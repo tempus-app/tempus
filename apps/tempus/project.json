@@ -75,10 +75,7 @@
     "lint": {
       "executor": "@nrwl/linter:eslint",
       "options": {
-        "lintFilePatterns": [
-          "apps/tempus/src/**/*.ts",
-          "apps/tempus/src/**/*.html"
-        ]
+        "lintFilePatterns": ["apps/tempus/src/**/*.ts", "apps/tempus/src/**/*.html"]
       }
     },
     "test": {
