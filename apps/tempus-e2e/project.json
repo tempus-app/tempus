@@ -1,0 +1,28 @@
+{
+  "root": "apps/tempus-e2e",
+  "sourceRoot": "apps/tempus-e2e/src",
+  "projectType": "application",
+  "targets": {
+    "e2e": {
+      "executor": "@nrwl/cypress:cypress",
+      "options": {
+        "cypressConfig": "apps/tempus-e2e/cypress.json",
+        "devServerTarget": "tempus:serve:development"
+      },
+      "configurations": {
+        "production": {
+          "devServerTarget": "tempus:serve:production"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/tempus-e2e/**/*.{js,ts}"]
+      }
+    }
+  },
+  "tags": [],
+  "implicitDependencies": ["tempus"]
+}
