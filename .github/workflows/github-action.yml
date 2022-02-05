@@ -17,4 +17,4 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
       - run: docker build -t tempusapp:1.0 .
-      - run: docker run tempusapp:1.0 -p 3000:3000
+      - run: docker run -p 3000:3000 tempusapp:1.0
