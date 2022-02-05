@@ -7,7 +7,7 @@
     "postinstall": "node ./decorate-angular-cli.js && ngcc --properties es2015 browser module main",
     "start:api": "nx serve api",
     "start:client": "nx serve tempus",
-    "start:api:prod": "node ./dist/apps/api/main.ts",
+    "start:api:prod": "node ./dist/apps/api/main.js",
     "build:api": "nx build api --production",
     "test": "nx test",
     "prepare": "husky install",

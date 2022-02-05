@@ -6,7 +6,7 @@ import { AppService } from './app.service'
 import { CoreModule } from '@tempus/core'
 
 @Module({
-  imports: [TypeOrmModule.forRoot(), CoreModule],
+  imports: [CoreModule],
   controllers: [AppController],
   providers: [AppService],
 })
