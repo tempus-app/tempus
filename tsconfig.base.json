@@ -15,7 +15,8 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@tempus/api-interfaces": ["libs/api-interfaces/src/index.ts"]
+      "@tempus/api-interfaces": ["libs/api-interfaces/src/index.ts"],
+      "@tempus/core": ["libs/core/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
