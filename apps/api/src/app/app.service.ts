@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm'
 import { Message } from '@tempus/api-interfaces'
 import { Repository } from 'typeorm'
 import { Resource, User } from '@tempus/account'
+import { RoleType } from 'libs/account/src/lib/entities/role'
 
 @Injectable()
 export class AppService {
@@ -20,10 +21,18 @@ export class AppService {
 
     const newResource = new Resource()
     newResource.email = 'email'
+    const resRoles = [RoleType.AVAILABLE_RESOURCE, RoleType.SUPERVISOR]
+    newResource.roles = JSON.stringify(resRoles)
+
     this.userRepo.save(newResource)
   }
 
   async getUser() {
-    return await this.userRepo.find()
+    const users = await this.userRepo.find()
+    const usersRoles = []
+    users.forEach((user) => {
+      usersRoles.push(JSON.parse(user.roles).map((role) => <RoleType>role))
+    })
+    return await { data: users, roles: usersRoles }
   }
 }

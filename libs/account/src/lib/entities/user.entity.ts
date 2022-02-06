@@ -17,4 +17,7 @@ export class User {
 
   @Column({ nullable: true })
   password: string
+
+  @Column()
+  roles: string
 }
