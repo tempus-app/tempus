@@ -5,6 +5,7 @@
     "api": "apps/api",
     "api-interfaces": "libs/api-interfaces",
     "core": "libs/core",
+    "profile": "libs/profile",
     "tempus": "apps/tempus",
     "tempus-e2e": "apps/tempus-e2e"
   }

@@ -1,4 +1,5 @@
-import { Entity, Column, PrimaryGeneratedColumn, TableInheritance } from 'typeorm'
+import { Entity, Column, PrimaryGeneratedColumn, TableInheritance, OneToMany } from 'typeorm'
+import { View } from '@tempus/profile'
 
 @Entity()
 @TableInheritance({ column: { type: 'varchar', name: 'role' } })
@@ -20,4 +21,7 @@ export class User {
 
   @Column()
   roles: string
+
+  @OneToMany(() => View, (view) => view.user)
+  views: View[]
 }
