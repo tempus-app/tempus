@@ -1,10 +1,10 @@
 import { SqliteConnectionOptions } from 'typeorm/driver/sqlite/SqliteConnectionOptions'
-import { User } from './apps/api/src/app/user.entity'
+import { User, Resource } from '@tempus/account'
 
 const config: SqliteConnectionOptions = {
   type: 'sqlite',
   database: './db',
-  entities: [User],
+  entities: [User, Resource],
   synchronize: true,
 }
 

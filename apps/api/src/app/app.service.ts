@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Message } from '@tempus/api-interfaces'
 import { Repository } from 'typeorm'
-import { User } from '../entities/user.entity'
+import { Resource, User } from '@tempus/account'
 
 @Injectable()
 export class AppService {
@@ -13,10 +13,14 @@ export class AppService {
 
   createUser() {
     const newUser = new User()
-    newUser.firstName = 'test'
-    newUser.lastName = 'test'
-    newUser.isActive = true
-    this.userRepo.save(newUser)
+    // newUser.firstName = 'test'
+    // newUser.lastName = 'test'
+    // // newUser.isActive = true
+    // this.userRepo.save(newUser)
+
+    const newResource = new Resource()
+    newResource.email = 'email'
+    this.userRepo.save(newResource)
   }
 
   async getUser() {

@@ -15,6 +15,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@tempus/account": ["libs/account/src/index.ts"],
       "@tempus/api-interfaces": ["libs/api-interfaces/src/index.ts"],
       "@tempus/core": ["libs/core/src/index.ts"]
     }

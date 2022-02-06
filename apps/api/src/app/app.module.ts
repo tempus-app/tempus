@@ -4,10 +4,10 @@ import { TypeOrmModule } from '@nestjs/typeorm'
 import { AppController } from './app.controller'
 import { AppService } from './app.service'
 import { CoreModule } from '@tempus/core'
-import { User } from './user.entity'
+import { AccountModule } from '@tempus/account'
 
 @Module({
-  imports: [CoreModule, TypeOrmModule.forFeature([User])],
+  imports: [CoreModule, AccountModule],
   controllers: [AppController],
   providers: [AppService],
 })

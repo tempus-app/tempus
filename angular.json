@@ -1,6 +1,7 @@
 {
   "version": 2,
   "projects": {
+    "account": "libs/account",
     "api": "apps/api",
     "api-interfaces": "libs/api-interfaces",
     "core": "libs/core",
