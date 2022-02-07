@@ -6,8 +6,8 @@ export class Revision {
   @PrimaryGeneratedColumn()
   id: number
 
-  @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP(6)' })
-  timestamp: Date
+  // @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP(6)' })
+  // timestamp: Date
 
   @Column()
   section: string
