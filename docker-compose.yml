@@ -33,4 +33,3 @@ services:
       - postgres
     links:
       - postgres:postgres
-    command: npm run start:api
