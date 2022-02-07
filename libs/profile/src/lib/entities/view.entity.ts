@@ -3,7 +3,7 @@ import { Skill } from './skill.entity'
 import { Revision } from './revision.entity'
 import { Experience } from './experience.entity'
 import { Education } from '.'
-import { User } from '@tempus/account'
+import { Resource, User } from '@tempus/account'
 
 @Entity()
 export class View {
@@ -30,4 +30,7 @@ export class View {
 
   @ManyToOne(() => User, (user) => user.views)
   user: User
+
+  @ManyToOne(() => Resource, (resource) => resource.views)
+  resource: Resource
 }
