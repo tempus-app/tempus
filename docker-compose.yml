@@ -6,11 +6,8 @@ services:
     restart: always
     ports:
       - 5432:5432
-    expose:
-      - 5432
     environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
+      POSTGRES_PASSWORD: example
 
   adminer:
     image: adminer
@@ -27,8 +24,8 @@ services:
     environment:
       - DB_HOST=postgres
       - DB_PORT=5432
-      - DB_USER=postgres
-      - DB_PASSWORD=postgres
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=example
       - DB_NAME=postgres
     ports:
       - 3000:3000
