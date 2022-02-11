@@ -1,8 +1,9 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany, CreateDateColumn, ManyToOne } from 'typeorm'
-import { View } from './view.entity'
+import { Revision } from '../models/revision.model'
+import { ViewEntity } from './view.entity'
 
 @Entity()
-export class Revision {
+export class RevisionEntity implements Revision {
   @PrimaryGeneratedColumn()
   id: number
 
@@ -15,6 +16,6 @@ export class Revision {
   @Column()
   approved: boolean
 
-  @ManyToOne(() => View, (view) => view.status)
-  view: View
+  @ManyToOne(() => ViewEntity, (view) => view.status)
+  view: ViewEntity
 }

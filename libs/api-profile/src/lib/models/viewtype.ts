@@ -1,4 +1,4 @@
-export enum View {
+export enum ViewType {
   PRIMARY = 'PRIMARY',
   SECONDARY = 'SECONDARY',
 }

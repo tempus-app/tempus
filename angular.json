@@ -1,12 +1,15 @@
 {
-  "version": 2,
+  "cli": {
+    "analytics": false
+  },
+  "version": 1,
   "projects": {
-    "account": "libs/account",
+    "api-account": "libs/api-account",
     "api": "apps/api",
     "api-interfaces": "libs/api-interfaces",
     "core": "libs/core",
-    "profile": "libs/profile",
-    "project": "libs/project",
+    "api-profile": "libs/api-profile",
+    "api-project": "libs/api-project",
     "tempus": "apps/tempus",
     "tempus-e2e": "apps/tempus-e2e"
   }

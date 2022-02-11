@@ -1,7 +1,8 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany, CreateDateColumn, ManyToOne } from 'typeorm'
+import { Education } from '../models/education.model'
 
 @Entity()
-export class Education {
+export class EducationEntity implements Education {
   @PrimaryGeneratedColumn()
   id: number
 

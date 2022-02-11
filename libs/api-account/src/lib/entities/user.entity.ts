@@ -1,9 +1,10 @@
 import { Entity, Column, PrimaryGeneratedColumn, TableInheritance, OneToMany } from 'typeorm'
-import { View } from 'libs/api-profile/src'
+import { ViewEntity } from 'libs/api-profile/src'
+import { User } from '../models/user.model'
 
 @Entity()
 @TableInheritance({ column: { type: 'varchar', name: 'role' } })
-export class User {
+export class UserEntity implements User {
   @PrimaryGeneratedColumn()
   id: number
 
@@ -22,6 +23,6 @@ export class User {
   @Column()
   roles: string
 
-  @OneToMany(() => View, (view) => view.user)
-  views: View[]
+  @OneToMany(() => ViewEntity, (view) => view.user)
+  views: ViewEntity[]
 }

@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common'
 import { TypeOrmModule } from '@nestjs/typeorm'
-import { Client, Project, Task } from './entities'
+import { ClientEntity, ProjectEntity, TaskEntity } from './entities'
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Client, Project, Task])],
+  imports: [TypeOrmModule.forFeature([ClientEntity, ProjectEntity, TaskEntity])],
   controllers: [],
   providers: [],
   exports: [TypeOrmModule],

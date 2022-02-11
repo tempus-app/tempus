@@ -1,8 +1,9 @@
 import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm'
-import { User } from './user.entity'
+import { Link } from '../models/link.model'
+import { UserEntity } from './user.entity'
 
 @Entity()
-export class Link {
+export class LinkEntity implements Link {
   @PrimaryGeneratedColumn()
   id: number
 
@@ -12,7 +13,7 @@ export class Link {
   @Column()
   completed: Boolean
 
-  @OneToOne(() => User)
+  @OneToOne(() => UserEntity)
   @JoinColumn()
-  user: User
+  user: UserEntity
 }

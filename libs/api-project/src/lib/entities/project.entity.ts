@@ -1,14 +1,15 @@
 import { Entity, Column, PrimaryGeneratedColumn, TableInheritance, OneToMany, ManyToOne } from 'typeorm'
-import { Client } from './client.entity'
-import { Task } from './task.entity'
+import { Project } from '../models/project.model'
+import { ClientEntity } from './client.entity'
+import { TaskEntity } from './task.entity'
 
 @Entity()
-export class Project {
+export class ProjectEntity implements Project {
   @PrimaryGeneratedColumn()
   id: number
 
   @Column()
-  projName: string
+  name: string;
 
   @Column()
   startDate: Date
@@ -19,9 +20,9 @@ export class Project {
   @Column()
   hoursPerDay: number
 
-  @ManyToOne(() => Client, (client) => client.projects)
-  client: Client
+  @ManyToOne(() => ClientEntity, (client) => client.projects)
+  client: ClientEntity
 
-  @OneToMany(() => Task, (tasks) => tasks.project)
-  tasks: Task[]
+  @OneToMany(() => TaskEntity, (tasks) => tasks.project)
+  tasks: TaskEntity[]
 }

@@ -1,10 +1,11 @@
 import { ChildEntity, Column, JoinTable, ManyToMany, OneToMany } from 'typeorm'
-import { User } from './user.entity'
-import { Project } from 'libs/api-project/src'
-import { View } from 'libs/api-profile/src'
+import { UserEntity } from './user.entity'
+import { ProjectEntity } from 'libs/api-project/src'
+import { ViewEntity } from 'libs/api-profile/src'
+import { Resource } from '../models/resource.model'
 
 @ChildEntity()
-export class Resource extends User {
+export class ResourceEntity extends UserEntity implements Resource {
   @Column({ nullable: true })
   phoneNumber: string
 
@@ -14,10 +15,10 @@ export class Resource extends User {
   @Column({ nullable: true })
   title: string
 
-  @ManyToMany(() => Project)
+  @ManyToMany(() => ProjectEntity)
   @JoinTable()
-  projects: Project[]
+  projects: ProjectEntity[]
 
-  @OneToMany(() => View, (views) => views.resource)
-  views: View[]
+  @OneToMany(() => ViewEntity, (views) => views.resource)
+  views: ViewEntity[]
 }

@@ -1,14 +1,15 @@
 import { Entity, Column, PrimaryGeneratedColumn, TableInheritance, OneToMany, ManyToOne } from 'typeorm'
-import { Project } from './project.entity'
+import { Task } from '../models'
+import { ProjectEntity } from './project.entity'
 
 @Entity()
-export class Task {
+export class TaskEntity implements Task {
   @PrimaryGeneratedColumn()
   id: number
 
   @Column()
   taskName: string
 
-  @ManyToOne(() => Project, (project) => project.tasks)
-  project: Project[]
+  @ManyToOne(() => ProjectEntity, (project) => project.tasks)
+  project: ProjectEntity[]
 }

@@ -1,8 +1,9 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany, CreateDateColumn, ManyToOne } from 'typeorm'
-import { View } from './view.entity'
+import { Experience } from '../models/experience.model'
+import { ViewEntity } from './view.entity'
 
 @Entity()
-export class Experience {
+export class ExperienceEntity implements Experience {
   @PrimaryGeneratedColumn()
   id: number
 

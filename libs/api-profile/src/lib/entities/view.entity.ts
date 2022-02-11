@@ -1,36 +1,37 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany, ManyToMany, JoinTable, ManyToOne } from 'typeorm'
-import { Skill } from './skill.entity'
-import { Revision } from './revision.entity'
-import { Experience } from './experience.entity'
-import { Education } from '.'
-import { Resource, User } from 'libs/api-account/src'
+import { SkillEntity } from './skill.entity'
+import { RevisionEntity } from './revision.entity'
+import { ExperienceEntity } from './experience.entity'
+import { EducationEntity } from '.'
+import { ResourceEntity, UserEntity } from 'libs/api-account/src'
+import { View } from '../models/view.model'
 
 @Entity()
-export class View {
+export class ViewEntity implements View {
   @PrimaryGeneratedColumn()
   id: number
 
   @Column()
   type: string
 
-  @OneToMany(() => Revision, (status) => status.view)
-  status: Revision[]
+  @OneToMany(() => RevisionEntity, (status) => status.view)
+  status: RevisionEntity[]
 
-  @ManyToMany(() => Skill)
+  @ManyToMany(() => SkillEntity)
   @JoinTable()
-  skills: Skill[]
+  skills: SkillEntity[]
 
-  @ManyToMany(() => Experience)
+  @ManyToMany(() => ExperienceEntity)
   @JoinTable()
-  experience: Experience[]
+  experience: ExperienceEntity[]
 
-  @ManyToMany(() => Education)
+  @ManyToMany(() => EducationEntity)
   @JoinTable()
-  education: Education[]
+  education: EducationEntity[]
 
-  @ManyToOne(() => User, (user) => user.views)
-  user: User
+  @ManyToOne(() => UserEntity, (user) => user.views)
+  user: UserEntity
 
-  @ManyToOne(() => Resource, (resource) => resource.views)
-  resource: Resource
+  @ManyToOne(() => ResourceEntity, (resource) => resource.views)
+  resource: ResourceEntity
 }

@@ -1,10 +1,8 @@
 import { Module } from '@nestjs/common'
-import { TypeOrmModule } from '@nestjs/typeorm'
-
 import { AppController } from './app.controller'
 import { AppService } from './app.service'
 import { CoreModule } from '@tempus/core'
-import { AccountModule } from '@tempus/account'
+import { AccountModule } from '@tempus/api-account'
 
 @Module({
   imports: [CoreModule, AccountModule],

@@ -1,7 +1,7 @@
 import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions'
-import { User, Resource } from '@tempus/api-account'
-import { View, Education, Skill, Experience, Revision, SkillType } from '@tempus/api-profile'
-import { Client, Project, Task } from '@tempus/api-project'
+import { ResourceEntity, UserEntity } from '@tempus/api-account'
+import { ViewEntity, EducationEntity, SkillEntity, ExperienceEntity, RevisionEntity, SkillTypeEntity } from '@tempus/api-profile'
+import { ClientEntity, ProjectEntity, TaskEntity } from '@tempus/api-project'
 
 const config: PostgresConnectionOptions = {
   type: 'postgres',
@@ -10,7 +10,7 @@ const config: PostgresConnectionOptions = {
   username: process.env.DB_USERNAME,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
-  entities: [User, Resource, View, Education, Skill, Experience, Revision, SkillType, Client, Project, Task],
+  entities: [UserEntity, ResourceEntity, ViewEntity, EducationEntity, SkillEntity, ExperienceEntity, RevisionEntity, SkillTypeEntity, ClientEntity, ProjectEntity, TaskEntity],
   synchronize: true,
 }
 

@@ -10,17 +10,18 @@ import {
   OneToOne,
   JoinColumn,
 } from 'typeorm'
-import { SkillType } from './skilltype.entity'
-import { View } from './view.entity'
+import { Skill } from '../models/skill.model'
+import { SkillTypeEntity } from './skilltype.entity'
+import { ViewEntity } from './view.entity'
 
 @Entity()
-export class Skill {
+export class SkillEntity implements Skill {
   @PrimaryGeneratedColumn()
   id: number
 
-  @OneToOne(() => SkillType)
+  @OneToOne(() => SkillTypeEntity)
   @JoinColumn()
-  skill: SkillType
+  skill: SkillTypeEntity
 
   //must be 1-5, figure it out later
   @Column()
