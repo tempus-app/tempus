@@ -3,7 +3,7 @@ import { Skill } from './skill.entity'
 import { Revision } from './revision.entity'
 import { Experience } from './experience.entity'
 import { Education } from '.'
-import { Resource, User } from '@tempus/account'
+import { Resource, User } from 'libs/api-account/src'
 
 @Entity()
 export class View {

@@ -1,7 +1,7 @@
 import { ChildEntity, Column, JoinTable, ManyToMany, OneToMany } from 'typeorm'
 import { User } from './user.entity'
-import { Project } from '@tempus/project'
-import { View } from '@tempus/profile'
+import { Project } from 'libs/api-project/src'
+import { View } from 'libs/api-profile/src'
 
 @ChildEntity()
 export class Resource extends User {

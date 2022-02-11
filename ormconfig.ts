@@ -1,7 +1,7 @@
 import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions'
-import { User, Resource } from '@tempus/account'
-import { View, Education, Skill, Experience, Revision, SkillType } from '@tempus/profile'
-import { Client, Project, Task } from '@tempus/project'
+import { User, Resource } from '@tempus/api-account'
+import { View, Education, Skill, Experience, Revision, SkillType } from '@tempus/api-profile'
+import { Client, Project, Task } from '@tempus/api-project'
 
 const config: PostgresConnectionOptions = {
   type: 'postgres',

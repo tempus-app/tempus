@@ -1,5 +1,5 @@
 import { Entity, Column, PrimaryGeneratedColumn, TableInheritance, OneToMany } from 'typeorm'
-import { View } from '@tempus/profile'
+import { View } from 'libs/api-profile/src'
 
 @Entity()
 @TableInheritance({ column: { type: 'varchar', name: 'role' } })

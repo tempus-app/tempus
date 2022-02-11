@@ -15,11 +15,11 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@tempus/account": ["libs/account/src/index.ts"],
+      "@tempus/api-account": ["libs/api-account/src/index.ts"],
       "@tempus/api-interfaces": ["libs/api-interfaces/src/index.ts"],
       "@tempus/core": ["libs/core/src/index.ts"],
-      "@tempus/profile": ["libs/profile/src/index.ts"],
-      "@tempus/project": ["libs/project/src/index.ts"]
+      "@tempus/api-profile": ["libs/api-profile/src/index.ts"],
+      "@tempus/api-project": ["libs/api-project/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
