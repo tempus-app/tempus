@@ -1,0 +1,56 @@
+version: '3.1'
+
+services:
+  postgres:
+    image: postgres
+    restart: always
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_PASSWORD: example
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+
+  onboarding:
+    build:
+      context: .
+      dockerfile: Dockerfile.onboarding.dev
+      args:
+        - NODE_ENV=development
+    environment:
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=example
+      - DB_NAME=postgres
+    ports:
+      - 3000:3000
+    volumes:
+      - type: bind
+        source: .
+        target: /src
+      - /src/node_modules
+    working_dir: /src
+    depends_on:
+      - postgres
+
+  timesheet:
+    build:
+      context: .
+      dockerfile: Dockerfile.timesheet.dev
+      args:
+        - NODE_ENV=development
+    environment:
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=dbpass
+      - DB_NAME=postgres
+    ports:
+      - 3001:3001
+    depends_on:
+      - postgres
