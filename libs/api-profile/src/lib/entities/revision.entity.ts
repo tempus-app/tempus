@@ -1,4 +1,5 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany, CreateDateColumn, ManyToOne } from 'typeorm'
+import { UserEntity } from '@tempus/api-account'
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany, CreateDateColumn, ManyToOne, OneToOne } from 'typeorm'
 import { Revision } from '../models/revision.model'
 import { ViewEntity } from './view.entity'
 
@@ -8,10 +9,16 @@ export class RevisionEntity implements Revision {
   id: number
 
   @CreateDateColumn()
-  timestamp: Date
+  createdAt: Date
+
+  @Column()
+  approvedAt: Date
 
   @Column()
   section: string
+
+  @OneToOne(() => UserEntity)
+  approver: UserEntity
 
   @Column()
   approved: boolean
