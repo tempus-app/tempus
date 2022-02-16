@@ -1,3 +1,4 @@
+import { ResourceEntity } from '@tempus/api-account'
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany, CreateDateColumn, ManyToOne } from 'typeorm'
 import { Education } from '../models/education.model'
 
@@ -17,4 +18,7 @@ export class EducationEntity implements Education {
 
   @Column()
   endDate: Date
+
+  @ManyToOne(() => ResourceEntity, (resource) => resource.educations)
+  resource: ResourceEntity
 }

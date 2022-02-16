@@ -29,9 +29,6 @@ export class ViewEntity implements View {
   @JoinTable()
   education: EducationEntity[]
 
-  @ManyToOne(() => UserEntity, (user) => user.views)
-  user: UserEntity
-
   @ManyToOne(() => ResourceEntity, (resource) => resource.views)
   resource: ResourceEntity
 }

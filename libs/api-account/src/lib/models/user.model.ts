@@ -14,6 +14,4 @@ export interface User {
 
   // TODO: Authroization
   roles: RoleType[]
-
-  views?: View[]
 }
