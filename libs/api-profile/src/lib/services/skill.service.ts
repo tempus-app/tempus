@@ -1,42 +1,36 @@
-import { Injectable, NotImplementedException } from "@nestjs/common";
-import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
-import { Skill, SkillTypeEntity } from "..";
-import { SkillEntity } from "../entities/skill.entity";
+import { Injectable, NotImplementedException } from '@nestjs/common'
+import { InjectRepository } from '@nestjs/typeorm'
+import { Repository } from 'typeorm'
+import { SkillEntity, SkillTypeEntity } from '../entities'
+import { Skill } from '../models/skill.model'
 
 @Injectable()
 export class SkillsService {
-    constructor(
-        @InjectRepository(SkillEntity)
-        private skillsRepository: Repository<SkillEntity>,
-        private skillTypeRepository: Repository<SkillTypeEntity>
-    ) {}
+  constructor(
+    @InjectRepository(SkillEntity)
+    private skillsRepository: Repository<SkillEntity>,
+    private skillTypeRepository: Repository<SkillTypeEntity>,
+  ) {}
 
-    // create skill
-    createSkill(name: string): Promise<Skill> {
-        throw new NotImplementedException();
-    }
+  // create skill
+  createSkill(userId: string, skill: Omit<SkillEntity, 'id'>): Promise<SkillEntity> {
+    throw new NotImplementedException()
 
-    // return all skills from database
-    findAll(): Promise<SkillEntity> {
-        throw new NotImplementedException();    
-    }
+    // TODO: search for skill in skill type repository and create if doesnt exist
+  }
 
-    // return skills by user
-    findSkillsByResource(userId: string) {
-        throw new NotImplementedException();
-    }
+  // return skills by user
+  findSkillsByResource(userId: string) {
+    throw new NotImplementedException()
+  }
 
-    // edit skill
-    editSkill(skill: Skill) {
-        throw new NotImplementedException();
-    }
+  // edit skill
+  editSkill(skill: Skill) {
+    throw new NotImplementedException()
+  }
 
-    // delete skill
-    deleteSkill(skillId) {
-        throw new NotImplementedException();
-    }
-
-
-
+  // delete skill
+  deleteView(skillId: string) {
+    throw new NotImplementedException()
+  }
 }

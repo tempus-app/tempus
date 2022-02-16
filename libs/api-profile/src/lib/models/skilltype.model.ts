@@ -1,3 +1,3 @@
 export class SkillType {
-name: string
+  name: string
 }

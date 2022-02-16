@@ -1,5 +1,5 @@
-import { ProjectEntity } from ".."
-import { Project } from "./project.model"
+import { ProjectEntity } from '..'
+import { Project } from './project.model'
 
 export class Task {
   id: number

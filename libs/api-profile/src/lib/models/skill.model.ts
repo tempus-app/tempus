@@ -1,10 +1,9 @@
-import { SkillType } from "./skilltype.model";
+import { SkillType } from './skilltype.model'
 
 export interface Skill {
-    id: number
+  id: number
 
-    skill: SkillType
+  skill: SkillType
 
-    level: number
+  level: number
 }
-  

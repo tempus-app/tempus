@@ -8,7 +8,7 @@ export class ClientEntity implements Client {
   id: number
 
   @Column()
-  name: string;
+  name: string
 
   @Column()
   title: string

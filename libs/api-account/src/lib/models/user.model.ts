@@ -1,4 +1,4 @@
-import { View } from '@tempus/api-profile';
+import { View } from '@tempus/api-profile'
 
 export interface User {
   id: number
