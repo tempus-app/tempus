@@ -2,7 +2,7 @@
   "cli": {
     "analytics": false
   },
-  "version": 1,
+  "version": 2,
   "projects": {
     "api-account": "libs/api-account",
     "api": "apps/api",
