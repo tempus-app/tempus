@@ -27,7 +27,7 @@ export class ExperienceService {
   }
 
   // edit experience
-  editEducation(experience: Experience): Promise<Experience> {
+  editExperience(experience: Experience): Promise<Experience> {
     throw new NotImplementedException()
   }
 

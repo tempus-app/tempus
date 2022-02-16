@@ -20,22 +20,22 @@ export class SkillsService {
   }
 
   // return skills by resource
-  findSkillsByResource(resourceId: number) {
+  findSkillsByResource(resourceId: number): Promise<SkillEntity> {
     throw new NotImplementedException()
   }
 
   // return skill by id
-  findSkillsById(skillId: number) {
+  findSkillsById(skillId: number): Promise<SkillEntity> {
     throw new NotImplementedException()
   }
 
   // edit skill
-  editSkill(skill: Skill) {
+  editSkill(skill: Skill): Promise<SkillEntity> {
     throw new NotImplementedException()
   }
 
   // delete skill
-  deleteView(skillId: string) {
+  deleteSkill(skillId: number) {
     throw new NotImplementedException()
   }
 }
