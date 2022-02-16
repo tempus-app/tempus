@@ -10,19 +10,15 @@ export class UserService {
     private userEntity: Repository<UserEntity>,
   ) {}
 
-  createrUser(userId: Omit<User, 'id'>): Promise<UserEntity> {
+  createrUser(user: Omit<User, 'id'>): Promise<UserEntity> {
     throw new NotImplementedException()
   }
 
-  editUser(userId: User): Promise<UserEntity> {
+  editUser(user: User): Promise<UserEntity> {
     throw new NotImplementedException()
   }
 
   getUser(userId: number): Promise<UserEntity> {
-    throw new NotImplementedException()
-  }
-
-  hashPassword(password: string): String {
     throw new NotImplementedException()
   }
 }
