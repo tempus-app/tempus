@@ -23,7 +23,11 @@ export class LinkEntity implements Link {
   @Column()
   token: string
 
-  @Column()
+  @Column({
+    type: 'enum',
+    enum: StatusType,
+    default: [StatusType.ACTIVE],
+  })
   status: StatusType
 
   @OneToOne(() => UserEntity)
