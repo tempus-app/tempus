@@ -18,6 +18,9 @@ export class LinkEntity implements Link {
   lastName: string
 
   @Column()
+  expiry: Date
+
+  @Column()
   token: string
 
   @Column()
