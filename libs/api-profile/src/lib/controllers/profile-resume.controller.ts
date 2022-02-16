@@ -30,18 +30,18 @@ export class ProfileResumeController {
 
   // UPDATE DATA (only relevant when on main table page and editing)
   @Patch('/education/:educationId')
-  async updateEducation(@Param('educationId') educationId: number, @Body() education: Education): Promise<Education> {
+  async editEducation(@Param('educationId') educationId: number, @Body() education: Education): Promise<Education> {
     throw new NotImplementedException()
   }
   @Patch('/experience/:experienceId')
-  async updateExperience(
+  async editExperience(
     @Param('experienceId') experienceId: number,
     @Body() experience: Experience,
   ): Promise<Experience> {
     throw new NotImplementedException()
   }
   @Patch('/skill/:skillId')
-  async updateSkill(@Param('skillId') skillId: number, @Body() skill: Skill): Promise<Skill> {
+  async editSkill(@Param('skillId') skillId: number, @Body() skill: Skill): Promise<Skill> {
     throw new NotImplementedException()
   }
 
