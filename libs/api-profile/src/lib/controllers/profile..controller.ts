@@ -6,7 +6,7 @@ export class ViewsController {
   constructor(private viewsService: ViewsService) {}
 
   @Post('/:userId')
-  async create() {
+  async createProfile() {
     throw new NotImplementedException()
   }
 }

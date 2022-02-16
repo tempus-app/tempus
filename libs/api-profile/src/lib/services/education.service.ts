@@ -17,7 +17,7 @@ export class EducationService {
   }
 
   // return education by user
-  findEducationByResource(userId: string): Promise<Education> {
+  findEducationByResource(userId: number): Promise<Education> {
     throw new NotImplementedException()
   }
 
@@ -27,7 +27,7 @@ export class EducationService {
   }
 
   // delete education
-  deleteEducation(skillId) {
+  deleteEducation(educationId: number) {
     throw new NotImplementedException()
   }
 }

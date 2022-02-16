@@ -21,7 +21,7 @@ export class AppService {
     const newResource = new ResourceEntity()
     newResource.email = 'email'
     const resRoles = [RoleType.AVAILABLE_RESOURCE, RoleType.SUPERVISOR]
-    newResource.roles = JSON.stringify(resRoles)
+    newResource.roles = resRoles
 
     this.userRepo.save(newResource)
   }
@@ -30,7 +30,7 @@ export class AppService {
     const users = await this.userRepo.find()
     const usersRoles = []
     users.forEach((user) => {
-      usersRoles.push(JSON.parse(user.roles).map((role) => <RoleType>role))
+      usersRoles.push(user.roles)
     })
     return await { data: users, roles: usersRoles }
   }

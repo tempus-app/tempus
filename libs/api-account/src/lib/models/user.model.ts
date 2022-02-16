@@ -1,4 +1,5 @@
 import { View } from '@tempus/api-profile'
+import { RoleType } from '.'
 
 export interface User {
   id: number
@@ -12,7 +13,7 @@ export interface User {
   password?: string
 
   // TODO: Authroization
-  roles: string
+  roles: RoleType[]
 
   views?: View[]
 }

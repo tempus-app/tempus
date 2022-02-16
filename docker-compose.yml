@@ -15,10 +15,10 @@ services:
     ports:
       - 8080:8080
 
-  api:
+  onboarding:
     build:
       context: .
-      dockerfile: Dockerfile.dev
+      dockerfile: Dockerfile.onboarding.dev
       args:
         - NODE_ENV=development
     environment:
@@ -29,7 +29,28 @@ services:
       - DB_NAME=postgres
     ports:
       - 3000:3000
+    volumes:
+      - type: bind
+        source: .
+        target: /src
+      - /src/node_modules
+    working_dir: /src
     depends_on:
       - postgres
-    links:
-      - postgres:postgres
+
+  timesheet:
+    build:
+      context: .
+      dockerfile: Dockerfile.timesheet.dev
+      args:
+        - NODE_ENV=development
+    environment:
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=dbpass
+      - DB_NAME=postgres
+    ports:
+      - 3001:3001
+    depends_on:
+      - postgres

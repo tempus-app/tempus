@@ -12,11 +12,11 @@ import { ClientEntity, ProjectEntity, TaskEntity } from '@tempus/api-project'
 
 const config: PostgresConnectionOptions = {
   type: 'postgres',
-  host: process.env.DB_HOST,
+  host: process.env.DB_HOST.toString(),
   port: parseInt(process.env.DB_PORT),
-  username: process.env.DB_USERNAME,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
+  username: process.env.DB_USERNAME.toString(),
+  password: process.env.DB_PASSWORD.toString(),
+  database: process.env.DB_NAME.toString(),
   entities: [
     UserEntity,
     ResourceEntity,
