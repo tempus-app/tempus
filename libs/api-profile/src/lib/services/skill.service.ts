@@ -12,15 +12,20 @@ export class SkillsService {
     private skillTypeRepository: Repository<SkillTypeEntity>,
   ) {}
 
-  // create skill
-  createSkill(userId: string, skill: Omit<SkillEntity, 'id'>): Promise<SkillEntity> {
+  // create skill for a specific resource
+  createSkill(resourceId: number, skill: Omit<SkillEntity, 'id'>): Promise<SkillEntity> {
     throw new NotImplementedException()
 
     // TODO: search for skill in skill type repository and create if doesnt exist
   }
 
-  // return skills by user
-  findSkillsByResource(userId: string) {
+  // return skills by resource
+  findSkillsByResource(resourceId: number) {
+    throw new NotImplementedException()
+  }
+
+  // return skill by id
+  findSkillsById(skillId: number) {
     throw new NotImplementedException()
   }
 

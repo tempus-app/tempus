@@ -11,13 +11,18 @@ export class EducationService {
     private educationRepository: Repository<EducationEntity>,
   ) {}
 
-  // create education
-  createEducation(education: Omit<Education, 'id'>): Promise<EducationEntity> {
+  // create education for a specific resource
+  createEducation(resourceId: number, education: Omit<Education, 'id'>): Promise<EducationEntity> {
     throw new NotImplementedException()
   }
 
-  // return education by user
-  findEducationByResource(userId: number): Promise<Education> {
+  // return all educations by resource
+  findEducationByResource(resourceId: number): Promise<Education> {
+    throw new NotImplementedException()
+  }
+
+  // return education by id
+  findEducationById(educationId: number): Promise<Education> {
     throw new NotImplementedException()
   }
 

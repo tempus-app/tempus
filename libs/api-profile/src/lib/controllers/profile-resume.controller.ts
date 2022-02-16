@@ -6,7 +6,7 @@ import { EducationService } from '../services/education.service'
 import { ExperienceService } from '../services/experience.service'
 import { SkillsService } from '../services/skill.service'
 
-@Controller('profile')
+@Controller('profileresume')
 export class ProfileResumeController {
   constructor(
     private educationService: EducationService,
@@ -14,12 +14,7 @@ export class ProfileResumeController {
     private expService: ExperienceService,
   ) {}
 
-  @Patch('/:userId')
-  async createProfile() {
-    throw new NotImplementedException()
-  }
-
-  // CREATE DATA
+  // CREATE DATA (only relevant when on main table page and creating)
   @Post('/education/:userId')
   async createEducation(@Param('userId') userId: number, @Body() education: Education): Promise<Education> {
     throw new NotImplementedException()
@@ -29,11 +24,11 @@ export class ProfileResumeController {
     throw new NotImplementedException()
   }
   @Post('/skill/:userId')
-  async ceateSkill(@Param('userId') userId: number, @Body() skill: Skill): Promise<Skill> {
+  async createSkill(@Param('userId') userId: number, @Body() skill: Skill): Promise<Skill> {
     throw new NotImplementedException()
   }
 
-  // UPDATE DATA
+  // UPDATE DATA (only relevant when on main table page and editing)
   @Patch('/education/:educationId')
   async updateEducation(@Param('educationId') educationId: number, @Body() education: Education): Promise<Education> {
     throw new NotImplementedException()
@@ -50,7 +45,7 @@ export class ProfileResumeController {
     throw new NotImplementedException()
   }
 
-  // GET DATA
+  // GET DATA (only relevant when on main table page when getting OR if we ever need one specifically)
   @Get('/education/:educationId')
   async getEducation(@Param('educationId') educationId: number, @Body() education: Education): Promise<Education> {
     throw new NotImplementedException()

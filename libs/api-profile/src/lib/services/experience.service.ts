@@ -11,13 +11,18 @@ export class ExperienceService {
     private experienceRepository: Repository<ExperienceEntity>,
   ) {}
 
-  // create experience
-  createExperience(userId: string, experience: Omit<Experience, 'id'>) {
+  // create experience for specific resource
+  createExperience(resourceId: number, experience: Omit<Experience, 'id'>) {
     throw new NotImplementedException()
   }
 
-  // return experience by user
-  findExperienceByResource(userId: string): Promise<ExperienceEntity> {
+  // return all experiences by resource
+  findExperienceByResource(resourceId: number): Promise<ExperienceEntity> {
+    throw new NotImplementedException()
+  }
+
+  // return experience by id
+  findExperienceById(experienceId: number): Promise<ExperienceEntity> {
     throw new NotImplementedException()
   }
 
@@ -27,7 +32,7 @@ export class ExperienceService {
   }
 
   // delete experience
-  deleteExperience(skillId: string) {
+  deleteExperience(experienceId: number) {
     throw new NotImplementedException()
   }
 }

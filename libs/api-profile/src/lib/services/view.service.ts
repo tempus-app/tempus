@@ -11,20 +11,28 @@ export class ViewsService {
     private viewsRepository: Repository<ViewEntity>,
   ) {}
 
-  // create view
-  createView(userId: string): Promise<View> {
+  // create view for resource
+  createView(resourceId: number): Promise<ViewEntity> {
     throw new NotImplementedException()
   }
 
   // edit view
-  editView(view: View) {
+  editView(view: View): Promise<ViewEntity> {
     throw new NotImplementedException()
 
     // TODO: revision entity associated with view edits for approval
   }
 
+  getViewsByResource(resourceId: number): Promise<ViewEntity> {
+    throw new NotImplementedException()
+  }
+
+  getView(viewId: number): Promise<ViewEntity> {
+    throw new NotImplementedException()
+  }
+
   // delete view
-  deleteSkill(viewId) {
+  deleteView(viewId: number) {
     throw new NotImplementedException()
   }
 }
