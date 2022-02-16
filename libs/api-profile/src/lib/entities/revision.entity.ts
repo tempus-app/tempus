@@ -7,8 +7,8 @@ export class RevisionEntity implements Revision {
   @PrimaryGeneratedColumn()
   id: number
 
-  // @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP(6)' })
-  // timestamp: Date
+  @CreateDateColumn()
+  timestamp: Date
 
   @Column()
   section: string
