@@ -22,10 +22,10 @@ export class UserEntity implements User {
   password: string
 
   @Column({
-    type: "enum",
+    type: 'enum',
     enum: RoleType,
     array: true,
-    default: [RoleType.AVAILABLE_RESOURCE]
+    default: [RoleType.AVAILABLE_RESOURCE],
   })
   roles: RoleType[]
 

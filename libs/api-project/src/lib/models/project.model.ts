@@ -1,6 +1,6 @@
-import { ClientEntity, TaskEntity } from ".."
-import { Client } from "./client.model"
-import { Task } from "./task.model"
+import { ClientEntity, TaskEntity } from '..'
+import { Client } from './client.model'
+import { Task } from './task.model'
 
 export class Project {
   id: number

@@ -1,5 +1,5 @@
-import { View } from '@tempus/api-profile';
-import { RoleType } from '.';
+import { View } from '@tempus/api-profile'
+import { RoleType } from '.'
 
 export interface User {
   id: number
