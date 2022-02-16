@@ -5,7 +5,7 @@ import { Link, LinkEntity } from '..'
 import { StatusType } from '../models/status'
 
 @Injectable()
-class LinkService {
+export class LinkService {
   constructor(
     @InjectRepository(LinkEntity)
     private linkEntity: Repository<LinkEntity>,
