@@ -1,4 +1,4 @@
-import { Body, Controller, Get, NotImplementedException, Param, Patch, Post, Query, Req } from '@nestjs/common'
+import { Body, Controller, Get, NotImplementedException, Param, Patch, Post } from '@nestjs/common'
 import { Link, LinkEntity, User } from '..'
 import { StatusType } from '../models/status'
 import { LinkService } from '../services/link.service'
@@ -19,11 +19,13 @@ export class LinkController {
     throw new NotImplementedException()
   }
 
+  //updates link status
   @Patch('status/:linkId')
   async editLinkStatus(@Param('linkId') linkId: number, @Body() status: StatusType): Promise<LinkEntity> {
     throw new NotImplementedException()
   }
 
+  //associate link to user
   @Post('/user/:linkId')
   async associateUserToLink(@Param('linkId') linkId: number, @Body() user: User) {
     throw new NotImplementedException()

@@ -1,6 +1,6 @@
 import { Injectable, NotImplementedException } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { Experience, Skill } from '@tempus/api-profile'
+import {  Skill } from '@tempus/api-profile'
 import { Project } from '@tempus/api-project'
 import { Repository } from 'typeorm'
 import { ResourceEntity } from '..'

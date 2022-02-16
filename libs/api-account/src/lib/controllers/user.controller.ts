@@ -1,5 +1,4 @@
 import { Body, Controller, Get, NotImplementedException, Param, Patch, Post, Query } from '@nestjs/common'
-import { Skill, SkillType } from '@tempus/api-profile'
 import { ResourceEntity, User, UserEntity } from '..'
 import { ResourceService } from '../services/resource.service'
 import { UserService } from '../services/user.service'
