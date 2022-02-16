@@ -7,9 +7,12 @@
     "api-account": "libs/api-account",
     "api": "apps/api",
     "api-interfaces": "libs/api-interfaces",
-    "core": "libs/core",
     "api-profile": "libs/api-profile",
     "api-project": "libs/api-project",
+    "core": "libs/core",
+    "frontend-account": "libs/frontend-account",
+    "frontend-profile": "libs/frontend-profile",
+    "frontend-project": "libs/frontend-project",
     "tempus": "apps/tempus",
     "tempus-e2e": "apps/tempus-e2e"
   }

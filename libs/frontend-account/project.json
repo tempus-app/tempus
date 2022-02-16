@@ -1,0 +1,23 @@
+{
+  "projectType": "library",
+  "root": "libs/frontend-account",
+  "sourceRoot": "libs/frontend-account/src",
+  "prefix": "tempus",
+  "targets": {
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/frontend-account"],
+      "options": {
+        "jestConfig": "libs/frontend-account/jest.config.js",
+        "passWithNoTests": true
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": ["libs/frontend-account/src/**/*.ts", "libs/frontend-account/src/**/*.html"]
+      }
+    }
+  },
+  "tags": []
+}

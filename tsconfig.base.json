@@ -19,7 +19,10 @@
       "@tempus/api-interfaces": ["libs/api-interfaces/src/index.ts"],
       "@tempus/core": ["libs/core/src/index.ts"],
       "@tempus/api-profile": ["libs/api-profile/src/index.ts"],
-      "@tempus/api-project": ["libs/api-project/src/index.ts"]
+      "@tempus/api-project": ["libs/api-project/src/index.ts"],
+      "@tempus/frontend-account": ["libs/frontend-account/src/index.ts"],
+      "@tempus/frontend-profile": ["libs/frontend-profile/src/index.ts"],
+      "@tempus/frontend-project": ["libs/frontend-project/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
