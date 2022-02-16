@@ -20,12 +20,16 @@ export class SkillsService {
   }
 
   // return skills by resource
-  findSkillsByResource(resourceId: number): Promise<SkillEntity> {
+  findSkillsByResource(resourceId: number): Promise<SkillEntity[]> {
+    throw new NotImplementedException()
+  }
+
+  findAllSkillTypes(): Promise<SkillTypeEntity[]> {
     throw new NotImplementedException()
   }
 
   // return skill by id
-  findSkillsById(skillId: number): Promise<SkillEntity> {
+  findSkillById(skillId: number): Promise<SkillEntity> {
     throw new NotImplementedException()
   }
 
