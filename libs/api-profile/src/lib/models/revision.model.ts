@@ -1,8 +1,9 @@
-import { View } from './view.model'
+import { ViewEntity } from '../entities/view.entity'
+import { ResumeSectionType } from './resumesectiontype'
 
 export interface Revision {
   id: number
-  section: string
+  sectionsChanged: ResumeSectionType[]
   approved: boolean
-  view: View
+  view: ViewEntity
 }
