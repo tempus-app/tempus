@@ -1,6 +1,6 @@
 import { Injectable, NotImplementedException } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import {  Skill } from '@tempus/api-profile'
+import { Skill } from '@tempus/api-profile'
 import { Project } from '@tempus/api-project'
 import { Repository } from 'typeorm'
 import { ResourceEntity } from '..'
@@ -15,7 +15,7 @@ export class ResourceService extends UserService {
     super(resourceEntity)
   }
 
-  getAllUsers(
+  getAllResources(
     location?: string[] | string,
     skills?: string[] | string,
     title?: string[] | string,
@@ -26,12 +26,12 @@ export class ResourceService extends UserService {
     throw new NotImplementedException()
   }
 
-  findUsersBySkills(skills: Skill[]): Promise<ResourceEntity[]> {
+  findResourcesBySkills(skills: Skill[]): Promise<ResourceEntity[]> {
     //should interact with profile view
     throw new NotImplementedException()
   }
 
-  findUsersByProjects(projects: Project[]): Promise<ResourceEntity[]> {
+  findResourcesByProjects(projects: Project[]): Promise<ResourceEntity[]> {
     throw new NotImplementedException()
   }
 }
