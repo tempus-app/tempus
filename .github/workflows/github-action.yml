@@ -28,4 +28,3 @@ jobs:
       - run: npm ci
       - run: npm run build:onboarding-api --if-present
       - run: npm test
-

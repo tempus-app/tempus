@@ -11,6 +11,5 @@ export interface View {
   skills?: Skill[]
   experience?: Experience[]
   education?: Education[]
-  user: User
   resource: Resource
 }

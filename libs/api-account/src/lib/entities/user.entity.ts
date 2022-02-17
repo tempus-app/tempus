@@ -28,7 +28,4 @@ export class UserEntity implements User {
     default: [RoleType.AVAILABLE_RESOURCE],
   })
   roles: RoleType[]
-
-  @OneToMany(() => ViewEntity, (view) => view.user)
-  views: ViewEntity[]
 }

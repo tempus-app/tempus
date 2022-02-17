@@ -1,4 +1,7 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany, CreateDateColumn, ManyToOne } from 'typeorm'
+import { UserEntity } from '@tempus/api-account'
+import { array } from 'joi'
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany, CreateDateColumn, ManyToOne, OneToOne } from 'typeorm'
+import { ResumeSectionType } from '../models/resumesectiontype'
 import { Revision } from '../models/revision.model'
 import { ViewEntity } from './view.entity'
 
@@ -8,10 +11,21 @@ export class RevisionEntity implements Revision {
   id: number
 
   @CreateDateColumn()
-  timestamp: Date
+  createdAt: Date
 
   @Column()
-  section: string
+  approvedAt: Date
+
+  @Column({
+    type: 'enum',
+    enum: ResumeSectionType,
+    default: [ResumeSectionType.PERSONAL],
+    array: true,
+  })
+  sectionsChanged: ResumeSectionType[]
+
+  @OneToOne(() => UserEntity)
+  approver: UserEntity
 
   @Column()
   approved: boolean

@@ -1,6 +1,6 @@
+import { ResourceEntity } from '@tempus/api-account'
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany, CreateDateColumn, ManyToOne } from 'typeorm'
 import { Experience } from '../models/experience.model'
-import { ViewEntity } from './view.entity'
 
 @Entity()
 export class ExperienceEntity implements Experience {
@@ -18,4 +18,7 @@ export class ExperienceEntity implements Experience {
 
   @Column()
   endDate: Date
+
+  @ManyToOne(() => ResourceEntity, (resource) => resource.experiences)
+  resource: ResourceEntity
 }

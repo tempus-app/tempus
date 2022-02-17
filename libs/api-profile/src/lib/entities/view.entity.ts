@@ -5,6 +5,7 @@ import { ExperienceEntity } from './experience.entity'
 import { EducationEntity } from '.'
 import { ResourceEntity, UserEntity } from 'libs/api-account/src'
 import { View } from '../models/view.model'
+import { ViewType } from '../models/viewtype'
 
 @Entity()
 export class ViewEntity implements View {
@@ -29,9 +30,13 @@ export class ViewEntity implements View {
   @JoinTable()
   education: EducationEntity[]
 
-  @ManyToOne(() => UserEntity, (user) => user.views)
-  user: UserEntity
-
   @ManyToOne(() => ResourceEntity, (resource) => resource.views)
   resource: ResourceEntity
+
+  @Column({
+    type: 'enum',
+    enum: ViewType,
+    default: ViewType.SECONDARY,
+  })
+  viewType: ViewType
 }
