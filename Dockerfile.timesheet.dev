@@ -5,5 +5,5 @@ ENV NODE_ENV=development
 WORKDIR /src
 COPY . .
 RUN npm install
-CMD npm run start:api
+CMD npm run start:onboarding-api
 
