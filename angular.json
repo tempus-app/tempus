@@ -1,10 +1,6 @@
 {
-  "cli": {
-    "analytics": false
-  },
   "version": 2,
   "projects": {
-    "api": "apps/api",
     "api-account": "libs/api-account",
     "api-interfaces": "libs/api-interfaces",
     "api-profile": "libs/api-profile",
@@ -14,6 +10,7 @@
     "frontend-common": "libs/frontend-common",
     "frontend-profile": "libs/frontend-profile",
     "frontend-project": "libs/frontend-project",
+    "onboarding-api": "apps/onboarding-api",
     "tempus": "apps/tempus",
     "tempus-e2e": "apps/tempus-e2e"
   }
