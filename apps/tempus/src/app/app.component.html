@@ -1,25 +1,11 @@
 <div style="text-align: center">
   <section class="mat-typography">
-    <body>
-      tempus-theme defines the following typography levels:
-    </body>
-    <h1>Heading 1</h1>
-    <h2>Heading 2</h2>
-    <h3>Heading 3</h3>
-    <p>Body</p>
-    <br />
-    <hr />
-    <br />
-    <h3>Styling components</h3>
-    <br />
-    <p>Primary:</p>
-    <button mat-raised-button color="primary">FILTER</button>
-    <br /><br />
-    <p>Accent:</p>
-    <button mat-raised-button color="accent">FILTER</button>
-    <br /><br />
-    <p>Warning:</p>
-    <button mat-raised-button color="warn">FILTER</button>
-    <br /><br />
+    <h1>Welcome to tempus!</h1>
+    <img
+      width="450"
+      src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png"
+      alt="Nx - Smart, Fast and Extensible Build System"
+    />
   </section>
 </div>
+<div>Message: {{ hello$ | async | json }}</div>
