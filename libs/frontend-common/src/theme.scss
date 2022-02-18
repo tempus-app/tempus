@@ -1,7 +1,7 @@
-@import '~@angular/material/theming';
+@use '@angular/material' as mat;
 @import url('https://fonts.googleapis.com/css2?family=Merriweather&family=Raleway&display=swap');
 
-@include mat-core();
+@include mat.core();
 
 /* Defining custom color palettes */
 $blue-palette: (
@@ -55,11 +55,11 @@ $green-palette: (
   ),
 );
 
-$tempus-primary: mat-palette($blue-palette, 500, 100, 800, 900);
-$tempus-accent: mat-palette($green-palette, 800, 300, 900, 900);
+$tempus-primary: mat.define-palette($blue-palette, 500, 100, 800, 900);
+$tempus-accent: mat.define-palette($green-palette, 800, 300, 900, 900);
 
 /* Defining tempus-theme, using default warning palette */
-$tempus-theme: mat-light-theme(
+$tempus-theme: mat.define-light-theme(
   (
     color: (
       primary: $tempus-primary,
@@ -70,10 +70,10 @@ $tempus-theme: mat-light-theme(
 
 /* Defining alert-theme that only applies to CSS class .alert-theme */
 .alert-theme {
-  $alert-primary: mat-palette($mat-green, A700, 100, 700, 900);
-  $alert-accent: mat-palette($mat-amber, A200, 200, 600, 800);
+  $alert-primary: mat.define-palette(mat.$green-palette, A700, 100, 700, 900);
+  $alert-accent: mat.define-palette(mat.$amber-palette, A200, 200, 600, 800);
 
-  $alert-theme: mat-light-theme(
+  $alert-theme: mat.define-light-theme(
     (
       color: (
         primary: $alert-primary,
@@ -81,7 +81,7 @@ $tempus-theme: mat-light-theme(
       ),
     )
   );
-  @include angular-material-theme($alert-theme);
+  @include mat.all-component-themes($alert-theme);
 }
 
 /* Fonts */
@@ -89,37 +89,37 @@ $merriweather: "'Merriweather', serif";
 $raleway: "'Raleway', sans-serif";
 
 /* Defining custom typography levels */
-$h1: mat-typography-level(
+$h1: mat.define-typography-level(
   $font-family: $merriweather,
   $font-weight: bold,
   $font-size: 48px,
 );
 
-$h2: mat-typography-level(
+$h2: mat.define-typography-level(
   $font-family: $merriweather,
   $font-weight: bold,
   $font-size: 30px,
 );
 
-$h3: mat-typography-level(
+$h3: mat.define-typography-level(
   $font-family: $raleway,
   $font-weight: bold,
   $font-size: 26px,
 );
 
-$body: mat-typography-level(
+$body: mat.define-typography-level(
   $font-family: $raleway,
   $font-weight: 500,
   $font-size: 20px,
 );
 
-$button: mat-typography-level(
+$button: mat.define-typography-level(
   $font-family: $raleway,
   $font-weight: bold,
   $font-size: 20px,
 );
 
-$tempus-typography: mat-typography-config(
+$tempus-typography: mat.define-typography-config(
   $headline: $h1,
   $title: $h2,
   $subheading-2: $h3,
@@ -128,5 +128,5 @@ $tempus-typography: mat-typography-config(
 );
 
 /* Injecting theme and typography */
-@include angular-material-theme($tempus-theme);
-@include angular-material-typography($tempus-typography);
+@include mat.all-component-themes($tempus-theme);
+@include mat.core($tempus-typography);
