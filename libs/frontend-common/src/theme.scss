@@ -58,6 +58,32 @@ $green-palette: (
 $tempus-primary: mat-palette($blue-palette, 500, 100, 800, 900);
 $tempus-accent: mat-palette($green-palette, 800, 300, 900, 900);
 
+/* Defining tempus-theme, using default warning palette */
+$tempus-theme: mat-light-theme(
+  (
+    color: (
+      primary: $tempus-primary,
+      accent: $tempus-accent,
+    ),
+  )
+);
+
+/* Defining alert-theme that only applies to CSS class .alert-theme */
+.alert-theme {
+  $alert-primary: mat-palette($mat-green, A700, 100, 700, 900);
+  $alert-accent: mat-palette($mat-amber, A200, 200, 600, 800);
+
+  $alert-theme: mat-light-theme(
+    (
+      color: (
+        primary: $alert-primary,
+        accent: $alert-accent,
+      ),
+    )
+  );
+  @include angular-material-theme($alert-theme);
+}
+
 /* Fonts */
 $merriweather: "'Merriweather', serif";
 $raleway: "'Raleway', sans-serif";
@@ -99,16 +125,6 @@ $tempus-typography: mat-typography-config(
   $subheading-2: $h3,
   $body-1: $body,
   $button: $button,
-);
-
-/* Defining tempus-theme, using default warning palette */
-$tempus-theme: mat-light-theme(
-  (
-    color: (
-      primary: $tempus-primary,
-      accent: $tempus-accent,
-    ),
-  )
 );
 
 /* Injecting theme and typography */
