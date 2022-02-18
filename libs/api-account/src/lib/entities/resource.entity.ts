@@ -1,7 +1,7 @@
 import { ChildEntity, Column, JoinTable, ManyToMany, OneToMany } from 'typeorm'
 import { UserEntity } from './user.entity'
 import { ProjectEntity } from '@tempus/api-project'
-import { SkillEntity, ViewEntity, EducationEntity, ExperienceEntity } from '@tempus/api-profile'
+import { SkillEntity, ViewEntity, EducationEntity, ExperienceEntity, CertificationEntity } from '@tempus/api-profile'
 import { Resource } from '../models/resource.model'
 
 @ChildEntity()
@@ -30,4 +30,7 @@ export class ResourceEntity extends UserEntity implements Resource {
 
   @OneToMany(() => SkillEntity, (skill) => skill.resource)
   skills: SkillEntity[]
+
+  @OneToMany(() => CertificationEntity, (certification) => certification.resource)
+  certifications: CertificationEntity[]
 }
