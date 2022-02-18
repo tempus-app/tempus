@@ -1,0 +1,116 @@
+@import '~@angular/material/theming';
+@import url('https://fonts.googleapis.com/css2?family=Merriweather&family=Raleway&display=swap');
+
+@include mat-core();
+
+/* Defining custom color palettes */
+$blue-palette: (
+  50: #ffffff,
+  100: #f1f8fd,
+  200: #eeeff0,
+  300: #93c2d3,
+  400: #569ab8,
+  500: #43768f,
+  600: #337ea4,
+  700: #1d5e83,
+  800: #104264,
+  900: #031927,
+  /* Text colors that will overlay the base */ contrast:
+    (
+      50: rgba(3, 25, 39, 1),
+      100: rgba(3, 25, 39, 1),
+      200: rgba(3, 25, 39, 1),
+      300: rgba(white, 1),
+      400: rgba(white, 1),
+      500: rgba(white, 1),
+      600: rgba(white, 1),
+      700: rgba(white, 1),
+      800: rgba(white, 1),
+      900: rgba(white, 1),
+    ),
+);
+
+$green-palette: (
+  50: #f2f6ed,
+  100: #dfe7d1,
+  200: #cad7b5,
+  300: #c0ccb7,
+  400: #a9bc87,
+  500: #9bb175,
+  600: #8da26c,
+  700: #7b8e61,
+  800: #6a7a58,
+  900: #4f5749,
+  contrast: (
+    50: rgba(3, 25, 39, 1),
+    100: rgba(3, 25, 39, 1),
+    200: rgba(3, 25, 39, 1),
+    300: rgba(white, 1),
+    400: rgba(white, 1),
+    500: rgba(white, 1),
+    600: rgba(white, 1),
+    700: rgba(white, 1),
+    800: rgba(white, 1),
+    900: rgba(white, 1),
+  ),
+);
+
+$tempus-primary: mat-palette($blue-palette, 500, 100, 800, 900);
+$tempus-accent: mat-palette($green-palette, 800, 300, 900, 900);
+
+/* Fonts */
+$merriweather: "'Merriweather', serif";
+$raleway: "'Raleway', sans-serif";
+
+/* Defining custom typography levels */
+$h1: mat-typography-level(
+  $font-family: $merriweather,
+  $font-weight: bold,
+  $font-size: 48px,
+);
+
+$h2: mat-typography-level(
+  $font-family: $merriweather,
+  $font-weight: bold,
+  $font-size: 30px,
+);
+
+$h3: mat-typography-level(
+  $font-family: $raleway,
+  $font-weight: bold,
+  $font-size: 26px,
+);
+
+$body: mat-typography-level(
+  $font-family: $raleway,
+  $font-weight: 500,
+  $font-size: 20px,
+);
+
+$button: mat-typography-level(
+  $font-family: $raleway,
+  $font-weight: bold,
+  $font-size: 20px,
+);
+
+$tempus-typography: mat-typography-config(
+  $headline: $h1,
+  $title: $h2,
+  $subheading-2: $h3,
+  $body-1: $body,
+  $button: $button,
+);
+
+/* Defining tempus-theme, using default warning palette */
+$tempus-theme: mat-light-theme(
+  (
+    color: (
+      primary: $tempus-primary,
+      accent: $tempus-accent,
+    ),
+  )
+);
+
+/* Injecting theme and typography */
+@include angular-material-theme($tempus-theme);
+@include angular-material-typography($tempus-typography);
