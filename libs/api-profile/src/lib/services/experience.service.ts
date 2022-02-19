@@ -17,7 +17,7 @@ export class ExperienceService {
   }
 
   // return all experiences by resource
-  findExperienceByResource(resourceId: number): Promise<ExperienceEntity> {
+  findExperienceByResource(resourceId: number): Promise<ExperienceEntity[]> {
     throw new NotImplementedException()
   }
 
@@ -27,7 +27,7 @@ export class ExperienceService {
   }
 
   // edit experience
-  editExperience(experience: Experience): Promise<Experience> {
+  editExperience(experience: Experience): Promise<ExperienceEntity> {
     throw new NotImplementedException()
   }
 

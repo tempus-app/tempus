@@ -2,6 +2,7 @@
   "version": 2,
   "projects": {
     "api-account": "libs/api-account",
+    "api-common": "libs/api-common",
     "api-interfaces": "libs/api-interfaces",
     "api-profile": "libs/api-profile",
     "api-project": "libs/api-project",
