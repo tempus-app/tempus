@@ -7,8 +7,10 @@ import {
   ExperienceEntity,
   RevisionEntity,
   SkillTypeEntity,
+  CertificationEntity,
 } from '@tempus/api-profile'
 import { ClientEntity, ProjectEntity, TaskEntity } from '@tempus/api-project'
+import { LocationEntity } from '@tempus/api-common'
 
 const config: PostgresConnectionOptions = {
   type: 'postgres',
@@ -29,6 +31,8 @@ const config: PostgresConnectionOptions = {
     ClientEntity,
     ProjectEntity,
     TaskEntity,
+    LocationEntity,
+    CertificationEntity,
   ],
   synchronize: true,
 }
