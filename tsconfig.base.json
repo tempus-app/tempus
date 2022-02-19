@@ -16,6 +16,7 @@
     "baseUrl": ".",
     "paths": {
       "@tempus/api-account": ["libs/api-account/src/index.ts"],
+      "@tempus/api-common": ["libs/api-common/src/index.ts"],
       "@tempus/api-interfaces": ["libs/api-interfaces/src/index.ts"],
       "@tempus/api-profile": ["libs/api-profile/src/index.ts"],
       "@tempus/api-project": ["libs/api-project/src/index.ts"],

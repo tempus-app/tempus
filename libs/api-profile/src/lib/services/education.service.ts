@@ -17,17 +17,17 @@ export class EducationService {
   }
 
   // return all educations by resource
-  findEducationByResource(resourceId: number): Promise<Education> {
+  findEducationByResource(resourceId: number): Promise<EducationEntity[]> {
     throw new NotImplementedException()
   }
 
   // return education by id
-  findEducationById(educationId: number): Promise<Education> {
+  findEducationById(educationId: number): Promise<EducationEntity> {
     throw new NotImplementedException()
   }
 
   // edit education
-  editEducation(education: Education): Promise<Education> {
+  editEducation(education: Education): Promise<EducationEntity> {
     throw new NotImplementedException()
   }
 
