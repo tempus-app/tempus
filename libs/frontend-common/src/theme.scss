@@ -1,4 +1,5 @@
 @use '@angular/material' as mat;
+@use 'lib/search-box/search-box.component.scss' as search-box;
 @import url('https://fonts.googleapis.com/css2?family=Merriweather&family=Raleway&display=swap');
 
 @include mat.core();
@@ -130,3 +131,4 @@ $tempus-typography: mat.define-typography-config(
 /* Injecting theme and typography */
 @include mat.all-component-themes($tempus-theme);
 @include mat.core($tempus-typography);
+@include search-box.theme($tempus-theme);
