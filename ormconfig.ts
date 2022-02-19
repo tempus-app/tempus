@@ -1,5 +1,5 @@
 import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions'
-import { ResourceEntity, UserEntity } from '@tempus/api-account'
+import { ResourceEntity, UserEntity, LinkEntity } from '@tempus/api-account'
 import {
   ViewEntity,
   EducationEntity,
@@ -22,6 +22,7 @@ const config: PostgresConnectionOptions = {
   entities: [
     UserEntity,
     ResourceEntity,
+    LinkEntity,
     ViewEntity,
     EducationEntity,
     SkillEntity,
