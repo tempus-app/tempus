@@ -17,17 +17,17 @@ export class CertificationService {
   }
 
   // return all certifications by resource
-  findCertificationByResource(resourceId: number): Promise<Certification> {
+  findCertificationByResource(resourceId: number): Promise<CertificationEntity[]> {
     throw new NotImplementedException()
   }
 
   // return certification by id
-  findCertificationById(certificationId: number): Promise<Certification> {
+  findCertificationById(certificationId: number): Promise<CertificationEntity> {
     throw new NotImplementedException()
   }
 
   // edit certification
-  editCertification(certification: Certification): Promise<Certification> {
+  editCertification(certification: Certification): Promise<CertificationEntity> {
     throw new NotImplementedException()
   }
 
