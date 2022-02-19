@@ -71,6 +71,11 @@ const password = 'random_password'
 const hash = await bcrypt.hash(password, saltOrRounds)
 ```
 
+### Additional Resources
+
+- Really good YouTube [video](https://www.youtube.com/watch?v=_L225zpUK0M) implementing authentication in NestJS.
+- Good [article](https://dev.to/thisdotmedia/angular-and-the-rest-nest-js-and-jwt-dja)
+
 ---
 
 ## 2FA
