@@ -1,12 +1,9 @@
 import { Body, Controller, Get, NotImplementedException, Param, Patch, Post, Req } from '@nestjs/common'
-import { Experience } from '../models/experience.model'
-import { Skill } from '../models/skill.model'
-import { Education } from '../models/education.model'
-import { Certification } from '../models/certification.model'
 import { EducationService } from '../services/education.service'
 import { ExperienceService } from '../services/experience.service'
 import { SkillsService } from '../services/skill.service'
 import { CertificationService } from '../services/certificate.service'
+import { Certification, Education, Experience, Skill } from '@tempus/datalayer'
 
 @Controller('profileresume')
 export class ProfileResumeController {

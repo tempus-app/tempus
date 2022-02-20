@@ -1,0 +1,21 @@
+<ng-container>
+  <mat-form-field class={{cssClass}} appearance="fill">
+    <mat-label>{{placeholder}}</mat-label>
+    <input type="text"
+           aria-label="Search"
+           matInput
+           [formControl]="myControl"
+           [matAutocomplete]="auto">
+    <mat-autocomplete #auto="matAutocomplete">
+      <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+        {{option}}
+      </mat-option>
+    </mat-autocomplete>
+    <mat-icon matSuffix>search</mat-icon>
+  </mat-form-field>
+</ng-container>
+
+
+<ng-template>
+  <ng-content></ng-content>
+</ng-template>

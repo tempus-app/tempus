@@ -1,8 +1,7 @@
 import { Injectable, NotImplementedException } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
+import { Certification, CertificationEntity } from '@tempus/datalayer'
 import { Repository } from 'typeorm'
-import { Certification } from '../models/certification.model'
-import { CertificationEntity } from '../entities/certification.entity'
 
 @Injectable()
 export class CertificationService {
