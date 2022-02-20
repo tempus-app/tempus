@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Message } from '@tempus/api-interfaces'
 import { Repository } from 'typeorm'
-import { RoleType, ResourceEntity, UserEntity } from '@tempus/api-account'
+import { RoleType, ResourceEntity, UserEntity } from '@tempus/datalayer'
 
 @Injectable()
 export class AppService {
