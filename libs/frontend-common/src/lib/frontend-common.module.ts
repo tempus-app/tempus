@@ -1,8 +1,12 @@
 import { NgModule } from '@angular/core'
 import { CommonModule } from '@angular/common'
+import { ChipComponent } from './chip/chip.component'
+import { MatChipsModule } from '@angular/material/chips'
+import { MatIconModule } from '@angular/material/icon'
+import { CardComponent } from './card/card.component'
+import { MatCardModule } from '@angular/material/card'
 import { SearchBoxComponent } from './search-box/search-box.component'
 import { MatInputModule } from '@angular/material/input'
-import { MatIconModule } from '@angular/material/icon'
 import { MatButtonModule } from '@angular/material/button'
 import { FileUploadComponent } from './file-upload/file-upload.component'
 import { TextAreaComponent } from './text-area/text-area.component'
@@ -26,8 +30,27 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms'
     MatAutocompleteModule,
     FormsModule,
     ReactiveFormsModule,
+    MatChipsModule,
+    MatIconModule,
+    MatCardModule,
   ],
-  declarations: [SearchBoxComponent, FileUploadComponent, TextAreaComponent, DropdownComponent, TextInputComponent],
-  exports: [SearchBoxComponent, FileUploadComponent, TextAreaComponent, DropdownComponent, TextInputComponent],
+  declarations: [
+    SearchBoxComponent,
+    FileUploadComponent,
+    TextAreaComponent,
+    DropdownComponent,
+    TextInputComponent,
+    ChipComponent,
+    CardComponent,
+  ],
+  exports: [
+    SearchBoxComponent,
+    FileUploadComponent,
+    TextAreaComponent,
+    DropdownComponent,
+    TextInputComponent,
+    ChipComponent,
+    CardComponent,
+  ],
 })
 export class FrontendCommon {}
