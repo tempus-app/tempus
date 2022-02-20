@@ -4,6 +4,21 @@ import { RoleType, User } from '../../models/account-models'
 @Entity()
 @TableInheritance({ column: { type: 'varchar', name: 'role' } })
 export class UserEntity implements User {
+  constructor(
+    id?: number,
+    firstName?: string,
+    lastName?: string,
+    email?: string,
+    password?: string,
+    roles?: RoleType[],
+  ) {
+    this.id = id ?? null
+    this.firstName = firstName ?? null
+    this.lastName = lastName ?? null
+    this.email = email ?? null
+    this.password = password ?? null
+    this.roles = roles ?? null
+  }
   @PrimaryGeneratedColumn()
   id: number
 

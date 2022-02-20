@@ -48,18 +48,15 @@ export class EducationEntity implements Education {
   })
   resource: ResourceEntity
 
-  public static fromDto(education: Education): EducationEntity {
-    if (education == null || education == undefined) return new EducationEntity()
-
-    let educationEntity = new EducationEntity(
-      education.id,
-      education.degree,
-      education.institution,
-      education.startDate,
-      education.endDate,
-      LocationEntity.fromDto(education.location),
-    )
-
-    return educationEntity
-  }
+  // public static fromDto(education: Education): EducationEntity {
+  //   if (education == null || education == undefined) return new EducationEntity()
+  //   return new EducationEntity(
+  //     education.id,
+  //     education.degree,
+  //     education.institution,
+  //     education.startDate,
+  //     education.endDate,
+  //     LocationEntity.fromDto(education.location),
+  //   )
+  // }
 }

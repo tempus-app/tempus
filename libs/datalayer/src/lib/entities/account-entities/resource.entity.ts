@@ -60,13 +60,15 @@ export class ResourceEntity extends UserEntity implements Resource {
   @OneToMany(() => CertificationEntity, (certification) => certification.resource)
   certifications: CertificationEntity[]
 
-  public static fromDto(resource: Resource): ResourceEntity {
-    if (resource == null || resource == undefined) return new ResourceEntity()
-    return new ResourceEntity(
-      resource.id,
-      resource.phoneNumber,
-      resource.title,
-      LocationEntity.fromDto(resource.location),
-    )
-  }
+  // public static fromDto(resource: Resource): ResourceEntity {
+  //   if (resource == null || resource == undefined) return new ResourceEntity()
+  //   return new ResourceEntity(
+  //     resource.id,
+  //     resource.phoneNumber,
+  //     resource.title,
+  //     LocationEntity.fromDto(resource.location),
+  //     resource.projects.map(project => ProjectEntity.fromDto(project)),
+
+  //   )
+  // }
 }

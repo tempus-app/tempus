@@ -4,6 +4,11 @@ import { ProjectEntity } from './project.entity'
 
 @Entity()
 export class TaskEntity implements Task {
+  constructor(id?: number, taskName?: string, project?: ProjectEntity) {
+    this.id = id ?? null
+    this.taskName = taskName ?? null
+    this.project = project ?? null
+  }
   @PrimaryGeneratedColumn()
   id: number
 
@@ -11,5 +16,14 @@ export class TaskEntity implements Task {
   taskName: string
 
   @ManyToOne(() => ProjectEntity, (project) => project.tasks)
-  project: ProjectEntity[]
+  project: ProjectEntity
+
+  // public static fromDto(task: Task): TaskEntity {
+  //   if (task == null || task == undefined) return new TaskEntity()
+  //   return new TaskEntity(
+  //     task.id,
+  //     task.taskName,
+  //     ProjectEntity.fromDto(task.project)
+  //   )
+  // }
 }
