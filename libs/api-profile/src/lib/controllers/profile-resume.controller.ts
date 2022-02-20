@@ -3,7 +3,7 @@ import { EducationService } from '../services/education.service'
 import { ExperienceService } from '../services/experience.service'
 import { SkillsService } from '../services/skill.service'
 import { CertificationService } from '../services/certificate.service'
-import { Certification, Education, Experience, Skill } from '@tempus/datalayer'
+import { Certification, Education, EducationDto, Experience, GetEducationDto, Skill } from '@tempus/datalayer'
 
 @Controller('profileresume')
 export class ProfileResumeController {
@@ -16,7 +16,7 @@ export class ProfileResumeController {
 
   // CREATE DATA (only relevant when on main table page and creating)
   @Post('/education/:userId')
-  async createEducation(@Param('userId') userId: number, @Body() education: Education): Promise<Education> {
+  async createEducation(@Param('userId') userId: number, @Body() education: EducationDto): Promise<GetEducationDto> {
     return this.educationService.createEducation(userId, education)
   }
   @Post('/experience/:userId')

@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException, NotImplementedException } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { Education, EducationEntity } from '@tempus/datalayer'
+import { Education, EducationDto, EducationEntity, GetEducationDto } from '@tempus/datalayer'
 import { ResourceService } from '@tempus/api-account'
 import { Repository } from 'typeorm'
 
@@ -13,7 +13,7 @@ export class EducationService {
   ) {}
 
   // create education for a specific resource
-  async createEducation(resourceId: number, education: Omit<Education, 'id'>): Promise<EducationEntity> {
+  async createEducation(resourceId: number, education: EducationDto): Promise<GetEducationDto> {
     let educationEntity = <EducationEntity>education
     let resourceEntity = await this.resourceService.findResourceById(resourceId)
     educationEntity.resource = resourceEntity
