@@ -1,11 +1,11 @@
 <ng-container>
-    <mat-chip-list>
-        <mat-chip class="chip" id="{{ cssId }}" selected>
-            <p class="{{ typography }}">Inner header</p>
+  <mat-chip-list>
+    <mat-chip class="chip" id="{{ cssId }}" selected>
+      <p class="{{ typography }}">Inner header</p>
 
-            <button *ngIf="removable" matChipRemove (click)="removeChip()">
-      <mat-icon>cancel</mat-icon>
-    </button>
-        </mat-chip>
-    </mat-chip-list>
+      <button *ngIf="removable" matChipRemove (click)="removeChip()">
+        <mat-icon>cancel</mat-icon>
+      </button>
+    </mat-chip>
+  </mat-chip-list>
 </ng-container>
