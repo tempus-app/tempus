@@ -1,8 +1,7 @@
 import { Injectable, NotImplementedException } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
+import { Link, LinkEntity, StatusType } from '@tempus/datalayer'
 import { Repository } from 'typeorm'
-import { Link, LinkEntity } from '..'
-import { StatusType } from '../models/status'
 
 @Injectable()
 export class LinkService {

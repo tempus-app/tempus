@@ -1,14 +1,20 @@
 import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions'
-import { ResourceEntity, UserEntity } from '@tempus/api-account'
 import {
-  ViewEntity,
+  LinkEntity,
+  ResourceEntity,
+  UserEntity,
+  LocationEntity,
+  CertificationEntity,
   EducationEntity,
-  SkillEntity,
   ExperienceEntity,
   RevisionEntity,
+  SkillEntity,
   SkillTypeEntity,
-} from '@tempus/api-profile'
-import { ClientEntity, ProjectEntity, TaskEntity } from '@tempus/api-project'
+  ViewEntity,
+  ClientEntity,
+  ProjectEntity,
+  TaskEntity,
+} from '@tempus/datalayer'
 
 const config: PostgresConnectionOptions = {
   type: 'postgres',
@@ -20,6 +26,7 @@ const config: PostgresConnectionOptions = {
   entities: [
     UserEntity,
     ResourceEntity,
+    LinkEntity,
     ViewEntity,
     EducationEntity,
     SkillEntity,
@@ -29,6 +36,8 @@ const config: PostgresConnectionOptions = {
     ClientEntity,
     ProjectEntity,
     TaskEntity,
+    LocationEntity,
+    CertificationEntity,
   ],
   synchronize: true,
 }

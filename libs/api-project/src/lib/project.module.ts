@@ -1,11 +1,10 @@
 import { Module } from '@nestjs/common'
-import { TypeOrmModule } from '@nestjs/typeorm'
-import { ClientEntity, ProjectEntity, TaskEntity } from './entities'
+import { DataLayerModule } from '@tempus/datalayer'
 
 @Module({
-  imports: [TypeOrmModule.forFeature([ClientEntity, ProjectEntity, TaskEntity])],
+  imports: [DataLayerModule],
   controllers: [],
   providers: [],
-  exports: [TypeOrmModule],
+  exports: [],
 })
 export class ProjectModule {}
