@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import { FormControl } from '@angular/forms';
+import { map, Observable, of, startWith } from 'rxjs';
 
 @Component({
   selector: 'tempus-search-box',
@@ -6,10 +8,26 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./search-box.component.scss']
 })
 export class SearchBoxComponent implements OnInit {
+  myControl = new FormControl();
   search : String ="";
-  constructor() { }
-
-  ngOnInit(): void {
+  @Input() cssClass: string = '';
+  @Input() placeholder: string = '';
+  @Input() options: string[] = [];
+  filteredOptions: Observable<string[]>;
+  constructor() { 
+    this.filteredOptions = of([]);
   }
 
+  ngOnInit() {
+    this.filteredOptions = this.myControl.valueChanges.pipe(
+      startWith(''),
+      map(value => this._filter(value)),
+    );
+  }
+
+  private _filter(value: string): string[] {
+    const filterValue = value.toLowerCase();
+
+    return this.options.filter(option => option.toLowerCase().includes(filterValue));
+  }
 }

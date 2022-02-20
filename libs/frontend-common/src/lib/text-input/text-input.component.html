@@ -1,17 +1,10 @@
-<ng-container *ngIf="type === 'primary'">
-    <mat-form-field  appearance="standard" color="accent">
-        <input matInput placeholder={{placeholder}} >
-      </mat-form-field>
-  </ng-container>
-  
-  <ng-container *ngIf="type === 'secondary'">
-    <mat-form-field class="example-full-width" appearance="standard" color="accent">
-        <input matInput placeholder={{placeholder}} >
-      </mat-form-field>
-  </ng-container>
+<ng-container>
+  <mat-form-field class={{cssClass}} appearance="fill" color="accent">
+    <input matInput placeholder={{placeholder}} >
+  </mat-form-field>
+</ng-container>
 
-  
-  <ng-template>
+
+<ng-template>
     <ng-content></ng-content>
-  </ng-template>
-  
+</ng-template>

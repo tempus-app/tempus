@@ -1,4 +1,10 @@
-<mat-form-field class="example-full-width" appearance="fill">
-    <mat-label>Leave a comment</mat-label>
-    <textarea matInput class="input-background-color"></textarea>
-</mat-form-field>
+<ng-container>
+    <mat-form-field class={{cssClass}} id="text-area" appearance="fill">
+        <textarea matInput placeholder={{placeholder}} class="input-background-color"></textarea>
+    </mat-form-field>
+</ng-container>
+
+
+<ng-template>
+    <ng-content></ng-content>
+</ng-template>

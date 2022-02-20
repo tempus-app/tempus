@@ -11,6 +11,8 @@ import { TextInputComponent } from './text-input/text-input.component'
 import {MatSelectModule} from '@angular/material/select';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgxDropzoneModule } from 'ngx-dropzone';
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 
 @NgModule({
   imports: [
@@ -20,7 +22,11 @@ import { NgxDropzoneModule } from 'ngx-dropzone';
     MatButtonModule,
     MatSelectModule,
     BrowserAnimationsModule,
-    NgxDropzoneModule
+    NgxDropzoneModule,
+    MatAutocompleteModule,
+    FormsModule,
+    ReactiveFormsModule,
+    
   ],
   declarations: [
     SearchBoxComponent,

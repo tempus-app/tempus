@@ -6,18 +6,9 @@ import { Component, OnInit, Input } from '@angular/core';
   styleUrls: ['./dropdown.component.scss']
 })
 export class DropdownComponent implements OnInit {
-  files: File[] = [];
-
-	onSelect(event: any) {
-		console.log(event);
-		this.files.push(...event.addedFiles);
-	}
-
-	onRemove(event: any) {
-		console.log(event);
-		this.files.splice(this.files.indexOf(event), 1);
-	}
-
+  @Input() options: string = '';
+  @Input() cssClass: string = '';
+  @Input() label: string = '';
   constructor() { }
 
   ngOnInit(): void {
