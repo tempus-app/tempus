@@ -6,10 +6,10 @@ import { MatButtonModule } from '@angular/material/button'
 import { AppComponent } from './app.component'
 import { NxWelcomeComponent } from './nx-welcome.component'
 import { HttpClientModule } from '@angular/common/http'
-
+import { FrontendCommon } from '@tempus/frontend-common'
 @NgModule({
   declarations: [AppComponent, NxWelcomeComponent],
-  imports: [BrowserModule, HttpClientModule, MatInputModule, MatButtonModule],
+  imports: [BrowserModule, HttpClientModule, MatInputModule, MatButtonModule, FrontendCommon],
   providers: [],
   bootstrap: [AppComponent],
 })
