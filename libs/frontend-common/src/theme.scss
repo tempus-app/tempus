@@ -128,19 +128,19 @@ $tempus-typography: mat.define-typography-config(
 );
 
 //Global styles to all form fields
-.mat-form-field.primary .mat-form-field-flex{
+.mat-form-field.primary .mat-form-field-flex {
   background-color: mat.get-color-from-palette($tempus-primary, 100);
   border-radius: 10px;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
 }
 
-.mat-form-field.secondary .mat-form-field-flex{
-  background-color: white; 
+.mat-form-field.secondary .mat-form-field-flex {
+  background-color: white;
   border-radius: 10px;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
 }
 
-.mat-form-field-underline{
+.mat-form-field-underline {
   display: none;
 }
 
