@@ -17,7 +17,7 @@ export class ProfileResumeController {
   // CREATE DATA (only relevant when on main table page and creating)
   @Post('/education/:userId')
   async createEducation(@Param('userId') userId: number, @Body() education: Education): Promise<Education> {
-    throw new NotImplementedException()
+    return this.educationService.createEducation(userId, education)
   }
   @Post('/experience/:userId')
   async createExperience(@Param('userId') userId: number, @Body() experience: Experience): Promise<Experience> {

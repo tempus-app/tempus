@@ -8,7 +8,6 @@ export class SkillsService {
   constructor(
     @InjectRepository(SkillEntity)
     private skillsRepository: Repository<SkillEntity>,
-    private skillTypeRepository: Repository<SkillTypeEntity>,
   ) {}
 
   // create skill for a specific resource

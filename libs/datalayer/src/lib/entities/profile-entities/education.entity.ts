@@ -23,6 +23,9 @@ export class EducationEntity implements Education {
   @OneToOne(() => LocationEntity)
   location: LocationEntity
 
-  @ManyToOne(() => ResourceEntity, (resource) => resource.educations)
+  @ManyToOne(() => ResourceEntity, (resource) => resource.educations, {
+    onDelete: 'CASCADE',
+    cascade: ['insert', 'update'],
+  })
   resource: ResourceEntity
 }
