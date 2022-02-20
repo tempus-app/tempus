@@ -1,4 +1,4 @@
-import { User, Resource } from '@tempus/api-account'
+import { Resource } from '../account-models'
 import { Education } from './education.model'
 import { Experience } from './experience.model'
 import { Revision } from './revision.model'
