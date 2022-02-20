@@ -1,9 +1,7 @@
 import { Injectable, NotImplementedException } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { Skill } from '@tempus/api-profile'
-import { Project } from '@tempus/api-project'
+import { Project, ResourceEntity, Skill } from '@tempus/datalayer'
 import { Repository } from 'typeorm'
-import { ResourceEntity } from '..'
 import { UserService } from './user.service'
 
 @Injectable()

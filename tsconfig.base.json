@@ -16,11 +16,11 @@
     "baseUrl": ".",
     "paths": {
       "@tempus/api-account": ["libs/api-account/src/index.ts"],
-      "@tempus/api-common": ["libs/api-common/src/index.ts"],
       "@tempus/api-interfaces": ["libs/api-interfaces/src/index.ts"],
       "@tempus/api-profile": ["libs/api-profile/src/index.ts"],
       "@tempus/api-project": ["libs/api-project/src/index.ts"],
       "@tempus/core": ["libs/core/src/index.ts"],
+      "@tempus/datalayer": ["libs/datalayer/src/index.ts"],
       "@tempus/frontend-account": ["libs/frontend-account/src/index.ts"],
       "@tempus/frontend-common": ["libs/frontend-common/src/index.ts"],
       "@tempus/frontend-profile": ["libs/frontend-profile/src/index.ts"],

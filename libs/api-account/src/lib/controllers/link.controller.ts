@@ -1,6 +1,5 @@
 import { Body, Controller, Get, NotImplementedException, Param, Patch, Post } from '@nestjs/common'
-import { Link, LinkEntity, User } from '..'
-import { StatusType } from '../models/status'
+import { Link, LinkEntity, StatusType } from '@tempus/datalayer'
 import { LinkService } from '../services/link.service'
 
 @Controller('link')

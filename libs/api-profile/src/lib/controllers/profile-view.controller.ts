@@ -1,9 +1,8 @@
 import { Body, Controller, Delete, Get, NotImplementedException, Param, Patch, Post, Req } from '@nestjs/common'
+import { View, ViewEntity } from '@tempus/datalayer'
 import { EducationService } from '../services/education.service'
 import { ExperienceService } from '../services/experience.service'
 import { SkillsService } from '../services/skill.service'
-import { ViewEntity } from '..'
-import { View } from '../models/view.model'
 
 @Controller('profileview')
 export class ProfileViewController {

@@ -1,11 +1,10 @@
 import { Module } from '@nestjs/common'
-import { TypeOrmModule } from '@nestjs/typeorm'
-import { UserEntity } from './entities'
-import { ResourceEntity } from './entities/resource.entity'
+import { DataLayerModule } from 'libs/datalayer/src'
+import { ResourceService } from './services/resource.service'
 
 @Module({
-  imports: [TypeOrmModule.forFeature([UserEntity, ResourceEntity])],
-  providers: [],
-  exports: [TypeOrmModule],
+  imports: [DataLayerModule],
+  providers: [ResourceService],
+  exports: [ResourceService],
 })
 export class AccountModule {}
