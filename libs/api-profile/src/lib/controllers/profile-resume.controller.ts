@@ -38,7 +38,7 @@ export class ProfileResumeController {
   // UPDATE DATA (only relevant when on main table page and editing)
   @Patch('/education/:educationId')
   async editEducation(@Param('educationId') educationId: number, @Body() education: Education): Promise<Education> {
-    throw new NotImplementedException()
+    return await this.educationService.editEducation(education)
   }
   @Patch('/experience/:experienceId')
   async editExperience(

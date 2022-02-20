@@ -7,6 +7,31 @@ import { UserEntity } from './user.entity'
 
 @ChildEntity()
 export class ResourceEntity extends UserEntity implements Resource {
+  constructor(
+    id?: number,
+    phoneNumber?: string,
+    title?: string,
+    location?: LocationEntity,
+    projects?: ProjectEntity[],
+    views?: ViewEntity[],
+    experiences?: ExperienceEntity[],
+    educations?: EducationEntity[],
+    skills?: SkillEntity[],
+    certifications?: CertificationEntity[],
+  ) {
+    super()
+    this.id = id ?? null
+    this.phoneNumber = phoneNumber ?? null
+    this.title = title ?? null
+    this.location = location ?? null
+    this.projects = projects ?? null
+    this.views = views ?? null
+    this.experiences = experiences ?? null
+    this.educations = educations ?? null
+    this.skills = skills ?? null
+    this.certifications = certifications ?? null
+  }
+
   @Column({ nullable: true })
   phoneNumber: string
 
@@ -34,4 +59,14 @@ export class ResourceEntity extends UserEntity implements Resource {
 
   @OneToMany(() => CertificationEntity, (certification) => certification.resource)
   certifications: CertificationEntity[]
+
+  public static fromDto(resource: Resource): ResourceEntity {
+    if (resource == null || resource == undefined) return new ResourceEntity()
+    return new ResourceEntity(
+      resource.id,
+      resource.phoneNumber,
+      resource.title,
+      LocationEntity.fromDto(resource.location),
+    )
+  }
 }

@@ -5,11 +5,11 @@ import { Revision } from './revision.model'
 import { Skill } from './skill.model'
 
 export interface View {
-  id: number
+  id?: number
   type: string
-  status?: Revision[]
-  skills?: Skill[]
-  experience?: Experience[]
-  education?: Education[]
+  status: Revision[]
+  skills: Skill[]
+  experience: Experience[]
+  education: Education[]
   resource: Resource
 }

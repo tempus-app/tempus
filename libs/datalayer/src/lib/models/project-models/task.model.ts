@@ -1,7 +1,7 @@
 import { Project } from './project.model'
 
 export class Task {
-  id: number
+  id?: number
   taskName: string
   project: Project[]
 }

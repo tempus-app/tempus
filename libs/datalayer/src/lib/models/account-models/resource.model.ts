@@ -7,10 +7,10 @@ export interface Resource extends User {
   phoneNumber: string
   location: Location
   title: string
-  projects?: Project[]
-  views?: View[]
-  experiences?: Experience[]
-  educations?: Education[]
-  skills?: Skill[]
+  projects: Project[]
+  views: View[]
+  experiences: Experience[]
+  educations: Education[]
+  skills: Skill[]
   certifications?: Certification[]
 }

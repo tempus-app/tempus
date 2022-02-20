@@ -1,15 +1,15 @@
 import { RoleType } from '.'
 
 export interface User {
-  id: number
+  id?: number
 
   firstName: string
 
   lastName: string
 
-  email?: string
+  email: string
 
-  password?: string
+  password: string
 
   // TODO: Authroization
   roles: RoleType[]
