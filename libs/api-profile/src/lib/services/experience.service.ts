@@ -1,8 +1,7 @@
 import { Injectable, NotImplementedException } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
+import { Experience, ExperienceEntity } from '@tempus/datalayer'
 import { Repository } from 'typeorm'
-import { Experience } from '../models/experience.model'
-import { ExperienceEntity } from '../entities/experience.entity'
 
 @Injectable()
 export class ExperienceService {
