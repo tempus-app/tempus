@@ -5,9 +5,9 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
   styleUrls: ['./chip.component.scss'],
 })
 export class ChipComponent implements OnInit {
-  @Input() cssId: string = 'skill-select'
+  @Input() cssId: string = 'skill'
   @Input() removable: boolean = true
-  @Input() typography: string = 'mat-button'
+  @Input() typography: string = 'subheading-1'
   @Output() onRemove: EventEmitter<any> = new EventEmitter()
 
   removeChip() {
