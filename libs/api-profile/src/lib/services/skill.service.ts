@@ -1,8 +1,7 @@
 import { Injectable, NotImplementedException } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
+import { Skill, SkillEntity, SkillTypeEntity } from '@tempus/datalayer'
 import { Repository } from 'typeorm'
-import { SkillEntity, SkillTypeEntity } from '../entities'
-import { Skill } from '../models/skill.model'
 
 @Injectable()
 export class SkillsService {

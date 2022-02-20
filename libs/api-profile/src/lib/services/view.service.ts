@@ -1,8 +1,7 @@
 import { Injectable, NotImplementedException } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
+import { View, ViewEntity } from '@tempus/datalayer'
 import { Repository } from 'typeorm'
-import { View } from '..'
-import { ViewEntity } from '../entities/view.entity'
 
 @Injectable()
 export class ViewsService {
