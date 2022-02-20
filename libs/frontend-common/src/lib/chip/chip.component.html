@@ -1,0 +1,9 @@
+<mat-chip-list>
+  <mat-chip class="chip" id="{{ cssId }}" selected>
+    <p class="mat-button">Inner header</p>
+
+    <button *ngIf="removable" matChipRemove>
+      <mat-icon>cancel</mat-icon>
+    </button>
+  </mat-chip>
+</mat-chip-list>
