@@ -7,7 +7,7 @@ import { Repository } from 'typeorm'
 export class UserService {
   constructor(
     @InjectRepository(UserEntity)
-    private userEntity: Repository<UserEntity>,
+    private userRepository: Repository<UserEntity>,
   ) {}
 
   createrUser(user: Omit<User, 'id'>): Promise<UserEntity> {
@@ -20,5 +20,9 @@ export class UserService {
 
   getUser(userId: number): Promise<UserEntity> {
     throw new NotImplementedException()
+  }
+
+  async findByEmail(email: string): Promise<UserEntity> {
+    return this.userRepository.find({ where: { email: email } })[0]
   }
 }

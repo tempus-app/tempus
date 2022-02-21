@@ -19,6 +19,7 @@
       "@tempus/api-interfaces": ["libs/api-interfaces/src/index.ts"],
       "@tempus/api-profile": ["libs/api-profile/src/index.ts"],
       "@tempus/api-project": ["libs/api-project/src/index.ts"],
+      "@tempus/api-auth": ["libs/api-auth/src/index.ts"],
       "@tempus/core": ["libs/core/src/index.ts"],
       "@tempus/datalayer": ["libs/datalayer/src/index.ts"],
       "@tempus/frontend-account": ["libs/frontend-account/src/index.ts"],

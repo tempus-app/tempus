@@ -1,4 +1,5 @@
-import { Body, Controller, Get, NotImplementedException, Param, Patch, Post, Query } from '@nestjs/common'
+import { Body, Controller, Get, NotImplementedException, Param, Patch, Post, Query, UseGuards } from '@nestjs/common'
+import { LocalAuthGuard } from 'libs/api-auth/src/lib/local-auth.guard'
 import { ResourceEntity, User, UserEntity } from '..'
 import { ResourceService } from '../services/resource.service'
 import { UserService } from '../services/user.service'
@@ -13,6 +14,7 @@ export class UserController {
     throw new NotImplementedException()
   }
 
+  @UseGuards(LocalAuthGuard)
   @Get()
   async getAllUsers(
     @Query() location: string[] | string,

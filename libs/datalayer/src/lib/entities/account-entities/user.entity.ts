@@ -2,7 +2,7 @@ import { Entity, Column, PrimaryGeneratedColumn, TableInheritance, OneToMany } f
 import { RoleType, User } from '../../models/account-models'
 
 @Entity()
-@TableInheritance({ column: { type: 'varchar', name: 'role' } })
+@TableInheritance({ column: { type: 'varchar', name: 'user_type' } })
 export class UserEntity implements User {
   @PrimaryGeneratedColumn()
   id: number
@@ -23,7 +23,7 @@ export class UserEntity implements User {
     type: 'enum',
     enum: RoleType,
     array: true,
-    default: [RoleType.AVAILABLE_RESOURCE],
+    default: [RoleType.USER],
   })
   roles: RoleType[]
 }
