@@ -13,7 +13,6 @@
     "frontend-project": "libs/frontend-project",
     "onboarding-api": "apps/onboarding-api",
     "tempus": "apps/tempus",
-    "tempus-e2e": "apps/tempus-e2e",
-    "ui-table": "libs/ui-table"
+    "tempus-e2e": "apps/tempus-e2e"
   }
 }

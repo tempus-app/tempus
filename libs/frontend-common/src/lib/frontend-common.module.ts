@@ -17,6 +17,10 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { NgxDropzoneModule } from 'ngx-dropzone'
 import { MatAutocompleteModule } from '@angular/material/autocomplete'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
+import { MatSortModule } from '@angular/material/sort'
+import { MatTableModule } from '@angular/material/table'
+import { MatDividerModule } from '@angular/material/divider'
+import { TableComponent } from './table/table.component'
 
 @NgModule({
   imports: [
@@ -33,6 +37,9 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms'
     MatChipsModule,
     MatIconModule,
     MatCardModule,
+    MatSortModule,
+    MatTableModule,
+    MatDividerModule,
   ],
   declarations: [
     SearchBoxComponent,
@@ -42,6 +49,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms'
     TextInputComponent,
     ChipComponent,
     CardComponent,
+    TableComponent,
   ],
   exports: [
     SearchBoxComponent,
@@ -51,6 +59,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms'
     TextInputComponent,
     ChipComponent,
     CardComponent,
+    TableComponent,
   ],
 })
 export class FrontendCommon {}

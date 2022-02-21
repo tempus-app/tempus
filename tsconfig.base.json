@@ -24,8 +24,7 @@
       "@tempus/frontend-account": ["libs/frontend-account/src/index.ts"],
       "@tempus/frontend-common": ["libs/frontend-common/src/index.ts"],
       "@tempus/frontend-profile": ["libs/frontend-profile/src/index.ts"],
-      "@tempus/frontend-project": ["libs/frontend-project/src/index.ts"],
-      "@tempus/ui-table": ["libs/scaffolding/ui-table/src/index.ts"]
+      "@tempus/frontend-project": ["libs/frontend-project/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
