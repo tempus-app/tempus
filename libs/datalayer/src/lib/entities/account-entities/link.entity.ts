@@ -1,10 +1,28 @@
 import { Column, CreateDateColumn, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm'
-import { Link } from '../../models/account-models'
-import { StatusType } from '../../models/account-models'
+import { StatusType } from '../../enums'
 import { UserEntity } from './user.entity'
 
 @Entity()
-export class LinkEntity implements Link {
+export class LinkEntity {
+  constructor(
+    id?: number,
+    createdAt?: Date,
+    firstName?: string,
+    lastName?: string,
+    expiry?: Date,
+    token?: string,
+    status?: StatusType,
+    user?: UserEntity,
+  ) {
+    this.id = id ?? null
+    this.createdAt = createdAt ?? null
+    this.firstName = firstName ?? null
+    this.lastName = lastName ?? null
+    this.expiry = expiry ?? null
+    this.token = token ?? null
+    this.status = status ?? null
+    this.user = user ?? null
+  }
   @PrimaryGeneratedColumn()
   id: number
 

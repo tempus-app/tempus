@@ -1,6 +1,6 @@
-import { Injectable, NotImplementedException } from '@nestjs/common'
+import { Injectable, NotFoundException } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { Education, EducationEntity } from '@tempus/datalayer'
+import { SlimEducationDto, EducationEntity, FullEducationDto, LocationEntity } from '@tempus/datalayer'
 import { ResourceService } from '@tempus/api-account'
 import { Repository } from 'typeorm'
 
@@ -10,30 +10,50 @@ export class EducationService {
     private readonly resourceService: ResourceService,
     @InjectRepository(EducationEntity)
     private educationRepository: Repository<EducationEntity>,
+    @InjectRepository(LocationEntity)
+    private locationRepo: Repository<LocationEntity>,
   ) {}
 
   // create education for a specific resource
-  createEducation(resourceId: number, education: Omit<Education, 'id'>): Promise<EducationEntity> {
-    throw new NotImplementedException()
+  async createEducation(resourceId: number, education: SlimEducationDto): Promise<FullEducationDto> {
+    let educationEntity = SlimEducationDto.toEntity(education)
+    let resourceEntity = await this.resourceService.findResourceById(resourceId)
+
+    educationEntity.resource = resourceEntity
+    educationEntity = await this.educationRepository.save(educationEntity)
+
+    return FullEducationDto.fromEntity(educationEntity)
   }
 
   // return all educations by resource
   findEducationByResource(resourceId: number): Promise<EducationEntity[]> {
-    throw new NotImplementedException()
+    return this.educationRepository.find({ where: { resource: { id: resourceId } } })
   }
 
   // return education by id
-  findEducationById(educationId: number): Promise<EducationEntity> {
-    throw new NotImplementedException()
+  async findEducationById(educationId: number): Promise<EducationEntity> {
+    let educationEntity = await this.educationRepository.findOne(educationId)
+    if (!educationEntity) {
+      throw new NotFoundException(`Could not find education with id ${educationId}`)
+    }
+    return educationEntity
   }
 
   // edit education
-  editEducation(education: Education): Promise<EducationEntity> {
-    throw new NotImplementedException()
+  async editEducation(education: SlimEducationDto): Promise<EducationEntity> {
+    let educationEntity = await this.educationRepository.findOne(education.id)
+    if (!educationEntity) {
+      throw new NotFoundException(`Could not find education with id ${education.id}`)
+    }
+    return await this.educationRepository.save(<EducationEntity>education)
   }
 
   // delete education
-  deleteEducation(educationId: number) {
-    throw new NotImplementedException()
+  async deleteEducation(educationId: number) {
+    let educationEntity = await this.educationRepository.findOne(educationId)
+    if (!educationEntity) {
+      throw new NotFoundException(`Could not find education with id ${educationId}`)
+    }
+    this.educationRepository.delete(educationEntity)
   }
 }
