@@ -1,9 +1,15 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm'
-import { Certification } from '../../models/profile-models'
 import { ResourceEntity } from '../account-entities'
 
 @Entity()
-export class CertificationEntity implements Certification {
+export class CertificationEntity {
+  constructor(id?: number, title?: string, institution?: string, resource?: ResourceEntity) {
+    this.id = id ?? null
+    this.title = title ?? null
+    this.institution = institution ?? null
+    this.resource = resource ?? null
+  }
+
   @PrimaryGeneratedColumn()
   id: number
 
@@ -13,6 +19,9 @@ export class CertificationEntity implements Certification {
   @Column()
   institution: string
 
-  @ManyToOne(() => ResourceEntity, (resource) => resource.certifications)
+  @ManyToOne(() => ResourceEntity, (resource) => resource.certifications, {
+    onDelete: 'CASCADE',
+    cascade: ['insert', 'update'],
+  })
   resource: ResourceEntity
 }

@@ -1,8 +1,14 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm'
-import { Location } from '../../models/common-models'
 
 @Entity()
-export class LocationEntity implements Location {
+export class LocationEntity {
+  constructor(id?: number, city?: string, province?: string, country?: string) {
+    this.id = id ?? null
+    this.city = city ?? null
+    this.province = province ?? null
+    this.country = country ?? null
+  }
+
   @PrimaryGeneratedColumn()
   id: number
 

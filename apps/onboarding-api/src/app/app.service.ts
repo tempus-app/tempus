@@ -31,7 +31,7 @@ export class AppService {
   }
 
   async getUser() {
-    const users = await this.userRepo.find()
+    const users = await this.resourceRepo.find()
     const usersRoles = []
     users.forEach((user) => {
       usersRoles.push(user.roles)
