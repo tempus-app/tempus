@@ -50,7 +50,7 @@ export class ResourceEntity extends UserEntity {
   @OneToMany(() => ExperienceEntity, (experience) => experience.resource)
   experiences: ExperienceEntity[]
 
-  @OneToMany(() => EducationEntity, (education) => education.resource, { cascade: true })
+  @OneToMany(() => EducationEntity, (education) => education.resource, { cascade: ['insert', 'update'] })
   educations: EducationEntity[]
 
   @OneToMany(() => SkillEntity, (skill) => skill.resource)

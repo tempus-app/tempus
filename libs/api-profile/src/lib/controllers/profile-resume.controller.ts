@@ -56,7 +56,7 @@ export class ProfileResumeController {
   async editEducation(
     @Param('educationId') educationId: number,
     @Body() education: SlimEducationDto,
-  ): Promise<EducationEntity> {
+  ): Promise<FullEducationDto> {
     return await this.educationService.editEducation(education)
   }
   @Patch('/experience/:experienceId')
