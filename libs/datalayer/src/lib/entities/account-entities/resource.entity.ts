@@ -1,12 +1,11 @@
 import { ChildEntity, Column, JoinTable, ManyToMany, OneToMany, OneToOne } from 'typeorm'
-import { Resource } from '../../models/account-models'
 import { LocationEntity } from '../common-entities'
 import { CertificationEntity, EducationEntity, ExperienceEntity, SkillEntity, ViewEntity } from '../profile-entities'
 import { ProjectEntity } from '../project-entities'
 import { UserEntity } from './user.entity'
 
 @ChildEntity()
-export class ResourceEntity extends UserEntity implements Resource {
+export class ResourceEntity extends UserEntity {
   constructor(
     id?: number,
     phoneNumber?: string,
@@ -51,7 +50,7 @@ export class ResourceEntity extends UserEntity implements Resource {
   @OneToMany(() => ExperienceEntity, (experience) => experience.resource)
   experiences: ExperienceEntity[]
 
-  @OneToMany(() => EducationEntity, (education) => education.resource)
+  @OneToMany(() => EducationEntity, (education) => education.resource, { cascade: true })
   educations: EducationEntity[]
 
   @OneToMany(() => SkillEntity, (skill) => skill.resource)

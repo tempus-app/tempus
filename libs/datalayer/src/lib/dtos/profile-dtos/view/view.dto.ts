@@ -1,7 +1,7 @@
 import { ExperienceDto } from '../experience/experience.dto'
 import { SkillDto } from '../skill/skill.dto'
 import { EducationDto } from '../education/education.dto'
-import { ViewType } from '../../../models/profile-models'
+import { ViewType } from '../../../enums'
 
 export class ViewDto {
   constructor(

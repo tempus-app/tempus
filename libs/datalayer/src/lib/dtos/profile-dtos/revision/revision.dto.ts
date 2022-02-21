@@ -1,4 +1,5 @@
-import { ResumeSectionType } from '../../../models/profile-models/resumesectiontype'
+import { ResumeSectionType } from '../../../enums'
+
 export class RevisionDto {
   constructor(id?: number, sectionsChanged?: ResumeSectionType[]) {}
 }

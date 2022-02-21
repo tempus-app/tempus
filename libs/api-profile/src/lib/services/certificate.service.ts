@@ -1,6 +1,6 @@
 import { Injectable, NotImplementedException } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { Certification, CertificationEntity } from '@tempus/datalayer'
+import { CertificationDto, CertificationEntity } from '@tempus/datalayer'
 import { Repository } from 'typeorm'
 
 @Injectable()
@@ -11,7 +11,7 @@ export class CertificationService {
   ) {}
 
   // create ceritifcation for a specific resource
-  createCertification(resourceId: number, certification: Omit<Certification, 'id'>): Promise<CertificationEntity> {
+  createCertification(resourceId: number, certification: Omit<CertificationDto, 'id'>): Promise<CertificationEntity> {
     throw new NotImplementedException()
   }
 
@@ -26,7 +26,7 @@ export class CertificationService {
   }
 
   // edit certification
-  editCertification(certification: Certification): Promise<CertificationEntity> {
+  editCertification(certification: CertificationDto): Promise<CertificationEntity> {
     throw new NotImplementedException()
   }
 

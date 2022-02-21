@@ -1,4 +1,4 @@
-import { Location } from '../../../models/common-models'
+import { LocationDto } from '../../common-dtos/location.dto'
 export class ExperienceDto {
   constructor(
     id?: number,
@@ -6,6 +6,6 @@ export class ExperienceDto {
     description?: string,
     startDate?: Date,
     endDate?: Date,
-    location?: Location,
+    location?: LocationDto,
   ) {}
 }

@@ -3,11 +3,11 @@ import { SkillEntity } from './skill.entity'
 import { RevisionEntity } from './revision.entity'
 import { ExperienceEntity } from './experience.entity'
 import { EducationEntity } from './'
-import { View, ViewType } from '../../models/profile-models'
 import { ResourceEntity } from '../account-entities'
+import { ViewType } from '../../enums'
 
 @Entity()
-export class ViewEntity implements View {
+export class ViewEntity {
   constructor(
     id?: number,
     type?: string,

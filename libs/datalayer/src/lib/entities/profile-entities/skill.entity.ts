@@ -1,10 +1,9 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn, ManyToOne } from 'typeorm'
-import { Skill } from '../../models/profile-models'
 import { ResourceEntity } from '../account-entities'
 import { SkillTypeEntity } from './skilltype.entity'
 
 @Entity()
-export class SkillEntity implements Skill {
+export class SkillEntity {
   constructor(id?: number, skill?: SkillTypeEntity, level?: number, resource?: ResourceEntity) {
     this.id = id ?? null
     this.skill = skill ?? null

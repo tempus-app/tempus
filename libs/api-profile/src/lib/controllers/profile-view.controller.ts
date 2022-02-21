@@ -1,5 +1,5 @@
 import { Body, Controller, Delete, Get, NotImplementedException, Param, Patch, Post, Req } from '@nestjs/common'
-import { View, ViewEntity } from '@tempus/datalayer'
+import { ViewDto, ViewEntity } from '@tempus/datalayer'
 import { EducationService } from '../services/education.service'
 import { ExperienceService } from '../services/experience.service'
 import { SkillsService } from '../services/skill.service'
@@ -33,7 +33,7 @@ export class ProfileViewController {
   // this should call the view service which should call individ services and CREATE new things, not edit
   // ONLY when you edit on the main table page does it actually edit
   @Patch('/:userId')
-  async editView(@Param('userId') userId: number, @Body() view: View): Promise<ViewEntity> {
+  async editView(@Param('userId') userId: number, @Body() view: ViewDto): Promise<ViewEntity> {
     throw new NotImplementedException()
   }
 

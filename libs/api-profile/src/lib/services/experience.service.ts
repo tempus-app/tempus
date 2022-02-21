@@ -1,6 +1,6 @@
 import { Injectable, NotImplementedException } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { Experience, ExperienceEntity } from '@tempus/datalayer'
+import { ExperienceDto, ExperienceEntity } from '@tempus/datalayer'
 import { Repository } from 'typeorm'
 
 @Injectable()
@@ -11,7 +11,7 @@ export class ExperienceService {
   ) {}
 
   // create experience for specific resource
-  createExperience(resourceId: number, experience: Omit<Experience, 'id'>) {
+  createExperience(resourceId: number, experience: Omit<ExperienceDto, 'id'>) {
     throw new NotImplementedException()
   }
 
@@ -26,7 +26,7 @@ export class ExperienceService {
   }
 
   // edit experience
-  editExperience(experience: Experience): Promise<ExperienceEntity> {
+  editExperience(experience: ExperienceDto): Promise<ExperienceEntity> {
     throw new NotImplementedException()
   }
 

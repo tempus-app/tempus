@@ -1,11 +1,9 @@
-import { start } from 'repl'
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToOne } from 'typeorm'
-import { Education } from '../../models/profile-models'
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToOne, JoinColumn } from 'typeorm'
 import { ResourceEntity } from '../account-entities'
 import { LocationEntity } from '../common-entities'
 
 @Entity()
-export class EducationEntity implements Education {
+export class EducationEntity {
   constructor(
     id?: number,
     degree?: string,
@@ -39,24 +37,12 @@ export class EducationEntity implements Education {
   @Column()
   endDate: Date
 
-  @OneToOne(() => LocationEntity)
+  @OneToOne(() => LocationEntity, { cascade: true })
+  @JoinColumn()
   location: LocationEntity
 
   @ManyToOne(() => ResourceEntity, (resource) => resource.educations, {
     onDelete: 'CASCADE',
-    cascade: ['insert', 'update'],
   })
   resource: ResourceEntity
-
-  // public static fromDto(education: Education): EducationEntity {
-  //   if (education == null || education == undefined) return new EducationEntity()
-  //   return new EducationEntity(
-  //     education.id,
-  //     education.degree,
-  //     education.institution,
-  //     education.startDate,
-  //     education.endDate,
-  //     LocationEntity.fromDto(education.location),
-  //   )
-  // }
 }

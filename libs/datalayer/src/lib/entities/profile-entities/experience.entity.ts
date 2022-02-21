@@ -1,10 +1,9 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToOne } from 'typeorm'
-import { Experience } from '../../models/profile-models'
 import { ResourceEntity } from '../account-entities'
 import { LocationEntity } from '../common-entities'
 
 @Entity()
-export class ExperienceEntity implements Experience {
+export class ExperienceEntity {
   constructor(
     id?: number,
     title?: string,

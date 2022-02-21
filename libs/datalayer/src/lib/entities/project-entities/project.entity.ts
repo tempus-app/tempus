@@ -1,11 +1,9 @@
-import { start } from 'repl'
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany, ManyToOne } from 'typeorm'
-import { Project } from '../../models/project-models'
 import { ClientEntity } from './client.entity'
 import { TaskEntity } from './task.entity'
 
 @Entity()
-export class ProjectEntity implements Project {
+export class ProjectEntity {
   constructor(
     id?: number,
     name?: string,

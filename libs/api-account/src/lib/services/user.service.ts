@@ -1,6 +1,6 @@
 import { Injectable, NotImplementedException } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { User, UserEntity } from '@tempus/datalayer'
+import { UserDto, UserEntity } from '@tempus/datalayer'
 import { Repository } from 'typeorm'
 
 @Injectable()
@@ -10,11 +10,11 @@ export class UserService {
     private userEntity: Repository<UserEntity>,
   ) {}
 
-  createrUser(user: Omit<User, 'id'>): Promise<UserEntity> {
+  createrUser(user: Omit<UserDto, 'id'>): Promise<UserEntity> {
     throw new NotImplementedException()
   }
 
-  editUser(user: User): Promise<UserEntity> {
+  editUser(user: UserDto): Promise<UserEntity> {
     throw new NotImplementedException()
   }
 

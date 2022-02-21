@@ -1,9 +1,9 @@
 import { Entity, Column, PrimaryGeneratedColumn, TableInheritance, OneToMany } from 'typeorm'
-import { RoleType, User } from '../../models/account-models'
+import { RoleType } from '../../enums'
 
 @Entity()
 @TableInheritance({ column: { type: 'varchar', name: 'role' } })
-export class UserEntity implements User {
+export class UserEntity {
   constructor(
     id?: number,
     firstName?: string,

@@ -1,9 +1,8 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm'
-import { Task } from '../../models/project-models'
 import { ProjectEntity } from './project.entity'
 
 @Entity()
-export class TaskEntity implements Task {
+export class TaskEntity {
   constructor(id?: number, taskName?: string, project?: ProjectEntity) {
     this.id = id ?? null
     this.taskName = taskName ?? null

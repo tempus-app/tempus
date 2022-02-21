@@ -1,6 +1,6 @@
-import { Injectable, NotFoundException, NotImplementedException } from '@nestjs/common'
+import { Injectable, NotFoundException } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { Education, EducationDto, EducationEntity, GetEducationDto } from '@tempus/datalayer'
+import { EducationDto, EducationEntity, GetEducationDto, LocationEntity } from '@tempus/datalayer'
 import { ResourceService } from '@tempus/api-account'
 import { Repository } from 'typeorm'
 
@@ -10,14 +10,19 @@ export class EducationService {
     private readonly resourceService: ResourceService,
     @InjectRepository(EducationEntity)
     private educationRepository: Repository<EducationEntity>,
+    @InjectRepository(LocationEntity)
+    private locationRepo: Repository<LocationEntity>,
   ) {}
 
   // create education for a specific resource
   async createEducation(resourceId: number, education: EducationDto): Promise<GetEducationDto> {
-    let educationEntity = <EducationEntity>education
+    let educationEntity = EducationDto.toEntity(education)
     let resourceEntity = await this.resourceService.findResourceById(resourceId)
+
     educationEntity.resource = resourceEntity
-    return await this.educationRepository.save(educationEntity)
+    educationEntity = await this.educationRepository.save(educationEntity)
+
+    return GetEducationDto.fromEntity(educationEntity)
   }
 
   // return all educations by resource
@@ -35,7 +40,7 @@ export class EducationService {
   }
 
   // edit education
-  async editEducation(education: Education): Promise<EducationEntity> {
+  async editEducation(education: EducationDto): Promise<EducationEntity> {
     let educationEntity = await this.educationRepository.findOne(education.id)
     if (!educationEntity) {
       throw new NotFoundException(`Could not find education with id ${education.id}`)

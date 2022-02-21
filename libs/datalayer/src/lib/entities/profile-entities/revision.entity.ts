@@ -1,12 +1,10 @@
-import { boolean } from 'joi'
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, ManyToOne, OneToOne } from 'typeorm'
-import { Revision } from '../../models/profile-models'
-import { ResumeSectionType } from '../../models/profile-models/resumesectiontype'
+import { ResumeSectionType } from '../../enums'
 import { UserEntity } from '../account-entities'
 import { ViewEntity } from './view.entity'
 
 @Entity()
-export class RevisionEntity implements Revision {
+export class RevisionEntity {
   constructor(
     id?: number,
     createdAt?: Date,
