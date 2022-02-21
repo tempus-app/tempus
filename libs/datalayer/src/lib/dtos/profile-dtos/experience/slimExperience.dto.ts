@@ -1,5 +1,5 @@
 import { LocationDto } from '../../common-dtos/location.dto'
-export class ExperienceDto {
+export class SlimExperienceDto {
   constructor(
     id?: number,
     title?: string,

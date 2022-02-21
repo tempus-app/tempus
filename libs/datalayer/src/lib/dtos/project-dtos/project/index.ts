@@ -1,2 +1,2 @@
-export * from './project.dto'
-export * from './getProject.dto'
+export * from './slimProject.dto'
+export * from './fullProject.dto'

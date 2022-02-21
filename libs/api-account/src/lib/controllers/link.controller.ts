@@ -1,5 +1,6 @@
 import { Body, Controller, Get, NotImplementedException, Param, Patch, Post } from '@nestjs/common'
-import { Link, LinkEntity, StatusType } from '@tempus/datalayer'
+import { SlimLinkDto, LinkEntity, StatusType } from '@tempus/datalayer'
+import { SlimUserDto } from 'libs/datalayer/src/lib/dtos/account-dtos/user/slimUser.dto'
 import { LinkService } from '../services/link.service'
 
 @Controller('link')
@@ -8,7 +9,7 @@ export class LinkController {
 
   //Generates a link
   @Post()
-  async createLink(@Body() link: Omit<Link, 'id'>): Promise<LinkEntity> {
+  async createLink(@Body() link: Omit<SlimLinkDto, 'id'>): Promise<LinkEntity> {
     throw new NotImplementedException()
   }
 
@@ -26,7 +27,7 @@ export class LinkController {
 
   //associate link to user
   @Post('/user/:linkId')
-  async associateUserToLink(@Param('linkId') linkId: number, @Body() user: User) {
+  async associateUserToLink(@Param('linkId') linkId: number, @Body() user: SlimUserDto) {
     throw new NotImplementedException()
   }
 }

@@ -1,2 +1,2 @@
-export * from './experience.dto'
-export * from './getExperience.dto'
+export * from './slimExperience.dto'
+export * from './fullExperience.dto'

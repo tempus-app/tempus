@@ -1,5 +1,5 @@
 import { ResumeSectionType } from '../../../enums'
 
-export class RevisionDto {
+export class SlimRevisionDto {
   constructor(id?: number, sectionsChanged?: ResumeSectionType[]) {}
 }

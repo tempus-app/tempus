@@ -1,6 +1,6 @@
 import { Injectable, NotImplementedException } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { LinkDto, LinkEntity, StatusType } from '@tempus/datalayer'
+import { SlimLinkDto, LinkEntity, StatusType } from '@tempus/datalayer'
 import { Repository } from 'typeorm'
 
 @Injectable()
@@ -10,7 +10,7 @@ export class LinkService {
     private linkEntity: Repository<LinkEntity>,
   ) {}
 
-  createLink(link: Omit<LinkDto, 'id'>): Promise<LinkEntity> {
+  createLink(link: Omit<SlimLinkDto, 'id'>): Promise<LinkEntity> {
     throw new NotImplementedException()
   }
 

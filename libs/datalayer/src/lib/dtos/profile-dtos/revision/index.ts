@@ -1,2 +1,2 @@
-export * from './revision.dto'
-export * from './getRevision.dto'
+export * from './slimRevision.dto'
+export * from './fullRevision.dto'

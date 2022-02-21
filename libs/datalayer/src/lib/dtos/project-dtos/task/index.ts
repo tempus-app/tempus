@@ -1,2 +1,2 @@
-export * from './task.dto'
-export * from './getTask.dto'
+export * from './slimTask.dto'
+export * from './fullTask.dto'

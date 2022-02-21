@@ -1,6 +1,6 @@
 import { Injectable, NotImplementedException } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { SkillDto, SkillEntity, SkillTypeEntity } from '@tempus/datalayer'
+import { SlimSkillDto, SkillEntity, SkillTypeEntity } from '@tempus/datalayer'
 import { Repository } from 'typeorm'
 
 @Injectable()
@@ -32,7 +32,7 @@ export class SkillsService {
   }
 
   // edit skill
-  editSkill(skill: SkillDto): Promise<SkillEntity> {
+  editSkill(skill: SlimSkillDto): Promise<SkillEntity> {
     throw new NotImplementedException()
   }
 

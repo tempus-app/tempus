@@ -1,2 +1,2 @@
-export * from './getResource.dto'
-export * from './resource.dto'
+export * from './fullResource.dto'
+export * from './slimResource.dto'

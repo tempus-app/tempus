@@ -1,7 +1,8 @@
-import { ResourceEntity, RoleType } from '../../..'
+import { ResourceEntity } from '../../..'
+import { RoleType } from '../../../enums'
 import { LocationDto } from '../../common-dtos/location.dto'
-import { UserDto } from '../user/user.dto'
-export class ResourceDto extends UserDto {
+import { SlimUserDto } from '../user/slimUser.dto'
+export class SlimResourceDto extends SlimUserDto {
   phoneNumber: string
   title: string
   location: LocationDto
@@ -22,9 +23,9 @@ export class ResourceDto extends UserDto {
     this.title = title ?? null
     this.location = location ?? null
   }
-  public static fromEntity(entity: ResourceEntity): ResourceDto {
-    if (entity == null) return new ResourceDto()
-    return new ResourceDto(
+  public static fromEntity(entity: ResourceEntity): SlimResourceDto {
+    if (entity == null) return new SlimResourceDto()
+    return new SlimResourceDto(
       entity.phoneNumber,
       entity.title,
       LocationDto.fromEntity(entity.location),

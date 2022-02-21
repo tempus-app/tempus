@@ -1,2 +1,2 @@
-export * from './getUser.dto'
-export * from './user.dto'
+export * from './fullUser.dto'
+export * from './slimUser.dto'

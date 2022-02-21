@@ -1,2 +1,2 @@
-export * from './certification.dto'
-export * from './getCertification.dto'
+export * from './slimCertification.dto'
+export * from './fullCertification.dto'

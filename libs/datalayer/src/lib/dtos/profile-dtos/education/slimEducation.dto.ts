@@ -1,7 +1,7 @@
 import { EducationEntity } from '../../..'
 import { LocationDto } from '../../common-dtos/location.dto'
 
-export class EducationDto {
+export class SlimEducationDto {
   id: number
   degree: string
   institution: string
@@ -25,7 +25,7 @@ export class EducationDto {
     this.location = location ?? null
   }
 
-  public static toEntity(dto: EducationDto): EducationEntity {
+  public static toEntity(dto: SlimEducationDto): EducationEntity {
     if (dto == null) return new EducationEntity()
     return new EducationEntity(
       dto.id,
@@ -37,9 +37,9 @@ export class EducationDto {
     )
   }
 
-  public static fromEntity(entity: EducationEntity): EducationDto {
-    if (entity == null) return new EducationDto()
-    return new EducationDto(
+  public static fromEntity(entity: EducationEntity): SlimEducationDto {
+    if (entity == null) return new SlimEducationDto()
+    return new SlimEducationDto(
       entity.id,
       entity.degree,
       entity.institution,

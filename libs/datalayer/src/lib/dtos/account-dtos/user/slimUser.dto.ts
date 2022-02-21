@@ -1,6 +1,6 @@
 import { RoleType } from '../../../enums'
 
-export class UserDto {
+export class SlimUserDto {
   id: number
   firstName: string
   lastName: string
