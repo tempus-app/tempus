@@ -24,13 +24,4 @@ export class CertificationEntity {
     cascade: ['insert', 'update'],
   })
   resource: ResourceEntity
-
-  // public static fromDto(certification: Certification): CertificationEntity {
-  //   if (certification == null || certification == undefined) return new CertificationEntity()
-  //   return new CertificationEntity(
-  //     certification.id,
-  //     certification.title,
-  //     certification.institution
-  //   )
-  // }
 }

@@ -47,17 +47,4 @@ export class RevisionEntity {
 
   @ManyToOne(() => ViewEntity, (view) => view.status)
   view: ViewEntity
-
-  // public static fromDto(revision: Revision): RevisionEntity {
-  //   if (revision == null || revision == undefined) return new RevisionEntity()
-  //   return new RevisionEntity(
-  //     revision.id,
-  //     null,
-  //     null,
-  //     revision.sectionsChanged,
-  //     revision.approver,
-  //     revision.approved,
-  //     ViewEntity.fromDto(revision.view)
-  //   )
-  // }
 }

@@ -41,17 +41,4 @@ export class ProjectEntity {
 
   @OneToMany(() => TaskEntity, (tasks) => tasks.project)
   tasks: TaskEntity[]
-
-  // public static fromDto(project: Project): ProjectEntity {
-  //   if (project == null || project == undefined) return new ProjectEntity()
-  //   return new ProjectEntity(
-  //     project.id,
-  //     project.name,
-  //     project.startDate,
-  //     project.endDate,
-  //     project.hoursPerDay,
-  //     ClientEntity.fromDto(project.client),
-  //     project.tasks.map(task => TaskEntity.fromDto(task))
-  //   )
-  // }
 }

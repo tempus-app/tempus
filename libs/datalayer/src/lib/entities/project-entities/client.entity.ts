@@ -24,15 +24,4 @@ export class ClientEntity {
 
   @OneToMany(() => ProjectEntity, (projects) => projects.client)
   projects?: ProjectEntity[]
-
-  // public static fromDto(client: Client): ClientEntity {
-  //   if (client == null || client == undefined) return new ClientEntity()
-  //   return new ClientEntity(
-  //     client.id,
-  //     client.name,
-  //     client.title,
-  //     client.name,
-  //     client.projects.map(project => ProjectEntity.fromDto(project))
-  //   )
-  // }
 }

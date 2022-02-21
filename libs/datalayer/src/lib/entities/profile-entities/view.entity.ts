@@ -56,14 +56,4 @@ export class ViewEntity {
     default: ViewType.SECONDARY,
   })
   viewType: ViewType
-
-  // public static fromDto(view: View): ViewEntity {
-  //   if (view == null || view == undefined) return new ViewEntity()
-  //   return new ViewEntity(
-  //     view.id,
-  //     view.type,
-  //     view.status.map(status => RevisionEntity.fromDto(status)),
-
-  //   )
-  // }
 }

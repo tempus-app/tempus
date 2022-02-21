@@ -20,9 +20,4 @@ export class LocationEntity {
 
   @Column()
   country: string
-
-  // public static fromDto(location: Location): LocationEntity {
-  //   if (location == null || location == undefined) return new LocationEntity()
-  //   return new LocationEntity(location.id, location.city, location.province, location.country)
-  // }
 }

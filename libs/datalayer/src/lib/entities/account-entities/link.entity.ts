@@ -51,18 +51,4 @@ export class LinkEntity {
   @OneToOne(() => UserEntity)
   @JoinColumn()
   user?: UserEntity
-
-  // public static fromDto(link: Link): LinkEntity {
-  //   if (link == null || link == undefined) return new LinkEntity()
-  //   return new LinkEntity(
-  //     link.id,
-  //     null,
-  //     link.firstName,
-  //     link.lastName,
-  //     link.expiry,
-  //     link.token,
-  //     link.status,
-
-  //   )
-  // }
 }

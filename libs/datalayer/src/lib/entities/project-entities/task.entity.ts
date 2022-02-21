@@ -16,13 +16,4 @@ export class TaskEntity {
 
   @ManyToOne(() => ProjectEntity, (project) => project.tasks)
   project: ProjectEntity
-
-  // public static fromDto(task: Task): TaskEntity {
-  //   if (task == null || task == undefined) return new TaskEntity()
-  //   return new TaskEntity(
-  //     task.id,
-  //     task.taskName,
-  //     ProjectEntity.fromDto(task.project)
-  //   )
-  // }
 }

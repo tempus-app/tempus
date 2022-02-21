@@ -45,16 +45,4 @@ export class ExperienceEntity {
     cascade: ['insert', 'update'],
   })
   resource: ResourceEntity
-
-  // public static fromDto(experience: Experience): ExperienceEntity {
-  //   if (experience == null || experience == undefined) return new ExperienceEntity()
-  //   return new ExperienceEntity(
-  //     experience.id,
-  //     experience.title,
-  //     experience.description,
-  //     experience.startDate,
-  //     experience.endDate,
-  //     LocationEntity.fromDto(experience.location)
-  //   )
-  // }
 }
