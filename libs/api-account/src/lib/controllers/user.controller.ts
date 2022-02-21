@@ -1,7 +1,7 @@
 import { Body, Controller, Get, NotImplementedException, Param, Patch, Post, Query, UseGuards } from '@nestjs/common'
 import { ResourceEntity, UserEntity } from '@tempus/datalayer'
-import { LocalAuthGuard } from 'libs/api-auth/src/lib/local-auth.guard'
-import { SlimUserDto } from 'libs/datalayer/src/lib/dtos/account-dtos/user/slimUser.dto'
+import { LocalAuthGuard } from '@tempus/api-auth'
+import { SlimUserDto } from '@tempus/datalayer'
 import { ResourceService } from '../services/resource.service'
 import { UserService } from '../services/user.service'
 
