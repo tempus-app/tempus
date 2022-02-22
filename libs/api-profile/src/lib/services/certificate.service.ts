@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { ResourceService } from '@tempus/api-account'
-import { CertificationEntity, SlimCertificationDto } from '@tempus/datalayer'
+import { CertificationEntity, FullResourceDto, SlimCertificationDto } from '@tempus/datalayer'
 import { Repository } from 'typeorm'
 
 @Injectable()
@@ -14,8 +14,8 @@ export class CertificationService {
 
   // create ceritifcation for a specific resource
   async createCertification(resourceId: number, certification: CertificationEntity): Promise<CertificationEntity> {
-    let resourceEntity = await this.resourceService.findResourceById(resourceId)
-    certification.resource = resourceEntity
+    let resource = await this.resourceService.findResourceById(resourceId)
+    certification.resource = FullResourceDto.toEntity(resource)
     return await this.certificationRepository.save(certification)
   }
 

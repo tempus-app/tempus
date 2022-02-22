@@ -55,7 +55,7 @@ export class SlimResourceDto extends SlimUserDto {
       entity.email,
       entity.password,
       entity.location,
-      entity.roles
+      entity.roles,
     )
   }
 }

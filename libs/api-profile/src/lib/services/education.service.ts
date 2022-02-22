@@ -1,6 +1,12 @@
 import { Injectable, NotFoundException } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { EducationEntity, LocationEntity, ProfileResumeLocationInputDto, SlimEducationDto } from '@tempus/datalayer'
+import {
+  EducationEntity,
+  FullResourceDto,
+  LocationEntity,
+  ProfileResumeLocationInputDto,
+  SlimEducationDto,
+} from '@tempus/datalayer'
 import { ResourceService } from '@tempus/api-account'
 import { Repository } from 'typeorm'
 import { keyframes } from '@angular/animations'
@@ -23,9 +29,9 @@ export class EducationService {
   ): Promise<EducationEntity> {
     locationEntity.education = educationEntity
     educationEntity.location = locationEntity
-    let resourceEntity = await this.resourceService.findResourceById(resourceId)
+    let resource = await this.resourceService.findResourceById(resourceId)
 
-    educationEntity.resource = resourceEntity
+    educationEntity.resource = FullResourceDto.toEntity(resource)
     educationEntity = await this.educationRepository.save(educationEntity)
 
     return educationEntity

@@ -1,7 +1,13 @@
 import { Injectable, NotFoundException } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { ResourceService } from '@tempus/api-account'
-import { SlimExperienceDto, ExperienceEntity, LocationEntity, ProfileResumeLocationInputDto } from '@tempus/datalayer'
+import {
+  SlimExperienceDto,
+  ExperienceEntity,
+  LocationEntity,
+  ProfileResumeLocationInputDto,
+  FullResourceDto,
+} from '@tempus/datalayer'
 import { Repository } from 'typeorm'
 
 @Injectable()
@@ -21,9 +27,9 @@ export class ExperienceService {
     locationEntity.experience = experienceEntity
     experienceEntity.location = locationEntity
 
-    let resourceEntity = await this.resourceService.findResourceById(resourceId)
+    let resource = await this.resourceService.findResourceById(resourceId)
 
-    experienceEntity.resource = resourceEntity
+    experienceEntity.resource = FullResourceDto.toEntity(resource)
     experienceEntity = await this.experienceRepository.save(experienceEntity)
 
     return experienceEntity

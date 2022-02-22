@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { ResourceService } from '@tempus/api-account'
-import { SlimSkillDto, SkillEntity, SkillTypeEntity } from '@tempus/datalayer'
+import { SlimSkillDto, SkillEntity, SkillTypeEntity, FullResourceDto } from '@tempus/datalayer'
 import { Repository } from 'typeorm'
 
 @Injectable()
@@ -25,8 +25,8 @@ export class SkillsService {
     }
     skillEntity.skill = skillTypeEntity
 
-    let resourceEntity = await this.resourceService.findResourceById(resourceId)
-    skillEntity.resource = resourceEntity
+    let resource = await this.resourceService.findResourceById(resourceId)
+    skillEntity.resource = FullResourceDto.toEntity(resource)
 
     skillEntity = await this.skillsRepository.save(skillEntity)
 
