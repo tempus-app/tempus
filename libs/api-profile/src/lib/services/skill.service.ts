@@ -1,18 +1,26 @@
 import { Injectable, NotImplementedException } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { SlimSkillDto, SkillEntity, SkillTypeEntity } from '@tempus/datalayer'
+import { ResourceService } from '@tempus/api-account'
+import { SlimSkillDto, SkillEntity, SkillTypeEntity, FullSkillDto } from '@tempus/datalayer'
 import { Repository } from 'typeorm'
 
 @Injectable()
 export class SkillsService {
   constructor(
+    private resourceService: ResourceService,
     @InjectRepository(SkillEntity)
     private skillsRepository: Repository<SkillEntity>,
   ) {}
 
   // create skill for a specific resource
-  createSkill(resourceId: number, skill: Omit<SkillEntity, 'id'>): Promise<SkillEntity> {
-    throw new NotImplementedException()
+  async createSkill(resourceId: number, skill: SlimSkillDto): Promise<FullSkillDto> {
+    let skillEntity = SlimSkillDto.toEntity(skill)
+    let resourceEntity = await this.resourceService.findResourceById(resourceId)
+
+    skillEntity.resource = resourceEntity
+    skillEntity = await this.skillsRepository.save(skillEntity)
+
+    return FullSkillDto.fromEntity(skillEntity)
 
     // TODO: search for skill in skill type repository and create if doesnt exist
   }

@@ -1,4 +1,5 @@
 import { ChildEntity, Column, JoinTable, ManyToMany, OneToMany, OneToOne } from 'typeorm'
+import { RoleType } from '../..'
 import { LocationEntity } from '../common-entities'
 import { CertificationEntity, EducationEntity, ExperienceEntity, SkillEntity, ViewEntity } from '../profile-entities'
 import { ProjectEntity } from '../project-entities'
@@ -17,9 +18,13 @@ export class ResourceEntity extends UserEntity {
     educations?: EducationEntity[],
     skills?: SkillEntity[],
     certifications?: CertificationEntity[],
+    firstName?: string,
+    lastName?: string,
+    email?: string,
+    password?: string,
+    roles?: RoleType[],
   ) {
-    super()
-    this.id = id ?? null
+    super(id, firstName, lastName, email, password, roles)
     this.phoneNumber = phoneNumber ?? null
     this.title = title ?? null
     this.location = location ?? null

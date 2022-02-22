@@ -1,7 +1,13 @@
 import { Injectable, NotFoundException, NotImplementedException } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { ResourceService } from '@tempus/api-account'
-import { SlimExperienceDto, ExperienceEntity, FullExperienceDto } from '@tempus/datalayer'
+import {
+  SlimExperienceDto,
+  ExperienceEntity,
+  FullExperienceDto,
+  ProfileResumeLocationInputDto,
+  SlimLocationDto,
+} from '@tempus/datalayer'
 import { Repository } from 'typeorm'
 
 @Injectable()
@@ -13,8 +19,11 @@ export class ExperienceService {
   ) {}
 
   // create experience for specific resource
-  async createExperience(resourceId: number, experience: SlimExperienceDto): Promise<FullExperienceDto> {
-    let experienceEntity = SlimExperienceDto.toEntity(experience)
+  async createExperience(resourceId: number, dataInput: ProfileResumeLocationInputDto): Promise<FullExperienceDto> {
+    let experienceEntity = SlimExperienceDto.toEntity(<SlimExperienceDto>dataInput.data)
+    let locationEntity = SlimLocationDto.toEntity(dataInput.location)
+    experienceEntity.location = locationEntity
+
     let resourceEntity = await this.resourceService.findResourceById(resourceId)
 
     experienceEntity.resource = resourceEntity
