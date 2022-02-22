@@ -13,6 +13,12 @@
   background-color: transparent !important;
 }
 
+.mat-horizontal-stepper-header::before,
+.mat-horizontal-stepper-header::after,
+.mat-stepper-horizontal-line {
+  border-top-color: mat.get-color-from-palette(theme.$tempus-primary, 300);
+}
+
 .mat-step-header .mat-step-icon-state-done {
   background-color: mat.get-color-from-palette(theme.$tempus-primary, 900);
   border: 2px solid mat.get-color-from-palette(theme.$tempus-primary, 900);
