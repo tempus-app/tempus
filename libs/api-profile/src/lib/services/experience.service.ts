@@ -1,13 +1,7 @@
 import { Injectable, NotFoundException, NotImplementedException } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { ResourceService } from '@tempus/api-account'
-import {
-  SlimExperienceDto,
-  ExperienceEntity,
-  FullExperienceDto,
-  ProfileResumeLocationInputDto,
-  SlimLocationDto,
-} from '@tempus/datalayer'
+import { SlimExperienceDto, ExperienceEntity, LocationEntity } from '@tempus/datalayer'
 import { Repository } from 'typeorm'
 
 @Injectable()
@@ -19,9 +13,11 @@ export class ExperienceService {
   ) {}
 
   // create experience for specific resource
-  async createExperience(resourceId: number, dataInput: ProfileResumeLocationInputDto): Promise<FullExperienceDto> {
-    let experienceEntity = SlimExperienceDto.toEntity(<SlimExperienceDto>dataInput.data)
-    let locationEntity = SlimLocationDto.toEntity(dataInput.location)
+  async createExperience(
+    resourceId: number,
+    experienceEntity: ExperienceEntity,
+    locationEntity: LocationEntity,
+  ): Promise<ExperienceEntity> {
     experienceEntity.location = locationEntity
 
     let resourceEntity = await this.resourceService.findResourceById(resourceId)
@@ -29,37 +25,38 @@ export class ExperienceService {
     experienceEntity.resource = resourceEntity
     experienceEntity = await this.experienceRepository.save(experienceEntity)
 
-    return FullExperienceDto.fromEntity(experienceEntity)
+    return experienceEntity
   }
 
   // return all experiences by resource
-  async findExperienceByResource(resourceId: number): Promise<FullExperienceDto[]> {
+  async findExperienceByResource(resourceId: number): Promise<ExperienceEntity[]> {
     let experienceEntities = await this.experienceRepository.find({
       where: { resource: { id: resourceId } },
-      relations: ['resource',' experience'],
+      relations: ['resource', ' experience'],
     })
-    let fullExperienceDtos = experienceEntities.map((entity) => FullExperienceDto.fromEntity(entity))
-    return fullExperienceDtos
+    return experienceEntities
   }
 
   // return experience by id
-  async findExperienceById(experienceId: number): Promise<FullExperienceDto> {
-    let experienceEntity = await this.experienceRepository.findOne(experienceId, { relations: ['resource', 'location'] })
+  async findExperienceById(experienceId: number): Promise<ExperienceEntity> {
+    let experienceEntity = await this.experienceRepository.findOne(experienceId, {
+      relations: ['resource', 'location'],
+    })
     if (!experienceEntity) {
       throw new NotFoundException(`Could not find experience with id ${experienceId}`)
     }
-    return FullExperienceDto.fromEntity(experienceEntity)
+    return experienceEntity
   }
 
   // edit experience
-  async editExperience(experience: SlimExperienceDto): Promise<FullExperienceDto> {
+  async editExperience(experience: SlimExperienceDto): Promise<ExperienceEntity> {
     let experienceEntity = await this.experienceRepository.findOne(experience.id)
     if (!experienceEntity) {
       throw new NotFoundException(`Could not find experience with id ${experience.id}`)
     }
-    await this.experienceRepository.update(experience.id, SlimExperienceDto.toEntity(experience))
+    await this.experienceRepository.update(experience.id, experience)
     let updatedEntity = await this.experienceRepository.findOne(experience.id, { relations: ['resource', 'location'] })
-    return FullExperienceDto.fromEntity(updatedEntity)
+    return experienceEntity
   }
 
   // delete experience

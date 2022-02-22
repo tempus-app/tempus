@@ -1,8 +1,7 @@
 import { Injectable, NotFoundException, NotImplementedException } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { ResourceService } from '@tempus/api-account'
-import { SlimSkillDto, SkillEntity, SkillTypeEntity, FullSkillDto } from '@tempus/datalayer'
-import { FullSkillTypeDto } from 'libs/datalayer/src/lib/dtos/profile-dtos/skill/fullSkillType.dto'
+import { SlimSkillDto, SkillEntity, SkillTypeEntity } from '@tempus/datalayer'
 import { Repository } from 'typeorm'
 
 @Injectable()
@@ -16,7 +15,7 @@ export class SkillsService {
   ) {}
 
   // create skill for a specific resource
-  async createSkill(resourceId: number, skillData: SlimSkillDto): Promise<FullSkillDto> {
+  async createSkill(resourceId: number, skillData: SkillEntity): Promise<SkillEntity> {
     let skillEntity = SlimSkillDto.toEntity(skillData)
     let skillTypeEntity = await this.skillTypeRepository.findOne(skillData.skill.name)
 
@@ -30,43 +29,41 @@ export class SkillsService {
 
     skillEntity = await this.skillsRepository.save(skillEntity)
 
-    return FullSkillDto.fromEntity(skillEntity)
-
+    return skillEntity
   }
 
   // return skills by resource
-  async findSkillsByResource(resourceId: number): Promise<FullSkillDto[]> {
+  async findSkillsByResource(resourceId: number): Promise<SkillEntity[]> {
     let skillEntities = await this.skillsRepository.find({
       where: { resource: { id: resourceId } },
       relations: ['resource', 'skill'],
     })
-    let fullSkillDtos = skillEntities.map((entity) => FullSkillDto.fromEntity(entity))
-    return fullSkillDtos
+    return skillEntities
   }
 
-  async findAllSkillTypes(): Promise<FullSkillTypeDto[]> {
+  async findAllSkillTypes(): Promise<SkillTypeEntity[]> {
     let skillTypeEntities = await this.skillTypeRepository.find()
-    return skillTypeEntities.map(entity => FullSkillTypeDto.fromEntity(entity))
+    return skillTypeEntities
   }
 
   // return skill by id
-  async findSkillById(skillId: number): Promise<FullSkillDto> {
+  async findSkillById(skillId: number): Promise<SkillEntity> {
     let skillEntity = await this.skillsRepository.findOne(skillId, { relations: ['resource', 'skill'] })
     if (!skillEntity) {
       throw new NotFoundException(`Could not find skill with id ${skillId}`)
     }
-    return FullSkillDto.fromEntity(skillEntity)
+    return skillEntity
   }
 
-  // edit skill
-  async editSkill(skill: SlimSkillDto): Promise<FullSkillDto> {
+  // edit skill -- NEED REWORKING
+  async editSkill(skill: SkillEntity): Promise<SkillEntity> {
     let skillEntity = await this.skillsRepository.findOne(skill.id)
     if (!skillEntity) {
       throw new NotFoundException(`Could not find skill with id ${skill.id}`)
     }
-    await this.skillsRepository.update(skill.id, SlimSkillDto.toEntity(skill))
+    await this.skillsRepository.update(skill.id, skill)
     let updatedEntity = await this.skillsRepository.findOne(skill.id, { relations: ['resource', 'skill'] })
-    return FullSkillDto.fromEntity(updatedEntity)
+    return updatedEntity
   }
 
   // delete skill
