@@ -1,0 +1,37 @@
+@use "sass:map";
+@use "@angular/material" as mat;
+@import "libs/frontend-common/src/theme.scss";
+
+$color-config: mat.get-color-config($tempus-theme);
+$primary-palette: map.get($color-config, "primary");
+
+a:link {
+  text-decoration: none;
+}
+
+a:visited {
+  text-decoration: none;
+}
+
+tempus-card {
+  max-width: 400px;
+  margin: 2em auto;
+  text-align: center;
+}
+
+mat-form-field {
+  display: block;
+}
+
+.card-header {
+  padding: 20px;
+  border-bottom: 2px solid mat.get-color-from-palette($primary-palette, 300);
+}
+
+.login-button {
+  text-align: center;
+}
+
+
+
+
