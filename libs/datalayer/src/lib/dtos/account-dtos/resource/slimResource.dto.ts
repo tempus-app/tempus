@@ -16,9 +16,10 @@ export class SlimResourceDto extends SlimUserDto {
     location?: SlimLocationDto,
     roles?: RoleType[],
   ) {
-    super(id, firstName, lastName, email, password, location, roles)
+    super(id, firstName, lastName, email, password, roles)
     this.phoneNumber = phoneNumber ?? null
     this.title = title ?? null
+    this.location = location ?? null
   }
 
   public static toEntity(dto: SlimResourceDto): ResourceEntity {
@@ -53,7 +54,8 @@ export class SlimResourceDto extends SlimUserDto {
       entity.lastName,
       entity.email,
       entity.password,
-      entity.roles,
+      entity.location,
+      entity.roles
     )
   }
 }

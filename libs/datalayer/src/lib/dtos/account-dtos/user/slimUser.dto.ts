@@ -31,7 +31,6 @@ export class SlimUserDto {
     lastName?: string,
     email?: string,
     password?: string,
-    location?: SlimLocationDto,
     roles?: RoleType[],
   ) {
     this.id = id ?? null
@@ -39,7 +38,6 @@ export class SlimUserDto {
     this.lastName = lastName ?? null
     this.email = email ?? null
     this.password = password ?? null
-    this.location = location ?? null
     this.roles = roles ?? null
   }
 
