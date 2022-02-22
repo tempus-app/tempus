@@ -12,6 +12,7 @@ export class TableComponent<T> implements OnInit {
   tableColumns: Array<Column> = []
 
   @Input()
+  // T extends giving problems, TODO: look into better way to define table data
   tableData: Array<T> = []
 
   displayedColumns: Array<string> = []
