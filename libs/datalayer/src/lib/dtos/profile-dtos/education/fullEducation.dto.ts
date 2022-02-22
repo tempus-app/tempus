@@ -10,9 +10,9 @@ export class FullEducationDto extends SlimEducationDto {
   public static fromEntity(entity: EducationEntity): FullEducationDto {
     if (entity == null) return new FullEducationDto()
 
-    let getEducationDto = <FullEducationDto>SlimEducationDto.fromEntity(entity)
-    getEducationDto.resource = SlimResourceDto.fromEntity(entity.resource)
+    let fullEducationDto = <FullEducationDto>SlimEducationDto.fromEntity(entity)
+    fullEducationDto.resource = SlimResourceDto.fromEntity(entity.resource)
 
-    return getEducationDto
+    return fullEducationDto
   }
 }

@@ -40,22 +40,22 @@ export class ResourceEntity extends UserEntity {
   @OneToOne(() => LocationEntity)
   location: LocationEntity
 
-  @ManyToMany(() => ProjectEntity)
+  @ManyToMany(() => ProjectEntity, { cascade: ['insert', 'update'] })
   @JoinTable()
   projects: ProjectEntity[]
 
-  @OneToMany(() => ViewEntity, (views) => views.resource)
+  @OneToMany(() => ViewEntity, (views) => views.resource, { cascade: ['insert', 'update'] })
   views: ViewEntity[]
 
-  @OneToMany(() => ExperienceEntity, (experience) => experience.resource)
+  @OneToMany(() => ExperienceEntity, (experience) => experience.resource, { cascade: ['insert', 'update'] })
   experiences: ExperienceEntity[]
 
   @OneToMany(() => EducationEntity, (education) => education.resource, { cascade: ['insert', 'update'] })
   educations: EducationEntity[]
 
-  @OneToMany(() => SkillEntity, (skill) => skill.resource)
+  @OneToMany(() => SkillEntity, (skill) => skill.resource, { cascade: ['insert', 'update'] })
   skills: SkillEntity[]
 
-  @OneToMany(() => CertificationEntity, (certification) => certification.resource)
+  @OneToMany(() => CertificationEntity, (certification) => certification.resource, { cascade: ['insert', 'update'] })
   certifications: CertificationEntity[]
 }
