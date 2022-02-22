@@ -37,8 +37,7 @@ export class EducationEntity {
   @Column()
   endDate: Date
 
-  @OneToOne(() => LocationEntity, (location) => location.id, { cascade: ['insert', 'update'] })
-  @JoinColumn()
+  @OneToOne(() => LocationEntity, (location) => location.education, { cascade: ['insert', 'update'] })
   location: LocationEntity
 
   @ManyToOne(() => ResourceEntity, (resource) => resource.educations, {

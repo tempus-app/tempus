@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm'
+import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm'
+import { EducationEntity } from '..'
 
 @Entity()
 export class LocationEntity {
@@ -20,4 +21,8 @@ export class LocationEntity {
 
   @Column()
   country: string
+
+  @OneToOne(() => EducationEntity, (edu) => edu.location, { onDelete: 'CASCADE' })
+  @JoinColumn()
+  education: EducationEntity
 }
