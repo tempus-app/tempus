@@ -36,7 +36,7 @@ export class ExperienceService {
   async findExperienceByResource(resourceId: number): Promise<FullExperienceDto[]> {
     let experienceEntities = await this.experienceRepository.find({
       where: { resource: { id: resourceId } },
-      relations: ['resource'],
+      relations: ['resource',' experience'],
     })
     let fullExperienceDtos = experienceEntities.map((entity) => FullExperienceDto.fromEntity(entity))
     return fullExperienceDtos
@@ -44,7 +44,7 @@ export class ExperienceService {
 
   // return experience by id
   async findExperienceById(experienceId: number): Promise<FullExperienceDto> {
-    let experienceEntity = await this.experienceRepository.findOne(experienceId, { relations: ['resource'] })
+    let experienceEntity = await this.experienceRepository.findOne(experienceId, { relations: ['resource', 'location'] })
     if (!experienceEntity) {
       throw new NotFoundException(`Could not find experience with id ${experienceId}`)
     }
@@ -58,7 +58,7 @@ export class ExperienceService {
       throw new NotFoundException(`Could not find experience with id ${experience.id}`)
     }
     await this.experienceRepository.update(experience.id, SlimExperienceDto.toEntity(experience))
-    let updatedEntity = await this.experienceRepository.findOne(experience.id, { relations: ['resource'] })
+    let updatedEntity = await this.experienceRepository.findOne(experience.id, { relations: ['resource', 'location'] })
     return FullExperienceDto.fromEntity(updatedEntity)
   }
 

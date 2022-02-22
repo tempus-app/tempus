@@ -35,7 +35,7 @@ export class EducationService {
   async findEducationByResource(resourceId: number): Promise<FullEducationDto[]> {
     let educationEntities = await this.educationRepository.find({
       where: { resource: { id: resourceId } },
-      relations: ['resource'],
+      relations: ['resource', 'location'],
     })
     let fullEducationDtos = educationEntities.map((entity) => FullEducationDto.fromEntity(entity))
     return fullEducationDtos
@@ -43,7 +43,7 @@ export class EducationService {
 
   // return education by id
   async findEducationById(educationId: number): Promise<FullEducationDto> {
-    let educationEntity = await this.educationRepository.findOne(educationId, { relations: ['resource'] })
+    let educationEntity = await this.educationRepository.findOne(educationId, { relations: ['resource', 'location'] })
     if (!educationEntity) {
       throw new NotFoundException(`Could not find education with id ${educationId}`)
     }
@@ -57,7 +57,7 @@ export class EducationService {
       throw new NotFoundException(`Could not find education with id ${education.id}`)
     }
     await this.educationRepository.update(education.id, SlimEducationDto.toEntity(education))
-    let updatedEntity = await this.educationRepository.findOne(education.id, { relations: ['resource'] })
+    let updatedEntity = await this.educationRepository.findOne(education.id, { relations: ['resource', 'location'] })
     return FullEducationDto.fromEntity(updatedEntity)
   }
 
