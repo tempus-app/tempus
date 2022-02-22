@@ -1,10 +1,26 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany, ManyToOne } from 'typeorm'
-import { Project } from '../../models/project-models'
 import { ClientEntity } from './client.entity'
 import { TaskEntity } from './task.entity'
 
 @Entity()
-export class ProjectEntity implements Project {
+export class ProjectEntity {
+  constructor(
+    id?: number,
+    name?: string,
+    startDate?: Date,
+    endDate?: Date,
+    hoursPerDay?: number,
+    client?: ClientEntity,
+    tasks?: TaskEntity[],
+  ) {
+    this.id = id ?? null
+    this.name = name ?? null
+    this.startDate = startDate ?? null
+    this.endDate = endDate ?? null
+    this.hoursPerDay = hoursPerDay ?? null
+    this.client = client ?? null
+    this.tasks = tasks ?? null
+  }
   @PrimaryGeneratedColumn()
   id: number
 

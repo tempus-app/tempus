@@ -16,12 +16,8 @@ import { MatSelectModule } from '@angular/material/select'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { NgxDropzoneModule } from 'ngx-dropzone'
 import { MatAutocompleteModule } from '@angular/material/autocomplete'
-import { FormsModule, ReactiveFormsModule } from '@angular/forms'
-import { MatSortModule } from '@angular/material/sort'
-import { MatTableModule } from '@angular/material/table'
-import { MatDividerModule } from '@angular/material/divider'
-import { TableComponent } from './table/table.component'
-import { MatProgressBarModule } from '@angular/material/progress-bar'
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FooterComponent } from './footer/footer.component'
 
 @NgModule({
   imports: [
@@ -52,6 +48,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar'
     ChipComponent,
     CardComponent,
     TableComponent,
+    FooterComponent,
   ],
   exports: [
     SearchBoxComponent,
@@ -62,6 +59,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar'
     ChipComponent,
     CardComponent,
     TableComponent,
+    FooterComponent,
   ],
 })
 export class FrontendCommon {}

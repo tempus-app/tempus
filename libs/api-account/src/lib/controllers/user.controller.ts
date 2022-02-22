@@ -1,5 +1,6 @@
 import { Body, Controller, Get, NotImplementedException, Param, Patch, Post, Query } from '@nestjs/common'
-import { ResourceEntity, User, UserEntity } from '..'
+import { ResourceEntity, UserEntity } from '@tempus/datalayer'
+import { SlimUserDto } from 'libs/datalayer/src/lib/dtos/account-dtos/user/slimUser.dto'
 import { ResourceService } from '../services/resource.service'
 import { UserService } from '../services/user.service'
 
@@ -9,7 +10,7 @@ export class UserController {
 
   //creates User (includes resource)
   @Post()
-  async createUser(@Body() user: Omit<User, 'id'>): Promise<UserEntity | ResourceEntity> {
+  async createUser(@Body() user: Omit<SlimUserDto, 'id'>): Promise<UserEntity | ResourceEntity> {
     throw new NotImplementedException()
   }
 
@@ -32,7 +33,7 @@ export class UserController {
 
   //updates user information  (includes resource)
   @Patch('/:userId')
-  async editUser(@Param('userId') userId: number, @Body() user: User): Promise<UserEntity | ResourceEntity> {
+  async editUser(@Param('userId') userId: number, @Body() user: SlimUserDto): Promise<UserEntity | ResourceEntity> {
     throw new NotImplementedException()
   }
 }
