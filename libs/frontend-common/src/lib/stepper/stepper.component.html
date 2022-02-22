@@ -1,9 +1,9 @@
 <ng-container>
   <mat-stepper [disableRipple]="true" linear [labelPosition]="'bottom'">
-    <mat-step *ngFor="let step of steps" label="step">
-      <div>
-        <button mat-button matStepperPrevious type="button">Back</button>
-        <button mat-button matStepperNext type="button">Next</button>
+    <mat-step *ngFor="let step of steps" label="{{ step }}" state="default">
+      <div id="button-container">
+        <button color="{{ color }}" mat-raised-button matStepperPrevious type="button">Back</button>
+        <button color="{{ color }}" mat-raised-button matStepperNext="button">Next</button>
       </div>
     </mat-step>
 
