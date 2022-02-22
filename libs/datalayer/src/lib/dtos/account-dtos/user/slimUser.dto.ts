@@ -17,7 +17,7 @@ export class SlimUserDto {
   @ApiProperty()
   password: string
 
-  @ApiProperty({ enum: ['ASSIGNED_RESOURCE', 'AVAILABLE_RESOURCE', 'BUSINESS_OWNER', 'SUPERVISOR']})
+  @ApiProperty({ enum: ['ASSIGNED_RESOURCE', 'AVAILABLE_RESOURCE', 'BUSINESS_OWNER', 'SUPERVISOR'] })
   roles: RoleType[]
 
   constructor(

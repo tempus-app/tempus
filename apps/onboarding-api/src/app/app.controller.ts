@@ -12,14 +12,14 @@ export class AppController {
 
   @Post('create-user')
   async createUserSwaggerExample(@Body() createUserDto: SlimUserDto) {
-    this.appService.createUser();
+    this.appService.createUser()
   }
 
   @Get('hello')
   getData(): Message {
     return this.appService.getData()
   }
-  
+
   @Get('create')
   makeUser() {
     this.appService.createUser()

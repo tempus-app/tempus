@@ -5,7 +5,7 @@
 
 import { applyDecorators, INestApplication, Logger } from '@nestjs/common'
 import { NestFactory } from '@nestjs/core'
-import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger'
 
 import { AppModule } from './app/app.module'
 import { ConfigService } from '@nestjs/config'
@@ -16,7 +16,7 @@ async function bootstrap() {
   const config = app.get(ConfigService)
   const globalPrefix = 'api'
 
-  setupSwagger(app);
+  setupSwagger(app)
 
   app.setGlobalPrefix(globalPrefix)
   app.useGlobalFilters(new HttpErrorFilter(config))
@@ -28,14 +28,13 @@ async function bootstrap() {
 
 bootstrap()
 
-
 function setupSwagger(app: INestApplication) {
   const swaggerConfig = new DocumentBuilder()
     .setTitle('Tempus')
     .setDescription('The tempus API')
     .setVersion('0.0.1')
-    .build();
+    .build()
 
-  const document = SwaggerModule.createDocument(app, swaggerConfig);
-  SwaggerModule.setup('api', app, document);
+  const document = SwaggerModule.createDocument(app, swaggerConfig)
+  SwaggerModule.setup('api', app, document)
 }
