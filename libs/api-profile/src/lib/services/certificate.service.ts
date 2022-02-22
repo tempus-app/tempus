@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { ResourceService } from '@tempus/api-account'
-import { CertificationEntity } from '@tempus/datalayer'
+import { CertificationEntity, SlimCertificationDto } from '@tempus/datalayer'
 import { Repository } from 'typeorm'
 
 @Injectable()
@@ -38,14 +38,19 @@ export class CertificationService {
   }
 
   // edit certification
-  async editCertification(certification: CertificationEntity): Promise<CertificationEntity> {
-    let certificationEntity = await this.certificationRepository.findOne(certification.id)
-    if (!certificationEntity) {
-      throw new NotFoundException(`Could not find certification with id ${certification.id}`)
+  async editCertification(updatedCertificationData: SlimCertificationDto): Promise<CertificationEntity> {
+    let existingCertificationEntity = await this.certificationRepository.findOne(updatedCertificationData.id, {
+      relations: ['resource'],
+    })
+    if (!existingCertificationEntity) {
+      throw new NotFoundException(`Could not find certification with id ${existingCertificationEntity.id}`)
     }
-    await this.certificationRepository.update(certification.id, certification)
-    let updatedEntity = await this.certificationRepository.findOne(certification.id, { relations: ['resource'] })
-    return updatedEntity
+
+    // Safe guards to prevent data from being overwritten as null
+    for (let [key, val] of Object.entries(updatedCertificationData)) if (!val) delete updatedCertificationData[key]
+    Object.assign(existingCertificationEntity, updatedCertificationData)
+
+    return await this.certificationRepository.save(existingCertificationEntity)
   }
 
   // delete certification
@@ -54,6 +59,6 @@ export class CertificationService {
     if (!certificationEntity) {
       throw new NotFoundException(`Could not find education with id ${certificationId}`)
     }
-    this.certificationRepository.delete(certificationEntity)
+    this.certificationRepository.remove(certificationEntity)
   }
 }

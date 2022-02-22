@@ -42,7 +42,6 @@ export class ExperienceEntity {
 
   @ManyToOne(() => ResourceEntity, (resource) => resource.experiences, {
     onDelete: 'CASCADE',
-    cascade: ['insert', 'update'],
   })
   resource: ResourceEntity
 }

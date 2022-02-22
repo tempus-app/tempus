@@ -14,8 +14,8 @@ export class SkillEntity {
   @PrimaryGeneratedColumn()
   id: number
 
-  @OneToOne(() => SkillTypeEntity, { cascade: ['insert', 'update'] })
-  @JoinColumn()
+  @ManyToOne(() => SkillTypeEntity)
+  @JoinColumn([{ name: 'skill_key', referencedColumnName: 'name' }])
   skill: SkillTypeEntity
 
   //must be 1-5, figure it out later
