@@ -30,8 +30,8 @@ bootstrap()
 
 function setupSwagger(app: INestApplication) {
   const swaggerConfig = new DocumentBuilder()
-    .setTitle('Tempus')
-    .setDescription('The tempus API')
+    .setTitle('Onboarding')
+    .setDescription('The Tempus onboarding API')
     .setVersion('0.0.1')
     .build()
 
