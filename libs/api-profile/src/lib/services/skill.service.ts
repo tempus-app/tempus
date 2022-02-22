@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException, NotImplementedException } from '@nestjs/common'
+import { Injectable, NotFoundException } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { ResourceService } from '@tempus/api-account'
 import { SlimSkillDto, SkillEntity, SkillTypeEntity } from '@tempus/datalayer'
@@ -21,6 +21,7 @@ export class SkillsService {
 
     if (!skillTypeEntity) {
       skillTypeEntity = new SkillTypeEntity(skillData.skill.name)
+      await this.skillTypeRepository.save(skillTypeEntity)
     }
     skillEntity.skill = skillTypeEntity
 
@@ -56,14 +57,18 @@ export class SkillsService {
   }
 
   // edit skill -- NEED REWORKING
-  async editSkill(skill: SkillEntity): Promise<SkillEntity> {
-    let skillEntity = await this.skillsRepository.findOne(skill.id)
-    if (!skillEntity) {
-      throw new NotFoundException(`Could not find skill with id ${skill.id}`)
+  async editSkill(updatedSkillData: SlimSkillDto): Promise<SkillEntity> {
+    let existingSkillEntity = await this.skillsRepository.findOne(updatedSkillData.id, {
+      relations: ['resource', 'skill'],
+    })
+    if (!existingSkillEntity) {
+      throw new NotFoundException(`Could not find skill with id ${updatedSkillData.id}`)
     }
-    await this.skillsRepository.update(skill.id, skill)
-    let updatedEntity = await this.skillsRepository.findOne(skill.id, { relations: ['resource', 'skill'] })
-    return updatedEntity
+
+    // Only let users change the level of a specific skill
+    delete updatedSkillData.skill
+    existingSkillEntity.level = updatedSkillData.level
+    return await this.skillsRepository.save(existingSkillEntity)
   }
 
   // delete skill
@@ -72,6 +77,6 @@ export class SkillsService {
     if (!skillEntity) {
       throw new NotFoundException(`Could not find skill with id ${skillId}`)
     }
-    this.skillsRepository.delete(skillEntity)
+    this.skillsRepository.remove(skillEntity)
   }
 }

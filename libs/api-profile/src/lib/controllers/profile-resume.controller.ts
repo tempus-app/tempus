@@ -1,4 +1,4 @@
-import { Body, Controller, Get, NotImplementedException, Param, Patch, Post, Req } from '@nestjs/common'
+import { Body, Controller, Delete, Get, NotImplementedException, Param, Patch, Post, Req } from '@nestjs/common'
 import { EducationService } from '../services/education.service'
 import { ExperienceService } from '../services/experience.service'
 import { SkillsService } from '../services/skill.service'
@@ -12,7 +12,6 @@ import {
   FullExperienceDto,
   FullSkillDto,
   SlimSkillDto,
-  EducationEntity,
   ProfileResumeLocationInputDto,
   SlimLocationDto,
   ResumeComponentsDto,
@@ -24,7 +23,6 @@ export class ProfileResumeController {
   constructor(
     private educationService: EducationService,
     private skillService: SkillsService,
-    private expService: ExperienceService,
     private certificationService: CertificationService,
     private experienceService: ExperienceService,
   ) {}
@@ -68,27 +66,25 @@ export class ProfileResumeController {
 
   // UPDATE DATA (only relevant when on main table page and editing)
   @Patch('/education')
-  async editEducation(@Body() updatedEducationData: SlimEducationDto): Promise<FullEducationDto> {
-    let updatedEducationEntity = SlimEducationDto.toEntity(updatedEducationData)
-    updatedEducationEntity = await this.educationService.editEducation(updatedEducationEntity)
+  async editEducation(@Body() updatedEducationLocationData: ProfileResumeLocationInputDto): Promise<FullEducationDto> {
+    let updatedEducationEntity = await this.educationService.editEducation(updatedEducationLocationData)
     return FullEducationDto.fromEntity(updatedEducationEntity)
   }
   @Patch('/experience')
-  async editExperience(@Body() updatedExperienceData: SlimExperienceDto): Promise<FullExperienceDto> {
-    let updatedExperienceEntity = SlimExperienceDto.toEntity(updatedExperienceData)
-    updatedExperienceEntity = await this.experienceService.editExperience(updatedExperienceData)
+  async editExperience(
+    @Body() updatedExperienceLocationData: ProfileResumeLocationInputDto,
+  ): Promise<FullExperienceDto> {
+    let updatedExperienceEntity = await this.experienceService.editExperience(updatedExperienceLocationData)
     return FullExperienceDto.fromEntity(updatedExperienceEntity)
   }
   @Patch('/skill')
   async editSkill(@Body() updatedSkillData: SlimSkillDto): Promise<FullSkillDto> {
-    let updatedSkillEntity = SlimSkillDto.toEntity(updatedSkillData)
-    updatedSkillEntity = await this.skillService.editSkill(updatedSkillEntity)
+    let updatedSkillEntity = await this.skillService.editSkill(updatedSkillData)
     return FullSkillDto.fromEntity(updatedSkillEntity)
   }
   @Patch('/cerification')
   async editCertification(@Body() updatedCertificationData: SlimCertificationDto): Promise<FullCertificationDto> {
-    let updatedCertificationEntity = SlimCertificationDto.toEntity(updatedCertificationData)
-    updatedCertificationEntity = await this.certificationService.editCertification(updatedCertificationEntity)
+    let updatedCertificationEntity = await this.certificationService.editCertification(updatedCertificationData)
     return FullCertificationDto.fromEntity(updatedCertificationEntity)
   }
 
@@ -156,5 +152,23 @@ export class ProfileResumeController {
     )
 
     return new ResumeComponentsDto(educationDtos, experienceDtos, skillDtos, certificationDtos)
+  }
+
+  // DELETES only to be used on the main table page (no delete capability on views)
+  @Delete('/education/:educationId')
+  async deleteEducation(@Param('educationId') educationId: number): Promise<void> {
+    return await this.educationService.deleteEducation(educationId)
+  }
+  @Delete('/experience/:experienceId')
+  async deleteExperience(@Param('experienceId') experienceId: number): Promise<void> {
+    return await this.experienceService.deleteExperience(experienceId)
+  }
+  @Delete('/certification/:certificationId')
+  async deleteCertification(@Param('certificationId') certificationId: number): Promise<void> {
+    return await this.certificationService.deleteCertification(certificationId)
+  }
+  @Delete('/skill/:skillId')
+  async deleteSkill(@Param('skillId') skillId: number): Promise<void> {
+    return await this.skillService.deleteSkill(skillId)
   }
 }
