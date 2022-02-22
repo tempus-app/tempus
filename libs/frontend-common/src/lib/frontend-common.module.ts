@@ -16,7 +16,8 @@ import { MatSelectModule } from '@angular/material/select'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { NgxDropzoneModule } from 'ngx-dropzone'
 import { MatAutocompleteModule } from '@angular/material/autocomplete'
-import { FormsModule, ReactiveFormsModule } from '@angular/forms'
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FooterComponent } from './footer/footer.component'
 
 @NgModule({
   imports: [
@@ -42,6 +43,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms'
     TextInputComponent,
     ChipComponent,
     CardComponent,
+    FooterComponent,
   ],
   exports: [
     SearchBoxComponent,
@@ -51,6 +53,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms'
     TextInputComponent,
     ChipComponent,
     CardComponent,
+    FooterComponent,
   ],
 })
 export class FrontendCommon {}
