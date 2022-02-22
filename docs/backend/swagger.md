@@ -82,5 +82,4 @@ To identify an enum, we must manually set the enum property on the @ApiProperty 
 
 ![swagger example](https://github.com/tempus-app/tempus/blob/feature-api/open-api-support/docs/screenshots/swagger-request.PNG)
 
-
 Now requests can be made to these endpoints by visiting `http://localhost:3000/api`
