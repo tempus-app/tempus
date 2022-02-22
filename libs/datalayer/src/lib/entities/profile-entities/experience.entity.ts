@@ -37,7 +37,7 @@ export class ExperienceEntity {
   @Column()
   endDate: Date
 
-  @OneToOne(() => LocationEntity)
+  @OneToOne(() => LocationEntity, (location) => location.experience, { cascade: ['insert', 'update'] })
   location: LocationEntity
 
   @ManyToOne(() => ResourceEntity, (resource) => resource.experiences, {

@@ -1,8 +1,9 @@
 import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm'
-import { EducationEntity } from '..'
+import { EducationEntity, ExperienceEntity } from '..'
 
 @Entity()
 export class LocationEntity {
+
   constructor(id?: number, city?: string, province?: string, country?: string) {
     this.id = id ?? null
     this.city = city ?? null
@@ -25,4 +26,8 @@ export class LocationEntity {
   @OneToOne(() => EducationEntity, (edu) => edu.location, { onDelete: 'CASCADE' })
   @JoinColumn()
   education: EducationEntity
+
+  @OneToOne(() => ExperienceEntity, (exp) => exp.location, { onDelete: 'CASCADE' })
+  @JoinColumn()
+  experience: ExperienceEntity
 }
