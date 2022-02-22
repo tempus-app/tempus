@@ -1,0 +1,30 @@
+<ng-container>
+  <mat-horizontal-stepper [disableRipple]="true" linear [labelPosition]="'bottom'">
+    <mat-step state="selected">
+      <ng-template matStepLabel>Step 1</ng-template>
+    </mat-step>
+    <mat-step state="default">
+      <ng-template matStepLabel>Step 2</ng-template>
+    </mat-step>
+    <mat-step state="default">
+      <ng-template matStepLabel>Step 3</ng-template>
+    </mat-step>
+
+    <!-- Icon overrides. -->
+    <ng-template matStepperIcon="selected">
+      <mat-icon></mat-icon>
+    </ng-template>
+
+    <ng-template matStepperIcon="edit">
+      <mat-icon></mat-icon>
+    </ng-template>
+
+    <ng-template matStepperIcon="default">
+      <mat-icon></mat-icon>
+    </ng-template>
+
+    <ng-template matStepperIcon="done">
+      <mat-icon></mat-icon>
+    </ng-template>
+  </mat-horizontal-stepper>
+</ng-container>
