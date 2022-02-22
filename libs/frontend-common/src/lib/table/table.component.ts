@@ -1,58 +1,27 @@
-import {
-  AfterViewInit,
-  Component,
-  ContentChildren,
-  Directive,
-  Input,
-  OnDestroy,
-  Output,
-  QueryList,
-  TemplateRef,
-  EventEmitter,
-  ViewChild,
-} from '@angular/core'
-import { MatSort, Sort } from '@angular/material/sort'
-import { Subject } from 'rxjs'
-import { takeUntil } from 'rxjs/operators'
-import { v4 as uuid } from 'uuid'
-
-@Directive({
-  selector: '[tempusTableCol]',
-})
-export class TableColumnDirective {
-  id = uuid()
-  @Input('tempusTableCol') title?: string
-  constructor(public templateRef: TemplateRef<TableColumnDirective>) {}
-}
+import { Component, OnInit, Input } from '@angular/core'
+import { MatTableDataSource } from '@angular/material/table'
+import { Column } from './column.model'
 
 @Component({
   selector: 'tempus-table',
   templateUrl: './table.component.html',
   styleUrls: ['./table.component.scss'],
 })
-export class TableComponent implements AfterViewInit, OnDestroy {
-  @ContentChildren(TableColumnDirective) colTemplates!: QueryList<TableColumnDirective>
-  @Input() data: any[] = []
-  @Input() loading = false
+export class TableComponent<T> implements OnInit {
+  @Input()
+  tableColumns: Array<Column> = []
 
-  @Input() rowClick = new EventEmitter()
+  @Input()
+  tableData: Array<T> = []
 
-  @Output() sortChange = new EventEmitter<Sort>(true)
-  @ViewChild(MatSort) sort?: MatSort
+  displayedColumns: Array<string> = []
+  dataSource: MatTableDataSource<T> = new MatTableDataSource()
 
-  @Input() activeSort?: Sort
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  constructor() {}
 
-  private _onDestroy$ = new Subject<void>()
-
-  ngAfterViewInit() {
-    if (this.sort) {
-      this.sort.sortChange.pipe(takeUntil(this._onDestroy$)).subscribe((sort) => {
-        this.sortChange.emit(sort)
-      })
-    }
-  }
-  ngOnDestroy() {
-    this._onDestroy$.next()
-    this._onDestroy$.complete()
+  ngOnInit(): void {
+    this.displayedColumns = this.tableColumns.map((c) => c.columnDef)
+    this.dataSource = new MatTableDataSource(this.tableData)
   }
 }

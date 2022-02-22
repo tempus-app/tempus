@@ -7,10 +7,20 @@ import { AppComponent } from './app.component'
 import { NxWelcomeComponent } from './nx-welcome.component'
 import { HttpClientModule } from '@angular/common/http'
 import { FrontendCommon } from '@tempus/frontend-common'
+import { MatTooltipModule } from '@angular/material/tooltip'
+import { MatPaginatorModule } from '@angular/material/paginator'
 
 @NgModule({
   declarations: [AppComponent, NxWelcomeComponent],
-  imports: [BrowserModule, HttpClientModule, MatInputModule, MatButtonModule, FrontendCommon],
+  imports: [
+    BrowserModule,
+    HttpClientModule,
+    MatInputModule,
+    MatButtonModule,
+    FrontendCommon,
+    MatTooltipModule,
+    MatPaginatorModule,
+  ],
   providers: [],
   bootstrap: [AppComponent],
 })

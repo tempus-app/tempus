@@ -21,6 +21,7 @@ import { MatSortModule } from '@angular/material/sort'
 import { MatTableModule } from '@angular/material/table'
 import { MatDividerModule } from '@angular/material/divider'
 import { TableComponent } from './table/table.component'
+import { MatProgressBarModule } from '@angular/material/progress-bar'
 
 @NgModule({
   imports: [
@@ -40,6 +41,7 @@ import { TableComponent } from './table/table.component'
     MatSortModule,
     MatTableModule,
     MatDividerModule,
+    MatProgressBarModule,
   ],
   declarations: [
     SearchBoxComponent,

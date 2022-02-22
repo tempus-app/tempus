@@ -9,4 +9,5 @@
   </section>
 </div>
 <div>Message: {{ hello$ | async | json }}</div>
-<tempus-table></tempus-table>
+<tempus-table [tableColumns]="tableColumns" [tableData]="data"> </tempus-table>
+<p>hello</p>
