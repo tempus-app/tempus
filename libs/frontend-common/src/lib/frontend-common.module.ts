@@ -19,6 +19,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { StepperComponent } from './stepper/stepper.component'
 import { MatStepperModule } from '@angular/material/stepper'
+import { FooterComponent } from './footer/footer.component'
 
 @NgModule({
   imports: [
@@ -46,6 +47,7 @@ import { MatStepperModule } from '@angular/material/stepper'
     ChipComponent,
     CardComponent,
     StepperComponent,
+    FooterComponent,
   ],
   exports: [
     SearchBoxComponent,
@@ -56,6 +58,7 @@ import { MatStepperModule } from '@angular/material/stepper'
     ChipComponent,
     CardComponent,
     StepperComponent,
+    FooterComponent,
   ],
 })
 export class FrontendCommon {}
