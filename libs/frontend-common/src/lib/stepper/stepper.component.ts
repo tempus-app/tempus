@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewEncapsulation, Input } from '@angular/core'
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper'
 import { MatIconModule } from '@angular/material/icon'
+import { MatStep } from '@angular/material/stepper'
 
 @Component({
   selector: 'tempus-stepper',
@@ -15,6 +16,8 @@ import { MatIconModule } from '@angular/material/icon'
   encapsulation: ViewEncapsulation.None,
 })
 export class StepperComponent implements OnInit {
+  @Input()
+  steps: Array<String> = []
   constructor() {}
 
   ngOnInit(): void {}

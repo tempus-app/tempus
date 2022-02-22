@@ -1,13 +1,10 @@
 <ng-container>
-  <mat-horizontal-stepper [disableRipple]="true" linear [labelPosition]="'bottom'">
-    <mat-step state="selected">
-      <ng-template matStepLabel>Step 1</ng-template>
-    </mat-step>
-    <mat-step state="default">
-      <ng-template matStepLabel>Step 2</ng-template>
-    </mat-step>
-    <mat-step state="default">
-      <ng-template matStepLabel>Step 3</ng-template>
+  <mat-horizontal-stepper [steps]="steps" [disableRipple]="true" linear [labelPosition]="'bottom'">
+    <mat-step *ngFor="let step of steps" label="step">
+      <div>
+        <button mat-button matStepperPrevious type="button">Back</button>
+        <button mat-button matStepperNext type="button">Next</button>
+      </div>
     </mat-step>
 
     <!-- Icon overrides. -->
