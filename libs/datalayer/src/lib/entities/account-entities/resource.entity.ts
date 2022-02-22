@@ -1,4 +1,5 @@
 import { ChildEntity, Column, JoinTable, ManyToMany, OneToMany, OneToOne } from 'typeorm'
+import { RoleType } from '../..'
 import { LocationEntity } from '../common-entities'
 import { CertificationEntity, EducationEntity, ExperienceEntity, SkillEntity, ViewEntity } from '../profile-entities'
 import { ProjectEntity } from '../project-entities'
@@ -17,9 +18,13 @@ export class ResourceEntity extends UserEntity {
     educations?: EducationEntity[],
     skills?: SkillEntity[],
     certifications?: CertificationEntity[],
+    firstName?: string,
+    lastName?: string,
+    email?: string,
+    password?: string,
+    roles?: RoleType[],
   ) {
-    super()
-    this.id = id ?? null
+    super(id, firstName, lastName, email, password, roles)
     this.phoneNumber = phoneNumber ?? null
     this.title = title ?? null
     this.location = location ?? null
@@ -40,22 +45,22 @@ export class ResourceEntity extends UserEntity {
   @OneToOne(() => LocationEntity)
   location: LocationEntity
 
-  @ManyToMany(() => ProjectEntity)
+  @ManyToMany(() => ProjectEntity, { cascade: ['insert', 'update'] })
   @JoinTable()
   projects: ProjectEntity[]
 
-  @OneToMany(() => ViewEntity, (views) => views.resource)
+  @OneToMany(() => ViewEntity, (views) => views.resource, { cascade: ['insert', 'update'] })
   views: ViewEntity[]
 
-  @OneToMany(() => ExperienceEntity, (experience) => experience.resource)
+  @OneToMany(() => ExperienceEntity, (experience) => experience.resource, { cascade: ['insert', 'update'] })
   experiences: ExperienceEntity[]
 
-  @OneToMany(() => EducationEntity, (education) => education.resource, { cascade: true })
+  @OneToMany(() => EducationEntity, (education) => education.resource, { cascade: ['insert', 'update'] })
   educations: EducationEntity[]
 
-  @OneToMany(() => SkillEntity, (skill) => skill.resource)
+  @OneToMany(() => SkillEntity, (skill) => skill.resource, { cascade: ['insert', 'update'] })
   skills: SkillEntity[]
 
-  @OneToMany(() => CertificationEntity, (certification) => certification.resource)
+  @OneToMany(() => CertificationEntity, (certification) => certification.resource, { cascade: ['insert', 'update'] })
   certifications: CertificationEntity[]
 }

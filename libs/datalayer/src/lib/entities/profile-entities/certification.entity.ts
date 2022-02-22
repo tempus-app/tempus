@@ -21,7 +21,6 @@ export class CertificationEntity {
 
   @ManyToOne(() => ResourceEntity, (resource) => resource.certifications, {
     onDelete: 'CASCADE',
-    cascade: ['insert', 'update'],
   })
   resource: ResourceEntity
 }
