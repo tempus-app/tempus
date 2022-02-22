@@ -14,9 +14,7 @@ export class ExperienceService {
 
   // create experience for specific resource
   async createExperience(resourceId: number, experienceEntity: ExperienceEntity): Promise<Experience> {
-    //experienceEntity.location.experience = experienceEntity
-
-    let resourceEntity = await this.resourceService.findResourceById(resourceId)
+    const resourceEntity = await this.resourceService.findResourceById(resourceId)
 
     experienceEntity.resource = resourceEntity
     experienceEntity = await this.experienceRepository.save(experienceEntity)
