@@ -1,4 +1,4 @@
-import { ResourceEntity } from '../../..'
+import { ResourceEntity, SlimLocationDto } from '../../..'
 import { RoleType } from '../../../enums'
 import { SlimUserDto } from '../user/slimUser.dto'
 export class SlimResourceDto extends SlimUserDto {
@@ -13,16 +13,17 @@ export class SlimResourceDto extends SlimUserDto {
     lastName?: string,
     email?: string,
     password?: string,
+    location?: SlimLocationDto,
     roles?: RoleType[],
   ) {
-    super(id, firstName, lastName, email, password, roles)
+    super(id, firstName, lastName, email, password, location, roles)
     this.phoneNumber = phoneNumber ?? null
     this.title = title ?? null
   }
 
   public static toEntity(dto: SlimResourceDto): ResourceEntity {
     if (dto == null) return new ResourceEntity()
-    let resEntity = new ResourceEntity(
+    const resEntity = new ResourceEntity(
       dto.id,
       dto.phoneNumber,
       dto.title,

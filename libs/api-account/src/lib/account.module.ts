@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common'
-import { DataLayerModule } from 'libs/datalayer/src'
+import { DataLayerModule } from '@tempus/datalayer'
 import { ResourceService } from './services/resource.service'
 
 @Module({

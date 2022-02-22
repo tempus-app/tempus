@@ -37,7 +37,7 @@ export class FullResourceDto extends SlimResourceDto {
   public static fromEntity(entity: ResourceEntity): FullResourceDto {
     if (entity == null) return new FullResourceDto()
 
-    let fullResourceDto = <FullResourceDto>SlimResourceDto.fromEntity(entity)
+    const fullResourceDto = <FullResourceDto>SlimResourceDto.fromEntity(entity)
     fullResourceDto.certifications = entity.certifications.map((certEntity) =>
       SlimCertificationDto.fromEntity(certEntity),
     )
