@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException, NotImplementedException } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { SlimProjectDto, ResourceEntity, SlimSkillDto } from '@tempus/datalayer'
+import { CreateProjectDto, ResourceEntity, CreateSkillDto } from '@tempus/datalayer'
 import { Repository } from 'typeorm'
 import { UserService } from './user.service'
 
@@ -24,12 +24,12 @@ export class ResourceService extends UserService {
     throw new NotImplementedException()
   }
 
-  findResourcesBySkills(skills: SlimProjectDto[]): Promise<ResourceEntity[]> {
+  findResourcesBySkills(skills: CreateProjectDto[]): Promise<ResourceEntity[]> {
     //should interact with profile view
     throw new NotImplementedException()
   }
 
-  findResourcesByProjects(projects: SlimProjectDto[]): Promise<ResourceEntity[]> {
+  findResourcesByProjects(projects: CreateProjectDto[]): Promise<ResourceEntity[]> {
     throw new NotImplementedException()
   }
 

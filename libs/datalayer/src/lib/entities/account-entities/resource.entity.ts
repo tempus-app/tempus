@@ -1,12 +1,12 @@
 import { ChildEntity, Column, JoinTable, ManyToMany, OneToMany, OneToOne } from 'typeorm'
-import { RoleType } from '../..'
+import { Resource, RoleType } from '../..'
 import { LocationEntity } from '../common-entities'
 import { CertificationEntity, EducationEntity, ExperienceEntity, SkillEntity, ViewEntity } from '../profile-entities'
 import { ProjectEntity } from '../project-entities'
 import { UserEntity } from './user.entity'
 
 @ChildEntity()
-export class ResourceEntity extends UserEntity {
+export class ResourceEntity extends UserEntity implements Resource {
   constructor(
     id?: number,
     phoneNumber?: string,
@@ -25,15 +25,15 @@ export class ResourceEntity extends UserEntity {
     roles?: RoleType[],
   ) {
     super(id, firstName, lastName, email, password, roles)
-    this.phoneNumber = phoneNumber ?? null
-    this.title = title ?? null
-    this.location = location ?? null
-    this.projects = projects ?? null
-    this.views = views ?? null
-    this.experiences = experiences ?? null
-    this.educations = educations ?? null
-    this.skills = skills ?? null
-    this.certifications = certifications ?? null
+    this.phoneNumber = phoneNumber
+    this.title = title
+    this.location = location
+    this.projects = projects
+    this.views = views
+    this.experiences = experiences
+    this.educations = educations
+    this.skills = skills
+    this.certifications = certifications
   }
 
   @Column({ nullable: true })

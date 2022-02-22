@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { ResourceService } from '@tempus/api-account'
-import { SlimSkillDto, SkillEntity, SkillTypeEntity } from '@tempus/datalayer'
+import { CreateSkillDto, Skill, SkillEntity, SkillType, SkillTypeEntity, UpdateSkillDto } from '@tempus/datalayer'
 import { Repository } from 'typeorm'
 
 @Injectable()
@@ -16,7 +16,7 @@ export class SkillsService {
 
   // create skill for a specific resource
   async createSkill(resourceId: number, skillData: SkillEntity): Promise<SkillEntity> {
-    let skillEntity = SlimSkillDto.toEntity(skillData)
+    let skillEntity = CreateSkillDto.toEntity(skillData)
     let skillTypeEntity = await this.skillTypeRepository.findOne(skillData.skill.name)
 
     if (!skillTypeEntity) {
@@ -34,7 +34,7 @@ export class SkillsService {
   }
 
   // return skills by resource
-  async findSkillsByResource(resourceId: number): Promise<SkillEntity[]> {
+  async findSkillsByResource(resourceId: number): Promise<Skill[]> {
     let skillEntities = await this.skillsRepository.find({
       where: { resource: { id: resourceId } },
       relations: ['resource', 'skill'],
@@ -42,13 +42,13 @@ export class SkillsService {
     return skillEntities
   }
 
-  async findAllSkillTypes(): Promise<SkillTypeEntity[]> {
+  async findAllSkillTypes(): Promise<SkillType[]> {
     let skillTypeEntities = await this.skillTypeRepository.find()
     return skillTypeEntities
   }
 
   // return skill by id
-  async findSkillById(skillId: number): Promise<SkillEntity> {
+  async findSkillById(skillId: number): Promise<Skill> {
     let skillEntity = await this.skillsRepository.findOne(skillId, { relations: ['resource', 'skill'] })
     if (!skillEntity) {
       throw new NotFoundException(`Could not find skill with id ${skillId}`)
@@ -57,7 +57,7 @@ export class SkillsService {
   }
 
   // edit skill -- NEED REWORKING
-  async editSkill(updatedSkillData: SlimSkillDto): Promise<SkillEntity> {
+  async editSkill(updatedSkillData: UpdateSkillDto): Promise<Skill> {
     let existingSkillEntity = await this.skillsRepository.findOne(updatedSkillData.id, {
       relations: ['resource', 'skill'],
     })
@@ -65,8 +65,6 @@ export class SkillsService {
       throw new NotFoundException(`Could not find skill with id ${updatedSkillData.id}`)
     }
 
-    // Only let users change the level of a specific skill
-    delete updatedSkillData.skill
     existingSkillEntity.level = updatedSkillData.level
     return await this.skillsRepository.save(existingSkillEntity)
   }

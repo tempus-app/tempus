@@ -5,9 +5,10 @@ import { ExperienceEntity } from './experience.entity'
 import { EducationEntity } from './'
 import { ResourceEntity } from '../account-entities'
 import { ViewType } from '../../enums'
+import { View } from '../..'
 
 @Entity()
-export class ViewEntity {
+export class ViewEntity implements View {
   constructor(
     id?: number,
     type?: string,
@@ -18,13 +19,14 @@ export class ViewEntity {
     resource?: ResourceEntity,
     viewType?: ViewType,
   ) {
-    ;(this.id = id ?? null), (this.type = type ?? null)
-    this.status = status ?? null
-    this.skills = skills ?? null
-    this.experiences = experiences ?? null
-    this.educations = educations ?? null
-    this.resource = resource ?? null
-    this.viewType = viewType ?? null
+    this.id = id
+    this.type = type
+    this.status = status
+    this.skills = skills
+    this.experiences = experiences
+    this.educations = educations
+    this.resource = resource
+    this.viewType = viewType
   }
   @PrimaryGeneratedColumn()
   id: number

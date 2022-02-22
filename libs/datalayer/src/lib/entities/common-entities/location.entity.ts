@@ -1,8 +1,9 @@
 import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm'
 import { EducationEntity, ExperienceEntity, ResourceEntity } from '..'
+import { Location } from '../..'
 
 @Entity()
-export class LocationEntity {
+export class LocationEntity implements Location {
   constructor(
     id?: number,
     city?: string,
@@ -12,13 +13,13 @@ export class LocationEntity {
     experience?: ExperienceEntity,
     resource?: ResourceEntity,
   ) {
-    this.id = id ?? null
-    this.city = city ?? null
-    this.province = province ?? null
-    this.country = country ?? null
-    this.education = education ?? null
-    this.experience = experience ?? null
-    this.resource = resource ?? null
+    this.id = id
+    this.city = city
+    this.province = province
+    this.country = country
+    this.education = education
+    this.experience = experience
+    this.resource = resource
   }
 
   @PrimaryGeneratedColumn()
