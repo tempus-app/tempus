@@ -29,8 +29,6 @@ export class AppComponent {
       columnDef: 'name',
       header: 'Name',
       cell: (element: Record<string, any>) => `${element['name']}`,
-      isLink: true,
-      url: 'abc',
     },
     {
       columnDef: 'email',
