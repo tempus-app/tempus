@@ -1,5 +1,5 @@
 import { MailerModule } from '@nestjs-modules/mailer'
-import { Module  } from '@nestjs/common'
+import { Module } from '@nestjs/common'
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter'
 
 import { ConfigService } from '@nestjs/config'
@@ -34,6 +34,6 @@ import { DataLayerModule } from '@tempus/datalayer'
       }),
     }),
   ],
-  providers: [EmailService]
+  providers: [EmailService],
 })
 export class EmailModule {}
