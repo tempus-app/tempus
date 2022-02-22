@@ -1,5 +1,5 @@
 <ng-container>
-  <mat-horizontal-stepper [steps]="steps" [disableRipple]="true" linear [labelPosition]="'bottom'">
+  <mat-stepper [disableRipple]="true" linear [labelPosition]="'bottom'">
     <mat-step *ngFor="let step of steps" label="step">
       <div>
         <button mat-button matStepperPrevious type="button">Back</button>
@@ -23,5 +23,5 @@
     <ng-template matStepperIcon="done">
       <mat-icon></mat-icon>
     </ng-template>
-  </mat-horizontal-stepper>
+  </mat-stepper>
 </ng-container>
