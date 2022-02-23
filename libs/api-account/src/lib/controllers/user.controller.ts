@@ -1,8 +1,10 @@
 import { Body, Controller, Get, NotImplementedException, Param, Patch, Post, Query, UseGuards } from '@nestjs/common'
-import { CreateUserDto, ResourceEntity, UserEntity } from '@tempus/datalayer'
+import { CreateUserDto, ResourceEntity, RoleType, UserEntity } from '@tempus/datalayer'
 import { JwtAuthGuard } from '@tempus/api-auth'
 import { ResourceService } from '../services/resource.service'
 import { UserService } from '../services/user.service'
+import { Roles } from 'libs/api-auth/src/lib/roles.decorator'
+import { RolesGuard } from 'libs/api-auth/src/lib/roles.guard'
 
 @Controller('User')
 export class UserController {
@@ -14,7 +16,8 @@ export class UserController {
     throw new NotImplementedException()
   }
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(RoleType.BUSINESS_OWNER)
   @Get()
   async getAllUsers(
     @Query() location: string[] | string,
