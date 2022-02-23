@@ -1,30 +1,42 @@
-import { Injectable, Res } from '@nestjs/common'
+import { Injectable, Response } from '@nestjs/common'
 import * as puppeteer from 'puppeteer'
 import * as path from 'path'
 import * as handlebars from 'handlebars'
 import * as fs from 'fs'
+import { PdfTemplateDto } from '@tempus/datalayer'
 
 @Injectable()
 export class PdfGeneratorService {
   constructor() {}
 
-  async createPDF(@Res() res: Response): Promise<void> {
+  async createPDF(
+    @Response() res,
+    templateData?: PdfTemplateDto<any>,
+    pdfOptions?: puppeteer.PDFOptions
+  ): Promise<void> {
+    let pdfData = templateData ? templateData : { template: 'resume', data: { name: 'mustafa' } }
+
     // compiling template into html with injected data
-    let templateHtml = fs.readFileSync(path.join('./libs/pdfgenerator/src/lib', './templates/resume.html'), 'utf8')
+    let templateHtml = fs.readFileSync(
+      path.join('./libs/pdfgenerator/src/lib/templates/', `./${pdfData.template}.html`),
+      'utf8'
+    )
     let template = handlebars.compile(templateHtml)
-    let html = template({ name: 'test' })
+    let html = template(pdfData.data)
 
     // basic pdf options
-    let options = {
-      format: 'A4',
-      margin: {
-        top: '10px',
-        bottom: '10px',
-        left: '10px',
-        right: '10px',
-      },
-      printBackground: true,
-    }
+    let options = pdfOptions
+      ? pdfOptions
+      : {
+          format: 'a4',
+          margin: {
+            top: '10px',
+            bottom: '10px',
+            left: '10px',
+            right: '10px',
+          },
+          printBackground: true,
+        }
 
     // start headless browser
     const browser = await puppeteer.launch({
@@ -41,6 +53,7 @@ export class PdfGeneratorService {
       waitUntil: 'networkidle0',
     })
 
+    // @ts-ignore
     const buffer = await page.pdf(options)
     await browser.close()
 
