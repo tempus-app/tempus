@@ -6,6 +6,7 @@ export interface Link {
   createdAt?: Date
   firstName?: string
   lastName?: string
+  email?: string
   expiry?: Date
   token?: string
   status?: StatusType
