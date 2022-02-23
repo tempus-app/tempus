@@ -1,2 +1,1 @@
-export * from './slimView.dto'
-export * from './fullView.dto'
+export * from './createView.dto'

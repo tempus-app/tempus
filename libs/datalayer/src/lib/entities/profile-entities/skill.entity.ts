@@ -1,21 +1,22 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn, ManyToOne } from 'typeorm'
+import { Skill } from '../..'
 import { ResourceEntity } from '../account-entities'
 import { SkillTypeEntity } from './skilltype.entity'
 
 @Entity()
-export class SkillEntity {
+export class SkillEntity implements Skill {
   constructor(id?: number, skill?: SkillTypeEntity, level?: number, resource?: ResourceEntity) {
-    this.id = id ?? null
-    this.skill = skill ?? null
-    this.level = level ?? null
-    this.resource = resource ?? null
+    this.id = id
+    this.skill = skill
+    this.level = level
+    this.resource = resource
   }
 
   @PrimaryGeneratedColumn()
   id: number
 
-  @OneToOne(() => SkillTypeEntity)
-  @JoinColumn()
+  @ManyToOne(() => SkillTypeEntity)
+  @JoinColumn([{ name: 'skill_key', referencedColumnName: 'name' }])
   skill: SkillTypeEntity
 
   //must be 1-5, figure it out later

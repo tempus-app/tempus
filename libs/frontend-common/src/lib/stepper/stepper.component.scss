@@ -1,0 +1,63 @@
+@use '../../theme.scss';
+@use '@angular/material' as mat;
+@import url('https://fonts.googleapis.com/css2?family=Merriweather&family=Raleway&display=swap');
+
+/**
+    Change color of stepper icons depending on state
+    - NOTE: requires 'encapsulation: ViewEncapsulation.None' in component definition
+ */
+
+.mat-step-header:hover,
+.mat-step-header.cdk-program-focused,
+.mat-step-header.cdk-mouse-focused,
+.mat-step-header.cdk-focused {
+  background-color: transparent !important;
+}
+
+.mat-horizontal-stepper-header::before,
+.mat-horizontal-stepper-header::after,
+.mat-stepper-horizontal-line {
+  border-top-color: mat.get-color-from-palette(theme.$tempus-primary, 300);
+}
+
+.mat-step-header .mat-step-icon-state-done {
+  background-color: mat.get-color-from-palette(theme.$tempus-primary, 900);
+  border: 2px solid mat.get-color-from-palette(theme.$tempus-primary, 900);
+  + .mat-step-label {
+    color: mat.get-color-from-palette(theme.$tempus-primary, 900);
+    font-size: 20px;
+    font-family: Raleway, sans-serif;
+    font-weight: bold;
+  }
+}
+
+.mat-step-header .mat-step-icon-state-edit,
+.mat-step-header .mat-step-icon-state-selected {
+  background-color: mat.get-color-from-palette(theme.$tempus-primary);
+  border: 2px solid mat.get-color-from-palette(theme.$tempus-primary);
+  + .mat-step-label {
+    color: mat.get-color-from-palette(theme.$tempus-primary, 900);
+    font-size: 20px;
+    font-family: Raleway, sans-serif;
+    font-weight: bold;
+  }
+}
+
+.mat-step-header .mat-step-icon-state-default {
+  background-color: transparent;
+  border: 2px solid mat.get-color-from-palette(theme.$tempus-primary);
+  + .mat-step-label {
+    color: mat.get-color-from-palette(theme.$tempus-primary, 900);
+    font-size: 20px;
+    font-family: Raleway, sans-serif;
+    font-weight: bold;
+  }
+}
+
+#button-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  position: relative;
+  bottom: 0;
+}
