@@ -69,79 +69,79 @@ export class ProfileResumeController {
   // UPDATE DATA (only relevant when on main table page and editing)
   @Patch('/education')
   async editEducation(@Body() updateEducationData: UpdateEducationDto): Promise<Education> {
-    let updatedEducationEntity = await this.educationService.editEducation(updateEducationData)
+    const updatedEducationEntity = await this.educationService.editEducation(updateEducationData)
     return updatedEducationEntity
   }
   @Patch('/experience')
   async editExperience(@Body() updateExperienceData: UpdateExperienceDto): Promise<Experience> {
-    let updatedExperienceEntity = await this.experienceService.editExperience(updateExperienceData)
+    const updatedExperienceEntity = await this.experienceService.editExperience(updateExperienceData)
     return updatedExperienceEntity
   }
   @Patch('/skill')
   async editSkill(@Body() updatedSkillData: UpdateSkillDto): Promise<Skill> {
-    let updatedSkillEntity = await this.skillService.editSkill(updatedSkillData)
+    const updatedSkillEntity = await this.skillService.editSkill(updatedSkillData)
     return updatedSkillEntity
   }
   @Patch('/cerification')
   async editCertification(@Body() updatedCertificationData: UpdateCertificationDto): Promise<Certification> {
-    let updatedCertificationEntity = await this.certificationService.editCertification(updatedCertificationData)
+    const updatedCertificationEntity = await this.certificationService.editCertification(updatedCertificationData)
     return updatedCertificationEntity
   }
 
   // GET DATA (only relevant when on main table page when getting OR if we ever need one specifically)
   @Get('/education/:educationId')
   async getEducation(@Param('educationId') educationId: number): Promise<Education> {
-    let educationEntity = await this.educationService.findEducationById(educationId)
+    const educationEntity = await this.educationService.findEducationById(educationId)
     return educationEntity
   }
   @Get('/experience/:experienceId')
   async getExperience(@Param('experienceId') experienceId: number): Promise<Experience> {
-    let experienceEntity = await this.experienceService.findExperienceById(experienceId)
+    const experienceEntity = await this.experienceService.findExperienceById(experienceId)
     return experienceEntity
   }
   @Get('/skill/:skillId')
   async getSkill(@Param('skillId') skillId: number): Promise<Skill> {
-    let skillEntity = await this.skillService.findSkillById(skillId)
+    const skillEntity = await this.skillService.findSkillById(skillId)
     return skillEntity
   }
   @Get('/cerification/:certificationId')
   async getCertification(@Param('certificationId') certificationId: number): Promise<Certification> {
-    let certificationEntity = await this.certificationService.findCertificationById(certificationId)
+    const certificationEntity = await this.certificationService.findCertificationById(certificationId)
     return certificationEntity
   }
 
   // Expected to be used on many pages
   @Get('/skillTypes')
   async getAllSkillTypes(): Promise<SkillType[]> {
-    let skillTypeEntities = await this.skillService.findAllSkillTypes()
+    const skillTypeEntities = await this.skillService.findAllSkillTypes()
     return skillTypeEntities
   }
   @Get('/education/all/:userId')
   async getAllEducationsByResource(@Param('userId') userId: number): Promise<Education[]> {
-    let educationEntities = await this.educationService.findEducationByResource(userId)
+    const educationEntities = await this.educationService.findEducationByResource(userId)
     return educationEntities
   }
   @Get('/experience/all/:userId')
   async getAllExperiencesByUser(@Param('userId') userId: number): Promise<Experience[]> {
-    let experienceEntities = await this.experienceService.findExperienceByResource(userId)
+    const experienceEntities = await this.experienceService.findExperienceByResource(userId)
     return experienceEntities
   }
   @Get('/certification/all/:userId')
   async getAllCertificationsByUser(@Param('userId') userId: number): Promise<Certification[]> {
-    let certificationEntities = await this.certificationService.findCertificationByResource(userId)
+    const certificationEntities = await this.certificationService.findCertificationByResource(userId)
     return certificationEntities
   }
   @Get('/skill/all/:userId')
   async getAllSkillsByUser(@Param('userId') userId: number): Promise<Skill[]> {
-    let skillEntities = await this.skillService.findSkillsByResource(userId)
+    const skillEntities = await this.skillService.findSkillsByResource(userId)
     return skillEntities
   }
   @Get('/:userId')
   async getAllResumeComponentsByUser(@Param('userId') userId: number): Promise<ResumeComponentsDto> {
-    let skillEntities = await this.skillService.findSkillsByResource(userId)
-    let certificationEntities = await this.certificationService.findCertificationByResource(userId)
-    let experienceEntities = await this.experienceService.findExperienceByResource(userId)
-    let educationEntities = await this.educationService.findEducationByResource(userId)
+    const skillEntities = await this.skillService.findSkillsByResource(userId)
+    const certificationEntities = await this.certificationService.findCertificationByResource(userId)
+    const experienceEntities = await this.experienceService.findExperienceByResource(userId)
+    const educationEntities = await this.educationService.findEducationByResource(userId)
 
     return new ResumeComponentsDto(educationEntities, experienceEntities, skillEntities, certificationEntities)
   }
