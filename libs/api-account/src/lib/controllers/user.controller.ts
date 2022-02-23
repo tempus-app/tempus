@@ -1,7 +1,6 @@
 import { Body, Controller, Get, NotImplementedException, Param, Patch, Post, Query, UseGuards } from '@nestjs/common'
-import { ResourceEntity, UserEntity } from '@tempus/datalayer'
-import { LocalAuthGuard } from '@tempus/api-auth'
-import { SlimUserDto } from '@tempus/datalayer'
+import { CreateUserDto, ResourceEntity, UserEntity } from '@tempus/datalayer'
+import { JwtAuthGuard } from '@tempus/api-auth'
 import { ResourceService } from '../services/resource.service'
 import { UserService } from '../services/user.service'
 
@@ -11,11 +10,11 @@ export class UserController {
 
   //creates User (includes resource)
   @Post()
-  async createUser(@Body() user: Omit<SlimUserDto, 'id'>): Promise<UserEntity | ResourceEntity> {
+  async createUser(@Body() user: Omit<CreateUserDto, 'id'>): Promise<UserEntity | ResourceEntity> {
     throw new NotImplementedException()
   }
 
-  @UseGuards(LocalAuthGuard)
+  @UseGuards(JwtAuthGuard)
   @Get()
   async getAllUsers(
     @Query() location: string[] | string,
@@ -35,7 +34,7 @@ export class UserController {
 
   //updates user information  (includes resource)
   @Patch('/:userId')
-  async editUser(@Param('userId') userId: number, @Body() user: SlimUserDto): Promise<UserEntity | ResourceEntity> {
+  async editUser(@Param('userId') userId: number, @Body() user: CreateUserDto): Promise<UserEntity | ResourceEntity> {
     throw new NotImplementedException()
   }
 }

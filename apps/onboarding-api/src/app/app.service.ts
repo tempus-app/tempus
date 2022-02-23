@@ -20,6 +20,8 @@ export class AppService {
     newUser.lastName = 'testL'
     newUser.email = 'email@email.com'
     newUser.password = 'fred'
+    const roles = [RoleType.BUSINESS_OWNER]
+    newUser.roles = roles
     this.userRepo.save(newUser)
 
     const newResource = new ResourceEntity()

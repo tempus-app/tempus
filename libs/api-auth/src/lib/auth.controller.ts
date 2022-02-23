@@ -9,8 +9,8 @@ export class AuthController {
 
   @UseGuards(LocalAuthGuard)
   @Post('login')
-  login(@Body() user: LoginDto): Promise<UserEntity> {
-    return this.authService.login(user)
+  login(@Request() req): Promise<LoginDto> {
+    return this.authService.login(req.user)
   }
 
   @Post('signup')

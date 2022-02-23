@@ -1,9 +1,11 @@
-export class LoginDto {
-  email: string
-  password: string
+import { Resource, ResourceEntity, User } from '@tempus/datalayer'
 
-  constructor(email?: string, password?: string) {
-    this.email = email ?? null
-    this.password = password ?? null
+export class LoginDto {
+  user: User | Resource
+  accessToken: string
+
+  constructor(user: User | Resource, accessToken: string) {
+    this.user = user
+    this.accessToken = accessToken
   }
 }
