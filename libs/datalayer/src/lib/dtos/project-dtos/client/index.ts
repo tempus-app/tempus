@@ -1,2 +1,1 @@
-export * from './slimClient.dto'
-export * from './fullClient.dto'
+export * from './createClient.dto'

@@ -1,9 +1,10 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToOne, JoinColumn } from 'typeorm'
+import { Education } from '../../models'
 import { ResourceEntity } from '../account-entities'
 import { LocationEntity } from '../common-entities'
 
 @Entity()
-export class EducationEntity {
+export class EducationEntity implements Education {
   constructor(
     id?: number,
     degree?: string,
@@ -13,13 +14,13 @@ export class EducationEntity {
     location?: LocationEntity,
     resource?: ResourceEntity,
   ) {
-    this.id = id ?? null
-    this.degree = degree ?? null
-    this.institution = institution ?? null
-    this.startDate = startDate ?? null
-    this.endDate = endDate ?? null
-    this.location = location ?? null
-    this.resource = resource ?? null
+    this.id = id
+    this.degree = degree
+    this.institution = institution
+    this.startDate = startDate
+    this.endDate = endDate
+    this.location = location
+    this.resource = resource
   }
 
   @PrimaryGeneratedColumn()

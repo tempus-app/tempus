@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException, NotImplementedException } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { FullResourceDto, FullUserDto, RoleType, SlimResourceDto, SlimUserDto, UserEntity } from '@tempus/datalayer'
+import { RoleType,} from '@tempus/datalayer'
 import { Repository } from 'typeorm'
 import { ResourceService } from '.'
 

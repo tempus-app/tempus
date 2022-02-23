@@ -1,2 +1,1 @@
-export * from './fullLink.dto'
-export * from './slimLink.dto'
+export * from './createLink.dto'

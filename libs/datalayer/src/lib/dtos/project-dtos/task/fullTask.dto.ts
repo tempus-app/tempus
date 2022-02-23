@@ -1,8 +1,8 @@
-import { SlimProjectDto } from '../project/slimProject.dto'
+import { CreateProjectDto } from '../project/createProject.dto'
 import { SlimTaskDto } from './slimTask.dto'
 
 export class FullTaskDto extends SlimTaskDto {
-  constructor(projects: SlimProjectDto) {
+  constructor(projects: CreateProjectDto) {
     super()
   }
 }

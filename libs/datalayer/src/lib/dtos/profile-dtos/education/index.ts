@@ -1,2 +1,2 @@
-export * from './slimEducation.dto'
-export * from './fullEducation.dto'
+export * from './createEduation.dto'
+export * from './updateEducation.dto'

@@ -4,20 +4,24 @@ import { ExperienceService } from '../services/experience.service'
 import { SkillsService } from '../services/skill.service'
 import { CertificationService } from '../services/certificate.service'
 import {
-  SlimCertificationDto,
-  SlimEducationDto,
-  SlimExperienceDto,
-  FullCertificationDto,
-  FullEducationDto,
-  FullExperienceDto,
-  FullSkillDto,
-  SlimSkillDto,
-  ProfileResumeLocationInputDto,
-  SlimLocationDto,
+  Certification,
+  CreateCertificationDto,
+  CreateEducationDto,
+  CreateExperienceDto,
+  CreateSkillDto,
+  Education,
+  Experience,
+  Skill,
+  SkillType,
+  UpdateCertificationDto,
+  UpdateEducationDto,
+  UpdateExperienceDto,
+  UpdateSkillDto,
   ResumeComponentsDto,
 } from '@tempus/datalayer'
-import { FullSkillTypeDto } from '@tempus/datalayer'
+import { ApiTags } from '@nestjs/swagger'
 
+@ApiTags('Profile Resume Components')
 @Controller('profileresume')
 export class ProfileResumeController {
   constructor(
@@ -31,127 +35,115 @@ export class ProfileResumeController {
   @Post('/education/:userId')
   async createEducation(
     @Param('userId') userId: number,
-    @Body() educationLocationData: ProfileResumeLocationInputDto,
-  ): Promise<FullEducationDto> {
-    let educationEntity = SlimEducationDto.toEntity(<SlimEducationDto>educationLocationData.data)
-    const locationEntity = SlimLocationDto.toEntity(educationLocationData.location)
-    educationEntity = await this.educationService.createEducation(userId, educationEntity, locationEntity)
-    return FullEducationDto.fromEntity(educationEntity)
+    @Body() createEducationData: CreateEducationDto,
+  ): Promise<Education> {
+    let educationEntity = CreateEducationDto.toEntity(createEducationData)
+    educationEntity = await this.educationService.createEducation(userId, educationEntity)
+    return educationEntity
   }
   @Post('/experience/:userId')
   async createExperience(
     @Param('userId') userId: number,
-    @Body() experienceLocationData: ProfileResumeLocationInputDto,
-  ): Promise<FullExperienceDto> {
-    let experienceEntity = SlimExperienceDto.toEntity(<SlimExperienceDto>experienceLocationData.data)
-    const locationEntity = SlimLocationDto.toEntity(experienceLocationData.location)
-    experienceEntity = await this.experienceService.createExperience(userId, experienceEntity, locationEntity)
-    return FullExperienceDto.fromEntity(experienceEntity)
+    @Body() createExperienceData: CreateExperienceDto,
+  ): Promise<Experience> {
+    let experienceEntity = CreateExperienceDto.toEntity(createExperienceData)
+    experienceEntity = await this.experienceService.createExperience(userId, experienceEntity)
+    return experienceEntity
   }
   @Post('/skill/:userId')
-  async createSkill(@Param('userId') userId: number, @Body() skillData: SlimSkillDto): Promise<FullSkillDto> {
-    let skillEntity = SlimSkillDto.toEntity(skillData)
+  async createSkill(@Param('userId') userId: number, @Body() createSkillData: CreateSkillDto): Promise<Skill> {
+    let skillEntity = CreateSkillDto.toEntity(createSkillData)
     skillEntity = await this.skillService.createSkill(userId, skillEntity)
-    return FullSkillDto.fromEntity(skillEntity)
+    return skillEntity
   }
   @Post('/certification/:userId')
   async createCertification(
     @Param('userId') userId: number,
-    @Body() certificationData: SlimCertificationDto,
-  ): Promise<FullCertificationDto> {
-    let certificationEntity = SlimCertificationDto.toEntity(certificationData)
+    @Body() createCertificationData: CreateCertificationDto,
+  ): Promise<Certification> {
+    let certificationEntity = CreateCertificationDto.toEntity(createCertificationData)
     certificationEntity = await this.certificationService.createCertification(userId, certificationEntity)
-    return FullCertificationDto.fromEntity(certificationEntity)
+    return certificationEntity
   }
 
   // UPDATE DATA (only relevant when on main table page and editing)
   @Patch('/education')
-  async editEducation(@Body() updatedEducationLocationData: ProfileResumeLocationInputDto): Promise<FullEducationDto> {
-    let updatedEducationEntity = await this.educationService.editEducation(updatedEducationLocationData)
-    return FullEducationDto.fromEntity(updatedEducationEntity)
+  async editEducation(@Body() updateEducationData: UpdateEducationDto): Promise<Education> {
+    let updatedEducationEntity = await this.educationService.editEducation(updateEducationData)
+    return updatedEducationEntity
   }
   @Patch('/experience')
-  async editExperience(
-    @Body() updatedExperienceLocationData: ProfileResumeLocationInputDto,
-  ): Promise<FullExperienceDto> {
-    let updatedExperienceEntity = await this.experienceService.editExperience(updatedExperienceLocationData)
-    return FullExperienceDto.fromEntity(updatedExperienceEntity)
+  async editExperience(@Body() updateExperienceData: UpdateExperienceDto): Promise<Experience> {
+    let updatedExperienceEntity = await this.experienceService.editExperience(updateExperienceData)
+    return updatedExperienceEntity
   }
   @Patch('/skill')
-  async editSkill(@Body() updatedSkillData: SlimSkillDto): Promise<FullSkillDto> {
+  async editSkill(@Body() updatedSkillData: UpdateSkillDto): Promise<Skill> {
     let updatedSkillEntity = await this.skillService.editSkill(updatedSkillData)
-    return FullSkillDto.fromEntity(updatedSkillEntity)
+    return updatedSkillEntity
   }
   @Patch('/cerification')
-  async editCertification(@Body() updatedCertificationData: SlimCertificationDto): Promise<FullCertificationDto> {
+  async editCertification(@Body() updatedCertificationData: UpdateCertificationDto): Promise<Certification> {
     let updatedCertificationEntity = await this.certificationService.editCertification(updatedCertificationData)
-    return FullCertificationDto.fromEntity(updatedCertificationEntity)
+    return updatedCertificationEntity
   }
 
   // GET DATA (only relevant when on main table page when getting OR if we ever need one specifically)
   @Get('/education/:educationId')
-  async getEducation(@Param('educationId') educationId: number): Promise<FullEducationDto> {
-    const educationEntity = await this.educationService.findEducationById(educationId)
-    return FullEducationDto.fromEntity(educationEntity)
+  async getEducation(@Param('educationId') educationId: number): Promise<Education> {
+    let educationEntity = await this.educationService.findEducationById(educationId)
+    return educationEntity
   }
   @Get('/experience/:experienceId')
-  async getExperience(@Param('experienceId') experienceId: number): Promise<FullExperienceDto> {
-    const experienceEntity = await this.experienceService.findExperienceById(experienceId)
-    return FullExperienceDto.fromEntity(experienceEntity)
+  async getExperience(@Param('experienceId') experienceId: number): Promise<Experience> {
+    let experienceEntity = await this.experienceService.findExperienceById(experienceId)
+    return experienceEntity
   }
   @Get('/skill/:skillId')
-  async getSkill(@Param('skillId') skillId: number): Promise<FullSkillDto> {
-    const skillEntity = await this.skillService.findSkillById(skillId)
-    return FullSkillDto.fromEntity(skillEntity)
+  async getSkill(@Param('skillId') skillId: number): Promise<Skill> {
+    let skillEntity = await this.skillService.findSkillById(skillId)
+    return skillEntity
   }
   @Get('/cerification/:certificationId')
-  async getCertification(@Param('certificationId') certificationId: number): Promise<FullCertificationDto> {
-    const certificationEntity = await this.certificationService.findCertificationById(certificationId)
-    return FullCertificationDto.fromEntity(certificationEntity)
+  async getCertification(@Param('certificationId') certificationId: number): Promise<Certification> {
+    let certificationEntity = await this.certificationService.findCertificationById(certificationId)
+    return certificationEntity
   }
 
   // Expected to be used on many pages
   @Get('/skillTypes')
-  async getAllSkillTypes(): Promise<FullSkillTypeDto[]> {
-    const skillTypeEntities = await this.skillService.findAllSkillTypes()
-    return skillTypeEntities.map((entity) => FullSkillTypeDto.fromEntity(entity))
+  async getAllSkillTypes(): Promise<SkillType[]> {
+    let skillTypeEntities = await this.skillService.findAllSkillTypes()
+    return skillTypeEntities
   }
   @Get('/education/all/:userId')
-  async getAllEducationsByResource(@Param('userId') userId: number): Promise<FullEducationDto[]> {
-    const educationEntities = await this.educationService.findEducationByResource(userId)
-    return educationEntities.map((entity) => FullEducationDto.fromEntity(entity))
+  async getAllEducationsByResource(@Param('userId') userId: number): Promise<Education[]> {
+    let educationEntities = await this.educationService.findEducationByResource(userId)
+    return educationEntities
   }
   @Get('/experience/all/:userId')
-  async getAllExperiencesByUser(@Param('userId') userId: number): Promise<FullExperienceDto[]> {
-    const experienceEntities = await this.experienceService.findExperienceByResource(userId)
-    return experienceEntities.map((entity) => FullExperienceDto.fromEntity(entity))
+  async getAllExperiencesByUser(@Param('userId') userId: number): Promise<Experience[]> {
+    let experienceEntities = await this.experienceService.findExperienceByResource(userId)
+    return experienceEntities
   }
   @Get('/certification/all/:userId')
-  async getAllCertificationsByUser(@Param('userId') userId: number): Promise<FullCertificationDto[]> {
-    const certificationEntities = await this.certificationService.findCertificationByResource(userId)
-    return certificationEntities.map((entity) => FullCertificationDto.fromEntity(entity))
+  async getAllCertificationsByUser(@Param('userId') userId: number): Promise<Certification[]> {
+    let certificationEntities = await this.certificationService.findCertificationByResource(userId)
+    return certificationEntities
   }
   @Get('/skill/all/:userId')
-  async getAllSkillsByUser(@Param('userId') userId: number): Promise<FullSkillDto[]> {
-    const skillEntities = await this.skillService.findSkillsByResource(userId)
-    return skillEntities.map((entity) => FullSkillDto.fromEntity(entity))
+  async getAllSkillsByUser(@Param('userId') userId: number): Promise<Skill[]> {
+    let skillEntities = await this.skillService.findSkillsByResource(userId)
+    return skillEntities
   }
   @Get('/:userId')
   async getAllResumeComponentsByUser(@Param('userId') userId: number): Promise<ResumeComponentsDto> {
-    const skillDtos = (await this.skillService.findSkillsByResource(userId)).map((entity) =>
-      FullSkillDto.fromEntity(entity),
-    )
-    const certificationDtos = (await this.certificationService.findCertificationByResource(userId)).map((entity) =>
-      FullCertificationDto.fromEntity(entity),
-    )
-    const experienceDtos = (await this.experienceService.findExperienceByResource(userId)).map((entity) =>
-      FullExperienceDto.fromEntity(entity),
-    )
-    const educationDtos = (await this.educationService.findEducationByResource(userId)).map((entity) =>
-      FullEducationDto.fromEntity(entity),
-    )
+    let skillEntities = await this.skillService.findSkillsByResource(userId)
+    let certificationEntities = await this.certificationService.findCertificationByResource(userId)
+    let experienceEntities = await this.experienceService.findExperienceByResource(userId)
+    let educationEntities = await this.educationService.findEducationByResource(userId)
 
-    return new ResumeComponentsDto(educationDtos, experienceDtos, skillDtos, certificationDtos)
+    return new ResumeComponentsDto(educationEntities, experienceEntities, skillEntities, certificationEntities)
   }
 
   // DELETES only to be used on the main table page (no delete capability on views)

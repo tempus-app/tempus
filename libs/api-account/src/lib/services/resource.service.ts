@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException, NotImplementedException } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { EducationService, ExperienceService } from '@tempus/api-profile'
-import { SlimProjectDto, ResourceEntity, SlimSkillDto, SlimResourceDto, FullResourceDto } from '@tempus/datalayer'
+import { ResourceEntity, SlimSkillDto } from '@tempus/datalayer'
 import { Repository } from 'typeorm'
 import { UserService } from './user.service'
 
