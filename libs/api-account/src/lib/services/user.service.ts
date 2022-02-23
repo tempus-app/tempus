@@ -23,6 +23,6 @@ export class UserService {
   }
 
   async findByEmail(email: string): Promise<UserEntity> {
-    return this.userRepository.find({ where: { email: email } })[0]
+    return (await this.userRepository.find({ where: { email: email } }))[0]
   }
 }

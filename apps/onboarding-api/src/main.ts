@@ -16,7 +16,6 @@ async function bootstrap() {
   const config = app.get(ConfigService)
   const globalPrefix = 'onboarding'
 
-
   setupSwagger(app)
   app.setGlobalPrefix(globalPrefix)
   app.useGlobalFilters(new HttpErrorFilter(config))
