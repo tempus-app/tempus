@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Post } from '@nestjs/common'
 import { ApiTags } from '@nestjs/swagger'
 import { Message } from '@tempus/api-interfaces'
-import { SlimUserDto } from '@tempus/datalayer'
+import { CreateUserDto } from '@tempus/datalayer'
 
 import { AppService } from './app.service'
 
@@ -11,7 +11,7 @@ export class AppController {
   constructor(private readonly appService: AppService) {}
 
   @Post('create-user')
-  async createUserSwaggerExample(@Body() createUserDto: SlimUserDto) {
+  async createUserSwaggerExample(@Body() createUserDto: CreateUserDto) {
     this.appService.createUser()
   }
 

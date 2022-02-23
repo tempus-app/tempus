@@ -1,2 +1,1 @@
-export * from './slimProject.dto'
-export * from './fullProject.dto'
+export * from './createProject.dto'

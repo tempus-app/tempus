@@ -1,9 +1,10 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToOne } from 'typeorm'
+import { Experience } from '../../models'
 import { ResourceEntity } from '../account-entities'
 import { LocationEntity } from '../common-entities'
 
 @Entity()
-export class ExperienceEntity {
+export class ExperienceEntity implements Experience {
   constructor(
     id?: number,
     title?: string,
@@ -13,13 +14,13 @@ export class ExperienceEntity {
     location?: LocationEntity,
     resource?: ResourceEntity,
   ) {
-    this.id = id ?? null
-    this.title = title ?? null
-    this.description = description ?? null
-    this.startDate = startDate ?? null
-    this.endDate = endDate ?? null
-    this.location = location ?? null
-    this.resource = resource ?? null
+    this.id = id
+    this.title = title
+    this.description = description
+    this.startDate = startDate
+    this.endDate = endDate
+    this.location = location
+    this.resource = resource
   }
 
   @PrimaryGeneratedColumn()
@@ -37,12 +38,11 @@ export class ExperienceEntity {
   @Column()
   endDate: Date
 
-  @OneToOne(() => LocationEntity)
+  @OneToOne(() => LocationEntity, (location) => location.experience, { cascade: ['insert', 'update'] })
   location: LocationEntity
 
   @ManyToOne(() => ResourceEntity, (resource) => resource.experiences, {
     onDelete: 'CASCADE',
-    cascade: ['insert', 'update'],
   })
   resource: ResourceEntity
 }

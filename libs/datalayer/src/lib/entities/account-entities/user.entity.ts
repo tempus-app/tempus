@@ -1,9 +1,10 @@
 import { Entity, Column, PrimaryGeneratedColumn, TableInheritance, OneToMany } from 'typeorm'
+import { User } from '../..'
 import { RoleType } from '../../enums'
 
 @Entity()
 @TableInheritance({ column: { type: 'varchar', name: 'user_type' } })
-export class UserEntity {
+export class UserEntity implements User {
   constructor(
     id?: number,
     firstName?: string,
@@ -12,12 +13,12 @@ export class UserEntity {
     password?: string,
     roles?: RoleType[],
   ) {
-    this.id = id ?? null
-    this.firstName = firstName ?? null
-    this.lastName = lastName ?? null
-    this.email = email ?? null
-    this.password = password ?? null
-    this.roles = roles ?? null
+    this.id = id
+    this.firstName = firstName
+    this.lastName = lastName
+    this.email = email
+    this.password = password
+    this.roles = roles
   }
   @PrimaryGeneratedColumn()
   id: number

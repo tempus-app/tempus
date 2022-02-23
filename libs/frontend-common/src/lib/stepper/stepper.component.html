@@ -1,0 +1,27 @@
+<ng-container>
+  <mat-stepper [disableRipple]="true" linear [labelPosition]="'bottom'">
+    <mat-step *ngFor="let step of steps" label="{{ step }}" state="default">
+      <div id="button-container">
+        <button color="{{ color }}" mat-raised-button matStepperPrevious type="button">Back</button>
+        <button color="{{ color }}" mat-raised-button matStepperNext="button">Next</button>
+      </div>
+    </mat-step>
+
+    <!-- Icon overrides. -->
+    <ng-template matStepperIcon="selected">
+      <mat-icon></mat-icon>
+    </ng-template>
+
+    <ng-template matStepperIcon="edit">
+      <mat-icon></mat-icon>
+    </ng-template>
+
+    <ng-template matStepperIcon="default">
+      <mat-icon></mat-icon>
+    </ng-template>
+
+    <ng-template matStepperIcon="done">
+      <mat-icon></mat-icon>
+    </ng-template>
+  </mat-stepper>
+</ng-container>

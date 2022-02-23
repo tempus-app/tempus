@@ -26,6 +26,22 @@
 />
 ```
 
+
+### Stepper: tempus-stepper
+
+- a stepper based off of material UI mat-stepper - it does not wrap step contents, rather it is used as a decoraitve header with navigation buttons for step.
+- tempus-stepper takes in the following inputs:
+
+  - `steps`: array of stepper labels
+  - `color`: [primary, accent]
+
+  ```
+  <tempus-stepper
+    [steps]="['Step 1', 'Step 2', 'Step 3', 'Step 4']"
+    color="primary">
+  </tempus-stepper>
+  ```
+
 ### Table: tempus-table
 
 - wrapper around material table to provide reusability around it
