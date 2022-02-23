@@ -1,30 +1,32 @@
 import { MailerModule } from '@nestjs-modules/mailer'
 import { Module } from '@nestjs/common'
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter'
-
-import { ConfigService } from '@nestjs/config'
-import { EmailService } from '.'
+import { EmailService } from './services'
 import { DataLayerModule } from '@tempus/datalayer'
+import { ConfigModule, ConfigService } from '@nestjs/config'
+const path = require('path')
 
 @Module({
   imports: [
+    DataLayerModule,
+    ConfigModule,
     MailerModule.forRootAsync({
       useFactory: async (config: ConfigService) => ({
         transport: {
-          host: config.get('EMAIL_HOST'),
-          port: config.get('EMAIL_PORT'),
+          host: process.env.EMAIL_HOST,
+          port: process.env.EMAIL_PORT,
           secure: false,
           requireTLS: true,
           auth: {
-            user: config.get('EMAIL_USERNAME'),
-            pass: config.get('EMAIL_PASSWORD'),
+            user: process.env.EMAIL_USERNAME,
+            pass: process.env.EMAIL_PASSWORD,
           },
         },
         defaults: {
-          from: `"No Reply" <${config.get('EMAIL_ADDRESS')}>`,
+          from: `"No Reply" <${process.env.EMAIL_PASSWORD}>`,
         },
         template: {
-          dir: __dirname + '/templates',
+          dir: path.resolve('../src/libs/api-email/src/lib/templates/'),
           adapter: new HandlebarsAdapter(),
           options: {
             strict: true,
@@ -35,5 +37,6 @@ import { DataLayerModule } from '@tempus/datalayer'
     }),
   ],
   providers: [EmailService],
+  exports: [EmailService],
 })
 export class EmailModule {}

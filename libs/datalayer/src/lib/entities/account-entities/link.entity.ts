@@ -9,6 +9,7 @@ export class LinkEntity {
     createdAt?: Date,
     firstName?: string,
     lastName?: string,
+    email?: string,
     expiry?: Date,
     token?: string,
     status?: StatusType,
@@ -18,6 +19,7 @@ export class LinkEntity {
     this.createdAt = createdAt ?? null
     this.firstName = firstName ?? null
     this.lastName = lastName ?? null
+    this.email = email ?? null
     this.expiry = expiry ?? null
     this.token = token ?? null
     this.status = status ?? null
@@ -34,6 +36,9 @@ export class LinkEntity {
 
   @Column()
   lastName: string
+
+  @Column()
+  email: string
 
   @Column()
   expiry: Date
