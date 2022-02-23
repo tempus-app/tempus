@@ -19,7 +19,7 @@ export class EducationService {
   async createEducation(resourceId: number, educationEntity: EducationEntity): Promise<Education> {
     const resourceEntity = await this.resourceService.findResourceById(resourceId)
 
-    educationEntity.resource = FullResourceDto.toEntity(resource)
+    educationEntity.resource = resourceEntity
     educationEntity = await this.educationRepository.save(educationEntity)
 
     return educationEntity
