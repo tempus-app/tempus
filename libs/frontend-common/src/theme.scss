@@ -81,7 +81,7 @@ $tempus-theme: mat.define-light-theme(
       ),
     )
   );
-  @include mat.all-component-themes($alert-theme);
+  @include mat.all-component-colors($alert-theme);
 }
 
 /* Fonts */
