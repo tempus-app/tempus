@@ -1,6 +1,6 @@
 import { ConsoleLogger, forwardRef, Inject, Injectable } from '@nestjs/common'
 import { UserService } from '@tempus/api-account'
-import { LoginDto, UserEntity } from '@tempus/datalayer'
+import { LoginDto } from '@tempus/datalayer'
 import { JwtService } from '@nestjs/jwt'
 
 @Injectable()

@@ -3,8 +3,8 @@ import { CreateUserDto, ResourceEntity, RoleType, UserEntity } from '@tempus/dat
 import { JwtAuthGuard } from '@tempus/api-auth'
 import { ResourceService } from '../services/resource.service'
 import { UserService } from '../services/user.service'
-import { Roles } from 'libs/api-auth/src/lib/roles.decorator'
-import { RolesGuard } from 'libs/api-auth/src/lib/roles.guard'
+import { Roles } from '@tempus/api-auth'
+import { RolesGuard } from '@tempus/api-auth'
 
 @Controller('User')
 export class UserController {
