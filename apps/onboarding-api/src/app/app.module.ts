@@ -6,9 +6,10 @@ import { AccountModule } from '@tempus/api-account'
 import { DataLayerModule } from '@tempus/datalayer'
 import { ProfileModule } from '@tempus/api-profile'
 import { EmailModule } from '@tempus/api-email'
+import { PdfgeneratorModule } from '@tempus/pdfgenerator'
 
 @Module({
-  imports: [CoreModule, DataLayerModule, AccountModule, ProfileModule, EmailModule],
+  imports: [CoreModule, DataLayerModule, AccountModule, ProfileModule, EmailModule, PdfgeneratorModule],
   controllers: [AppController],
   providers: [AppService],
 })

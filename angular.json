@@ -13,6 +13,7 @@
     "frontend-profile": "libs/frontend-profile",
     "frontend-project": "libs/frontend-project",
     "onboarding-api": "apps/onboarding-api",
+    "pdfgenerator": "libs/pdfgenerator",
     "tempus": "apps/tempus",
     "tempus-e2e": "apps/tempus-e2e"
   }

@@ -3,10 +3,14 @@ import { InjectRepository } from '@nestjs/typeorm'
 import { Message } from '@tempus/api-interfaces'
 import { Repository } from 'typeorm'
 import { RoleType, ResourceEntity, UserEntity } from '@tempus/datalayer'
+import { PdfGeneratorService } from '@tempus/pdfgenerator'
 
 @Injectable()
 export class AppService {
-  constructor(@InjectRepository(ResourceEntity) private resourceRepo: Repository<ResourceEntity>) {}
+  constructor(
+    @InjectRepository(ResourceEntity) private resourceRepo: Repository<ResourceEntity>,
+    private pdfGeneratorService: PdfGeneratorService,
+  ) {}
   getData(): Message {
     return { message: 'Welcome to api!' }
   }
@@ -33,5 +37,9 @@ export class AppService {
       usersRoles.push(user.roles)
     })
     return await { data: users, roles: usersRoles }
+  }
+
+  getPdf(res: Response) {
+    this.pdfGeneratorService.createPDF(res)
   }
 }
