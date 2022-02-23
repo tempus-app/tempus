@@ -10,15 +10,12 @@ h1 {
   border-bottom: 2px solid mat.get-color-from-palette($primary-palette, 300);
 }
 
-a:link {
+a, a:hover, a:focus, a:active {
   text-decoration: none;
+  color: #031927;
 }
 
-a:visited {
-  text-decoration: none;
-}
-
-button{
+.sign-in-button{
   width: 150px;
 }
 
@@ -44,7 +41,21 @@ button{
 .profile{
   width:100%;
   text-align:right;
-  font-size: 36px;
+}
+
+.small-icon-button {
+  width: 48px !important;
+  height: 48px !important;
+  line-height: 48px !important;
+
+  .mat-icon {
+     width: 32px !important;
+     height: 32px !important;
+     line-height: 32px !important;
+  }
+  .material-icons {
+     font-size: 32px !important;
+  }
 }
 
 .example-flex-container {
@@ -54,7 +65,7 @@ button{
 }
 
 tempus-card {
-  width: 60%;
+  width: 50%;
   margin: 2em auto;
   text-align: center;
 }

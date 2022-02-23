@@ -4,7 +4,11 @@
         <h2 class="mat-h2 logo">Tempus</h2>
       </mat-grid-tile>
       <mat-grid-tile>
-        <mat-icon class="profile">account_circle</mat-icon>
+        <div class="profile"> 
+          <button mat-icon-button class="small-icon-button" >
+            <mat-icon >account_circle</mat-icon>
+          </button>
+        </div>        
       </mat-grid-tile>
       <mat-grid-tile></mat-grid-tile>
       <mat-grid-tile colspan="2"rowspan="12">
@@ -17,12 +21,13 @@
               <tempus-text-input placeholder="Username" cssClass="secondary"></tempus-text-input>
               <tempus-text-input placeholder="Password" cssClass="secondary"></tempus-text-input>
               <div class="login-button">
-                <button mat-raised-button color="accent">Login</button>
+                <button mat-raised-button color="accent" class="sign-in-button">Login</button>
               </div>
-              <p class="mat-body-2 forgot-text"><a href="https://www.w3schools.com/">Forgot your password?</a></p>
+              <p class="mat-body-2 forgot-text"><b><a href="#">Forgot your password?</a></b></p>
             </form>
           </mat-card-content>
         </tempus-card>
       </mat-grid-tile>
     </mat-grid-list>
+    <tempus-footer></tempus-footer>
   </ng-container>
