@@ -1,2 +1,2 @@
-export * from './slimSkill.dto'
-export * from './fullSkill.dto'
+export * from './createSkill.dto'
+export * from './updateSkill.dto'

@@ -1,9 +1,10 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany, ManyToOne } from 'typeorm'
+import { Project } from '../..'
 import { ClientEntity } from './client.entity'
 import { TaskEntity } from './task.entity'
 
 @Entity()
-export class ProjectEntity {
+export class ProjectEntity implements Project {
   constructor(
     id?: number,
     name?: string,
@@ -13,13 +14,13 @@ export class ProjectEntity {
     client?: ClientEntity,
     tasks?: TaskEntity[],
   ) {
-    this.id = id ?? null
-    this.name = name ?? null
-    this.startDate = startDate ?? null
-    this.endDate = endDate ?? null
-    this.hoursPerDay = hoursPerDay ?? null
-    this.client = client ?? null
-    this.tasks = tasks ?? null
+    this.id = id
+    this.name = name
+    this.startDate = startDate
+    this.endDate = endDate
+    this.hoursPerDay = hoursPerDay
+    this.client = client
+    this.tasks = tasks
   }
   @PrimaryGeneratedColumn()
   id: number

@@ -1,6 +1,6 @@
 import { Injectable, NotImplementedException } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { SlimViewDto, ViewEntity } from '@tempus/datalayer'
+import { CreateViewDto, ViewEntity } from '@tempus/datalayer'
 import { Repository } from 'typeorm'
 
 @Injectable()
@@ -16,7 +16,7 @@ export class ViewsService {
   }
 
   // edit view
-  editView(view: SlimViewDto): Promise<ViewEntity> {
+  editView(view: CreateViewDto): Promise<ViewEntity> {
     throw new NotImplementedException()
 
     // TODO: revision entity associated with view edits for approval

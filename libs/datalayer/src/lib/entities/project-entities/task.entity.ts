@@ -1,12 +1,13 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm'
+import { Task } from '../..'
 import { ProjectEntity } from './project.entity'
 
 @Entity()
-export class TaskEntity {
+export class TaskEntity implements Task {
   constructor(id?: number, taskName?: string, project?: ProjectEntity) {
-    this.id = id ?? null
-    this.taskName = taskName ?? null
-    this.project = project ?? null
+    this.id = id
+    this.taskName = taskName
+    this.project = project
   }
   @PrimaryGeneratedColumn()
   id: number
