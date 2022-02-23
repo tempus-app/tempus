@@ -26,6 +26,7 @@
 />
 ```
 
+
 ### Stepper: tempus-stepper
 
 - a stepper based off of material UI mat-stepper - it does not wrap step contents, rather it is used as a decoraitve header with navigation buttons for step.
@@ -40,3 +41,49 @@
     color="primary">
   </tempus-stepper>
   ```
+
+### Table: tempus-table
+
+- wrapper around material table to provide reusability around it
+  - `tableColumns`: the columns to be generated in the table
+  - `tableData`: the data to be provided in the table
+
+```
+<tempus-table
+  [tableColumns]="tableColumns"
+  [tableData]="data">
+ </tempus-table>
+```
+
+`tableColumns` and `tableData` should reflect each other like so:
+
+```
+data = [
+  {
+    name: 'Gabriel Granata',
+    email: 'gabriel.granata@hotmail.com',
+  },
+  {
+    name: 'Mustafa Ali',
+    email: 'mustafa.ali@email.com',
+  },
+  {
+    name: 'Georges Chamoun',
+    email: 'georges.chamoun@email.com',
+  },
+]
+
+tableColumns: Array<Column> = [
+  {
+    columnDef: 'name',
+    header: 'Name',
+    cell: (element: Record<string, any>) => `${element['name']}`
+  },
+  {
+    columnDef: 'email',
+    header: 'Email',
+    cell: (element: Record<string, any>) => `${element['email']}`
+  },
+]
+
+```
