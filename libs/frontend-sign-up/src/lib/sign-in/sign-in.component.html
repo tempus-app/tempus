@@ -1,0 +1,28 @@
+<ng-container>
+    <mat-grid-list cols="2" rowHeight="50px">
+      <mat-grid-tile>
+        <h2 class="mat-h2 logo">Tempus</h2>
+      </mat-grid-tile>
+      <mat-grid-tile>
+        <mat-icon class="profile">account_circle</mat-icon>
+      </mat-grid-tile>
+      <mat-grid-tile></mat-grid-tile>
+      <mat-grid-tile colspan="2"rowspan="12">
+        <tempus-card>
+          <mat-card-content>
+            <form>
+              <div class="card-header">
+                <h1 class="card-header mat-h1" color="primary">Sign In</h1>
+              </div>
+              <tempus-text-input placeholder="Username" cssClass="secondary"></tempus-text-input>
+              <tempus-text-input placeholder="Password" cssClass="secondary"></tempus-text-input>
+              <div class="login-button">
+                <button mat-raised-button color="accent">Login</button>
+              </div>
+              <p class="mat-body-2 forgot-text"><a href="https://www.w3schools.com/">Forgot your password?</a></p>
+            </form>
+          </mat-card-content>
+        </tempus-card>
+      </mat-grid-tile>
+    </mat-grid-list>
+  </ng-container>

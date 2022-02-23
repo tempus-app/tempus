@@ -11,6 +11,7 @@
     "frontend-common": "libs/frontend-common",
     "frontend-profile": "libs/frontend-profile",
     "frontend-project": "libs/frontend-project",
+    "frontend-sign-up": "libs/frontend-sign-up",
     "onboarding-api": "apps/onboarding-api",
     "tempus": "apps/tempus",
     "tempus-e2e": "apps/tempus-e2e"

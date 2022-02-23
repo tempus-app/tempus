@@ -1,0 +1,66 @@
+@use "sass:map";
+@use "@angular/material" as mat;
+@import "libs/frontend-common/src/theme.scss";
+
+$color-config: mat.get-color-config($tempus-theme);
+$primary-palette: map.get($color-config, "primary");
+
+h1 {
+  padding: 30px 0px 30px 0px;
+  border-bottom: 2px solid mat.get-color-from-palette($primary-palette, 300);
+}
+
+a:link {
+  text-decoration: none;
+}
+
+a:visited {
+  text-decoration: none;
+}
+
+button{
+  width: 150px;
+}
+
+.card-header{
+  width: 95%;
+  margin: auto;
+  padding-bottom: 40px;
+}
+
+.login-button {
+  padding: 20px 0px 20px 0px;
+  text-align: center;
+}
+
+.forgot-text{
+  padding-bottom: 40px;
+}
+
+.logo{
+  width: 100%;
+}
+
+.profile{
+  width:100%;
+  text-align:right;
+  font-size: 36px;
+}
+
+.example-flex-container {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+tempus-card {
+  width: 60%;
+  margin: 2em auto;
+  text-align: center;
+}
+tempus-text-input{
+  text-align: center;
+  margin: auto;
+  width: 70%;
+  display: block;
+}
