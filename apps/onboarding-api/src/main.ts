@@ -3,8 +3,9 @@
  * This is only a minimal backend to get started.
  */
 
-import { applyDecorators, Logger } from '@nestjs/common'
+import { applyDecorators, INestApplication, Logger } from '@nestjs/common'
 import { NestFactory } from '@nestjs/core'
+import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger'
 
 import { AppModule } from './app/app.module'
 import { ConfigService } from '@nestjs/config'
@@ -14,6 +15,9 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule)
   const config = app.get(ConfigService)
   const globalPrefix = 'onboarding'
+
+
+  setupSwagger(app)
   app.setGlobalPrefix(globalPrefix)
   app.useGlobalFilters(new HttpErrorFilter(config))
   const port = process.env.PORT || 3333
@@ -23,3 +27,14 @@ async function bootstrap() {
 }
 
 bootstrap()
+
+function setupSwagger(app: INestApplication) {
+  const swaggerConfig = new DocumentBuilder()
+    .setTitle('Onboarding')
+    .setDescription('The Tempus onboarding API')
+    .setVersion('0.0.1')
+    .build()
+
+  const document = SwaggerModule.createDocument(app, swaggerConfig)
+  SwaggerModule.setup('api', app, document)
+}
