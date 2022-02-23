@@ -6,7 +6,7 @@ $color-config: mat.get-color-config($tempus-theme);
 $primary-palette: map.get($color-config, "primary");
 
 h1 {
-  padding: 30px 0px 30px 0px;
+  padding: 0.5em 0em 0.5em 0em;
   border-bottom: 2px solid mat.get-color-from-palette($primary-palette, 300);
 }
 
@@ -16,22 +16,22 @@ a, a:hover, a:focus, a:active {
 }
 
 .sign-in-button{
-  width: 150px;
+  width: 8.375em;
 }
 
 .card-header{
   width: 95%;
   margin: auto;
-  padding-bottom: 40px;
+  padding-bottom: 1em;
 }
 
 .login-button {
-  padding: 20px 0px 20px 0px;
+  padding: 1.25em 0em 1.25em 0em;
   text-align: center;
 }
 
 .forgot-text{
-  padding-bottom: 40px;
+  padding-bottom: 2.5em;
 }
 
 .logo{
@@ -44,24 +44,18 @@ a, a:hover, a:focus, a:active {
 }
 
 .small-icon-button {
-  width: 48px !important;
-  height: 48px !important;
-  line-height: 48px !important;
+  width: 2.5em;
+  height: 2.5em;
+  line-height: 2.5em;
 
   .mat-icon {
-     width: 32px !important;
-     height: 32px !important;
-     line-height: 32px !important;
+     width: 1.5em;
+     height: 1.5em;
+     line-height: 1.5em;
   }
   .material-icons {
-     font-size: 32px !important;
+     font-size: 1.5em;
   }
-}
-
-.example-flex-container {
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
 }
 
 tempus-card {
@@ -74,4 +68,10 @@ tempus-text-input{
   margin: auto;
   width: 70%;
   display: block;
+}
+
+@media only screen and (max-width: 900px) {
+  tempus-card {
+    width: 90%;
+  }
 }
