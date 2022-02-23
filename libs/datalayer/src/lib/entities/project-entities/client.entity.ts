@@ -1,14 +1,15 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm'
+import { Client } from '../..'
 import { ProjectEntity } from './project.entity'
 
 @Entity()
-export class ClientEntity {
+export class ClientEntity implements Client {
   constructor(id?: number, name?: string, title?: string, clientName?: string, projects?: ProjectEntity[]) {
-    this.id = id ?? null
-    this.name = name ?? null
-    this.title = title ?? null
-    this.clientName = clientName ?? null
-    this.projects = projects ?? null
+    this.id = id
+    this.name = name
+    this.title = title
+    this.clientName = clientName
+    this.projects = projects
   }
   @PrimaryGeneratedColumn()
   id: number
@@ -23,5 +24,5 @@ export class ClientEntity {
   clientName: string
 
   @OneToMany(() => ProjectEntity, (projects) => projects.client)
-  projects?: ProjectEntity[]
+  projects: ProjectEntity[]
 }

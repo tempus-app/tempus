@@ -34,6 +34,10 @@ import { FooterComponent } from './footer/footer.component'
     MatChipsModule,
     MatIconModule,
     MatCardModule,
+    MatSortModule,
+    MatTableModule,
+    MatDividerModule,
+    MatProgressBarModule,
   ],
   declarations: [
     SearchBoxComponent,
@@ -43,6 +47,7 @@ import { FooterComponent } from './footer/footer.component'
     TextInputComponent,
     ChipComponent,
     CardComponent,
+    TableComponent,
     FooterComponent,
   ],
   exports: [
@@ -53,6 +58,7 @@ import { FooterComponent } from './footer/footer.component'
     TextInputComponent,
     ChipComponent,
     CardComponent,
+    TableComponent,
     FooterComponent,
   ],
 })

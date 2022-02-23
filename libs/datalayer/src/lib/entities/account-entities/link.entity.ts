@@ -1,9 +1,10 @@
 import { Column, CreateDateColumn, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm'
+import { Link } from '../..'
 import { StatusType } from '../../enums'
 import { UserEntity } from './user.entity'
 
 @Entity()
-export class LinkEntity {
+export class LinkEntity implements Link {
   constructor(
     id?: number,
     createdAt?: Date,
@@ -15,15 +16,15 @@ export class LinkEntity {
     status?: StatusType,
     user?: UserEntity,
   ) {
-    this.id = id ?? null
-    this.createdAt = createdAt ?? null
-    this.firstName = firstName ?? null
-    this.lastName = lastName ?? null
-    this.email = email ?? null
-    this.expiry = expiry ?? null
-    this.token = token ?? null
-    this.status = status ?? null
-    this.user = user ?? null
+    this.id = id
+    this.createdAt = createdAt
+    this.firstName = firstName
+    this.lastName = lastName
+    this.expiry = expiry
+    this.email = email
+    this.token = token
+    this.status = status
+    this.user = user
   }
   @PrimaryGeneratedColumn()
   id: number

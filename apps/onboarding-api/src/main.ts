@@ -3,7 +3,7 @@
  * This is only a minimal backend to get started.
  */
 
-import { applyDecorators, INestApplication, Logger } from '@nestjs/common'
+import { INestApplication, Logger, ValidationPipe } from '@nestjs/common'
 import { NestFactory } from '@nestjs/core'
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger'
 
@@ -16,6 +16,7 @@ async function bootstrap() {
   const config = app.get(ConfigService)
   const globalPrefix = 'api'
 
+  app.useGlobalPipes(new ValidationPipe())
   setupSwagger(app)
 
   app.setGlobalPrefix(globalPrefix)

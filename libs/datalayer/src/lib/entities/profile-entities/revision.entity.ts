@@ -1,10 +1,11 @@
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, ManyToOne, OneToOne } from 'typeorm'
+import { Revision } from '../..'
 import { ResumeSectionType } from '../../enums'
 import { UserEntity } from '../account-entities'
 import { ViewEntity } from './view.entity'
 
 @Entity()
-export class RevisionEntity {
+export class RevisionEntity implements Revision {
   constructor(
     id?: number,
     createdAt?: Date,
@@ -14,13 +15,13 @@ export class RevisionEntity {
     approved?: boolean,
     view?: ViewEntity,
   ) {
-    this.id = id ?? null
-    this.createdAt = createdAt ?? null
-    this.approvedAt = approvedAt ?? null
-    this.sectionsChanged = sectionsChanged ?? null
-    this.approver = approver ?? null
-    this.approved = approved ?? null
-    this.view = view ?? null
+    this.id = id
+    this.createdAt = createdAt
+    this.approvedAt = approvedAt
+    this.sectionsChanged = sectionsChanged
+    this.approver = approver
+    this.approved = approved
+    this.view = view
   }
   @PrimaryGeneratedColumn()
   id: number

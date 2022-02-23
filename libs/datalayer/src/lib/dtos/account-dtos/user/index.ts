@@ -1,2 +1,1 @@
-export * from './fullUser.dto'
-export * from './slimUser.dto'
+export * from './createUser.dto'

@@ -1,40 +1,64 @@
-import { Injectable, NotImplementedException } from '@nestjs/common'
+import { Injectable, NotFoundException } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { SlimCertificationDto, CertificationEntity } from '@tempus/datalayer'
+import { ResourceService } from '@tempus/api-account'
+import { Certification, CertificationEntity, CreateCertificationDto, UpdateCertificationDto } from '@tempus/datalayer'
 import { Repository } from 'typeorm'
 
 @Injectable()
 export class CertificationService {
   constructor(
+    private resourceService: ResourceService,
     @InjectRepository(CertificationEntity)
     private certificationRepository: Repository<CertificationEntity>,
   ) {}
 
   // create ceritifcation for a specific resource
-  createCertification(
-    resourceId: number,
-    certification: Omit<SlimCertificationDto, 'id'>,
-  ): Promise<CertificationEntity> {
-    throw new NotImplementedException()
+  async createCertification(resourceId: number, certification: CertificationEntity): Promise<Certification> {
+    const resourceEntity = await this.resourceService.findResourceById(resourceId)
+    certification.resource = resourceEntity
+    return await this.certificationRepository.save(certification)
   }
 
   // return all certifications by resource
-  findCertificationByResource(resourceId: number): Promise<CertificationEntity[]> {
-    throw new NotImplementedException()
+  async findCertificationByResource(resourceId: number): Promise<Certification[]> {
+    let certificationEntities = await this.certificationRepository.find({
+      where: { resource: { id: resourceId } },
+      relations: ['resource'],
+    })
+    return certificationEntities
   }
 
   // return certification by id
-  findCertificationById(certificationId: number): Promise<CertificationEntity> {
-    throw new NotImplementedException()
+  async findCertificationById(certificationId: number): Promise<Certification> {
+    let certificationEntity = await this.certificationRepository.findOne(certificationId, { relations: ['resource'] })
+    if (!certificationEntity) {
+      throw new NotFoundException(`Could not find certification with id ${certificationId}`)
+    }
+    return certificationEntity
   }
 
   // edit certification
-  editCertification(certification: SlimCertificationDto): Promise<CertificationEntity> {
-    throw new NotImplementedException()
+  async editCertification(updatedCertificationData: UpdateCertificationDto): Promise<Certification> {
+    let existingCertificationEntity = await this.certificationRepository.findOne(updatedCertificationData.id, {
+      relations: ['resource'],
+    })
+    if (!existingCertificationEntity) {
+      throw new NotFoundException(`Could not find certification with id ${existingCertificationEntity.id}`)
+    }
+
+    // Safe guards to prevent data from being overwritten as null
+    for (let [key, val] of Object.entries(updatedCertificationData)) if (!val) delete updatedCertificationData[key]
+    Object.assign(existingCertificationEntity, updatedCertificationData)
+
+    return await this.certificationRepository.save(existingCertificationEntity)
   }
 
   // delete certification
-  deleteCertification(certificationId: number) {
-    throw new NotImplementedException()
+  async deleteCertification(certificationId: number) {
+    let certificationEntity = await this.certificationRepository.findOne(certificationId)
+    if (!certificationEntity) {
+      throw new NotFoundException(`Could not find education with id ${certificationId}`)
+    }
+    this.certificationRepository.remove(certificationEntity)
   }
 }
