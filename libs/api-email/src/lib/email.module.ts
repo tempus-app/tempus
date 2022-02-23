@@ -3,7 +3,7 @@ import { Module } from '@nestjs/common'
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter'
 import { EmailService } from './services'
 import { DataLayerModule } from '@tempus/datalayer'
-import {ConfigService } from '@nestjs/config'
+import { ConfigService } from '@nestjs/config'
 const path = require('path')
 
 @Module({
