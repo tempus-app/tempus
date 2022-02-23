@@ -13,17 +13,23 @@ export class AuthService {
 
   async validateUser(email: string, password: string): Promise<any> {
     const user = await this.userService.findByEmail(email)
-    console.log(user)
     if (user && (await this.comparePassword(password, user.password))) {
-      return user // return userDTO (wait for Mustafa to merge)
+      return user
     }
+    return null
+  }
 
+  async validateUserJWT(email: string) {
+    const user = await this.userService.findByEmail(email)
+    if (user) {
+      return user
+    }
     return null
   }
 
   async login(user): Promise<any> {
     const payload = {
-      sub: user.email,
+      email: user.email,
       roles: user.roles,
     }
     user.password = null
