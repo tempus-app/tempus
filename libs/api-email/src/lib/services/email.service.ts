@@ -12,7 +12,7 @@ export class EmailService {
       subject: 'Complete your Application for CAL & Associates',
       template: 'invitationLink',
       context: {
-        code: 'cf1a3f828287',
+        code: link.token,
         name: `${link.firstName} ${link.lastName}`,
       },
     })
