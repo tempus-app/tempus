@@ -1,6 +1,6 @@
-import { Injectable, NotFoundException, NotImplementedException } from '@nestjs/common'
+import { Injectable, NotFoundException } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { RoleType,} from '@tempus/datalayer'
+import { CreateResourceDto, CreateUserDto, ResourceEntity, RoleType, User, UserEntity } from '@tempus/datalayer'
 import { Repository } from 'typeorm'
 import { ResourceService } from '.'
 
@@ -12,38 +12,38 @@ export class UserService {
     private resourceService: ResourceService,
   ) {}
 
-  async createrUser(user: Omit<FullUserDto | FullResourceDto, 'id'>): Promise<UserEntity> {
+  async createrUser(user: UserEntity): Promise<User> {
     if (user.roles.includes(RoleType.BUSINESS_OWNER)) {
-      let userEntity = FullUserDto.toEntity(<FullUserDto>user)
-      userEntity = await this.userRepository.save(userEntity)
-      return FullUserDto.fromEntity(userEntity)
+      return await this.userRepository.save(user)
     } else {
-      const resourceDto = await this.resourceService.createResource(<FullResourceDto>user)
+      const resourceDto = await this.resourceService.createResource(<ResourceEntity>user)
       return resourceDto
     }
   }
 
-  async editUser(user: SlimUserDto): Promise<SlimUserDto> {
-    const userEntity = await this.userRepository.findOne(user.id)
+  async editUser(userId: number, user: CreateUserDto): Promise<User> {
+    const userEntity = await this.userRepository.findOne(userId)
     if (!userEntity) {
       throw new NotFoundException(`Could not find resource with id ${userEntity.id}`)
     }
-
     if (userEntity.roles.includes(RoleType.BUSINESS_OWNER)) {
-      await this.userRepository.update(user.id, userEntity)
-      return FullUserDto.fromEntity(userEntity)
+      await this.userRepository.update(userId, user)
+      return { user, ...userEntity } as UserEntity
     } else {
-      const resourceDto = await this.resourceService.editResource(<SlimResourceDto>userEntity)
+      const resourceDto = await this.resourceService.editResource(userId, <CreateResourceDto>user)
       return resourceDto
     }
   }
 
-  async getUser(userId: number): Promise<FullUserDto> {
+  async getUser(userId: number): Promise<User> {
     const userEntity = await this.userRepository.findOne(userId)
     if (userEntity.roles.includes(RoleType.BUSINESS_OWNER)) {
-      return FullUserDto.fromEntity(userEntity)
+      if (!userEntity) {
+        throw new NotFoundException(`Could not find resource with id ${userEntity.id}`)
+      }
+      return userEntity
     } else {
-      const resourceDto = await this.resourceService.getResource(<FullResourceDto>userEntity)
+      const resourceDto = await this.resourceService.getResource(userId)
       return resourceDto
     }
   }
@@ -57,14 +57,10 @@ export class UserService {
     project?: string[] | string,
     status?: string[] | string,
     sortBy?: string,
-  ): Promise<FullUserDto[]> {
+  ): Promise<User[]> {
     const users = await this.userRepository.find()
 
-    const userDtos = []
-    users.forEach((user) => {
-      userDtos.push(FullUserDto.fromEntity(user))
-    })
-    return userDtos
+    return users
   }
 
   async deleteUser(userId: number) {
@@ -73,5 +69,6 @@ export class UserService {
       throw new NotFoundException(`Could not find user with id ${userId}`)
     }
     await this.userRepository.delete(userEntity)
+    return true
   }
 }

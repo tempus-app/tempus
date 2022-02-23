@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger'
 import { ResourceEntity } from '../../..'
 import { RoleType } from '../../../enums'
-import { CreateUserDto } from '../user/createUser.dto'
+import { CreateUserDto } from '../user/create-user.dto'
 export class CreateResourceDto extends CreateUserDto {
   @ApiProperty()
   phoneNumber: string
@@ -25,7 +25,7 @@ export class CreateResourceDto extends CreateUserDto {
 
   public static toEntity(dto: CreateResourceDto): ResourceEntity {
     if (dto == null) return new ResourceEntity()
-    let resEntity = new ResourceEntity(
+    const resEntity = new ResourceEntity(
       null,
       dto.phoneNumber,
       dto.title,

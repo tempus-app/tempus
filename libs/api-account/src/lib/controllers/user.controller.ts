@@ -1,13 +1,12 @@
 import { Body, Controller, Get, Param, Patch, Post, Query } from '@nestjs/common'
-import { FullResourceDto, FullUserDto, ResourceEntity, UserEntity, SlimUserDto } from '@tempus/datalayer'
-import { ResourceService } from '../services/resource.service'
+import { ResourceEntity, UserEntity, User, Resource, CreateUserDto } from '@tempus/datalayer'
 import { UserService } from '../services/user.service'
 
 @Controller('User')
 export class UserController {
   constructor(private userService: UserService) {}
 
-  @Get('')
+  @Get()
   // TODO: filtering
   async getUsers(
     @Query() location: string[] | string,
@@ -15,7 +14,7 @@ export class UserController {
     @Query() title: string[] | string,
     @Query() project: string[] | string,
     @Query() status: string[] | string,
-  ): Promise<FullUserDto[]> {
+  ): Promise<User[]> {
     return await this.userService.getAllUsers(location, skills, title, project, status)
   }
 
@@ -27,13 +26,13 @@ export class UserController {
 
   //creates User (includes resource)
   @Post()
-  async createUser(@Body() user: Omit<FullResourceDto | FullUserDto, 'id'>): Promise<FullUserDto | FullResourceDto> {
-    return await this.userService.createrUser(user)
+  async createUser(@Body() user: CreateUserDto): Promise<User | Resource> {
+    return await this.userService.createrUser(CreateUserDto.toEntity(user))
   }
 
   //updates user information  (includes resource)
-  @Patch('')
-  async editUser(@Body() user: SlimUserDto): Promise<UserEntity | ResourceEntity> {
-    return await this.userService.editUser(user)
+  @Patch(':userId')
+  async editUser(@Param('userId') userId: number, @Body() user: CreateUserDto): Promise<User | Resource> {
+    return await this.userService.editUser(userId, user)
   }
 }

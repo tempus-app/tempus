@@ -26,7 +26,6 @@
 />
 ```
 
-
 ### Stepper: tempus-stepper
 
 - a stepper based off of material UI mat-stepper - it does not wrap step contents, rather it is used as a decoraitve header with navigation buttons for step.

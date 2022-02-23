@@ -1,5 +1,6 @@
 import { RoleType } from '../../../enums'
 import { ApiProperty } from '@nestjs/swagger'
+import { UserEntity } from '../../../entities/account-entities/user.entity'
 
 export class CreateUserDto {
   @ApiProperty()
@@ -23,5 +24,10 @@ export class CreateUserDto {
     this.email = email
     this.password = password
     this.roles = roles
+  }
+
+  public static toEntity(dto: CreateUserDto): UserEntity {
+    if (dto == null) return new UserEntity()
+    return new UserEntity(null, dto.firstName, dto.lastName, dto.email, dto.password, dto.roles)
   }
 }
