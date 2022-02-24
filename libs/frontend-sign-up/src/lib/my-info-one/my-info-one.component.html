@@ -1,0 +1,68 @@
+<ng-container>
+    <mat-grid-list cols="2" rowHeight="50px">
+        <mat-grid-tile>
+            <h2 class="mat-h2 logo">Tempus</h2>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <div class="profile">
+                <button mat-icon-button class="small-icon-button">
+                    <mat-icon>account_circle</mat-icon>
+                </button>
+            </div>
+        </mat-grid-tile>
+        <mat-grid-tile></mat-grid-tile>
+        <mat-grid-tile colspan="2" rowspan="2">
+            <h1 class="mat-h1">Name</h1>
+        </mat-grid-tile>
+        <mat-grid-tile colspan="2" rowspan="8">
+            <tempus-card>
+                <mat-card-content>
+                    <form>
+                        <div class="personal">
+                            <div>
+                                <tempus-text-input placeholder="First Name" cssClass="secondary"></tempus-text-input>
+
+                            </div>
+                            <div>
+                                <tempus-text-input placeholder="Last Name" cssClass="secondary"></tempus-text-input>
+                            </div>
+                        </div>
+                        <div class="personal">
+                            <div>
+                                <tempus-text-input placeholder="Phone Number" cssClass="secondary"></tempus-text-input>
+                            </div>
+                            <div>
+                                <tempus-text-input placeholder="Email" cssClass="secondary"></tempus-text-input>
+                            </div>
+                        </div>
+                    </form>
+                </mat-card-content>
+            </tempus-card>
+        </mat-grid-tile>
+        <mat-grid-tile colspan="2" rowspan="2">
+            <h1 class="mat-h1">Address</h1>
+        </mat-grid-tile>
+        <mat-grid-tile colspan="2" rowspan="8">
+            <tempus-card>
+                <mat-card-content>
+                    <form>
+                        <div class="personal">
+                            <div>
+                                <tempus-text-input placeholder="Country" cssClass="secondary"></tempus-text-input>
+
+                            </div>
+                            <div>
+                                <tempus-text-input placeholder="State" cssClass="secondary"></tempus-text-input>
+                            </div>
+                        </div>
+                        <div class="personal">
+                            <div>
+                                <tempus-text-input placeholder="City" cssClass="secondary"></tempus-text-input>
+                            </div>
+                        </div>
+                    </form>
+                </mat-card-content>
+            </tempus-card>
+        </mat-grid-tile>
+    </mat-grid-list>
+</ng-container>

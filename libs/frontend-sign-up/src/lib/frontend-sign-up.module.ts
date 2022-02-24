@@ -6,14 +6,17 @@ import { MatCardModule } from '@angular/material/card';
 import {MatGridListModule} from '@angular/material/grid-list';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { MyInfoOneComponent } from './my-info-one/my-info-one.component';
 
 @NgModule({
   imports: [CommonModule, FrontendCommon, MatCardModule, MatGridListModule, MatIconModule, MatButtonModule],
   declarations: [
-    SignInComponent
+    SignInComponent,
+    MyInfoOneComponent
   ],
   exports: [
-    SignInComponent
+    SignInComponent,
+    MyInfoOneComponent
   ],
 })
 export class FrontendSignUpModule {}
