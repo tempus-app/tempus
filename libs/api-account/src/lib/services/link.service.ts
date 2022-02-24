@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException, NotImplementedException } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { EmailService } from '@tempus/api-email'
-import { CreateLinkDto, LinkEntity, StatusType, UpdatelinkDto } from '@tempus/datalayer'
+import { CreateLinkDto, Link, LinkEntity, StatusType, UpdatelinkDto } from '@tempus/datalayer'
 import { Repository } from 'typeorm'
 import { v4 as uuidv4 } from 'uuid'
 
@@ -13,7 +13,7 @@ export class LinkService {
     private emailService: EmailService,
   ) {}
 
-  createLink(link: LinkEntity): Promise<LinkEntity> {
+  createLink(link: LinkEntity): Promise<Link> {
     const uniqueToken = uuidv4()
     let expiryDate = link.expiry
 
@@ -27,22 +27,22 @@ export class LinkService {
     return this.linkRepository.save(fullLink)
   }
 
-  associateLinkToUser(linkId: number, userId: number): Promise<LinkEntity> {
+  associateLinkToUser(linkId: number, userId: number): Promise<Link> {
     throw new NotImplementedException()
   }
 
-  async findLinkById(linkId: number): Promise<LinkEntity> {
+  async findLinkById(linkId: number): Promise<Link> {
     const linkEntity = await this.linkRepository.findOne(linkId)
     if (!linkEntity) {
-      throw new NotFoundException(`Could not find education with id ${linkId}`)
+      throw new NotFoundException(`Could not find token with id ${linkId}`)
     }
     if (!this.isLinkValid(linkEntity)) {
-      await this.editLinkStatus(linkId, StatusType.INACTIVE)
+      await this.editLinkStatus(linkId, StatusType.INACTIVE, linkEntity)
     }
     return linkEntity
   }
 
-  async findLinkByToken(token: string): Promise<LinkEntity> {
+  async findLinkByToken(token: string): Promise<Link> {
     //should be unique
     const links = await this.linkRepository.find({ where: { token: token } })
     const linkEntity = links[0]
@@ -55,13 +55,15 @@ export class LinkService {
     return linkEntity
   }
 
-  async editLink(updatelinkDto: UpdatelinkDto): Promise<LinkEntity> {
+  async editLink(updatelinkDto: UpdatelinkDto): Promise<Link> {
     return this.editLinkStatus(updatelinkDto.id, updatelinkDto.status)
   }
 
-  async editLinkStatus(linkId: number, newStatus: StatusType): Promise<LinkEntity> {
-    let existingLinkEntity = await this.linkRepository.findOne(linkId)
-
+  async editLinkStatus(linkId: number, newStatus: StatusType, linkEntity?: LinkEntity): Promise<Link> {
+    let existingLinkEntity = linkEntity
+    if (!linkEntity) {
+      existingLinkEntity = await this.linkRepository.findOne(linkId)
+    }
     if (!existingLinkEntity) {
       throw new NotFoundException(`Could not find link with id ${existingLinkEntity.id}`)
     }
