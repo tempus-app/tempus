@@ -1,4 +1,4 @@
-import { Body, Controller, Get, NotImplementedException, Param, Patch, Post } from '@nestjs/common'
+import { Body, Controller, Get, NotImplementedException, Param, Patch, Post, Query } from '@nestjs/common'
 import { ApiTags } from '@nestjs/swagger'
 import { CreateLinkDto, Link, LinkEntity, UpdatelinkDto } from '@tempus/datalayer'
 import { LinkService } from '../services/link.service'
@@ -32,11 +32,11 @@ export class LinkController {
   //gets link information, should verify validity
   @Get('/:linkId')
   async getLink(@Param('linkId') linkId: number): Promise<Link> {
-    throw new NotImplementedException()
+    return await this.linkService.findLinkById(linkId)
   }
 
-  @Get('/:token')
-  async getLinkByToken(@Param('token') token: string): Promise<Link> {
-    throw new NotImplementedException()
+  @Get('/')
+  async getLinkByToken(@Query('token') token: string): Promise<Link> {
+    return this.linkService.findLinkByToken(token)
   }
 }

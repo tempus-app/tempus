@@ -1,4 +1,4 @@
-import { Injectable, NotImplementedException } from '@nestjs/common'
+import { Injectable, NotFoundException, NotImplementedException } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { EmailService } from '@tempus/api-email'
 import { CreateLinkDto, LinkEntity, StatusType } from '@tempus/datalayer'
@@ -31,16 +31,39 @@ export class LinkService {
     throw new NotImplementedException()
   }
 
-  getLink(linkId: number): Promise<LinkEntity> {
-    throw new NotImplementedException()
+  async findLinkById(linkId: number): Promise<LinkEntity> {
+    const linkEntity = await this.linkRepository.findOne(linkId)
+    if (!linkEntity) {
+      throw new NotFoundException(`Could not find education with id ${linkId}`)
+    }
+    if (!this.isLinkValid(linkEntity)) {
+      await this.editLinkStatus(linkId, StatusType.INACTIVE)
+    }
+    return linkEntity
   }
 
-  editLinkStatus(linkId: number, newStatus: StatusType): Promise<LinkEntity> {
+  async findLinkByToken(token: string): Promise<LinkEntity> {
+    //should be unique
+    const links = await this.linkRepository.find({ where: { token: token } })
+    const linkEntity = links[0]
+    if (!linkEntity) {
+      throw new NotFoundException(`Could not find link with token ${token}`)
+    }
+    if (!this.isLinkValid(linkEntity)) {
+      await this.editLinkStatus(linkEntity.id, StatusType.INACTIVE)
+    }
+    return linkEntity
+  }
+
+  async editLinkStatus(linkId: number, newStatus: StatusType): Promise<LinkEntity> {
     throw new NotImplementedException()
   }
 
   //compares link expiry with current time
-  isLinkValid(linkId: number): boolean {
-    throw new NotImplementedException()
+  isLinkValid(linkEntity: LinkEntity): boolean {
+    if (linkEntity.expiry.getTime() <= Date.now()) {
+      return false
+    }
+    return true
   }
 }
