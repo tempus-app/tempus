@@ -13,7 +13,7 @@ export class SkillEntity implements Skill {
   }
 
   @PrimaryGeneratedColumn()
-  id: number
+  id?: number
 
   @ManyToOne(() => SkillTypeEntity)
   @JoinColumn([{ name: 'skill_key', referencedColumnName: 'name' }])

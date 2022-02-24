@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { EditUserDto, Resource, ResourceEntity } from '@tempus/datalayer'
+import { ViewsService } from '@tempus/api-profile'
+import { CreateViewDto, EditUserDto, Resource, ResourceEntity, ViewEntity, ViewType } from '@tempus/datalayer'
 import { Repository } from 'typeorm'
 
 @Injectable()
@@ -8,14 +9,28 @@ export class ResourceService {
   constructor(
     @InjectRepository(ResourceEntity)
     private resourceRepository: Repository<ResourceEntity>,
+    private viewService: ViewsService,
   ) {}
 
   async createResource(resource: ResourceEntity): Promise<Resource> {
     const createdResource = await this.resourceRepository.save(resource)
 
-    // TODO: create initial view with inital data
+    //  Initial View
+    const view = await this.viewService.createView(
+      createdResource.id,
+      new ViewEntity(
+        null,
+        'type',
+        null,
+        resource.skills,
+        resource.experiences,
+        resource.educations,
+        null,
+        ViewType.PRIMARY,
+      ),
+    )
+    createdResource.views.push(view)
 
-    // view service
     return createdResource
   }
 

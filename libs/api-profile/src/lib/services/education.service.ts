@@ -3,7 +3,6 @@ import { InjectRepository } from '@nestjs/typeorm'
 import { EducationEntity, LocationEntity, UpdateEducationDto, Education } from '@tempus/datalayer'
 import { ResourceService } from '@tempus/api-account'
 import { Repository } from 'typeorm'
-import { keyframes } from '@angular/animations'
 
 @Injectable()
 export class EducationService {
