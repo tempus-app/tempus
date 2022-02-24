@@ -11,17 +11,18 @@ export class UserController {
 
   @Get()
   // TODO: filtering
-  async getUsers(): Promise<User[]> {// @Query() location: string[] | string,
-  // @Query() skills: string[] | string,
-  // @Query() title: string[] | string,
-  // @Query() project: string[] | string,
-  // @Query() status: string[] | string,
+  async getUsers(): Promise<User[]> {
+    // @Query() location: string[] | string,
+    // @Query() skills: string[] | string,
+    // @Query() title: string[] | string,
+    // @Query() project: string[] | string,
+    // @Query() status: string[] | string,
     return await this.userService.getAllUsers()
   }
 
   @Get('resources')
   async getResources(): Promise<ResourceEntity[]> {
-    return await this.resourceService.getAllResources();
+    return await this.resourceService.getAllResources()
   }
 
   //gets a User  (includes resource)
@@ -44,6 +45,6 @@ export class UserController {
 
   @Delete(':userId')
   async deleteUser(@Param('userId') userId: number): Promise<void> {
-    return await this.userService.deleteUser(userId);
+    return await this.userService.deleteUser(userId)
   }
 }

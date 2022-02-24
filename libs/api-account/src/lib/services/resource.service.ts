@@ -44,15 +44,16 @@ export class ResourceService {
   // TODO: filtering
 
   // CRUD requests
-  async getAllResources():Promise<Resource[]>{ // location?: string[] | string,
-  // skills?: string[] | string,
-  // title?: string[] | string,
-  // project?: string[] | string,
-  // status?: string[] | string,
-  // sortBy?: string,
-   
+  async getAllResources(): Promise<Resource[]> {
+    // location?: string[] | string,
+    // skills?: string[] | string,
+    // title?: string[] | string,
+    // project?: string[] | string,
+    // status?: string[] | string,
+    // sortBy?: string,
+
     const resources = await this.resourceRepository.find({
-      relations: ['projects', 'experiences', 'educations', 'skills', 'certifications', 'views', 'location']  
+      relations: ['projects', 'experiences', 'educations', 'skills', 'certifications', 'views', 'location'],
     })
 
     return resources
