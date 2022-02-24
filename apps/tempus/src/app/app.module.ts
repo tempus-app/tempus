@@ -9,6 +9,7 @@ import { HttpClientModule } from '@angular/common/http'
 import { FrontendCommon } from '@tempus/frontend-common'
 import { MatTooltipModule } from '@angular/material/tooltip'
 import { MatPaginatorModule } from '@angular/material/paginator'
+import {FrontendSignUpModule} from '@tempus/frontend-sign-up'
 
 @NgModule({
   declarations: [AppComponent, NxWelcomeComponent],
@@ -20,6 +21,7 @@ import { MatPaginatorModule } from '@angular/material/paginator'
     FrontendCommon,
     MatTooltipModule,
     MatPaginatorModule,
+    FrontendSignUpModule
   ],
   providers: [],
   bootstrap: [AppComponent],
