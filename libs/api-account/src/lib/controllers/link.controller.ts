@@ -18,15 +18,9 @@ export class LinkController {
   //UPDATES:
 
   //updates link status
-  @Patch('/')
-  async editLinkStatus(@Body() link: UpdatelinkDto): Promise<Link> {
-    throw new NotImplementedException()
-  }
-
-  //associate link to user
-  @Patch('/:userId')
-  async associateUserToLink(@Param('userId') userId, @Body() link: UpdatelinkDto) {
-    throw new NotImplementedException()
+  @Patch('/:linkId')
+  async editLinkStatus(@Body() updatelinkDto: UpdatelinkDto): Promise<Link> {
+    return this.linkService.editLink(updatelinkDto)
   }
 
   //gets link information, should verify validity

@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException, NotImplementedException } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { EmailService } from '@tempus/api-email'
-import { CreateLinkDto, LinkEntity, StatusType } from '@tempus/datalayer'
+import { CreateLinkDto, LinkEntity, StatusType, UpdatelinkDto } from '@tempus/datalayer'
 import { Repository } from 'typeorm'
 import { v4 as uuidv4 } from 'uuid'
 
@@ -55,8 +55,20 @@ export class LinkService {
     return linkEntity
   }
 
+  async editLink(updatelinkDto: UpdatelinkDto): Promise<LinkEntity> {
+    return this.editLinkStatus(updatelinkDto.id, updatelinkDto.status)
+  }
+
   async editLinkStatus(linkId: number, newStatus: StatusType): Promise<LinkEntity> {
-    throw new NotImplementedException()
+    let existingLinkEntity = await this.linkRepository.findOne(linkId)
+
+    if (!existingLinkEntity) {
+      throw new NotFoundException(`Could not find link with id ${existingLinkEntity.id}`)
+    }
+
+    existingLinkEntity.status = newStatus
+
+    return this.linkRepository.save(existingLinkEntity)
   }
 
   //compares link expiry with current time
