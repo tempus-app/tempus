@@ -16,6 +16,9 @@
         "inlineStyleLanguage": "scss",
         "assets": ["apps/tempus/src/favicon.ico", "apps/tempus/src/assets"],
         "styles": ["apps/tempus/src/styles.scss"],
+        "stylePreprocessorOptions": {
+          "includePaths": ["libs/frontend-common/src/styles"]
+        },
         "scripts": []
       },
       "configurations": {
