@@ -21,6 +21,7 @@ export class ResourceService {
 
   async getResource(resourceId: number): Promise<Resource> {
     const resourceEntity = await this.resourceRepository.findOne(resourceId, {
+      // TODO: relations error???
       relations: ['projects', 'experiences', 'educations', 'skills', 'certifications', 'views', 'location'],
     })
 
