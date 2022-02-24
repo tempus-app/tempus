@@ -1,25 +1,26 @@
-import { Body, Controller, Get, Param, Patch, Post, Query } from '@nestjs/common'
-import { ResourceEntity, UserEntity, User, Resource, CreateUserDto } from '@tempus/datalayer'
+import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common'
+import { ApiTags } from '@nestjs/swagger'
+import { ResourceEntity, UserEntity, User, Resource, CreateUserDto, EditUserDto } from '@tempus/datalayer'
 import { UserService } from '../services/user.service'
 
-@Controller('User')
+@ApiTags('User')
+@Controller('user')
 export class UserController {
   constructor(private userService: UserService) {}
 
   @Get()
   // TODO: filtering
-  async getUsers(
-    @Query() location: string[] | string,
-    @Query() skills: string[] | string,
-    @Query() title: string[] | string,
-    @Query() project: string[] | string,
-    @Query() status: string[] | string,
-  ): Promise<User[]> {
-    return await this.userService.getAllUsers(location, skills, title, project, status)
+  async getUsers(): // @Query() location: string[] | string,
+  // @Query() skills: string[] | string,
+  // @Query() title: string[] | string,
+  // @Query() project: string[] | string,
+  // @Query() status: string[] | string,
+  Promise<User[]> {
+    return await this.userService.getAllUsers()
   }
 
   //gets a User  (includes resource)
-  @Get('/:userId')
+  @Get(':userId')
   async getUser(@Param('userId') userId: number): Promise<UserEntity | ResourceEntity> {
     return await this.userService.getUser(userId)
   }
@@ -27,12 +28,12 @@ export class UserController {
   //creates User (includes resource)
   @Post()
   async createUser(@Body() user: CreateUserDto): Promise<User | Resource> {
-    return await this.userService.createrUser(CreateUserDto.toEntity(user))
+    return await this.userService.createUser(CreateUserDto.toEntity(user))
   }
 
   //updates user information  (includes resource)
   @Patch(':userId')
-  async editUser(@Param('userId') userId: number, @Body() user: CreateUserDto): Promise<User | Resource> {
-    return await this.userService.editUser(userId, user)
+  async editUser(@Body() user: EditUserDto): Promise<User | Resource> {
+    return await this.userService.editUser(EditUserDto.toEntity(user))
   }
 }

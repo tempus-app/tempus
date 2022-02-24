@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, NotImplementedException, Param, Patch, Post, Req } from '@nestjs/common'
+import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common'
 import { EducationService } from '../services/education.service'
 import { ExperienceService } from '../services/experience.service'
 import { SkillsService } from '../services/skill.service'

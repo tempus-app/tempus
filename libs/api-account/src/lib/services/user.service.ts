@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { CreateResourceDto, CreateUserDto, ResourceEntity, RoleType, User, UserEntity } from '@tempus/datalayer'
+import { Resource, ResourceEntity, RoleType, User, UserEntity } from '@tempus/datalayer'
 import { Repository } from 'typeorm'
 import { ResourceService } from '.'
 
@@ -12,35 +12,36 @@ export class UserService {
     private resourceService: ResourceService,
   ) {}
 
-  async createrUser(user: UserEntity): Promise<User> {
+  async createUser(user: UserEntity): Promise<UserEntity> {
     if (user.roles.includes(RoleType.BUSINESS_OWNER)) {
       return await this.userRepository.save(user)
     } else {
-      const resourceDto = await this.resourceService.createResource(<ResourceEntity>user)
-      return resourceDto
+      return await this.resourceService.createResource({
+        ...user,
+      } as Resource)
     }
   }
 
-  async editUser(userId: number, user: CreateUserDto): Promise<User> {
-    const userEntity = await this.userRepository.findOne(userId)
+  async editUser(user: UserEntity): Promise<UserEntity> {
+    const userEntity = await this.userRepository.findOne(user.id)
     if (!userEntity) {
-      throw new NotFoundException(`Could not find resource with id ${userEntity.id}`)
+      throw new NotFoundException(`Could not find user with id ${userEntity.id}`)
     }
-    if (userEntity.roles.includes(RoleType.BUSINESS_OWNER)) {
-      await this.userRepository.update(userId, user)
+    if (userEntity['title']) {
+      await this.userRepository.update(user.id, user)
       return { user, ...userEntity } as UserEntity
     } else {
-      const resourceDto = await this.resourceService.editResource(userId, <CreateResourceDto>user)
+      const resourceDto = await this.resourceService.editResource(user)
       return resourceDto
     }
   }
 
-  async getUser(userId: number): Promise<User> {
+  async getUser(userId: number): Promise<UserEntity> {
     const userEntity = await this.userRepository.findOne(userId)
-    if (userEntity.roles.includes(RoleType.BUSINESS_OWNER)) {
-      if (!userEntity) {
-        throw new NotFoundException(`Could not find resource with id ${userEntity.id}`)
-      }
+    if (!userEntity) {
+      throw new NotFoundException(`Could not find user with id ${userEntity.id}`)
+    }
+    if (userEntity['title']) {
       return userEntity
     } else {
       const resourceDto = await this.resourceService.getResource(userId)
@@ -50,25 +51,23 @@ export class UserService {
 
   // TODO: filtering
   // ROLES?
-  async getAllUsers(
-    location?: string[] | string,
-    skills?: string[] | string,
-    title?: string[] | string,
-    project?: string[] | string,
-    status?: string[] | string,
-    sortBy?: string,
-  ): Promise<User[]> {
+  async getAllUsers(): // location?: string[] | string,
+  // skills?: string[] | string,
+  // title?: string[] | string,
+  // project?: string[] | string,
+  // status?: string[] | string,
+  // sortBy?: string,
+  Promise<UserEntity[]> {
     const users = await this.userRepository.find()
 
     return users
   }
 
-  async deleteUser(userId: number) {
+  async deleteUser(userId: number): Promise<void> {
     const userEntity = await this.userRepository.findOne(userId)
     if (!userEntity) {
       throw new NotFoundException(`Could not find user with id ${userId}`)
     }
-    await this.userRepository.delete(userEntity)
-    return true
+    await this.userRepository.remove(userEntity)
   }
 }
