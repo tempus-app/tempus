@@ -17,7 +17,7 @@ export class EducationService {
 
   // create education for a specific resource
   async createEducation(resourceId: number, educationEntity: EducationEntity): Promise<Education> {
-    const resourceEntity = await this.resourceService.getResource(resourceId)
+    const resourceEntity = await this.resourceService.getResourceInfo(resourceId)
 
     educationEntity.resource = resourceEntity
     educationEntity = await this.educationRepository.save(educationEntity)

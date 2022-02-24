@@ -16,6 +16,7 @@ export class UserService {
     if (user.roles.includes(RoleType.BUSINESS_OWNER)) {
       return await this.userRepository.save(user)
     } else {
+      console.log(user);
       return await this.resourceService.createResource({
         ...user,
       } as Resource)
@@ -41,7 +42,7 @@ export class UserService {
     if (!userEntity) {
       throw new NotFoundException(`Could not find user with id ${userEntity.id}`)
     }
-    if (userEntity['title']) {
+    if (!userEntity['title']) {
       return userEntity
     } else {
       const resourceDto = await this.resourceService.getResource(userId)
@@ -51,13 +52,13 @@ export class UserService {
 
   // TODO: filtering
   // ROLES?
-  async getAllUsers(): // location?: string[] | string,
+  // get by resource etc
+  async getAllUsers():Promise<UserEntity[]> { // location?: string[] | string,
   // skills?: string[] | string,
   // title?: string[] | string,
   // project?: string[] | string,
   // status?: string[] | string,
   // sortBy?: string,
-  Promise<UserEntity[]> {
     const users = await this.userRepository.find()
 
     return users

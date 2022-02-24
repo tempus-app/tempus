@@ -14,7 +14,7 @@ export class CertificationService {
 
   // create ceritifcation for a specific resource
   async createCertification(resourceId: number, certification: CertificationEntity): Promise<Certification> {
-    const resourceEntity = await this.resourceService.getResource(resourceId)
+    const resourceEntity = await this.resourceService.getResourceInfo(resourceId)
     certification.resource = resourceEntity
     return await this.certificationRepository.save(certification)
   }

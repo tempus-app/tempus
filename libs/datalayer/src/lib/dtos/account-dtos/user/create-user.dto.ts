@@ -13,6 +13,7 @@ import {
   CreateViewDto,
 } from '../..'
 import exp = require('constants')
+import { LocationEntity } from '../../../entities/common-entities/location.entity'
 
 export class CreateUserDto {
   @ApiProperty()
@@ -105,7 +106,7 @@ export class CreateUserDto {
         null,
         dto.phoneNumber,
         dto.title,
-        null,
+        new LocationEntity(),
         [],
         [],
         [],
