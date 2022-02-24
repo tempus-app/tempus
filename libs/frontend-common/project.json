@@ -4,6 +4,22 @@
   "sourceRoot": "libs/frontend-common/src",
   "prefix": "tempus",
   "targets": {
+    "build": {
+      "executor": "@nrwl/angular:ng-packagr-lite",
+      "outputs": ["dist/libs/frontend-common"],
+      "options": {
+        "project": "libs/frontend-common/ng-package.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "libs/frontend-common/tsconfig.lib.prod.json"
+        },
+        "development": {
+          "tsConfig": "libs/frontend-common/tsconfig.lib.json"
+        }
+      },
+      "defaultConfiguration": "production"
+    },
     "test": {
       "executor": "@nrwl/jest:jest",
       "outputs": ["coverage/libs/frontend-common"],
@@ -21,3 +37,4 @@
   },
   "tags": []
 }
+
