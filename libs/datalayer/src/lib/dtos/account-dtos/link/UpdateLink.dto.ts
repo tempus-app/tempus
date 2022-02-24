@@ -1,11 +1,16 @@
-import { ApiProperty, PartialType } from '@nestjs/swagger'
-import { CreateLinkDto } from '.'
+import { ApiProperty } from '@nestjs/swagger'
+import { StatusType } from '../../..'
+import { UpdateUserDto } from '../user/updateUser.dto'
 
-export class UpdatelinkDto extends PartialType(CreateLinkDto) {
+export class UpdatelinkDto {
   @ApiProperty()
   id: number
-  constructor(id: number) {
-    super()
+
+  @ApiProperty()
+  status: StatusType
+
+  constructor(id: number, status: StatusType) {
     this.id = id
+    this.status = status
   }
 }

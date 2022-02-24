@@ -30,6 +30,7 @@ async function bootstrap() {
 bootstrap()
 
 function setupSwagger(app: INestApplication) {
+  app.setGlobalPrefix('api')
   const swaggerConfig = new DocumentBuilder()
     .setTitle('Onboarding')
     .setDescription('The Tempus onboarding API')

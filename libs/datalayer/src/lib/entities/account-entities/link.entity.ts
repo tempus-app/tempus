@@ -7,7 +7,6 @@ import { UserEntity } from './user.entity'
 export class LinkEntity implements Link {
   constructor(
     id?: number,
-    createdAt?: Date,
     firstName?: string,
     lastName?: string,
     email?: string,
@@ -17,7 +16,6 @@ export class LinkEntity implements Link {
     user?: UserEntity,
   ) {
     this.id = id
-    this.createdAt = createdAt
     this.firstName = firstName
     this.lastName = lastName
     this.expiry = expiry
