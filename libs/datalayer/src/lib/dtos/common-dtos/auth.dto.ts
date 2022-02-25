@@ -1,6 +1,6 @@
 import { Resource, ResourceEntity, User } from '@tempus/datalayer'
 
-export class LoginDto {
+export class AuthDto {
   user: User | Resource
   jwtAccessToken: string
 

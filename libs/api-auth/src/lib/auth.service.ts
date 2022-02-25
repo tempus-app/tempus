@@ -1,6 +1,6 @@
 import { ConsoleLogger, forwardRef, Inject, Injectable } from '@nestjs/common'
 import { UserService } from '@tempus/api-account'
-import { LoginDto } from '@tempus/datalayer'
+import { AuthDto } from '@tempus/datalayer'
 import { JwtService } from '@nestjs/jwt'
 
 @Injectable()
@@ -34,7 +34,7 @@ export class AuthService {
     }
     user.password = null
     const accessToken = this.jwtService.sign(payload)
-    const result = new LoginDto(user, accessToken)
+    const result = new AuthDto(user, accessToken)
 
     return result
   }

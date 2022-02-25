@@ -33,7 +33,7 @@ export class UserService {
     if (user.roles.includes(RoleType.BUSINESS_OWNER)) {
       return user
     } else {
-      const resource = await this.resourceService.findResourceByEamil(email)
+      const resource = await this.resourceService.findResourceByEmail(email)
       return resource
     }
   }

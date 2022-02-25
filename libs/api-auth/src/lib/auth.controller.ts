@@ -1,5 +1,5 @@
 import { Body, Request, Controller, NotImplementedException, Post, UseGuards, Get } from '@nestjs/common'
-import { LoginDto, RoleType, UserEntity } from '@tempus/datalayer'
+import { AuthDto, RoleType, UserEntity } from '@tempus/datalayer'
 import { LocalAuthGuard } from './guards/local-auth.guard'
 import { AuthService } from './auth.service'
 import { Roles } from './roles.decorator'
@@ -12,7 +12,7 @@ export class AuthController {
 
   @UseGuards(LocalAuthGuard)
   @Post('login')
-  login(@Request() req): Promise<LoginDto> {
+  login(@Request() req): Promise<AuthDto> {
     return this.authService.login(req.user)
   }
 
