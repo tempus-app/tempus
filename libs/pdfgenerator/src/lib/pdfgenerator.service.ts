@@ -5,10 +5,11 @@ import * as handlebars from 'handlebars'
 import * as fs from 'fs'
 import { PdfTemplateDto, HandleBarHelper, ResumePdfTemplateDto } from '@tempus/datalayer'
 import { SampleView } from './testdata/sampleView'
+import { ConfigService } from '@nestjs/config'
 
 @Injectable()
 export class PdfGeneratorService {
-  constructor() {}
+  constructor(private configService: ConfigService) {}
 
   async createPDF(
     @Response() res,
@@ -49,6 +50,7 @@ export class PdfGeneratorService {
 
     // start headless browser
     const browser = await puppeteer.launch({
+      executablePath: this.configService.get('chromiumPath') || null,
       args: ['--no-sandbox'],
       headless: true,
     })
@@ -70,7 +72,7 @@ export class PdfGeneratorService {
     // 'inline' opens the pdf in the tab. if auto download needed, use 'attachment'
     res.set({
       'Content-Type': 'application/pdf',
-      'Content-Disposition': `${attach ? 'attachment' : 'inline'}; filename=example.pdf`,
+      'Content-Disposition': `${attach ? 'attachment' : 'inline'}; filename=${pdfData.filename}.pdf`,
       'Content-Length': buffer.length,
     })
 

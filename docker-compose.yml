@@ -27,6 +27,7 @@ services:
       - DB_USERNAME=postgres
       - DB_PASSWORD=example
       - DB_NAME=postgres
+      - CHROMIUM_PATH=/usr/bin/chromium-browser
     ports:
       - 3000:3000
     volumes:
