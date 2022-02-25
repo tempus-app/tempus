@@ -42,7 +42,7 @@ export class ResourceEntity extends UserEntity implements Resource {
   @Column({ nullable: true })
   title: string
 
-  @OneToOne(() => LocationEntity)
+  @OneToOne(() => LocationEntity, (loc) => loc.resource, { cascade: ['insert', 'update'] })
   location: LocationEntity
 
   @ManyToMany(() => ProjectEntity, { cascade: ['insert', 'update'] })

@@ -16,14 +16,14 @@ import { MatSelectModule } from '@angular/material/select'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { NgxDropzoneModule } from 'ngx-dropzone'
 import { MatAutocompleteModule } from '@angular/material/autocomplete'
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';	
-import {MatFormFieldModule} from '@angular/material/form-field';	
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'
+import { MatFormFieldModule } from '@angular/material/form-field'
 import { FooterComponent } from './footer/footer.component'
-import { StepperComponent } from './stepper/stepper.component'	
-import { MatStepperModule } from '@angular/material/stepper'	
-import { TableComponent } from './table/table.component';
-import {MatTableModule} from '@angular/material/table';
-import {MatSortModule} from '@angular/material/sort';
+import { StepperComponent } from './stepper/stepper.component'
+import { MatStepperModule } from '@angular/material/stepper'
+import { TableComponent } from './table/table.component'
+import { MatTableModule } from '@angular/material/table'
+import { MatSortModule } from '@angular/material/sort'
 
 @NgModule({
   imports: [
@@ -43,8 +43,7 @@ import {MatSortModule} from '@angular/material/sort';
     MatFormFieldModule,
     MatStepperModule,
     MatTableModule,
-    MatSortModule
-
+    MatSortModule,
   ],
   declarations: [
     SearchBoxComponent,

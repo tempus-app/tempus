@@ -14,11 +14,10 @@ import { HttpErrorFilter } from '@tempus/core'
 async function bootstrap() {
   const app = await NestFactory.create(AppModule)
   const config = app.get(ConfigService)
-  const globalPrefix = 'api'
+  const globalPrefix = 'onboarding'
 
   app.useGlobalPipes(new ValidationPipe())
   setupSwagger(app)
-
   app.setGlobalPrefix(globalPrefix)
   app.useGlobalFilters(new HttpErrorFilter(config))
   const port = process.env.PORT || 3333
