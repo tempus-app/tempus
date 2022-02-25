@@ -2,22 +2,27 @@
 
 Please refer to our [wiki](https://github.com/tempus-app/wiki/wiki/Guide-to-Angular-Material-Theming).
 
-## Usage
-
-- To fetch colors from palettes, use the style variables in `variables.scss`. **Do not import `theme.scss` directly!**
-
-1. Import file **after** any `@use` imports:
-
+## Styles
+- Abstracts: fonts, colors, typography and other variables  
+- Components: styling for particular components (e.g buttons, form fields)
+  
+### Usage
+1. Import the relevant helper file:
 ```
-@use '@angular/material' as mat;
-@use 'sass:map';
-@import 'variables';
-```
+@use 'abstracts/helper' as abs;
+```  
 
-2. Use variables to style:
+  2. Use variables:
+    ```
+    .mat-stepper-horizontal-line {
+      border-top-color: abs.$primary-300;
+    }
+    ```
+- Use mixins:
+ ```
+ @use 'components/helper' as c;
 
-```
-#skill-select {
-  background-color: $primary-700;
-}
-```
+ .secondary {
+   @include c.tempus-form(white);
+ }
+ ```

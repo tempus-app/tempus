@@ -1,5 +1,4 @@
-@use '@angular/material' as mat;
-@import 'variables';
+@use 'abstracts/helper' as abs;
 @import url('https://fonts.googleapis.com/css2?family=Merriweather&family=Raleway&display=swap');
 
 /**
@@ -17,14 +16,14 @@
 .mat-horizontal-stepper-header::before,
 .mat-horizontal-stepper-header::after,
 .mat-stepper-horizontal-line {
-  border-top-color: $primary-300;
+  border-top-color: abs.$primary-300;
 }
 
 .mat-step-header .mat-step-icon-state-done {
-  background-color: $primary-900;
-  border: 2px solid $primary-900;
+  background-color: abs.$primary-900;
+  border: 2px solid abs.$primary-900;
   + .mat-step-label {
-    color: $primary-900;
+    color: abs.$primary-900;
     font-size: 20px;
     font-family: Raleway, sans-serif;
     font-weight: bold;
@@ -36,10 +35,10 @@
 
 .mat-step-header .mat-step-icon-state-edit,
 .mat-step-header .mat-step-icon-state-selected {
-  background-color: $primary;
-  border: 2px solid $primary;
+  background-color: abs.$primary;
+  border: 2px solid abs.$primary;
   + .mat-step-label {
-    color: $primary-900;
+    color: abs.$primary-900;
     font-size: 20px;
     font-family: Raleway, sans-serif;
     font-weight: bold;
@@ -51,9 +50,9 @@
 
 .mat-step-header .mat-step-icon-state-default {
   background-color: transparent;
-  border: 2px solid $primary;
+  border: 2px solid abs.$primary;
   + .mat-step-label {
-    color: $primary-900;
+    color: abs.$primary-900;
     font-size: 20px;
     font-family: Raleway, sans-serif;
     font-weight: bold;
