@@ -12,6 +12,7 @@
     "frontend-common": "libs/frontend-common",
     "frontend-profile": "libs/frontend-profile",
     "frontend-project": "libs/frontend-project",
+    "frontend-sign-up": "libs/frontend-sign-up",
     "onboarding-api": "apps/onboarding-api",
     "pdfgenerator": "libs/pdfgenerator",
     "tempus": "apps/tempus",

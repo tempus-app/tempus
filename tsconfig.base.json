@@ -26,7 +26,8 @@
       "@tempus/frontend-common": ["libs/frontend-common/src/index.ts"],
       "@tempus/frontend-profile": ["libs/frontend-profile/src/index.ts"],
       "@tempus/frontend-project": ["libs/frontend-project/src/index.ts"],
-      "@tempus/pdfgenerator": ["libs/pdfgenerator/src/index.ts"]
+      "@tempus/pdfgenerator": ["libs/pdfgenerator/src/index.ts"],
+      "@tempus/frontend-sign-up": ["libs/frontend-sign-up/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
