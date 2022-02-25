@@ -7,7 +7,7 @@ import { Repository } from 'typeorm'
 export class ResourceService {
   constructor(
     @InjectRepository(ResourceEntity)
-    private resourceRepository: Repository<ResourceEntity>,
+    private resourceRepository: Repository<ResourceEntity>
   ) {}
 
   getAllResources(
@@ -16,7 +16,7 @@ export class ResourceService {
     title?: string[] | string,
     project?: string[] | string,
     status?: string[] | string,
-    sortBy?: string,
+    sortBy?: string
   ): Promise<ResourceEntity[]> {
     throw new NotImplementedException()
   }

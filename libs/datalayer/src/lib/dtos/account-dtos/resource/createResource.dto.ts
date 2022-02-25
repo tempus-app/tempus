@@ -16,7 +16,7 @@ export class CreateResourceDto extends CreateUserDto {
     lastName: string,
     email: string,
     password: string,
-    roles: RoleType[],
+    roles: RoleType[]
   ) {
     super(firstName, lastName, email, password, roles)
     this.phoneNumber = phoneNumber ?? null
@@ -40,7 +40,7 @@ export class CreateResourceDto extends CreateUserDto {
       dto.lastName,
       dto.email,
       dto.password,
-      dto.roles,
+      dto.roles
     )
     return resEntity
   }

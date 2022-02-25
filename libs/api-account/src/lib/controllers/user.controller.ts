@@ -24,7 +24,7 @@ export class UserController {
     @Query() skill: string[] | string,
     @Query() title: string[] | string,
     @Query() project: string[] | string,
-    @Query() status: string[] | string,
+    @Query() status: string[] | string
   ): Promise<ResourceEntity> {
     throw new NotImplementedException()
   }

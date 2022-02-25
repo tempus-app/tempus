@@ -22,7 +22,7 @@ export class ResourceEntity extends UserEntity implements Resource {
     lastName?: string,
     email?: string,
     password?: string,
-    roles?: RoleType[],
+    roles?: RoleType[]
   ) {
     super(id, firstName, lastName, email, password, roles)
     this.phoneNumber = phoneNumber
@@ -42,25 +42,25 @@ export class ResourceEntity extends UserEntity implements Resource {
   @Column({ nullable: true })
   title: string
 
-  @OneToOne(() => LocationEntity, (loc) => loc.resource, { cascade: ['insert', 'update'] })
+  @OneToOne(() => LocationEntity, loc => loc.resource, { cascade: ['insert', 'update'] })
   location: LocationEntity
 
   @ManyToMany(() => ProjectEntity, { cascade: ['insert', 'update'] })
   @JoinTable()
   projects: ProjectEntity[]
 
-  @OneToMany(() => ViewEntity, (views) => views.resource, { cascade: ['insert', 'update'] })
+  @OneToMany(() => ViewEntity, views => views.resource, { cascade: ['insert', 'update'] })
   views: ViewEntity[]
 
-  @OneToMany(() => ExperienceEntity, (experience) => experience.resource, { cascade: ['insert', 'update'] })
+  @OneToMany(() => ExperienceEntity, experience => experience.resource, { cascade: ['insert', 'update'] })
   experiences: ExperienceEntity[]
 
-  @OneToMany(() => EducationEntity, (education) => education.resource, { cascade: ['insert', 'update'] })
+  @OneToMany(() => EducationEntity, education => education.resource, { cascade: ['insert', 'update'] })
   educations: EducationEntity[]
 
-  @OneToMany(() => SkillEntity, (skill) => skill.resource, { cascade: ['insert', 'update'] })
+  @OneToMany(() => SkillEntity, skill => skill.resource, { cascade: ['insert', 'update'] })
   skills: SkillEntity[]
 
-  @OneToMany(() => CertificationEntity, (certification) => certification.resource, { cascade: ['insert', 'update'] })
+  @OneToMany(() => CertificationEntity, certification => certification.resource, { cascade: ['insert', 'update'] })
   certifications: CertificationEntity[]
 }

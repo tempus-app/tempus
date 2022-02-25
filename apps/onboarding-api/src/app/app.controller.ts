@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common'
+import { Body, Controller, Get, Post, Res } from '@nestjs/common'
 import { ApiTags } from '@nestjs/swagger'
 import { Message } from '@tempus/api-interfaces'
 import { CreateUserDto } from '@tempus/datalayer'
@@ -27,5 +27,9 @@ export class AppController {
   @Get('getuser')
   getUser() {
     return this.appService.getUser()
+  }
+  @Get('pdf')
+  async getTest(@Res() res: Response): Promise<void> {
+    this.appService.getPdf(res)
   }
 }

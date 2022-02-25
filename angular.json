@@ -15,6 +15,7 @@
     "frontend-project": "libs/frontend-project",
     "frontend-sign-up": "libs/frontend-sign-up",
     "onboarding-api": "apps/onboarding-api",
+    "pdfgenerator": "libs/pdfgenerator",
     "tempus": "apps/tempus",
     "tempus-e2e": "apps/tempus-e2e"
   }

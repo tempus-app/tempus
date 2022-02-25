@@ -6,7 +6,10 @@ export class CreateExperienceDto {
   title: string
 
   @ApiProperty()
-  description: string
+  summary: string
+
+  @ApiProperty()
+  description: string[]
 
   @ApiProperty()
   startDate: Date
@@ -17,8 +20,16 @@ export class CreateExperienceDto {
   @ApiProperty()
   location: CreateLocationDto
 
-  constructor(title: string, description: string, startDate: Date, endDate: Date, location: CreateLocationDto) {
+  constructor(
+    title: string,
+    summary: string,
+    description: string[],
+    startDate: Date,
+    endDate: Date,
+    location: CreateLocationDto
+  ) {
     this.title = title
+    this.summary = summary
     this.description = description
     this.startDate = startDate
     this.endDate = endDate
@@ -30,10 +41,11 @@ export class CreateExperienceDto {
     return new ExperienceEntity(
       null,
       dto.title,
+      dto.summary,
       dto.description,
       dto.startDate,
       dto.endDate,
-      CreateLocationDto.toEntity(dto.location),
+      CreateLocationDto.toEntity(dto.location)
     )
   }
 }

@@ -9,7 +9,7 @@ export class UserService {
   constructor(
     @InjectRepository(UserEntity)
     private userRepository: Repository<UserEntity>,
-    private resourceService: ResourceService,
+    private resourceService: ResourceService
   ) {}
 
   createrUser(user: Omit<CreateUserDto, 'id'>): Promise<UserEntity> {
