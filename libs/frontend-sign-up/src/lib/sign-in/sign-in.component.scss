@@ -1,25 +1,28 @@
-@use "sass:map";
-@use "@angular/material" as mat;
-@import "libs/frontend-common/src/theme.scss";
+@use 'sass:map';
+@use '@angular/material' as mat;
+@import 'theme';
 
 $color-config: mat.get-color-config($tempus-theme);
-$primary-palette: map.get($color-config, "primary");
+$primary-palette: map.get($color-config, 'primary');
 
 h1 {
   padding: 0.5em 0em 0.5em 0em;
   border-bottom: 2px solid mat.get-color-from-palette($primary-palette, 300);
 }
 
-a, a:hover, a:focus, a:active {
+a,
+a:hover,
+a:focus,
+a:active {
   text-decoration: none;
   color: #031927;
 }
 
-.sign-in-button{
+.sign-in-button {
   width: 8.375em;
 }
 
-.card-header{
+.card-header {
   width: 95%;
   margin: auto;
   padding-bottom: 1em;
@@ -30,17 +33,17 @@ a, a:hover, a:focus, a:active {
   text-align: center;
 }
 
-.forgot-text{
+.forgot-text {
   padding-bottom: 2.5em;
 }
 
-.logo{
+.logo {
   width: 100%;
 }
 
-.profile{
-  width:100%;
-  text-align:right;
+.profile {
+  width: 100%;
+  text-align: right;
 }
 
 .small-icon-button {
@@ -49,12 +52,12 @@ a, a:hover, a:focus, a:active {
   line-height: 2.5em;
 
   .mat-icon {
-     width: 1.5em;
-     height: 1.5em;
-     line-height: 1.5em;
+    width: 1.5em;
+    height: 1.5em;
+    line-height: 1.5em;
   }
   .material-icons {
-     font-size: 1.5em;
+    font-size: 1.5em;
   }
 }
 
@@ -63,7 +66,7 @@ tempus-card {
   margin: 2em auto;
   text-align: center;
 }
-tempus-text-input{
+tempus-text-input {
   text-align: center;
   margin: auto;
   width: 70%;
