@@ -38,7 +38,7 @@ export class ResourceService {
     return resourceEntity
   }
 
-  async findResourceByEamil(email: string): Promise<Resource> {
+  async findResourceByEmail(email: string): Promise<Resource> {
     let resourceEntity = (
       await this.resourceRepository.find({
         where: { email: email },
