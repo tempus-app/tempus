@@ -10,6 +10,7 @@ export class LinkEntity implements Link {
     createdAt?: Date,
     firstName?: string,
     lastName?: string,
+    email?: string,
     expiry?: Date,
     token?: string,
     status?: StatusType,
@@ -20,6 +21,7 @@ export class LinkEntity implements Link {
     this.firstName = firstName
     this.lastName = lastName
     this.expiry = expiry
+    this.email = email
     this.token = token
     this.status = status
     this.user = user
@@ -35,6 +37,9 @@ export class LinkEntity implements Link {
 
   @Column()
   lastName: string
+
+  @Column()
+  email: string
 
   @Column()
   expiry: Date
