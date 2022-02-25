@@ -1,4 +1,4 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm'
+import { Column, CreateDateColumn, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn, Unique } from 'typeorm'
 import { Link } from '../..'
 import { StatusType } from '../../enums'
 import { UserEntity } from './user.entity'
@@ -7,7 +7,6 @@ import { UserEntity } from './user.entity'
 export class LinkEntity implements Link {
   constructor(
     id?: number,
-    createdAt?: Date,
     firstName?: string,
     lastName?: string,
     email?: string,
@@ -17,7 +16,6 @@ export class LinkEntity implements Link {
     user?: UserEntity,
   ) {
     this.id = id
-    this.createdAt = createdAt
     this.firstName = firstName
     this.lastName = lastName
     this.expiry = expiry
@@ -44,7 +42,7 @@ export class LinkEntity implements Link {
   @Column()
   expiry: Date
 
-  @Column()
+  @Column({ unique: true })
   token: string
 
   @Column({
