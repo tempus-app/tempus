@@ -1,16 +1,28 @@
-import { Body, Controller, Get, NotImplementedException, Param, Patch, Post, Query, UseGuards } from '@nestjs/common'
-import { CreateUserDto, ResourceEntity, RoleType, UserEntity } from '@tempus/datalayer'
-import { JwtAuthGuard } from '@tempus/api-auth'
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  NotImplementedException,
+  Param,
+  Patch,
+  Post,
+  Query,
+  UseGuards,
+} from '@nestjs/common'
+import { CreateUserDto, Resource, ResourceEntity, RoleType, UpdateUserDto, User, UserEntity } from '@tempus/datalayer'
+import { JwtAuthGuard, Roles, RolesGuard } from '@tempus/api-auth'
 import { ResourceService } from '../services/resource.service'
 import { UserService } from '../services/user.service'
-import { Roles } from '@tempus/api-auth'
-import { RolesGuard } from '@tempus/api-auth'
+import { ApiTags } from '@nestjs/swagger'
 
 @ApiTags('User')
 @Controller('user')
 export class UserController {
   constructor(private userService: UserService, private resourceService: ResourceService) {}
 
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(RoleType.BUSINESS_OWNER)
   @Get()
   // TODO: filtering
   async getUsers(): Promise<User[]> {

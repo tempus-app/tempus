@@ -1,9 +1,8 @@
-import { Resource, RoleType, User, UserEntity, UpdateUserDto, CreateResourceDto } from '@tempus/datalayer'
+import { Resource, RoleType, User, UserEntity, UpdateUserDto } from '@tempus/datalayer'
 import { ConsoleLogger, Injectable, NotFoundException, NotImplementedException } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { ResourceService } from './resource.service'
 import { Repository } from 'typeorm'
-import { ResourceService } from '.'
 
 @Injectable()
 export class UserService {
@@ -71,22 +70,5 @@ export class UserService {
       throw new NotFoundException(`Could not find user with id ${userId}`)
     }
     await this.userRepository.remove(userEntity)
-  }
-
-  async findByEmail(email: string): Promise<User> {
-    const user = (
-      await this.userRepository.find({
-        where: { email: email },
-      })
-    )[0]
-    if (!user) {
-      throw new NotFoundException(`Could not find resource with id ${email}`)
-    }
-    if (user.roles.includes(RoleType.BUSINESS_OWNER)) {
-      return user
-    } else {
-      const resource = await this.resourceService.findResourceByEmail(email)
-      return resource
-    }
   }
 }
