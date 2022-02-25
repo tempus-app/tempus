@@ -29,11 +29,8 @@ export class UserService {
       throw new NotFoundException(`Could not find user with id ${userEntity.id}`)
     }
     if (userEntity.roles.includes(RoleType.BUSINESS_OWNER)) {
-      // await this.userRepository.save({
-      //   user,
-      //   ...userEntity
-      // } as UserEntity)
-      // return { user, ...userEntity } as UserEntity
+      Object.assign(userEntity, updateUserData)
+      return await this.userRepository.save(userEntity as UserEntity)
     } else {
       return await this.resourceService.editResource(updateUserData)
     }
