@@ -10,6 +10,7 @@ export class AppService {
   constructor(
     @InjectRepository(ResourceEntity) private resourceRepo: Repository<ResourceEntity>,
     private pdfGeneratorService: PdfGeneratorService,
+    @InjectRepository(UserEntity) private userRepo: Repository<UserEntity>
   ) {}
   getData(): Message {
     return { message: 'Welcome to api!' }
@@ -17,10 +18,13 @@ export class AppService {
 
   createUser() {
     const newUser = new UserEntity()
-    // newUser.firstName = 'test'
-    // newUser.lastName = 'test'
-    // // newUser.isActive = true
-    // this.userRepo.save(newUser)
+    newUser.firstName = 'testF'
+    newUser.lastName = 'testL'
+    newUser.email = 'email@email.com'
+    newUser.password = 'fred'
+    const roles = [RoleType.BUSINESS_OWNER]
+    newUser.roles = roles
+    this.userRepo.save(newUser)
 
     const newResource = new ResourceEntity()
     newResource.email = 'email'
@@ -33,7 +37,7 @@ export class AppService {
   async getUser() {
     const users = await this.resourceRepo.find()
     const usersRoles = []
-    users.forEach((user) => {
+    users.forEach(user => {
       usersRoles.push(user.roles)
     })
     return await { data: users, roles: usersRoles }

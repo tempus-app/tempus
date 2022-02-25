@@ -1,8 +1,10 @@
-import { Body, Controller, Get, NotImplementedException, Param, Patch, Post, Query } from '@nestjs/common'
-import { ResourceEntity, UserEntity } from '@tempus/datalayer'
-import { SlimUserDto } from 'libs/datalayer/src/lib/dtos/account-dtos/user/slimUser.dto'
+import { Body, Controller, Get, NotImplementedException, Param, Patch, Post, Query, UseGuards } from '@nestjs/common'
+import { CreateUserDto, ResourceEntity, RoleType, UserEntity } from '@tempus/datalayer'
+import { JwtAuthGuard } from '@tempus/api-auth'
 import { ResourceService } from '../services/resource.service'
 import { UserService } from '../services/user.service'
+import { Roles } from '@tempus/api-auth'
+import { RolesGuard } from '@tempus/api-auth'
 
 @Controller('User')
 export class UserController {
@@ -10,17 +12,19 @@ export class UserController {
 
   //creates User (includes resource)
   @Post()
-  async createUser(@Body() user: Omit<SlimUserDto, 'id'>): Promise<UserEntity | ResourceEntity> {
+  async createUser(@Body() user: Omit<CreateUserDto, 'id'>): Promise<UserEntity | ResourceEntity> {
     throw new NotImplementedException()
   }
 
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(RoleType.BUSINESS_OWNER)
   @Get()
   async getAllUsers(
     @Query() location: string[] | string,
     @Query() skill: string[] | string,
     @Query() title: string[] | string,
     @Query() project: string[] | string,
-    @Query() status: string[] | string,
+    @Query() status: string[] | string
   ): Promise<ResourceEntity> {
     throw new NotImplementedException()
   }
@@ -33,7 +37,7 @@ export class UserController {
 
   //updates user information  (includes resource)
   @Patch('/:userId')
-  async editUser(@Param('userId') userId: number, @Body() user: SlimUserDto): Promise<UserEntity | ResourceEntity> {
+  async editUser(@Param('userId') userId: number, @Body() user: CreateUserDto): Promise<UserEntity | ResourceEntity> {
     throw new NotImplementedException()
   }
 }

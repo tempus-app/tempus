@@ -6,6 +6,7 @@
     "api-interfaces": "libs/api-interfaces",
     "api-profile": "libs/api-profile",
     "api-project": "libs/api-project",
+    "api-auth": "libs/api-auth",
     "core": "libs/core",
     "datalayer": "libs/datalayer",
     "frontend-account": "libs/frontend-account",
