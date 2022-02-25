@@ -92,7 +92,7 @@ $raleway: "'Raleway', sans-serif";
 $h1: mat.define-typography-level(
   $font-family: $merriweather,
   $font-weight: bold,
-  $font-size: 3em
+  $font-size: 3em,
 );
 
 $h2: mat.define-typography-level(
@@ -128,13 +128,13 @@ $button: mat.define-typography-level(
 $input: mat.define-typography-level(
   $font-family: $raleway,
   $font-weight: 500,
-  $font-size: 1em
+  $font-size: 1em,
 );
 
 $caption: mat.define-typography-level(
   $font-family: $raleway,
   $font-weight: 500,
-  $font-size: 0.75em
+  $font-size: 0.75em,
 );
 
 $tempus-typography: mat.define-typography-config(
@@ -145,7 +145,7 @@ $tempus-typography: mat.define-typography-config(
   $body-2: $body-2,
   $input: $input,
   $button: $button,
-  $caption: $caption
+  $caption: $caption,
 );
 
 //Global styles to all form fields

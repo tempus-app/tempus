@@ -1,5 +1,5 @@
 @use '@angular/material' as mat;
-@import 'theme';
+@import 'variables';
 @import url('https://fonts.googleapis.com/css2?family=Merriweather&family=Raleway&display=swap');
 
 /**
@@ -17,40 +17,49 @@
 .mat-horizontal-stepper-header::before,
 .mat-horizontal-stepper-header::after,
 .mat-stepper-horizontal-line {
-  border-top-color: mat.get-color-from-palette($tempus-primary, 300);
+  border-top-color: $primary-300;
 }
 
 .mat-step-header .mat-step-icon-state-done {
-  background-color: mat.get-color-from-palette($tempus-primary, 900);
-  border: 2px solid mat.get-color-from-palette($tempus-primary, 900);
+  background-color: $primary-900;
+  border: 2px solid $primary-900;
   + .mat-step-label {
-    color: mat.get-color-from-palette($tempus-primary, 900);
+    color: $primary-900;
     font-size: 20px;
     font-family: Raleway, sans-serif;
     font-weight: bold;
+  }
+  + .mat-step-label .mat-step-text-label {
+    padding: 10px !important;
   }
 }
 
 .mat-step-header .mat-step-icon-state-edit,
 .mat-step-header .mat-step-icon-state-selected {
-  background-color: mat.get-color-from-palette($tempus-primary);
-  border: 2px solid mat.get-color-from-palette($tempus-primary);
+  background-color: $primary;
+  border: 2px solid $primary;
   + .mat-step-label {
-    color: mat.get-color-from-palette($tempus-primary, 900);
+    color: $primary-900;
     font-size: 20px;
     font-family: Raleway, sans-serif;
     font-weight: bold;
+  }
+  + .mat-step-label .mat-step-text-label {
+    padding: 10px !important;
   }
 }
 
 .mat-step-header .mat-step-icon-state-default {
   background-color: transparent;
-  border: 2px solid mat.get-color-from-palette($tempus-primary);
+  border: 2px solid $primary;
   + .mat-step-label {
-    color: mat.get-color-from-palette($tempus-primary, 900);
+    color: $primary-900;
     font-size: 20px;
     font-family: Raleway, sans-serif;
     font-weight: bold;
+  }
+  + .mat-step-label .mat-step-text-label {
+    padding: 10px !important;
   }
 }
 
