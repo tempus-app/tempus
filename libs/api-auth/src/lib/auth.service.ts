@@ -1,4 +1,4 @@
-import { ConsoleLogger, forwardRef, Inject, Injectable } from '@nestjs/common'
+import { forwardRef, Inject, Injectable } from '@nestjs/common'
 import { UserService } from '@tempus/api-account'
 import { AuthDto } from '@tempus/datalayer'
 import { JwtService } from '@nestjs/jwt'
@@ -19,7 +19,7 @@ export class AuthService {
     return null
   }
 
-  async validateUserJWT(email: string) {
+  async getUserFromJWT(email: string) {
     const user = await this.userService.findByEmail(email)
     if (user) {
       return user

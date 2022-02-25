@@ -1,4 +1,4 @@
-import { Resource, ResourceEntity, User } from '@tempus/datalayer'
+import { Resource, User } from '@tempus/datalayer'
 
 export class AuthDto {
   user: User | Resource

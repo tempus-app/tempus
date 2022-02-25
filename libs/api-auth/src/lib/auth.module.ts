@@ -10,8 +10,6 @@ import { JwtStrategy } from './strategies/jwt.strategy'
 import { JwtAuthGuard } from './guards/jwt-auth.guard'
 import { ConfigModule } from '@nestjs/config'
 import { CoreModule } from '@tempus/core'
-import { RolesGuard } from './guards/roles.guard'
-import { APP_GUARD } from '@nestjs/core'
 
 @Module({
   imports: [

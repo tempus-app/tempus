@@ -1,4 +1,4 @@
-import { ConsoleLogger, Injectable, NotImplementedException } from '@nestjs/common'
+import { ConsoleLogger, Injectable, NotFoundException, NotImplementedException } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { ResourceService } from './resource.service'
 import { CreateUserDto, RoleType, User, UserEntity } from '@tempus/datalayer'
@@ -30,6 +30,9 @@ export class UserService {
         where: { email: email },
       })
     )[0]
+    if (!user) {
+      throw new NotFoundException(`Could not find resource with id ${email}`)
+    }
     if (user.roles.includes(RoleType.BUSINESS_OWNER)) {
       return user
     } else {
