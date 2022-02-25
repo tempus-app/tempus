@@ -11,7 +11,7 @@
     "build:onboarding-api": "nx build onboarding-api --production",
     "test": "nx test",
     "prepare": "husky install",
-    "lint": "prettier --write ."
+    "lint": "prettier --write .",
     "lint:check": "prettier --check ."
   },
   "private": true,
