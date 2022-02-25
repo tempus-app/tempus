@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { UpdateUserDto, Resource, ResourceEntity, UserEntity } from '@tempus/datalayer'
+import { UpdateUserDto, UserEntity, CreateProjectDto, ResourceEntity, CreateSkillDto, Resource } from '@tempus/datalayer'
 import { Repository } from 'typeorm'
 
 @Injectable()
@@ -41,9 +41,8 @@ export class ResourceService {
 
     return resourceEntity
   }
-
+  
   // TODO: filtering
-
   // CRUD requests
   async getAllResources(): Promise<Resource[]> {
     // location?: string[] | string,

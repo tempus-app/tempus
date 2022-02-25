@@ -1,5 +1,5 @@
-@use '../../theme.scss';
 @use '@angular/material' as mat;
+@import 'theme';
 
 .footer {
   position: fixed;
@@ -7,7 +7,7 @@
   padding: 10px 0px 0px 0px;
   bottom: 0;
   width: 100%;
-  background-color: mat.get-color-from-palette(theme.$tempus-accent, 300);
+  background-color: mat.get-color-from-palette($tempus-accent, 300);
   color: white;
   text-align: center;
   font-size: 18px;

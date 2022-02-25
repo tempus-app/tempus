@@ -1,8 +1,10 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common'
-import { ApiTags } from '@nestjs/swagger'
-import { ResourceEntity, UserEntity, User, Resource, CreateUserDto, UpdateUserDto } from '@tempus/datalayer'
+import { Body, Controller, Get, NotImplementedException, Param, Patch, Post, Query, UseGuards } from '@nestjs/common'
+import { CreateUserDto, ResourceEntity, RoleType, UserEntity } from '@tempus/datalayer'
+import { JwtAuthGuard } from '@tempus/api-auth'
 import { ResourceService } from '../services/resource.service'
 import { UserService } from '../services/user.service'
+import { Roles } from '@tempus/api-auth'
+import { RolesGuard } from '@tempus/api-auth'
 
 @ApiTags('User')
 @Controller('user')
