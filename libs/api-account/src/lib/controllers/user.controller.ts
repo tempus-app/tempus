@@ -1,6 +1,6 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common'
 import { ApiTags } from '@nestjs/swagger'
-import { ResourceEntity, UserEntity, User, Resource, CreateUserDto, EditUserDto } from '@tempus/datalayer'
+import { ResourceEntity, UserEntity, User, Resource, CreateUserDto, UpdateUserDto } from '@tempus/datalayer'
 import { ResourceService } from '../services/resource.service'
 import { UserService } from '../services/user.service'
 
@@ -21,13 +21,13 @@ export class UserController {
   }
 
   @Get('resources')
-  async getResources(): Promise<ResourceEntity[]> {
+  async getResources(): Promise<Resource[]> {
     return await this.resourceService.getAllResources()
   }
 
   //gets a User  (includes resource)
   @Get(':userId')
-  async getUser(@Param('userId') userId: number): Promise<UserEntity | ResourceEntity> {
+  async getUser(@Param('userId') userId: number): Promise<User | Resource> {
     return await this.userService.getUser(userId)
   }
 
@@ -38,9 +38,9 @@ export class UserController {
   }
 
   //updates user information  (includes resource)
-  @Patch(':userId')
-  async editUser(@Body() user: EditUserDto): Promise<User | Resource> {
-    return await this.userService.editUser(EditUserDto.toEntity(user))
+  @Patch()
+  async updateUser(@Body() updateUserData: UpdateUserDto): Promise<User | Resource> {
+    return await this.userService.updateUser(updateUserData)
   }
 
   @Delete(':userId')

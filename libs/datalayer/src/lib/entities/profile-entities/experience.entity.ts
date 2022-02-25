@@ -27,6 +27,9 @@ export class ExperienceEntity implements Experience {
   id: number
 
   @Column()
+  company: string
+
+  @Column()
   title: string
 
   @Column()

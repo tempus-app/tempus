@@ -9,6 +9,9 @@ export class CreateExperienceDto {
   description: string
 
   @ApiProperty()
+  company: string
+
+  @ApiProperty()
   startDate: Date
 
   @ApiProperty()

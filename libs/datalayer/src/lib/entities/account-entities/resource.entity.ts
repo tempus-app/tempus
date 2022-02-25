@@ -1,3 +1,4 @@
+import { resourceUsage } from 'process'
 import { ChildEntity, Column, JoinTable, ManyToMany, OneToMany, OneToOne } from 'typeorm'
 import { Resource, RoleType } from '../..'
 import { LocationEntity } from '../common-entities'
@@ -42,7 +43,7 @@ export class ResourceEntity extends UserEntity implements Resource {
   @Column({ nullable: true })
   title: string
 
-  @OneToOne(() => LocationEntity)
+  @OneToOne(() => LocationEntity, (location) => location.resource, { cascade: ['insert', 'update'] })
   location: LocationEntity
 
   @ManyToMany(() => ProjectEntity, { cascade: ['insert', 'update'] })

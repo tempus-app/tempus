@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { EditUserDto, Resource, ResourceEntity } from '@tempus/datalayer'
+import { UpdateUserDto, Resource, ResourceEntity, UserEntity } from '@tempus/datalayer'
 import { Repository } from 'typeorm'
 
 @Injectable()
@@ -22,7 +22,7 @@ export class ResourceService {
   async getResource(resourceId: number): Promise<Resource> {
     const resourceEntity = await this.resourceRepository.findOne(resourceId, {
       // TODO: relations error???
-      relations: ['projects', 'experiences', 'educations', 'skills', 'certifications', 'views', 'location'],
+      relations: ['experiences', 'educations', 'skills', 'certifications', 'location'],
     })
 
     if (!resourceEntity) {
@@ -61,13 +61,18 @@ export class ResourceService {
   }
 
   // edit resource to be used specifically when updating local information
-  async editResource(resource: EditUserDto): Promise<Resource> {
-    const resourceEntity = await this.resourceRepository.findOne(resource.id)
-    if (!resourceEntity) {
-      throw new NotFoundException(`Could not find resource with id ${resource.id}`)
-    }
+  async editResource(updateResourceData: UpdateUserDto): Promise<Resource> {
+    const resourceEntity = await this.getResource(updateResourceData.id)
 
-    await this.resourceRepository.update(resource.id, resource)
-    return { resource, ...resourceEntity } as ResourceEntity
+    let updatedLocationData = updateResourceData.location
+    delete updateResourceData.location
+
+    for (const [key, val] of Object.entries(updateResourceData)) if (!val) delete updateResourceData[key]
+    for (const [key, val] of Object.entries(updatedLocationData)) if (!val) delete updatedLocationData[key]
+
+    Object.assign(resourceEntity.location, updatedLocationData)
+    Object.assign(resourceEntity, updateResourceData)
+
+    return await this.resourceRepository.save(resourceEntity)
   }
 }

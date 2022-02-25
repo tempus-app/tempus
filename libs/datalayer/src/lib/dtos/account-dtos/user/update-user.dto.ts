@@ -2,9 +2,10 @@ import { RoleType } from '../../../enums'
 import { ApiProperty } from '@nestjs/swagger'
 import { UserEntity } from '../../../entities/account-entities/user.entity'
 import { IsOptional } from 'class-validator'
-import { ResourceEntity } from '../../..'
+import { LocationEntity, ResourceEntity } from '../../..'
+import { UpdateLocationDto } from '../..'
 
-export class EditUserDto {
+export class UpdateUserDto {
   @ApiProperty()
   id: number
 
@@ -18,7 +19,8 @@ export class EditUserDto {
   email: string
 
   @ApiProperty()
-  password: string
+  @IsOptional()
+  location?: UpdateLocationDto
 
   @ApiProperty({ enum: ['ASSIGNED_RESOURCE', 'AVAILABLE_RESOURCE', 'BUSINESS_OWNER', 'SUPERVISOR'] })
   roles: RoleType[]
@@ -32,31 +34,33 @@ export class EditUserDto {
   title?: string
 
   constructor(
+    id: number,
     firstName: string,
     lastName: string,
     email: string,
-    password: string,
     roles: RoleType[],
+    location?: UpdateLocationDto,
     phoneNumber?: string,
     title?: string,
   ) {
+    this.id = id
     this.firstName = firstName
     this.lastName = lastName
     this.email = email
-    this.password = password
     this.roles = roles
     this.phoneNumber = phoneNumber ? phoneNumber : null
     this.title = title ? title : null
+    this.location = location
   }
 
-  public static toEntity(dto: EditUserDto): UserEntity {
+  public static toEntity(dto: UpdateUserDto): UserEntity {
     if (dto == null) return new UserEntity()
     if (dto) {
       return new ResourceEntity(
-        null,
+        dto.id,
         dto.phoneNumber,
         dto.title,
-        null,
+        UpdateLocationDto.toEntity(dto.location),
         null,
         null,
         null,
@@ -66,10 +70,10 @@ export class EditUserDto {
         dto.firstName,
         dto.lastName,
         dto.email,
-        dto.password,
+        null,
         dto.roles,
       )
     }
-    return new UserEntity(null, dto.firstName, dto.lastName, dto.email, dto.password, dto.roles)
+    return new UserEntity(null, dto.firstName, dto.lastName, dto.email, null, dto.roles)
   }
 }

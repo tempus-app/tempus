@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { Resource, ResourceEntity, RoleType, User, UserEntity } from '@tempus/datalayer'
+import { Resource, RoleType, User, UserEntity, UpdateUserDto } from '@tempus/datalayer'
 import { Repository } from 'typeorm'
 import { ResourceService } from '.'
 
@@ -12,7 +12,7 @@ export class UserService {
     private resourceService: ResourceService,
   ) {}
 
-  async createUser(user: UserEntity): Promise<UserEntity> {
+  async createUser(user: UserEntity): Promise<User> {
     if (user.roles.includes(RoleType.BUSINESS_OWNER)) {
       return await this.userRepository.save(user)
     } else {
@@ -23,26 +23,28 @@ export class UserService {
     }
   }
 
-  async editUser(user: UserEntity): Promise<UserEntity> {
-    const userEntity = await this.userRepository.findOne(user.id)
+  async updateUser(updateUserData: UpdateUserDto): Promise<User> {
+    const userEntity = await this.userRepository.findOne(updateUserData.id)
     if (!userEntity) {
       throw new NotFoundException(`Could not find user with id ${userEntity.id}`)
     }
-    if (userEntity['title']) {
-      await this.userRepository.update(user.id, user)
-      return { user, ...userEntity } as UserEntity
+    if (userEntity.roles.includes(RoleType.BUSINESS_OWNER)) {
+      // await this.userRepository.save({
+      //   user,
+      //   ...userEntity
+      // } as UserEntity)
+      // return { user, ...userEntity } as UserEntity
     } else {
-      const resourceDto = await this.resourceService.editResource(user)
-      return resourceDto
+      return await this.resourceService.editResource(updateUserData)
     }
   }
 
-  async getUser(userId: number): Promise<UserEntity> {
+  async getUser(userId: number): Promise<User | Resource> {
     const userEntity = await this.userRepository.findOne(userId)
     if (!userEntity) {
       throw new NotFoundException(`Could not find user with id ${userEntity.id}`)
     }
-    if (!userEntity['title']) {
+    if (userEntity.roles.includes(RoleType.BUSINESS_OWNER)) {
       return userEntity
     } else {
       const resourceDto = await this.resourceService.getResource(userId)
@@ -53,7 +55,7 @@ export class UserService {
   // TODO: filtering
   // ROLES?
   // get by resource etc
-  async getAllUsers(): Promise<UserEntity[]> {
+  async getAllUsers(): Promise<User[]> {
     // location?: string[] | string,
     // skills?: string[] | string,
     // title?: string[] | string,
