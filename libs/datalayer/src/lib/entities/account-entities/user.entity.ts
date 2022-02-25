@@ -3,7 +3,7 @@ import { User } from '../..'
 import { RoleType } from '../../enums'
 
 @Entity()
-@TableInheritance({ column: { type: 'varchar', name: 'role' } })
+@TableInheritance({ column: { type: 'varchar', name: 'user_type' } })
 export class UserEntity implements User {
   constructor(
     id?: number,
@@ -39,7 +39,7 @@ export class UserEntity implements User {
     type: 'enum',
     enum: RoleType,
     array: true,
-    default: [RoleType.AVAILABLE_RESOURCE],
+    default: [RoleType.USER],
   })
   roles: RoleType[]
 }
