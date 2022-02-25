@@ -36,7 +36,7 @@ export class LinkService {
     if (!linkEntity) {
       throw new NotFoundException(`Could not find token with id ${linkId}`)
     }
-    if (!this.isLinkValid(linkEntity)) {
+    if (!this.isLinkExpired(linkEntity)) {
       await this.editLinkStatus(linkId, StatusType.INACTIVE, linkEntity)
     }
     return linkEntity
@@ -45,12 +45,12 @@ export class LinkService {
   async findLinkByToken(token: string): Promise<Link> {
     //should be unique
     const links = await this.linkRepository.find({ where: { token: token } })
-    const linkEntity = links[0]
+    let linkEntity = links[0]
     if (!linkEntity) {
       throw new NotFoundException(`Could not find link with token ${token}`)
     }
-    if (!this.isLinkValid(linkEntity)) {
-      await this.editLinkStatus(linkEntity.id, StatusType.INACTIVE)
+    if (this.isLinkExpired(linkEntity)) {
+      return await this.editLinkStatus(linkEntity.id, StatusType.INACTIVE)
     }
     return linkEntity
   }
@@ -74,10 +74,10 @@ export class LinkService {
   }
 
   //compares link expiry with current time
-  isLinkValid(linkEntity: LinkEntity): boolean {
+  isLinkExpired(linkEntity: LinkEntity): boolean {
     if (linkEntity.expiry.getTime() <= Date.now()) {
-      return false
+      return true
     }
-    return true
+    return false
   }
 }
