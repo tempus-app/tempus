@@ -1,4 +1,4 @@
-import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions'
+import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions';
 import {
   LinkEntity,
   ResourceEntity,
@@ -14,12 +14,12 @@ import {
   ClientEntity,
   ProjectEntity,
   TaskEntity,
-} from '@tempus/datalayer'
+} from '@tempus/datalayer';
 
 const config: PostgresConnectionOptions = {
   type: 'postgres',
   host: process.env.DB_HOST.toString(),
-  port: parseInt(process.env.DB_PORT),
+  port: parseInt(process.env.DB_PORT, 10),
   username: process.env.DB_USERNAME.toString(),
   password: process.env.DB_PASSWORD.toString(),
   database: process.env.DB_NAME.toString(),
@@ -41,6 +41,6 @@ const config: PostgresConnectionOptions = {
   ],
   synchronize: true,
   logging: true,
-}
+};
 
-export default config
+export default config;

@@ -64,11 +64,11 @@ Recommend using `bcrypt` package.
 #### Example
 
 ```js
-import * as bcrypt from 'bcrypt'
+import * as bcrypt from 'bcrypt';
 
-const saltOrRounds = 10
-const password = 'random_password'
-const hash = await bcrypt.hash(password, saltOrRounds)
+const saltOrRounds = 10;
+const password = 'random_password';
+const hash = await bcrypt.hash(password, saltOrRounds);
 ```
 
 ### Additional Resources
