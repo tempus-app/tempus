@@ -7,6 +7,10 @@ import { Skill } from './skill.model'
 
 export interface View {
   id: number
+  profileSummary: string
+  skillsSummary: string
+  educationsSummary: string
+  experiencesSummary: string
   type: string
   status: Revision[]
   skills: Skill[]

@@ -11,15 +11,23 @@ import { View } from '../..'
 export class ViewEntity implements View {
   constructor(
     id?: number,
+    profileSummary?: string,
+    skillsSummary?: string,
+    educationsSummary?: string,
+    experiencesSummary?: string,
     type?: string,
     status?: RevisionEntity[],
     skills?: SkillEntity[],
     experiences?: ExperienceEntity[],
     educations?: EducationEntity[],
     resource?: ResourceEntity,
-    viewType?: ViewType,
+    viewType?: ViewType
   ) {
     this.id = id
+    this.profileSummary = profileSummary
+    this.skillsSummary = skillsSummary
+    this.educationsSummary = educationsSummary
+    this.experiencesSummary = experiencesSummary
     this.type = type
     this.status = status
     this.skills = skills
@@ -31,10 +39,22 @@ export class ViewEntity implements View {
   @PrimaryGeneratedColumn()
   id: number
 
+  @Column({ nullable: true })
+  profileSummary: string
+
+  @Column({ nullable: true })
+  skillsSummary: string
+
+  @Column({ nullable: true })
+  educationsSummary: string
+
+  @Column({ nullable: true })
+  experiencesSummary: string
+
   @Column()
   type: string
 
-  @OneToMany(() => RevisionEntity, (status) => status.view)
+  @OneToMany(() => RevisionEntity, status => status.view)
   status: RevisionEntity[]
 
   @ManyToMany(() => SkillEntity)
@@ -49,7 +69,7 @@ export class ViewEntity implements View {
   @JoinTable()
   educations: EducationEntity[]
 
-  @ManyToOne(() => ResourceEntity, (resource) => resource.views)
+  @ManyToOne(() => ResourceEntity, resource => resource.views)
   resource: ResourceEntity
 
   @Column({

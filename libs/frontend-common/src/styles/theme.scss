@@ -92,57 +92,61 @@ $raleway: "'Raleway', sans-serif";
 $h1: mat.define-typography-level(
   $font-family: $merriweather,
   $font-weight: bold,
-  $font-size: 48px,
+  $font-size: 3em,
 );
 
 $h2: mat.define-typography-level(
   $font-family: $merriweather,
   $font-weight: bold,
-  $font-size: 30px,
+  $font-size: 1.875em,
 );
 
 $h3: mat.define-typography-level(
   $font-family: $raleway,
   $font-weight: bold,
-  $font-size: 26px,
+  $font-size: 1.5em,
 );
 
-$body: mat.define-typography-level(
+$body-1: mat.define-typography-level(
   $font-family: $raleway,
-  $font-weight: 500,
-  $font-size: 20px,
+  $font-weight: 400,
+  $font-size: 1em,
+);
+
+$body-2: mat.define-typography-level(
+  $font-family: $raleway,
+  $font-weight: 600,
+  $font-size: 1em,
 );
 
 $button: mat.define-typography-level(
   $font-family: $raleway,
   $font-weight: bold,
-  $font-size: 20px,
+  $font-size: 1.25em,
+);
+
+$input: mat.define-typography-level(
+  $font-family: $raleway,
+  $font-weight: 500,
+  $font-size: 1em,
+);
+
+$caption: mat.define-typography-level(
+  $font-family: $raleway,
+  $font-weight: 500,
+  $font-size: 0.75em,
 );
 
 $tempus-typography: mat.define-typography-config(
   $headline: $h1,
   $title: $h2,
   $subheading-2: $h3,
-  $body-1: $body,
+  $body-1: $body-1,
+  $body-2: $body-2,
+  $input: $input,
   $button: $button,
+  $caption: $caption,
 );
-
-//Global styles to all form fields
-.mat-form-field.primary .mat-form-field-flex {
-  background-color: mat.get-color-from-palette($tempus-primary, 100);
-  border-radius: 10px;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-}
-
-.mat-form-field.secondary .mat-form-field-flex {
-  background-color: white;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-}
-
-.mat-form-field-underline {
-  display: none;
-}
 
 /* Injecting theme and typography */
 @include mat.all-component-themes($tempus-theme);

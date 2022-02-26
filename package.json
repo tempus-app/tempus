@@ -8,10 +8,17 @@
     "start:onboarding-api": "nx serve onboarding-api",
     "start:client": "nx serve tempus",
     "start:onboarding-api:prod": "node ./dist/apps/onboarding-api/main.js",
+    "build:client:prod": "nx build tempus --production",
     "build:onboarding-api": "nx build onboarding-api --production",
     "test": "nx test",
     "prepare": "husky install",
-    "lint": "prettier --write ."
+    "format:all": "prettier --config .prettierrc ./**/*.{js,ts,html,css,scss,json} --write",
+    "lint": "npx lint-staged"
+  },
+  "lint-staged": {
+    "*.{ts,js,json,scss,css,html}": [
+      "prettier --write"
+    ]
   },
   "private": true,
   "dependencies": {
@@ -52,6 +59,7 @@
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",
     "pg": "^8.7.3",
+    "puppeteer": "^13.4.0",
     "reflect-metadata": "^0.1.13",
     "rxjs": "~7.4.0",
     "swagger-ui-express": "^4.3.0",
@@ -84,6 +92,7 @@
     "@types/passport": "^1.0.7",
     "@types/passport-jwt": "^3.0.6",
     "@types/passport-local": "^1.0.34",
+    "@types/puppeteer": "^5.4.4",
     "@types/uuid": "^8.3.4",
     "@typescript-eslint/eslint-plugin": "~5.10.0",
     "@typescript-eslint/parser": "~5.10.0",
@@ -98,7 +107,7 @@
     "ng-packagr": "^13.0.0",
     "postcss": "^8.4.5",
     "postcss-import": "^14.0.2",
-    "postcss-preset-env": "^6.7.0",
+    "postcss-preset-env": "^7.4.1",
     "postcss-url": "^10.1.1",
     "prettier": "^2.5.1",
     "ts-jest": "27.0.5",

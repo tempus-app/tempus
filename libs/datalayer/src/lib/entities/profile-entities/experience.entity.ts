@@ -8,14 +8,16 @@ export class ExperienceEntity implements Experience {
   constructor(
     id?: number,
     title?: string,
-    description?: string,
+    summary?: string,
+    description?: string[],
     startDate?: Date,
     endDate?: Date,
     location?: LocationEntity,
-    resource?: ResourceEntity,
+    resource?: ResourceEntity
   ) {
     this.id = id
     this.title = title
+    this.summary = summary
     this.description = description
     this.startDate = startDate
     this.endDate = endDate
@@ -33,7 +35,10 @@ export class ExperienceEntity implements Experience {
   title: string
 
   @Column()
-  description: string
+  summary: string
+
+  @Column('simple-array', { nullable: true })
+  description: string[]
 
   @Column()
   startDate: Date
@@ -41,10 +46,10 @@ export class ExperienceEntity implements Experience {
   @Column()
   endDate: Date
 
-  @OneToOne(() => LocationEntity, (location) => location.experience, { cascade: ['insert', 'update'] })
+  @OneToOne(() => LocationEntity, location => location.experience, { cascade: ['insert', 'update'] })
   location: LocationEntity
 
-  @ManyToOne(() => ResourceEntity, (resource) => resource.experiences, {
+  @ManyToOne(() => ResourceEntity, resource => resource.experiences, {
     onDelete: 'CASCADE',
   })
   resource: ResourceEntity

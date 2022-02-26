@@ -1,6 +1,4 @@
-@use '@angular/material' as mat;
-@use 'sass:map';
-@import 'theme';
+@use 'abstracts/helper' as abs;
 @import 'https://fonts.googleapis.com/icon?family=Material+Icons';
 .chip {
   border-radius: 30px;
@@ -26,9 +24,9 @@
 }
 
 #skill-select {
-  background-color: mat.get-color-from-palette($tempus-primary, 700);
+  background-color: abs.$primary-700;
 }
 
 #skill {
-  background-color: mat.get-color-from-palette($tempus-primary, 500);
+  background-color: abs.$primary-500;
 }

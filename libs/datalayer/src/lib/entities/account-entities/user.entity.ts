@@ -11,7 +11,7 @@ export class UserEntity implements User {
     lastName?: string,
     email?: string,
     password?: string,
-    roles?: RoleType[],
+    roles?: RoleType[]
   ) {
     this.id = id
     this.firstName = firstName

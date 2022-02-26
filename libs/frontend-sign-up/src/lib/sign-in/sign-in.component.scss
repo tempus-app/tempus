@@ -1,13 +1,8 @@
-@use 'sass:map';
-@use '@angular/material' as mat;
-@import 'theme';
-
-$color-config: mat.get-color-config($tempus-theme);
-$primary-palette: map.get($color-config, 'primary');
+@use 'abstracts/helper' as abs;
 
 h1 {
   padding: 0.5em 0em 0.5em 0em;
-  border-bottom: 2px solid mat.get-color-from-palette($primary-palette, 300);
+  border-bottom: 2px solid abs.$primary-300;
 }
 
 a,
