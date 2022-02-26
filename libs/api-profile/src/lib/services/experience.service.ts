@@ -9,7 +9,7 @@ export class ExperienceService {
 	constructor(
 		private resourceService: ResourceService,
 		@InjectRepository(ExperienceEntity)
-		private experienceRepository: Repository<ExperienceEntity>
+		private experienceRepository: Repository<ExperienceEntity>,
 	) {}
 
 	// create experience for specific resource

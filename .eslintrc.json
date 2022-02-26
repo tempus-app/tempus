@@ -1,46 +1,46 @@
 {
-  "root": true,
-  "ignorePatterns": ["!**/*"],
-  "plugins": ["@nrwl/nx", "prettier"],
-  "parserOptions": {
-    "project": ["./tsconfig.*?.json"]
-  },
-  "overrides": [
-    {
-      "files": ["*.ts", "*.tsx"],
-      "extends": [
-        "plugin:@nrwl/nx/typescript",
-        "eslint:recommended",
-        "plugin:@typescript-eslint/recommended",
-        "airbnb-base",
-        "airbnb-typescript/base",
-        "prettier"
-      ],
-      "rules": {
-        "arrow-body-style": "off",
-        "prefer-arrow-callback": "off",
-        "import/prefer-default-export": "off",
-        "import/no-cycle": "off", //TODO: look into why this is happening
-        "prettier/prettier": "error",
-        "object-curly-newline": "off", //prettier conflict
-        "class-methods-use-this": "off", //TODO: remove me when method signatures are completed
-        "@typescript-eslint/indent": "off", //handled by prettier
-        "@typescript-eslint/no-unused-vars": "off", //TODO: IMPORTANT! change "off" to "error" when method signatures are completed
-        "@typescript-eslint/no-explicit-any": "error",
-        "@nrwl/nx/enforce-module-boundaries": [
-          "error",
-          {
-            "enforceBuildableLibDependency": true,
-            "allow": [],
-            "depConstraints": [
-              {
-                "sourceTag": "*",
-                "onlyDependOnLibsWithTags": ["*"]
-              }
-            ]
-          }
-        ]
-      }
-    }
-  ]
+	"root": true,
+	"ignorePatterns": ["!**/*"],
+	"plugins": ["@nrwl/nx", "prettier"],
+	"parserOptions": {
+		"project": ["./tsconfig.*?.json"]
+	},
+	"overrides": [
+		{
+			"files": ["*.ts", "*.tsx"],
+			"extends": [
+				"plugin:@nrwl/nx/typescript",
+				"eslint:recommended",
+				"plugin:@typescript-eslint/recommended",
+				"airbnb-base",
+				"airbnb-typescript/base",
+				"prettier"
+			],
+			"rules": {
+				"arrow-body-style": "off",
+				"prefer-arrow-callback": "off",
+				"import/prefer-default-export": "off",
+				"import/no-cycle": "off", //TODO: look into why this is happening
+				"prettier/prettier": ["error", { "useTabs": false }],
+				"object-curly-newline": "off", //prettier conflict
+				"class-methods-use-this": "off", //TODO: remove me when method signatures are completed
+				"@typescript-eslint/indent": "off", //handled by prettier
+				"@typescript-eslint/no-unused-vars": "off", //TODO: IMPORTANT! change "off" to "error" when method signatures are completed
+				"@typescript-eslint/no-explicit-any": "error",
+				"@nrwl/nx/enforce-module-boundaries": [
+					"error",
+					{
+						"enforceBuildableLibDependency": true,
+						"allow": [],
+						"depConstraints": [
+							{
+								"sourceTag": "*",
+								"onlyDependOnLibsWithTags": ["*"]
+							}
+						]
+					}
+				]
+			}
+		}
+	]
 }

@@ -5,42 +5,42 @@ import { TaskEntity } from './task.entity';
 
 @Entity()
 export class ProjectEntity implements Project {
-  constructor(
-    id?: number,
-    name?: string,
-    startDate?: Date,
-    endDate?: Date,
-    hoursPerDay?: number,
-    client?: ClientEntity,
-    tasks?: TaskEntity[],
-  ) {
-    this.id = id;
-    this.name = name;
-    this.startDate = startDate;
-    this.endDate = endDate;
-    this.hoursPerDay = hoursPerDay;
-    this.client = client;
-    this.tasks = tasks;
-  }
+	constructor(
+		id?: number,
+		name?: string,
+		startDate?: Date,
+		endDate?: Date,
+		hoursPerDay?: number,
+		client?: ClientEntity,
+		tasks?: TaskEntity[],
+	) {
+		this.id = id;
+		this.name = name;
+		this.startDate = startDate;
+		this.endDate = endDate;
+		this.hoursPerDay = hoursPerDay;
+		this.client = client;
+		this.tasks = tasks;
+	}
 
-  @PrimaryGeneratedColumn()
-  id: number;
+	@PrimaryGeneratedColumn()
+	id: number;
 
-  @Column()
-  name: string;
+	@Column()
+	name: string;
 
-  @Column()
-  startDate: Date;
+	@Column()
+	startDate: Date;
 
-  @Column()
-  endDate: Date;
+	@Column()
+	endDate: Date;
 
-  @Column()
-  hoursPerDay: number;
+	@Column()
+	hoursPerDay: number;
 
-  @ManyToOne(() => ClientEntity, (client) => client.projects)
-  client: ClientEntity;
+	@ManyToOne(() => ClientEntity, client => client.projects)
+	client: ClientEntity;
 
-  @OneToMany(() => TaskEntity, (tasks) => tasks.project)
-  tasks: TaskEntity[];
+	@OneToMany(() => TaskEntity, tasks => tasks.project)
+	tasks: TaskEntity[];
 }

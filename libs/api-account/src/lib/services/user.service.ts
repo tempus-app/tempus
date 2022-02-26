@@ -9,14 +9,13 @@ export class UserService {
 	constructor(
 		@InjectRepository(UserEntity)
 		private userRepository: Repository<UserEntity>,
-		private resourceService: ResourceService
+		private resourceService: ResourceService,
 	) {}
 
 	async createUser(user: UserEntity): Promise<User> {
 		if (user.roles.includes(RoleType.BUSINESS_OWNER)) {
 			return this.userRepository.save(user);
 		}
-		console.log(user);
 		return this.resourceService.createResource({
 			...user,
 		} as Resource);

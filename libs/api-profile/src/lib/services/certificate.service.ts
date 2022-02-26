@@ -9,7 +9,7 @@ export class CertificationService {
 	constructor(
 		private resourceService: ResourceService,
 		@InjectRepository(CertificationEntity)
-		private certificationRepository: Repository<CertificationEntity>
+		private certificationRepository: Repository<CertificationEntity>,
 	) {}
 
 	// create ceritifcation for a specific resource

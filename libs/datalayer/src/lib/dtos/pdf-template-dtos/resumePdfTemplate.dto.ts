@@ -5,14 +5,17 @@ import { PdfTemplateDto } from './pdfTemplate.dto';
 const handlebarHelper: HandleBarHelper = {
 	helperName: 'formatdate',
 	helper: (date: Date) => {
-		return (date.toLocaleDateString('default', { month: 'short' }) + ' ' + date.getFullYear()).toString();
+		return `${date.toLocaleDateString('default', { month: 'short' })} ${date.getFullYear()}`.toString();
 	},
 };
 
 export class ResumePdfTemplateDto implements PdfTemplateDto<View> {
 	filename: string;
-	template: string = 'resume';
+
+	template = 'resume';
+
 	data: View;
+
 	handlebarsHelpers: HandleBarHelper[] = [handlebarHelper];
 
 	constructor(filename: string, data: View) {

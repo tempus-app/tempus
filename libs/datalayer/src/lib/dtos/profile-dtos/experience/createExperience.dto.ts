@@ -30,7 +30,7 @@ export class CreateExperienceDto {
 		description: string[],
 		startDate: Date,
 		endDate: Date,
-		location: CreateLocationDto
+		location: CreateLocationDto,
 	) {
 		this.title = title;
 		this.summary = summary;
@@ -49,7 +49,7 @@ export class CreateExperienceDto {
 			dto.description,
 			dto.startDate,
 			dto.endDate,
-			CreateLocationDto.toEntity(dto.location)
+			CreateLocationDto.toEntity(dto.location),
 		);
 	}
 }

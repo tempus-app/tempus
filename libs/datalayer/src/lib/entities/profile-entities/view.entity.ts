@@ -21,7 +21,7 @@ export class ViewEntity implements View {
 		experiences?: ExperienceEntity[],
 		educations?: EducationEntity[],
 		resource?: ResourceEntity,
-		viewType?: ViewType
+		viewType?: ViewType,
 	) {
 		this.id = id;
 		this.profileSummary = profileSummary;

@@ -13,7 +13,7 @@ export class ExperienceEntity implements Experience {
 		startDate?: Date,
 		endDate?: Date,
 		location?: LocationEntity,
-		resource?: ResourceEntity
+		resource?: ResourceEntity,
 	) {
 		this.id = id;
 		this.title = title;

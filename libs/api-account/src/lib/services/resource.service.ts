@@ -7,7 +7,7 @@ import { Repository } from 'typeorm';
 export class ResourceService {
 	constructor(
 		@InjectRepository(ResourceEntity)
-		private resourceRepository: Repository<ResourceEntity>
+		private resourceRepository: Repository<ResourceEntity>,
 	) {}
 
 	async createResource(resource: ResourceEntity): Promise<Resource> {

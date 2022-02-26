@@ -4,18 +4,18 @@ import { ProjectEntity } from './project.entity';
 
 @Entity()
 export class TaskEntity implements Task {
-  constructor(id?: number, taskName?: string, project?: ProjectEntity) {
-    this.id = id;
-    this.taskName = taskName;
-    this.project = project;
-  }
+	constructor(id?: number, taskName?: string, project?: ProjectEntity) {
+		this.id = id;
+		this.taskName = taskName;
+		this.project = project;
+	}
 
-  @PrimaryGeneratedColumn()
-  id: number;
+	@PrimaryGeneratedColumn()
+	id: number;
 
-  @Column()
-  taskName: string;
+	@Column()
+	taskName: string;
 
-  @ManyToOne(() => ProjectEntity, (project) => project.tasks)
-  project: ProjectEntity;
+	@ManyToOne(() => ProjectEntity, project => project.tasks)
+	project: ProjectEntity;
 }

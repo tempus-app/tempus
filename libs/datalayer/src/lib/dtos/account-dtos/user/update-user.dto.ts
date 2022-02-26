@@ -1,7 +1,7 @@
-import { RoleType } from '../../../enums';
 import { ApiProperty } from '@nestjs/swagger';
-import { UserEntity } from '../../../entities/account-entities/user.entity';
 import { IsOptional } from 'class-validator';
+import { RoleType } from '../../../enums';
+import { UserEntity } from '../../../entities/account-entities/user.entity';
 import { LocationEntity, ResourceEntity } from '../../..';
 import { UpdateLocationDto } from '../..';
 
@@ -41,15 +41,15 @@ export class UpdateUserDto {
 		roles: RoleType[],
 		location?: UpdateLocationDto,
 		phoneNumber?: string,
-		title?: string
+		title?: string,
 	) {
 		this.id = id;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.email = email;
 		this.roles = roles;
-		this.phoneNumber = phoneNumber ? phoneNumber : null;
-		this.title = title ? title : null;
+		this.phoneNumber = phoneNumber || null;
+		this.title = title || null;
 		this.location = location;
 	}
 
@@ -71,7 +71,7 @@ export class UpdateUserDto {
 				dto.lastName,
 				dto.email,
 				null,
-				dto.roles
+				dto.roles,
 			);
 		}
 		return new UserEntity(null, dto.firstName, dto.lastName, dto.email, null, dto.roles);

@@ -23,7 +23,7 @@ export class ResourceEntity extends UserEntity implements Resource {
 		lastName?: string,
 		email?: string,
 		password?: string,
-		roles?: RoleType[]
+		roles?: RoleType[],
 	) {
 		super(id, firstName, lastName, email, password, roles);
 		this.phoneNumber = phoneNumber;

@@ -2,6 +2,7 @@ import { SkillTypeEntity } from '../../..';
 
 export class FullSkillTypeDto {
 	name: string;
+
 	constructor(name?: string) {
 		this.name = name;
 	}

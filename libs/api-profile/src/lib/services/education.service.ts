@@ -12,7 +12,7 @@ export class EducationService {
 		@InjectRepository(EducationEntity)
 		private educationRepository: Repository<EducationEntity>,
 		@InjectRepository(LocationEntity)
-		private locationRepository: Repository<LocationEntity>
+		private locationRepository: Repository<LocationEntity>,
 	) {}
 
 	// create education for a specific resource

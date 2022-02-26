@@ -11,7 +11,7 @@ export class SkillsService {
 		@InjectRepository(SkillEntity)
 		private skillsRepository: Repository<SkillEntity>,
 		@InjectRepository(SkillTypeEntity)
-		private skillTypeRepository: Repository<SkillTypeEntity>
+		private skillTypeRepository: Repository<SkillTypeEntity>,
 	) {}
 
 	// create skill for a specific resource

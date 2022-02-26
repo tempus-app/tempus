@@ -20,7 +20,7 @@ export class UserController {
 		// @Query() title: string[] | string,
 		// @Query() project: string[] | string,
 		// @Query() status: string[] | string,
-		return await this.userService.getAllUsers();
+		return this.userService.getAllUsers();
 	}
 
 	@Get('resources')
@@ -37,17 +37,17 @@ export class UserController {
 	// creates User (includes resource)
 	@Post()
 	async createUser(@Body() user: CreateUserDto): Promise<User | Resource> {
-		return await this.userService.createUser(CreateUserDto.toEntity(user));
+		return this.userService.createUser(CreateUserDto.toEntity(user));
 	}
 
 	// updates user information  (includes resource)
 	@Patch()
 	async updateUser(@Body() updateUserData: UpdateUserDto): Promise<User | Resource> {
-		return await this.userService.updateUser(updateUserData);
+		return this.userService.updateUser(updateUserData);
 	}
 
 	@Delete(':userId')
 	async deleteUser(@Param('userId') userId: number): Promise<void> {
-		return await this.userService.deleteUser(userId);
+		return this.userService.deleteUser(userId);
 	}
 }

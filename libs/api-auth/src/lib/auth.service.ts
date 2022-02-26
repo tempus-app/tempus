@@ -8,7 +8,7 @@ export class AuthService {
 	constructor(
 		@Inject(forwardRef(() => UserService))
 		private userService: UserService,
-		private jwtService: JwtService
+		private jwtService: JwtService,
 	) {}
 
 	async validateUser(email: string, password: string): Promise<any> {

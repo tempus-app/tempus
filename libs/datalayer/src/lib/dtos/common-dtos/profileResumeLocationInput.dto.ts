@@ -3,6 +3,7 @@ import { SlimEducationDto, SlimExperienceDto, SlimResourceDto } from '..';
 
 export class ProfileResumeLocationInputDto {
 	location: SlimLocationDto;
+
 	data: SlimEducationDto | SlimExperienceDto | SlimResourceDto;
 
 	constructor(location?: SlimLocationDto, data?: SlimEducationDto | SlimExperienceDto | SlimResourceDto) {

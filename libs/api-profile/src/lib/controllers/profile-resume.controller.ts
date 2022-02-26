@@ -16,10 +16,10 @@ import {
 	ResumeComponentsDto,
 } from '@tempus/datalayer';
 import { ApiTags } from '@nestjs/swagger';
-import { EducationService, EducationService } from '../services/education.service';
-import { ExperienceService, ExperienceService } from '../services/experience.service';
-import { SkillsService, SkillsService } from '../services/skill.service';
-import { CertificationService, CertificationService } from '../services/certificate.service';
+import { EducationService } from '../services/education.service';
+import { ExperienceService } from '../services/experience.service';
+import { SkillsService } from '../services/skill.service';
+import { CertificationService } from '../services/certificate.service';
 
 @ApiTags('Profile Resume Components')
 @Controller('profileresume')
@@ -28,14 +28,14 @@ export class ProfileResumeController {
 		private educationService: EducationService,
 		private skillService: SkillsService,
 		private certificationService: CertificationService,
-		private experienceService: ExperienceService
+		private experienceService: ExperienceService,
 	) {}
 
 	// CREATE DATA (only relevant when on main table page and creating)
 	@Post('/education/:userId')
 	async createEducation(
 		@Param('userId') userId: number,
-		@Body() createEducationData: CreateEducationDto
+		@Body() createEducationData: CreateEducationDto,
 	): Promise<Education> {
 		let educationEntity = CreateEducationDto.toEntity(createEducationData);
 		educationEntity = await this.educationService.createEducation(userId, educationEntity);
@@ -45,7 +45,7 @@ export class ProfileResumeController {
 	@Post('/experience/:userId')
 	async createExperience(
 		@Param('userId') userId: number,
-		@Body() createExperienceData: CreateExperienceDto
+		@Body() createExperienceData: CreateExperienceDto,
 	): Promise<Experience> {
 		let experienceEntity = CreateExperienceDto.toEntity(createExperienceData);
 		experienceEntity = await this.experienceService.createExperience(userId, experienceEntity);
@@ -62,7 +62,7 @@ export class ProfileResumeController {
 	@Post('/certification/:userId')
 	async createCertification(
 		@Param('userId') userId: number,
-		@Body() createCertificationData: CreateCertificationDto
+		@Body() createCertificationData: CreateCertificationDto,
 	): Promise<Certification> {
 		let certificationEntity = CreateCertificationDto.toEntity(createCertificationData);
 		certificationEntity = await this.certificationService.createCertification(userId, certificationEntity);

@@ -10,7 +10,7 @@ export class AppService {
 	constructor(
 		@InjectRepository(ResourceEntity) private resourceRepo: Repository<ResourceEntity>,
 		private pdfGeneratorService: PdfGeneratorService,
-		@InjectRepository(UserEntity) private userRepo: Repository<UserEntity>
+		@InjectRepository(UserEntity) private userRepo: Repository<UserEntity>,
 	) {}
 
 	getData(): Message {
