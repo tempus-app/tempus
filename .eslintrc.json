@@ -13,11 +13,12 @@
         "eslint:recommended",
         "plugin:@typescript-eslint/recommended",
         "airbnb-base",
-        "airbnb-typescript/base",
-        "prettier"
+        "airbnb-typescript/base"
       ],
       "rules": {
+        "import/prefer-default-export": "off",
         "prettier/prettier": "error",
+        "class-methods-use-this": "off", //TODO: remove me when method signatures are completed
         "@typescript-eslint/indent": ["error", 2],
         "@typescript-eslint/no-unused-vars": "error",
         "@typescript-eslint/no-explicit-any": "error",
