@@ -9,54 +9,74 @@ import { View } from '../..';
 
 @Entity()
 export class ViewEntity implements View {
-  constructor(
-    id?: number,
-    type?: string,
-    status?: RevisionEntity[],
-    skills?: SkillEntity[],
-    experiences?: ExperienceEntity[],
-    educations?: EducationEntity[],
-    resource?: ResourceEntity,
-    viewType?: ViewType,
-  ) {
-    this.id = id;
-    this.type = type;
-    this.status = status;
-    this.skills = skills;
-    this.experiences = experiences;
-    this.educations = educations;
-    this.resource = resource;
-    this.viewType = viewType;
-  }
+	constructor(
+		id?: number,
+		profileSummary?: string,
+		skillsSummary?: string,
+		educationsSummary?: string,
+		experiencesSummary?: string,
+		type?: string,
+		status?: RevisionEntity[],
+		skills?: SkillEntity[],
+		experiences?: ExperienceEntity[],
+		educations?: EducationEntity[],
+		resource?: ResourceEntity,
+		viewType?: ViewType
+	) {
+		this.id = id;
+		this.profileSummary = profileSummary;
+		this.skillsSummary = skillsSummary;
+		this.educationsSummary = educationsSummary;
+		this.experiencesSummary = experiencesSummary;
+		this.type = type;
+		this.status = status;
+		this.skills = skills;
+		this.experiences = experiences;
+		this.educations = educations;
+		this.resource = resource;
+		this.viewType = viewType;
+	}
 
-  @PrimaryGeneratedColumn()
-  id: number;
+	@PrimaryGeneratedColumn()
+	id: number;
 
-  @Column()
-  type: string;
+	@Column({ nullable: true })
+	profileSummary: string;
 
-  @OneToMany(() => RevisionEntity, (status) => status.view)
-  status: RevisionEntity[];
+	@Column({ nullable: true })
+	skillsSummary: string;
 
-  @ManyToMany(() => SkillEntity)
-  @JoinTable()
-  skills: SkillEntity[];
+	@Column({ nullable: true })
+	educationsSummary: string;
 
-  @ManyToMany(() => ExperienceEntity)
-  @JoinTable()
-  experiences: ExperienceEntity[];
+	@Column({ nullable: true })
+	experiencesSummary: string;
 
-  @ManyToMany(() => EducationEntity)
-  @JoinTable()
-  educations: EducationEntity[];
+	@Column()
+	type: string;
 
-  @ManyToOne(() => ResourceEntity, (resource) => resource.views)
-  resource: ResourceEntity;
+	@OneToMany(() => RevisionEntity, status => status.view)
+	status: RevisionEntity[];
 
-  @Column({
-    type: 'enum',
-    enum: ViewType,
-    default: ViewType.SECONDARY,
-  })
-  viewType: ViewType;
+	@ManyToMany(() => SkillEntity)
+	@JoinTable()
+	skills: SkillEntity[];
+
+	@ManyToMany(() => ExperienceEntity)
+	@JoinTable()
+	experiences: ExperienceEntity[];
+
+	@ManyToMany(() => EducationEntity)
+	@JoinTable()
+	educations: EducationEntity[];
+
+	@ManyToOne(() => ResourceEntity, resource => resource.views)
+	resource: ResourceEntity;
+
+	@Column({
+		type: 'enum',
+		enum: ViewType,
+		default: ViewType.SECONDARY,
+	})
+	viewType: ViewType;
 }

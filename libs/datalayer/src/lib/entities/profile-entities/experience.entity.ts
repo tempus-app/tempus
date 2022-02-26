@@ -5,46 +5,52 @@ import { LocationEntity } from '../common-entities';
 
 @Entity()
 export class ExperienceEntity implements Experience {
-  constructor(
-    id?: number,
-    title?: string,
-    description?: string,
-    startDate?: Date,
-    endDate?: Date,
-    location?: LocationEntity,
-    resource?: ResourceEntity,
-  ) {
-    this.id = id;
-    this.title = title;
-    this.description = description;
-    this.startDate = startDate;
-    this.endDate = endDate;
-    this.location = location;
-    this.resource = resource;
-  }
+	constructor(
+		id?: number,
+		title?: string,
+		summary?: string,
+		description?: string[],
+		startDate?: Date,
+		endDate?: Date,
+		location?: LocationEntity,
+		resource?: ResourceEntity
+	) {
+		this.id = id;
+		this.title = title;
+		this.summary = summary;
+		this.description = description;
+		this.startDate = startDate;
+		this.endDate = endDate;
+		this.location = location;
+		this.resource = resource;
+	}
 
-  @PrimaryGeneratedColumn()
-  id: number;
+	@PrimaryGeneratedColumn()
+	id: number;
 
-  @Column()
-  title: string;
+	@Column()
+	company: string;
 
-  @Column()
-  description: string;
+	@Column()
+	title: string;
 
-  @Column()
-  startDate: Date;
+	@Column()
+	summary: string;
 
-  @Column()
-  endDate: Date;
+	@Column('simple-array', { nullable: true })
+	description: string[];
 
-  @OneToOne(() => LocationEntity, (location) => location.experience, {
-    cascade: ['insert', 'update'],
-  })
-  location: LocationEntity;
+	@Column()
+	startDate: Date;
 
-  @ManyToOne(() => ResourceEntity, (resource) => resource.experiences, {
-    onDelete: 'CASCADE',
-  })
-  resource: ResourceEntity;
+	@Column()
+	endDate: Date;
+
+	@OneToOne(() => LocationEntity, location => location.experience, { cascade: ['insert', 'update'] })
+	location: LocationEntity;
+
+	@ManyToOne(() => ResourceEntity, resource => resource.experiences, {
+		onDelete: 'CASCADE',
+	})
+	resource: ResourceEntity;
 }

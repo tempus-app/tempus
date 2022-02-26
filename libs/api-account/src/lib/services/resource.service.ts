@@ -1,57 +1,90 @@
-import { Injectable, NotFoundException, NotImplementedException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CreateProjectDto, ResourceEntity, CreateSkillDto, Resource } from '@tempus/datalayer';
+import { UpdateUserDto, ResourceEntity, Resource } from '@tempus/datalayer';
 import { Repository } from 'typeorm';
 
 @Injectable()
 export class ResourceService {
-  constructor(
-    @InjectRepository(ResourceEntity)
-    private resourceRepository: Repository<ResourceEntity>,
-  ) {}
+	constructor(
+		@InjectRepository(ResourceEntity)
+		private resourceRepository: Repository<ResourceEntity>
+	) {}
 
-  getAllResources(
-    location?: string[] | string,
-    skills?: string[] | string,
-    title?: string[] | string,
-    project?: string[] | string,
-    status?: string[] | string,
-    sortBy?: string,
-  ): Promise<ResourceEntity[]> {
-    throw new NotImplementedException();
-  }
+	async createResource(resource: ResourceEntity): Promise<Resource> {
+		const createdResource = await this.resourceRepository.save(resource);
 
-  findResourcesBySkills(skills: CreateProjectDto[]): Promise<ResourceEntity[]> {
-    // should interact with profile view
-    throw new NotImplementedException();
-  }
+		// TODO: create initial view with inital data
 
-  findResourcesByProjects(projects: CreateProjectDto[]): Promise<ResourceEntity[]> {
-    throw new NotImplementedException();
-  }
+		// view service
+		return createdResource;
+	}
 
-  async findResourceById(resourceId: number): Promise<ResourceEntity> {
-    const resourceEntity = await this.resourceRepository.findOne(resourceId);
-    if (!resourceEntity) {
-      throw new NotFoundException(`Could not find resource with id ${resourceId}`);
-    }
-    return resourceEntity;
-  }
+	async getResource(resourceId: number): Promise<Resource> {
+		const resourceEntity = await this.resourceRepository.findOne(resourceId, {
+			// TODO: relations error???
+			relations: ['experiences', 'educations', 'skills', 'certifications', 'location'],
+		});
 
-  async findResourceByEmail(email: string): Promise<Resource> {
-    const resourceEntity = (
-      await this.resourceRepository.find({
-        where: { email },
-        relations: ['location', 'projects', 'views', 'experiences', 'educations', 'skills', 'certifications'],
-      })
-    )[0];
-    if (!resourceEntity) {
-      throw new NotFoundException(`Could not find resource with id ${email}`);
-    }
-    return resourceEntity;
-  }
+		if (!resourceEntity) {
+			throw new NotFoundException(`Could not find resource with id ${resourceId}`);
+		}
 
-  async saveResource(resource: ResourceEntity): Promise<ResourceEntity> {
-    return this.resourceRepository.save(resource);
-  }
+		return resourceEntity;
+	}
+
+	async getResourceInfo(resourceId: number): Promise<Resource> {
+		const resourceEntity = await this.resourceRepository.findOne(resourceId);
+
+		if (!resourceEntity) {
+			throw new NotFoundException(`Could not find resource with id ${resourceId}`);
+		}
+
+		return resourceEntity;
+	}
+
+	// TODO: filtering
+	// CRUD requests
+	async getAllResources(): Promise<Resource[]> {
+		// location?: string[] | string,
+		// skills?: string[] | string,
+		// title?: string[] | string,
+		// project?: string[] | string,
+		// status?: string[] | string,
+		// sortBy?: string,
+
+		const resources = await this.resourceRepository.find({
+			relations: ['projects', 'experiences', 'educations', 'skills', 'certifications', 'views', 'location'],
+		});
+
+		return resources;
+	}
+
+	async findResourceByEmail(email: string): Promise<Resource> {
+		const resourceEntity = (
+			await this.resourceRepository.find({
+				where: { email },
+				relations: ['location', 'projects', 'views', 'experiences', 'educations', 'skills', 'certifications'],
+			})
+		)[0];
+		if (!resourceEntity) {
+			throw new NotFoundException(`Could not find resource with id ${email}`);
+		}
+		return resourceEntity;
+	}
+
+	// edit resource to be used specifically when updating local information
+	async editResource(updateResourceData: UpdateUserDto): Promise<Resource> {
+		const resourceEntity = await this.getResource(updateResourceData.id);
+
+		const updatedLocationData = updateResourceData.location;
+		delete updateResourceData.location;
+
+		for (const [key, val] of Object.entries(updateResourceData)) if (!val) delete updateResourceData[key];
+		for (const [key, val] of Object.entries(updatedLocationData)) if (!val) delete updatedLocationData[key];
+
+		Object.assign(resourceEntity.location, updatedLocationData);
+		Object.assign(resourceEntity, updateResourceData);
+
+		return this.resourceRepository.save(resourceEntity);
+	}
 }

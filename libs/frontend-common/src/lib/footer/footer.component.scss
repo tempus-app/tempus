@@ -1,14 +1,13 @@
-@use '@angular/material' as mat;
-@import 'theme';
+@use 'abstracts/helper' as abs;
 
 .footer {
-  position: fixed;
-  left: 0;
-  padding: 10px 0px 0px 0px;
-  bottom: 0;
-  width: 100%;
-  background-color: mat.get-color-from-palette($tempus-accent, 300);
-  color: white;
-  text-align: center;
-  font-size: 18px;
+	position: fixed;
+	left: 0;
+	padding: 10px 0px 0px 0px;
+	bottom: 0;
+	width: 100%;
+	background-color: abs.$accent-300;
+	color: white;
+	text-align: center;
+	font-size: 18px;
 }

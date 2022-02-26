@@ -6,12 +6,16 @@ import { Revision } from './revision.model';
 import { Skill } from './skill.model';
 
 export interface View {
-  id: number;
-  type: string;
-  status: Revision[];
-  skills: Skill[];
-  experiences: Experience[];
-  educations: Education[];
-  resource: Resource;
-  viewType: ViewType;
+	id: number;
+	profileSummary: string;
+	skillsSummary: string;
+	educationsSummary: string;
+	experiencesSummary: string;
+	type: string;
+	status: Revision[];
+	skills: Skill[];
+	experiences: Experience[];
+	educations: Education[];
+	resource: Resource;
+	viewType: ViewType;
 }

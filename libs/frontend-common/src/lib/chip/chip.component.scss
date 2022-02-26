@@ -1,34 +1,32 @@
-@use '@angular/material' as mat;
-@use 'sass:map';
-@import 'theme';
+@use 'abstracts/helper' as abs;
 @import 'https://fonts.googleapis.com/icon?family=Material+Icons';
 .chip {
-  border-radius: 30px;
-  padding: 17px 20px;
-  color: white;
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
+	border-radius: 30px;
+	padding: 17px 20px;
+	color: white;
+	box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
 }
 
 .mat-standard-chip.mat-chip-with-trailing-icon {
-  padding: 20px 8px 20px 20px; //top, right, bottom, left
+	padding: 20px 8px 20px 20px; //top, right, bottom, left
 }
 
 #skill-light {
-  background-color: #b9c2c7;
+	background-color: #b9c2c7;
 }
 
 #skill-medium {
-  background-color: #9aa5ac;
+	background-color: #9aa5ac;
 }
 
 #skill-dark {
-  background-color: #717a80;
+	background-color: #717a80;
 }
 
 #skill-select {
-  background-color: mat.get-color-from-palette($tempus-primary, 700);
+	background-color: abs.$primary-700;
 }
 
 #skill {
-  background-color: mat.get-color-from-palette($tempus-primary, 500);
+	background-color: abs.$primary-500;
 }
