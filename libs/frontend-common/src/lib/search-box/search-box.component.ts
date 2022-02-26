@@ -1,6 +1,6 @@
-import { Component, OnInit, Input } from '@angular/core'
-import { FormControl } from '@angular/forms'
-import { map, Observable, of, startWith } from 'rxjs'
+import { Component, OnInit, Input } from '@angular/core';
+import { FormControl } from '@angular/forms';
+import { map, Observable, of, startWith } from 'rxjs';
 
 @Component({
   selector: 'tempus-search-box',
@@ -8,26 +8,32 @@ import { map, Observable, of, startWith } from 'rxjs'
   styleUrls: ['./search-box.component.scss'],
 })
 export class SearchBoxComponent implements OnInit {
-  myControl = new FormControl()
-  search: String = ''
-  @Input() cssClass: string = ''
-  @Input() placeholder: string = ''
-  @Input() options: string[] = []
-  filteredOptions: Observable<string[]>
+  myControl = new FormControl();
+
+  search = '';
+
+  @Input() cssClass = '';
+
+  @Input() placeholder = '';
+
+  @Input() options: string[] = [];
+
+  filteredOptions: Observable<string[]>;
+
   constructor() {
-    this.filteredOptions = of([])
+    this.filteredOptions = of([]);
   }
 
   ngOnInit() {
     this.filteredOptions = this.myControl.valueChanges.pipe(
       startWith(''),
       map((value) => this._filter(value)),
-    )
+    );
   }
 
   private _filter(value: string): string[] {
-    const filterValue = value.toLowerCase()
+    const filterValue = value.toLowerCase();
 
-    return this.options.filter((option) => option.toLowerCase().includes(filterValue))
+    return this.options.filter((option) => option.toLowerCase().includes(filterValue));
   }
 }

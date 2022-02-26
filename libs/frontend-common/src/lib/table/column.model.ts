@@ -1,9 +1,9 @@
 export interface Column {
-  columnDef: string
-  header: string
+  columnDef: string;
+  header: string;
   // eslint-disable-next-line @typescript-eslint/ban-types
-  cell: Function
+  cell: Function;
   // TODO: add link functionality
-  isLink?: boolean
-  url?: string
+  isLink?: boolean;
+  url?: string;
 }

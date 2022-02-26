@@ -7,4 +7,4 @@ export const configuration = () => ({
   emailUsername: process.env.EMAIL_USERNAME,
   emailPassword: process.env.EMAIL_PASSWORD,
   emailDefaultAddress: process.env.EMAIL_ADDRESS,
-})
+});

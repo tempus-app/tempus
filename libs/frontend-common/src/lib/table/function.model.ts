@@ -1,1 +1,1 @@
-export type CellFunction = (...args: any[]) => string
+export type CellFunction = (...args: any[]) => string;
