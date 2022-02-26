@@ -6,19 +6,19 @@ import { AuthService } from '../auth.service';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
-  constructor(private authService: AuthService, private configService: ConfigService) {
-    super({
-      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-      ignoreExpiration: false,
-      secretOrKey: configService.get('JWT_SECRET'),
-    });
-  }
+	constructor(private authService: AuthService, private configService: ConfigService) {
+		super({
+			jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+			ignoreExpiration: false,
+			secretOrKey: configService.get('JWT_SECRET'),
+		});
+	}
 
-  async validate(payload: any): Promise<any> {
-    const user = await this.authService.getUserFromJWT(payload.email);
-    if (!user) {
-      throw new UnauthorizedException('Incorrect credentials.');
-    }
-    return user;
-  }
+	async validate(payload: any): Promise<any> {
+		const user = await this.authService.getUserFromJWT(payload.email);
+		if (!user) {
+			throw new UnauthorizedException('Incorrect credentials.');
+		}
+		return user;
+	}
 }

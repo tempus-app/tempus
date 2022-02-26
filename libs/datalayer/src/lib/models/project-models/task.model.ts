@@ -1,9 +1,9 @@
 import { Project } from './project.model';
 
 export class Task {
-  id: number;
+	id: number;
 
-  taskName: string;
+	taskName: string;
 
-  project: Project;
+	project: Project;
 }

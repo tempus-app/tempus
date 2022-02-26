@@ -1,12 +1,12 @@
 import { Resource, User } from '../..';
 
 export class AuthDto {
-  user: User | Resource;
+	user: User | Resource;
 
-  jwtAccessToken: string;
+	jwtAccessToken: string;
 
-  constructor(user: User | Resource, accessToken: string) {
-    this.user = user;
-    this.jwtAccessToken = accessToken;
-  }
+	constructor(user: User | Resource, accessToken: string) {
+		this.user = user;
+		this.jwtAccessToken = accessToken;
+	}
 }

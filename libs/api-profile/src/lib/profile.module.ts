@@ -10,9 +10,9 @@ import { SkillsService } from './services/skill.service';
 import { ViewsService } from './services/view.service';
 
 @Module({
-  imports: [DataLayerModule, AccountModule],
-  controllers: [ProfileResumeController, ProfileViewController],
-  providers: [EducationService, ExperienceService, SkillsService, ViewsService, CertificationService],
-  exports: [],
+	imports: [DataLayerModule, AccountModule],
+	controllers: [ProfileResumeController, ProfileViewController],
+	providers: [EducationService, ExperienceService, SkillsService, ViewsService, CertificationService],
+	exports: [],
 })
 export class ProfileModule {}

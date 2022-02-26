@@ -12,18 +12,18 @@ import { NxWelcomeComponent } from './nx-welcome.component';
 import { AppComponent } from './app.component';
 
 @NgModule({
-  declarations: [AppComponent, NxWelcomeComponent],
-  imports: [
-    BrowserModule,
-    HttpClientModule,
-    MatInputModule,
-    MatButtonModule,
-    FrontendCommon,
-    MatTooltipModule,
-    MatPaginatorModule,
-    FrontendSignUpModule,
-  ],
-  providers: [],
-  bootstrap: [AppComponent],
+	declarations: [AppComponent, NxWelcomeComponent],
+	imports: [
+		BrowserModule,
+		HttpClientModule,
+		MatInputModule,
+		MatButtonModule,
+		FrontendCommon,
+		MatTooltipModule,
+		MatPaginatorModule,
+		FrontendSignUpModule,
+	],
+	providers: [],
+	bootstrap: [AppComponent],
 })
 export class AppModule {}

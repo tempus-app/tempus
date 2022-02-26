@@ -5,16 +5,16 @@ import { AuthService } from './auth.service';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private authService: AuthService) {}
+	constructor(private authService: AuthService) {}
 
-  @UseGuards(LocalAuthGuard)
-  @Post('login')
-  login(@Request() req): Promise<AuthDto> {
-    return this.authService.login(req.user);
-  }
+	@UseGuards(LocalAuthGuard)
+	@Post('login')
+	login(@Request() req): Promise<AuthDto> {
+		return this.authService.login(req.user);
+	}
 
-  @Post('signup')
-  signup(@Body() req: string): Promise<UserEntity> {
-    throw new NotImplementedException();
-  }
+	@Post('signup')
+	signup(@Body() req: string): Promise<UserEntity> {
+		throw new NotImplementedException();
+	}
 }

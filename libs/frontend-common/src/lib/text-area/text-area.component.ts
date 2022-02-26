@@ -1,16 +1,16 @@
 import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'tempus-text-area',
-  templateUrl: './text-area.component.html',
-  styleUrls: ['./text-area.component.scss'],
+	selector: 'tempus-text-area',
+	templateUrl: './text-area.component.html',
+	styleUrls: ['./text-area.component.scss'],
 })
 export class TextAreaComponent implements OnInit {
-  @Input() cssClass = '';
+	@Input() cssClass = '';
 
-  @Input() placeholder = '';
+	@Input() placeholder = '';
 
-  constructor() {}
+	constructor() {}
 
-  ngOnInit(): void {}
+	ngOnInit(): void {}
 }

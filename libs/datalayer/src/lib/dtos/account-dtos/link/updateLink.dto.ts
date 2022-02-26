@@ -3,14 +3,14 @@ import { StatusType } from '../../..';
 import { UpdateUserDto } from '../user/updateUser.dto';
 
 export class UpdatelinkDto {
-  @ApiProperty()
-  id: number;
+	@ApiProperty()
+	id: number;
 
-  @ApiProperty()
-  status: StatusType;
+	@ApiProperty()
+	status: StatusType;
 
-  constructor(id: number, status: StatusType) {
-    this.id = id;
-    this.status = status;
-  }
+	constructor(id: number, status: StatusType) {
+		this.id = id;
+		this.status = status;
+	}
 }

@@ -1,3 +1,3 @@
 export class SlimTaskDto {
-  constructor(id?: number, taskName?: string) {}
+	constructor(id?: number, taskName?: string) {}
 }

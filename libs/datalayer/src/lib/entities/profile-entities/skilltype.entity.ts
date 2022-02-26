@@ -4,11 +4,11 @@ import { SkillType } from '../..';
 @Unique('primary_key_constraint', ['name'])
 @Entity()
 export class SkillTypeEntity implements SkillType {
-  constructor(name?: string) {
-    this.name = name;
-  }
+	constructor(name?: string) {
+		this.name = name;
+	}
 
-  @Column({ unique: true })
-  @PrimaryColumn()
-  name: string;
+	@Column({ unique: true })
+	@PrimaryColumn()
+	name: string;
 }

@@ -12,18 +12,18 @@ import { JwtStrategy } from './strategies/jwt.strategy';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 
 @Module({
-  imports: [
-    forwardRef(() => AccountModule),
-    PassportModule,
-    CoreModule,
-    ConfigModule,
-    JwtModule.register({
-      secret: process.env.JWT_SECRET,
-      signOptions: { expiresIn: '900s' },
-    }),
-  ],
-  controllers: [AuthController],
-  providers: [AuthService, LocalStrategy, JwtStrategy, LocalAuthGuard, JwtAuthGuard],
-  exports: [LocalAuthGuard, JwtAuthGuard],
+	imports: [
+		forwardRef(() => AccountModule),
+		PassportModule,
+		CoreModule,
+		ConfigModule,
+		JwtModule.register({
+			secret: process.env.JWT_SECRET,
+			signOptions: { expiresIn: '900s' },
+		}),
+	],
+	controllers: [AuthController],
+	providers: [AuthService, LocalStrategy, JwtStrategy, LocalAuthGuard, JwtAuthGuard],
+	exports: [LocalAuthGuard, JwtAuthGuard],
 })
 export class AuthModule {}

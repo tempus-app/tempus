@@ -5,55 +5,55 @@ import { UserEntity } from './user.entity';
 
 @Entity()
 export class LinkEntity implements Link {
-  constructor(
-    id?: number,
-    firstName?: string,
-    lastName?: string,
-    email?: string,
-    expiry?: Date,
-    token?: string,
-    status?: StatusType,
-    user?: UserEntity,
-  ) {
-    this.id = id;
-    this.firstName = firstName;
-    this.lastName = lastName;
-    this.expiry = expiry;
-    this.email = email;
-    this.token = token;
-    this.status = status;
-    this.user = user;
-  }
+	constructor(
+		id?: number,
+		firstName?: string,
+		lastName?: string,
+		email?: string,
+		expiry?: Date,
+		token?: string,
+		status?: StatusType,
+		user?: UserEntity,
+	) {
+		this.id = id;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.expiry = expiry;
+		this.email = email;
+		this.token = token;
+		this.status = status;
+		this.user = user;
+	}
 
-  @PrimaryGeneratedColumn()
-  id: number;
+	@PrimaryGeneratedColumn()
+	id: number;
 
-  @CreateDateColumn()
-  createdAt: Date;
+	@CreateDateColumn()
+	createdAt: Date;
 
-  @Column()
-  firstName: string;
+	@Column()
+	firstName: string;
 
-  @Column()
-  lastName: string;
+	@Column()
+	lastName: string;
 
-  @Column()
-  email: string;
+	@Column()
+	email: string;
 
-  @Column()
-  expiry: Date;
+	@Column()
+	expiry: Date;
 
-  @Column({ unique: true })
-  token: string;
+	@Column({ unique: true })
+	token: string;
 
-  @Column({
-    type: 'enum',
-    enum: StatusType,
-    default: [StatusType.ACTIVE],
-  })
-  status: StatusType;
+	@Column({
+		type: 'enum',
+		enum: StatusType,
+		default: [StatusType.ACTIVE],
+	})
+	status: StatusType;
 
-  @OneToOne(() => UserEntity)
-  @JoinColumn()
-  user?: UserEntity;
+	@OneToOne(() => UserEntity)
+	@JoinColumn()
+	user?: UserEntity;
 }

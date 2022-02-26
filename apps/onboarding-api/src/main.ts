@@ -12,30 +12,30 @@ import { HttpErrorFilter } from '@tempus/core';
 import { AppModule } from './app/app.module';
 
 function setupSwagger(app: INestApplication) {
-  app.setGlobalPrefix('api');
-  const swaggerConfig = new DocumentBuilder()
-    .setTitle('Onboarding')
-    .setDescription('The Tempus onboarding API')
-    .setVersion('0.0.1')
-    .build();
+	app.setGlobalPrefix('api');
+	const swaggerConfig = new DocumentBuilder()
+		.setTitle('Onboarding')
+		.setDescription('The Tempus onboarding API')
+		.setVersion('0.0.1')
+		.build();
 
-  const document = SwaggerModule.createDocument(app, swaggerConfig);
-  SwaggerModule.setup('api', app, document);
+	const document = SwaggerModule.createDocument(app, swaggerConfig);
+	SwaggerModule.setup('api', app, document);
 }
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
-  const config = app.get(ConfigService);
-  const globalPrefix = 'onboarding';
+	const app = await NestFactory.create(AppModule);
+	const config = app.get(ConfigService);
+	const globalPrefix = 'onboarding';
 
-  app.useGlobalPipes(new ValidationPipe());
-  setupSwagger(app);
-  app.setGlobalPrefix(globalPrefix);
-  app.useGlobalFilters(new HttpErrorFilter(config));
-  const port = process.env.PORT || 3333;
-  await app.listen(port);
-  Logger.log(`🚀 Application is running on: http://localhost:${port}/${globalPrefix}`);
-  Logger.log(`Running in ${config.get('environment')} mode`);
+	app.useGlobalPipes(new ValidationPipe());
+	setupSwagger(app);
+	app.setGlobalPrefix(globalPrefix);
+	app.useGlobalFilters(new HttpErrorFilter(config));
+	const port = process.env.PORT || 3333;
+	await app.listen(port);
+	Logger.log(`🚀 Application is running on: http://localhost:${port}/${globalPrefix}`);
+	Logger.log(`Running in ${config.get('environment')} mode`);
 }
 
 bootstrap();

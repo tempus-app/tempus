@@ -6,16 +6,16 @@ import { validationSchema } from './configuration/validation';
 import config from '../../../../ormconfig';
 
 @Module({
-  imports: [
-    ConfigModule.forRoot({
-      isGlobal: true,
-      load: [configuration],
-      validationSchema,
-    }),
-    TypeOrmModule.forRoot(config),
-  ],
-  controllers: [],
-  providers: [],
-  exports: [],
+	imports: [
+		ConfigModule.forRoot({
+			isGlobal: true,
+			load: [configuration],
+			validationSchema,
+		}),
+		TypeOrmModule.forRoot(config),
+	],
+	controllers: [],
+	providers: [],
+	exports: [],
 })
 export class CoreModule {}

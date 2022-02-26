@@ -5,23 +5,23 @@ import { MatStep } from '@angular/material/stepper';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
-  selector: 'tempus-stepper',
-  templateUrl: './stepper.component.html',
-  styleUrls: ['./stepper.component.scss'],
-  providers: [
-    {
-      provide: STEPPER_GLOBAL_OPTIONS,
-      useValue: { displayDefaultIndicatorType: false },
-    },
-  ],
-  encapsulation: ViewEncapsulation.None,
+	selector: 'tempus-stepper',
+	templateUrl: './stepper.component.html',
+	styleUrls: ['./stepper.component.scss'],
+	providers: [
+		{
+			provide: STEPPER_GLOBAL_OPTIONS,
+			useValue: { displayDefaultIndicatorType: false },
+		},
+	],
+	encapsulation: ViewEncapsulation.None,
 })
 export class StepperComponent implements OnInit {
-  @Input() steps: Array<string> = [];
+	@Input() steps: Array<string> = [];
 
-  @Input() color = 'primary';
+	@Input() color = 'primary';
 
-  constructor() {}
+	constructor() {}
 
-  ngOnInit(): void {}
+	ngOnInit(): void {}
 }

@@ -9,9 +9,9 @@ import { ResourceService } from './services/resource.service';
 import { UserController } from './controllers/user.controller';
 
 @Module({
-  imports: [DataLayerModule, EmailModule, forwardRef(() => AuthModule)],
-  controllers: [UserController, LinkController],
-  providers: [ResourceService, UserService, LinkService],
-  exports: [ResourceService, UserService, LinkService],
+	imports: [DataLayerModule, EmailModule, forwardRef(() => AuthModule)],
+	controllers: [UserController, LinkController],
+	providers: [ResourceService, UserService, LinkService],
+	exports: [ResourceService, UserService, LinkService],
 })
 export class AccountModule {}
