@@ -1,7 +1,7 @@
-import { Injectable, NotImplementedException } from '@nestjs/common'
-import { InjectRepository } from '@nestjs/typeorm'
-import { CreateLinkDto, LinkEntity, StatusType } from '@tempus/datalayer'
-import { Repository } from 'typeorm'
+import { Injectable, NotImplementedException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { CreateLinkDto, LinkEntity, StatusType } from '@tempus/datalayer';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class LinkService {
@@ -11,23 +11,23 @@ export class LinkService {
   ) {}
 
   createLink(link: Omit<CreateLinkDto, 'id'>): Promise<LinkEntity> {
-    throw new NotImplementedException()
+    throw new NotImplementedException();
   }
 
   associateLinkToUser(linkId: number, userId: number): Promise<LinkEntity> {
-    throw new NotImplementedException()
+    throw new NotImplementedException();
   }
 
   getLink(linkId: number): Promise<LinkEntity> {
-    throw new NotImplementedException()
+    throw new NotImplementedException();
   }
 
   editLinkStatus(linkId: number, newStatus: StatusType): Promise<LinkEntity> {
-    throw new NotImplementedException()
+    throw new NotImplementedException();
   }
 
-  //compares link expiry with current time
+  // compares link expiry with current time
   isLinkValid(linkId: number): boolean {
-    throw new NotImplementedException()
+    throw new NotImplementedException();
   }
 }
