@@ -1,7 +1,7 @@
-import { Component } from '@angular/core'
-import { HttpClient } from '@angular/common/http'
-import { Message } from '@tempus/api-interfaces'
-import { Column } from '@tempus/frontend-common'
+import { Component } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Message } from '@tempus/api-interfaces';
+import { Column } from '@tempus/frontend-common';
 
 @Component({
   selector: 'tempus-root',
@@ -22,20 +22,22 @@ export class AppComponent {
       name: 'Georges Chamoun',
       email: 'georges.chamoun@email.com',
     },
-  ]
+  ];
 
   tableColumns: Array<Column> = [
     {
       columnDef: 'name',
       header: 'Name',
-      cell: (element: Record<string, any>) => `${element['name']}`,
+      cell: (element: Record<string, any>) => `${element.name}`,
     },
     {
       columnDef: 'email',
       header: 'Email',
-      cell: (element: Record<string, any>) => `${element['email']}`,
+      cell: (element: Record<string, any>) => `${element.email}`,
     },
-  ]
-  hello$ = this.http.get<Message>('/api/hello')
+  ];
+
+  hello$ = this.http.get<Message>('/api/hello');
+
   constructor(private http: HttpClient) {}
 }
