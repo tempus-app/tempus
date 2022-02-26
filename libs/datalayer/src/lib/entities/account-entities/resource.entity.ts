@@ -1,13 +1,7 @@
 import { ChildEntity, Column, JoinTable, ManyToMany, OneToMany, OneToOne } from 'typeorm';
 import { Resource, RoleType } from '../..';
 import { LocationEntity } from '../common-entities';
-import {
-  CertificationEntity,
-  EducationEntity,
-  ExperienceEntity,
-  SkillEntity,
-  ViewEntity,
-} from '../profile-entities';
+import { CertificationEntity, EducationEntity, ExperienceEntity, SkillEntity, ViewEntity } from '../profile-entities';
 import { ProjectEntity } from '../project-entities';
 import { UserEntity } from './user.entity';
 

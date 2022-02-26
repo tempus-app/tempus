@@ -19,13 +19,7 @@ export class CreateUserDto {
   })
   roles: RoleType[];
 
-  constructor(
-    firstName: string,
-    lastName: string,
-    email: string,
-    password: string,
-    roles: RoleType[],
-  ) {
+  constructor(firstName: string, lastName: string, email: string, password: string, roles: RoleType[]) {
     this.firstName = firstName;
     this.lastName = lastName;
     this.email = email;

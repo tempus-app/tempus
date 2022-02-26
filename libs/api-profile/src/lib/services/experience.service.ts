@@ -13,10 +13,7 @@ export class ExperienceService {
   ) {}
 
   // create experience for specific resource
-  async createExperience(
-    resourceId: number,
-    experienceEntity: ExperienceEntity,
-  ): Promise<Experience> {
+  async createExperience(resourceId: number, experienceEntity: ExperienceEntity): Promise<Experience> {
     const resourceEntity = await this.resourceService.findResourceById(resourceId);
 
     experienceEntity.resource = resourceEntity;
@@ -50,21 +47,16 @@ export class ExperienceService {
     const updatedLocationData = updateExperienceData.location;
     delete updateExperienceData.location;
 
-    const existingExperienceEntity = await this.experienceRepository.findOne(
-      updateExperienceData.id,
-      {
-        relations: ['location', 'resource'],
-      },
-    );
+    const existingExperienceEntity = await this.experienceRepository.findOne(updateExperienceData.id, {
+      relations: ['location', 'resource'],
+    });
     if (!existingExperienceEntity) {
       throw new NotFoundException(`Could not find experience with id ${updateExperienceData.id}`);
     }
 
     // Safe guards to prevent data from being overwritten as null
-    for (const [key, val] of Object.entries(updatedLocationData))
-      if (!val) delete updatedLocationData[key];
-    for (const [key, val] of Object.entries(updateExperienceData))
-      if (!val) delete updateExperienceData[key];
+    for (const [key, val] of Object.entries(updatedLocationData)) if (!val) delete updatedLocationData[key];
+    for (const [key, val] of Object.entries(updateExperienceData)) if (!val) delete updateExperienceData[key];
 
     Object.assign(existingExperienceEntity.location, updatedLocationData);
     Object.assign(existingExperienceEntity, updateExperienceData);

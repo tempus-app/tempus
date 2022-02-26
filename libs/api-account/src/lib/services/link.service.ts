@@ -20,11 +20,7 @@ export class LinkService {
     // if custom expiry not defined, link expires in a week
     if (!link.expiry) {
       const currentDate = new Date();
-      expiryDate = new Date(
-        currentDate.getFullYear(),
-        currentDate.getMonth(),
-        currentDate.getDate() + 7,
-      );
+      expiryDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() + 7);
     }
     const fullLink = { ...link, token: uniqueToken, status: StatusType.ACTIVE, expiry: expiryDate };
     this.emailService.sendInvitationEmail(fullLink);
@@ -63,11 +59,7 @@ export class LinkService {
     return this.editLinkStatus(updatelinkDto.id, updatelinkDto.status);
   }
 
-  async editLinkStatus(
-    linkId: number,
-    newStatus: StatusType,
-    linkEntity?: LinkEntity,
-  ): Promise<Link> {
+  async editLinkStatus(linkId: number, newStatus: StatusType, linkEntity?: LinkEntity): Promise<Link> {
     let existingLinkEntity = linkEntity;
     if (!linkEntity) {
       existingLinkEntity = await this.linkRepository.findOne(linkId);

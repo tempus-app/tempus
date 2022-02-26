@@ -1,14 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ResourceService } from '@tempus/api-account';
-import {
-  CreateSkillDto,
-  Skill,
-  SkillEntity,
-  SkillType,
-  SkillTypeEntity,
-  UpdateSkillDto,
-} from '@tempus/datalayer';
+import { CreateSkillDto, Skill, SkillEntity, SkillType, SkillTypeEntity, UpdateSkillDto } from '@tempus/datalayer';
 import { Repository } from 'typeorm';
 
 @Injectable()

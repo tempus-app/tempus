@@ -57,10 +57,8 @@ export class EducationService {
     }
 
     // Safe guards to prevent data from being overwritten as null
-    for (const [key, val] of Object.entries(updatedLocationData))
-      if (!val) delete updatedLocationData[key];
-    for (const [key, val] of Object.entries(updateEducationData))
-      if (!val) delete updateEducationData[key];
+    for (const [key, val] of Object.entries(updatedLocationData)) if (!val) delete updatedLocationData[key];
+    for (const [key, val] of Object.entries(updateEducationData)) if (!val) delete updateEducationData[key];
 
     Object.assign(existingEducationEntity.location, updatedLocationData);
     Object.assign(existingEducationEntity, updateEducationData);

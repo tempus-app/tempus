@@ -4,13 +4,7 @@ import { ProjectEntity } from './project.entity';
 
 @Entity()
 export class ClientEntity implements Client {
-  constructor(
-    id?: number,
-    name?: string,
-    title?: string,
-    clientName?: string,
-    projects?: ProjectEntity[],
-  ) {
+  constructor(id?: number, name?: string, title?: string, clientName?: string, projects?: ProjectEntity[]) {
     this.id = id;
     this.name = name;
     this.title = title;

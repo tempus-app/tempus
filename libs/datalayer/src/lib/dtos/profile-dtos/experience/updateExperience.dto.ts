@@ -2,9 +2,7 @@ import { ApiProperty, OmitType, PartialType } from '@nestjs/swagger';
 import { CreateExperienceDto } from '.';
 import { UpdateLocationDto } from '../../common-dtos';
 
-export class UpdateExperienceDto extends PartialType(
-  OmitType(CreateExperienceDto, ['location'] as const),
-) {
+export class UpdateExperienceDto extends PartialType(OmitType(CreateExperienceDto, ['location'] as const)) {
   @ApiProperty()
   id: number;
 

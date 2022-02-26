@@ -8,14 +8,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { SignInComponent } from './sign-in/sign-in.component';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FrontendCommon,
-    MatCardModule,
-    MatGridListModule,
-    MatIconModule,
-    MatButtonModule,
-  ],
+  imports: [CommonModule, FrontendCommon, MatCardModule, MatGridListModule, MatIconModule, MatButtonModule],
   declarations: [SignInComponent],
   exports: [SignInComponent],
 })

@@ -18,13 +18,7 @@ export class CreateExperienceDto {
   @ApiProperty()
   location: CreateLocationDto;
 
-  constructor(
-    title: string,
-    description: string,
-    startDate: Date,
-    endDate: Date,
-    location: CreateLocationDto,
-  ) {
+  constructor(title: string, description: string, startDate: Date, endDate: Date, location: CreateLocationDto) {
     this.title = title;
     this.description = description;
     this.startDate = startDate;

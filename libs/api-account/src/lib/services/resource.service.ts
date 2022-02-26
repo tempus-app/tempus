@@ -42,15 +42,7 @@ export class ResourceService {
     const resourceEntity = (
       await this.resourceRepository.find({
         where: { email },
-        relations: [
-          'location',
-          'projects',
-          'views',
-          'experiences',
-          'educations',
-          'skills',
-          'certifications',
-        ],
+        relations: ['location', 'projects', 'views', 'experiences', 'educations', 'skills', 'certifications'],
       })
     )[0];
     if (!resourceEntity) {

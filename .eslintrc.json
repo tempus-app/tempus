@@ -13,9 +13,12 @@
         "eslint:recommended",
         "plugin:@typescript-eslint/recommended",
         "airbnb-base",
-        "airbnb-typescript/base"
+        "airbnb-typescript/base",
+        "prettier"
       ],
       "rules": {
+        "arrow-body-style": "off",
+        "prefer-arrow-callback": "off",
         "import/prefer-default-export": "off",
         "import/no-cycle": "off", //TODO: look into why this is happening
         "prettier/prettier": "error",
