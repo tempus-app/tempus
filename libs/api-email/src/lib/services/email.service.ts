@@ -14,6 +14,7 @@ export class EmailService {
       context: {
         code: link.token,
         name: `${link.firstName} ${link.lastName}`,
+        expiry: link.expiry,
       },
     });
   }
