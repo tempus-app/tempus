@@ -1,4 +1,9 @@
-import { ConsoleLogger, Injectable, NotFoundException, NotImplementedException } from '@nestjs/common';
+import {
+  ConsoleLogger,
+  Injectable,
+  NotFoundException,
+  NotImplementedException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateUserDto, RoleType, User, UserEntity } from '@tempus/datalayer';
 import { Repository } from 'typeorm';

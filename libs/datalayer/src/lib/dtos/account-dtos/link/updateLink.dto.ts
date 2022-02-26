@@ -1,16 +1,16 @@
-import { ApiProperty } from '@nestjs/swagger'
-import { StatusType } from '../../..'
-import { UpdateUserDto } from '../user/updateUser.dto'
+import { ApiProperty } from '@nestjs/swagger';
+import { StatusType } from '../../..';
+import { UpdateUserDto } from '../user/updateUser.dto';
 
 export class UpdatelinkDto {
   @ApiProperty()
-  id: number
+  id: number;
 
   @ApiProperty()
-  status: StatusType
+  status: StatusType;
 
   constructor(id: number, status: StatusType) {
-    this.id = id
-    this.status = status
+    this.id = id;
+    this.status = status;
   }
 }

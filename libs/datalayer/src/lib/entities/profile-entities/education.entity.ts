@@ -38,7 +38,9 @@ export class EducationEntity implements Education {
   @Column()
   endDate: Date;
 
-  @OneToOne(() => LocationEntity, (location) => location.education, { cascade: ['insert', 'update'] })
+  @OneToOne(() => LocationEntity, (location) => location.education, {
+    cascade: ['insert', 'update'],
+  })
   location: LocationEntity;
 
   @ManyToOne(() => ResourceEntity, (resource) => resource.educations, {

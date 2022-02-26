@@ -14,10 +14,18 @@ export class CreateUserDto {
   @ApiProperty()
   password: string;
 
-  @ApiProperty({ enum: ['ASSIGNED_RESOURCE', 'AVAILABLE_RESOURCE', 'BUSINESS_OWNER', 'SUPERVISOR'] })
+  @ApiProperty({
+    enum: ['ASSIGNED_RESOURCE', 'AVAILABLE_RESOURCE', 'BUSINESS_OWNER', 'SUPERVISOR'],
+  })
   roles: RoleType[];
 
-  constructor(firstName: string, lastName: string, email: string, password: string, roles: RoleType[]) {
+  constructor(
+    firstName: string,
+    lastName: string,
+    email: string,
+    password: string,
+    roles: RoleType[],
+  ) {
     this.firstName = firstName;
     this.lastName = lastName;
     this.email = email;

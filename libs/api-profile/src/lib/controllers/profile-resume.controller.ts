@@ -1,4 +1,14 @@
-import { Body, Controller, Delete, Get, NotImplementedException, Param, Patch, Post, Req } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  NotImplementedException,
+  Param,
+  Patch,
+  Post,
+  Req,
+} from '@nestjs/common';
 import {
   Certification,
   CreateCertificationDto,
@@ -53,7 +63,10 @@ export class ProfileResumeController {
   }
 
   @Post('/skill/:userId')
-  async createSkill(@Param('userId') userId: number, @Body() createSkillData: CreateSkillDto): Promise<Skill> {
+  async createSkill(
+    @Param('userId') userId: number,
+    @Body() createSkillData: CreateSkillDto,
+  ): Promise<Skill> {
     let skillEntity = CreateSkillDto.toEntity(createSkillData);
     skillEntity = await this.skillService.createSkill(userId, skillEntity);
     return skillEntity;
@@ -65,7 +78,10 @@ export class ProfileResumeController {
     @Body() createCertificationData: CreateCertificationDto,
   ): Promise<Certification> {
     let certificationEntity = CreateCertificationDto.toEntity(createCertificationData);
-    certificationEntity = await this.certificationService.createCertification(userId, certificationEntity);
+    certificationEntity = await this.certificationService.createCertification(
+      userId,
+      certificationEntity,
+    );
     return certificationEntity;
   }
 
@@ -78,7 +94,9 @@ export class ProfileResumeController {
 
   @Patch('/experience')
   async editExperience(@Body() updateExperienceData: UpdateExperienceDto): Promise<Experience> {
-    const updatedExperienceEntity = await this.experienceService.editExperience(updateExperienceData);
+    const updatedExperienceEntity = await this.experienceService.editExperience(
+      updateExperienceData,
+    );
     return updatedExperienceEntity;
   }
 
@@ -89,8 +107,12 @@ export class ProfileResumeController {
   }
 
   @Patch('/cerification')
-  async editCertification(@Body() updatedCertificationData: UpdateCertificationDto): Promise<Certification> {
-    const updatedCertificationEntity = await this.certificationService.editCertification(updatedCertificationData);
+  async editCertification(
+    @Body() updatedCertificationData: UpdateCertificationDto,
+  ): Promise<Certification> {
+    const updatedCertificationEntity = await this.certificationService.editCertification(
+      updatedCertificationData,
+    );
     return updatedCertificationEntity;
   }
 
@@ -114,8 +136,12 @@ export class ProfileResumeController {
   }
 
   @Get('/cerification/:certificationId')
-  async getCertification(@Param('certificationId') certificationId: number): Promise<Certification> {
-    const certificationEntity = await this.certificationService.findCertificationById(certificationId);
+  async getCertification(
+    @Param('certificationId') certificationId: number,
+  ): Promise<Certification> {
+    const certificationEntity = await this.certificationService.findCertificationById(
+      certificationId,
+    );
     return certificationEntity;
   }
 
@@ -140,7 +166,9 @@ export class ProfileResumeController {
 
   @Get('/certification/all/:userId')
   async getAllCertificationsByUser(@Param('userId') userId: number): Promise<Certification[]> {
-    const certificationEntities = await this.certificationService.findCertificationByResource(userId);
+    const certificationEntities = await this.certificationService.findCertificationByResource(
+      userId,
+    );
     return certificationEntities;
   }
 
@@ -151,13 +179,22 @@ export class ProfileResumeController {
   }
 
   @Get('/:userId')
-  async getAllResumeComponentsByUser(@Param('userId') userId: number): Promise<ResumeComponentsDto> {
+  async getAllResumeComponentsByUser(
+    @Param('userId') userId: number,
+  ): Promise<ResumeComponentsDto> {
     const skillEntities = await this.skillService.findSkillsByResource(userId);
-    const certificationEntities = await this.certificationService.findCertificationByResource(userId);
+    const certificationEntities = await this.certificationService.findCertificationByResource(
+      userId,
+    );
     const experienceEntities = await this.experienceService.findExperienceByResource(userId);
     const educationEntities = await this.educationService.findEducationByResource(userId);
 
-    return new ResumeComponentsDto(educationEntities, experienceEntities, skillEntities, certificationEntities);
+    return new ResumeComponentsDto(
+      educationEntities,
+      experienceEntities,
+      skillEntities,
+      certificationEntities,
+    );
   }
 
   // DELETES only to be used on the main table page (no delete capability on views)

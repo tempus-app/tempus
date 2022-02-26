@@ -12,7 +12,13 @@ import { ViewsService } from './services/view.service';
 @Module({
   imports: [DataLayerModule, AccountModule],
   controllers: [ProfileResumeController, ProfileViewController],
-  providers: [EducationService, ExperienceService, SkillsService, ViewsService, CertificationService],
+  providers: [
+    EducationService,
+    ExperienceService,
+    SkillsService,
+    ViewsService,
+    CertificationService,
+  ],
   exports: [],
 })
 export class ProfileModule {}

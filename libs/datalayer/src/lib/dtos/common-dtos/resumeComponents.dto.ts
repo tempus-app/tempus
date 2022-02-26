@@ -14,7 +14,12 @@ export class ResumeComponentsDto {
   @ApiProperty()
   certifications: Certification[];
 
-  constructor(educations: Education[], experiences: Experience[], skills: Skill[], certifications: Certification[]) {
+  constructor(
+    educations: Education[],
+    experiences: Experience[],
+    skills: Skill[],
+    certifications: Certification[],
+  ) {
     this.educations = educations;
     this.experiences = experiences;
     this.certifications = certifications;

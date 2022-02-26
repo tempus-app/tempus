@@ -18,7 +18,13 @@ export class CreateEducationDto {
   @ApiProperty()
   location: CreateLocationDto;
 
-  constructor(degree: string, institution: string, startDate: Date, endDate: Date, location: CreateLocationDto) {
+  constructor(
+    degree: string,
+    institution: string,
+    startDate: Date,
+    endDate: Date,
+    location: CreateLocationDto,
+  ) {
     this.degree = degree;
     this.institution = institution;
     this.startDate = startDate;

@@ -1,7 +1,12 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ResourceService } from '@tempus/api-account';
-import { Certification, CertificationEntity, CreateCertificationDto, UpdateCertificationDto } from '@tempus/datalayer';
+import {
+  Certification,
+  CertificationEntity,
+  CreateCertificationDto,
+  UpdateCertificationDto,
+} from '@tempus/datalayer';
 import { Repository } from 'typeorm';
 
 @Injectable()
@@ -13,7 +18,10 @@ export class CertificationService {
   ) {}
 
   // create ceritifcation for a specific resource
-  async createCertification(resourceId: number, certification: CertificationEntity): Promise<Certification> {
+  async createCertification(
+    resourceId: number,
+    certification: CertificationEntity,
+  ): Promise<Certification> {
     const resourceEntity = await this.resourceService.findResourceById(resourceId);
     certification.resource = resourceEntity;
     return this.certificationRepository.save(certification);
@@ -40,16 +48,24 @@ export class CertificationService {
   }
 
   // edit certification
-  async editCertification(updatedCertificationData: UpdateCertificationDto): Promise<Certification> {
-    const existingCertificationEntity = await this.certificationRepository.findOne(updatedCertificationData.id, {
-      relations: ['resource'],
-    });
+  async editCertification(
+    updatedCertificationData: UpdateCertificationDto,
+  ): Promise<Certification> {
+    const existingCertificationEntity = await this.certificationRepository.findOne(
+      updatedCertificationData.id,
+      {
+        relations: ['resource'],
+      },
+    );
     if (!existingCertificationEntity) {
-      throw new NotFoundException(`Could not find certification with id ${existingCertificationEntity.id}`);
+      throw new NotFoundException(
+        `Could not find certification with id ${existingCertificationEntity.id}`,
+      );
     }
 
     // Safe guards to prevent data from being overwritten as null
-    for (const [key, val] of Object.entries(updatedCertificationData)) if (!val) delete updatedCertificationData[key];
+    for (const [key, val] of Object.entries(updatedCertificationData))
+      if (!val) delete updatedCertificationData[key];
     Object.assign(existingCertificationEntity, updatedCertificationData);
 
     return this.certificationRepository.save(existingCertificationEntity);

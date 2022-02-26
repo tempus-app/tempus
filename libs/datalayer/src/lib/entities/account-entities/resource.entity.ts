@@ -1,7 +1,13 @@
 import { ChildEntity, Column, JoinTable, ManyToMany, OneToMany, OneToOne } from 'typeorm';
 import { Resource, RoleType } from '../..';
 import { LocationEntity } from '../common-entities';
-import { CertificationEntity, EducationEntity, ExperienceEntity, SkillEntity, ViewEntity } from '../profile-entities';
+import {
+  CertificationEntity,
+  EducationEntity,
+  ExperienceEntity,
+  SkillEntity,
+  ViewEntity,
+} from '../profile-entities';
 import { ProjectEntity } from '../project-entities';
 import { UserEntity } from './user.entity';
 
@@ -52,15 +58,21 @@ export class ResourceEntity extends UserEntity implements Resource {
   @OneToMany(() => ViewEntity, (views) => views.resource, { cascade: ['insert', 'update'] })
   views: ViewEntity[];
 
-  @OneToMany(() => ExperienceEntity, (experience) => experience.resource, { cascade: ['insert', 'update'] })
+  @OneToMany(() => ExperienceEntity, (experience) => experience.resource, {
+    cascade: ['insert', 'update'],
+  })
   experiences: ExperienceEntity[];
 
-  @OneToMany(() => EducationEntity, (education) => education.resource, { cascade: ['insert', 'update'] })
+  @OneToMany(() => EducationEntity, (education) => education.resource, {
+    cascade: ['insert', 'update'],
+  })
   educations: EducationEntity[];
 
   @OneToMany(() => SkillEntity, (skill) => skill.resource, { cascade: ['insert', 'update'] })
   skills: SkillEntity[];
 
-  @OneToMany(() => CertificationEntity, (certification) => certification.resource, { cascade: ['insert', 'update'] })
+  @OneToMany(() => CertificationEntity, (certification) => certification.resource, {
+    cascade: ['insert', 'update'],
+  })
   certifications: CertificationEntity[];
 }

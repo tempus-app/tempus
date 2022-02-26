@@ -12,7 +12,7 @@ import { HttpErrorFilter } from '@tempus/core';
 import { AppModule } from './app/app.module';
 
 function setupSwagger(app: INestApplication) {
-  app.setGlobalPrefix('api')
+  app.setGlobalPrefix('api');
   const swaggerConfig = new DocumentBuilder()
     .setTitle('Onboarding')
     .setDescription('The Tempus onboarding API')

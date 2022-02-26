@@ -1,6 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { LinkEntity } from '../../..';
-import { StatusType } from '../../../enums';
 
 export class CreateLinkDto {
   @ApiProperty()
