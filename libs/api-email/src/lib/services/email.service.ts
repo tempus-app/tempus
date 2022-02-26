@@ -1,6 +1,6 @@
-import { Injectable } from '@nestjs/common'
-import { MailerService } from '@nestjs-modules/mailer'
-import { LinkEntity } from '@tempus/datalayer'
+import { Injectable } from '@nestjs/common';
+import { MailerService } from '@nestjs-modules/mailer';
+import { LinkEntity } from '@tempus/datalayer';
 
 @Injectable()
 export class EmailService {
@@ -15,6 +15,6 @@ export class EmailService {
         code: link.token,
         name: `${link.firstName} ${link.lastName}`,
       },
-    })
+    });
   }
 }
