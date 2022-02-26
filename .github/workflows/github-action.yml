@@ -27,5 +27,4 @@ jobs:
           cache: 'npm'
       - run: npm ci
       - run: npm run build:onboarding-api --if-present
-      - run: npm run lint:check
       - run: npm test
