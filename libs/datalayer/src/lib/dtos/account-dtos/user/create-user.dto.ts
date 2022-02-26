@@ -101,7 +101,7 @@ export class CreateUserDto {
 
   public static toEntity(dto: CreateUserDto): UserEntity {
     if (dto == null) return new UserEntity()
-    if (dto.roles.includes(RoleType.BUSINESS_OWNER)) {
+    if (!dto.roles.includes(RoleType.BUSINESS_OWNER)) {
       return new ResourceEntity(
         null,
         dto.phoneNumber,

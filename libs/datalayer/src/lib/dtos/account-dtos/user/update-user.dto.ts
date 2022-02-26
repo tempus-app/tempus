@@ -55,7 +55,7 @@ export class UpdateUserDto {
 
   public static toEntity(dto: UpdateUserDto): UserEntity {
     if (dto == null) return new UserEntity()
-    if (dto) {
+    if (!dto.roles.includes(RoleType.BUSINESS_OWNER)) {
       return new ResourceEntity(
         dto.id,
         dto.phoneNumber,
