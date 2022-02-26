@@ -21,7 +21,7 @@
 				"prefer-arrow-callback": "off",
 				"import/prefer-default-export": "off",
 				"import/no-cycle": "off", //TODO: look into why this is happening
-				"prettier/prettier": ["error", { "useTabs": false }],
+				"prettier/prettier": ["error", { "useTabs": false, "arrowParens": "avoid" }],
 				"object-curly-newline": "off", //prettier conflict
 				"class-methods-use-this": "off", //TODO: remove me when method signatures are completed
 				"@typescript-eslint/indent": "off", //handled by prettier
