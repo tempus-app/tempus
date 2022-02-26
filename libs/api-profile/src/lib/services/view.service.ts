@@ -1,7 +1,7 @@
-import { Injectable, NotImplementedException } from '@nestjs/common'
-import { InjectRepository } from '@nestjs/typeorm'
-import { CreateViewDto, ViewEntity } from '@tempus/datalayer'
-import { Repository } from 'typeorm'
+import { Injectable, NotImplementedException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { CreateViewDto, ViewEntity } from '@tempus/datalayer';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class ViewsService {
@@ -12,26 +12,26 @@ export class ViewsService {
 
   // create view for resource
   createView(resourceId: number): Promise<ViewEntity> {
-    throw new NotImplementedException()
+    throw new NotImplementedException();
   }
 
   // edit view
   editView(view: CreateViewDto): Promise<ViewEntity> {
-    throw new NotImplementedException()
+    throw new NotImplementedException();
 
     // TODO: revision entity associated with view edits for approval
   }
 
   getViewsByResource(resourceId: number): Promise<ViewEntity> {
-    throw new NotImplementedException()
+    throw new NotImplementedException();
   }
 
   getView(viewId: number): Promise<ViewEntity> {
-    throw new NotImplementedException()
+    throw new NotImplementedException();
   }
 
   // delete view
   deleteView(viewId: number) {
-    throw new NotImplementedException()
+    throw new NotImplementedException();
   }
 }
