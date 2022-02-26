@@ -13,7 +13,9 @@
 		"test": "nx test",
 		"prepare": "husky install",
 		"format:all": "prettier --config .prettierrc ./**/*.{js,ts,html,css,scss,json} --write",
-		"lint": "npx lint-staged"
+		"lint": "npx lint-staged --relative",
+		"lint:check": "npx nx run-many --all --target=lint",
+		"lint:fix": "npx nx run-many --all --target=lint --fix"
 	},
 	"lint-staged": {
 		"*.{ts,js,json,scss,css,html}": [
