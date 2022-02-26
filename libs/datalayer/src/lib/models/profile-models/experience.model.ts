@@ -4,6 +4,7 @@ import { Location } from '../common-models'
 export interface Experience {
   id: number
   title: string
+  company: string
   summary: string
   description: string[]
   startDate: Date

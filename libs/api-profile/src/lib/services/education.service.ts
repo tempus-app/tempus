@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm'
 import { EducationEntity, LocationEntity, UpdateEducationDto, Education } from '@tempus/datalayer'
 import { ResourceService } from '@tempus/api-account'
 import { Repository } from 'typeorm'
+import { keyframes } from '@angular/animations'
 
 @Injectable()
 export class EducationService {
@@ -16,7 +17,7 @@ export class EducationService {
 
   // create education for a specific resource
   async createEducation(resourceId: number, educationEntity: EducationEntity): Promise<Education> {
-    const resourceEntity = await this.resourceService.findResourceById(resourceId)
+    const resourceEntity = await this.resourceService.getResourceInfo(resourceId)
 
     educationEntity.resource = resourceEntity
     educationEntity = await this.educationRepository.save(educationEntity)
@@ -26,7 +27,7 @@ export class EducationService {
 
   // return all educations by resource
   async findEducationByResource(resourceId: number): Promise<Education[]> {
-    let educationEntities = await this.educationRepository.find({
+    const educationEntities = await this.educationRepository.find({
       where: { resource: { id: resourceId } },
       relations: ['resource', 'location'],
     })
@@ -35,7 +36,7 @@ export class EducationService {
 
   // return education by id
   async findEducationById(educationId: number): Promise<Education> {
-    let educationEntity = await this.educationRepository.findOne(educationId, { relations: ['resource', 'location'] })
+    const educationEntity = await this.educationRepository.findOne(educationId, { relations: ['resource', 'location'] })
     if (!educationEntity) {
       throw new NotFoundException(`Could not find education with id ${educationId}`)
     }
@@ -44,10 +45,10 @@ export class EducationService {
 
   // edit education
   async editEducation(updateEducationData: UpdateEducationDto): Promise<Education> {
-    let updatedLocationData = updateEducationData.location
+    const updatedLocationData = updateEducationData.location
     delete updateEducationData.location
 
-    let existingEducationEntity = await this.educationRepository.findOne(updateEducationData.id, {
+    const existingEducationEntity = await this.educationRepository.findOne(updateEducationData.id, {
       relations: ['location', 'resource'],
     })
     if (!existingEducationEntity) {
@@ -55,8 +56,8 @@ export class EducationService {
     }
 
     // Safe guards to prevent data from being overwritten as null
-    for (let [key, val] of Object.entries(updatedLocationData)) if (!val) delete updatedLocationData[key]
-    for (let [key, val] of Object.entries(updateEducationData)) if (!val) delete updateEducationData[key]
+    for (const [key, val] of Object.entries(updatedLocationData)) if (!val) delete updatedLocationData[key]
+    for (const [key, val] of Object.entries(updateEducationData)) if (!val) delete updateEducationData[key]
 
     Object.assign(existingEducationEntity.location, updatedLocationData)
     Object.assign(existingEducationEntity, updateEducationData)
@@ -66,7 +67,7 @@ export class EducationService {
 
   // delete education
   async deleteEducation(educationId: number) {
-    let educationEntity = await this.educationRepository.findOne(educationId)
+    const educationEntity = await this.educationRepository.findOne(educationId)
     if (!educationEntity) {
       throw new NotFoundException(`Could not find education with id ${educationId}`)
     }

@@ -60,6 +60,7 @@ export const SampleView: View = {
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
       description: null,
       startDate: new Date('2010/10/09'),
+      company: 'string',
       endDate: new Date('2022/01/04'),
       location: {
         id: 1,
@@ -72,6 +73,7 @@ export const SampleView: View = {
     {
       id: 2,
       title: 'SAP Solutions Architect',
+      company: 'string',
       summary:
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
       description: [
@@ -91,6 +93,7 @@ export const SampleView: View = {
     {
       id: 3,
       title: 'Principal Software Engineer',
+      company: 'string',
       summary:
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
       description: [

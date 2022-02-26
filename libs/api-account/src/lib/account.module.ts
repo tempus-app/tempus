@@ -1,5 +1,5 @@
 import { EmailModule } from '@tempus/api-email'
-import { DataLayerModule } from 'libs/datalayer/src'
+import { DataLayerModule } from '@tempus/datalayer'
 import { LinkController } from './controllers/link.controller'
 import { LinkService } from './services/link.service'
 import { forwardRef, Module } from '@nestjs/common'

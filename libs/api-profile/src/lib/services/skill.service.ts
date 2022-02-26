@@ -25,7 +25,7 @@ export class SkillsService {
     }
     skillEntity.skill = skillTypeEntity
 
-    let resourceEntity = await this.resourceService.findResourceById(resourceId)
+    const resourceEntity = await this.resourceService.getResource(resourceId)
     skillEntity.resource = resourceEntity
 
     skillEntity = await this.skillsRepository.save(skillEntity)
@@ -35,7 +35,7 @@ export class SkillsService {
 
   // return skills by resource
   async findSkillsByResource(resourceId: number): Promise<Skill[]> {
-    let skillEntities = await this.skillsRepository.find({
+    const skillEntities = await this.skillsRepository.find({
       where: { resource: { id: resourceId } },
       relations: ['resource', 'skill'],
     })
@@ -43,13 +43,13 @@ export class SkillsService {
   }
 
   async findAllSkillTypes(): Promise<SkillType[]> {
-    let skillTypeEntities = await this.skillTypeRepository.find()
+    const skillTypeEntities = await this.skillTypeRepository.find()
     return skillTypeEntities
   }
 
   // return skill by id
   async findSkillById(skillId: number): Promise<Skill> {
-    let skillEntity = await this.skillsRepository.findOne(skillId, { relations: ['resource', 'skill'] })
+    const skillEntity = await this.skillsRepository.findOne(skillId, { relations: ['resource', 'skill'] })
     if (!skillEntity) {
       throw new NotFoundException(`Could not find skill with id ${skillId}`)
     }
@@ -58,7 +58,7 @@ export class SkillsService {
 
   // edit skill -- NEED REWORKING
   async editSkill(updatedSkillData: UpdateSkillDto): Promise<Skill> {
-    let existingSkillEntity = await this.skillsRepository.findOne(updatedSkillData.id, {
+    const existingSkillEntity = await this.skillsRepository.findOne(updatedSkillData.id, {
       relations: ['resource', 'skill'],
     })
     if (!existingSkillEntity) {
@@ -71,7 +71,7 @@ export class SkillsService {
 
   // delete skill
   async deleteSkill(skillId: number) {
-    let skillEntity = await this.skillsRepository.findOne(skillId)
+    const skillEntity = await this.skillsRepository.findOne(skillId)
     if (!skillEntity) {
       throw new NotFoundException(`Could not find skill with id ${skillId}`)
     }
