@@ -1,7 +1,7 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany, ManyToOne } from 'typeorm'
-import { Project } from '../..'
-import { ClientEntity } from './client.entity'
-import { TaskEntity } from './task.entity'
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany, ManyToOne } from 'typeorm';
+import { Project } from '../..';
+import { ClientEntity } from './client.entity';
+import { TaskEntity } from './task.entity';
 
 @Entity()
 export class ProjectEntity implements Project {
@@ -14,32 +14,33 @@ export class ProjectEntity implements Project {
     client?: ClientEntity,
     tasks?: TaskEntity[],
   ) {
-    this.id = id
-    this.name = name
-    this.startDate = startDate
-    this.endDate = endDate
-    this.hoursPerDay = hoursPerDay
-    this.client = client
-    this.tasks = tasks
+    this.id = id;
+    this.name = name;
+    this.startDate = startDate;
+    this.endDate = endDate;
+    this.hoursPerDay = hoursPerDay;
+    this.client = client;
+    this.tasks = tasks;
   }
+
   @PrimaryGeneratedColumn()
-  id: number
+  id: number;
 
   @Column()
-  name: string
+  name: string;
 
   @Column()
-  startDate: Date
+  startDate: Date;
 
   @Column()
-  endDate: Date
+  endDate: Date;
 
   @Column()
-  hoursPerDay: number
+  hoursPerDay: number;
 
   @ManyToOne(() => ClientEntity, (client) => client.projects)
-  client: ClientEntity
+  client: ClientEntity;
 
   @OneToMany(() => TaskEntity, (tasks) => tasks.project)
-  tasks: TaskEntity[]
+  tasks: TaskEntity[];
 }

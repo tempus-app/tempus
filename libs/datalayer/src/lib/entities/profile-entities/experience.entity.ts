@@ -1,7 +1,7 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToOne } from 'typeorm'
-import { Experience } from '../../models'
-import { ResourceEntity } from '../account-entities'
-import { LocationEntity } from '../common-entities'
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToOne } from 'typeorm';
+import { Experience } from '../../models';
+import { ResourceEntity } from '../account-entities';
+import { LocationEntity } from '../common-entities';
 
 @Entity()
 export class ExperienceEntity implements Experience {
@@ -14,35 +14,35 @@ export class ExperienceEntity implements Experience {
     location?: LocationEntity,
     resource?: ResourceEntity,
   ) {
-    this.id = id
-    this.title = title
-    this.description = description
-    this.startDate = startDate
-    this.endDate = endDate
-    this.location = location
-    this.resource = resource
+    this.id = id;
+    this.title = title;
+    this.description = description;
+    this.startDate = startDate;
+    this.endDate = endDate;
+    this.location = location;
+    this.resource = resource;
   }
 
   @PrimaryGeneratedColumn()
-  id: number
+  id: number;
 
   @Column()
-  title: string
+  title: string;
 
   @Column()
-  description: string
+  description: string;
 
   @Column()
-  startDate: Date
+  startDate: Date;
 
   @Column()
-  endDate: Date
+  endDate: Date;
 
   @OneToOne(() => LocationEntity, (location) => location.experience, { cascade: ['insert', 'update'] })
-  location: LocationEntity
+  location: LocationEntity;
 
   @ManyToOne(() => ResourceEntity, (resource) => resource.experiences, {
     onDelete: 'CASCADE',
   })
-  resource: ResourceEntity
+  resource: ResourceEntity;
 }

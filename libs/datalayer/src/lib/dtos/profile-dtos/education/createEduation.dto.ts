@@ -1,33 +1,33 @@
-import { ApiProperty } from '@nestjs/swagger'
-import { EducationEntity } from '../../..'
-import { CreateLocationDto } from '../../common-dtos'
+import { ApiProperty } from '@nestjs/swagger';
+import { EducationEntity } from '../../..';
+import { CreateLocationDto } from '../../common-dtos';
 
 export class CreateEducationDto {
   @ApiProperty()
-  degree: string
+  degree: string;
 
   @ApiProperty()
-  institution: string
+  institution: string;
 
   @ApiProperty()
-  startDate: Date
+  startDate: Date;
 
   @ApiProperty()
-  endDate: Date
+  endDate: Date;
 
   @ApiProperty()
-  location: CreateLocationDto
+  location: CreateLocationDto;
 
   constructor(degree: string, institution: string, startDate: Date, endDate: Date, location: CreateLocationDto) {
-    this.degree = degree
-    this.institution = institution
-    this.startDate = startDate
-    this.endDate = endDate
-    this.location = location
+    this.degree = degree;
+    this.institution = institution;
+    this.startDate = startDate;
+    this.endDate = endDate;
+    this.location = location;
   }
 
   public static toEntity(dto: CreateEducationDto): EducationEntity {
-    if (dto == null) return new EducationEntity()
+    if (dto == null) return new EducationEntity();
     return new EducationEntity(
       null,
       dto.degree,
@@ -35,6 +35,6 @@ export class CreateEducationDto {
       dto.startDate,
       dto.endDate,
       CreateLocationDto.toEntity(dto.location),
-    )
+    );
   }
 }

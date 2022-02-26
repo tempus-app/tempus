@@ -1,8 +1,8 @@
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, ManyToOne, OneToOne } from 'typeorm'
-import { Revision } from '../..'
-import { ResumeSectionType } from '../../enums'
-import { UserEntity } from '../account-entities'
-import { ViewEntity } from './view.entity'
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, ManyToOne, OneToOne } from 'typeorm';
+import { Revision } from '../..';
+import { ResumeSectionType } from '../../enums';
+import { UserEntity } from '../account-entities';
+import { ViewEntity } from './view.entity';
 
 @Entity()
 export class RevisionEntity implements Revision {
@@ -15,22 +15,23 @@ export class RevisionEntity implements Revision {
     approved?: boolean,
     view?: ViewEntity,
   ) {
-    this.id = id
-    this.createdAt = createdAt
-    this.approvedAt = approvedAt
-    this.sectionsChanged = sectionsChanged
-    this.approver = approver
-    this.approved = approved
-    this.view = view
+    this.id = id;
+    this.createdAt = createdAt;
+    this.approvedAt = approvedAt;
+    this.sectionsChanged = sectionsChanged;
+    this.approver = approver;
+    this.approved = approved;
+    this.view = view;
   }
+
   @PrimaryGeneratedColumn()
-  id: number
+  id: number;
 
   @CreateDateColumn()
-  createdAt: Date
+  createdAt: Date;
 
   @Column()
-  approvedAt: Date
+  approvedAt: Date;
 
   @Column({
     type: 'enum',
@@ -38,14 +39,14 @@ export class RevisionEntity implements Revision {
     default: [ResumeSectionType.PERSONAL],
     array: true,
   })
-  sectionsChanged: ResumeSectionType[]
+  sectionsChanged: ResumeSectionType[];
 
   @OneToOne(() => UserEntity)
-  approver: UserEntity
+  approver: UserEntity;
 
   @Column()
-  approved: boolean
+  approved: boolean;
 
   @ManyToOne(() => ViewEntity, (view) => view.status)
-  view: ViewEntity
+  view: ViewEntity;
 }

@@ -1,11 +1,12 @@
-import { ApiProperty, PartialType } from '@nestjs/swagger'
-import { CreateSkillDto } from '.'
+import { ApiProperty, PartialType } from '@nestjs/swagger';
+import { CreateSkillDto } from '.';
 
 export class UpdateSkillDto extends PartialType(CreateSkillDto) {
   @ApiProperty()
-  id: number
+  id: number;
+
   constructor(id: number) {
-    super()
-    this.id = id
+    super();
+    this.id = id;
   }
 }

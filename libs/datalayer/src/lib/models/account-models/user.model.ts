@@ -1,16 +1,16 @@
-import { RoleType } from '../../enums'
+import { RoleType } from '../../enums';
 
 export interface User {
-  id: number
+  id: number;
 
-  firstName: string
+  firstName: string;
 
-  lastName: string
+  lastName: string;
 
-  email: string
+  email: string;
 
-  password: string
+  password: string;
 
   // TODO: Authroization
-  roles: RoleType[]
+  roles: RoleType[];
 }

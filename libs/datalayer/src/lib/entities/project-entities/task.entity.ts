@@ -1,20 +1,21 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm'
-import { Task } from '../..'
-import { ProjectEntity } from './project.entity'
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+import { Task } from '../..';
+import { ProjectEntity } from './project.entity';
 
 @Entity()
 export class TaskEntity implements Task {
   constructor(id?: number, taskName?: string, project?: ProjectEntity) {
-    this.id = id
-    this.taskName = taskName
-    this.project = project
+    this.id = id;
+    this.taskName = taskName;
+    this.project = project;
   }
+
   @PrimaryGeneratedColumn()
-  id: number
+  id: number;
 
   @Column()
-  taskName: string
+  taskName: string;
 
   @ManyToOne(() => ProjectEntity, (project) => project.tasks)
-  project: ProjectEntity
+  project: ProjectEntity;
 }

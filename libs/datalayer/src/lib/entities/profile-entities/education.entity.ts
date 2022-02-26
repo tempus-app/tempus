@@ -1,7 +1,7 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToOne, JoinColumn } from 'typeorm'
-import { Education } from '../../models'
-import { ResourceEntity } from '../account-entities'
-import { LocationEntity } from '../common-entities'
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToOne, JoinColumn } from 'typeorm';
+import { Education } from '../../models';
+import { ResourceEntity } from '../account-entities';
+import { LocationEntity } from '../common-entities';
 
 @Entity()
 export class EducationEntity implements Education {
@@ -14,35 +14,35 @@ export class EducationEntity implements Education {
     location?: LocationEntity,
     resource?: ResourceEntity,
   ) {
-    this.id = id
-    this.degree = degree
-    this.institution = institution
-    this.startDate = startDate
-    this.endDate = endDate
-    this.location = location
-    this.resource = resource
+    this.id = id;
+    this.degree = degree;
+    this.institution = institution;
+    this.startDate = startDate;
+    this.endDate = endDate;
+    this.location = location;
+    this.resource = resource;
   }
 
   @PrimaryGeneratedColumn()
-  id: number
+  id: number;
 
   @Column()
-  degree: string
+  degree: string;
 
   @Column()
-  institution: string
+  institution: string;
 
   @Column()
-  startDate: Date
+  startDate: Date;
 
   @Column()
-  endDate: Date
+  endDate: Date;
 
   @OneToOne(() => LocationEntity, (location) => location.education, { cascade: ['insert', 'update'] })
-  location: LocationEntity
+  location: LocationEntity;
 
   @ManyToOne(() => ResourceEntity, (resource) => resource.educations, {
     onDelete: 'CASCADE',
   })
-  resource: ResourceEntity
+  resource: ResourceEntity;
 }

@@ -1,1 +1,1 @@
-export * from './createProject.dto'
+export * from './createProject.dto';

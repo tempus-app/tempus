@@ -1,7 +1,7 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm'
-import { Link } from '../..'
-import { StatusType } from '../../enums'
-import { UserEntity } from './user.entity'
+import { Column, CreateDateColumn, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Link } from '../..';
+import { StatusType } from '../../enums';
+import { UserEntity } from './user.entity';
 
 @Entity()
 export class LinkEntity implements Link {
@@ -16,45 +16,46 @@ export class LinkEntity implements Link {
     status?: StatusType,
     user?: UserEntity,
   ) {
-    this.id = id
-    this.createdAt = createdAt
-    this.firstName = firstName
-    this.lastName = lastName
-    this.expiry = expiry
-    this.email = email
-    this.token = token
-    this.status = status
-    this.user = user
+    this.id = id;
+    this.createdAt = createdAt;
+    this.firstName = firstName;
+    this.lastName = lastName;
+    this.expiry = expiry;
+    this.email = email;
+    this.token = token;
+    this.status = status;
+    this.user = user;
   }
+
   @PrimaryGeneratedColumn()
-  id: number
+  id: number;
 
   @CreateDateColumn()
-  createdAt: Date
+  createdAt: Date;
 
   @Column()
-  firstName: string
+  firstName: string;
 
   @Column()
-  lastName: string
+  lastName: string;
 
   @Column()
-  email: string
+  email: string;
 
   @Column()
-  expiry: Date
+  expiry: Date;
 
   @Column()
-  token: string
+  token: string;
 
   @Column({
     type: 'enum',
     enum: StatusType,
     default: [StatusType.ACTIVE],
   })
-  status: StatusType
+  status: StatusType;
 
   @OneToOne(() => UserEntity)
   @JoinColumn()
-  user?: UserEntity
+  user?: UserEntity;
 }

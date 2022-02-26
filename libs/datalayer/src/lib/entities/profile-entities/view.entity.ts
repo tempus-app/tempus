@@ -1,11 +1,11 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany, ManyToMany, JoinTable, ManyToOne } from 'typeorm'
-import { SkillEntity } from './skill.entity'
-import { RevisionEntity } from './revision.entity'
-import { ExperienceEntity } from './experience.entity'
-import { EducationEntity } from './'
-import { ResourceEntity } from '../account-entities'
-import { ViewType } from '../../enums'
-import { View } from '../..'
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany, ManyToMany, JoinTable, ManyToOne } from 'typeorm';
+import { SkillEntity } from './skill.entity';
+import { RevisionEntity } from './revision.entity';
+import { ExperienceEntity } from './experience.entity';
+import { EducationEntity } from '.';
+import { ResourceEntity } from '../account-entities';
+import { ViewType } from '../../enums';
+import { View } from '../..';
 
 @Entity()
 export class ViewEntity implements View {
@@ -19,43 +19,44 @@ export class ViewEntity implements View {
     resource?: ResourceEntity,
     viewType?: ViewType,
   ) {
-    this.id = id
-    this.type = type
-    this.status = status
-    this.skills = skills
-    this.experiences = experiences
-    this.educations = educations
-    this.resource = resource
-    this.viewType = viewType
+    this.id = id;
+    this.type = type;
+    this.status = status;
+    this.skills = skills;
+    this.experiences = experiences;
+    this.educations = educations;
+    this.resource = resource;
+    this.viewType = viewType;
   }
+
   @PrimaryGeneratedColumn()
-  id: number
+  id: number;
 
   @Column()
-  type: string
+  type: string;
 
   @OneToMany(() => RevisionEntity, (status) => status.view)
-  status: RevisionEntity[]
+  status: RevisionEntity[];
 
   @ManyToMany(() => SkillEntity)
   @JoinTable()
-  skills: SkillEntity[]
+  skills: SkillEntity[];
 
   @ManyToMany(() => ExperienceEntity)
   @JoinTable()
-  experiences: ExperienceEntity[]
+  experiences: ExperienceEntity[];
 
   @ManyToMany(() => EducationEntity)
   @JoinTable()
-  educations: EducationEntity[]
+  educations: EducationEntity[];
 
   @ManyToOne(() => ResourceEntity, (resource) => resource.views)
-  resource: ResourceEntity
+  resource: ResourceEntity;
 
   @Column({
     type: 'enum',
     enum: ViewType,
     default: ViewType.SECONDARY,
   })
-  viewType: ViewType
+  viewType: ViewType;
 }

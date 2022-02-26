@@ -1,11 +1,12 @@
-import { ApiProperty, PartialType } from '@nestjs/swagger'
-import { CreateCertificationDto } from '.'
+import { ApiProperty, PartialType } from '@nestjs/swagger';
+import { CreateCertificationDto } from '.';
 
 export class UpdateCertificationDto extends PartialType(CreateCertificationDto) {
   @ApiProperty()
-  id: number
+  id: number;
+
   constructor(id: number) {
-    super()
-    this.id = id
+    super();
+    this.id = id;
   }
 }

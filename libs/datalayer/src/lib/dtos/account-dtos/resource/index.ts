@@ -1,1 +1,1 @@
-export * from './createResource.dto'
+export * from './createResource.dto';

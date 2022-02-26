@@ -1,6 +1,6 @@
-import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm'
-import { EducationEntity, ExperienceEntity, ResourceEntity } from '..'
-import { Location } from '../..'
+import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { EducationEntity, ExperienceEntity, ResourceEntity } from '..';
+import { Location } from '../..';
 
 @Entity()
 export class LocationEntity implements Location {
@@ -13,36 +13,36 @@ export class LocationEntity implements Location {
     experience?: ExperienceEntity,
     resource?: ResourceEntity,
   ) {
-    this.id = id
-    this.city = city
-    this.province = province
-    this.country = country
-    this.education = education
-    this.experience = experience
-    this.resource = resource
+    this.id = id;
+    this.city = city;
+    this.province = province;
+    this.country = country;
+    this.education = education;
+    this.experience = experience;
+    this.resource = resource;
   }
 
   @PrimaryGeneratedColumn()
-  id: number
+  id: number;
 
   @Column()
-  city: string
+  city: string;
 
   @Column()
-  province: string
+  province: string;
 
   @Column()
-  country: string
+  country: string;
 
   @OneToOne(() => EducationEntity, (edu) => edu.location, { onDelete: 'CASCADE' })
   @JoinColumn()
-  education?: EducationEntity
+  education?: EducationEntity;
 
   @OneToOne(() => ExperienceEntity, (exp) => exp.location, { onDelete: 'CASCADE' })
   @JoinColumn()
-  experience?: ExperienceEntity
+  experience?: ExperienceEntity;
 
   @OneToOne(() => ResourceEntity, (res) => res.location, { onDelete: 'CASCADE' })
   @JoinColumn()
-  resource?: ResourceEntity
+  resource?: ResourceEntity;
 }

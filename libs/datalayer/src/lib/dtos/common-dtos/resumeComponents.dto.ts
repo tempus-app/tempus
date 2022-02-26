@@ -1,23 +1,23 @@
-import { ApiProperty } from '@nestjs/swagger'
-import { Certification, Education, Experience, Skill } from '../../models'
+import { ApiProperty } from '@nestjs/swagger';
+import { Certification, Education, Experience, Skill } from '../../models';
 
 export class ResumeComponentsDto {
   @ApiProperty()
-  educations: Education[]
+  educations: Education[];
 
   @ApiProperty()
-  experiences: Experience[]
+  experiences: Experience[];
 
   @ApiProperty()
-  skills: Skill[]
+  skills: Skill[];
 
   @ApiProperty()
-  certifications: Certification[]
+  certifications: Certification[];
 
   constructor(educations: Education[], experiences: Experience[], skills: Skill[], certifications: Certification[]) {
-    this.educations = educations
-    this.experiences = experiences
-    this.certifications = certifications
-    this.skills = skills
+    this.educations = educations;
+    this.experiences = experiences;
+    this.certifications = certifications;
+    this.skills = skills;
   }
 }

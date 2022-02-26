@@ -1,6 +1,6 @@
-import { Entity, Column, PrimaryGeneratedColumn, TableInheritance, OneToMany } from 'typeorm'
-import { User } from '../..'
-import { RoleType } from '../../enums'
+import { Entity, Column, PrimaryGeneratedColumn, TableInheritance, OneToMany } from 'typeorm';
+import { User } from '../..';
+import { RoleType } from '../../enums';
 
 @Entity()
 @TableInheritance({ column: { type: 'varchar', name: 'user_type' } })
@@ -13,27 +13,28 @@ export class UserEntity implements User {
     password?: string,
     roles?: RoleType[],
   ) {
-    this.id = id
-    this.firstName = firstName
-    this.lastName = lastName
-    this.email = email
-    this.password = password
-    this.roles = roles
+    this.id = id;
+    this.firstName = firstName;
+    this.lastName = lastName;
+    this.email = email;
+    this.password = password;
+    this.roles = roles;
   }
+
   @PrimaryGeneratedColumn()
-  id: number
+  id: number;
 
   @Column({ nullable: true })
-  firstName: string
+  firstName: string;
 
   @Column({ nullable: true })
-  lastName: string
+  lastName: string;
 
   @Column({ nullable: true })
-  email: string
+  email: string;
 
   @Column({ nullable: true })
-  password: string
+  password: string;
 
   @Column({
     type: 'enum',
@@ -41,5 +42,5 @@ export class UserEntity implements User {
     array: true,
     default: [RoleType.USER],
   })
-  roles: RoleType[]
+  roles: RoleType[];
 }

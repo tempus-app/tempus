@@ -1,2 +1,2 @@
-export * from './slimTask.dto'
-export * from './fullTask.dto'
+export * from './slimTask.dto';
+export * from './fullTask.dto';

@@ -1,5 +1,5 @@
-import { Module } from '@nestjs/common'
-import { TypeOrmModule } from '@nestjs/typeorm'
+import { Module } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import {
   LinkEntity,
   ResourceEntity,
@@ -15,7 +15,7 @@ import {
   ClientEntity,
   ProjectEntity,
   TaskEntity,
-} from './entities'
+} from './entities';
 
 @Module({
   imports: [
