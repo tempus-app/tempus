@@ -1,33 +1,36 @@
-import { Body, Controller, Get, NotImplementedException, Param, Patch, Post } from '@nestjs/common'
-import { SlimLinkDto, LinkEntity, StatusType } from '@tempus/datalayer'
-import { SlimUserDto } from 'libs/datalayer/src/lib/dtos/account-dtos/user/slimUser.dto'
-import { LinkService } from '../services/link.service'
+import { Body, Controller, Get, Param, Patch, Post, Query } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
+import { CreateLinkDto, Link, LinkEntity, UpdatelinkDto } from '@tempus/datalayer';
+import { LinkService } from '../services/link.service';
 
+@ApiTags('Link Components')
 @Controller('link')
 export class LinkController {
-  constructor(private linkService: LinkService) {}
+	constructor(private linkService: LinkService) {}
 
-  //Generates a link
-  @Post()
-  async createLink(@Body() link: Omit<SlimLinkDto, 'id'>): Promise<LinkEntity> {
-    throw new NotImplementedException()
-  }
+	// Generates a link
+	@Post('/')
+	async createLink(@Body() createLinkDto: CreateLinkDto): Promise<Link> {
+		const linkEntity: LinkEntity = CreateLinkDto.toEntity(createLinkDto);
+		return this.linkService.createLink(linkEntity);
+	}
 
-  //gets link information, should verify validity
-  @Get('/:linkId')
-  async getLink(@Param('linkId') linkId: number): Promise<LinkEntity> {
-    throw new NotImplementedException()
-  }
+	// UPDATES:
 
-  //updates link status
-  @Patch('status/:linkId')
-  async editLinkStatus(@Param('linkId') linkId: number, @Body() status: StatusType): Promise<LinkEntity> {
-    throw new NotImplementedException()
-  }
+	// updates link status
+	@Patch('/:linkId')
+	async editLinkStatus(@Body() updatelinkDto: UpdatelinkDto): Promise<Link> {
+		return this.linkService.editLink(updatelinkDto);
+	}
 
-  //associate link to user
-  @Post('/user/:linkId')
-  async associateUserToLink(@Param('linkId') linkId: number, @Body() user: SlimUserDto) {
-    throw new NotImplementedException()
-  }
+	// gets link information, should verify validity
+	@Get('/:linkId')
+	async getLink(@Param('linkId') linkId: number): Promise<Link> {
+		return this.linkService.findLinkById(linkId);
+	}
+
+	@Get('/')
+	async getLinkByToken(@Query('token') token: string): Promise<Link> {
+		return this.linkService.findLinkByToken(token);
+	}
 }

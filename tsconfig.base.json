@@ -1,32 +1,35 @@
 {
-  "compileOnSave": false,
-  "compilerOptions": {
-    "rootDir": ".",
-    "sourceMap": true,
-    "declaration": false,
-    "moduleResolution": "node",
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "importHelpers": true,
-    "target": "es2015",
-    "module": "esnext",
-    "lib": ["es2017", "dom"],
-    "skipLibCheck": true,
-    "skipDefaultLibCheck": true,
-    "baseUrl": ".",
-    "paths": {
-      "@tempus/api-account": ["libs/api-account/src/index.ts"],
-      "@tempus/api-email": ["libs/api-email/src/index.ts"],
-      "@tempus/api-interfaces": ["libs/api-interfaces/src/index.ts"],
-      "@tempus/api-profile": ["libs/api-profile/src/index.ts"],
-      "@tempus/api-project": ["libs/api-project/src/index.ts"],
-      "@tempus/core": ["libs/core/src/index.ts"],
-      "@tempus/datalayer": ["libs/datalayer/src/index.ts"],
-      "@tempus/frontend-account": ["libs/frontend-account/src/index.ts"],
-      "@tempus/frontend-common": ["libs/frontend-common/src/index.ts"],
-      "@tempus/frontend-profile": ["libs/frontend-profile/src/index.ts"],
-      "@tempus/frontend-project": ["libs/frontend-project/src/index.ts"]
-    }
-  },
-  "exclude": ["node_modules", "tmp"]
+	"compileOnSave": false,
+	"compilerOptions": {
+		"rootDir": ".",
+		"sourceMap": true,
+		"declaration": false,
+		"moduleResolution": "node",
+		"emitDecoratorMetadata": true,
+		"experimentalDecorators": true,
+		"importHelpers": true,
+		"target": "es2015",
+		"module": "esnext",
+		"lib": ["es2017", "dom"],
+		"skipLibCheck": true,
+		"skipDefaultLibCheck": true,
+		"baseUrl": ".",
+		"paths": {
+			"@tempus/api-account": ["libs/api-account/src/index.ts"],
+			"@tempus/api-email": ["libs/api-email/src/index.ts"],
+			"@tempus/api-interfaces": ["libs/api-interfaces/src/index.ts"],
+			"@tempus/api-profile": ["libs/api-profile/src/index.ts"],
+			"@tempus/api-project": ["libs/api-project/src/index.ts"],
+			"@tempus/api-auth": ["libs/api-auth/src/index.ts"],
+			"@tempus/core": ["libs/core/src/index.ts"],
+			"@tempus/datalayer": ["libs/datalayer/src/index.ts"],
+			"@tempus/frontend-account": ["libs/frontend-account/src/index.ts"],
+			"@tempus/frontend-common": ["libs/frontend-common/src/index.ts"],
+			"@tempus/frontend-profile": ["libs/frontend-profile/src/index.ts"],
+			"@tempus/frontend-project": ["libs/frontend-project/src/index.ts"],
+			"@tempus/pdfgenerator": ["libs/pdfgenerator/src/index.ts"],
+			"@tempus/frontend-sign-up": ["libs/frontend-sign-up/src/index.ts"]
+		}
+	},
+	"exclude": ["node_modules", "tmp"]
 }

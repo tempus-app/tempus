@@ -1,5 +1,5 @@
-import { ResumeSectionType } from '../../../enums'
+import { ResumeSectionType } from '../../../enums';
 
 export class CreateRevisionDto {
-  constructor(sectionsChanged: ResumeSectionType[]) {}
+	constructor(sectionsChanged: ResumeSectionType[]) {}
 }

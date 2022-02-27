@@ -1,23 +1,23 @@
 {
-  "root": "libs/account",
-  "sourceRoot": "libs/account/src",
-  "projectType": "library",
-  "targets": {
-    "lint": {
-      "executor": "@nrwl/linter:eslint",
-      "outputs": ["{options.outputFile}"],
-      "options": {
-        "lintFilePatterns": ["libs/account/**/*.ts"]
-      }
-    },
-    "test": {
-      "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/account"],
-      "options": {
-        "jestConfig": "libs/account/jest.config.js",
-        "passWithNoTests": true
-      }
-    }
-  },
-  "tags": []
+	"root": "libs/account",
+	"sourceRoot": "libs/account/src",
+	"projectType": "library",
+	"targets": {
+		"lint": {
+			"executor": "@nrwl/linter:eslint",
+			"outputs": ["{options.outputFile}"],
+			"options": {
+				"lintFilePatterns": ["libs/api-account/**/*.ts"]
+			}
+		},
+		"test": {
+			"executor": "@nrwl/jest:jest",
+			"outputs": ["coverage/libs/account"],
+			"options": {
+				"jestConfig": "libs/account/jest.config.js",
+				"passWithNoTests": true
+			}
+		}
+	},
+	"tags": []
 }

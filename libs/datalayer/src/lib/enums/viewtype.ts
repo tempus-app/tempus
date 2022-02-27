@@ -1,4 +1,4 @@
 export enum ViewType {
-  PRIMARY = 'PRIMARY',
-  SECONDARY = 'SECONDARY',
+	PRIMARY = 'PRIMARY',
+	SECONDARY = 'SECONDARY',
 }

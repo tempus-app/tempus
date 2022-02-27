@@ -1,28 +1,29 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm'
-import { Client } from '../..'
-import { ProjectEntity } from './project.entity'
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { Client } from '../..';
+import { ProjectEntity } from './project.entity';
 
 @Entity()
 export class ClientEntity implements Client {
-  constructor(id?: number, name?: string, title?: string, clientName?: string, projects?: ProjectEntity[]) {
-    this.id = id
-    this.name = name
-    this.title = title
-    this.clientName = clientName
-    this.projects = projects
-  }
-  @PrimaryGeneratedColumn()
-  id: number
+	constructor(id?: number, name?: string, title?: string, clientName?: string, projects?: ProjectEntity[]) {
+		this.id = id;
+		this.name = name;
+		this.title = title;
+		this.clientName = clientName;
+		this.projects = projects;
+	}
 
-  @Column()
-  name: string
+	@PrimaryGeneratedColumn()
+	id: number;
 
-  @Column()
-  title: string
+	@Column()
+	name: string;
 
-  @Column()
-  clientName: string
+	@Column()
+	title: string;
 
-  @OneToMany(() => ProjectEntity, (projects) => projects.client)
-  projects: ProjectEntity[]
+	@Column()
+	clientName: string;
+
+	@OneToMany(() => ProjectEntity, projects => projects.client)
+	projects: ProjectEntity[];
 }

@@ -1,75 +1,89 @@
-import { Injectable, NotFoundException } from '@nestjs/common'
-import { InjectRepository } from '@nestjs/typeorm'
-import { Resource, ResourceEntity, RoleType, User, UserEntity } from '@tempus/datalayer'
-import { Repository } from 'typeorm'
-import { ResourceService } from '.'
+import { Resource, RoleType, User, UserEntity, UpdateUserDto } from '@tempus/datalayer';
+import { ConsoleLogger, Injectable, NotFoundException, NotImplementedException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { ResourceService } from './resource.service';
 
 @Injectable()
 export class UserService {
-  constructor(
-    @InjectRepository(UserEntity)
-    private userRepository: Repository<UserEntity>,
-    private resourceService: ResourceService,
-  ) {}
+	constructor(
+		@InjectRepository(UserEntity)
+		private userRepository: Repository<UserEntity>,
+		private resourceService: ResourceService,
+	) {}
 
-  async createUser(user: UserEntity): Promise<UserEntity> {
-    if (user.roles.includes(RoleType.BUSINESS_OWNER)) {
-      return await this.userRepository.save(user)
-    } else {
-      console.log(user)
-      return await this.resourceService.createResource({
-        ...user,
-      } as Resource)
-    }
-  }
+	async createUser(user: UserEntity): Promise<User> {
+		if (user.roles.includes(RoleType.BUSINESS_OWNER)) {
+			return this.userRepository.save(user);
+		}
+		return this.resourceService.createResource({
+			...user,
+		} as Resource);
+	}
 
-  async editUser(user: UserEntity): Promise<UserEntity> {
-    const userEntity = await this.userRepository.findOne(user.id)
-    if (!userEntity) {
-      throw new NotFoundException(`Could not find user with id ${userEntity.id}`)
-    }
-    if (userEntity['title']) {
-      await this.userRepository.update(user.id, user)
-      return { user, ...userEntity } as UserEntity
-    } else {
-      const resourceDto = await this.resourceService.editResource(user)
-      return resourceDto
-    }
-  }
+	async updateUser(updateUserData: UpdateUserDto): Promise<User> {
+		const userEntity = await this.userRepository.findOne(updateUserData.id);
+		if (!userEntity) {
+			throw new NotFoundException(`Could not find user with id ${userEntity.id}`);
+		}
+		if (userEntity.roles.includes(RoleType.BUSINESS_OWNER)) {
+			const user = UpdateUserDto.toEntity(updateUserData);
+			for (const [key, val] of Object.entries(user)) if (!val) delete user[key];
 
-  async getUser(userId: number): Promise<UserEntity> {
-    const userEntity = await this.userRepository.findOne(userId)
-    if (!userEntity) {
-      throw new NotFoundException(`Could not find user with id ${userEntity.id}`)
-    }
-    if (!userEntity['title']) {
-      return userEntity
-    } else {
-      const resourceDto = await this.resourceService.getResource(userId)
-      return resourceDto
-    }
-  }
+			Object.assign(userEntity, user);
+			return this.userRepository.save(userEntity);
+		}
+		return this.resourceService.editResource(updateUserData);
+	}
 
-  // TODO: filtering
-  // ROLES?
-  // get by resource etc
-  async getAllUsers(): Promise<UserEntity[]> {
-    // location?: string[] | string,
-    // skills?: string[] | string,
-    // title?: string[] | string,
-    // project?: string[] | string,
-    // status?: string[] | string,
-    // sortBy?: string,
-    const users = await this.userRepository.find()
+	async getUser(userId: number): Promise<User | Resource> {
+		const userEntity = await this.userRepository.findOne(userId);
+		if (!userEntity) {
+			throw new NotFoundException(`Could not find user with id ${userEntity.id}`);
+		}
+		if (userEntity.roles.includes(RoleType.BUSINESS_OWNER)) {
+			return userEntity;
+		}
+		const resourceDto = await this.resourceService.getResource(userId);
+		return resourceDto;
+	}
 
-    return users
-  }
+	async findByEmail(email: string): Promise<User> {
+		const user = (
+			await this.userRepository.find({
+				where: { email },
+			})
+		)[0];
+		if (!user) {
+			throw new NotFoundException(`Could not find resource with id ${email}`);
+		}
+		if (user.roles.includes(RoleType.BUSINESS_OWNER)) {
+			return user;
+		}
+		const resource = await this.resourceService.findResourceByEmail(email);
+		return resource;
+	}
 
-  async deleteUser(userId: number): Promise<void> {
-    const userEntity = await this.userRepository.findOne(userId)
-    if (!userEntity) {
-      throw new NotFoundException(`Could not find user with id ${userId}`)
-    }
-    await this.userRepository.remove(userEntity)
-  }
+	// TODO: filtering
+	// ROLES?
+	// get by resource etc
+	async getAllUsers(): Promise<User[]> {
+		// location?: string[] | string,
+		// skills?: string[] | string,
+		// title?: string[] | string,
+		// project?: string[] | string,
+		// status?: string[] | string,
+		// sortBy?: string,
+		const users = await this.userRepository.find();
+
+		return users;
+	}
+
+	async deleteUser(userId: number): Promise<void> {
+		const userEntity = await this.userRepository.findOne(userId);
+		if (!userEntity) {
+			throw new NotFoundException(`Could not find user with id ${userId}`);
+		}
+		await this.userRepository.remove(userEntity);
+	}
 }
