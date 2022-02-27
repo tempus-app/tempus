@@ -1,8 +1,8 @@
-import { Resource } from '..'
+import { Resource } from '..';
 
 export interface Certification {
-  id: number
-  title: string
-  institution: string
-  resource: Resource
+	id: number;
+	title: string;
+	institution: string;
+	resource: Resource;
 }

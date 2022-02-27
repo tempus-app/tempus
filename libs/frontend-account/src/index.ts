@@ -1,1 +1,1 @@
-export * from './lib/frontend-account.module'
+export * from './lib/frontend-account.module';

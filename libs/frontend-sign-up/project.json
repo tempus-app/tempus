@@ -1,23 +1,23 @@
 {
-  "projectType": "library",
-  "root": "libs/frontend-sign-up",
-  "sourceRoot": "libs/frontend-sign-up/src",
-  "prefix": "tempus",
-  "targets": {
-    "test": {
-      "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/frontend-sign-up"],
-      "options": {
-        "jestConfig": "libs/frontend-sign-up/jest.config.js",
-        "passWithNoTests": true
-      }
-    },
-    "lint": {
-      "executor": "@nrwl/linter:eslint",
-      "options": {
-        "lintFilePatterns": ["libs/frontend-sign-up/src/**/*.ts", "libs/frontend-sign-up/src/**/*.html"]
-      }
-    }
-  },
-  "tags": []
+	"projectType": "library",
+	"root": "libs/frontend-sign-up",
+	"sourceRoot": "libs/frontend-sign-up/src",
+	"prefix": "tempus",
+	"targets": {
+		"test": {
+			"executor": "@nrwl/jest:jest",
+			"outputs": ["coverage/libs/frontend-sign-up"],
+			"options": {
+				"jestConfig": "libs/frontend-sign-up/jest.config.js",
+				"passWithNoTests": true
+			}
+		},
+		"lint": {
+			"executor": "@nrwl/linter:eslint",
+			"options": {
+				"lintFilePatterns": ["libs/frontend-sign-up/src/**/*.ts", "libs/frontend-sign-up/src/**/*.html"]
+			}
+		}
+	},
+	"tags": []
 }

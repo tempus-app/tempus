@@ -1,81 +1,82 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany, ManyToMany, JoinTable, ManyToOne } from 'typeorm'
-import { SkillEntity } from './skill.entity'
-import { RevisionEntity } from './revision.entity'
-import { ExperienceEntity } from './experience.entity'
-import { EducationEntity } from './'
-import { ResourceEntity } from '../account-entities'
-import { ViewType } from '../../enums'
-import { View } from '../..'
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany, ManyToMany, JoinTable, ManyToOne } from 'typeorm';
+import { SkillEntity } from './skill.entity';
+import { RevisionEntity } from './revision.entity';
+import { ExperienceEntity } from './experience.entity';
+import { EducationEntity } from '.';
+import { ResourceEntity } from '../account-entities';
+import { ViewType } from '../../enums';
+import { View } from '../..';
 
 @Entity()
 export class ViewEntity implements View {
-  constructor(
-    id?: number,
-    profileSummary?: string,
-    skillsSummary?: string,
-    educationsSummary?: string,
-    experiencesSummary?: string,
-    type?: string,
-    status?: RevisionEntity[],
-    skills?: SkillEntity[],
-    experiences?: ExperienceEntity[],
-    educations?: EducationEntity[],
-    resource?: ResourceEntity,
-    viewType?: ViewType
-  ) {
-    this.id = id
-    this.profileSummary = profileSummary
-    this.skillsSummary = skillsSummary
-    this.educationsSummary = educationsSummary
-    this.experiencesSummary = experiencesSummary
-    this.type = type
-    this.status = status
-    this.skills = skills
-    this.experiences = experiences
-    this.educations = educations
-    this.resource = resource
-    this.viewType = viewType
-  }
-  @PrimaryGeneratedColumn()
-  id: number
+	constructor(
+		id?: number,
+		profileSummary?: string,
+		skillsSummary?: string,
+		educationsSummary?: string,
+		experiencesSummary?: string,
+		type?: string,
+		status?: RevisionEntity[],
+		skills?: SkillEntity[],
+		experiences?: ExperienceEntity[],
+		educations?: EducationEntity[],
+		resource?: ResourceEntity,
+		viewType?: ViewType,
+	) {
+		this.id = id;
+		this.profileSummary = profileSummary;
+		this.skillsSummary = skillsSummary;
+		this.educationsSummary = educationsSummary;
+		this.experiencesSummary = experiencesSummary;
+		this.type = type;
+		this.status = status;
+		this.skills = skills;
+		this.experiences = experiences;
+		this.educations = educations;
+		this.resource = resource;
+		this.viewType = viewType;
+	}
 
-  @Column({ nullable: true })
-  profileSummary: string
+	@PrimaryGeneratedColumn()
+	id: number;
 
-  @Column({ nullable: true })
-  skillsSummary: string
+	@Column({ nullable: true })
+	profileSummary: string;
 
-  @Column({ nullable: true })
-  educationsSummary: string
+	@Column({ nullable: true })
+	skillsSummary: string;
 
-  @Column({ nullable: true })
-  experiencesSummary: string
+	@Column({ nullable: true })
+	educationsSummary: string;
 
-  @Column()
-  type: string
+	@Column({ nullable: true })
+	experiencesSummary: string;
 
-  @OneToMany(() => RevisionEntity, status => status.view)
-  status: RevisionEntity[]
+	@Column()
+	type: string;
 
-  @ManyToMany(() => SkillEntity)
-  @JoinTable()
-  skills: SkillEntity[]
+	@OneToMany(() => RevisionEntity, status => status.view)
+	status: RevisionEntity[];
 
-  @ManyToMany(() => ExperienceEntity)
-  @JoinTable()
-  experiences: ExperienceEntity[]
+	@ManyToMany(() => SkillEntity)
+	@JoinTable()
+	skills: SkillEntity[];
 
-  @ManyToMany(() => EducationEntity)
-  @JoinTable()
-  educations: EducationEntity[]
+	@ManyToMany(() => ExperienceEntity)
+	@JoinTable()
+	experiences: ExperienceEntity[];
 
-  @ManyToOne(() => ResourceEntity, resource => resource.views)
-  resource: ResourceEntity
+	@ManyToMany(() => EducationEntity)
+	@JoinTable()
+	educations: EducationEntity[];
 
-  @Column({
-    type: 'enum',
-    enum: ViewType,
-    default: ViewType.SECONDARY,
-  })
-  viewType: ViewType
+	@ManyToOne(() => ResourceEntity, resource => resource.views)
+	resource: ResourceEntity;
+
+	@Column({
+		type: 'enum',
+		enum: ViewType,
+		default: ViewType.SECONDARY,
+	})
+	viewType: ViewType;
 }

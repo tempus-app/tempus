@@ -1,15 +1,18 @@
-import { Component, OnInit, Input } from '@angular/core'
+import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
-  selector: 'tempus-dropdown',
-  templateUrl: './dropdown.component.html',
-  styleUrls: ['./dropdown.component.scss'],
+	selector: 'tempus-dropdown',
+	templateUrl: './dropdown.component.html',
+	styleUrls: ['./dropdown.component.scss'],
 })
 export class DropdownComponent implements OnInit {
-  @Input() options: string = ''
-  @Input() cssClass: string = ''
-  @Input() label: string = ''
-  constructor() {}
+	@Input() options = '';
 
-  ngOnInit(): void {}
+	@Input() cssClass = '';
+
+	@Input() label = '';
+
+	constructor() {}
+
+	ngOnInit(): void {}
 }

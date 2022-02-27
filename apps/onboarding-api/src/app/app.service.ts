@@ -1,49 +1,50 @@
-import { Injectable } from '@nestjs/common'
-import { InjectRepository } from '@nestjs/typeorm'
-import { Message } from '@tempus/api-interfaces'
-import { Repository } from 'typeorm'
-import { RoleType, ResourceEntity, UserEntity } from '@tempus/datalayer'
-import { PdfGeneratorService } from '@tempus/pdfgenerator'
+import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Message } from '@tempus/api-interfaces';
+import { Repository } from 'typeorm';
+import { RoleType, ResourceEntity, UserEntity } from '@tempus/datalayer';
+import { PdfGeneratorService } from '@tempus/pdfgenerator';
 
 @Injectable()
 export class AppService {
-  constructor(
-    @InjectRepository(ResourceEntity) private resourceRepo: Repository<ResourceEntity>,
-    private pdfGeneratorService: PdfGeneratorService,
-    @InjectRepository(UserEntity) private userRepo: Repository<UserEntity>
-  ) {}
-  getData(): Message {
-    return { message: 'Welcome to api!' }
-  }
+	constructor(
+		@InjectRepository(ResourceEntity) private resourceRepo: Repository<ResourceEntity>,
+		private pdfGeneratorService: PdfGeneratorService,
+		@InjectRepository(UserEntity) private userRepo: Repository<UserEntity>,
+	) {}
 
-  createUser() {
-    const newUser = new UserEntity()
-    newUser.firstName = 'testF'
-    newUser.lastName = 'testL'
-    newUser.email = 'email@email.com'
-    newUser.password = 'fred'
-    const roles = [RoleType.BUSINESS_OWNER]
-    newUser.roles = roles
-    this.userRepo.save(newUser)
+	getData(): Message {
+		return { message: 'Welcome to api!' };
+	}
 
-    const newResource = new ResourceEntity()
-    newResource.email = 'email'
-    const resRoles = [RoleType.AVAILABLE_RESOURCE, RoleType.SUPERVISOR]
-    newResource.roles = resRoles
+	createUser() {
+		const newUser = new UserEntity();
+		newUser.firstName = 'testF';
+		newUser.lastName = 'testL';
+		newUser.email = 'email@email.com';
+		newUser.password = 'fred';
+		const roles = [RoleType.BUSINESS_OWNER];
+		newUser.roles = roles;
+		this.userRepo.save(newUser);
 
-    this.resourceRepo.save(newResource)
-  }
+		const newResource = new ResourceEntity();
+		newResource.email = 'email';
+		const resRoles = [RoleType.AVAILABLE_RESOURCE, RoleType.SUPERVISOR];
+		newResource.roles = resRoles;
 
-  async getUser() {
-    const users = await this.resourceRepo.find()
-    const usersRoles = []
-    users.forEach(user => {
-      usersRoles.push(user.roles)
-    })
-    return await { data: users, roles: usersRoles }
-  }
+		this.resourceRepo.save(newResource);
+	}
 
-  getPdf(res: Response) {
-    this.pdfGeneratorService.createPDF(res)
-  }
+	async getUser() {
+		const users = await this.resourceRepo.find();
+		const usersRoles = [];
+		users.forEach(user => {
+			usersRoles.push(user.roles);
+		});
+		return { data: users, roles: usersRoles };
+	}
+
+	getPdf(res: Response) {
+		this.pdfGeneratorService.createPDF(res);
+	}
 }

@@ -1,51 +1,52 @@
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, ManyToOne, OneToOne } from 'typeorm'
-import { Revision } from '../..'
-import { ResumeSectionType } from '../../enums'
-import { UserEntity } from '../account-entities'
-import { ViewEntity } from './view.entity'
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, ManyToOne, OneToOne } from 'typeorm';
+import { Revision } from '../..';
+import { ResumeSectionType } from '../../enums';
+import { UserEntity } from '../account-entities';
+import { ViewEntity } from './view.entity';
 
 @Entity()
 export class RevisionEntity implements Revision {
-  constructor(
-    id?: number,
-    createdAt?: Date,
-    approvedAt?: Date,
-    sectionsChanged?: ResumeSectionType[],
-    approver?: UserEntity,
-    approved?: boolean,
-    view?: ViewEntity,
-  ) {
-    this.id = id
-    this.createdAt = createdAt
-    this.approvedAt = approvedAt
-    this.sectionsChanged = sectionsChanged
-    this.approver = approver
-    this.approved = approved
-    this.view = view
-  }
-  @PrimaryGeneratedColumn()
-  id: number
+	constructor(
+		id?: number,
+		createdAt?: Date,
+		approvedAt?: Date,
+		sectionsChanged?: ResumeSectionType[],
+		approver?: UserEntity,
+		approved?: boolean,
+		view?: ViewEntity,
+	) {
+		this.id = id;
+		this.createdAt = createdAt;
+		this.approvedAt = approvedAt;
+		this.sectionsChanged = sectionsChanged;
+		this.approver = approver;
+		this.approved = approved;
+		this.view = view;
+	}
 
-  @CreateDateColumn()
-  createdAt: Date
+	@PrimaryGeneratedColumn()
+	id: number;
 
-  @Column()
-  approvedAt: Date
+	@CreateDateColumn()
+	createdAt: Date;
 
-  @Column({
-    type: 'enum',
-    enum: ResumeSectionType,
-    default: [ResumeSectionType.PERSONAL],
-    array: true,
-  })
-  sectionsChanged: ResumeSectionType[]
+	@Column()
+	approvedAt: Date;
 
-  @OneToOne(() => UserEntity)
-  approver: UserEntity
+	@Column({
+		type: 'enum',
+		enum: ResumeSectionType,
+		default: [ResumeSectionType.PERSONAL],
+		array: true,
+	})
+	sectionsChanged: ResumeSectionType[];
 
-  @Column()
-  approved: boolean
+	@OneToOne(() => UserEntity)
+	approver: UserEntity;
 
-  @ManyToOne(() => ViewEntity, (view) => view.status)
-  view: ViewEntity
+	@Column()
+	approved: boolean;
+
+	@ManyToOne(() => ViewEntity, view => view.status)
+	view: ViewEntity;
 }

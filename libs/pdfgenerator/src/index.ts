@@ -1,2 +1,2 @@
-export * from './lib/pdfgenerator.module'
-export * from './lib/pdfgenerator.service'
+export * from './lib/pdfgenerator.module';
+export * from './lib/pdfgenerator.service';

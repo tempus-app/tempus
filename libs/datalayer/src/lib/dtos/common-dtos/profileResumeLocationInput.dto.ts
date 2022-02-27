@@ -1,12 +1,13 @@
-import { SlimLocationDto } from '.'
-import { SlimEducationDto, SlimExperienceDto, SlimResourceDto } from '..'
+import { SlimLocationDto } from '.';
+import { SlimEducationDto, SlimExperienceDto, SlimResourceDto } from '..';
 
 export class ProfileResumeLocationInputDto {
-  location: SlimLocationDto
-  data: SlimEducationDto | SlimExperienceDto | SlimResourceDto
+	location: SlimLocationDto;
 
-  constructor(location?: SlimLocationDto, data?: SlimEducationDto | SlimExperienceDto | SlimResourceDto) {
-    this.location = location
-    this.data = data
-  }
+	data: SlimEducationDto | SlimExperienceDto | SlimResourceDto;
+
+	constructor(location?: SlimLocationDto, data?: SlimEducationDto | SlimExperienceDto | SlimResourceDto) {
+		this.location = location;
+		this.data = data;
+	}
 }
