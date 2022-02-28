@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsOptional } from 'class-validator';
+import { IsISO31661Alpha2, IsOptional } from 'class-validator';
 import exp = require('constants');
 import { RoleType } from '../../../enums';
 import { UserEntity } from '../../../entities/account-entities/user.entity';
@@ -67,6 +67,22 @@ export class CreateUserDto {
 	@IsOptional()
 	certifications?: CreateCertificationDto[];
 
+	@ApiProperty()
+	@IsOptional()
+	skillsSummary?: string;
+
+	@ApiProperty()
+	@IsOptional()
+	profileSummary?: string;
+
+	@ApiProperty()
+	@IsOptional()
+	educationsSummary?: string;
+
+	@ApiProperty()
+	@IsOptional()
+	experiencesSummary?: string;
+
 	constructor(
 		firstName: string,
 		lastName: string,
@@ -82,6 +98,10 @@ export class CreateUserDto {
 		educations?: CreateEducationDto[],
 		skills?: CreateSkillDto[],
 		certifications?: CreateCertificationDto[],
+		experiencesSummary?: string,
+		profileSummary?: string,
+		educationsSummary?: string,
+		skillsSummary?: string,
 	) {
 		this.firstName = firstName;
 		this.lastName = lastName;
@@ -97,9 +117,13 @@ export class CreateUserDto {
 		this.educations = educations || [];
 		this.skills = skills || [];
 		this.certifications = certifications || [];
+		this.experiencesSummary = experiencesSummary;
+		this.educationsSummary = educationsSummary;
+		this.profileSummary = profileSummary;
+		this.skillsSummary = skillsSummary;
 	}
 
-	public static toEntity(dto: CreateUserDto): UserEntity {
+	public static toEntity(dto: CreateUserDto): UserEntity | ResourceEntity {
 		if (dto == null) return new UserEntity();
 		if (!dto.roles.includes(RoleType.BUSINESS_OWNER)) {
 			return new ResourceEntity(

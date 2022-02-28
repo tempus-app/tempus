@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { AccountModule } from '@tempus/api-account';
 import { DataLayerModule } from '@tempus/datalayer';
 import { ProfileResumeController } from './controllers/profile-resume.controller';
@@ -10,9 +10,9 @@ import { SkillsService } from './services/skill.service';
 import { ViewsService } from './services/view.service';
 
 @Module({
-	imports: [DataLayerModule, AccountModule],
+	imports: [DataLayerModule, forwardRef(() => AccountModule)],
 	controllers: [ProfileResumeController, ProfileViewController],
 	providers: [EducationService, ExperienceService, SkillsService, ViewsService, CertificationService],
-	exports: [],
+	exports: [EducationService, ExperienceService, SkillsService, ViewsService, CertificationService],
 })
 export class ProfileModule {}

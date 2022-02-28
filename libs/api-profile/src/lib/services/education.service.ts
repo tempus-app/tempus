@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { forwardRef, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { EducationEntity, LocationEntity, UpdateEducationDto, Education } from '@tempus/datalayer';
 import { ResourceService } from '@tempus/api-account';
@@ -8,6 +8,7 @@ import { keyframes } from '@angular/animations';
 @Injectable()
 export class EducationService {
 	constructor(
+		@Inject(forwardRef(() => ResourceService))
 		private resourceService: ResourceService,
 		@InjectRepository(EducationEntity)
 		private educationRepository: Repository<EducationEntity>,

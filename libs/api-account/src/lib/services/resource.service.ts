@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UpdateUserDto, ResourceEntity, Resource } from '@tempus/datalayer';
+import { ViewsService } from '@tempus/api-profile';
+import { UpdateUserDto, ResourceEntity, Resource, CreateUserDto, ViewType } from '@tempus/datalayer';
 import { Repository } from 'typeorm';
 
 @Injectable()
@@ -8,14 +9,27 @@ export class ResourceService {
 	constructor(
 		@InjectRepository(ResourceEntity)
 		private resourceRepository: Repository<ResourceEntity>,
+		private viewsService: ViewsService,
 	) {}
 
-	async createResource(resource: ResourceEntity): Promise<Resource> {
-		const createdResource = await this.resourceRepository.save(resource);
+	async createResource(resource: CreateUserDto): Promise<Resource> {
+		const resourceEntity = CreateUserDto.toEntity(resource);
+		const createdResource = await this.resourceRepository.save(resourceEntity);
 
 		// TODO: create initial view with inital data
 
-		// view service
+		await this.viewsService.createInitialView(resourceEntity as ResourceEntity, {
+			viewType: ViewType.PRIMARY,
+			educationsSummary: resource.educationsSummary,
+			educations: resource.educations,
+			certifications: resource.certifications,
+			experiencesSummary: resource.experiencesSummary,
+			experiences: resource.experiences,
+			skillsSummary: resource.skillsSummary,
+			skills: resource.skills,
+			profileSummary: resource.profileSummary,
+		});
+
 		return createdResource;
 	}
 
@@ -34,7 +48,6 @@ export class ResourceService {
 
 	async getResourceInfo(resourceId: number): Promise<Resource> {
 		const resourceEntity = await this.resourceRepository.findOne(resourceId);
-
 		if (!resourceEntity) {
 			throw new NotFoundException(`Could not find resource with id ${resourceId}`);
 		}

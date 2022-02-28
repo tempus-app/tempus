@@ -1,4 +1,4 @@
-import { Resource, RoleType, User, UserEntity, UpdateUserDto } from '@tempus/datalayer';
+import { Resource, RoleType, User, UserEntity, UpdateUserDto, CreateUserDto } from '@tempus/datalayer';
 import { ConsoleLogger, Injectable, NotFoundException, NotImplementedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -12,13 +12,12 @@ export class UserService {
 		private resourceService: ResourceService,
 	) {}
 
-	async createUser(user: UserEntity): Promise<User> {
+	async createUser(user: CreateUserDto): Promise<User> {
+		const userEntity = CreateUserDto.toEntity(user);
 		if (user.roles.includes(RoleType.BUSINESS_OWNER)) {
-			return this.userRepository.save(user);
+			return this.userRepository.save(userEntity);
 		}
-		return this.resourceService.createResource({
-			...user,
-		} as Resource);
+		return this.resourceService.createResource(user);
 	}
 
 	async updateUser(updateUserData: UpdateUserDto): Promise<User> {

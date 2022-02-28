@@ -37,7 +37,7 @@ export class UserController {
 	// creates User (includes resource)
 	@Post()
 	async createUser(@Body() user: CreateUserDto): Promise<User | Resource> {
-		return this.userService.createUser(CreateUserDto.toEntity(user));
+		return this.userService.createUser(user);
 	}
 
 	// updates user information  (includes resource)

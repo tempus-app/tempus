@@ -2,7 +2,7 @@ import { Entity, Column, PrimaryGeneratedColumn, OneToMany, ManyToMany, JoinTabl
 import { SkillEntity } from './skill.entity';
 import { RevisionEntity } from './revision.entity';
 import { ExperienceEntity } from './experience.entity';
-import { EducationEntity } from '.';
+import { CertificationEntity, EducationEntity } from '.';
 import { ResourceEntity } from '../account-entities';
 import { ViewType } from '../../enums';
 import { View } from '../..';
@@ -20,6 +20,7 @@ export class ViewEntity implements View {
 		skills?: SkillEntity[],
 		experiences?: ExperienceEntity[],
 		educations?: EducationEntity[],
+		certifications?: CertificationEntity[],
 		resource?: ResourceEntity,
 		viewType?: ViewType,
 	) {
@@ -33,6 +34,7 @@ export class ViewEntity implements View {
 		this.skills = skills;
 		this.experiences = experiences;
 		this.educations = educations;
+		this.certifications = certifications;
 		this.resource = resource;
 		this.viewType = viewType;
 	}
@@ -70,7 +72,11 @@ export class ViewEntity implements View {
 	@JoinTable()
 	educations: EducationEntity[];
 
-	@ManyToOne(() => ResourceEntity, resource => resource.views)
+	@ManyToMany(() => CertificationEntity)
+	@JoinTable()
+	certifications: CertificationEntity[];
+
+	@ManyToOne(() => ResourceEntity, resource => resource.views, { onDelete: 'CASCADE' })
 	resource: ResourceEntity;
 
 	@Column({
