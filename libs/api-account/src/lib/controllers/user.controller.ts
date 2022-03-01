@@ -1,5 +1,14 @@
+/* eslint-disable @typescript-eslint/return-await */
 import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards } from '@nestjs/common';
-import { CreateUserDto, Resource, RoleType, UpdateUserDto, User } from '@tempus/datalayer';
+import {
+	CreateResourceDto,
+	CreateUserDto,
+	Resource,
+	RoleType,
+	UpdateResourceDto,
+	UpdateUserDto,
+	User,
+} from '@tempus/datalayer';
 import { JwtAuthGuard, Roles, RolesGuard } from '@tempus/api-auth';
 import { ApiTags } from '@nestjs/swagger';
 import { ResourceService } from '../services/resource.service';
@@ -37,13 +46,25 @@ export class UserController {
 	// creates User (includes resource)
 	@Post()
 	async createUser(@Body() user: CreateUserDto): Promise<User | Resource> {
-		return this.userService.createUser(CreateUserDto.toEntity(user));
+		// if (user.roles.includes(RoleType.BUSINESS_OWNER)) {
+		return this.userService.createUser(user);
+		// return this.resourceService.createResource(user as CreateResourceDto);
+	}
+
+	@Post('resource')
+	async createResource(@Body() user: CreateResourceDto): Promise<Resource> {
+		return await this.resourceService.createResource(user as CreateResourceDto);
 	}
 
 	// updates user information  (includes resource)
 	@Patch()
-	async updateUser(@Body() updateUserData: UpdateUserDto): Promise<User | Resource> {
-		return this.userService.updateUser(updateUserData);
+	async updateUser(@Body() updateUserData: UpdateUserDto): Promise<User> {
+		return await this.userService.updateUser(updateUserData);
+	}
+
+	@Patch('resource')
+	async updateResource(@Body() updateResourceData: UpdateResourceDto): Promise<Resource> {
+		return await this.resourceService.editResource(updateResourceData);
 	}
 
 	@Delete(':userId')

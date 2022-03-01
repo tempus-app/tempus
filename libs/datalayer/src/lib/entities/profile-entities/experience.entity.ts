@@ -8,6 +8,7 @@ export class ExperienceEntity implements Experience {
 	constructor(
 		id?: number,
 		title?: string,
+		company?: string,
 		summary?: string,
 		description?: string[],
 		startDate?: Date,
@@ -17,6 +18,7 @@ export class ExperienceEntity implements Experience {
 	) {
 		this.id = id;
 		this.title = title;
+		this.company = company;
 		this.summary = summary;
 		this.description = description;
 		this.startDate = startDate;

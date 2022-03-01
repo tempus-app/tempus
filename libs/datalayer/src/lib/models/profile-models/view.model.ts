@@ -1,3 +1,4 @@
+import { Certification } from '.';
 import { ViewType } from '../..';
 import { Resource } from '../account-models';
 import { Education } from './education.model';
@@ -16,6 +17,7 @@ export interface View {
 	skills: Skill[];
 	experiences: Experience[];
 	educations: Education[];
+	certifications: Certification[];
 	resource: Resource;
 	viewType: ViewType;
 }
