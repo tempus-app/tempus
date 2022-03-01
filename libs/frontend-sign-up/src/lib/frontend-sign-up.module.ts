@@ -7,16 +7,20 @@ import {MatGridListModule} from '@angular/material/grid-list';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MyInfoOneComponent } from './my-info-one/my-info-one.component';
+import { MyInfoTwoComponent } from './my-info-two/my-info-two.component';
+import {MatTooltipModule} from '@angular/material/tooltip';
 
 @NgModule({
-  imports: [CommonModule, FrontendCommon, MatCardModule, MatGridListModule, MatIconModule, MatButtonModule],
+  imports: [CommonModule, FrontendCommon, MatCardModule, MatGridListModule, MatIconModule, MatButtonModule, MatTooltipModule],
   declarations: [
     SignInComponent,
-    MyInfoOneComponent
+    MyInfoOneComponent,
+    MyInfoTwoComponent
   ],
   exports: [
     SignInComponent,
-    MyInfoOneComponent
+    MyInfoOneComponent,
+    MyInfoTwoComponent
   ],
 })
 export class FrontendSignUpModule {}

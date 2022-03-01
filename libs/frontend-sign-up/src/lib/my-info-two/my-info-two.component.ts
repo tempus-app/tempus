@@ -1,29 +1,23 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Country, State, City }  from 'country-state-city';
 import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
+
 @Component({
-  selector: 'tempus-my-info-one',
-  templateUrl: './my-info-one.component.html',
-  styleUrls: ['./my-info-one.component.scss']
+  selector: 'tempus-my-info-two',
+  templateUrl: './my-info-two.component.html',
+  styleUrls: ['./my-info-two.component.scss']
 })
-export class MyInfoOneComponent implements OnInit {
-  countries: string[] =  Country.getAllCountries().map(country => { return country.name});
-  states: string[] =  State.getAllStates().map(state => { return state.name});
+export class MyInfoTwoComponent implements OnInit {
+
   destroyed = new Subject<void>();
   cols: string = '1';
-  rows: string = '5';
+  rows: string = '10';
+  numberWorkSections: number[] = [1];
+  hideElement = true;
 
 
   // Create a map to display breakpoint names for demonstration purposes.
-  displayNameMap = new Map([
-    [Breakpoints.XSmall, '1'],
-    [Breakpoints.Small, 'Small'],
-    [Breakpoints.Medium, 'Medium'],
-    [Breakpoints.Large, 'Large'],
-    [Breakpoints.XLarge, 'XLarge'],
-  ]);
 
   constructor(breakpointObserver: BreakpointObserver) {
     breakpointObserver
@@ -39,11 +33,13 @@ export class MyInfoOneComponent implements OnInit {
         for (const query of Object.keys(result.breakpoints)) {
           if (result.breakpoints[query]) {
             if (query == Breakpoints.XSmall || query == Breakpoints.Small ){
-              this.rows = '8';
+              this.rows = '15';
               this.cols = '2';
+              this.hideElement = false;
             }else{
-              this.rows = '5';
+              this.rows = '10';
               this.cols = '1';
+              this.hideElement = true;
             }
 
           }
@@ -51,18 +47,22 @@ export class MyInfoOneComponent implements OnInit {
       });
   }
 
+  ngOnInit(): void {
+  }
+
+
   ngOnDestroy() {
     this.destroyed.next();
     this.destroyed.complete();
   }
-  ngOnInit(): void {
+
+  incrementWorkSections(){
+    this.numberWorkSections.push(this.numberWorkSections.length + 1);
   }
 
-  updateStateOptions(inputtedCountry: string){
-    let countryCode =  Country.getAllCountries().find(country => country.name === inputtedCountry);
-    console.log(countryCode)
-    if (countryCode != null)
-      this.states = State.getStatesOfCountry(countryCode.isoCode).map(state => { return state.name});
+  decrementWorkSections(){
+    this.numberWorkSections.pop();
   }
+
 
 }
