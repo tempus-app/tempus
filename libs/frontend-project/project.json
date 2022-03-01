@@ -1,23 +1,23 @@
 {
-  "projectType": "library",
-  "root": "libs/frontend-project",
-  "sourceRoot": "libs/frontend-project/src",
-  "prefix": "tempus",
-  "targets": {
-    "test": {
-      "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/frontend-project"],
-      "options": {
-        "jestConfig": "libs/frontend-project/jest.config.js",
-        "passWithNoTests": true
-      }
-    },
-    "lint": {
-      "executor": "@nrwl/linter:eslint",
-      "options": {
-        "lintFilePatterns": ["libs/frontend-project/src/**/*.ts", "libs/frontend-project/src/**/*.html"]
-      }
-    }
-  },
-  "tags": []
+	"projectType": "library",
+	"root": "libs/frontend-project",
+	"sourceRoot": "libs/frontend-project/src",
+	"prefix": "tempus",
+	"targets": {
+		"test": {
+			"executor": "@nrwl/jest:jest",
+			"outputs": ["coverage/libs/frontend-project"],
+			"options": {
+				"jestConfig": "libs/frontend-project/jest.config.js",
+				"passWithNoTests": true
+			}
+		},
+		"lint": {
+			"executor": "@nrwl/linter:eslint",
+			"options": {
+				"lintFilePatterns": ["libs/frontend-project/src/**/*.ts", "libs/frontend-project/src/**/*.html"]
+			}
+		}
+	},
+	"tags": []
 }

@@ -1,1 +1,1 @@
-export * from './createRevision.dto'
+export * from './createRevision.dto';

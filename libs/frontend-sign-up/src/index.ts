@@ -1,1 +1,1 @@
-export * from './lib/frontend-sign-up.module'
+export * from './lib/frontend-sign-up.module';

@@ -4,7 +4,8 @@ ENV NODE_ENV=development
 
 WORKDIR /src
 COPY . .
-RUN apk add --update python3 make g++ && rm -rf /var/cache/apk/*
+RUN apk add --update python3 make g++ && rm -rf /var/cache/apk/
+RUN apk add chromium
 RUN npm install
 CMD npm run start:onboarding-api
 

@@ -1,60 +1,59 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm'
-import { Link } from '../..'
-import { StatusType } from '../../enums'
-import { UserEntity } from './user.entity'
+import { Column, CreateDateColumn, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Link } from '../..';
+import { StatusType } from '../../enums';
+import { UserEntity } from './user.entity';
 
 @Entity()
 export class LinkEntity implements Link {
-  constructor(
-    id?: number,
-    createdAt?: Date,
-    firstName?: string,
-    lastName?: string,
-    email?: string,
-    expiry?: Date,
-    token?: string,
-    status?: StatusType,
-    user?: UserEntity,
-  ) {
-    this.id = id
-    this.createdAt = createdAt
-    this.firstName = firstName
-    this.lastName = lastName
-    this.expiry = expiry
-    this.email = email
-    this.token = token
-    this.status = status
-    this.user = user
-  }
-  @PrimaryGeneratedColumn()
-  id: number
+	constructor(
+		id?: number,
+		firstName?: string,
+		lastName?: string,
+		email?: string,
+		expiry?: Date,
+		token?: string,
+		status?: StatusType,
+		user?: UserEntity,
+	) {
+		this.id = id;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.expiry = expiry;
+		this.email = email;
+		this.token = token;
+		this.status = status;
+		this.user = user;
+	}
 
-  @CreateDateColumn()
-  createdAt: Date
+	@PrimaryGeneratedColumn()
+	id: number;
 
-  @Column()
-  firstName: string
+	@CreateDateColumn()
+	createdAt: Date;
 
-  @Column()
-  lastName: string
+	@Column()
+	firstName: string;
 
-  @Column()
-  email: string
+	@Column()
+	lastName: string;
 
-  @Column()
-  expiry: Date
+	@Column()
+	email: string;
 
-  @Column()
-  token: string
+	@Column()
+	expiry: Date;
 
-  @Column({
-    type: 'enum',
-    enum: StatusType,
-    default: [StatusType.ACTIVE],
-  })
-  status: StatusType
+	@Column({ unique: true })
+	token: string;
 
-  @OneToOne(() => UserEntity)
-  @JoinColumn()
-  user?: UserEntity
+	@Column({
+		type: 'enum',
+		enum: StatusType,
+		default: [StatusType.ACTIVE],
+	})
+	status: StatusType;
+
+	@OneToOne(() => UserEntity)
+	@JoinColumn()
+	user?: UserEntity;
 }

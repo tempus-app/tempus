@@ -1,31 +1,37 @@
-import { Body, Controller, Get, Post } from '@nestjs/common'
-import { ApiTags } from '@nestjs/swagger'
-import { Message } from '@tempus/api-interfaces'
-import { CreateUserDto } from '@tempus/datalayer'
+import { Body, Controller, Get, Post, Res } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
+import { Message } from '@tempus/api-interfaces';
+import { CreateUserDto } from '@tempus/datalayer';
 
-import { AppService } from './app.service'
+import { AppService } from './app.service';
 
 @ApiTags('app')
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) {}
+	constructor(private readonly appService: AppService) {}
 
-  @Post('create-user')
-  async createUserSwaggerExample(@Body() createUserDto: CreateUserDto) {
-    this.appService.createUser()
-  }
+	@Post('create-user')
+	async createUserSwaggerExample(@Body() createUserDto: CreateUserDto) {
+		this.appService.createUser();
+	}
 
-  @Get('hello')
-  getData(): Message {
-    return this.appService.getData()
-  }
+	@Get('hello')
+	getData(): Message {
+		return this.appService.getData();
+	}
 
-  @Get('create')
-  makeUser() {
-    this.appService.createUser()
-  }
-  @Get('getuser')
-  getUser() {
-    return this.appService.getUser()
-  }
+	@Get('create')
+	makeUser() {
+		this.appService.createUser();
+	}
+
+	@Get('getuser')
+	getUser() {
+		return this.appService.getUser();
+	}
+
+	@Get('pdf')
+	async getTest(@Res() res: Response): Promise<void> {
+		this.appService.getPdf(res);
+	}
 }

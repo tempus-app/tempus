@@ -1,6 +1,18 @@
+@use 'components/helper' as c;
+@use 'abstracts/helper' as abs;
+
 mat-form-field {
-    width: 100%;
+	width: 100%;
 }
+
+.secondary {
+	@include c.tempus-form(white);
+}
+
+.primary {
+	@include c.tempus-form(abs.$primary-100);
+}
+
 input {
-    height: 50%;
+	height: 50%;
 }

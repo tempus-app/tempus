@@ -1,91 +1,94 @@
 {
-  "projectType": "application",
-  "root": "apps/tempus",
-  "sourceRoot": "apps/tempus/src",
-  "prefix": "tempus",
-  "targets": {
-    "build": {
-      "executor": "@angular-devkit/build-angular:browser",
-      "outputs": ["{options.outputPath}"],
-      "options": {
-        "outputPath": "dist/apps/tempus",
-        "index": "apps/tempus/src/index.html",
-        "main": "apps/tempus/src/main.ts",
-        "polyfills": "apps/tempus/src/polyfills.ts",
-        "tsConfig": "apps/tempus/tsconfig.app.json",
-        "inlineStyleLanguage": "scss",
-        "assets": ["apps/tempus/src/favicon.ico", "apps/tempus/src/assets"],
-        "styles": ["apps/tempus/src/styles.scss"],
-        "scripts": []
-      },
-      "configurations": {
-        "production": {
-          "budgets": [
-            {
-              "type": "initial",
-              "maximumWarning": "500kb",
-              "maximumError": "1mb"
-            },
-            {
-              "type": "anyComponentStyle",
-              "maximumWarning": "2kb",
-              "maximumError": "4kb"
-            }
-          ],
-          "fileReplacements": [
-            {
-              "replace": "apps/tempus/src/environments/environment.ts",
-              "with": "apps/tempus/src/environments/environment.prod.ts"
-            }
-          ],
-          "outputHashing": "all"
-        },
-        "development": {
-          "buildOptimizer": false,
-          "optimization": false,
-          "vendorChunk": true,
-          "extractLicenses": false,
-          "sourceMap": true,
-          "namedChunks": true
-        }
-      },
-      "defaultConfiguration": "production"
-    },
-    "serve": {
-      "executor": "@angular-devkit/build-angular:dev-server",
-      "configurations": {
-        "production": {
-          "browserTarget": "tempus:build:production"
-        },
-        "development": {
-          "browserTarget": "tempus:build:development"
-        }
-      },
-      "defaultConfiguration": "development",
-      "options": {
-        "proxyConfig": "apps/tempus/proxy.conf.json"
-      }
-    },
-    "extract-i18n": {
-      "executor": "@angular-devkit/build-angular:extract-i18n",
-      "options": {
-        "browserTarget": "tempus:build"
-      }
-    },
-    "lint": {
-      "executor": "@nrwl/linter:eslint",
-      "options": {
-        "lintFilePatterns": ["apps/tempus/src/**/*.ts", "apps/tempus/src/**/*.html"]
-      }
-    },
-    "test": {
-      "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/apps/tempus"],
-      "options": {
-        "jestConfig": "apps/tempus/jest.config.js",
-        "passWithNoTests": true
-      }
-    }
-  },
-  "tags": []
+	"projectType": "application",
+	"root": "apps/tempus",
+	"sourceRoot": "apps/tempus/src",
+	"prefix": "tempus",
+	"targets": {
+		"build": {
+			"executor": "@angular-devkit/build-angular:browser",
+			"outputs": ["{options.outputPath}"],
+			"options": {
+				"outputPath": "dist/apps/tempus",
+				"index": "apps/tempus/src/index.html",
+				"main": "apps/tempus/src/main.ts",
+				"polyfills": "apps/tempus/src/polyfills.ts",
+				"tsConfig": "apps/tempus/tsconfig.app.json",
+				"inlineStyleLanguage": "scss",
+				"assets": ["apps/tempus/src/favicon.ico", "apps/tempus/src/assets"],
+				"styles": ["apps/tempus/src/styles.scss"],
+				"stylePreprocessorOptions": {
+					"includePaths": ["libs/frontend-common/src/styles"]
+				},
+				"scripts": []
+			},
+			"configurations": {
+				"production": {
+					"budgets": [
+						{
+							"type": "initial",
+							"maximumWarning": "500kb",
+							"maximumError": "1mb"
+						},
+						{
+							"type": "anyComponentStyle",
+							"maximumWarning": "2kb",
+							"maximumError": "4kb"
+						}
+					],
+					"fileReplacements": [
+						{
+							"replace": "apps/tempus/src/environments/environment.ts",
+							"with": "apps/tempus/src/environments/environment.prod.ts"
+						}
+					],
+					"outputHashing": "all"
+				},
+				"development": {
+					"buildOptimizer": false,
+					"optimization": false,
+					"vendorChunk": true,
+					"extractLicenses": false,
+					"sourceMap": true,
+					"namedChunks": true
+				}
+			},
+			"defaultConfiguration": "production"
+		},
+		"serve": {
+			"executor": "@angular-devkit/build-angular:dev-server",
+			"configurations": {
+				"production": {
+					"browserTarget": "tempus:build:production"
+				},
+				"development": {
+					"browserTarget": "tempus:build:development"
+				}
+			},
+			"defaultConfiguration": "development",
+			"options": {
+				"proxyConfig": "apps/tempus/proxy.conf.json"
+			}
+		},
+		"extract-i18n": {
+			"executor": "@angular-devkit/build-angular:extract-i18n",
+			"options": {
+				"browserTarget": "tempus:build"
+			}
+		},
+		"lint": {
+			"executor": "@nrwl/linter:eslint",
+			"options": {
+				"lintFilePatterns": ["apps/tempus/src/**/*.ts", "apps/tempus/src/**/*.html"]
+			}
+		},
+		"test": {
+			"executor": "@nrwl/jest:jest",
+			"outputs": ["coverage/apps/tempus"],
+			"options": {
+				"jestConfig": "apps/tempus/jest.config.js",
+				"passWithNoTests": true
+			}
+		}
+	},
+	"tags": []
 }

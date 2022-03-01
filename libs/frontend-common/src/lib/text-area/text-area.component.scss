@@ -1,10 +1,10 @@
-mat-form-field  {
-    width: 100%;
-   
+@use 'components/helper';
+mat-form-field {
+	width: 100%;
 }
 input {
-    height: 50%;
+	height: 50%;
 }
 textarea {
-    width: 100%;
+	width: 100%;
 }

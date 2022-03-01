@@ -1,23 +1,39 @@
 {
-  "projectType": "library",
-  "root": "libs/frontend-common",
-  "sourceRoot": "libs/frontend-common/src",
-  "prefix": "tempus",
-  "targets": {
-    "test": {
-      "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/frontend-common"],
-      "options": {
-        "jestConfig": "libs/frontend-common/jest.config.js",
-        "passWithNoTests": true
-      }
-    },
-    "lint": {
-      "executor": "@nrwl/linter:eslint",
-      "options": {
-        "lintFilePatterns": ["libs/frontend-common/src/**/*.ts", "libs/frontend-common/src/**/*.html"]
-      }
-    }
-  },
-  "tags": []
+	"projectType": "library",
+	"root": "libs/frontend-common",
+	"sourceRoot": "libs/frontend-common/src",
+	"prefix": "tempus",
+	"targets": {
+		"build": {
+			"executor": "@nrwl/angular:ng-packagr-lite",
+			"outputs": ["dist/libs/frontend-common"],
+			"options": {
+				"project": "libs/frontend-common/ng-package.json"
+			},
+			"configurations": {
+				"production": {
+					"tsConfig": "libs/frontend-common/tsconfig.lib.prod.json"
+				},
+				"development": {
+					"tsConfig": "libs/frontend-common/tsconfig.lib.json"
+				}
+			},
+			"defaultConfiguration": "production"
+		},
+		"test": {
+			"executor": "@nrwl/jest:jest",
+			"outputs": ["coverage/libs/frontend-common"],
+			"options": {
+				"jestConfig": "libs/frontend-common/jest.config.js",
+				"passWithNoTests": true
+			}
+		},
+		"lint": {
+			"executor": "@nrwl/linter:eslint",
+			"options": {
+				"lintFilePatterns": ["libs/frontend-common/src/**/*.ts", "libs/frontend-common/src/**/*.html"]
+			}
+		}
+	},
+	"tags": []
 }
