@@ -14,10 +14,7 @@ export class UserService {
 
 	async createUser(user: CreateUserDto): Promise<User> {
 		const userEntity = CreateUserDto.toEntity(user);
-		if (user.roles.includes(RoleType.BUSINESS_OWNER)) {
-			return this.userRepository.save(userEntity);
-		}
-		return this.resourceService.createResource(user);
+		return this.userRepository.save(userEntity);
 	}
 
 	async updateUser(updateUserData: UpdateUserDto): Promise<User> {
@@ -25,14 +22,11 @@ export class UserService {
 		if (!userEntity) {
 			throw new NotFoundException(`Could not find user with id ${userEntity.id}`);
 		}
-		if (userEntity.roles.includes(RoleType.BUSINESS_OWNER)) {
-			const user = UpdateUserDto.toEntity(updateUserData);
-			for (const [key, val] of Object.entries(user)) if (!val) delete user[key];
+		const user = UpdateUserDto.toEntity(updateUserData);
+		for (const [key, val] of Object.entries(user)) if (!val) delete user[key];
 
-			Object.assign(userEntity, user);
-			return this.userRepository.save(userEntity);
-		}
-		return this.resourceService.editResource(updateUserData);
+		Object.assign(userEntity, user);
+		return this.userRepository.save(userEntity);
 	}
 
 	async getUser(userId: number): Promise<User | Resource> {

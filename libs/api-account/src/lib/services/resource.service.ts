@@ -12,6 +12,9 @@ import {
 	CreateViewDto,
 	UserEntity,
 	ExperienceEntity,
+	CreateResourceDto,
+	UpdateResourceDto,
+	UpdateLocationDto,
 } from '@tempus/datalayer';
 import { create } from 'domain';
 import { Repository } from 'typeorm';
@@ -25,8 +28,8 @@ export class ResourceService {
 		private experiencesService: ExperienceService,
 	) {}
 
-	async createResource(resource: CreateUserDto): Promise<Resource> {
-		const resourceEntity = CreateUserDto.toEntity(resource);
+	async createResource(resource: CreateResourceDto): Promise<Resource> {
+		const resourceEntity = CreateResourceDto.toEntity(resource);
 		const createdResource = await this.resourceRepository.save(resourceEntity);
 
 		const view = await this.viewsService.createView(createdResource.id, {
@@ -99,15 +102,16 @@ export class ResourceService {
 	}
 
 	// edit resource to be used specifically when updating local information
-	async editResource(updateResourceData: UpdateUserDto): Promise<Resource> {
+	async editResource(updateResourceData: UpdateResourceDto): Promise<Resource> {
 		const resourceEntity = await this.getResource(updateResourceData.id);
 
 		const updatedLocationData = updateResourceData.location;
 		delete updateResourceData.location;
 
 		for (const [key, val] of Object.entries(updateResourceData)) if (!val) delete updateResourceData[key];
-		for (const [key, val] of Object.entries(updatedLocationData)) if (!val) delete updatedLocationData[key];
-
+		if (updatedLocationData) {
+			for (const [key, val] of Object.entries(updatedLocationData)) if (!val) delete updatedLocationData[key];
+		}
 		Object.assign(resourceEntity.location, updatedLocationData);
 		Object.assign(resourceEntity, updateResourceData);
 
