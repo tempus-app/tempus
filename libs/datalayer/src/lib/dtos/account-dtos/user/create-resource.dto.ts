@@ -101,7 +101,7 @@ export class CreateResourceDto extends CreateUserDto {
 			null,
 			dto.phoneNumber,
 			dto.title,
-			(dto.location ? dto.location : null) as LocationEntity,
+			CreateLocationDto.toEntity(dto.location),
 			[],
 			[],
 			dto.experiences.map(experience => CreateExperienceDto.toEntity(experience)),
