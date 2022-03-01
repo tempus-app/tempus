@@ -1,7 +1,19 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+/* eslint-disable no-param-reassign */
+/* eslint-disable no-restricted-syntax */
+import { ConsoleLogger, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ViewsService } from '@tempus/api-profile';
-import { UpdateUserDto, ResourceEntity, Resource, CreateUserDto, ViewType } from '@tempus/datalayer';
+import { ExperienceService, ViewsService } from '@tempus/api-profile';
+import {
+	UpdateUserDto,
+	ResourceEntity,
+	Resource,
+	CreateUserDto,
+	ViewType,
+	CreateViewDto,
+	UserEntity,
+	ExperienceEntity,
+} from '@tempus/datalayer';
+import { create } from 'domain';
 import { Repository } from 'typeorm';
 
 @Injectable()
@@ -10,26 +22,27 @@ export class ResourceService {
 		@InjectRepository(ResourceEntity)
 		private resourceRepository: Repository<ResourceEntity>,
 		private viewsService: ViewsService,
+		private experiencesService: ExperienceService,
 	) {}
 
 	async createResource(resource: CreateUserDto): Promise<Resource> {
 		const resourceEntity = CreateUserDto.toEntity(resource);
 		const createdResource = await this.resourceRepository.save(resourceEntity);
 
-		// TODO: create initial view with inital data
-
-		await this.viewsService.createInitialView(resourceEntity as ResourceEntity, {
+		const view = await this.viewsService.createView(createdResource.id, {
 			viewType: ViewType.PRIMARY,
 			educationsSummary: resource.educationsSummary,
-			educations: resource.educations,
-			certifications: resource.certifications,
+			educations: createdResource.educations,
+			certifications: createdResource.certifications,
 			experiencesSummary: resource.experiencesSummary,
-			experiences: resource.experiences,
+			experiences: createdResource.experiences,
 			skillsSummary: resource.skillsSummary,
-			skills: resource.skills,
+			skills: createdResource.skills,
 			profileSummary: resource.profileSummary,
+			type: 'PROFILE',
 		});
 
+		createdResource.views.push(view);
 		return createdResource;
 	}
 

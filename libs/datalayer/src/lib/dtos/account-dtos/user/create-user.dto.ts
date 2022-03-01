@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsISO31661Alpha2, IsOptional } from 'class-validator';
 import exp = require('constants');
-import { RoleType } from '../../../enums';
+import { RoleType, ViewType } from '../../../enums';
 import { UserEntity } from '../../../entities/account-entities/user.entity';
 import { ResourceEntity } from '../../../entities/account-entities/resource.entity';
 import { CreateCertificationDto } from '../../profile-dtos/certification/createCertification.dto';
@@ -133,10 +133,10 @@ export class CreateUserDto {
 				(dto.location ? dto.location : null) as LocationEntity,
 				[],
 				[],
-				(dto.experiences ? dto.experiences : []) as ExperienceEntity[],
-				(dto.educations ? dto.educations : []) as EducationEntity[],
-				(dto.skills ? dto.skills : []) as SkillEntity[],
-				(dto.certifications ? dto.certifications : []) as CertificationEntity[],
+				dto.experiences.map(experience => CreateExperienceDto.toEntity(experience)),
+				dto.educations.map(education => CreateEducationDto.toEntity(education)),
+				dto.skills.map(skill => CreateSkillDto.toEntity(skill)),
+				dto.certifications.map(certification => CreateCertificationDto.toEntity(certification)),
 				dto.firstName,
 				dto.lastName,
 				dto.email,

@@ -20,31 +20,14 @@ export class ViewsService {
 		private resourceService: ResourceService,
 	) {}
 
-	async createView(resourceId: number): Promise<View> {
+	async createView(resourceId: number, createViewDto: CreateViewDto): Promise<View> {
+		// error check
 		const resourceEntity = await this.resourceService.getResourceInfo(resourceId);
-		const primaryView: ViewEntity = (
-			await this.viewsRepository.find({
-				where: {
-					resource: resourceEntity,
-					viewType: ViewType.PRIMARY,
-				},
-			})
-		)[0];
 
-		primaryView.id = null;
-		primaryView.viewType = ViewType.SECONDARY;
+		const viewEntity = CreateViewDto.toEntity(createViewDto);
+		viewEntity.resource = resourceEntity;
 
-		primaryView.resource = resourceEntity;
-
-		return await this.viewsRepository.save(primaryView);
-	}
-
-	async createInitialView(resource: ResourceEntity, createViewDto: CreateViewDto): Promise<View> {
-		const view = CreateViewDto.toEntity(createViewDto);
-
-		view.resource = resource;
-
-		return await this.viewsRepository.save(view);
+		return await this.viewsRepository.save(viewEntity);
 	}
 
 	// edit view
@@ -80,7 +63,7 @@ export class ViewsService {
 	async deleteView(viewId: number) {
 		const viewEntity = await this.viewsRepository.findOne(viewId);
 		if (!viewEntity) {
-			throw new NotFoundException(`Could not find view with ID ${viewId}`);
+			throw new NotFoundException(`Could not find view with id ${viewId}`);
 		}
 		if (viewEntity.type === ViewType.PRIMARY) {
 			throw new ForbiddenException(`Cannot delete primary view`);

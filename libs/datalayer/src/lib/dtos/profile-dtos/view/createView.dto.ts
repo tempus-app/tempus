@@ -22,26 +22,30 @@ export class CreateViewDto {
 	experiencesSummary: string;
 
 	@ApiProperty()
-	skills: CreateSkillDto[];
+	type: string;
 
 	@ApiProperty()
-	experiences: CreateExperienceDto[];
+	skills: SkillEntity[];
 
 	@ApiProperty()
-	educations: CreateEducationDto[];
+	experiences: ExperienceEntity[];
 
 	@ApiProperty()
-	certifications: CreateCertificationDto[];
+	educations: EducationEntity[];
+
+	@ApiProperty()
+	certifications: CertificationEntity[];
 
 	@ApiProperty({ enum: ['PRIMARY', 'SECONDARY'] })
 	viewType: ViewType;
 
 	constructor(
-		skills: CreateSkillDto[],
-		experiences: CreateExperienceDto[],
-		educations: CreateEducationDto[],
-		certifications: CreateCertificationDto[],
+		skills: SkillEntity[],
+		experiences: ExperienceEntity[],
+		educations: EducationEntity[],
+		certifications: CertificationEntity[],
 		viewType: ViewType,
+		type: string,
 		skillsSummary: string,
 		profileSummary: string,
 		educationsSummary: string,
@@ -56,6 +60,7 @@ export class CreateViewDto {
 		this.educationsSummary = educationsSummary;
 		this.experiencesSummary = experiencesSummary;
 		this.certifications = certifications;
+		this.type = type;
 	}
 
 	public static toEntity(dto: CreateViewDto): ViewEntity {
@@ -66,14 +71,14 @@ export class CreateViewDto {
 			dto.skillsSummary,
 			dto.educationsSummary,
 			dto.experiencesSummary,
-			'PROFILE',
+			dto.type,
 			[],
-			dto.skills as SkillEntity[],
-			dto.experiences as ExperienceEntity[],
-			dto.educations as EducationEntity[],
-			dto.certifications as CertificationEntity[],
+			dto.skills,
+			dto.experiences,
+			dto.educations,
+			dto.certifications,
 			null,
-			ViewType.PRIMARY,
+			dto.viewType,
 		);
 	}
 }

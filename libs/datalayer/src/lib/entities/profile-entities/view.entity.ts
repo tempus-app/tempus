@@ -60,19 +60,19 @@ export class ViewEntity implements View {
 	@OneToMany(() => RevisionEntity, status => status.view)
 	status: RevisionEntity[];
 
-	@ManyToMany(() => SkillEntity)
+	@ManyToMany(() => SkillEntity, { cascade: ['insert', 'update'] })
 	@JoinTable()
 	skills: SkillEntity[];
 
-	@ManyToMany(() => ExperienceEntity)
+	@ManyToMany(() => ExperienceEntity, { cascade: ['insert', 'update'] })
 	@JoinTable()
 	experiences: ExperienceEntity[];
 
-	@ManyToMany(() => EducationEntity)
+	@ManyToMany(() => EducationEntity, { cascade: ['insert', 'update'] })
 	@JoinTable()
 	educations: EducationEntity[];
 
-	@ManyToMany(() => CertificationEntity)
+	@ManyToMany(() => CertificationEntity, { cascade: ['insert', 'update'] })
 	@JoinTable()
 	certifications: CertificationEntity[];
 
