@@ -8,7 +8,7 @@ import { Component, OnInit, Input } from '@angular/core';
 export class DropdownComponent implements OnInit {
 	@Input() options = '';
 
-	@Input() cssClass = '';
+	@Input() cssClass = 'secondary';
 
 	@Input() label = '';
 

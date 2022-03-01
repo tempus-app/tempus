@@ -6,20 +6,20 @@
     - NOTE: requires 'encapsulation: ViewEncapsulation.None' in component definition
  */
 
-.mat-step-header:hover,
-.mat-step-header.cdk-program-focused,
-.mat-step-header.cdk-mouse-focused,
-.mat-step-header.cdk-focused {
+::ng-deep .mat-step-header:hover,
+::ng-deep .mat-step-header.cdk-program-focused,
+::ng-deep .mat-step-header.cdk-mouse-focused,
+::ng-deep .mat-step-header.cdk-focused {
 	background-color: transparent !important;
 }
 
-.mat-horizontal-stepper-header::before,
-.mat-horizontal-stepper-header::after,
-.mat-stepper-horizontal-line {
+::ng-deep .mat-horizontal-stepper-header::before,
+::ng-deep .mat-horizontal-stepper-header::after,
+::ng-deep .mat-stepper-horizontal-line {
 	border-top-color: abs.$primary-300;
 }
 
-.mat-step-header .mat-step-icon-state-done {
+::ng-deep .mat-step-header .mat-step-icon-state-done {
 	background-color: abs.$primary-900;
 	border: 2px solid abs.$primary-900;
 	+ .mat-step-label {
@@ -33,8 +33,8 @@
 	}
 }
 
-.mat-step-header .mat-step-icon-state-edit,
-.mat-step-header .mat-step-icon-state-selected {
+::ng-deep .mat-step-header .mat-step-icon-state-edit,
+::ng-deep .mat-step-header .mat-step-icon-state-selected {
 	background-color: abs.$primary;
 	border: 2px solid abs.$primary;
 	+ .mat-step-label {
@@ -48,7 +48,7 @@
 	}
 }
 
-.mat-step-header .mat-step-icon-state-default {
+::ng-deep .mat-step-header .mat-step-icon-state-default {
 	background-color: transparent;
 	border: 2px solid abs.$primary;
 	+ .mat-step-label {

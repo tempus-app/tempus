@@ -12,7 +12,7 @@ export class SearchBoxComponent implements OnInit {
 
 	search = '';
 
-	@Input() cssClass = '';
+	@Input() cssClass = 'secondary';
 
 	@Input() placeholder = '';
 
