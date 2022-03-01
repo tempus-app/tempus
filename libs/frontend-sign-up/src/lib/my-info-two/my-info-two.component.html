@@ -1,58 +1,76 @@
 <ng-container>
-  <mat-grid-list cols="2" rowHeight="50px" [gutterSize]="'0.8em'">
-    <mat-grid-tile colspan="2" rowspan="3">
-      <div class="info-title">
-        <h2 class="mat-h2 section-header">Work Experience</h2>
-        <button mat-mini-fab (click)="incrementWorkSections()" matTooltip="Add more work experience sections"
-          class="experience-button" color="primary">
-          <mat-icon>add</mat-icon>
-        </button>
-      </div>
-    </mat-grid-tile>
-    <mat-grid-tile *ngFor="let numExperience of numberWorkSections" colspan="2" rowspan={{rows}}>
-      <tempus-card>
-        <mat-card-content>
-          <form>
-            <div class="card-header">
-              <div class="experience-button">
-                <button mat-mini-fab (click)="decrementWorkSections()" matTooltip="Add more work experience sections" color="primary">
-                  <mat-icon>remove</mat-icon>
-                </button>
-              </div>
-              <div>
-                <h3 class="mat-h3" color="accent">Work Experience {{numExperience}}</h3>
-              </div>
-            </div>
-            <mat-grid-list cols="2" rowHeight="100px">
-              <mat-grid-tile colspan={{cols}}>
-                <tempus-text-input id="title-{{numExperience}}" placeholder="Title" cssClass="secondary">
-                </tempus-text-input>
-              </mat-grid-tile>
-              <mat-grid-tile colspan={{cols}}>
-                <tempus-text-input id="company-{{numExperience}}" placeholder="Company" cssClass="secondary">
-                </tempus-text-input>
-              </mat-grid-tile>
-              <mat-grid-tile colspan={{cols}}>
-                <tempus-text-input id="location-{{numExperience}}" placeholder="Location" cssClass="secondary">
-                </tempus-text-input>
-              </mat-grid-tile>
-              <mat-grid-tile *ngIf="hideElement" colspan="1"></mat-grid-tile>
-              <mat-grid-tile colspan={{cols}}>
-                <tempus-text-input id="start-date-{{numExperience}}" inputType="date" placeholder="Start Date"
-                  cssClass="secondary"></tempus-text-input>
-              </mat-grid-tile>
-              <mat-grid-tile colspan={{cols}}>
-                <tempus-text-input id="end-date-{{numExperience}}" inputType="date" placeholder="End Date"
-                  cssClass="secondary"></tempus-text-input>
-              </mat-grid-tile>
-              <mat-grid-tile colspan="2" rowspan="2">
-                <tempus-text-area id="description-{{numExperience}}" placeholder="Description" cssClass="secondary">
-                </tempus-text-area>
-              </mat-grid-tile>
-            </mat-grid-list>
-          </form>
-        </mat-card-content>
-      </tempus-card>
-    </mat-grid-tile>
-  </mat-grid-list>
+	<mat-grid-list cols="2" rowHeight="50px" [gutterSize]="'0.8em'">
+		<mat-grid-tile colspan="2" rowspan="3">
+			<div class="info-title">
+				<h2 class="mat-h2 section-header">Work Experience</h2>
+				<button
+					mat-mini-fab
+					(click)="incrementWorkSections()"
+					matTooltip="Add more work experience sections"
+					class="experience-button"
+					color="primary"
+				>
+					<mat-icon>add</mat-icon>
+				</button>
+			</div>
+		</mat-grid-tile>
+		<mat-grid-tile *ngFor="let numExperience of numberWorkSections" colspan="2" rowspan="{{ rows }}">
+			<tempus-card>
+				<mat-card-content>
+					<form>
+						<div class="card-header">
+							<div class="experience-button">
+								<button
+									mat-mini-fab
+									(click)="decrementWorkSections()"
+									matTooltip="Remove work experience section"
+									color="primary"
+								>
+									<mat-icon>remove</mat-icon>
+								</button>
+							</div>
+							<div>
+								<h3 class="mat-h3" color="accent">Work Experience {{ numExperience }}</h3>
+							</div>
+						</div>
+						<mat-grid-list cols="2" rowHeight="100px">
+							<mat-grid-tile colspan="{{ cols }}">
+								<tempus-text-input id="title-{{ numExperience }}" placeholder="Title" cssClass="secondary">
+								</tempus-text-input>
+							</mat-grid-tile>
+							<mat-grid-tile colspan="{{ cols }}">
+								<tempus-text-input id="company-{{ numExperience }}" placeholder="Company" cssClass="secondary">
+								</tempus-text-input>
+							</mat-grid-tile>
+							<mat-grid-tile colspan="{{ cols }}">
+								<tempus-text-input id="location-{{ numExperience }}" placeholder="Location" cssClass="secondary">
+								</tempus-text-input>
+							</mat-grid-tile>
+							<mat-grid-tile *ngIf="hideElement" colspan="1"></mat-grid-tile>
+							<mat-grid-tile colspan="{{ cols }}">
+								<tempus-text-input
+									id="start-date-{{ numExperience }}"
+									inputType="date"
+									placeholder="Start Date"
+									cssClass="secondary"
+								></tempus-text-input>
+							</mat-grid-tile>
+							<mat-grid-tile colspan="{{ cols }}">
+								<tempus-text-input
+									id="end-date-{{ numExperience }}"
+									inputType="date"
+									placeholder="End Date"
+									cssClass="secondary"
+								></tempus-text-input>
+							</mat-grid-tile>
+							<mat-grid-tile colspan="2" rowspan="2">
+								<tempus-text-area id="description-{{ numExperience }}" placeholder="Description" cssClass="secondary">
+								</tempus-text-area>
+							</mat-grid-tile>
+						</mat-grid-list>
+					</form>
+				</mat-card-content>
+			</tempus-card>
+		</mat-grid-tile>
+	</mat-grid-list>
 </ng-container>
