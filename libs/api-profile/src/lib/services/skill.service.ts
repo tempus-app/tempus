@@ -57,7 +57,7 @@ export class SkillsService {
 		return skillEntity;
 	}
 
-	// edit skill -- NEED REWORKING
+	// edit skill
 	async editSkill(updatedSkillData: UpdateSkillDto): Promise<Skill> {
 		const existingSkillEntity = await this.skillsRepository.findOne(updatedSkillData.id, {
 			relations: ['resource', 'skill'],

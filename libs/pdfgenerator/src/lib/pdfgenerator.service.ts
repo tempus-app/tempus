@@ -3,7 +3,7 @@ import * as puppeteer from 'puppeteer';
 import * as path from 'path';
 import * as handlebars from 'handlebars';
 import * as fs from 'fs';
-import { PdfTemplateDto, HandleBarHelper, ResumePdfTemplateDto } from '@tempus/datalayer';
+import { PdfTemplateDtoInterface, HandleBarHelper, ResumePdfTemplateDto } from '@tempus/datalayer';
 import { ConfigService } from '@nestjs/config';
 import { SampleView } from './testdata/sampleView';
 
@@ -13,11 +13,12 @@ export class PdfGeneratorService {
 
 	async createPDF(
 		@Response() res,
-		templateData?: PdfTemplateDto<any>,
+		templateData?: PdfTemplateDtoInterface<unknown>,
 		pdfOptions?: puppeteer.PDFOptions,
 		attach?: boolean,
 	): Promise<void> {
-		const pdfData: PdfTemplateDto<any> = templateData || new ResumePdfTemplateDto('testresume', SampleView);
+		const pdfData: PdfTemplateDtoInterface<unknown> =
+			templateData || new ResumePdfTemplateDto('testresume', SampleView);
 
 		// reading template file from file system
 		const templateHtml = fs.readFileSync(
@@ -62,7 +63,6 @@ export class PdfGeneratorService {
 			waitUntil: 'networkidle0',
 		});
 
-		// @ts-ignore
 		const buffer = await page.pdf(options);
 		await browser.close();
 

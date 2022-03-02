@@ -1,2 +1,2 @@
-export * from './pdfTemplate.dto';
+export * from './pdfTemplateInterface.dto';
 export * from './resumePdfTemplate.dto';

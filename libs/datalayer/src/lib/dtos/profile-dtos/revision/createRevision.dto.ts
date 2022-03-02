@@ -1,5 +1,9 @@
 import { ResumeSectionType } from '../../../enums';
 
 export class CreateRevisionDto {
-	constructor(sectionsChanged: ResumeSectionType[]) {}
+	sectionsChanged: ResumeSectionType[];
+
+	constructor(sectionsChanged: ResumeSectionType[]) {
+		this.sectionsChanged = sectionsChanged;
+	}
 }

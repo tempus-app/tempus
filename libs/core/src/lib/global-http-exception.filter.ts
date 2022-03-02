@@ -5,7 +5,7 @@ import { ConfigService } from '@nestjs/config';
 export class HttpErrorFilter implements ExceptionFilter {
 	constructor(private readonly config: ConfigService) {}
 
-	catch(exception: Error, host: ArgumentsHost): any {
+	catch(exception: Error, host: ArgumentsHost) {
 		const ctx = host.switchToHttp();
 		const request = ctx.getRequest();
 		const response = ctx.getResponse();
@@ -13,7 +13,7 @@ export class HttpErrorFilter implements ExceptionFilter {
 		const statusCode = exception instanceof HttpException ? exception.getStatus() : HttpStatus.INTERNAL_SERVER_ERROR;
 		const message = exception instanceof HttpException ? exception.message : 'Internal server error';
 
-		const devErrorResponse: any = {
+		const devErrorResponse = {
 			statusCode,
 			timestamp: new Date().toISOString(),
 			path: request.url,
@@ -22,7 +22,7 @@ export class HttpErrorFilter implements ExceptionFilter {
 			message: exception?.message,
 		};
 
-		const prodErrorResponse: any = {
+		const prodErrorResponse = {
 			statusCode,
 			message,
 		};

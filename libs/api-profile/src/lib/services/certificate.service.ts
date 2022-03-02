@@ -16,8 +16,9 @@ export class CertificationService {
 	// create ceritifcation for a specific resource
 	async createCertification(resourceId: number, certification: CertificationEntity): Promise<Certification> {
 		const resourceEntity = await this.resourceService.getResourceInfo(resourceId);
-		certification.resource = resourceEntity;
-		return this.certificationRepository.save(certification);
+		const newCertification = certification;
+		newCertification.resource = resourceEntity;
+		return this.certificationRepository.save(newCertification);
 	}
 
 	// return all certifications by resource
@@ -42,7 +43,8 @@ export class CertificationService {
 
 	// edit certification
 	async editCertification(updatedCertificationData: UpdateCertificationDto): Promise<Certification> {
-		const existingCertificationEntity = await this.certificationRepository.findOne(updatedCertificationData.id, {
+		const updatedCertification = updatedCertificationData;
+		const existingCertificationEntity = await this.certificationRepository.findOne(updatedCertification.id, {
 			relations: ['resource'],
 		});
 		if (!existingCertificationEntity) {
@@ -50,8 +52,12 @@ export class CertificationService {
 		}
 
 		// Safe guards to prevent data from being overwritten as null
-		for (const [key, val] of Object.entries(updatedCertificationData)) if (!val) delete updatedCertificationData[key];
-		Object.assign(existingCertificationEntity, updatedCertificationData);
+		Object.entries(updatedCertification).forEach(entry => {
+			if (!entry[1]) {
+				delete updatedCertification[entry[0]];
+			}
+		});
+		Object.assign(existingCertificationEntity, updatedCertification);
 
 		return this.certificationRepository.save(existingCertificationEntity);
 	}
