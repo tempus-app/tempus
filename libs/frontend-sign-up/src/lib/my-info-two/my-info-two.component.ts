@@ -2,6 +2,7 @@ import { Component, OnDestroy } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { InputType } from '@tempus/frontend-common';
 
 @Component({
 	selector: 'tempus-my-info-two',
@@ -18,6 +19,8 @@ export class MyInfoTwoComponent implements OnDestroy {
 	numberWorkSections: number[] = [0];
 
 	hideElement = true;
+
+	InputType = InputType;
 
 	constructor(breakpointObserver: BreakpointObserver) {
 		breakpointObserver

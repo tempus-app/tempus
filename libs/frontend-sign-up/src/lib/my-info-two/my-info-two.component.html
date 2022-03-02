@@ -55,7 +55,7 @@
 							<mat-grid-tile colspan="{{ cols }}">
 								<tempus-text-input
 									id="start-date-{{ numExperience }}"
-									inputType="date"
+									[inputType]="InputType.DATE"
 									placeholder="Start Date"
 									cssClass="secondary"
 								></tempus-text-input>
@@ -63,7 +63,7 @@
 							<mat-grid-tile colspan="{{ cols }}">
 								<tempus-text-input
 									id="end-date-{{ numExperience }}"
-									inputType="date"
+									[inputType]="InputType.DATE"
 									placeholder="End Date"
 									cssClass="secondary"
 								></tempus-text-input>

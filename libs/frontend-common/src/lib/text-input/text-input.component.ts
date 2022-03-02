@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { InputType } from './text-input-enum';
 
 @Component({
 	selector: 'tempus-text-input',
@@ -12,5 +13,5 @@ export class TextInputComponent {
 
 	@Input() id = '';
 
-	@Input() inputType = '';
+	@Input() inputType: InputType = InputType.TEXT;
 }
