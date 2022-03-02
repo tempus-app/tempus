@@ -1,5 +1,4 @@
 @use 'abstracts/helper' as abs;
-@use '@angular/material' as mat;
 
 //Global styles to all form fields
 @mixin tempus-form($background-color) {
