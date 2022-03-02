@@ -13,12 +13,11 @@ export class PdfGeneratorService {
 
 	async createPDF(
 		@Response() res,
-		templateData?: PdfTemplateDtoInterface<unknown>,
+		templateData?: PdfTemplateDtoInterface,
 		pdfOptions?: puppeteer.PDFOptions,
 		attach?: boolean,
 	): Promise<void> {
-		const pdfData: PdfTemplateDtoInterface<unknown> =
-			templateData || new ResumePdfTemplateDto('testresume', SampleView);
+		const pdfData: PdfTemplateDtoInterface = templateData || new ResumePdfTemplateDto('testresume', SampleView);
 
 		// reading template file from file system
 		const templateHtml = fs.readFileSync(

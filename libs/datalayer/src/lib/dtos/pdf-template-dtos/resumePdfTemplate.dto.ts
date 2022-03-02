@@ -9,7 +9,7 @@ const handlebarHelper: HandleBarHelper = {
 	},
 };
 
-export class ResumePdfTemplateDto implements PdfTemplateDtoInterface<View> {
+export class ResumePdfTemplateDto implements PdfTemplateDtoInterface {
 	filename: string;
 
 	template = 'resume';

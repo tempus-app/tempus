@@ -3,9 +3,9 @@ export interface HandleBarHelper {
 	helper: (...args: never) => string;
 }
 
-export interface PdfTemplateDtoInterface<T> {
+export interface PdfTemplateDtoInterface {
 	filename: string;
 	template: string;
-	data: T;
+	data: unknown;
 	handlebarsHelpers?: HandleBarHelper[];
 }
