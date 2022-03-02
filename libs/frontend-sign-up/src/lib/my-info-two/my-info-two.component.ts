@@ -1,68 +1,57 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
-import {Subject} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
+import { Component, OnDestroy } from '@angular/core';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
-  selector: 'tempus-my-info-two',
-  templateUrl: './my-info-two.component.html',
-  styleUrls: ['./my-info-two.component.scss']
+	selector: 'tempus-my-info-two',
+	templateUrl: './my-info-two.component.html',
+	styleUrls: ['./my-info-two.component.scss'],
 })
-export class MyInfoTwoComponent implements OnInit {
+export class MyInfoTwoComponent implements OnDestroy {
+	destroyed = new Subject<void>();
 
-  destroyed = new Subject<void>();
-  cols: string = '1';
-  rows: string = '10';
-  numberWorkSections: number[] = [1];
-  hideElement = true;
+	cols = '1';
 
+	rows = '10';
 
-  // Create a map to display breakpoint names for demonstration purposes.
+	numberWorkSections: number[] = [0];
 
-  constructor(breakpointObserver: BreakpointObserver) {
-    breakpointObserver
-      .observe([
-        Breakpoints.XSmall,
-        Breakpoints.Small,
-        Breakpoints.Medium,
-        Breakpoints.Large,
-        Breakpoints.XLarge,
-      ])
-      .pipe(takeUntil(this.destroyed))
-      .subscribe(result => {
-        for (const query of Object.keys(result.breakpoints)) {
-          if (result.breakpoints[query]) {
-            if (query == Breakpoints.XSmall || query == Breakpoints.Small ){
-              this.rows = '15';
-              this.cols = '2';
-              this.hideElement = false;
-            }else{
-              this.rows = '10';
-              this.cols = '1';
-              this.hideElement = true;
-            }
+	hideElement = true;
 
-          }
-        }
-      });
-  }
+	constructor(breakpointObserver: BreakpointObserver) {
+		breakpointObserver
+			.observe([Breakpoints.XSmall, Breakpoints.Small, Breakpoints.Medium, Breakpoints.Large, Breakpoints.XLarge])
+			.pipe(takeUntil(this.destroyed))
+			.subscribe(result => {
+				for (const query of Object.keys(result.breakpoints)) {
+					if (result.breakpoints[query]) {
+						if (query === Breakpoints.XSmall || query === Breakpoints.Small) {
+							this.rows = '15';
+							this.cols = '2';
+							this.hideElement = false;
+						} else {
+							this.rows = '10';
+							this.cols = '1';
+							this.hideElement = true;
+						}
+					}
+				}
+			});
+	}
 
-  ngOnInit(): void {
-  }
+	ngOnDestroy() {
+		this.destroyed.next();
+		this.destroyed.complete();
+	}
 
+	addWorkSections() {
+		// Prevent duplicate numbers which can cause an error when splicing a work experience section out
+		const lastElement = this.numberWorkSections[this.numberWorkSections.length - 1];
+		this.numberWorkSections.push(lastElement + 1);
+	}
 
-  ngOnDestroy() {
-    this.destroyed.next();
-    this.destroyed.complete();
-  }
-
-  incrementWorkSections(){
-    this.numberWorkSections.push(this.numberWorkSections.length + 1);
-  }
-
-  decrementWorkSections(){
-    this.numberWorkSections.pop();
-  }
-
-
+	removeWorkSection(index: number) {
+		this.numberWorkSections.splice(index, 1);
+	}
 }

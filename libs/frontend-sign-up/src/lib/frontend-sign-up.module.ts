@@ -5,9 +5,9 @@ import { MatCardModule } from '@angular/material/card';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { MyInfoOneComponent } from './my-info-one/my-info-one.component';
 import { MyInfoTwoComponent } from './my-info-two/my-info-two.component';
-import { MatTooltipModule } from '@angular/material/tooltip';
 import { SignInComponent } from './sign-in/sign-in.component';
 
 @NgModule({

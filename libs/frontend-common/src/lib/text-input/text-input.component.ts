@@ -1,16 +1,16 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
 	selector: 'tempus-text-input',
 	templateUrl: './text-input.component.html',
 	styleUrls: ['./text-input.component.scss'],
 })
-export class TextInputComponent implements OnInit {
+export class TextInputComponent {
 	@Input() placeholder = '';
-	@Input() cssClass: string = '';
-	@Input() id: string = '';
-	@Input() inputType: string = '';
-	constructor() {}
 
-	ngOnInit(): void {}
+	@Input() cssClass = '';
+
+	@Input() id = '';
+
+	@Input() inputType = '';
 }

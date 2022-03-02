@@ -5,7 +5,7 @@
 				<h2 class="mat-h2 section-header">Work Experience</h2>
 				<button
 					mat-mini-fab
-					(click)="incrementWorkSections()"
+					(click)="addWorkSections()"
 					matTooltip="Add more work experience sections"
 					class="experience-button"
 					color="primary"
@@ -14,7 +14,12 @@
 				</button>
 			</div>
 		</mat-grid-tile>
-		<mat-grid-tile *ngFor="let numExperience of numberWorkSections" colspan="2" rowspan="{{ rows }}">
+		<mat-grid-tile
+			*ngFor="let numExperience of numberWorkSections; let index = index"
+			colspan="2"
+			rowspan="{{ rows }}"
+			id="work-experience-{{ index }}"
+		>
 			<tempus-card>
 				<mat-card-content>
 					<form>
@@ -22,7 +27,7 @@
 							<div class="experience-button">
 								<button
 									mat-mini-fab
-									(click)="decrementWorkSections()"
+									(click)="removeWorkSection(index)"
 									matTooltip="Remove work experience section"
 									color="primary"
 								>
@@ -30,7 +35,7 @@
 								</button>
 							</div>
 							<div>
-								<h3 class="mat-h3" color="accent">Work Experience {{ numExperience }}</h3>
+								<h3 class="mat-h3" color="accent">Work Experience {{ index + 1 }}</h3>
 							</div>
 						</div>
 						<mat-grid-list cols="2" rowHeight="100px">
