@@ -1,5 +1,5 @@
 import { Resource, RoleType, User, UserEntity, UpdateUserDto, CreateUserDto } from '@tempus/datalayer';
-import { ConsoleLogger, Injectable, NotFoundException, NotImplementedException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ResourceService } from './resource.service';
@@ -23,7 +23,11 @@ export class UserService {
 			throw new NotFoundException(`Could not find user with id ${userEntity.id}`);
 		}
 		const user = UpdateUserDto.toEntity(updateUserData);
-		for (const [key, val] of Object.entries(user)) if (!val) delete user[key];
+		Object.entries(user).forEach(entry => {
+			if (!entry[1]) {
+				delete user[entry[0]];
+			}
+		});
 
 		Object.assign(userEntity, user);
 		return this.userRepository.save(userEntity);
