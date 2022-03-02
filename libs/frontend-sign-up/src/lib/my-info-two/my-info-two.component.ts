@@ -47,8 +47,12 @@ export class MyInfoTwoComponent implements OnDestroy {
 
 	addWorkSections() {
 		// Prevent duplicate numbers which can cause an error when splicing a work experience section out
-		const lastElement = this.numberWorkSections[this.numberWorkSections.length - 1];
-		this.numberWorkSections.push(lastElement + 1);
+		if (this.numberWorkSections.length === 0) {
+			this.numberWorkSections.push(0);
+		} else {
+			const lastElement = this.numberWorkSections[this.numberWorkSections.length - 1];
+			this.numberWorkSections.push(lastElement + 1);
+		}
 	}
 
 	removeWorkSection(index: number) {
