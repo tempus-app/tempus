@@ -1,55 +1,60 @@
 <ng-container>
-    <mat-grid-list cols="2" rowHeight="50px">
-        <mat-grid-tile colspan="2" rowspan="2">
-            <div class="info-title">
-                <h2 class="mat-h2 section-header">Name</h2>
-            </div>
-        </mat-grid-tile>
-        <mat-grid-tile colspan="2" rowspan={{rows}}>
-            <tempus-card>
-                <mat-card-content>
-                    <form>
-                        <mat-grid-list cols="2" rowHeight="100px">
-                            <mat-grid-tile colspan={{cols}}>
-                                <tempus-text-input placeholder="First Name" cssClass="secondary"></tempus-text-input>
-                            </mat-grid-tile>
-                            <mat-grid-tile colspan={{cols}}>
-                                <tempus-text-input placeholder="Last Name" cssClass="secondary"></tempus-text-input>
-                            </mat-grid-tile>
-                            <mat-grid-tile colspan={{cols}}>
-                                <tempus-text-input placeholder="Phone Number" cssClass="secondary"></tempus-text-input>
-                            </mat-grid-tile>
-                            <mat-grid-tile colspan={{cols}}>
-                                <tempus-text-input placeholder="Email" cssClass="secondary"></tempus-text-input>
-                            </mat-grid-tile>
-                        </mat-grid-list>
-                    </form>
-                </mat-card-content>
-            </tempus-card>
-        </mat-grid-tile>
-        <mat-grid-tile colspan="2" rowspan="2">
-            <div class="info-title">
-                <h2 class="mat-h2 section-header">Address</h2>
-            </div>
-        </mat-grid-tile>
-        <mat-grid-tile colspan="2"  rowspan={{rows}}>
-            <tempus-card>
-                <mat-card-content>
-                    <form>
-                        <mat-grid-list cols="2" rowHeight="100px">
-                            <mat-grid-tile colspan={{cols}}>
-                                <tempus-dropdown [options]=countries label="Country" cssClass="secondary" (optionSelect)="updateStateOptions($event)" ></tempus-dropdown>
-                            </mat-grid-tile>
-                            <mat-grid-tile colspan={{cols}}>
-                                <tempus-dropdown  [options]=states label="State" cssClass="secondary"></tempus-dropdown>
-                            </mat-grid-tile>
-                            <mat-grid-tile colspan={{cols}}>
-                                <tempus-text-input placeholder="City" cssClass="secondary"></tempus-text-input>
-                            </mat-grid-tile>
-                        </mat-grid-list>
-                    </form>
-                </mat-card-content>
-            </tempus-card>
-        </mat-grid-tile>
-    </mat-grid-list>
+	<mat-grid-list cols="2" rowHeight="50px">
+		<mat-grid-tile colspan="2" rowspan="2">
+			<div class="info-title">
+				<h2 class="mat-h2 section-header">Name</h2>
+			</div>
+		</mat-grid-tile>
+		<mat-grid-tile colspan="2" rowspan="{{ rows }}">
+			<tempus-card>
+				<mat-card-content>
+					<form>
+						<mat-grid-list cols="2" rowHeight="100px">
+							<mat-grid-tile colspan="{{ cols }}">
+								<tempus-text-input placeholder="First Name" cssClass="secondary"></tempus-text-input>
+							</mat-grid-tile>
+							<mat-grid-tile colspan="{{ cols }}">
+								<tempus-text-input placeholder="Last Name" cssClass="secondary"></tempus-text-input>
+							</mat-grid-tile>
+							<mat-grid-tile colspan="{{ cols }}">
+								<tempus-text-input placeholder="Phone Number" cssClass="secondary"></tempus-text-input>
+							</mat-grid-tile>
+							<mat-grid-tile colspan="{{ cols }}">
+								<tempus-text-input placeholder="Email" cssClass="secondary"></tempus-text-input>
+							</mat-grid-tile>
+						</mat-grid-list>
+					</form>
+				</mat-card-content>
+			</tempus-card>
+		</mat-grid-tile>
+		<mat-grid-tile colspan="2" rowspan="2">
+			<div class="info-title">
+				<h2 class="mat-h2 section-header">Address</h2>
+			</div>
+		</mat-grid-tile>
+		<mat-grid-tile colspan="2" rowspan="{{ rows }}">
+			<tempus-card>
+				<mat-card-content>
+					<form>
+						<mat-grid-list cols="2" rowHeight="100px">
+							<mat-grid-tile colspan="{{ cols }}">
+								<tempus-search-box
+									[options]="countries"
+									placeholder="Country"
+									cssClass="secondary"
+									(optionSelect)="updateStateOptions($event)"
+								></tempus-search-box>
+							</mat-grid-tile>
+							<mat-grid-tile colspan="{{ cols }}">
+								<tempus-dropdown [options]="states" label="State" cssClass="secondary"></tempus-dropdown>
+							</mat-grid-tile>
+							<mat-grid-tile colspan="{{ cols }}">
+								<tempus-text-input placeholder="City" cssClass="secondary"></tempus-text-input>
+							</mat-grid-tile>
+						</mat-grid-list>
+					</form>
+				</mat-card-content>
+			</tempus-card>
+		</mat-grid-tile>
+	</mat-grid-list>
 </ng-container>

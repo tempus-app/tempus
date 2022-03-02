@@ -4,14 +4,14 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 	templateUrl: './dropdown.component.html',
 	styleUrls: ['./dropdown.component.scss'],
 })
-export class DropdownComponent implements OnInit {
+export class DropdownComponent {
 	@Input() options: string[] = [];
-	@Input() cssClass: string = '';
-	@Input() label: string = '';
-	@Output() optionSelect = new EventEmitter();
-	constructor() {}
 
-	ngOnInit(): void {}
+	@Input() cssClass = '';
+
+	@Input() label = '';
+
+	@Output() optionSelect = new EventEmitter();
 
 	optionSelected(option: string) {
 		this.optionSelect.emit(option);
