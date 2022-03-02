@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException, NotImplementedException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { EmailService } from '@tempus/api-email';
 import { Link, LinkEntity, StatusType, UpdatelinkDto } from '@tempus/datalayer';
@@ -27,16 +27,16 @@ export class LinkService {
 		return this.linkRepository.save(fullLink);
 	}
 
-	associateLinkToUser(linkId: number, userId: number): Promise<Link> {
-		throw new NotImplementedException();
-	}
+	// associateLinkToUser(linkId: number, userId: number): Promise<Link> {
+	// 	throw new NotImplementedException();
+	// }
 
 	async findLinkById(linkId: number): Promise<Link> {
 		const linkEntity = await this.linkRepository.findOne(linkId);
 		if (!linkEntity) {
 			throw new NotFoundException(`Could not find token with id ${linkId}`);
 		}
-		if (!this.isLinkExpired(linkEntity)) {
+		if (!LinkService.isLinkExpired(linkEntity)) {
 			await this.editLinkStatus(linkId, StatusType.INACTIVE, linkEntity);
 		}
 		return linkEntity;
@@ -49,7 +49,7 @@ export class LinkService {
 		if (!linkEntity) {
 			throw new NotFoundException(`Could not find link with token ${token}`);
 		}
-		if (this.isLinkExpired(linkEntity)) {
+		if (LinkService.isLinkExpired(linkEntity)) {
 			return this.editLinkStatus(linkEntity.id, StatusType.INACTIVE);
 		}
 		return linkEntity;
@@ -74,7 +74,7 @@ export class LinkService {
 	}
 
 	// compares link expiry with current time
-	isLinkExpired(linkEntity: LinkEntity): boolean {
+	public static isLinkExpired(linkEntity: LinkEntity): boolean {
 		if (linkEntity.expiry.getTime() <= Date.now()) {
 			return true;
 		}

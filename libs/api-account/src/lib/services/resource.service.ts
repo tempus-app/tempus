@@ -1,22 +1,9 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-restricted-syntax */
-import { ConsoleLogger, Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ExperienceService, ViewsService } from '@tempus/api-profile';
-import {
-	UpdateUserDto,
-	ResourceEntity,
-	Resource,
-	CreateUserDto,
-	ViewType,
-	CreateViewDto,
-	UserEntity,
-	ExperienceEntity,
-	CreateResourceDto,
-	UpdateResourceDto,
-	UpdateLocationDto,
-} from '@tempus/datalayer';
-import { create } from 'domain';
+import { ViewsService } from '@tempus/api-profile';
+import { ResourceEntity, Resource, ViewType, CreateResourceDto, UpdateResourceDto } from '@tempus/datalayer';
 import { Repository } from 'typeorm';
 
 @Injectable()
@@ -25,7 +12,6 @@ export class ResourceService {
 		@InjectRepository(ResourceEntity)
 		private resourceRepository: Repository<ResourceEntity>,
 		private viewsService: ViewsService,
-		private experiencesService: ExperienceService,
 	) {}
 
 	async createResource(resource: CreateResourceDto): Promise<Resource> {

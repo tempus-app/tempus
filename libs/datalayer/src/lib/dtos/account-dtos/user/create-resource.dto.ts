@@ -1,8 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsISO31661Alpha2, IsOptional } from 'class-validator';
-import exp = require('constants');
-import { RoleType, ViewType } from '../../../enums';
-import { UserEntity } from '../../../entities/account-entities/user.entity';
+import { RoleType } from '../../../enums';
 import { ResourceEntity } from '../../../entities/account-entities/resource.entity';
 import { CreateCertificationDto } from '../../profile-dtos/certification/createCertification.dto';
 import { CreateEducationDto } from '../../profile-dtos/education/createEduation.dto';
@@ -11,9 +8,6 @@ import { CreateSkillDto } from '../../profile-dtos/skill/createSkill.dto';
 import { CreateViewDto } from '../../profile-dtos/view/createView.dto';
 import { CreateLocationDto } from '../../common-dtos/createLocation.dto';
 import { CreateProjectDto } from '../../project-dtos/project/createProject.dto';
-
-import { LocationEntity } from '../../../entities/common-entities/location.entity';
-import { CertificationEntity, EducationEntity, ExperienceEntity, SkillEntity } from '../../..';
 import { CreateUserDto } from './create-user.dto';
 
 export class CreateResourceDto extends CreateUserDto {
