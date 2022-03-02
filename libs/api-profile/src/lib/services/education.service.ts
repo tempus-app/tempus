@@ -3,7 +3,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { EducationEntity, LocationEntity, UpdateEducationDto, Education } from '@tempus/datalayer';
 import { ResourceService } from '@tempus/api-account';
 import { Repository } from 'typeorm';
-import { keyframes } from '@angular/animations';
 
 @Injectable()
 export class EducationService {
@@ -19,9 +18,9 @@ export class EducationService {
 	// create education for a specific resource
 	async createEducation(resourceId: number, educationEntity: EducationEntity): Promise<Education> {
 		const resourceEntity = await this.resourceService.getResourceInfo(resourceId);
-
-		educationEntity.resource = resourceEntity;
-		educationEntity = await this.educationRepository.save(educationEntity);
+		let newEducationEntity = educationEntity;
+		newEducationEntity.resource = resourceEntity;
+		newEducationEntity = await this.educationRepository.save(newEducationEntity);
 
 		return educationEntity;
 	}
@@ -48,8 +47,9 @@ export class EducationService {
 
 	// edit education
 	async editEducation(updateEducationData: UpdateEducationDto): Promise<Education> {
-		const updatedLocationData = updateEducationData.location;
-		delete updateEducationData.location;
+		const updatedEducationData = updateEducationData;
+		const updatedLocationData = updatedEducationData.location;
+		delete updatedEducationData.location;
 
 		const existingEducationEntity = await this.educationRepository.findOne(updateEducationData.id, {
 			relations: ['location', 'resource'],
@@ -59,11 +59,19 @@ export class EducationService {
 		}
 
 		// Safe guards to prevent data from being overwritten as null
-		for (const [key, val] of Object.entries(updatedLocationData)) if (!val) delete updatedLocationData[key];
-		for (const [key, val] of Object.entries(updateEducationData)) if (!val) delete updateEducationData[key];
+		Object.entries(updatedEducationData).forEach(entry => {
+			if (!entry[1]) {
+				delete updatedEducationData[entry[0]];
+			}
+		});
+		Object.entries(updatedLocationData).forEach(entry => {
+			if (!entry[1]) {
+				delete updatedLocationData[entry[0]];
+			}
+		});
 
 		Object.assign(existingEducationEntity.location, updatedLocationData);
-		Object.assign(existingEducationEntity, updateEducationData);
+		Object.assign(existingEducationEntity, updatedEducationData);
 
 		return this.educationRepository.save(existingEducationEntity);
 	}

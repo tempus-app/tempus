@@ -1,14 +1,7 @@
-import {
-	ForbiddenException,
-	forwardRef,
-	Inject,
-	Injectable,
-	NotFoundException,
-	NotImplementedException,
-} from '@nestjs/common';
+import { ForbiddenException, forwardRef, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ResourceService } from '@tempus/api-account';
-import { CreateViewDto, ResourceEntity, View, ViewEntity, ViewType } from '@tempus/datalayer';
+import { CreateViewDto, View, ViewEntity, ViewType } from '@tempus/datalayer';
 import { Repository } from 'typeorm';
 
 @Injectable()
@@ -27,21 +20,22 @@ export class ViewsService {
 		const viewEntity = CreateViewDto.toEntity(createViewDto);
 		viewEntity.resource = resourceEntity;
 
-		return await this.viewsRepository.save(viewEntity);
+		const newView = await this.viewsRepository.save(viewEntity);
+
+		return newView;
 	}
 
 	// edit view
-	editView(view: CreateViewDto): Promise<View> {
-		throw new NotImplementedException();
+	// async editView(view: CreateViewDto): Promise<View> {
+	// 	throw new NotImplementedException();
 
-		// TODO: revision entity associated with view edits for approval
-	}
+	// 	// TODO: revision entity associated with view edits for approval
+	// }
 
 	async getViewsByResource(resourceId: number): Promise<View[]> {
 		// error check
 		await this.resourceService.getResourceInfo(resourceId);
-
-		return await this.viewsRepository.find({
+		const viewsInResource = await this.viewsRepository.find({
 			relations: ['experiences', 'educations', 'skills', 'certifications'],
 			where: {
 				resource: {
@@ -49,6 +43,8 @@ export class ViewsService {
 				},
 			},
 		});
+
+		return viewsInResource;
 	}
 
 	async getView(viewId: number): Promise<View> {

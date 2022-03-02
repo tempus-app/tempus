@@ -1,11 +1,11 @@
 export interface HandleBarHelper {
 	helperName: string;
-	helper: (...args: any) => string;
+	helper: (...args: never) => string;
 }
 
-export interface PdfTemplateDto<T> {
+export interface PdfTemplateDtoInterface {
 	filename: string;
 	template: string;
-	data: T;
+	data: unknown;
 	handlebarsHelpers?: HandleBarHelper[];
 }

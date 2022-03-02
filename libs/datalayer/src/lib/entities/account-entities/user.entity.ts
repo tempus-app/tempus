@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn, TableInheritance, OneToMany } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, TableInheritance } from 'typeorm';
 import { User } from '../..';
 import { RoleType } from '../../enums';
 

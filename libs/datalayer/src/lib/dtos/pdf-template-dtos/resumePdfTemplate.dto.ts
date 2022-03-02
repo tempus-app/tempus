@@ -1,6 +1,6 @@
 import { HandleBarHelper } from '.';
 import { View } from '../../models';
-import { PdfTemplateDto } from './pdfTemplate.dto';
+import { PdfTemplateDtoInterface } from './pdfTemplateInterface.dto';
 
 const handlebarHelper: HandleBarHelper = {
 	helperName: 'formatdate',
@@ -9,7 +9,7 @@ const handlebarHelper: HandleBarHelper = {
 	},
 };
 
-export class ResumePdfTemplateDto implements PdfTemplateDto<View> {
+export class ResumePdfTemplateDto implements PdfTemplateDtoInterface {
 	filename: string;
 
 	template = 'resume';
