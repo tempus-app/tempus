@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { forwardRef, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ResourceService } from '@tempus/api-account';
 import { Experience, ExperienceEntity, UpdateExperienceDto } from '@tempus/datalayer';
@@ -7,6 +7,7 @@ import { Repository } from 'typeorm';
 @Injectable()
 export class ExperienceService {
 	constructor(
+		@Inject(forwardRef(() => ResourceService))
 		private resourceService: ResourceService,
 		@InjectRepository(ExperienceEntity)
 		private experienceRepository: Repository<ExperienceEntity>,
@@ -14,12 +15,13 @@ export class ExperienceService {
 
 	// create experience for specific resource
 	async createExperience(resourceId: number, experienceEntity: ExperienceEntity): Promise<Experience> {
+		let newExperience = experienceEntity;
 		const resourceEntity = await this.resourceService.getResourceInfo(resourceId);
 
-		experienceEntity.resource = resourceEntity;
-		experienceEntity = await this.experienceRepository.save(experienceEntity);
+		newExperience.resource = resourceEntity;
+		newExperience = await this.experienceRepository.save(newExperience);
 
-		return experienceEntity;
+		return newExperience;
 	}
 
 	// return all experiences by resource
@@ -44,22 +46,31 @@ export class ExperienceService {
 
 	// edit experience
 	async editExperience(updateExperienceData: UpdateExperienceDto): Promise<Experience> {
-		const updatedLocationData = updateExperienceData.location;
-		delete updateExperienceData.location;
+		const updatedExperienceData = updateExperienceData;
+		const updatedLocationData = updatedExperienceData.location;
+		delete updatedExperienceData.location;
 
-		const existingExperienceEntity = await this.experienceRepository.findOne(updateExperienceData.id, {
+		const existingExperienceEntity = await this.experienceRepository.findOne(updatedExperienceData.id, {
 			relations: ['location', 'resource'],
 		});
 		if (!existingExperienceEntity) {
-			throw new NotFoundException(`Could not find experience with id ${updateExperienceData.id}`);
+			throw new NotFoundException(`Could not find experience with id ${updatedExperienceData.id}`);
 		}
 
 		// Safe guards to prevent data from being overwritten as null
-		for (const [key, val] of Object.entries(updatedLocationData)) if (!val) delete updatedLocationData[key];
-		for (const [key, val] of Object.entries(updateExperienceData)) if (!val) delete updateExperienceData[key];
+		Object.entries(updatedExperienceData).forEach(entry => {
+			if (!entry[1]) {
+				delete updatedExperienceData[entry[0]];
+			}
+		});
+		Object.entries(updatedLocationData).forEach(entry => {
+			if (!entry[1]) {
+				delete updatedLocationData[entry[0]];
+			}
+		});
 
 		Object.assign(existingExperienceEntity.location, updatedLocationData);
-		Object.assign(existingExperienceEntity, updateExperienceData);
+		Object.assign(existingExperienceEntity, updatedExperienceData);
 
 		return this.experienceRepository.save(existingExperienceEntity);
 	}

@@ -49,6 +49,7 @@
 		"bcrypt": "^5.0.1",
 		"class-transformer": "^0.5.1",
 		"class-validator": "^0.13.2",
+		"country-state-city": "^3.0.1",
 		"esbuild": "^0.14.23",
 		"handlebars": "^4.7.7",
 		"install": "^0.13.0",

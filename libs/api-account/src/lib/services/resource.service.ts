@@ -1,6 +1,9 @@
+/* eslint-disable no-param-reassign */
+/* eslint-disable no-restricted-syntax */
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UpdateUserDto, ResourceEntity, Resource } from '@tempus/datalayer';
+import { ViewsService } from '@tempus/api-profile';
+import { ResourceEntity, Resource, ViewType, CreateResourceDto, UpdateResourceDto } from '@tempus/datalayer';
 import { Repository } from 'typeorm';
 
 @Injectable()
@@ -8,14 +11,27 @@ export class ResourceService {
 	constructor(
 		@InjectRepository(ResourceEntity)
 		private resourceRepository: Repository<ResourceEntity>,
+		private viewsService: ViewsService,
 	) {}
 
-	async createResource(resource: ResourceEntity): Promise<Resource> {
-		const createdResource = await this.resourceRepository.save(resource);
+	async createResource(resource: CreateResourceDto): Promise<Resource> {
+		const resourceEntity = CreateResourceDto.toEntity(resource);
+		const createdResource = await this.resourceRepository.save(resourceEntity);
 
-		// TODO: create initial view with inital data
+		const view = await this.viewsService.createView(createdResource.id, {
+			viewType: ViewType.PRIMARY,
+			educationsSummary: resource.educationsSummary,
+			educations: createdResource.educations,
+			certifications: createdResource.certifications,
+			experiencesSummary: resource.experiencesSummary,
+			experiences: createdResource.experiences,
+			skillsSummary: resource.skillsSummary,
+			skills: createdResource.skills,
+			profileSummary: resource.profileSummary,
+			type: 'PROFILE',
+		});
 
-		// view service
+		createdResource.views.push(view);
 		return createdResource;
 	}
 
@@ -34,7 +50,6 @@ export class ResourceService {
 
 	async getResourceInfo(resourceId: number): Promise<Resource> {
 		const resourceEntity = await this.resourceRepository.findOne(resourceId);
-
 		if (!resourceEntity) {
 			throw new NotFoundException(`Could not find resource with id ${resourceId}`);
 		}
@@ -73,15 +88,16 @@ export class ResourceService {
 	}
 
 	// edit resource to be used specifically when updating local information
-	async editResource(updateResourceData: UpdateUserDto): Promise<Resource> {
+	async editResource(updateResourceData: UpdateResourceDto): Promise<Resource> {
 		const resourceEntity = await this.getResource(updateResourceData.id);
 
 		const updatedLocationData = updateResourceData.location;
 		delete updateResourceData.location;
 
 		for (const [key, val] of Object.entries(updateResourceData)) if (!val) delete updateResourceData[key];
-		for (const [key, val] of Object.entries(updatedLocationData)) if (!val) delete updatedLocationData[key];
-
+		if (updatedLocationData) {
+			for (const [key, val] of Object.entries(updatedLocationData)) if (!val) delete updatedLocationData[key];
+		}
 		Object.assign(resourceEntity.location, updatedLocationData);
 		Object.assign(resourceEntity, updateResourceData);
 

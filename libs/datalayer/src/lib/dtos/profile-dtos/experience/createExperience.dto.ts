@@ -28,6 +28,7 @@ export class CreateExperienceDto {
 		title: string,
 		summary: string,
 		description: string[],
+		company: string,
 		startDate: Date,
 		endDate: Date,
 		location: CreateLocationDto,
@@ -35,6 +36,7 @@ export class CreateExperienceDto {
 		this.title = title;
 		this.summary = summary;
 		this.description = description;
+		this.company = company;
 		this.startDate = startDate;
 		this.endDate = endDate;
 		this.location = location;
@@ -45,6 +47,7 @@ export class CreateExperienceDto {
 		return new ExperienceEntity(
 			null,
 			dto.title,
+			dto.company,
 			dto.summary,
 			dto.description,
 			dto.startDate,

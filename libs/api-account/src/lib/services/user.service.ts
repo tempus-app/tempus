@@ -1,5 +1,5 @@
-import { Resource, RoleType, User, UserEntity, UpdateUserDto } from '@tempus/datalayer';
-import { ConsoleLogger, Injectable, NotFoundException, NotImplementedException } from '@nestjs/common';
+import { Resource, RoleType, User, UserEntity, UpdateUserDto, CreateUserDto } from '@tempus/datalayer';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ResourceService } from './resource.service';
@@ -12,13 +12,9 @@ export class UserService {
 		private resourceService: ResourceService,
 	) {}
 
-	async createUser(user: UserEntity): Promise<User> {
-		if (user.roles.includes(RoleType.BUSINESS_OWNER)) {
-			return this.userRepository.save(user);
-		}
-		return this.resourceService.createResource({
-			...user,
-		} as Resource);
+	async createUser(user: CreateUserDto): Promise<User> {
+		const userEntity = CreateUserDto.toEntity(user);
+		return this.userRepository.save(userEntity);
 	}
 
 	async updateUser(updateUserData: UpdateUserDto): Promise<User> {
@@ -26,14 +22,15 @@ export class UserService {
 		if (!userEntity) {
 			throw new NotFoundException(`Could not find user with id ${userEntity.id}`);
 		}
-		if (userEntity.roles.includes(RoleType.BUSINESS_OWNER)) {
-			const user = UpdateUserDto.toEntity(updateUserData);
-			for (const [key, val] of Object.entries(user)) if (!val) delete user[key];
+		const user = UpdateUserDto.toEntity(updateUserData);
+		Object.entries(user).forEach(entry => {
+			if (!entry[1]) {
+				delete user[entry[0]];
+			}
+		});
 
-			Object.assign(userEntity, user);
-			return this.userRepository.save(userEntity);
-		}
-		return this.resourceService.editResource(updateUserData);
+		Object.assign(userEntity, user);
+		return this.userRepository.save(userEntity);
 	}
 
 	async getUser(userId: number): Promise<User | Resource> {

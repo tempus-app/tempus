@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsOptional } from 'class-validator';
+import { IsISO31661Alpha2, IsOptional } from 'class-validator';
 import exp = require('constants');
-import { RoleType } from '../../../enums';
+import { RoleType, ViewType } from '../../../enums';
 import { UserEntity } from '../../../entities/account-entities/user.entity';
 import { ResourceEntity } from '../../../entities/account-entities/resource.entity';
 import { CreateCertificationDto } from '../../profile-dtos/certification/createCertification.dto';
@@ -28,98 +28,19 @@ export class CreateUserDto {
 	@ApiProperty()
 	password: string;
 
-	@ApiProperty({ enum: ['ASSIGNED_RESOURCE', 'AVAILABLE_RESOURCE', 'BUSINESS_OWNER', 'SUPERVISOR'] })
+	@ApiProperty({ enum: ['BUSINESS_OWNER', 'SUPERVISOR'] })
 	roles: RoleType[];
 
-	@ApiProperty()
-	@IsOptional()
-	phoneNumber?: string;
-
-	@ApiProperty()
-	@IsOptional()
-	title?: string;
-
-	@ApiProperty()
-	@IsOptional()
-	location?: CreateLocationDto;
-
-	@ApiProperty()
-	@IsOptional()
-	projects?: CreateProjectDto[];
-
-	@ApiProperty()
-	@IsOptional()
-	views?: CreateViewDto[];
-
-	@ApiProperty()
-	@IsOptional()
-	experiences?: CreateExperienceDto[];
-
-	@ApiProperty()
-	@IsOptional()
-	educations?: CreateEducationDto[];
-
-	@ApiProperty()
-	@IsOptional()
-	skills?: CreateSkillDto[];
-
-	@ApiProperty()
-	@IsOptional()
-	certifications?: CreateCertificationDto[];
-
-	constructor(
-		firstName: string,
-		lastName: string,
-		email: string,
-		password: string,
-		roles: RoleType[],
-		phoneNumber?: string,
-		title?: string,
-		location?: CreateLocationDto,
-		projects?: CreateProjectDto[],
-		views?: CreateViewDto[],
-		experiences?: CreateExperienceDto[],
-		educations?: CreateEducationDto[],
-		skills?: CreateSkillDto[],
-		certifications?: CreateCertificationDto[],
-	) {
+	constructor(firstName: string, lastName: string, email: string, password: string, roles: RoleType[]) {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.email = email;
 		this.password = password;
 		this.roles = roles;
-		this.phoneNumber = phoneNumber || '';
-		this.title = title || '';
-		this.location = location || null;
-		this.projects = projects || [];
-		this.views = views || [];
-		this.experiences = experiences || [];
-		this.educations = educations || [];
-		this.skills = skills || [];
-		this.certifications = certifications || [];
 	}
 
-	public static toEntity(dto: CreateUserDto): UserEntity {
+	public static toEntity(dto: CreateUserDto): UserEntity | ResourceEntity {
 		if (dto == null) return new UserEntity();
-		if (!dto.roles.includes(RoleType.BUSINESS_OWNER)) {
-			return new ResourceEntity(
-				null,
-				dto.phoneNumber,
-				dto.title,
-				(dto.location ? dto.location : null) as LocationEntity,
-				[],
-				[],
-				(dto.experiences ? dto.experiences : []) as ExperienceEntity[],
-				(dto.educations ? dto.educations : []) as EducationEntity[],
-				(dto.skills ? dto.skills : []) as SkillEntity[],
-				(dto.certifications ? dto.certifications : []) as CertificationEntity[],
-				dto.firstName,
-				dto.lastName,
-				dto.email,
-				dto.password,
-				dto.roles,
-			);
-		}
 		return new UserEntity(null, dto.firstName, dto.lastName, dto.email, dto.password, dto.roles);
 	}
 }

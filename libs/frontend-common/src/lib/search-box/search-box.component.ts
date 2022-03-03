@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { map, Observable, of, startWith } from 'rxjs';
 
@@ -20,6 +20,8 @@ export class SearchBoxComponent implements OnInit {
 
 	filteredOptions: Observable<string[]>;
 
+	@Output() optionSelect = new EventEmitter();
+
 	constructor() {
 		this.filteredOptions = of([]);
 	}
@@ -29,6 +31,10 @@ export class SearchBoxComponent implements OnInit {
 			startWith(''),
 			map(value => this._filter(value)),
 		);
+	}
+
+	optionSelected(option: string) {
+		this.optionSelect.emit(option);
 	}
 
 	private _filter(value: string): string[] {

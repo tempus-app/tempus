@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToOne, JoinColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToOne } from 'typeorm';
 import { Education } from '../../models';
 import { ResourceEntity } from '../account-entities';
 import { LocationEntity } from '../common-entities';

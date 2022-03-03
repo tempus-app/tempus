@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn, ManyToOne } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, JoinColumn, ManyToOne } from 'typeorm';
 import { Skill } from '../..';
 import { ResourceEntity } from '../account-entities';
 import { SkillTypeEntity } from './skilltype.entity';
