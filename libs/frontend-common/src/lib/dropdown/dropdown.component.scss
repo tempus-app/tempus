@@ -1,8 +1,12 @@
 @use 'components/helper' as c;
 @use 'abstracts/helper' as abs;
 
-.mat-form-field {
+mat-form-field {
 	width: 100%;
+}
+
+input {
+	height: 50%;
 }
 
 ::ng-deep .primary .mat-form-field-wrapper .mat-form-field-flex {
