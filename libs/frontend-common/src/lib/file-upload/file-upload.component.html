@@ -1,5 +1,5 @@
 <ng-container>
-	<div class="custom-dropzone" ngx-dropzone [accept]="'image/*'" (change)="onSelect($event)">
+	<div class="custom-dropzone" ngx-dropzone [accept]="fileType" (change)="onSelect($event)">
 		<ngx-dropzone-label>
 			<div>
 				<mat-icon class="icon-display">upload</mat-icon>

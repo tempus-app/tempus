@@ -9,6 +9,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MyInfoOneComponent } from './my-info-one/my-info-one.component';
 import { MyInfoTwoComponent } from './my-info-two/my-info-two.component';
 import { SignInComponent } from './sign-in/sign-in.component';
+import { UploadResumeComponent } from './upload-resume/upload-resume.component';
+import { ConfirmResumeUploadComponent } from './confirm-resume-upload/confirm-resume-upload.component';
 
 @NgModule({
 	imports: [
@@ -20,7 +22,19 @@ import { SignInComponent } from './sign-in/sign-in.component';
 		MatButtonModule,
 		MatTooltipModule,
 	],
-	declarations: [SignInComponent, MyInfoOneComponent, MyInfoTwoComponent],
-	exports: [SignInComponent, MyInfoOneComponent, MyInfoTwoComponent],
+	declarations: [
+		SignInComponent,
+		MyInfoOneComponent,
+		MyInfoTwoComponent,
+		UploadResumeComponent,
+		ConfirmResumeUploadComponent,
+	],
+	exports: [
+		SignInComponent,
+		MyInfoOneComponent,
+		MyInfoTwoComponent,
+		UploadResumeComponent,
+		ConfirmResumeUploadComponent,
+	],
 })
 export class FrontendSignUpModule {}

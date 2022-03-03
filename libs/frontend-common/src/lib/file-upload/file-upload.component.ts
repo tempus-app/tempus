@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
 	selector: 'tempus-file-upload',
@@ -8,17 +8,33 @@ import { Component, OnInit } from '@angular/core';
 export class FileUploadComponent implements OnInit {
 	files: File[] = [];
 
+	fileType = '*';
+
+	@Input()
+	acceptedFileType = '';
+
+	ngOnInit(): void {
+		this.determineFileType();
+	}
+
 	onSelect(event: any) {
-		console.log(event);
 		this.files.push(...event.addedFiles);
 	}
 
-	onRemove(event: any) {
-		console.log(event);
+	onRemove(event: File) {
 		this.files.splice(this.files.indexOf(event), 1);
 	}
 
-	constructor() {}
-
-	ngOnInit(): void {}
+	determineFileType() {
+		switch (this.acceptedFileType) {
+			case 'image':
+				this.fileType = 'image/*';
+				break;
+			case 'file':
+				this.fileType = 'application/pdf,application/msword,.doc,.docx,text/plain';
+				break;
+			default:
+				this.fileType = '*';
+		}
+	}
 }
