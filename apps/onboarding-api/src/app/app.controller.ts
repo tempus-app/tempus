@@ -1,7 +1,6 @@
 import { Body, Controller, Get, Post, Res } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { Message } from '@tempus/api-interfaces';
-import { CreateUserDto } from '@tempus/datalayer';
+import { CreateUserDto } from '@tempus/shared-domain';
 
 import { AppService } from './app.service';
 
@@ -16,7 +15,7 @@ export class AppController {
 	}
 
 	@Get('hello')
-	getData(): Message {
+	getData() {
 		return this.appService.getData();
 	}
 

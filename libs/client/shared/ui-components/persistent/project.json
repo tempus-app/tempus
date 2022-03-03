@@ -1,0 +1,26 @@
+{
+	"projectType": "library",
+	"root": "libs/client/shared/ui-components/persistent",
+	"sourceRoot": "libs/client/shared/ui-components/persistent/src",
+	"prefix": "tempus",
+	"targets": {
+		"test": {
+			"executor": "@nrwl/jest:jest",
+			"outputs": ["coverage/libs/client/shared/ui-components/persistent"],
+			"options": {
+				"jestConfig": "libs/client/shared/ui-components/persistent/jest.config.js",
+				"passWithNoTests": true
+			}
+		},
+		"lint": {
+			"executor": "@nrwl/linter:eslint",
+			"options": {
+				"lintFilePatterns": [
+					"libs/client/shared/ui-components/persistent/src/**/*.ts",
+					"libs/client/shared/ui-components/persistent/src/**/*.html"
+				]
+			}
+		}
+	},
+	"tags": []
+}

@@ -1,9 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Message } from '@tempus/api-interfaces';
 import { Repository } from 'typeorm';
-import { RoleType, ResourceEntity, UserEntity } from '@tempus/datalayer';
-import { PdfGeneratorService } from '@tempus/pdfgenerator';
+import { RoleType, ResourceEntity, UserEntity } from '@tempus/shared-domain';
+import { PdfGeneratorService } from '@tempus/api-shared-feature-pdfgenerator';
 
 @Injectable()
 export class AppService {
@@ -13,7 +12,7 @@ export class AppService {
 		@InjectRepository(UserEntity) private userRepo: Repository<UserEntity>,
 	) {}
 
-	getData(): Message {
+	getData() {
 		return { message: 'Welcome to api!' };
 	}
 

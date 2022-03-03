@@ -1,0 +1,26 @@
+{
+	"projectType": "library",
+	"root": "libs/client/shared/ui-components/presentational",
+	"sourceRoot": "libs/client/shared/ui-components/presentational/src",
+	"prefix": "tempus",
+	"targets": {
+		"test": {
+			"executor": "@nrwl/jest:jest",
+			"outputs": ["coverage/libs/client/shared/ui-components/presentational"],
+			"options": {
+				"jestConfig": "libs/client/shared/ui-components/presentational/jest.config.js",
+				"passWithNoTests": true
+			}
+		},
+		"lint": {
+			"executor": "@nrwl/linter:eslint",
+			"options": {
+				"lintFilePatterns": [
+					"libs/client/shared/ui-components/presentational/src/**/*.ts",
+					"libs/client/shared/ui-components/presentational/src/**/*.html"
+				]
+			}
+		}
+	},
+	"tags": []
+}

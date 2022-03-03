@@ -1,52 +1,52 @@
 {
-  "root": "apps/onboarding-api",
-  "sourceRoot": "apps/onboarding-api/src",
-  "projectType": "application",
-  "targets": {
-    "build": {
-      "executor": "@nrwl/node:build",
-      "outputs": ["{options.outputPath}"],
-      "options": {
-        "outputPath": "dist/apps/onboarding-api",
-        "main": "apps/onboarding-api/src/main.ts",
-        "tsConfig": "apps/onboarding-api/tsconfig.app.json",
-        "assets": ["apps/onboarding-api/src/assets"]
-      },
-      "configurations": {
-        "production": {
-          "optimization": true,
-          "extractLicenses": true,
-          "inspect": false,
-          "fileReplacements": [
-            {
-              "replace": "apps/onboarding-api/src/environments/environment.ts",
-              "with": "apps/onboarding-api/src/environments/environment.prod.ts"
-            }
-          ]
-        }
-      }
-    },
-    "serve": {
-      "executor": "@nrwl/node:execute",
-      "options": {
-        "buildTarget": "onboarding-api:build"
-      }
-    },
-    "lint": {
-      "executor": "@nrwl/linter:eslint",
-      "outputs": ["{options.outputFile}"],
-      "options": {
-        "lintFilePatterns": ["apps/onboarding-api/**/*.ts"]
-      }
-    },
-    "test": {
-      "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/apps/onboarding-api"],
-      "options": {
-        "jestConfig": "apps/onboarding-api/jest.config.js",
-        "passWithNoTests": true
-      }
-    }
-  },
-  "tags": []
+	"root": "apps/onboarding-api",
+	"sourceRoot": "apps/onboarding-api/src",
+	"projectType": "application",
+	"targets": {
+		"build": {
+			"executor": "@nrwl/node:build",
+			"outputs": ["{options.outputPath}"],
+			"options": {
+				"outputPath": "dist/apps/onboarding-api",
+				"main": "apps/onboarding-api/src/main.ts",
+				"tsConfig": "apps/onboarding-api/tsconfig.app.json",
+				"assets": ["apps/onboarding-api/src/assets"]
+			},
+			"configurations": {
+				"production": {
+					"optimization": true,
+					"extractLicenses": true,
+					"inspect": false,
+					"fileReplacements": [
+						{
+							"replace": "apps/onboarding-api/src/environments/environment.ts",
+							"with": "apps/onboarding-api/src/environments/environment.prod.ts"
+						}
+					]
+				}
+			}
+		},
+		"serve": {
+			"executor": "@nrwl/node:execute",
+			"options": {
+				"buildTarget": "onboarding-api:build"
+			}
+		},
+		"lint": {
+			"executor": "@nrwl/linter:eslint",
+			"outputs": ["{options.outputFile}"],
+			"options": {
+				"lintFilePatterns": ["apps/onboarding-api/**/*.ts"]
+			}
+		},
+		"test": {
+			"executor": "@nrwl/jest:jest",
+			"outputs": ["coverage/apps/onboarding-api"],
+			"options": {
+				"jestConfig": "apps/onboarding-api/jest.config.js",
+				"passWithNoTests": true
+			}
+		}
+	},
+	"tags": []
 }

@@ -8,7 +8,7 @@ import { NestFactory } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 
 import { ConfigService } from '@nestjs/config';
-import { HttpErrorFilter } from '@tempus/core';
+import { HttpErrorFilter } from '@tempus/api-shared-feature-core';
 import { AppModule } from './app/app.module';
 
 function setupSwagger(app: INestApplication) {

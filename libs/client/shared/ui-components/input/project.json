@@ -1,0 +1,42 @@
+{
+	"projectType": "library",
+	"root": "libs/client/shared/ui-components/input",
+	"sourceRoot": "libs/client/shared/ui-components/input/src",
+	"prefix": "tempus",
+	"targets": {
+		"build": {
+			"executor": "@nrwl/angular:ng-packagr-lite",
+			"outputs": ["dist/libs/client/shared/ui-components/input"],
+			"options": {
+				"project": "libs/client/shared/ui-components/input/ng-package.json"
+			},
+			"configurations": {
+				"production": {
+					"tsConfig": "libs/client/shared/ui-components/input/tsconfig.lib.prod.json"
+				},
+				"development": {
+					"tsConfig": "libs/client/shared/ui-components/input/tsconfig.lib.json"
+				}
+			},
+			"defaultConfiguration": "production"
+		},
+		"test": {
+			"executor": "@nrwl/jest:jest",
+			"outputs": ["coverage/libs/client/shared/ui-components/input"],
+			"options": {
+				"jestConfig": "libs/client/shared/ui-components/input/jest.config.js",
+				"passWithNoTests": true
+			}
+		},
+		"lint": {
+			"executor": "@nrwl/linter:eslint",
+			"options": {
+				"lintFilePatterns": [
+					"libs/client/shared/ui-components/input/src/**/*.ts",
+					"libs/client/shared/ui-components/input/src/**/*.html"
+				]
+			}
+		}
+	},
+	"tags": []
+}
