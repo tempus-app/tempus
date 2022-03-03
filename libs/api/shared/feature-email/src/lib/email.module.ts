@@ -26,7 +26,7 @@ const path = require('path'); // eslint-disable-line
 					from: `"No Reply" <${config.get('emailDefaultAddress')}>`,
 				},
 				template: {
-					dir: path.resolve('../src/libs/api-email/src/lib/templates/'),
+					dir: path.resolve('./libs/api/shared/feature-email/src/lib/templates/'),
 					adapter: new HandlebarsAdapter(),
 					options: {
 						strict: true,

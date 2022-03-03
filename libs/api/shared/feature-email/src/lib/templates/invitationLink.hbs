@@ -1,14 +1,19 @@
 <html>
-	<head><title>Complete Your Application for CAL & Associates</title></head>
+	<head><title>Complete Your Profile for CAL & Associates</title></head>
 	<body>
-		<h1>Hi {{name}}, </h1>
-		<p>
-			<p>Please complete your application for CAL & Associates using the link below.
-				<a href='https://signuplink/{{code}}'>Sign Up Link</a>It will expire by
-				{{expiry}}
+		<h3>Hello {{name}}, </h3>
+		<div>
+			<p>Thank you for interviewing with Cal & Associates. Please complete your profile using this <a href='https://signuplink/{{code}}'>link</a>
+			to stay up to date on your candidacy. </p> 
+			<p>
+				The link will expire by <b>{{expiry}}</b>. If you need any help throughout the
+				proccess, please contact
+				<a href="mailto:admin@cal.com">admin@cal.com.</a>
 			</p>
+			<br />
 			<p>Best,</p>
 			<p>CAL & Associates</p>
-		</p>
+			<img src ="./libs/shared/assets/calLogo.png" alt="Cal & Associates Logo" />
+		</div>
 	</body>
 </html>
