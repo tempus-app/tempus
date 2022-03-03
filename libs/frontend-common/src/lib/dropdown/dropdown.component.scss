@@ -1,6 +1,10 @@
 @use 'components/helper' as c;
 @use 'abstracts/helper' as abs;
 
+.mat-form-field {
+	width: 100%;
+}
+
 ::ng-deep .primary .mat-form-field-wrapper .mat-form-field-flex {
 	@include c.tempus-form(abs.$primary-100);
 	+ .mat-form-field-underline {
