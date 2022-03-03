@@ -1,10 +1,12 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-restricted-syntax */
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ViewsService } from '@tempus/api-profile';
+import { ConfigService } from '@nestjs/config';
 import { ResourceEntity, Resource, ViewType, CreateResourceDto, UpdateResourceDto } from '@tempus/datalayer';
 import { Repository } from 'typeorm';
+import { genSalt, hash } from 'bcrypt';
 
 @Injectable()
 export class ResourceService {
@@ -12,10 +14,12 @@ export class ResourceService {
 		@InjectRepository(ResourceEntity)
 		private resourceRepository: Repository<ResourceEntity>,
 		private viewsService: ViewsService,
+		private configService: ConfigService,
 	) {}
 
 	async createResource(resource: CreateResourceDto): Promise<Resource> {
 		const resourceEntity = CreateResourceDto.toEntity(resource);
+		resourceEntity.password = await this.hashPassword(resourceEntity.password);
 		const createdResource = await this.resourceRepository.save(resourceEntity);
 
 		const view = await this.viewsService.createView(createdResource.id, {
@@ -32,6 +36,8 @@ export class ResourceService {
 		});
 
 		createdResource.views.push(view);
+		this.resourceRepository.save(createdResource);
+		createdResource.password = null;
 		return createdResource;
 	}
 
@@ -102,5 +108,14 @@ export class ResourceService {
 		Object.assign(resourceEntity, updateResourceData);
 
 		return this.resourceRepository.save(resourceEntity);
+	}
+
+	private async hashPassword(password: string): Promise<string> {
+		try {
+			const salt = await genSalt(this.configService.get('saltSecret'));
+			return await hash(password, salt);
+		} catch (e) {
+			throw new InternalServerErrorException(e);
+		}
 	}
 }

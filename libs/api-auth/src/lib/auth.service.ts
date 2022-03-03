@@ -1,7 +1,8 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common';
+import { forwardRef, Inject, Injectable, InternalServerErrorException } from '@nestjs/common';
 import { UserService } from '@tempus/api-account';
-import { AuthDto } from '@tempus/datalayer';
+import { AuthDto, User } from '@tempus/datalayer';
 import { JwtService } from '@nestjs/jwt';
+import { compare } from 'bcrypt';
 
 @Injectable()
 export class AuthService {
@@ -11,9 +12,9 @@ export class AuthService {
 		private jwtService: JwtService,
 	) {}
 
-	async validateUser(email: string, password: string): Promise<any> {
+	async validateUser(email: string, password: string): Promise<User> {
 		const user = await this.userService.findByEmail(email);
-		if (user && (await this.comparePassword(password, user.password))) {
+		if (user && (await AuthService.comparePassword(password, user.password))) {
 			return user;
 		}
 		return null;
@@ -27,19 +28,24 @@ export class AuthService {
 		return null;
 	}
 
-	async login(user): Promise<any> {
+	async login(user: User): Promise<AuthDto> {
+		const partialUser = user;
 		const payload = {
-			email: user.email,
-			roles: user.roles,
+			email: partialUser.email,
+			roles: partialUser.roles,
 		};
-		user.password = null;
+		partialUser.password = null;
 		const accessToken = this.jwtService.sign(payload);
-		const result = new AuthDto(user, accessToken);
+		const result = new AuthDto(partialUser, accessToken);
 
 		return result;
 	}
 
-	private async comparePassword(password: string, encryptedPassword: string) {
-		return password === encryptedPassword;
+	private static comparePassword(password: string, encryptedPassword: string): boolean {
+		try {
+			return compare(password, encryptedPassword);
+		} catch (e) {
+			throw new InternalServerErrorException(e);
+		}
 	}
 }

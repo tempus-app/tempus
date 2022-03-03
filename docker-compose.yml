@@ -29,6 +29,7 @@ services:
       - DB_NAME=postgres
       - CHROMIUM_PATH=/usr/bin/chromium-browser
       - JWT_SECRET=test
+      - SALT_SECRET=10
     ports:
       - 3000:3000
     volumes:
