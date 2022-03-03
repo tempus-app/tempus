@@ -14,7 +14,7 @@ import {
 	ClientEntity,
 	ProjectEntity,
 	TaskEntity,
-} from '@tempus/datalayer';
+} from '@tempus/shared-domain';
 
 const config: PostgresConnectionOptions = {
 	type: 'postgres',

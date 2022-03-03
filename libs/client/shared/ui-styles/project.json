@@ -1,0 +1,8 @@
+{
+	"projectType": "library",
+	"root": "libs/client/shared/ui-styles",
+	"sourceRoot": "libs/client/shared/ui-styles/src",
+	"prefix": "tempus",
+	"targets": {},
+	"tags": []
+}
