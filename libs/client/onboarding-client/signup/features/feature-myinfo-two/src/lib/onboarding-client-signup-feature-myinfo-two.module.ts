@@ -4,6 +4,7 @@ import { ClientSharedUiComponentsInputModule } from '@tempus/client/shared/ui-co
 import { ClientSharedUiComponentsPresentationalModule } from '@tempus/client/shared/ui-components/presentational';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
+import { MatButtonModule } from '@angular/material/button';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MyInfoTwoComponent } from './myinfotwo/my-info-two.component';
 
@@ -11,6 +12,7 @@ import { MyInfoTwoComponent } from './myinfotwo/my-info-two.component';
 	imports: [
 		CommonModule,
 		MatIconModule,
+		MatButtonModule,
 		MatCardModule,
 		ClientSharedUiComponentsInputModule,
 		ClientSharedUiComponentsPresentationalModule,
@@ -19,4 +21,4 @@ import { MyInfoTwoComponent } from './myinfotwo/my-info-two.component';
 	declarations: [MyInfoTwoComponent],
 	exports: [MyInfoTwoComponent],
 })
-export class ClientOnboardingClientSignupFeaturesFeatureMyinfoTwoModule {}
+export class OnboardingClientSignupFeatureMyInfoTwoModule {}

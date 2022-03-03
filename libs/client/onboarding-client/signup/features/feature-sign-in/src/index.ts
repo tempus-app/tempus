@@ -1,1 +1,1 @@
-export * from './lib/client-onboarding-client-signup-features-feature-sign-in.module';
+export * from './lib/onboarding-client-signup-feature-sign-in.module';

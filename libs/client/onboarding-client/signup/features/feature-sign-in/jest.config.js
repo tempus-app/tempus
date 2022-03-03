@@ -1,5 +1,5 @@
 module.exports = {
-	displayName: 'client-onboarding-client-signup-features-feature-sign-in',
+	displayName: 'onboarding-client-signup-feature-sign-in',
 	preset: '../../../../../../jest.preset.js',
 	setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
 	globals: {

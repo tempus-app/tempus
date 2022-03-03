@@ -1,5 +1,5 @@
 module.exports = {
-	displayName: 'api-onboarding-api-feature-auth',
+	displayName: 'onboarding-api-feature-auth',
 	preset: '../../../../jest.preset.js',
 	globals: {
 		'ts-jest': {

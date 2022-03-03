@@ -1,6 +1,6 @@
 import { forwardRef, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ResourceService } from '@tempus/api-onboarding-api-feature-account';
+import { ResourceService } from '@tempus/onboarding-api/feature-account';
 import { Experience, ExperienceEntity, UpdateExperienceDto } from '@tempus/shared-domain';
 import { Repository } from 'typeorm';
 

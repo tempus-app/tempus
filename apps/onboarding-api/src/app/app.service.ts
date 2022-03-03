@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { RoleType, ResourceEntity, UserEntity } from '@tempus/shared-domain';
-import { PdfGeneratorService } from '@tempus/api-shared-feature-pdfgenerator';
+import { PdfGeneratorService } from '@tempus/api-shared/feature-pdfgenerator';
 
 @Injectable()
 export class AppService {

@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { CoreModule } from '@tempus/api-shared-feature-core';
+import { CoreModule } from '@tempus/api-shared/feature-core';
 import { PdfGeneratorService } from './pdfgenerator.service';
 
 @Module({

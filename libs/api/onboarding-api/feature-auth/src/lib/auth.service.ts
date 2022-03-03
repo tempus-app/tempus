@@ -1,5 +1,5 @@
 import { forwardRef, Inject, Injectable } from '@nestjs/common';
-import { UserService } from '@tempus/api-onboarding-api-feature-account';
+import { UserService } from '@tempus/onboarding-api/feature-account';
 import { AuthDto } from '@tempus/shared-domain';
 import { JwtService } from '@nestjs/jwt';
 

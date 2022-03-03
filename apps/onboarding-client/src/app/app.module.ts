@@ -6,7 +6,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { HttpClientModule } from '@angular/common/http';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatPaginatorModule } from '@angular/material/paginator';
-import { ClientOnboardingClientSignupFeaturesFeatureMyinfoTwoModule } from '@tempus/client/onboarding-client/signup/features/feature-myinfo-two';
+import { OnboardingClientSignupFeatureMyInfoTwoModule } from '@tempus/onboarding-client/signup/feature-myinfo-two';
 import { NxWelcomeComponent } from './nx-welcome.component';
 import { AppComponent } from './app.component';
 
@@ -19,7 +19,7 @@ import { AppComponent } from './app.component';
 		MatButtonModule,
 		MatTooltipModule,
 		MatPaginatorModule,
-		ClientOnboardingClientSignupFeaturesFeatureMyinfoTwoModule,
+		OnboardingClientSignupFeatureMyInfoTwoModule,
 	],
 	providers: [],
 	bootstrap: [AppComponent],

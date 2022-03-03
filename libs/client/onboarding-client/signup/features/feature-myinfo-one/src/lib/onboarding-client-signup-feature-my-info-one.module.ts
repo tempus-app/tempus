@@ -15,4 +15,4 @@ import { MyInfoOneComponent } from './myinfoone/my-info-one.component';
 	declarations: [MyInfoOneComponent],
 	exports: [MyInfoOneComponent],
 })
-export class ClientOnboardingClientSignupFeaturesFeatureMyinfoOneModule {}
+export class OnboardingClientSignupFeatureMyInfoOneModule {}

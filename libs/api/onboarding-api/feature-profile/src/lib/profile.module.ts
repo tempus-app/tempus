@@ -1,5 +1,5 @@
 import { forwardRef, Module } from '@nestjs/common';
-import { AccountModule } from '@tempus/api-onboarding-api-feature-account';
+import { AccountModule } from '@tempus/onboarding-api/feature-account';
 import { DataLayerModule } from '@tempus/shared-domain';
 import { ProfileResumeController } from './controllers/profile-resume.controller';
 import { ProfileViewController } from './controllers/profile-view.controller';

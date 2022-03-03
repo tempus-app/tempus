@@ -9,7 +9,7 @@ import {
 	UpdateUserDto,
 	User,
 } from '@tempus/shared-domain';
-import { JwtAuthGuard, Roles, RolesGuard } from '@tempus/api-onboarding-api-feature-auth';
+import { JwtAuthGuard, Roles, RolesGuard } from '@tempus/onboarding-api/feature-auth';
 import { ApiTags } from '@nestjs/swagger';
 import { ResourceService } from '../services/resource.service';
 import { UserService } from '../services/user.service';

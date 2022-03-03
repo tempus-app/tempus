@@ -1,7 +1,7 @@
-# client-onboarding-client-signup-features-feature-sign-in
+# onboarding-client-signup-feature-sign-in
 
 This library was generated with [Nx](https://nx.dev).
 
 ## Running unit tests
 
-Run `nx test client-onboarding-client-signup-features-feature-sign-in` to execute the unit tests.
+Run `nx test onboarding-client-signup-feature-sign-in` to execute the unit tests.

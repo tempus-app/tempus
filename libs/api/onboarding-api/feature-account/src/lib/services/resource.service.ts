@@ -2,7 +2,7 @@
 /* eslint-disable no-restricted-syntax */
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ViewsService } from '@tempus/api-onboarding-api-feature-profile';
+import { ViewsService } from '@tempus/onboarding-api/feature-profile';
 import { ResourceEntity, Resource, ViewType, CreateResourceDto, UpdateResourceDto } from '@tempus/shared-domain';
 import { Repository } from 'typeorm';
 
@@ -16,7 +16,7 @@ export class ResourceService {
 
 	async createResource(resource: CreateResourceDto): Promise<Resource> {
 		const resourceEntity = CreateResourceDto.toEntity(resource);
-		const createdResource = await this.resourceRepository.save(resourceEntity);
+		let createdResource = await this.resourceRepository.save(resourceEntity);
 
 		const view = await this.viewsService.createView(createdResource.id, {
 			viewType: ViewType.PRIMARY,
@@ -32,6 +32,7 @@ export class ResourceService {
 		});
 
 		createdResource.views.push(view);
+		createdResource = await this.resourceRepository.save(resourceEntity);
 		return createdResource;
 	}
 

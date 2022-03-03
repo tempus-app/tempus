@@ -15,20 +15,20 @@
 		"skipDefaultLibCheck": true,
 		"baseUrl": ".",
 		"paths": {
-			"@tempus/api-onboarding-api-feature-account": ["libs/api/onboarding-api/feature-account/src/index.ts"],
-			"@tempus/api-onboarding-api-feature-auth": ["libs/api/onboarding-api/feature-auth/src/index.ts"],
-			"@tempus/api-onboarding-api-feature-profile": ["libs/api/onboarding-api/feature-profile/src/index.ts"],
-			"@tempus/api-onboarding-api-feature-project": ["libs/api/onboarding-api/feature-project/src/index.ts"],
-			"@tempus/api-shared-feature-core": ["libs/api/shared/feature-core/src/index.ts"],
-			"@tempus/api-shared-feature-email": ["libs/api/shared/feature-email/src/index.ts"],
-			"@tempus/api-shared-feature-pdfgenerator": ["libs/api/shared/feature-pdfgenerator/src/index.ts"],
-			"@tempus/client/onboarding-client/signup/features/feature-myinfo-one": [
+			"@tempus/onboarding-api/feature-account": ["libs/api/onboarding-api/feature-account/src/index.ts"],
+			"@tempus/onboarding-api/feature-auth": ["libs/api/onboarding-api/feature-auth/src/index.ts"],
+			"@tempus/onboarding-api/feature-profile": ["libs/api/onboarding-api/feature-profile/src/index.ts"],
+			"@tempus/onboarding-api/feature-project": ["libs/api/onboarding-api/feature-project/src/index.ts"],
+			"@tempus/api-shared/feature-core": ["libs/api/shared/feature-core/src/index.ts"],
+			"@tempus/api-shared/feature-email": ["libs/api/shared/feature-email/src/index.ts"],
+			"@tempus/api-shared/feature-pdfgenerator": ["libs/api/shared/feature-pdfgenerator/src/index.ts"],
+			"@tempus/onboarding-client/signup/feature-myinfo-one": [
 				"libs/client/onboarding-client/signup/features/feature-myinfo-one/src/index.ts"
 			],
-			"@tempus/client/onboarding-client/signup/features/feature-myinfo-two": [
+			"@tempus/onboarding-client/signup/feature-myinfo-two": [
 				"libs/client/onboarding-client/signup/features/feature-myinfo-two/src/index.ts"
 			],
-			"@tempus/client/onboarding-client/signup/features/feature-sign-in": [
+			"@tempus/onboarding-client/signup/feature-sign-in": [
 				"libs/client/onboarding-client/signup/features/feature-sign-in/src/index.ts"
 			],
 			"@tempus/client/shared/ui-components/input": ["libs/client/shared/ui-components/input/src/index.ts"],
