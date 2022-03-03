@@ -1,0 +1,26 @@
+{
+	"projectType": "library",
+	"root": "libs/client/onboarding-client/signup/features/feature-create-credentials",
+	"sourceRoot": "libs/client/onboarding-client/signup/features/feature-create-credentials/src",
+	"prefix": "tempus",
+	"targets": {
+		"test": {
+			"executor": "@nrwl/jest:jest",
+			"outputs": ["coverage/libs/client/onboarding-client/signup/features/feature-create-credentials"],
+			"options": {
+				"jestConfig": "libs/client/onboarding-client/signup/features/feature-create-credentials/jest.config.js",
+				"passWithNoTests": true
+			}
+		},
+		"lint": {
+			"executor": "@nrwl/linter:eslint",
+			"options": {
+				"lintFilePatterns": [
+					"libs/client/onboarding-client/signup/features/feature-create-credentials/src/**/*.ts",
+					"libs/client/onboarding-client/signup/features/feature-create-credentials/src/**/*.html"
+				]
+			}
+		}
+	},
+	"tags": []
+}

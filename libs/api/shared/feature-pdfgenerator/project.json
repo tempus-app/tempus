@@ -1,0 +1,23 @@
+{
+	"root": "libs/api/shared/feature-pdfgenerator",
+	"sourceRoot": "libs/api/shared/feature-pdfgenerator/src",
+	"projectType": "library",
+	"targets": {
+		"lint": {
+			"executor": "@nrwl/linter:eslint",
+			"outputs": ["{options.outputFile}"],
+			"options": {
+				"lintFilePatterns": ["libs/api/shared/feature-pdfgenerator/**/*.ts"]
+			}
+		},
+		"test": {
+			"executor": "@nrwl/jest:jest",
+			"outputs": ["coverage/libs/api/shared/feature-pdfgenerator"],
+			"options": {
+				"jestConfig": "libs/api/shared/feature-pdfgenerator/jest.config.js",
+				"passWithNoTests": true
+			}
+		}
+	},
+	"tags": []
+}
