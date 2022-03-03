@@ -6,6 +6,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatGridListModule } from '@angular/material/grid-list';
+import { RouterModule } from '@angular/router';
 import { MyInfoTwoComponent } from './myinfotwo/my-info-two.component';
 
 @NgModule({
@@ -17,6 +18,13 @@ import { MyInfoTwoComponent } from './myinfotwo/my-info-two.component';
 		ClientSharedUiComponentsInputModule,
 		ClientSharedUiComponentsPresentationalModule,
 		MatGridListModule,
+		RouterModule.forChild([
+			{
+				path: '',
+				pathMatch: 'full',
+				component: MyInfoTwoComponent,
+			},
+		]),
 	],
 	declarations: [MyInfoTwoComponent],
 	exports: [MyInfoTwoComponent],

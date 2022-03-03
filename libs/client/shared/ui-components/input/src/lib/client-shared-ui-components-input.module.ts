@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgxDropzoneModule } from 'ngx-dropzone';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -22,7 +21,6 @@ import { DropdownComponent } from './dropdown/dropdown.component';
 		MatInputModule,
 		MatIconModule,
 		MatSelectModule,
-		BrowserAnimationsModule,
 		NgxDropzoneModule,
 		MatAutocompleteModule,
 		FormsModule,

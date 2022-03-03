@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { EmailService } from '@tempus/api-shared/feature-email';
+import { EmailService } from '@tempus/api/shared/feature-email';
 import { Link, LinkEntity, StatusType, UpdatelinkDto } from '@tempus/shared-domain';
 import { Repository } from 'typeorm';
 import { v4 as uuidv4 } from 'uuid';

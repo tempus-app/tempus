@@ -3,7 +3,7 @@ import { PassportModule } from '@nestjs/passport';
 import { AccountModule } from '@tempus/onboarding-api/feature-account';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule } from '@nestjs/config';
-import { CoreModule } from '@tempus/api-shared/feature-core';
+import { CoreModule } from '@tempus/api/shared/feature-core';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './guards/local-auth.guard';

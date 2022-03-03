@@ -1,4 +1,4 @@
-import { EmailModule } from '@tempus/api-shared/feature-email';
+import { EmailModule } from '@tempus/api/shared/feature-email';
 import { DataLayerModule } from '@tempus/shared-domain';
 import { forwardRef, Module } from '@nestjs/common';
 import { AuthModule } from '@tempus/onboarding-api/feature-auth';
