@@ -10,6 +10,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { OnboardingClientSignupFeatureMyInfoTwoModule } from '@tempus/onboarding-client/signup/feature-myinfo-two';
 import { RouterModule } from '@angular/router';
 import { OnboardingClientSignupFeatureShellModule } from '@tempus/onboarding-client/signup/shell';
+import { OnboardingClientShellModule } from '@tempus/client/onboarding-client/shell';
 import { NxWelcomeComponent } from './nx-welcome.component';
 import { AppComponent } from './app.component';
 
@@ -23,19 +24,20 @@ import { AppComponent } from './app.component';
 		MatTooltipModule,
 		MatPaginatorModule,
 		BrowserAnimationsModule,
-		RouterModule.forRoot([
-			{
-				path: '',
-				component: AppComponent,
-				children: [
-					{
-						path: '',
-						loadChildren: () =>
-							import('@tempus/onboarding-client/signup/shell').then(m => m.OnboardingClientSignupFeatureShellModule),
-					},
-				],
-			},
-		]),
+		OnboardingClientShellModule,
+		// RouterModule.forRoot([
+		// 	{
+		// 		path: '',
+		// 		component: AppComponent,
+		// 		children: [
+		// 			{
+		// 				path: '',
+		// 				loadChildren: () =>
+		// 					import('@tempus/onboarding-client/signup/shell').then(m => m.OnboardingClientSignupFeatureShellModule),
+		// 			},
+		// 		],
+		// 	},
+		// ]),
 	],
 	providers: [],
 	bootstrap: [AppComponent],

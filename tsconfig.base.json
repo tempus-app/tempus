@@ -18,7 +18,8 @@
 			"@tempus/api/shared/feature-core": ["libs/api/shared/feature-core/src/index.ts"],
 			"@tempus/api/shared/feature-email": ["libs/api/shared/feature-email/src/index.ts"],
 			"@tempus/api/shared/feature-pdfgenerator": ["libs/api/shared/feature-pdfgenerator/src/index.ts"],
-			"@tempus/onboarding-client/signup/shell": ["libs/client/onboarding-client/signup/shell/src/index.ts"],
+			"@tempus/onboarding-client/profile/shell": ["libs/client/onboarding-client/profile/shell/src/index.ts"],
+			"@tempus/client/onboarding-client/shell": ["libs/client/onboarding-client/shell/src/index.ts"],
 			"@tempus/client/shared/ui-components/input": ["libs/client/shared/ui-components/input/src/index.ts"],
 			"@tempus/client/shared/ui-components/persistent": ["libs/client/shared/ui-components/persistent/src/index.ts"],
 			"@tempus/client/shared/ui-components/presentational": [
@@ -28,15 +29,25 @@
 			"@tempus/onboarding-api/feature-auth": ["libs/api/onboarding-api/feature-auth/src/index.ts"],
 			"@tempus/onboarding-api/feature-profile": ["libs/api/onboarding-api/feature-profile/src/index.ts"],
 			"@tempus/onboarding-api/feature-project": ["libs/api/onboarding-api/feature-project/src/index.ts"],
+			"@tempus/onboarding-client/profile/feature-sign-in": [
+				"libs/client/onboarding-client/profile/features/onboarding-client-profile-feature-sign-in/src/index.ts"
+			],
+			"@tempus/onboarding-client/signup/feature-create-credentials": [
+				"libs/client/onboarding-client/signup/features/feature-create-credentials/src/index.ts"
+			],
 			"@tempus/onboarding-client/signup/feature-myinfo-one": [
 				"libs/client/onboarding-client/signup/features/feature-myinfo-one/src/index.ts"
 			],
 			"@tempus/onboarding-client/signup/feature-myinfo-two": [
 				"libs/client/onboarding-client/signup/features/feature-myinfo-two/src/index.ts"
 			],
-			"@tempus/onboarding-client/signup/feature-sign-in": [
-				"libs/client/onboarding-client/signup/features/feature-sign-in/src/index.ts"
+			"@tempus/onboarding-client/signup/feature-review-info": [
+				"libs/client/onboarding-client/signup/features/feature-review-info/src/index.ts"
 			],
+			"@tempus/onboarding-client/signup/feature-upload-resume": [
+				"libs/client/onboarding-client/signup/features/feature-upload-resume/src/index.ts"
+			],
+			"@tempus/onboarding-client/signup/shell": ["libs/client/onboarding-client/signup/shell/src/index.ts"],
 			"@tempus/shared-domain": ["libs/shared/domain/src/index.ts"]
 		}
 	},

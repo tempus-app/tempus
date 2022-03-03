@@ -5,14 +5,22 @@ import { SignupShellComponent } from './shell/onboarding-client-signup-feature-s
 
 const routes: Routes = [
 	{
-		path: 'test',
+		path: '',
 		component: SignupShellComponent,
 		children: [
+			{ path: '', pathMatch: 'full', redirectTo: 'credentials' },
 			{
-				path: 'signup',
+				path: 'credentials',
 				loadChildren: () =>
-					import('@tempus/onboarding-client/signup/feature-sign-in').then(
-						m => m.OnboardingClientSignupFeatureSignInModule,
+					import('@tempus/onboarding-client/signup/feature-create-credentials').then(
+						m => m.OnboardingClientSignupFeatureCreateCredentialsModule,
+					),
+			},
+			{
+				path: 'uploadresume',
+				loadChildren: () =>
+					import('@tempus/onboarding-client/signup/feature-upload-resume').then(
+						m => m.OnboardingClientSignupFeatureUploadResumeModule,
 					),
 			},
 			{
@@ -27,6 +35,13 @@ const routes: Routes = [
 				loadChildren: () =>
 					import('@tempus/onboarding-client/signup/feature-myinfo-two').then(
 						m => m.OnboardingClientSignupFeatureMyInfoTwoModule,
+					),
+			},
+			{
+				path: 'review',
+				loadChildren: () =>
+					import('@tempus/onboarding-client/signup/feature-review-info').then(
+						m => m.OnboardingClientSignupFeatureReviewInfoModule,
 					),
 			},
 		],
