@@ -9,7 +9,7 @@ import { InputType } from './text-input-enum';
 export class TextInputComponent {
 	@Input() placeholder = '';
 
-	@Input() cssClass = '';
+	@Input() cssClass = 'secondary';
 
 	@Input() id = '';
 
