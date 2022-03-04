@@ -52,7 +52,8 @@
 							"with": "apps/onboarding-client/src/environments/environment.prod.ts"
 						}
 					],
-					"outputHashing": "all"
+					"outputHashing": "all",
+					"optimization": true
 				},
 				"development": {
 					"buildOptimizer": false,
@@ -98,6 +99,12 @@
 			"options": {
 				"jestConfig": "apps/onboarding-client/jest.config.js",
 				"passWithNoTests": true
+			}
+		},
+		"analyze": {
+			"executor": "@ngx-builders/analyze:analyze",
+			"options": {
+				"outputPath": "dist/apps/onboarding-client"
 			}
 		}
 	},
