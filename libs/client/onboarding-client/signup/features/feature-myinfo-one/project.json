@@ -1,0 +1,26 @@
+{
+	"projectType": "library",
+	"root": "libs/client/onboarding-client/signup/features/feature-myinfo-one",
+	"sourceRoot": "libs/client/onboarding-client/signup/features/feature-myinfo-one/src",
+	"prefix": "tempus",
+	"targets": {
+		"test": {
+			"executor": "@nrwl/jest:jest",
+			"outputs": ["coverage/libs/client/onboarding-client/signup/features/feature-myinfo-one"],
+			"options": {
+				"jestConfig": "libs/client/onboarding-client/signup/features/feature-myinfo-one/jest.config.js",
+				"passWithNoTests": true
+			}
+		},
+		"lint": {
+			"executor": "@nrwl/linter:eslint",
+			"options": {
+				"lintFilePatterns": [
+					"libs/client/onboarding-client/signup/features/feature-myinfo-one/src/**/*.ts",
+					"libs/client/onboarding-client/signup/features/feature-myinfo-one/src/**/*.html"
+				]
+			}
+		}
+	},
+	"tags": []
+}

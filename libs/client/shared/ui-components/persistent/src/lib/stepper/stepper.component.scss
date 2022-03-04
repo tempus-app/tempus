@@ -1,0 +1,71 @@
+@use 'abstracts/helper' as abs;
+@import url('https://fonts.googleapis.com/css2?family=Merriweather&family=Raleway&display=swap');
+
+/**
+    Change color of stepper icons depending on state
+    - NOTE: requires 'encapsulation: ViewEncapsulation.None' in component definition
+ */
+
+::ng-deep .mat-step-header:hover,
+::ng-deep .mat-step-header.cdk-program-focused,
+::ng-deep .mat-step-header.cdk-mouse-focused,
+::ng-deep .mat-step-header.cdk-focused {
+	background-color: transparent !important;
+}
+
+::ng-deep .mat-horizontal-stepper-header::before,
+::ng-deep .mat-horizontal-stepper-header::after,
+::ng-deep .mat-stepper-horizontal-line {
+	border-top-color: abs.$primary-300;
+}
+
+::ng-deep .mat-step-header .mat-step-icon-state-done {
+	background-color: abs.$primary-900;
+	border: 2px solid abs.$primary-900;
+	+ .mat-step-label {
+		color: abs.$primary-900;
+		font-size: 20px;
+		font-family: Raleway, sans-serif;
+		font-weight: bold;
+	}
+	+ .mat-step-label .mat-step-text-label {
+		padding: 10px !important;
+	}
+}
+
+::ng-deep .mat-step-header .mat-step-icon-state-edit,
+::ng-deep .mat-step-header .mat-step-icon-state-selected {
+	background-color: abs.$primary;
+	border: 2px solid abs.$primary;
+	+ .mat-step-label {
+		color: abs.$primary-900;
+		font-size: 20px;
+		font-family: Raleway, sans-serif;
+		font-weight: bold;
+	}
+	+ .mat-step-label .mat-step-text-label {
+		padding: 10px !important;
+	}
+}
+
+::ng-deep .mat-step-header .mat-step-icon-state-default {
+	background-color: transparent;
+	border: 2px solid abs.$primary;
+	+ .mat-step-label {
+		color: abs.$primary-900;
+		font-size: 20px;
+		font-family: Raleway, sans-serif;
+		font-weight: bold;
+	}
+	+ .mat-step-label .mat-step-text-label {
+		padding: 10px !important;
+	}
+}
+
+#button-container {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	position: relative;
+	bottom: 0;
+}

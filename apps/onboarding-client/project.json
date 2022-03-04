@@ -1,0 +1,106 @@
+{
+	"projectType": "application",
+	"root": "apps/onboarding-client",
+	"sourceRoot": "apps/onboarding-client/src",
+	"prefix": "tempus",
+	"targets": {
+		"build": {
+			"executor": "@angular-devkit/build-angular:browser",
+			"outputs": ["{options.outputPath}"],
+			"options": {
+				"outputPath": "dist/apps/onboarding-client",
+				"index": "apps/onboarding-client/src/index.html",
+				"main": "apps/onboarding-client/src/main.ts",
+				"polyfills": "apps/onboarding-client/src/polyfills.ts",
+				"tsConfig": "apps/onboarding-client/tsconfig.app.json",
+				"inlineStyleLanguage": "scss",
+				"assets": [
+					{
+						"glob": "favicon.ico",
+						"input": "libs/client/shared/ui-assets/src",
+						"output": "./"
+					},
+					{
+						"glob": "**/*",
+						"input": "libs/client/shared/ui-assets/src/assets",
+						"output": "assets"
+					}
+				],
+				"styles": ["apps/onboarding-client/src/styles.scss"],
+				"stylePreprocessorOptions": {
+					"includePaths": ["libs/client/shared/ui-styles/src/styles"]
+				},
+				"scripts": []
+			},
+			"configurations": {
+				"production": {
+					"budgets": [
+						{
+							"type": "initial",
+							"maximumWarning": "500kb",
+							"maximumError": "1mb"
+						},
+						{
+							"type": "anyComponentStyle",
+							"maximumWarning": "2kb",
+							"maximumError": "4kb"
+						}
+					],
+					"fileReplacements": [
+						{
+							"replace": "apps/onboarding-client/src/environments/environment.ts",
+							"with": "apps/onboarding-client/src/environments/environment.prod.ts"
+						}
+					],
+					"outputHashing": "all"
+				},
+				"development": {
+					"buildOptimizer": false,
+					"optimization": false,
+					"vendorChunk": true,
+					"extractLicenses": false,
+					"sourceMap": true,
+					"namedChunks": true
+				}
+			},
+			"defaultConfiguration": "production"
+		},
+		"serve": {
+			"executor": "@angular-devkit/build-angular:dev-server",
+			"configurations": {
+				"production": {
+					"browserTarget": "onboarding-client:build:production"
+				},
+				"development": {
+					"browserTarget": "onboarding-client:build:development"
+				}
+			},
+			"defaultConfiguration": "development",
+			"options": {
+				"proxyConfig": "apps/onboarding-client/proxy.conf.json"
+			}
+		},
+		"extract-i18n": {
+			"executor": "@angular-devkit/build-angular:extract-i18n",
+			"options": {
+				"browserTarget": "onboarding-client:build"
+			}
+		},
+		"lint": {
+			"executor": "@nrwl/linter:eslint",
+			"options": {
+				"lintFilePatterns": ["apps/onboarding-client/src/**/*.ts", "apps/onboarding-client/src/**/*.html"]
+			}
+		},
+		"test": {
+			"executor": "@nrwl/jest:jest",
+			"outputs": ["coverage/apps/onboarding-client"],
+			"options": {
+				"jestConfig": "apps/onboarding-client/jest.config.js",
+				"passWithNoTests": true
+			}
+		}
+	},
+	"tags": [],
+	"implicitDependencies": ["client-shared-ui-assets", "client-shared-ui-styles"]
+}
