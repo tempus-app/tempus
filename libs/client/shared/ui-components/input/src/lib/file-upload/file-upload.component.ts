@@ -1,40 +1,38 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { NgxDropzoneChangeEvent } from 'ngx-dropzone';
 
 @Component({
 	selector: 'tempus-file-upload',
 	templateUrl: './file-upload.component.html',
 	styleUrls: ['./file-upload.component.scss'],
 })
-export class FileUploadComponent implements OnInit {
+export class FileUploadComponent {
 	files: File[] = [];
 
+	@Input()
 	fileType = '*';
 
 	@Input()
-	acceptedFileType = '';
+	displayPreview = false;
 
-	ngOnInit(): void {
-		this.determineFileType();
-	}
+	@Input()
+	multiple = true;
 
-	onSelect(event: any) {
+	@Input()
+	disableFileSelector = false;
+
+	@Input()
+	label = 'Drag and drop your files here';
+
+	@Output()
+	fileUploadChange = new EventEmitter();
+
+	onSelect(event: NgxDropzoneChangeEvent) {
 		this.files.push(...event.addedFiles);
+		this.fileUploadChange.emit(...event.addedFiles);
 	}
 
 	onRemove(event: File) {
 		this.files.splice(this.files.indexOf(event), 1);
-	}
-
-	determineFileType() {
-		switch (this.acceptedFileType) {
-			case 'image':
-				this.fileType = 'image/*';
-				break;
-			case 'file':
-				this.fileType = 'application/pdf,application/msword,.doc,.docx,text/plain';
-				break;
-			default:
-				this.fileType = '*';
-		}
 	}
 }

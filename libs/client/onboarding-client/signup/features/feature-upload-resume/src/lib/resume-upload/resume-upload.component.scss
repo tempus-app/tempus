@@ -1,0 +1,42 @@
+@use 'abstracts/helper' as abs;
+tempus-card {
+	width: 80%;
+}
+
+.container {
+	display: block;
+	text-align: center;
+}
+
+.info-title {
+	width: 80%;
+}
+
+.section-header {
+	padding: 0.5em 0em 0.5em 0em;
+	border-bottom: 2px solid abs.$primary-300;
+}
+
+.grid-container {
+	padding-left: 10%;
+	padding-right: 10%;
+	@media screen and (max-width: 1024px) {
+		padding-left: 0px;
+		padding-right: 0px;
+	}
+}
+
+.view-file-container {
+	margin-top: 30px;
+}
+
+tempus-dropdown {
+	text-align: center;
+	width: 90%;
+	padding: 3em 0em 2em 0em;
+}
+
+.file-upload-button {
+	background-color: abs.$accent-300;
+	color: white;
+}

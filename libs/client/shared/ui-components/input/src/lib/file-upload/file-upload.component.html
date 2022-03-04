@@ -1,18 +1,27 @@
 <ng-container>
-	<div class="custom-dropzone" ngx-dropzone [accept]="fileType" (change)="onSelect($event)">
+	<div
+		class="custom-dropzone"
+		ngx-dropzone
+		[disableClick]="disableFileSelector"
+		[accept]="fileType"
+		(change)="onSelect($event)"
+	>
 		<ngx-dropzone-label>
 			<div>
 				<mat-icon class="icon-display">upload</mat-icon>
+				<h5 class="mat-body-2">{{ label }}</h5>
 			</div>
 		</ngx-dropzone-label>
-		<ngx-dropzone-image-preview
-			ngProjectAs="ngx-dropzone-preview"
-			*ngFor="let f of files"
-			[file]="f"
-			[removable]="true"
-			(removed)="onRemove(f)"
-		>
-			<ngx-dropzone-label>{{ f.name }} ({{ f.type }})</ngx-dropzone-label>
-		</ngx-dropzone-image-preview>
+		<div *ngIf="displayPreview">
+			<ngx-dropzone-image-preview
+				ngProjectAs="ngx-dropzone-preview"
+				*ngFor="let f of files"
+				[file]="f"
+				[removable]="true"
+				(removed)="onRemove(f)"
+			>
+				<ngx-dropzone-label>{{ f.name }} ({{ f.type }})</ngx-dropzone-label>
+			</ngx-dropzone-image-preview>
+		</div>
 	</div>
 </ng-container>
