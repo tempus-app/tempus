@@ -100,12 +100,6 @@
 				"jestConfig": "apps/onboarding-client/jest.config.js",
 				"passWithNoTests": true
 			}
-		},
-		"analyze": {
-			"executor": "@ngx-builders/analyze:analyze",
-			"options": {
-				"outputPath": "dist/apps/onboarding-client"
-			}
 		}
 	},
 	"tags": [],
