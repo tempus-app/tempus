@@ -17,7 +17,7 @@ export class ResourceService {
 		private configService: ConfigService,
 	) {}
 
-	async createResource(resource: CreateResourceDto): Promise<Resource> {
+	async createResource(resource: CreateResourceDto): Promise<Partial<Resource>> {
 		const resourceEntity = CreateResourceDto.toEntity(resource);
 		resourceEntity.password = await this.hashPassword(resourceEntity.password);
 		const createdResource = await this.resourceRepository.save(resourceEntity);
@@ -37,8 +37,8 @@ export class ResourceService {
 
 		createdResource.views.push(view);
 		this.resourceRepository.save(createdResource);
-		createdResource.password = null;
-		return createdResource;
+		const { password, ...partialResource } = createdResource;
+		return partialResource;
 	}
 
 	async getResource(resourceId: number): Promise<Resource> {
