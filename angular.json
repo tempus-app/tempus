@@ -2,6 +2,7 @@
 	"version": 2,
 	"projects": {
 		"api-shared-feature-core": "libs/api/shared/feature-core",
+		"api-shared-feature-auth": "libs/api/shared/feature-auth",
 		"api-shared-feature-email": "libs/api/shared/feature-email",
 		"api-shared-feature-pdfgenerator": "libs/api/shared/feature-pdfgenerator",
 		"onboarding-client-profile-feature-shell": "libs/client/onboarding-client/profile/shell",
@@ -12,7 +13,6 @@
 		"client-shared-ui-styles": "libs/client/shared/ui-styles",
 		"onboarding-api": "apps/onboarding-api",
 		"onboarding-api-feature-account": "libs/api/onboarding-api/feature-account",
-		"onboarding-api-feature-auth": "libs/api/onboarding-api/feature-auth",
 		"onboarding-api-feature-profile": "libs/api/onboarding-api/feature-profile",
 		"onboarding-api-feature-project": "libs/api/onboarding-api/feature-project",
 		"onboarding-client": "apps/onboarding-client",
