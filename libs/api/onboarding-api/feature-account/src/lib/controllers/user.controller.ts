@@ -52,7 +52,7 @@ export class UserController {
 	}
 
 	@Post('resource')
-	async createResource(@Body() user: CreateResourceDto): Promise<Resource> {
+	async createResource(@Body() user: CreateResourceDto): Promise<Partial<Resource>> {
 		return await this.resourceService.createResource(user as CreateResourceDto);
 	}
 
