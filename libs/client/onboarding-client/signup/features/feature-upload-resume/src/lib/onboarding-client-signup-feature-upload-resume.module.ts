@@ -21,7 +21,6 @@ import { ResumeUploadComponent } from './resume-upload/resume-upload.component';
 		MatGridListModule,
 		MatCardModule,
 		MatFormFieldModule,
-		CommonModule,
 		RouterModule.forChild([
 			{
 				path: '',
