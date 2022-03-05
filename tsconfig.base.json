@@ -16,6 +16,7 @@
 		"baseUrl": ".",
 		"paths": {
 			"@tempus/api/shared/feature-core": ["libs/api/shared/feature-core/src/index.ts"],
+			"@tempus/api/shared/feature-auth": ["libs/api/shared/feature-auth/src/index.ts"],
 			"@tempus/api/shared/feature-email": ["libs/api/shared/feature-email/src/index.ts"],
 			"@tempus/api/shared/feature-pdfgenerator": ["libs/api/shared/feature-pdfgenerator/src/index.ts"],
 			"@tempus/onboarding-client/profile/shell": ["libs/client/onboarding-client/profile/shell/src/index.ts"],
@@ -26,7 +27,6 @@
 				"libs/client/shared/ui-components/presentational/src/index.ts"
 			],
 			"@tempus/onboarding-api/feature-account": ["libs/api/onboarding-api/feature-account/src/index.ts"],
-			"@tempus/onboarding-api/feature-auth": ["libs/api/onboarding-api/feature-auth/src/index.ts"],
 			"@tempus/onboarding-api/feature-profile": ["libs/api/onboarding-api/feature-profile/src/index.ts"],
 			"@tempus/onboarding-api/feature-project": ["libs/api/onboarding-api/feature-project/src/index.ts"],
 			"@tempus/onboarding-client/profile/feature-sign-in": [

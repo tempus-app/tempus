@@ -9,7 +9,7 @@ import {
 	UpdateUserDto,
 	User,
 } from '@tempus/shared-domain';
-import { JwtAuthGuard, Roles, RolesGuard } from '@tempus/onboarding-api/feature-auth';
+import { JwtAuthGuard, Roles, RolesGuard } from '@tempus/api/shared/feature-auth';
 import { ApiTags } from '@nestjs/swagger';
 import { ResourceService } from '../services/resource.service';
 import { UserService } from '../services/user.service';
@@ -52,7 +52,7 @@ export class UserController {
 	}
 
 	@Post('resource')
-	async createResource(@Body() user: CreateResourceDto): Promise<Resource> {
+	async createResource(@Body() user: CreateResourceDto): Promise<Partial<Resource>> {
 		return await this.resourceService.createResource(user as CreateResourceDto);
 	}
 
