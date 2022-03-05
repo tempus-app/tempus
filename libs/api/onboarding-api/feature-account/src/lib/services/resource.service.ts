@@ -80,19 +80,6 @@ export class ResourceService {
 		return resources;
 	}
 
-	async findResourceByEmail(email: string): Promise<Resource> {
-		const resourceEntity = (
-			await this.resourceRepository.find({
-				where: { email },
-				relations: ['location', 'projects', 'views', 'experiences', 'educations', 'skills', 'certifications'],
-			})
-		)[0];
-		if (!resourceEntity) {
-			throw new NotFoundException(`Could not find resource with id ${email}`);
-		}
-		return resourceEntity;
-	}
-
 	// edit resource to be used specifically when updating local information
 	async editResource(updateResourceData: UpdateResourceDto): Promise<Resource> {
 		const resourceEntity = await this.getResource(updateResourceData.id);

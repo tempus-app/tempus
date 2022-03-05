@@ -49,22 +49,6 @@ export class UserService {
 		return resourceDto;
 	}
 
-	async findByEmail(email: string): Promise<User> {
-		const user = (
-			await this.userRepository.find({
-				where: { email },
-			})
-		)[0];
-		if (!user) {
-			throw new NotFoundException(`Could not find resource with id ${email}`);
-		}
-		if (user.roles.includes(RoleType.BUSINESS_OWNER)) {
-			return user;
-		}
-		const resource = await this.resourceService.findResourceByEmail(email);
-		return resource;
-	}
-
 	// TODO: filtering
 	// ROLES?
 	// get by resource etc
