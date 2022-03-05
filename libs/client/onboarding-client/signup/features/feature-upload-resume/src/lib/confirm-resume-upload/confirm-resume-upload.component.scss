@@ -1,0 +1,41 @@
+@use 'abstracts/helper' as abs;
+.file-name {
+	color: abs.$primary-800;
+	font-size: 1.2rem;
+	margin: 0px;
+}
+
+.container {
+	margin-left: 20px;
+	text-align: left;
+}
+
+.success-text {
+	margin: auto 3px auto 0px;
+	color: abs.$success;
+}
+
+.confirm-tile > ::ng-deep .mat-grid-tile-content {
+	justify-content: left;
+}
+
+.delete-tile > ::ng-deep .mat-grid-tile-content {
+	justify-content: flex-end;
+	margin-right: 20px;
+	@media screen and (max-width: 600px) {
+		justify-content: flex-start;
+	}
+}
+
+.icon-div {
+	display: flex;
+}
+
+#file-icon {
+	font-size: 45px;
+	padding-right: 20px;
+}
+
+#checkmark-icon {
+	color: abs.$success;
+}
