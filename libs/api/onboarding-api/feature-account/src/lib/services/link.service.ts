@@ -13,7 +13,7 @@ export class LinkService {
 		private emailService: EmailService,
 	) {}
 
-	createLink(link: LinkEntity): Promise<Link> {
+	async createLink(link: LinkEntity): Promise<Link> {
 		const uniqueToken = uuidv4();
 		let expiryDate = link.expiry;
 
@@ -23,7 +23,7 @@ export class LinkService {
 			expiryDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() + 7);
 		}
 		const fullLink = { ...link, token: uniqueToken, status: StatusType.ACTIVE, expiry: expiryDate };
-		this.emailService.sendInvitationEmail(fullLink);
+		await this.emailService.sendInvitationEmail(fullLink);
 		return this.linkRepository.save(fullLink);
 	}
 

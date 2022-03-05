@@ -10,7 +10,13 @@
 				"outputPath": "dist/apps/onboarding-api",
 				"main": "apps/onboarding-api/src/main.ts",
 				"tsConfig": "apps/onboarding-api/tsconfig.app.json",
-				"assets": ["apps/onboarding-api/src/assets"]
+				"assets": [
+					{
+						"glob": "**/*",
+						"input": "libs/shared/assets/",
+						"output": "assets"
+					}
+				]
 			},
 			"configurations": {
 				"production": {

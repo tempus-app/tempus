@@ -21,7 +21,7 @@ export class PdfGeneratorService {
 
 		// reading template file from file system
 		const templateHtml = fs.readFileSync(
-			path.join('./libs/api/shared/feature-pdfgenerator/src/lib/templates/', `./${pdfData.template}.hbs`),
+			path.join(path.resolve(`${__dirname}/assets/templates/pdf`), `./${pdfData.template}.hbs`),
 			'utf8',
 		);
 
