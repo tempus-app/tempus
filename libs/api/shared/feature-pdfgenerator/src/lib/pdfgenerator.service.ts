@@ -20,7 +20,10 @@ export class PdfGeneratorService {
 		const pdfData: PdfTemplateDtoInterface = templateData || new ResumePdfTemplateDto('testresume', SampleView);
 
 		// reading template file from file system
-		const templateHtml = fs.readFileSync(path.join('/assets/templates/pdf', `./${pdfData.template}.hbs`), 'utf8');
+		const templateHtml = fs.readFileSync(
+			path.join(path.resolve(`${__dirname}/assets/templates/pdf`), `./${pdfData.template}.hbs`),
+			'utf8',
+		);
 
 		// attaching any helper functions as provided in the template data input
 		pdfData.handlebarsHelpers.forEach((handlebarHelper: HandleBarHelper) => {
