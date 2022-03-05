@@ -28,9 +28,9 @@
 					}
 				],
 				"object-curly-newline": "off", //prettier conflict
-				//"class-methods-use-this": "off", //TODO: remove me when method signatures are completed
+				"class-methods-use-this": "off", //TODO: remove me when method signatures are completed
 				"@typescript-eslint/indent": "off", //handled by prettier
-				"@typescript-eslint/no-unused-vars": "error", //TODO: IMPORTANT! change "off" to "error" when method signatures are completed
+				"@typescript-eslint/no-unused-vars": "off", //TODO: IMPORTANT! change "off" to "error" when method signatures are completed
 				"@typescript-eslint/no-explicit-any": "error",
 				"@nrwl/nx/enforce-module-boundaries": [
 					"error",
