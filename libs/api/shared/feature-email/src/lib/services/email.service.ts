@@ -9,7 +9,7 @@ export class EmailService {
 	async sendInvitationEmail(link: LinkEntity): Promise<void> {
 		await this.mailerService.sendMail({
 			to: link.email, // list of receivers
-			subject: 'Complete your Profile for CAL & Associat?',
+			subject: 'Complete your Profile for CAL & Associates',
 			template: 'invitationLink',
 			context: {
 				code: link.token,
