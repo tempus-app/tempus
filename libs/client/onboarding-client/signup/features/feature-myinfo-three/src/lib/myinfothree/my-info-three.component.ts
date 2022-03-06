@@ -28,7 +28,7 @@ export class MyInfoThreeComponent implements OnDestroy {
 
 	readonly separatorKeysCodes = [ENTER, COMMA] as const;
 
-	skills: string[] = ['C#', 'Java'];
+	skills: string[] = [];
 
 	// Create a map to display breakpoint names for demonstration purposes.
 	displayNameMap = new Map([
