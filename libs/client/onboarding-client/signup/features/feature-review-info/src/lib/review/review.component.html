@@ -1,11 +1,11 @@
 <ng-container>
 	<mat-grid-list cols="2" rowHeight="50px">
-		<mat-grid-tile class="container" colspan="2" rowspan="2">
+		<mat-grid-tile class="container" colspan="2" rowspan="3">
 			<div class="info-title">
 				<h2 class="mat-h2 section-header">Review</h2>
 			</div>
 		</mat-grid-tile>
-		<mat-grid-tile colspan="{{ cols }}" rowspan="5">
+		<mat-grid-tile colspan="{{ cols }}" rowspan="6">
 			<tempus-card>
 				<div class="card-header">
 					<h3 class="mat-h3 section-header">Legal Name</h3>
@@ -17,7 +17,7 @@
 				</div>
 			</tempus-card>
 		</mat-grid-tile>
-		<mat-grid-tile colspan="{{ cols }}" rowspan="5">
+		<mat-grid-tile colspan="{{ cols }}" rowspan="6">
 			<tempus-card>
 				<div class="card-header">
 					<h3 class="mat-h3 section-header">Address</h3>
@@ -33,22 +33,22 @@
 			</div>
 		</mat-grid-tile>
 		<mat-grid-tile *ngFor="let workExperience of workExperienceSummary" colspan="2" rowspan="6">
-			<tempus-card>
+			<tempus-card class="work-experience-card">
 				<mat-grid-list cols="2" rowHeight="50px">
 					<mat-grid-tile colspan="{{ cols }}" rowspan="2">
 						<div class="left-card-header">
-							<h3 class="mat-h3">{{ workExperience.companyName }}</h3>
-							<p class="mat-body-2">{{ workExperience.position }}</p>
+							<h3 class="mat-h3">{{ workExperience.company }}</h3>
+							<p class="mat-body-2">{{ workExperience.title }}</p>
 						</div>
 					</mat-grid-tile>
 					<mat-grid-tile colspan="{{ cols }}">
 						<div [ngClass]="{ 'card-date': hideElement, 'left-card-header': !hideElement }">
-							<p class="mat-body-2">{{ workExperience.dateRange }}</p>
+							<p class="mat-body-2">{{ formatDate(workExperience.startDate, workExperience.endDate) }}</p>
 						</div>
 					</mat-grid-tile>
 					<mat-grid-tile colspan="2" rowspan="3">
-						<div>
-							<p class="mat-body-2">{{ workExperience.description }}</p>
+						<div *ngFor="let desc of workExperience.description">
+							<p class="mat-body-2">{{ desc }}</p>
 						</div>
 					</mat-grid-tile>
 				</mat-grid-list>
@@ -68,12 +68,12 @@
 					<mat-grid-tile colspan="{{ cols }}" rowspan="2">
 						<div class="left-card-header">
 							<h3 class="mat-h3">{{ education.institution }}</h3>
-							<p class="mat-body-2">{{ education.field }}</p>
+							<p class="mat-body-2">{{ education.degree }}</p>
 						</div>
 					</mat-grid-tile>
 					<mat-grid-tile colspan="{{ cols }}">
 						<div [ngClass]="{ 'card-date': hideElement, 'left-card-header': !hideElement }">
-							<p class="mat-body-2">{{ education.dateRange }}</p>
+							<p class="mat-body-2">{{ formatDate(education.startDate, education.endDate) }}</p>
 						</div>
 					</mat-grid-tile>
 				</mat-grid-list>
@@ -86,7 +86,7 @@
 			</div>
 		</mat-grid-tile>
 		<mat-grid-tile *ngIf="hideElement" colspan="1" rowspan="3"></mat-grid-tile>
-		<mat-grid-tile colspan="{{ skillsEducationCols }}" rowspan="3">
+		<mat-grid-tile colspan="{{ skillsEducationCols }}" rowspan="5">
 			<tempus-card>
 				<mat-grid-list cols="{{ skillsChipsCols }}" rowHeight="50px">
 					<mat-grid-tile *ngFor="let skill of skills" colspan="1">

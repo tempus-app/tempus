@@ -27,6 +27,5 @@ import { MyInfoTwoComponent } from './myinfotwo/my-info-two.component';
 		]),
 	],
 	declarations: [MyInfoTwoComponent],
-	exports: [MyInfoTwoComponent],
 })
 export class OnboardingClientSignupFeatureMyInfoTwoModule {}

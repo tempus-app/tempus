@@ -1,5 +1,6 @@
-export type Education = {
+export interface Education {
 	institution: string;
-	field: string;
-	dateRange: string;
-};
+	degree: string;
+	startDate: Date;
+	endDate: Date;
+}

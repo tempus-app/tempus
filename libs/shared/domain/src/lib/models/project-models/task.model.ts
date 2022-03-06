@@ -1,6 +1,6 @@
 import { Project } from './project.model';
 
-export class Task {
+export interface Task {
 	id: number;
 
 	taskName: string;

@@ -24,6 +24,5 @@ import { ReviewComponent } from './review/review.component';
 		]),
 	],
 	declarations: [ReviewComponent],
-	exports: [ReviewComponent],
 })
 export class OnboardingClientSignupFeatureReviewInfoModule {}

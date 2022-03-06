@@ -1,8 +1,10 @@
 import { Component } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Subject, takeUntil } from 'rxjs';
-import { WorkExperience } from './workExperience';
-import { Education } from './education';
+import { formatDateRange } from '@tempus/shared/util';
+// import { Experience } from './workExperience';
+// import { Education } from './education';
+import { Experience, Education } from '@tempus/shared-domain';
 
 @Component({
 	selector: 'tempus-review',
@@ -10,21 +12,21 @@ import { Education } from './education';
 	styleUrls: ['./review.component.scss'],
 })
 export class ReviewComponent {
-	name = '';
+	name = 'Barnes James';
 
-	email = '';
+	email = 'bjames@gmail.com';
 
-	country = '';
+	country = 'Canada';
 
-	state = '';
+	state = 'Ontario';
 
-	city = '';
+	city = 'Ottawa';
 
-	workExperienceSummary: WorkExperience[] = [];
+	workExperienceSummary: Array<Experience> = [];
 
-	educationSummary: Education[] = [];
+	educationSummary: Array<Education> = [];
 
-	skills = [];
+	skills = ['One', 'Two', 'Three', 'Four'];
 
 	destroyed = new Subject<void>();
 
@@ -65,5 +67,9 @@ export class ReviewComponent {
 					}
 				}
 			});
+	}
+
+	formatDate(startDate: Date, endDate: Date) {
+		return formatDateRange(startDate, endDate);
 	}
 }
