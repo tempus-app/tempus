@@ -2,9 +2,7 @@ import { Component } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Subject, takeUntil } from 'rxjs';
 import { formatDateRange } from '@tempus/shared/util';
-import { Experience } from './workExperience';
-import { Education } from './education';
-// import { Experience, Education } from '@tempus/shared-domain';
+import { Experience, Education } from '@tempus/shared-domain';
 
 @Component({
 	selector: 'tempus-review',
@@ -12,21 +10,21 @@ import { Education } from './education';
 	styleUrls: ['./review.component.scss'],
 })
 export class ReviewComponent {
-	name = 'Barnes James';
+	name = '';
 
-	email = 'bjames@gmail.com';
+	email = '';
 
-	country = 'Canada';
+	country = '';
 
-	state = 'Ontario';
+	state = '';
 
-	city = 'Ottawa';
+	city = '';
 
 	workExperienceSummary: Array<Experience> = [];
 
 	educationSummary: Array<Education> = [];
 
-	skills = ['One', 'Two', 'Three', 'Four'];
+	skills = [];
 
 	destroyed = new Subject<void>();
 

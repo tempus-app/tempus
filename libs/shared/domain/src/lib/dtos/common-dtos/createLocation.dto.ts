@@ -19,6 +19,6 @@ export class CreateLocationDto {
 
 	public static toEntity(dto: CreateLocationDto): LocationEntity {
 		if (dto == null) return new LocationEntity();
-		return new LocationEntity(null, dto.city, dto.province, dto.city);
+		return new LocationEntity(undefined, dto.city, dto.province, dto.city);
 	}
 }

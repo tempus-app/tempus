@@ -5,9 +5,9 @@ import { ProjectEntity } from './project.entity';
 @Entity()
 export class TaskEntity implements Task {
 	constructor(id?: number, taskName?: string, project?: ProjectEntity) {
-		this.id = id;
-		this.taskName = taskName;
-		this.project = project;
+		this.id = id || 0;
+		this.taskName = taskName || '';
+		this.project = project || new ProjectEntity();
 	}
 
 	@PrimaryGeneratedColumn()

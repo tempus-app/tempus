@@ -15,14 +15,15 @@ export class LinkEntity implements Link {
 		status?: StatusType,
 		user?: UserEntity,
 	) {
-		this.id = id;
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.expiry = expiry;
-		this.email = email;
-		this.token = token;
-		this.status = status;
-		this.user = user;
+		this.id = id || 0;
+		this.firstName = firstName || '';
+		this.lastName = lastName || '';
+		this.expiry = expiry || new Date();
+		this.email = email || '';
+		this.token = token || '';
+		this.status = status || StatusType.INACTIVE;
+		this.user = user || new UserEntity();
+		this.createdAt = new Date();
 	}
 
 	@PrimaryGeneratedColumn()

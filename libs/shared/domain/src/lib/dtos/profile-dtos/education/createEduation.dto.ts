@@ -29,7 +29,7 @@ export class CreateEducationDto {
 	public static toEntity(dto: CreateEducationDto): EducationEntity {
 		if (dto == null) return new EducationEntity();
 		return new EducationEntity(
-			null,
+			undefined,
 			dto.degree,
 			dto.institution,
 			dto.startDate,

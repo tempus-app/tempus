@@ -12,7 +12,7 @@ import { CreateUserDto } from './create-user.dto';
 
 export class CreateResourceDto extends CreateUserDto {
 	@ApiProperty({ enum: ['ASSIGNED_RESOURCE', 'AVAILABLE_RESOURCE', 'SUPERVISOR'] })
-	roles: RoleType[];
+	override roles: RoleType[];
 
 	@ApiProperty()
 	phoneNumber: string;
@@ -74,25 +74,26 @@ export class CreateResourceDto extends CreateUserDto {
 		skillsSummary?: string,
 	) {
 		super(firstName, lastName, email, password, roles);
+		this.roles = roles || [];
 		this.phoneNumber = phoneNumber || '';
 		this.title = title || '';
-		this.location = location || null;
+		this.location = location || new CreateLocationDto('', '', '');
 		this.projects = projects || [];
 		this.views = views || [];
 		this.experiences = experiences || [];
 		this.educations = educations || [];
 		this.skills = skills || [];
 		this.certifications = certifications || [];
-		this.experiencesSummary = experiencesSummary;
-		this.educationsSummary = educationsSummary;
-		this.profileSummary = profileSummary;
-		this.skillsSummary = skillsSummary;
+		this.experiencesSummary = experiencesSummary || '';
+		this.educationsSummary = educationsSummary || '';
+		this.profileSummary = profileSummary || '';
+		this.skillsSummary = skillsSummary || '';
 	}
 
-	public static toEntity(dto: CreateResourceDto): ResourceEntity {
+	public static override toEntity(dto: CreateResourceDto): ResourceEntity {
 		if (dto == null) return new ResourceEntity();
 		return new ResourceEntity(
-			null,
+			undefined,
 			dto.phoneNumber,
 			dto.title,
 			CreateLocationDto.toEntity(dto.location),

@@ -25,15 +25,15 @@ export class ResourceEntity extends UserEntity implements Resource {
 		roles?: RoleType[],
 	) {
 		super(id, firstName, lastName, email, password, roles);
-		this.phoneNumber = phoneNumber;
-		this.title = title;
-		this.location = location;
-		this.projects = projects;
-		this.views = views;
-		this.experiences = experiences;
-		this.educations = educations;
-		this.skills = skills;
-		this.certifications = certifications;
+		this.phoneNumber = phoneNumber || '';
+		this.title = title || '';
+		this.location = location || new LocationEntity();
+		this.projects = projects || [];
+		this.views = views || [];
+		this.experiences = experiences || [];
+		this.educations = educations || [];
+		this.skills = skills || [];
+		this.certifications = certifications || [];
 	}
 
 	@Column({ nullable: true })

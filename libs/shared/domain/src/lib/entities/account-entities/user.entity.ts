@@ -13,12 +13,12 @@ export class UserEntity implements User {
 		password?: string,
 		roles?: RoleType[],
 	) {
-		this.id = id;
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.email = email;
-		this.password = password;
-		this.roles = roles;
+		this.id = id || 0;
+		this.firstName = firstName || '';
+		this.lastName = lastName || '';
+		this.email = email || '';
+		this.password = password || '';
+		this.roles = roles || [];
 	}
 
 	@PrimaryGeneratedColumn()

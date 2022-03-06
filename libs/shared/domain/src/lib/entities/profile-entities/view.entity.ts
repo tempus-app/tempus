@@ -24,19 +24,19 @@ export class ViewEntity implements View {
 		resource?: ResourceEntity,
 		viewType?: ViewType,
 	) {
-		this.id = id;
-		this.profileSummary = profileSummary;
-		this.skillsSummary = skillsSummary;
-		this.educationsSummary = educationsSummary;
-		this.experiencesSummary = experiencesSummary;
-		this.type = type;
-		this.status = status;
-		this.skills = skills;
-		this.experiences = experiences;
-		this.educations = educations;
-		this.certifications = certifications;
-		this.resource = resource;
-		this.viewType = viewType;
+		this.id = id || 0;
+		this.profileSummary = profileSummary || '';
+		this.skillsSummary = skillsSummary || '';
+		this.educationsSummary = educationsSummary || '';
+		this.experiencesSummary = experiencesSummary || '';
+		this.type = type || '';
+		this.status = status || [];
+		this.skills = skills || [];
+		this.experiences = experiences || [];
+		this.educations = educations || [];
+		this.certifications = certifications || [];
+		this.resource = resource || new ResourceEntity();
+		this.viewType = viewType || ViewType.PRIMARY;
 	}
 
 	@PrimaryGeneratedColumn()

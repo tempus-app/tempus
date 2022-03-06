@@ -5,10 +5,10 @@ import { ResourceEntity } from '../account-entities';
 @Entity()
 export class CertificationEntity implements Certification {
 	constructor(id?: number, title?: string, institution?: string, resource?: ResourceEntity) {
-		this.id = id;
-		this.title = title;
-		this.institution = institution;
-		this.resource = resource;
+		this.id = id || 0;
+		this.title = title || '';
+		this.institution = institution || '';
+		this.resource = resource || new ResourceEntity();
 	}
 
 	@PrimaryGeneratedColumn()
