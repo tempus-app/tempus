@@ -1,0 +1,85 @@
+<ng-container>
+	<mat-grid-list cols="2" rowHeight="50px">
+		<mat-grid-tile colspan="2" rowspan="2">
+			<div class="info-title">
+				<h2 class="mat-h2 section-header">Education</h2>
+			</div>
+		</mat-grid-tile>
+		<mat-grid-tile colspan="2" rowspan="10">
+			<tempus-card>
+				<mat-card-content>
+					<form>
+						<mat-grid-list cols="2" rowHeight="100px">
+							<mat-grid-tile colspan="1">
+								<tempus-text-input placeholder="University" cssClass="secondary"></tempus-text-input>
+							</mat-grid-tile>
+							<mat-grid-tile colspan="1">
+								<tempus-text-input placeholder="Location" cssClass="secondary"></tempus-text-input>
+							</mat-grid-tile>
+							<mat-grid-tile colspan="1">
+								<tempus-text-input placeholder="Field" cssClass="secondary"></tempus-text-input>
+							</mat-grid-tile>
+							<mat-grid-tile></mat-grid-tile>
+							<mat-grid-tile colspan="{{ cols }}">
+								<tempus-text-input
+									id="start-date-1"
+									[inputType]="InputType.DATE"
+									placeholder="Start date"
+									cssClass="secondary"
+								></tempus-text-input>
+							</mat-grid-tile>
+							<mat-grid-tile colspan="{{ cols }}">
+								<tempus-text-input
+									id="end-date-1"
+									[inputType]="InputType.DATE"
+									placeholder="End date"
+									cssClass="secondary"
+								></tempus-text-input>
+							</mat-grid-tile>
+						</mat-grid-list>
+					</form>
+				</mat-card-content>
+			</tempus-card>
+		</mat-grid-tile>
+		<mat-grid-tile colspan="2" rowspan="2">
+			<div class="info-title">
+				<h2 class="mat-h2 section-header">Skills</h2>
+			</div>
+		</mat-grid-tile>
+		<mat-grid-tile colspan="2" rowspan="10">
+			<tempus-card>
+				<mat-card-content>
+					<tempus-text-area placeholder="Description"></tempus-text-area>
+					<form>
+						<mat-grid-list cols="2" rowHeight="40px">
+							<mat-grid-tile colspan="1" rowspan="1">
+								<input
+									class="mat-body"
+									id="skillChipInput"
+									placeholder="Add a skill..."
+									[matChipInputFor]="chipList"
+									[matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+									[matChipInputAddOnBlur]="addOnBlur"
+									(matChipInputTokenEnd)="add($event)"
+								/>
+							</mat-grid-tile>
+							<mat-grid-tile colspan="2" rowspan="2">
+								<mat-chip-list #chipList aria-label="Skill tags">
+									<tempus-chip
+										*ngFor="let skill of skills"
+										[removable]="true"
+										id="skill-dark"
+										typography="mat-body"
+										content="{{ skill }}"
+										(onRemove)="remove(skill)"
+									>
+									</tempus-chip>
+								</mat-chip-list>
+							</mat-grid-tile>
+						</mat-grid-list>
+					</form>
+				</mat-card-content>
+			</tempus-card>
+		</mat-grid-tile>
+	</mat-grid-list>
+</ng-container>
