@@ -1,5 +1,5 @@
 import { Component, OnDestroy } from '@angular/core';
-import { Country, State, City } from 'country-state-city';
+import { Country, State } from 'country-state-city';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';

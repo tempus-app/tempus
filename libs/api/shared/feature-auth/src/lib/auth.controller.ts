@@ -1,5 +1,5 @@
-import { Body, Request, Controller, NotImplementedException, Post, UseGuards } from '@nestjs/common';
-import { AuthDto, UserEntity } from '@tempus/shared-domain';
+import { Request, Controller, Post, UseGuards } from '@nestjs/common';
+import { AuthDto } from '@tempus/shared-domain';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { AuthService } from './auth.service';
 
@@ -11,10 +11,5 @@ export class AuthController {
 	@Post('login')
 	login(@Request() req): Promise<AuthDto> {
 		return this.authService.login(req.user);
-	}
-
-	@Post('signup')
-	signup(@Body() req: string): Promise<UserEntity> {
-		throw new NotImplementedException();
 	}
 }

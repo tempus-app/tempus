@@ -1,10 +1,12 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-restricted-syntax */
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { ConfigService } from '@nestjs/config';
 import { ViewsService } from '@tempus/onboarding-api/feature-profile';
 import { ResourceEntity, Resource, ViewType, CreateResourceDto, UpdateResourceDto } from '@tempus/shared-domain';
 import { Repository } from 'typeorm';
+import { genSalt, hash } from 'bcrypt';
 
 @Injectable()
 export class ResourceService {
@@ -12,11 +14,13 @@ export class ResourceService {
 		@InjectRepository(ResourceEntity)
 		private resourceRepository: Repository<ResourceEntity>,
 		private viewsService: ViewsService,
+		private configService: ConfigService,
 	) {}
 
-	async createResource(resource: CreateResourceDto): Promise<Resource> {
+	async createResource(resource: CreateResourceDto): Promise<Partial<Resource>> {
 		const resourceEntity = CreateResourceDto.toEntity(resource);
-		let createdResource = await this.resourceRepository.save(resourceEntity);
+		resourceEntity.password = await this.hashPassword(resourceEntity.password);
+		const createdResource = await this.resourceRepository.save(resourceEntity);
 
 		const view = await this.viewsService.createView(createdResource.id, {
 			viewType: ViewType.PRIMARY,
@@ -32,8 +36,9 @@ export class ResourceService {
 		});
 
 		createdResource.views.push(view);
-		createdResource = await this.resourceRepository.save(resourceEntity);
-		return createdResource;
+		this.resourceRepository.save(createdResource);
+		const { password, ...partialResource } = createdResource;
+		return partialResource;
 	}
 
 	async getResource(resourceId: number): Promise<Resource> {
@@ -75,19 +80,6 @@ export class ResourceService {
 		return resources;
 	}
 
-	async findResourceByEmail(email: string): Promise<Resource> {
-		const resourceEntity = (
-			await this.resourceRepository.find({
-				where: { email },
-				relations: ['location', 'projects', 'views', 'experiences', 'educations', 'skills', 'certifications'],
-			})
-		)[0];
-		if (!resourceEntity) {
-			throw new NotFoundException(`Could not find resource with id ${email}`);
-		}
-		return resourceEntity;
-	}
-
 	// edit resource to be used specifically when updating local information
 	async editResource(updateResourceData: UpdateResourceDto): Promise<Resource> {
 		const resourceEntity = await this.getResource(updateResourceData.id);
@@ -103,5 +95,14 @@ export class ResourceService {
 		Object.assign(resourceEntity, updateResourceData);
 
 		return this.resourceRepository.save(resourceEntity);
+	}
+
+	private async hashPassword(password: string): Promise<string> {
+		try {
+			const salt = await genSalt(this.configService.get('saltSecret'));
+			return await hash(password, salt);
+		} catch (e) {
+			throw new InternalServerErrorException(e);
+		}
 	}
 }

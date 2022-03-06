@@ -9,13 +9,21 @@ export class EmailService {
 	async sendInvitationEmail(link: LinkEntity): Promise<void> {
 		await this.mailerService.sendMail({
 			to: link.email, // list of receivers
-			subject: 'Complete your Application for CAL & Associates',
+			subject: 'Complete your Profile for CAL & Associates',
 			template: 'invitationLink',
 			context: {
 				code: link.token,
 				name: `${link.firstName} ${link.lastName}`,
-				expiry: link.expiry,
+				expiry: new Date(link.expiry).toLocaleDateString(),
 			},
+			// TODO: uncomment me when the next version of nestmailer is released
+			/* attachments: [
+				{
+					filename: 'placeholder.png',
+					path: path.resolve(`${__dirname}/assets/images/`),
+					cid: 'CalLogo:imgID', // same cid value as in the html img src
+				},
+			], */
 		});
 	}
 }

@@ -1,7 +1,9 @@
 import { Resource, RoleType, User, UserEntity, UpdateUserDto, CreateUserDto } from '@tempus/shared-domain';
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { ConfigService } from '@nestjs/config';
 import { Repository } from 'typeorm';
+import { genSalt, hash } from 'bcrypt';
 import { ResourceService } from './resource.service';
 
 @Injectable()
@@ -10,10 +12,12 @@ export class UserService {
 		@InjectRepository(UserEntity)
 		private userRepository: Repository<UserEntity>,
 		private resourceService: ResourceService,
+		private configService: ConfigService,
 	) {}
 
 	async createUser(user: CreateUserDto): Promise<User> {
 		const userEntity = CreateUserDto.toEntity(user);
+		userEntity.password = await this.hashPassword(userEntity.password);
 		return this.userRepository.save(userEntity);
 	}
 
@@ -45,22 +49,6 @@ export class UserService {
 		return resourceDto;
 	}
 
-	async findByEmail(email: string): Promise<User> {
-		const user = (
-			await this.userRepository.find({
-				where: { email },
-			})
-		)[0];
-		if (!user) {
-			throw new NotFoundException(`Could not find resource with id ${email}`);
-		}
-		if (user.roles.includes(RoleType.BUSINESS_OWNER)) {
-			return user;
-		}
-		const resource = await this.resourceService.findResourceByEmail(email);
-		return resource;
-	}
-
 	// TODO: filtering
 	// ROLES?
 	// get by resource etc
@@ -82,5 +70,14 @@ export class UserService {
 			throw new NotFoundException(`Could not find user with id ${userId}`);
 		}
 		await this.userRepository.remove(userEntity);
+	}
+
+	private async hashPassword(password: string): Promise<string> {
+		try {
+			const salt = await genSalt(password, this.configService.get('saltSecret'));
+			return await hash(password, salt);
+		} catch (e) {
+			throw new InternalServerErrorException(e);
+		}
 	}
 }

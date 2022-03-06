@@ -1,0 +1,33 @@
+<ng-container>
+	<mat-grid-list cols="4" rowHeight="40px">
+		<mat-grid-tile class="confirm-tile" colspan="{{ colsText }}" rowspan="2">
+			<div class="container">
+				<div class="icon-div">
+					<div class="icon-div">
+						<mat-icon id="file-icon" class="icon">description_outline</mat-icon>
+					</div>
+					<div>
+						<h3 class="mat-h3 file-name">{{ file?.name }}</h3>
+						<div class="icon-div">
+							<mat-icon
+								class="icon"
+								aria-label="success
+                                checkmark"
+								id="checkmark-icon"
+								>check_circle_outline</mat-icon
+							>
+							<p class="mat-body-1 success-text">Successfully Uploaded</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</mat-grid-tile>
+		<mat-grid-tile class="delete-tile" colspan="{{ colsButton }}" rowspan="2">
+			<div class="container">
+				<button mat-mini-fab color="primary" aria-label="Delete file">
+					<mat-icon class="icon" (click)="onDeleteSelect()"> delete_outline </mat-icon>
+				</button>
+			</div>
+		</mat-grid-tile>
+	</mat-grid-list>
+</ng-container>

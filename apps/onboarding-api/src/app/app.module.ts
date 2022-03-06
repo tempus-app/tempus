@@ -5,11 +5,12 @@ import { DataLayerModule } from '@tempus/shared-domain';
 import { ProfileModule } from '@tempus/onboarding-api/feature-profile';
 import { EmailModule } from '@tempus/api/shared/feature-email';
 import { PdfgeneratorModule } from '@tempus/api/shared/feature-pdfgenerator';
+import { AuthModule } from '@tempus/api/shared/feature-auth';
 import { AppService } from './app.service';
 import { AppController } from './app.controller';
 
 @Module({
-	imports: [CoreModule, DataLayerModule, AccountModule, ProfileModule, EmailModule, PdfgeneratorModule],
+	imports: [CoreModule, DataLayerModule, AccountModule, ProfileModule, EmailModule, PdfgeneratorModule, AuthModule],
 	controllers: [AppController],
 	providers: [AppService],
 })

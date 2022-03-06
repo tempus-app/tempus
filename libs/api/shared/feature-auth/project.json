@@ -1,0 +1,23 @@
+{
+	"root": "libs/api/shared/feature-auth",
+	"sourceRoot": "libs/api/shared/feature-auth/src",
+	"projectType": "library",
+	"targets": {
+		"lint": {
+			"executor": "@nrwl/linter:eslint",
+			"outputs": ["{options.outputFile}"],
+			"options": {
+				"lintFilePatterns": ["libs/api/shared/feature-auth/**/*.ts"]
+			}
+		},
+		"test": {
+			"executor": "@nrwl/jest:jest",
+			"outputs": ["coverage/libs/api/shared/feature-auth"],
+			"options": {
+				"jestConfig": "libs/api/shared/feature-auth/jest.config.js",
+				"passWithNoTests": true
+			}
+		}
+	},
+	"tags": []
+}
