@@ -1,28 +1,69 @@
 <ng-container>
-	<mat-grid-list cols="2" rowHeight="50px">
+	<mat-grid-list cols="2" rowHeight="50px" [gutterSize]="'0.25em'">
 		<mat-grid-tile colspan="2" rowspan="2">
 			<div class="info-title">
-				<h2 class="mat-h2 section-header">Education</h2>
+				<h2 class="mat-h2">Education</h2>
+				<button
+					mat-mini-fab
+					(click)="addEducationSections()"
+					matTooltip="Add more education sections"
+					class="header-button"
+					color="primary"
+				>
+					<mat-icon>add</mat-icon>
+				</button>
 			</div>
 		</mat-grid-tile>
-		<mat-grid-tile colspan="2" rowspan="{{ rows }}">
+		<mat-grid-tile
+			colspan="2"
+			rowspan="{{ rows }}"
+			*ngFor="let numEducation of numberEducationSections; let index = index"
+			id="education-{{ index }}"
+		>
 			<tempus-card>
 				<mat-card-content>
 					<form>
+						<div class="card-header">
+							<div class="header-button">
+								<button
+									mat-mini-fab
+									(click)="removeEducationSection(index)"
+									matTooltip="Remove education section"
+									color="primary"
+								>
+									<mat-icon>remove</mat-icon>
+								</button>
+							</div>
+							<div>
+								<h3 class="mat-h3" color="primary">Education {{ index + 1 }}</h3>
+							</div>
+						</div>
 						<mat-grid-list cols="2" rowHeight="100px">
 							<mat-grid-tile colspan="{{ cols }}">
-								<tempus-text-input placeholder="Institution" cssClass="secondary"></tempus-text-input>
+								<tempus-text-input
+									id="institution-{{ numEducation }}"
+									placeholder="Institution"
+									cssClass="secondary"
+								></tempus-text-input>
 							</mat-grid-tile>
 							<mat-grid-tile colspan="{{ cols }}">
-								<tempus-text-input placeholder="Location" cssClass="secondary"></tempus-text-input>
+								<tempus-text-input
+									id="location-{{ numEducation }}"
+									placeholder="Location"
+									cssClass="secondary"
+								></tempus-text-input>
 							</mat-grid-tile>
 							<mat-grid-tile colspan="{{ cols }}">
-								<tempus-text-input placeholder="Field" cssClass="secondary"></tempus-text-input>
+								<tempus-text-input
+									id="field-{{ numEducation }}"
+									placeholder="Field"
+									cssClass="secondary"
+								></tempus-text-input>
 							</mat-grid-tile>
 							<mat-grid-tile colspan="{{ fieldSpacing }}"></mat-grid-tile>
 							<mat-grid-tile colspan="{{ cols }}">
 								<tempus-text-input
-									id="start-date-1"
+									id="start-date-{{ numEducation }}"
 									[inputType]="InputType.DATE"
 									placeholder="Start date"
 									cssClass="secondary"
@@ -30,7 +71,7 @@
 							</mat-grid-tile>
 							<mat-grid-tile colspan="{{ cols }}">
 								<tempus-text-input
-									id="end-date-1"
+									id="end-date-{{ numEducation }}"
 									[inputType]="InputType.DATE"
 									placeholder="End date"
 									cssClass="secondary"
@@ -43,7 +84,7 @@
 		</mat-grid-tile>
 		<mat-grid-tile colspan="2" rowspan="2">
 			<div class="info-title">
-				<h2 class="mat-h2 section-header">Skills</h2>
+				<h2 class="mat-h2">Skills</h2>
 			</div>
 		</mat-grid-tile>
 		<mat-grid-tile colspan="2" rowspan="6">

@@ -1,12 +1,15 @@
 @use 'abstracts/helper' as abs;
 
 .info-title {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
 	width: 80%;
+	border-bottom: 2px solid abs.$primary-300;
 }
 
-.section-header {
-	padding: 0.5em 0em 0.5em 0em;
-	border-bottom: 2px solid abs.$primary-300;
+.header-button {
+	float: right;
 }
 
 .example-chip-list {
@@ -15,6 +18,11 @@
 
 #skillChipInput {
 	text-align: left;
+}
+
+h3 {
+	text-align: left;
+	color: abs.$primary-800;
 }
 
 mat-chip-list {

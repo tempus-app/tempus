@@ -8,7 +8,8 @@ import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
 import { ClientSharedUiComponentsPresentationalModule } from '@tempus/client/shared/ui-components/presentational';
 import { MyInfoThreeComponent } from './myinfothree/my-info-three.component';
-import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatButtonModule } from '@angular/material/button';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @NgModule({
 	imports: [
@@ -19,7 +20,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 		MatGridListModule,
 		MatCardModule,
 		MatChipsModule,
-		MatFormFieldModule,
+		MatButtonModule,
+		MatTooltipModule,
 		RouterModule.forChild([
 			{
 				path: '',

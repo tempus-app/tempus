@@ -6,10 +6,6 @@ import { InputType } from '@tempus/client/shared/ui-components/input';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { MatChipInputEvent } from '@angular/material/chips';
 
-export interface Fruit {
-	name: string;
-}
-
 @Component({
 	selector: 'tempus-my-info-three',
 	templateUrl: './my-info-three.component.html',
@@ -32,6 +28,8 @@ export class MyInfoThreeComponent implements OnDestroy {
 
 	skills: string[] = [];
 
+	numberEducationSections: number[] = [0];
+
 	constructor(breakpointObserver: BreakpointObserver) {
 		breakpointObserver
 			.observe([Breakpoints.XSmall, Breakpoints.Small, Breakpoints.Medium, Breakpoints.Large, Breakpoints.XLarge])
@@ -39,7 +37,7 @@ export class MyInfoThreeComponent implements OnDestroy {
 			.subscribe(result => {
 				for (const query of Object.keys(result.breakpoints)) {
 					if (result.breakpoints[query]) {
-						if (query === Breakpoints.XSmall || query === Breakpoints.Small) {
+						if (query === Breakpoints.XSmall) {
 							this.rows = '12';
 							this.cols = '2';
 							this.fieldSpacing = '0';
@@ -58,13 +56,31 @@ export class MyInfoThreeComponent implements OnDestroy {
 		this.destroyed.complete();
 	}
 
+	addEducationSections() {
+		// Prevent duplicate numbers which can cause an error when splicing a work experience section out
+		if (this.numberEducationSections.length === 0) {
+			this.numberEducationSections.push(0);
+		} else {
+			const lastElement = this.numberEducationSections[this.numberEducationSections.length - 1];
+			this.numberEducationSections.push(lastElement + 1);
+		}
+	}
+
+	removeEducationSection(index: number) {
+		if (this.numberEducationSections.length > 1) {
+			this.numberEducationSections.splice(index, 1);
+		}
+	}
+
 	addSkill(event: MatChipInputEvent): void {
 		const value = (event.value || '').trim().substring(0, 50);
 
 		if (value) {
 			this.skills.push(value);
 		}
-		event.chipInput!.clear();
+		if (event.chipInput !== undefined) {
+			event.chipInput.clear();
+		}
 	}
 
 	removeSkill(skill: string): void {
