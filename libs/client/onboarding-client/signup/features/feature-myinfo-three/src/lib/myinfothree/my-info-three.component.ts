@@ -20,7 +20,9 @@ export class MyInfoThreeComponent implements OnDestroy {
 
 	cols = '1';
 
-	rows = '10';
+	fieldSpacing = '1';
+
+	rows = '12';
 
 	InputType = InputType;
 
@@ -30,15 +32,6 @@ export class MyInfoThreeComponent implements OnDestroy {
 
 	skills: string[] = [];
 
-	// Create a map to display breakpoint names for demonstration purposes.
-	displayNameMap = new Map([
-		[Breakpoints.XSmall, '1'],
-		[Breakpoints.Small, 'Small'],
-		[Breakpoints.Medium, 'Medium'],
-		[Breakpoints.Large, 'Large'],
-		[Breakpoints.XLarge, 'XLarge'],
-	]);
-
 	constructor(breakpointObserver: BreakpointObserver) {
 		breakpointObserver
 			.observe([Breakpoints.XSmall, Breakpoints.Small, Breakpoints.Medium, Breakpoints.Large, Breakpoints.XLarge])
@@ -47,11 +40,13 @@ export class MyInfoThreeComponent implements OnDestroy {
 				for (const query of Object.keys(result.breakpoints)) {
 					if (result.breakpoints[query]) {
 						if (query === Breakpoints.XSmall || query === Breakpoints.Small) {
-							this.rows = '8';
+							this.rows = '12';
 							this.cols = '2';
+							this.fieldSpacing = '0';
 						} else {
-							this.rows = '5';
+							this.rows = '8';
 							this.cols = '1';
+							this.fieldSpacing = '1';
 						}
 					}
 				}
@@ -63,7 +58,7 @@ export class MyInfoThreeComponent implements OnDestroy {
 		this.destroyed.complete();
 	}
 
-	add(event: MatChipInputEvent): void {
+	addSkill(event: MatChipInputEvent): void {
 		const value = (event.value || '').trim().substring(0, 50);
 
 		if (value) {
@@ -72,7 +67,7 @@ export class MyInfoThreeComponent implements OnDestroy {
 		event.chipInput!.clear();
 	}
 
-	remove(skill: string): void {
+	removeSkill(skill: string): void {
 		const index = this.skills.indexOf(skill);
 
 		if (index >= 0) {
