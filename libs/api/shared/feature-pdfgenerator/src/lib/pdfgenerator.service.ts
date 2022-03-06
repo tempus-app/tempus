@@ -37,13 +37,17 @@ export class PdfGeneratorService {
 		// basic pdf options
 		const options = pdfOptions || {
 			format: 'a4',
-			margin: {
-				top: '1in',
-				bottom: '1in',
-				left: '1in',
-				right: '1in',
-			},
 			printBackground: true,
+			displayHeaderFooter: true,
+			headerTemplate: '<div></div>',
+			footerTemplate: `
+				<div style="border-top: solid 1px #bbb; width: 100%; font-size: 9px;
+					padding: 5px 5px 0; color: #bbb; position: relative;">
+					<div style="position: absolute; left: 5px; top: 5px;">Property of CAL and Associates.</span></div>
+					<div style="position: absolute; right: 5px; top: 5px;">Page <span class="pageNumber"></span>/<span class="totalPages"></span></div>
+				</div>
+			`,
+			margin: { bottom: '0.5in', top: '0.5in', left: '0.5in', right: '0.5in' },
 		};
 
 		// start headless browser

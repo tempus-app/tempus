@@ -6,16 +6,12 @@ export class CreateSkillDto {
 	@ApiProperty()
 	skill: CreateSkillTypeDto;
 
-	@ApiProperty()
-	level: number;
-
-	constructor(skill: CreateSkillTypeDto, level: number) {
+	constructor(skill: CreateSkillTypeDto) {
 		this.skill = skill;
-		this.level = level;
 	}
 
 	public static toEntity(dto: CreateSkillDto): SkillEntity {
 		if (dto == null) return new SkillEntity();
-		return new SkillEntity(null, CreateSkillTypeDto.toEntity(dto.skill), dto.level);
+		return new SkillEntity(null, CreateSkillTypeDto.toEntity(dto.skill));
 	}
 }

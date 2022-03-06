@@ -11,30 +11,33 @@ export const SampleView: View = {
 		'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
 	type: '',
 	status: [],
-	certifications: [],
+	certifications: [
+		{
+			id: 1,
+			title: 'Certification 1',
+			institution: 'Udemy',
+			resource: null,
+		},
+	],
 	skills: [
 		{
 			id: 1,
 			skill: { name: 'Random Skill 1' },
-			level: 2,
 			resource: null,
 		},
 		{
 			id: 2,
 			skill: { name: 'Random Skill 2' },
-			level: 2,
 			resource: null,
 		},
 		{
 			id: 3,
 			skill: { name: 'Random Skill 3' },
-			level: 5,
 			resource: null,
 		},
 		{
 			id: 4,
 			skill: { name: 'Random Skill 4' },
-			level: 4,
 			resource: null,
 		},
 		{
@@ -42,13 +45,11 @@ export const SampleView: View = {
 			skill: {
 				name: 'Random Long Skill Lorem Ipsum Dosom Dolor Set Lorem Ipsum Dosot Dolor Set Lorem Ipsum Dosot Dolor Set',
 			},
-			level: 1,
 			resource: null,
 		},
 		{
 			id: 6,
 			skill: { name: 'Random Skill 6' },
-			level: 3,
 			resource: null,
 		},
 	],

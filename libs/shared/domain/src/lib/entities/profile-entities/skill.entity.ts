@@ -5,10 +5,9 @@ import { SkillTypeEntity } from './skilltype.entity';
 
 @Entity()
 export class SkillEntity implements Skill {
-	constructor(id?: number, skill?: SkillTypeEntity, level?: number, resource?: ResourceEntity) {
+	constructor(id?: number, skill?: SkillTypeEntity, resource?: ResourceEntity) {
 		this.id = id;
 		this.skill = skill;
-		this.level = level;
 		this.resource = resource;
 	}
 
@@ -18,10 +17,6 @@ export class SkillEntity implements Skill {
 	@ManyToOne(() => SkillTypeEntity, { cascade: ['insert', 'update'] })
 	@JoinColumn([{ name: 'skill_key', referencedColumnName: 'name' }])
 	skill: SkillTypeEntity;
-
-	// must be 1-5, figure it out later
-	@Column()
-	level: number;
 
 	@ManyToOne(() => ResourceEntity, resource => resource.skills)
 	resource: ResourceEntity;
