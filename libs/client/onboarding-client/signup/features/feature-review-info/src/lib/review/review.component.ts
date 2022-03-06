@@ -2,9 +2,9 @@ import { Component } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Subject, takeUntil } from 'rxjs';
 import { formatDateRange } from '@tempus/shared/util';
-// import { Experience } from './workExperience';
-// import { Education } from './education';
-import { Experience, Education } from '@tempus/shared-domain';
+import { Experience } from './workExperience';
+import { Education } from './education';
+// import { Experience, Education } from '@tempus/shared-domain';
 
 @Component({
 	selector: 'tempus-review',
