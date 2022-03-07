@@ -5,11 +5,7 @@ export class CreateSkillDto {
 	@ApiProperty()
 	skill: CreateSkillTypeDto;
 
-	@ApiProperty()
-	level: number;
-
-	constructor(skill: CreateSkillTypeDto, level: number) {
+	constructor(skill: CreateSkillTypeDto) {
 		this.skill = skill;
-		this.level = level;
 	}
 }

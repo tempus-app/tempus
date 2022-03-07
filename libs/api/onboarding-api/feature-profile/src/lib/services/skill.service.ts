@@ -2,7 +2,7 @@ import { forwardRef, Inject, Injectable, NotFoundException } from '@nestjs/commo
 import { InjectRepository } from '@nestjs/typeorm';
 import { SkillEntity, SkillTypeEntity } from '@tempus/api/shared/entity';
 import { ResourceService } from '@tempus/onboarding-api/feature-account';
-import { CreateSkillDto, Skill, SkillType, UpdateSkillDto } from '@tempus/shared-domain';
+import { Skill, SkillType } from '@tempus/shared-domain';
 import { Repository } from 'typeorm';
 
 @Injectable()
@@ -56,19 +56,6 @@ export class SkillsService {
 			throw new NotFoundException(`Could not find skill with id ${skillId}`);
 		}
 		return skillEntity;
-	}
-
-	// edit skill
-	async editSkill(updatedSkillData: UpdateSkillDto): Promise<Skill> {
-		const existingSkillEntity = await this.skillsRepository.findOne(updatedSkillData.id, {
-			relations: ['resource', 'skill'],
-		});
-		if (!existingSkillEntity) {
-			throw new NotFoundException(`Could not find skill with id ${updatedSkillData.id}`);
-		}
-
-		existingSkillEntity.level = updatedSkillData.level;
-		return this.skillsRepository.save(existingSkillEntity);
 	}
 
 	// delete skill

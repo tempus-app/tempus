@@ -3,6 +3,9 @@
   <head>
     <title>Resume</title>
     <style>
+      body{
+        position: relative
+      }
       h1,
       h3,
       p {
@@ -30,14 +33,26 @@
         float: right;
         font-weight: normal;
       }
+      .watermark {
+        position: absolute;
+        z-index: -1;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background-image: url('data:image/svg+xml;utf8,<svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0.0 0.0 816.0 1056.0" fill="none" stroke="none" stroke-linecap="square" stroke-miterlimit="10"><clipPath id="p.0"><path d="m0 0l816.0 0l0 1056.0l-816.0 0l0 -1056.0z" clip-rule="nonzero"/></clipPath><g><path fill="black" fill-opacity="0.0" d="m0 0l816.0 0l0 1056.0l-816.0 0z" fill-rule="evenodd"/><path fill="rgb(243, 243, 243)" fill-opacity="0.933" d="m333.73596 228.6023c-16.589783 -16.589798 -34.07498 -28.871658 -52.455536 -36.84558c-18.34674 -8.007706 -36.98073 -11.60611 -55.90187 -10.795197c-18.887375 0.84469604 -37.639603 5.77771 -56.256653 14.799042c-18.5495 9.021347 -36.440125 22.147903 -53.671898 39.37967c-23.043259 23.043243 -38.82216 47.23532 -47.336685 72.57614c-8.514519 25.34085 -9.443691 50.462067 -2.7874908 75.36365c6.656204 24.901611 21.083588 48.45169 43.28215 70.65027c12.670418 12.67041 26.57409 23.06018 41.71102 31.16922c15.1707 8.075287 30.425903 12.957611 45.76555 14.647003c5.2033234 1.0136108 9.78157 0.48989868 13.734726 -1.5711365c3.953186 -2.0610657 6.960312 -4.865448 9.021347 -8.413147c2.0948486 -3.5139465 3.024002 -7.2474976 2.7874908 -11.200653c-0.20274353 -3.9193726 -1.7062988 -7.484009 -4.510666 -10.693848c-0.25860596 -0.30273438 -0.5314636 -0.59765625 -0.8186035 -0.88479614c-2.7893524 -2.7893677 -6.9257965 -4.8426514 -12.409317 -6.1599426c-12.636627 -2.297577 -24.462357 -6.352112 -35.477173 -12.163605c-11.014832 -5.811493 -21.083572 -13.278595 -30.206284 -22.401306c-15.778885 -15.77887 -25.813843 -32.3349 -30.104912 -49.66803c-4.2234497 -17.33313 -2.8719254 -35.071716 4.054535 -53.21576c6.9602966 -18.177826 19.377296 -36.203613 37.25103 -54.07733c17.83995 -17.83995 35.78128 -30.1725 53.823944 -36.997635c18.076447 -6.858917 35.78125 -8.176666 53.114395 -3.9531708c17.366913 4.257263 33.93982 14.27533 49.71872 30.05423c9.122681 9.122711 16.589783 19.090118 22.401306 29.902191c5.811493 10.812103 9.545044 22.215454 11.200623 34.210144c1.1564026 5.7819214 3.237915 10.176178 6.244507 13.1828c0.24377441 0.24377441 0.49362183 0.47842407 0.74957275 0.7039795c3.4125671 3.00708 7.1292114 4.5613403 11.149963 4.662689c4.088318 0.101379395 7.9401245 -0.9460449 11.55542 -3.1422424c3.6490784 -2.1624146 6.5041504 -5.422943 8.565216 -9.781586c2.0948486 -4.324829 2.5171814 -9.409882 1.2670288 -15.255157c-2.0610352 -14.494965 -7.0954285 -29.057495 -15.103119 -43.687622c-7.9739075 -14.663879 -18.093353 -28.128326 -30.358337 -40.39328z" fill-rule="evenodd"/><path fill="rgb(243, 243, 243)" fill-opacity="0.933" d="m491.6113 463.7165l-59.846558 148.151l-88.629 -88.62897l147.8674 -60.13022zm38.01126 -38.01126c-3.953186 -3.9531555 -8.582092 -6.4872437 -13.88678 -7.602234c-5.270874 -1.1488037 -11.454041 -0.2702942 -18.549469 2.635437l-273.68103 104.91104c-5.60878 2.2976074 -9.764664 5.203369 -12.467697 8.717285c-2.6692505 3.5477295 -3.7166748 7.5009155 -3.1422577 11.859497c0.6419678 4.3586426 3.0408936 8.615906 7.1967926 12.77179c4.155899 4.155884 8.565216 6.402771 13.227921 6.7406616c4.6965027 0.30407715 10.558685 -0.99676514 17.586533 -3.9024658l59.539764 -23.983643l111.16916 111.16913l-23.732056 59.79132c-2.7030334 6.8251343 -3.8518066 12.737976 -3.44635 17.738586c0.4392395 4.966797 2.9395142 9.730896 7.500885 14.292236c4.155884 4.155884 8.244202 6.4872437 12.264954 6.9940796c4.054535 0.5405884 7.889435 -0.59124756 11.50473 -3.395691c3.6828918 -2.8043823 6.571747 -7.1123047 8.666565 -12.923828l104.91107 -273.681c2.9057617 -7.0954285 3.7842407 -13.278595 2.635437 -18.5495c-1.1149902 -5.3046875 -3.5477295 -9.832245 -7.2981567 -13.582703z" fill-rule="evenodd"/><path fill="rgb(243, 243, 243)" fill-opacity="0.933" d="m684.6569 582.66547c-5.1695557 -5.1694946 -10.558716 -7.7542725 -16.16748 -7.7542725c-5.6087646 0 -11.11615 2.703003 -16.522217 8.10907l-187.72491 187.72491c-5.203308 5.203308 -7.804962 10.710754 -7.804962 16.522217c-3.0517578E-5 5.8115234 2.5847473 11.302002 7.7542725 16.471558l112.41196 112.41193c4.595154 4.595154 9.359192 6.8927 14.292236 6.892761c5.0006104 0 9.680176 -2.1793213 14.038818 -6.537964c4.392395 -4.392395 6.521057 -9.021301 6.3859253 -13.88678c-0.06756592 -4.8654175 -2.3989258 -9.595703 -6.9940796 -14.190857l-96.497925 -96.497925l176.52429 -176.52423c5.406006 -5.406067 8.109009 -10.913513 8.10907 -16.522278c0 -5.6087646 -2.6016846 -11.0147705 -7.8049927 -16.21814z" fill-rule="evenodd"/></g></svg>');
+        background-repeat: repeat-y;
+        background-position-x:-50px;
+        background-position-y:-50px;
+        background-size: 120% 100vh;
+      }
     </style>
   </head>
   <body>
     <section>
+      <div class="watermark"></div>
       <div class="resourceInfoHeader">
-        <h1 class="capitalize">{{resource.firstName}} {{resource.lastName}}</h1>
-        <p>{{resource.email}}</p>
-        <p>{{resource.phoneNumber}}</p>
+        <h1 class="capitalize">{{resource.firstName}} {{lastname resource.lastName}}</h1>
       </div>
       {{#if profileSummary}}
         <br />
@@ -46,63 +61,92 @@
       <br />
     </section>
 
-    <section>
-      <h3><u>SKILLS</u></h3>
-      <br />
-      {{#if skillsSummary}}
-        <p>{{skillsSummary}}</p>
+    {{#if (atleastone skills skillsSummary)}}
+      <section>
+        <h3><u>SKILLS</u></h3>
         <br />
-      {{/if}}
-      <ul>
-        {{#each skills}}
-          <li>({{level}}) {{skill.name}}</li>
-        {{/each}}
-      </ul>
-      <br />
-    </section>
-
-    <section>
-      <h3><u>PROFESSIONAL EXPERIENCE</u></h3>
-      <br />
-      {{#if experiencesSummary}}
-        <p>{{experiencesSummary}}</p>
-        <br />
-      {{/if}}
-      {{#each experiences}}
-        <div>
-          <p><strong>{{title}}<span class="date">{{formatdate startDate}} - {{formatdate endDate}}</span></strong></p>
-          <p>{{company}}</p>
-          <p><strong>{{location.city}}, {{location.province}}, {{location.country}}</strong></p>
-          <p>{{summary}}</p>
-        </div>
-        <br />
-        <ul>
-          {{#each description}}
-            <li>{{.}}</li>
-          {{/each}}
-        </ul>
-        {{#if description}}
+        {{#if skillsSummary}}
+          <p>{{skillsSummary}}</p>
           <br />
         {{/if}}
-      {{/each}}
-    </section>
+        <ul>
+          {{#each skills}}
+            <li>{{skill.name}}</li>
+          {{/each}}
+        </ul>
+        <br />
+      </section>
+    {{/if}}
 
-    <section>
-      <h3><u>EDUCATION</u></h3>
-      <br />
-      {{#if educationsSummary}}
-        <p>{{educationsSummary}}</p>
+    {{#if (atleastone experiences experiencesSummary)}}
+      <section>
+        <h3><u>PROFESSIONAL EXPERIENCE</u></h3>
         <br />
-      {{/if}}
-      {{#each educations}}
-        <div>
-          <p><strong>{{institution}}<span class="date">{{formatdate startDate}} - {{formatdate endDate}}</span></strong></p>
-          <p>{{degree}}</p>
-          <p>{{summary}}</p>
-        </div>
+        {{#if experiencesSummary}}
+          <p>{{experiencesSummary}}</p>
+          <br />
+        {{/if}}
+        {{#each experiences}}
+          <div>
+            <p><strong>{{title}}<span class="date">{{formatdate startDate}} - {{formatdate endDate}}</span></strong></p>
+            <p><strong>{{company}}</strong></p>
+            <p><strong>{{location.city}}, {{location.province}}, {{location.country}}</strong></p>
+            <p>{{summary}}</p>
+          </div>
+          <br />
+          <ul>
+            {{#each description}}
+              <li>{{.}}</li>
+            {{/each}}
+          </ul>
+          {{#if description}}
+            <br />
+          {{/if}}
+        {{/each}}
+      </section>
+    {{/if}}
+
+    {{#if (atleastone educations educationsSummary)}}
+      <section>
+        <h3><u>EDUCATION</u></h3>
         <br />
-      {{/each}}
-      <br />
-    </section>
+        {{#if educationsSummary}}
+          <p>{{educationsSummary}}</p>
+          <br />
+        {{/if}}
+        {{#each educations}}
+          <div>
+            <p><strong>{{institution}}<span class="date">{{formatdate startDate}} - {{formatdate endDate}}</span></strong></p>
+            <p>{{degree}}</p>
+            <p>{{summary}}</p>
+          </div>
+          <br />
+        {{/each}}
+        <br />
+      </section>
+    {{/if}}
+
+    {{#if (atleastone certifications "")}}
+      <section>
+        <h3><u>CERTIFICATIONS</u></h3>
+        <br />
+        {{#each certifications}}
+          <div>
+            <p><strong>{{institution}}</strong></p>
+            <p>{{title}}</p>
+          </div>
+          <br />
+        {{/each}}
+        <br />
+      </section>
+    {{/if}}
+    <div id="paddingContainer"></div>
+    <script>
+      let curHeight = document.body.offsetHeight
+      let remainderPixels = curHeight % 870
+      if ((870-remainderPixels) > 50) {
+        document.getElementById("paddingContainer").style.height = `${870-remainderPixels}px`
+      }
+    </script>
   </body>
 </html>

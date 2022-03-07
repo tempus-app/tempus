@@ -1,6 +1,6 @@
 export interface HandleBarHelper {
 	helperName: string;
-	helper: (...args: never) => string;
+	helper: (...args: never) => string | boolean;
 }
 
 export interface PdfTemplateDtoInterface {

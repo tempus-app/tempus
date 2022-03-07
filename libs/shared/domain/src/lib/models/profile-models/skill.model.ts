@@ -6,7 +6,5 @@ export interface Skill {
 
 	skill: SkillType;
 
-	level: number;
-
 	resource: Resource;
 }

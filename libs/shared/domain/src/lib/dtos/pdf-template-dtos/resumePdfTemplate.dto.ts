@@ -2,10 +2,22 @@ import { HandleBarHelper } from '.';
 import { View } from '../../models';
 import { PdfTemplateDtoInterface } from './pdfTemplateInterface.dto';
 
-const handlebarHelper: HandleBarHelper = {
+const formatDateHelper: HandleBarHelper = {
 	helperName: 'formatdate',
 	helper: (date: Date) => {
 		return `${date.toLocaleDateString('default', { month: 'short' })} ${date.getFullYear()}`.toString();
+	},
+};
+const lastNameHelper: HandleBarHelper = {
+	helperName: 'lastname',
+	helper: (lastname: string) => {
+		return `${lastname[0]}.`;
+	},
+};
+const atleastOne: HandleBarHelper = {
+	helperName: 'atleastone',
+	helper: (data: [], summary: string) => {
+		return data?.length > 0 || summary?.length > 0;
 	},
 };
 
@@ -16,7 +28,7 @@ export class ResumePdfTemplateDto implements PdfTemplateDtoInterface {
 
 	data: View;
 
-	handlebarsHelpers: HandleBarHelper[] = [handlebarHelper];
+	handlebarsHelpers: HandleBarHelper[] = [formatDateHelper, lastNameHelper, atleastOne];
 
 	constructor(filename: string, data: View) {
 		this.filename = filename;

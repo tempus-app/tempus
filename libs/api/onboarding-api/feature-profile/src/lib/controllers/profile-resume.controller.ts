@@ -12,7 +12,6 @@ import {
 	UpdateCertificationDto,
 	UpdateEducationDto,
 	UpdateExperienceDto,
-	UpdateSkillDto,
 	ResumeComponentsDto,
 } from '@tempus/shared-domain';
 import { ApiTags } from '@nestjs/swagger';
@@ -81,12 +80,6 @@ export class ProfileResumeController {
 	async editExperience(@Body() updateExperienceData: UpdateExperienceDto): Promise<Experience> {
 		const updatedExperienceEntity = await this.experienceService.editExperience(updateExperienceData);
 		return updatedExperienceEntity;
-	}
-
-	@Patch('/skill')
-	async editSkill(@Body() updatedSkillData: UpdateSkillDto): Promise<Skill> {
-		const updatedSkillEntity = await this.skillService.editSkill(updatedSkillData);
-		return updatedSkillEntity;
 	}
 
 	@Patch('/cerification')
