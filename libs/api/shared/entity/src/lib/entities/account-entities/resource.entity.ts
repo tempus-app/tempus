@@ -1,5 +1,5 @@
+import { CreateResourceDto, Resource, RoleType } from '@tempus/shared-domain';
 import { ChildEntity, Column, JoinTable, ManyToMany, OneToMany, OneToOne } from 'typeorm';
-import { Resource, RoleType } from '../..';
 import { LocationEntity } from '../common-entities';
 import { CertificationEntity, EducationEntity, ExperienceEntity, SkillEntity, ViewEntity } from '../profile-entities';
 import { ProjectEntity } from '../project-entities';
@@ -25,15 +25,15 @@ export class ResourceEntity extends UserEntity implements Resource {
 		roles?: RoleType[],
 	) {
 		super(id, firstName, lastName, email, password, roles);
-		this.phoneNumber = phoneNumber || '';
-		this.title = title || '';
-		this.location = location || new LocationEntity();
-		this.projects = projects || [];
-		this.views = views || [];
-		this.experiences = experiences || [];
-		this.educations = educations || [];
-		this.skills = skills || [];
-		this.certifications = certifications || [];
+		this.phoneNumber = phoneNumber;
+		this.title = title;
+		this.location = location;
+		this.projects = projects;
+		this.views = views;
+		this.experiences = experiences;
+		this.educations = educations;
+		this.skills = skills;
+		this.certifications = certifications;
 	}
 
 	@Column({ nullable: true })
@@ -63,4 +63,25 @@ export class ResourceEntity extends UserEntity implements Resource {
 
 	@OneToMany(() => CertificationEntity, certification => certification.resource, { cascade: ['insert', 'update'] })
 	certifications: CertificationEntity[];
+
+	public static override fromDto(dto: CreateResourceDto): ResourceEntity {
+		if (dto == null) return new ResourceEntity();
+		return new ResourceEntity(
+			undefined,
+			dto.phoneNumber,
+			dto.title,
+			LocationEntity.fromDto(dto.location),
+			undefined,
+			undefined,
+			dto.experiences.map(experience => ExperienceEntity.fromDto(experience)),
+			dto.educations.map(education => EducationEntity.fromDto(education)),
+			dto.skills.map(skill => SkillEntity.fromDto(skill)),
+			dto.certifications.map(certification => CertificationEntity.fromDto(certification)),
+			dto.firstName,
+			dto.lastName,
+			dto.email,
+			dto.password,
+			dto.roles,
+		);
+	}
 }

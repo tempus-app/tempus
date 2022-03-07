@@ -1,6 +1,5 @@
+import { ResumeSectionType, Revision } from '@tempus/shared-domain';
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, ManyToOne, OneToOne } from 'typeorm';
-import { Revision } from '../..';
-import { ResumeSectionType } from '../../enums';
 import { UserEntity } from '../account-entities';
 import { ViewEntity } from './view.entity';
 
@@ -15,13 +14,13 @@ export class RevisionEntity implements Revision {
 		approved?: boolean,
 		view?: ViewEntity,
 	) {
-		this.id = id || 0;
-		this.createdAt = createdAt || new Date();
-		this.approvedAt = approvedAt || new Date();
-		this.sectionsChanged = sectionsChanged || [];
-		this.approver = approver || new UserEntity();
-		this.approved = approved || false;
-		this.view = view || new ViewEntity();
+		this.id = id;
+		this.createdAt = createdAt;
+		this.approvedAt = approvedAt;
+		this.sectionsChanged = sectionsChanged;
+		this.approver = approver;
+		this.approved = approved;
+		this.view = view;
 	}
 
 	@PrimaryGeneratedColumn()

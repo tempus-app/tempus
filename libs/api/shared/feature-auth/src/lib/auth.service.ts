@@ -1,9 +1,10 @@
 import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
-import { AuthDto, ResourceEntity, RoleType, User, UserEntity } from '@tempus/shared-domain';
+import { AuthDto, RoleType, User } from '@tempus/shared-domain';
 import { JwtService } from '@nestjs/jwt';
 import { compare } from 'bcrypt';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
+import { ResourceEntity, UserEntity } from '@tempus/api/shared/entity';
 
 @Injectable()
 export class AuthService {

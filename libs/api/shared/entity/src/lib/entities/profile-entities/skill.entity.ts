@@ -1,15 +1,15 @@
+import { CreateSkillDto, Skill } from '@tempus/shared-domain';
 import { Entity, Column, PrimaryGeneratedColumn, JoinColumn, ManyToOne } from 'typeorm';
-import { Skill } from '../..';
 import { ResourceEntity } from '../account-entities';
 import { SkillTypeEntity } from './skilltype.entity';
 
 @Entity()
 export class SkillEntity implements Skill {
 	constructor(id?: number, skill?: SkillTypeEntity, level?: number, resource?: ResourceEntity) {
-		this.id = id || 0;
-		this.skill = skill || new SkillTypeEntity();
-		this.level = level || 0;
-		this.resource = resource || new ResourceEntity();
+		this.id = id;
+		this.skill = skill;
+		this.level = level;
+		this.resource = resource;
 	}
 
 	@PrimaryGeneratedColumn()
@@ -25,4 +25,9 @@ export class SkillEntity implements Skill {
 
 	@ManyToOne(() => ResourceEntity, resource => resource.skills)
 	resource: ResourceEntity;
+
+	public static fromDto(dto: CreateSkillDto): SkillEntity {
+		if (dto == null) return new SkillEntity();
+		return new SkillEntity(undefined, SkillTypeEntity.fromDto(dto.skill), dto.level);
+	}
 }

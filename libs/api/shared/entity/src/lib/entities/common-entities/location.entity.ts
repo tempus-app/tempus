@@ -1,6 +1,6 @@
 import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { CreateLocationDto, Location } from '@tempus/shared-domain';
 import { EducationEntity, ExperienceEntity, ResourceEntity } from '..';
-import { Location } from '../..';
 
 @Entity()
 export class LocationEntity implements Location {
@@ -13,13 +13,13 @@ export class LocationEntity implements Location {
 		experience?: ExperienceEntity,
 		resource?: ResourceEntity,
 	) {
-		this.id = id || 0;
-		this.city = city || '';
-		this.province = province || '';
-		this.country = country || '';
-		this.education = education || new EducationEntity();
-		this.experience = experience || new ExperienceEntity();
-		this.resource = resource || new ResourceEntity();
+		this.id = id;
+		this.city = city;
+		this.province = province;
+		this.country = country;
+		this.education = education;
+		this.experience = experience;
+		this.resource = resource;
 	}
 
 	@PrimaryGeneratedColumn()
@@ -45,4 +45,9 @@ export class LocationEntity implements Location {
 	@OneToOne(() => ResourceEntity, res => res.location, { onDelete: 'CASCADE' })
 	@JoinColumn()
 	resource?: ResourceEntity;
+
+	public static fromDto(dto: CreateLocationDto): LocationEntity {
+		if (dto == null) return new LocationEntity();
+		return new LocationEntity(undefined, dto.city, dto.province, dto.city);
+	}
 }

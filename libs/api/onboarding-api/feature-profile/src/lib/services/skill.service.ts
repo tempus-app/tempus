@@ -1,7 +1,8 @@
 import { forwardRef, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { SkillEntity, SkillTypeEntity } from '@tempus/api/shared/entity';
 import { ResourceService } from '@tempus/onboarding-api/feature-account';
-import { CreateSkillDto, Skill, SkillEntity, SkillType, SkillTypeEntity, UpdateSkillDto } from '@tempus/shared-domain';
+import { CreateSkillDto, Skill, SkillType, UpdateSkillDto } from '@tempus/shared-domain';
 import { Repository } from 'typeorm';
 
 @Injectable()
@@ -17,7 +18,7 @@ export class SkillsService {
 
 	// create skill for a specific resource
 	async createSkill(resourceId: number, skillData: SkillEntity): Promise<SkillEntity> {
-		let skillEntity = CreateSkillDto.toEntity(skillData);
+		let skillEntity = SkillEntity.fromDto(skillData);
 		let skillTypeEntity = await this.skillTypeRepository.findOne(skillData.skill.name);
 
 		if (!skillTypeEntity) {

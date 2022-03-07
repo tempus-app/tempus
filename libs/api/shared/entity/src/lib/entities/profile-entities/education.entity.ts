@@ -1,5 +1,5 @@
+import { CreateEducationDto, Education } from '@tempus/shared-domain';
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToOne } from 'typeorm';
-import { Education } from '../../models';
 import { ResourceEntity } from '../account-entities';
 import { LocationEntity } from '../common-entities';
 
@@ -14,13 +14,13 @@ export class EducationEntity implements Education {
 		location?: LocationEntity,
 		resource?: ResourceEntity,
 	) {
-		this.id = id || 0;
-		this.degree = degree || '';
-		this.institution = institution || '';
-		this.startDate = startDate || new Date();
-		this.endDate = endDate || new Date();
-		this.location = location || new LocationEntity();
-		this.resource = resource || new ResourceEntity();
+		this.id = id;
+		this.degree = degree;
+		this.institution = institution;
+		this.startDate = startDate;
+		this.endDate = endDate;
+		this.location = location;
+		this.resource = resource;
 	}
 
 	@PrimaryGeneratedColumn()
@@ -47,4 +47,16 @@ export class EducationEntity implements Education {
 		onDelete: 'CASCADE',
 	})
 	resource: ResourceEntity;
+
+	public static fromDto(dto: CreateEducationDto): EducationEntity {
+		if (dto == null) return new EducationEntity();
+		return new EducationEntity(
+			undefined,
+			dto.degree,
+			dto.institution,
+			dto.startDate,
+			dto.endDate,
+			LocationEntity.fromDto(dto.location),
+		);
+	}
 }

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { MailerService } from '@nestjs-modules/mailer';
-import { LinkEntity } from '@tempus/shared-domain';
+import { LinkEntity } from '@tempus/api/shared/entity';
 
 @Injectable()
 export class EmailService {

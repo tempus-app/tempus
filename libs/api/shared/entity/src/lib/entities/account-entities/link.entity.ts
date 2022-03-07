@@ -1,6 +1,5 @@
+import { CreateLinkDto, Link, StatusType } from '@tempus/shared-domain';
 import { Column, CreateDateColumn, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { Link } from '../..';
-import { StatusType } from '../../enums';
 import { UserEntity } from './user.entity';
 
 @Entity()
@@ -15,15 +14,14 @@ export class LinkEntity implements Link {
 		status?: StatusType,
 		user?: UserEntity,
 	) {
-		this.id = id || 0;
-		this.firstName = firstName || '';
-		this.lastName = lastName || '';
-		this.expiry = expiry || new Date();
-		this.email = email || '';
-		this.token = token || '';
-		this.status = status || StatusType.INACTIVE;
-		this.user = user || new UserEntity();
-		this.createdAt = new Date();
+		this.id = id;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.expiry = expiry;
+		this.email = email;
+		this.token = token;
+		this.status = status;
+		this.user = user;
 	}
 
 	@PrimaryGeneratedColumn()
@@ -57,4 +55,9 @@ export class LinkEntity implements Link {
 	@OneToOne(() => UserEntity)
 	@JoinColumn()
 	user?: UserEntity;
+
+	public static fromDto(dto: CreateLinkDto): LinkEntity {
+		if (dto == null) return new LinkEntity();
+		return new LinkEntity(undefined, dto.firstName, dto.lastName, dto.email, dto.expiry, undefined, undefined);
+	}
 }
