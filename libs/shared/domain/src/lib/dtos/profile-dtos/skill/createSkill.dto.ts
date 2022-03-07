@@ -1,5 +1,4 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { SkillEntity } from '../../..';
 import { CreateSkillTypeDto } from './createSkillType.dto';
 
 export class CreateSkillDto {
@@ -12,10 +11,5 @@ export class CreateSkillDto {
 	constructor(skill: CreateSkillTypeDto, level: number) {
 		this.skill = skill;
 		this.level = level;
-	}
-
-	public static toEntity(dto: CreateSkillDto): SkillEntity {
-		if (dto == null) return new SkillEntity();
-		return new SkillEntity(undefined, CreateSkillTypeDto.toEntity(dto.skill), dto.level);
 	}
 }

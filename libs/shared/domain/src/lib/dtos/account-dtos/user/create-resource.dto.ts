@@ -1,6 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { RoleType } from '../../../enums';
-import { ResourceEntity } from '../../../entities/account-entities/resource.entity';
 import { CreateCertificationDto } from '../../profile-dtos/certification/createCertification.dto';
 import { CreateEducationDto } from '../../profile-dtos/education/createEduation.dto';
 import { CreateExperienceDto } from '../../profile-dtos/experience/createExperience.dto';
@@ -59,55 +58,34 @@ export class CreateResourceDto extends CreateUserDto {
 		email: string,
 		password: string,
 		roles: RoleType[],
-		phoneNumber?: string,
-		title?: string,
-		location?: CreateLocationDto,
-		projects?: CreateProjectDto[],
-		views?: CreateViewDto[],
-		experiences?: CreateExperienceDto[],
-		educations?: CreateEducationDto[],
-		skills?: CreateSkillDto[],
-		certifications?: CreateCertificationDto[],
-		experiencesSummary?: string,
-		profileSummary?: string,
-		educationsSummary?: string,
-		skillsSummary?: string,
+		phoneNumber: string,
+		title: string,
+		location: CreateLocationDto,
+		projects: CreateProjectDto[],
+		views: CreateViewDto[],
+		experiences: CreateExperienceDto[],
+		educations: CreateEducationDto[],
+		skills: CreateSkillDto[],
+		certifications: CreateCertificationDto[],
+		experiencesSummary: string,
+		profileSummary: string,
+		educationsSummary: string,
+		skillsSummary: string,
 	) {
 		super(firstName, lastName, email, password, roles);
-		this.roles = roles || [];
-		this.phoneNumber = phoneNumber || '';
-		this.title = title || '';
-		this.location = location || new CreateLocationDto('', '', '');
-		this.projects = projects || [];
-		this.views = views || [];
-		this.experiences = experiences || [];
-		this.educations = educations || [];
-		this.skills = skills || [];
-		this.certifications = certifications || [];
-		this.experiencesSummary = experiencesSummary || '';
-		this.educationsSummary = educationsSummary || '';
-		this.profileSummary = profileSummary || '';
-		this.skillsSummary = skillsSummary || '';
-	}
-
-	public static override toEntity(dto: CreateResourceDto): ResourceEntity {
-		if (dto == null) return new ResourceEntity();
-		return new ResourceEntity(
-			undefined,
-			dto.phoneNumber,
-			dto.title,
-			CreateLocationDto.toEntity(dto.location),
-			[],
-			[],
-			dto.experiences.map(experience => CreateExperienceDto.toEntity(experience)),
-			dto.educations.map(education => CreateEducationDto.toEntity(education)),
-			dto.skills.map(skill => CreateSkillDto.toEntity(skill)),
-			dto.certifications.map(certification => CreateCertificationDto.toEntity(certification)),
-			dto.firstName,
-			dto.lastName,
-			dto.email,
-			dto.password,
-			dto.roles,
-		);
+		this.roles = roles;
+		this.phoneNumber = phoneNumber;
+		this.title = title;
+		this.location = location;
+		this.projects = projects;
+		this.views = views;
+		this.experiences = experiences;
+		this.educations = educations;
+		this.skills = skills;
+		this.certifications = certifications;
+		this.experiencesSummary = experiencesSummary;
+		this.educationsSummary = educationsSummary;
+		this.profileSummary = profileSummary;
+		this.skillsSummary = skillsSummary;
 	}
 }

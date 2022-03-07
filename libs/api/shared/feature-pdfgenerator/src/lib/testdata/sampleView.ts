@@ -1,4 +1,5 @@
-import { ResourceEntity, View, ViewType } from '@tempus/shared-domain';
+import { ResourceEntity } from '@tempus/api/shared/entity';
+import { View, ViewType } from '@tempus/shared-domain';
 
 export const SampleView: View = {
 	id: 0,

@@ -4,9 +4,10 @@ import { Injectable, InternalServerErrorException, NotFoundException } from '@ne
 import { InjectRepository } from '@nestjs/typeorm';
 import { ConfigService } from '@nestjs/config';
 import { ViewsService } from '@tempus/onboarding-api/feature-profile';
-import { ResourceEntity, Resource, ViewType, CreateResourceDto, UpdateResourceDto } from '@tempus/shared-domain';
+import { Resource, ViewType, CreateResourceDto, UpdateResourceDto } from '@tempus/shared-domain';
 import { Repository } from 'typeorm';
 import { genSalt, hash } from 'bcrypt';
+import { ResourceEntity } from '@tempus/api/shared/entity';
 
 @Injectable()
 export class ResourceService {
@@ -17,10 +18,10 @@ export class ResourceService {
 		private configService: ConfigService,
 	) {}
 
-	async createResource(resource: CreateResourceDto): Promise<Partial<Resource>> {
-		const resourceEntity = CreateResourceDto.toEntity(resource);
+	async createResource(resource: CreateResourceDto): Promise<Resource> {
+		const resourceEntity = ResourceEntity.fromDto(resource);
 		resourceEntity.password = await this.hashPassword(resourceEntity.password);
-		const createdResource = await this.resourceRepository.save(resourceEntity);
+		let createdResource = await this.resourceRepository.save(resourceEntity);
 
 		const view = await this.viewsService.createView(createdResource.id, {
 			viewType: ViewType.PRIMARY,
@@ -36,14 +37,13 @@ export class ResourceService {
 		});
 
 		createdResource.views.push(view);
-		this.resourceRepository.save(createdResource);
-		const { password, ...partialResource } = createdResource;
-		return partialResource;
+		createdResource = await this.resourceRepository.save(createdResource);
+		createdResource.password = null;
+		return createdResource;
 	}
 
 	async getResource(resourceId: number): Promise<Resource> {
 		const resourceEntity = await this.resourceRepository.findOne(resourceId, {
-			// TODO: relations error???
 			relations: ['experiences', 'educations', 'skills', 'certifications', 'location'],
 		});
 
@@ -54,6 +54,7 @@ export class ResourceService {
 		return resourceEntity;
 	}
 
+	// Lightweight method to find resource without the extra linked data
 	async getResourceInfo(resourceId: number): Promise<Resource> {
 		const resourceEntity = await this.resourceRepository.findOne(resourceId);
 		if (!resourceEntity) {
@@ -100,7 +101,7 @@ export class ResourceService {
 	private async hashPassword(password: string): Promise<string> {
 		try {
 			const salt = await genSalt(this.configService.get('saltSecret'));
-			return await hash(password, salt);
+			return hash(password, salt);
 		} catch (e) {
 			throw new InternalServerErrorException(e);
 		}

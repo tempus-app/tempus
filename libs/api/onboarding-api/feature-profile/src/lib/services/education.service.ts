@@ -1,7 +1,8 @@
 import { forwardRef, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { EducationEntity } from '@tempus/api/shared/entity';
 import { ResourceService } from '@tempus/onboarding-api/feature-account';
-import { EducationEntity, LocationEntity, UpdateEducationDto, Education } from '@tempus/shared-domain';
+import { UpdateEducationDto, Education } from '@tempus/shared-domain';
 import { Repository } from 'typeorm';
 
 @Injectable()
@@ -11,8 +12,6 @@ export class EducationService {
 		private resourceService: ResourceService,
 		@InjectRepository(EducationEntity)
 		private educationRepository: Repository<EducationEntity>,
-		@InjectRepository(LocationEntity)
-		private locationRepository: Repository<LocationEntity>,
 	) {}
 
 	// create education for a specific resource

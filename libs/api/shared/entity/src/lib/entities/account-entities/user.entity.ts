@@ -1,6 +1,5 @@
+import { CreateUserDto, RoleType, UpdateUserDto, User } from '@tempus/shared-domain';
 import { Entity, Column, PrimaryGeneratedColumn, TableInheritance } from 'typeorm';
-import { User } from '../..';
-import { RoleType } from '../../enums';
 
 @Entity()
 @TableInheritance({ column: { type: 'varchar', name: 'user_type' } })
@@ -13,12 +12,12 @@ export class UserEntity implements User {
 		password?: string,
 		roles?: RoleType[],
 	) {
-		this.id = id || 0;
-		this.firstName = firstName || '';
-		this.lastName = lastName || '';
-		this.email = email || '';
-		this.password = password || '';
-		this.roles = roles || [];
+		this.id = id;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.email = email;
+		this.password = password;
+		this.roles = roles;
 	}
 
 	@PrimaryGeneratedColumn()
@@ -43,4 +42,10 @@ export class UserEntity implements User {
 		default: [RoleType.USER],
 	})
 	roles: RoleType[];
+
+	public static fromDto(dto: CreateUserDto | UpdateUserDto): UserEntity {
+		if (dto == null) return new UserEntity();
+		const id = dto instanceof CreateUserDto ? undefined : dto.id;
+		return new UserEntity(id, dto.firstName, dto.lastName, dto.email, dto.password, dto.roles);
+	}
 }

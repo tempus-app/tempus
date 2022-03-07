@@ -1,11 +1,10 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany, ManyToMany, JoinTable, ManyToOne } from 'typeorm';
+import { CreateViewDto, View, ViewType } from '@tempus/shared-domain';
 import { SkillEntity } from './skill.entity';
 import { RevisionEntity } from './revision.entity';
 import { ExperienceEntity } from './experience.entity';
 import { CertificationEntity, EducationEntity } from '.';
 import { ResourceEntity } from '../account-entities';
-import { ViewType } from '../../enums';
-import { View } from '../..';
 
 @Entity()
 export class ViewEntity implements View {
@@ -24,19 +23,19 @@ export class ViewEntity implements View {
 		resource?: ResourceEntity,
 		viewType?: ViewType,
 	) {
-		this.id = id || 0;
-		this.profileSummary = profileSummary || '';
-		this.skillsSummary = skillsSummary || '';
-		this.educationsSummary = educationsSummary || '';
-		this.experiencesSummary = experiencesSummary || '';
-		this.type = type || '';
-		this.status = status || [];
-		this.skills = skills || [];
-		this.experiences = experiences || [];
-		this.educations = educations || [];
-		this.certifications = certifications || [];
-		this.resource = resource || new ResourceEntity();
-		this.viewType = viewType || ViewType.PRIMARY;
+		this.id = id;
+		this.profileSummary = profileSummary;
+		this.skillsSummary = skillsSummary;
+		this.educationsSummary = educationsSummary;
+		this.experiencesSummary = experiencesSummary;
+		this.type = type;
+		this.status = status;
+		this.skills = skills;
+		this.experiences = experiences;
+		this.educations = educations;
+		this.certifications = certifications;
+		this.resource = resource;
+		this.viewType = viewType;
 	}
 
 	@PrimaryGeneratedColumn()
@@ -85,4 +84,23 @@ export class ViewEntity implements View {
 		default: ViewType.SECONDARY,
 	})
 	viewType: ViewType;
+
+	public static fromDto(dto: CreateViewDto): ViewEntity {
+		if (dto == null) return new ViewEntity();
+		return new ViewEntity(
+			undefined,
+			dto.profileSummary,
+			dto.skillsSummary,
+			dto.educationsSummary,
+			dto.experiencesSummary,
+			dto.type,
+			undefined,
+			dto.skills.map(skill => SkillEntity.fromDto(skill)),
+			dto.experiences.map(experience => ExperienceEntity.fromDto(experience)),
+			dto.educations.map(education => EducationEntity.fromDto(education)),
+			dto.certifications.map(certification => CertificationEntity.fromDto(certification)),
+			undefined,
+			dto.viewType,
+		);
+	}
 }

@@ -1,6 +1,7 @@
 import { Body, Controller, Get, Param, Patch, Post, Query } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { CreateLinkDto, Link, LinkEntity, UpdatelinkDto } from '@tempus/shared-domain';
+import { LinkEntity } from '@tempus/api/shared/entity';
+import { CreateLinkDto, Link, UpdatelinkDto } from '@tempus/shared-domain';
 import { LinkService } from '../services/link.service';
 
 @ApiTags('Link Components')
@@ -11,7 +12,7 @@ export class LinkController {
 	// Generates a link
 	@Post('/')
 	async createLink(@Body() createLinkDto: CreateLinkDto): Promise<Link> {
-		const linkEntity: LinkEntity = CreateLinkDto.toEntity(createLinkDto);
+		const linkEntity: LinkEntity = LinkEntity.fromDto(createLinkDto);
 		return this.linkService.createLink(linkEntity);
 	}
 

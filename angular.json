@@ -1,8 +1,9 @@
 {
 	"version": 2,
 	"projects": {
-		"api-shared-feature-core": "libs/api/shared/feature-core",
+		"api-shared-entity": "libs/api/shared/entity",
 		"api-shared-feature-auth": "libs/api/shared/feature-auth",
+		"api-shared-feature-core": "libs/api/shared/feature-core",
 		"api-shared-feature-email": "libs/api/shared/feature-email",
 		"api-shared-feature-pdfgenerator": "libs/api/shared/feature-pdfgenerator",
 		"client-shared-ui-assets": "libs/client/shared/ui-assets",

@@ -1,5 +1,5 @@
+import { CreateExperienceDto, Experience } from '@tempus/shared-domain';
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToOne } from 'typeorm';
-import { Experience } from '../../models';
 import { ResourceEntity } from '../account-entities';
 import { LocationEntity } from '../common-entities';
 
@@ -16,15 +16,15 @@ export class ExperienceEntity implements Experience {
 		location?: LocationEntity,
 		resource?: ResourceEntity,
 	) {
-		this.id = id || 0;
-		this.title = title || '';
-		this.company = company || '';
-		this.summary = summary || '';
-		this.description = description || [];
-		this.startDate = startDate || new Date();
-		this.endDate = endDate || new Date();
-		this.location = location || new LocationEntity();
-		this.resource = resource || new ResourceEntity();
+		this.id = id;
+		this.title = title;
+		this.company = company;
+		this.summary = summary;
+		this.description = description;
+		this.startDate = startDate;
+		this.endDate = endDate;
+		this.location = location;
+		this.resource = resource;
 	}
 
 	@PrimaryGeneratedColumn()
@@ -55,4 +55,18 @@ export class ExperienceEntity implements Experience {
 		onDelete: 'CASCADE',
 	})
 	resource: ResourceEntity;
+
+	public static fromDto(dto: CreateExperienceDto): ExperienceEntity {
+		if (dto == null) return new ExperienceEntity();
+		return new ExperienceEntity(
+			undefined,
+			dto.title,
+			dto.company,
+			dto.summary,
+			dto.description,
+			dto.startDate,
+			dto.endDate,
+			LocationEntity.fromDto(dto.location),
+		);
+	}
 }
