@@ -1,8 +1,8 @@
 <ng-container>
 	<mat-grid-list cols="2" rowHeight="50px" [gutterSize]="'0.25em'">
-		<mat-grid-tile colspan="2" rowspan="2">
+		<mat-grid-tile colspan="2" rowspan="{{ buttonSpacing }}">
 			<div class="info-title">
-				<h2 class="mat-h2">Education</h2>
+				<h2 class="mat-h2">Education and Training</h2>
 				<button
 					mat-mini-fab
 					(click)="addEducationSections()"
@@ -35,7 +35,7 @@
 								</button>
 							</div>
 							<div>
-								<h3 class="mat-h3" color="primary">Education {{ index + 1 }}</h3>
+								<h3 class="mat-h3" color="primary">Qualification {{ index + 1 }}</h3>
 							</div>
 						</div>
 						<mat-grid-list cols="2" rowHeight="100px">
@@ -76,6 +76,67 @@
 									placeholder="End date"
 									cssClass="secondary"
 								></tempus-text-input>
+							</mat-grid-tile>
+						</mat-grid-list>
+					</form>
+				</mat-card-content>
+			</tempus-card>
+		</mat-grid-tile>
+		<mat-grid-tile colspan="2" rowspan="2">
+			<div class="info-title">
+				<h2 class="mat-h2">Certifications</h2>
+				<button
+					mat-mini-fab
+					(click)="addCertificationSections()"
+					matTooltip="Add more certifications sections"
+					class="header-button"
+					color="primary"
+				>
+					<mat-icon>add</mat-icon>
+				</button>
+			</div>
+		</mat-grid-tile>
+		<mat-grid-tile
+			colspan="2"
+			rowspan="{{ certRows }}"
+			*ngFor="let numCertification of numberCertificationSections; let index = index"
+			id="certification-{{ index }}"
+		>
+			<tempus-card>
+				<mat-card-content>
+					<form>
+						<div class="card-header">
+							<div class="header-button">
+								<button
+									mat-mini-fab
+									(click)="removeCertificationSection(index)"
+									matTooltip="Remove certification section"
+									color="primary"
+								>
+									<mat-icon>remove</mat-icon>
+								</button>
+							</div>
+							<div>
+								<h3 class="mat-h3">Certfication {{ index + 1 }}</h3>
+							</div>
+						</div>
+						<mat-grid-list cols="2" rowHeight="50px">
+							<mat-grid-tile colspan="{{ cols }}" rowspan="2">
+								<tempus-text-input
+									id="certifying-authority-{{ numCertification }}"
+									placeholder="Certifying Authority"
+									cssClass="secondary"
+								></tempus-text-input>
+							</mat-grid-tile>
+							<mat-grid-tile colspan="{{ cols }}" rowspan="2">
+								<tempus-text-input
+									id="title-{{ numCertification }}"
+									placeholder="Title"
+									cssClass="secondary"
+								></tempus-text-input>
+							</mat-grid-tile>
+							<mat-grid-tile colspan="2" rowspan="2">
+								<tempus-text-area id="summary-{{ numCertification }}" placeholder="Summary"></tempus-text-area>
 							</mat-grid-tile>
 						</mat-grid-list>
 					</form>

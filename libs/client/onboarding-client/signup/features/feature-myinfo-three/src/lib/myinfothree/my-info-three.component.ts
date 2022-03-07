@@ -18,6 +18,10 @@ export class MyInfoThreeComponent implements OnDestroy {
 
 	fieldSpacing = '1';
 
+	buttonSpacing = '2';
+
+	certRows = '6';
+
 	rows = '12';
 
 	InputType = InputType;
@@ -30,6 +34,8 @@ export class MyInfoThreeComponent implements OnDestroy {
 
 	numberEducationSections: number[] = [0];
 
+	numberCertificationSections: number[] = [0];
+
 	constructor(breakpointObserver: BreakpointObserver) {
 		breakpointObserver
 			.observe([Breakpoints.XSmall, Breakpoints.Small, Breakpoints.Medium, Breakpoints.Large, Breakpoints.XLarge])
@@ -41,10 +47,14 @@ export class MyInfoThreeComponent implements OnDestroy {
 							this.rows = '12';
 							this.cols = '2';
 							this.fieldSpacing = '0';
+							this.buttonSpacing = '3';
+							this.certRows = '8';
 						} else {
 							this.rows = '8';
 							this.cols = '1';
 							this.fieldSpacing = '1';
+							this.buttonSpacing = '2';
+							this.certRows = '6';
 						}
 					}
 				}
@@ -70,6 +80,20 @@ export class MyInfoThreeComponent implements OnDestroy {
 		if (this.numberEducationSections.length > 1) {
 			this.numberEducationSections.splice(index, 1);
 		}
+	}
+
+	addCertificationSections() {
+		// Prevent duplicate numbers which can cause an error when splicing a work experience section out
+		if (this.numberCertificationSections.length === 0) {
+			this.numberCertificationSections.push(0);
+		} else {
+			const lastElement = this.numberCertificationSections[this.numberCertificationSections.length - 1];
+			this.numberCertificationSections.push(lastElement + 1);
+		}
+	}
+
+	removeCertificationSection(index: number) {
+		this.numberCertificationSections.splice(index, 1);
 	}
 
 	addSkill(event: MatChipInputEvent): void {
