@@ -33,21 +33,6 @@
         float: right;
         font-weight: normal;
       }
-
-      .watermark{
-        position: absolute;
-        z-index: 9999;
-        top: 0;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        font-size: 4rem;
-        transform: rotate(45deg);
-      }
-      img{
-        width: 500px;
-        height: 500px;
-      }
       .watermark {
         position: absolute;
         z-index: -1;
@@ -155,5 +140,13 @@
         <br />
       </section>
     {{/if}}
+    <div id="paddingContainer"></div>
+    <script>
+      let curHeight = document.body.offsetHeight
+      let remainderPixels = curHeight % 870
+      if ((870-remainderPixels) > 50) {
+        document.getElementById("paddingContainer").style.height = `${870-remainderPixels}px`
+      }
+    </script>
   </body>
 </html>

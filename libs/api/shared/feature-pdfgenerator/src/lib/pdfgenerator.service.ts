@@ -59,6 +59,7 @@ export class PdfGeneratorService {
 
 		// go to blank page
 		const page = await browser.newPage();
+		await page.setViewport({ width: 794, height: 1122, deviceScaleFactor: 2 });
 
 		// pass compiled html data into the newly created page
 		// wait until external dependencies are loaded
