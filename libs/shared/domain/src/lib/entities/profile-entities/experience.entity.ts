@@ -16,15 +16,15 @@ export class ExperienceEntity implements Experience {
 		location?: LocationEntity,
 		resource?: ResourceEntity,
 	) {
-		this.id = id;
-		this.title = title;
-		this.company = company;
-		this.summary = summary;
-		this.description = description;
-		this.startDate = startDate;
-		this.endDate = endDate;
-		this.location = location;
-		this.resource = resource;
+		this.id = id || 0;
+		this.title = title || '';
+		this.company = company || '';
+		this.summary = summary || '';
+		this.description = description || [];
+		this.startDate = startDate || new Date();
+		this.endDate = endDate || new Date();
+		this.location = location || new LocationEntity();
+		this.resource = resource || new ResourceEntity();
 	}
 
 	@PrimaryGeneratedColumn()

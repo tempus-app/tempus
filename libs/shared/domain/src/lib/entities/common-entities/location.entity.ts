@@ -13,13 +13,13 @@ export class LocationEntity implements Location {
 		experience?: ExperienceEntity,
 		resource?: ResourceEntity,
 	) {
-		this.id = id;
-		this.city = city;
-		this.province = province;
-		this.country = country;
-		this.education = education;
-		this.experience = experience;
-		this.resource = resource;
+		this.id = id || 0;
+		this.city = city || '';
+		this.province = province || '';
+		this.country = country || '';
+		this.education = education || new EducationEntity();
+		this.experience = experience || new ExperienceEntity();
+		this.resource = resource || new ResourceEntity();
 	}
 
 	@PrimaryGeneratedColumn()

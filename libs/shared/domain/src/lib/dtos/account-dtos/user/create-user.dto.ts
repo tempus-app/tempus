@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsISO31661Alpha2, IsOptional } from 'class-validator';
-import exp = require('constants');
+// import exp = require('constants');
+import { override } from 'joi';
 import { RoleType, ViewType } from '../../../enums';
 import { UserEntity } from '../../../entities/account-entities/user.entity';
 import { ResourceEntity } from '../../../entities/account-entities/resource.entity';
@@ -41,6 +42,6 @@ export class CreateUserDto {
 
 	public static toEntity(dto: CreateUserDto): UserEntity | ResourceEntity {
 		if (dto == null) return new UserEntity();
-		return new UserEntity(null, dto.firstName, dto.lastName, dto.email, dto.password, dto.roles);
+		return new UserEntity(undefined, dto.firstName, dto.lastName, dto.email, dto.password, dto.roles);
 	}
 }

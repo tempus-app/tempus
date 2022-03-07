@@ -1,0 +1,41 @@
+@use 'abstracts/helper' as abs;
+
+.container {
+	display: block;
+	text-align: center;
+}
+
+.left-card-header {
+	width: 90%;
+	text-align: left;
+}
+
+.work-experience-card {
+	width: 90%;
+}
+
+.card-date {
+	width: 90%;
+	text-align: right;
+}
+
+.info-title {
+	width: 100%;
+}
+
+.card-header {
+	width: 70%;
+	text-align: left;
+}
+
+.section-header {
+	padding: 0.5em 0em 0.5em 0em;
+	border-bottom: 2px solid abs.$primary-300;
+}
+
+tempus-card {
+	width: 80%;
+	height: 100%;
+	margin: 2em auto;
+	text-align: center;
+}

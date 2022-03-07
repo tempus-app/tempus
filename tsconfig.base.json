@@ -19,7 +19,6 @@
 			"@tempus/api/shared/feature-auth": ["libs/api/shared/feature-auth/src/index.ts"],
 			"@tempus/api/shared/feature-email": ["libs/api/shared/feature-email/src/index.ts"],
 			"@tempus/api/shared/feature-pdfgenerator": ["libs/api/shared/feature-pdfgenerator/src/index.ts"],
-			"@tempus/onboarding-client/profile/shell": ["libs/client/onboarding-client/profile/shell/src/index.ts"],
 			"@tempus/client/onboarding-client/shell": ["libs/client/onboarding-client/shell/src/index.ts"],
 			"@tempus/client/shared/ui-components/input": ["libs/client/shared/ui-components/input/src/index.ts"],
 			"@tempus/client/shared/ui-components/persistent": ["libs/client/shared/ui-components/persistent/src/index.ts"],
@@ -32,6 +31,7 @@
 			"@tempus/onboarding-client/profile/feature-sign-in": [
 				"libs/client/onboarding-client/profile/features/onboarding-client-profile-feature-sign-in/src/index.ts"
 			],
+			"@tempus/onboarding-client/profile/shell": ["libs/client/onboarding-client/profile/shell/src/index.ts"],
 			"@tempus/onboarding-client/signup/feature-create-credentials": [
 				"libs/client/onboarding-client/signup/features/feature-create-credentials/src/index.ts"
 			],
@@ -48,7 +48,8 @@
 				"libs/client/onboarding-client/signup/features/feature-upload-resume/src/index.ts"
 			],
 			"@tempus/onboarding-client/signup/shell": ["libs/client/onboarding-client/signup/shell/src/index.ts"],
-			"@tempus/shared-domain": ["libs/shared/domain/src/index.ts"]
+			"@tempus/shared-domain": ["libs/shared/domain/src/index.ts"],
+			"@tempus/shared/util": ["libs/shared/util/src/index.ts"]
 		}
 	},
 	"exclude": ["node_modules", "tmp"]

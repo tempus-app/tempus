@@ -14,10 +14,23 @@ export class CreateLinkDto {
 	@ApiProperty()
 	expiry: Date;
 
-	constructor(firstName: string, lastName: string, email: string, expiry?: Date) {}
+	constructor(firstName: string, lastName: string, email: string, expiry?: Date) {
+		this.firstName = firstName || '';
+		this.lastName = lastName || '';
+		this.email = email || '';
+		this.expiry = expiry || new Date();
+	}
 
 	public static toEntity(dto: CreateLinkDto): LinkEntity {
 		if (dto == null) return new LinkEntity();
-		return new LinkEntity(null, dto.firstName, dto.lastName, dto.email, dto.expiry || null, null, null);
+		return new LinkEntity(
+			undefined,
+			dto.firstName,
+			dto.lastName,
+			dto.email,
+			dto.expiry || undefined,
+			undefined,
+			undefined,
+		);
 	}
 }

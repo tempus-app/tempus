@@ -14,13 +14,13 @@ export class ProjectEntity implements Project {
 		client?: ClientEntity,
 		tasks?: TaskEntity[],
 	) {
-		this.id = id;
-		this.name = name;
-		this.startDate = startDate;
-		this.endDate = endDate;
-		this.hoursPerDay = hoursPerDay;
-		this.client = client;
-		this.tasks = tasks;
+		this.id = id || 0;
+		this.name = name || '';
+		this.startDate = startDate || new Date();
+		this.endDate = endDate || new Date();
+		this.hoursPerDay = hoursPerDay || 0;
+		this.client = client || new ClientEntity();
+		this.tasks = tasks || [];
 	}
 
 	@PrimaryGeneratedColumn()

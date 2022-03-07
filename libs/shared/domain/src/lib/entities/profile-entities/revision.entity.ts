@@ -15,13 +15,13 @@ export class RevisionEntity implements Revision {
 		approved?: boolean,
 		view?: ViewEntity,
 	) {
-		this.id = id;
-		this.createdAt = createdAt;
-		this.approvedAt = approvedAt;
-		this.sectionsChanged = sectionsChanged;
-		this.approver = approver;
-		this.approved = approved;
-		this.view = view;
+		this.id = id || 0;
+		this.createdAt = createdAt || new Date();
+		this.approvedAt = approvedAt || new Date();
+		this.sectionsChanged = sectionsChanged || [];
+		this.approver = approver || new UserEntity();
+		this.approved = approved || false;
+		this.view = view || new ViewEntity();
 	}
 
 	@PrimaryGeneratedColumn()

@@ -5,7 +5,7 @@ import { SkillType } from '../..';
 @Entity()
 export class SkillTypeEntity implements SkillType {
 	constructor(name?: string) {
-		this.name = name;
+		this.name = name || '';
 	}
 
 	@Column({ unique: true })

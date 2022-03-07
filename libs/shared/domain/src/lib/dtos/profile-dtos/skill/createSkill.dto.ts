@@ -16,6 +16,6 @@ export class CreateSkillDto {
 
 	public static toEntity(dto: CreateSkillDto): SkillEntity {
 		if (dto == null) return new SkillEntity();
-		return new SkillEntity(null, CreateSkillTypeDto.toEntity(dto.skill), dto.level);
+		return new SkillEntity(undefined, CreateSkillTypeDto.toEntity(dto.skill), dto.level);
 	}
 }

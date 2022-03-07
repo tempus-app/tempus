@@ -45,7 +45,7 @@ export class CreateExperienceDto {
 	public static toEntity(dto: CreateExperienceDto): ExperienceEntity {
 		if (dto == null) return new ExperienceEntity();
 		return new ExperienceEntity(
-			null,
+			undefined,
 			dto.title,
 			dto.company,
 			dto.summary,

@@ -6,10 +6,10 @@ import { SkillTypeEntity } from './skilltype.entity';
 @Entity()
 export class SkillEntity implements Skill {
 	constructor(id?: number, skill?: SkillTypeEntity, level?: number, resource?: ResourceEntity) {
-		this.id = id;
-		this.skill = skill;
-		this.level = level;
-		this.resource = resource;
+		this.id = id || 0;
+		this.skill = skill || new SkillTypeEntity();
+		this.level = level || 0;
+		this.resource = resource || new ResourceEntity();
 	}
 
 	@PrimaryGeneratedColumn()

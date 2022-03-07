@@ -14,13 +14,13 @@ export class EducationEntity implements Education {
 		location?: LocationEntity,
 		resource?: ResourceEntity,
 	) {
-		this.id = id;
-		this.degree = degree;
-		this.institution = institution;
-		this.startDate = startDate;
-		this.endDate = endDate;
-		this.location = location;
-		this.resource = resource;
+		this.id = id || 0;
+		this.degree = degree || '';
+		this.institution = institution || '';
+		this.startDate = startDate || new Date();
+		this.endDate = endDate || new Date();
+		this.location = location || new LocationEntity();
+		this.resource = resource || new ResourceEntity();
 	}
 
 	@PrimaryGeneratedColumn()
