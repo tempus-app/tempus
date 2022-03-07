@@ -1,7 +1,7 @@
 import { Client } from './client.model';
 import { Task } from './task.model';
 
-export class Project {
+export interface Project {
 	id: number;
 
 	name: string;

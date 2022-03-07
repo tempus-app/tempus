@@ -1,15 +1,16 @@
 import { MailerModule } from '@nestjs-modules/mailer';
 import { Module } from '@nestjs/common';
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
-import { DataLayerModule } from '@tempus/shared-domain';
-import { ConfigService } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ApiSharedEntityModule } from '@tempus/api/shared/entity';
 import { EmailService } from './services';
 
 const path = require('path'); // eslint-disable-line
 
 @Module({
 	imports: [
-		DataLayerModule,
+		ApiSharedEntityModule,
+		ConfigModule,
 		MailerModule.forRootAsync({
 			useFactory: async (config: ConfigService) => ({
 				transport: {

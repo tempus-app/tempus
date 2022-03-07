@@ -1,7 +1,8 @@
 import { forwardRef, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { CertificationEntity } from '@tempus/api/shared/entity';
 import { ResourceService } from '@tempus/onboarding-api/feature-account';
-import { Certification, CertificationEntity, UpdateCertificationDto } from '@tempus/shared-domain';
+import { Certification, UpdateCertificationDto } from '@tempus/shared-domain';
 import { Repository } from 'typeorm';
 
 @Injectable()

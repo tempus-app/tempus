@@ -37,36 +37,37 @@ export class UserController {
 		return this.resourceService.getAllResources();
 	}
 
-	// gets a User  (includes resource)
+	// gets a User or Resource
 	@Get(':userId')
 	async getUser(@Param('userId') userId: number): Promise<User | Resource> {
 		return this.userService.getUser(userId);
 	}
 
-	// creates User (includes resource)
+	// creates User
 	@Post()
-	async createUser(@Body() user: CreateUserDto): Promise<User | Resource> {
-		// if (user.roles.includes(RoleType.BUSINESS_OWNER)) {
+	async createUser(@Body() user: CreateUserDto): Promise<User> {
 		return this.userService.createUser(user);
-		// return this.resourceService.createResource(user as CreateResourceDto);
 	}
 
+	// creates Resource
 	@Post('resource')
-	async createResource(@Body() user: CreateResourceDto): Promise<Partial<Resource>> {
-		return await this.resourceService.createResource(user as CreateResourceDto);
+	async createResource(@Body() user: CreateResourceDto): Promise<Resource> {
+		return await this.resourceService.createResource(user);
 	}
 
-	// updates user information  (includes resource)
+	// updates User information
 	@Patch()
 	async updateUser(@Body() updateUserData: UpdateUserDto): Promise<User> {
 		return await this.userService.updateUser(updateUserData);
 	}
 
+	// update Resource information
 	@Patch('resource')
 	async updateResource(@Body() updateResourceData: UpdateResourceDto): Promise<Resource> {
 		return await this.resourceService.editResource(updateResourceData);
 	}
 
+	// delete User or Resource
 	@Delete(':userId')
 	async deleteUser(@Param('userId') userId: number): Promise<void> {
 		return this.userService.deleteUser(userId);

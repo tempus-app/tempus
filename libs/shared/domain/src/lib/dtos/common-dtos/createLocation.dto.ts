@@ -1,5 +1,4 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { LocationEntity } from '../..';
 
 export class CreateLocationDto {
 	@ApiProperty()
@@ -15,10 +14,5 @@ export class CreateLocationDto {
 		this.city = city;
 		this.province = province;
 		this.country = country;
-	}
-
-	public static toEntity(dto: CreateLocationDto): LocationEntity {
-		if (dto == null) return new LocationEntity();
-		return new LocationEntity(null, dto.city, dto.province, dto.city);
 	}
 }

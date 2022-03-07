@@ -1,6 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { StatusType } from '../../..';
-import { UpdateUserDto } from '../user/updateUser.dto';
 
 export class UpdatelinkDto {
 	@ApiProperty()

@@ -1,9 +1,10 @@
-import { Resource, RoleType, User, UserEntity, UpdateUserDto, CreateUserDto } from '@tempus/shared-domain';
+import { Resource, RoleType, User, UpdateUserDto, CreateUserDto } from '@tempus/shared-domain';
 import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ConfigService } from '@nestjs/config';
 import { Repository } from 'typeorm';
 import { genSalt, hash } from 'bcrypt';
+import { UserEntity } from '@tempus/api/shared/entity';
 import { ResourceService } from './resource.service';
 
 @Injectable()
@@ -16,7 +17,7 @@ export class UserService {
 	) {}
 
 	async createUser(user: CreateUserDto): Promise<User> {
-		const userEntity = CreateUserDto.toEntity(user);
+		const userEntity = UserEntity.fromDto(user);
 		userEntity.password = await this.hashPassword(userEntity.password);
 		return this.userRepository.save(userEntity);
 	}
@@ -26,7 +27,7 @@ export class UserService {
 		if (!userEntity) {
 			throw new NotFoundException(`Could not find user with id ${userEntity.id}`);
 		}
-		const user = UpdateUserDto.toEntity(updateUserData);
+		const user = UserEntity.fromDto(updateUserData);
 		Object.entries(user).forEach(entry => {
 			if (!entry[1]) {
 				delete user[entry[0]];
@@ -40,29 +41,14 @@ export class UserService {
 	async getUser(userId: number): Promise<User | Resource> {
 		const userEntity = await this.userRepository.findOne(userId);
 		if (!userEntity) {
-			throw new NotFoundException(`Could not find user with id ${userEntity.id}`);
+			const resourceEntity = await this.resourceService.getResource(userId);
+			if (!resourceEntity) {
+				throw new NotFoundException(`Could not find user with id ${userEntity.id}`);
+			} else {
+				return resourceEntity;
+			}
 		}
-		if (userEntity.roles.includes(RoleType.BUSINESS_OWNER)) {
-			return userEntity;
-		}
-		const resourceDto = await this.resourceService.getResource(userId);
-		return resourceDto;
-	}
-
-	async findByEmail(email: string): Promise<User> {
-		const user = (
-			await this.userRepository.find({
-				where: { email },
-			})
-		)[0];
-		if (!user) {
-			throw new NotFoundException(`Could not find resource with id ${email}`);
-		}
-		if (user.roles.includes(RoleType.BUSINESS_OWNER)) {
-			return user;
-		}
-		const resource = await this.resourceService.findResourceByEmail(email);
-		return resource;
+		return userEntity;
 	}
 
 	// TODO: filtering
@@ -91,7 +77,7 @@ export class UserService {
 	private async hashPassword(password: string): Promise<string> {
 		try {
 			const salt = await genSalt(password, this.configService.get('saltSecret'));
-			return await hash(password, salt);
+			return hash(password, salt);
 		} catch (e) {
 			throw new InternalServerErrorException(e);
 		}

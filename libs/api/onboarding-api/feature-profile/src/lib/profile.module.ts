@@ -1,6 +1,6 @@
 import { forwardRef, Module } from '@nestjs/common';
+import { ApiSharedEntityModule } from '@tempus/api/shared/entity';
 import { AccountModule } from '@tempus/onboarding-api/feature-account';
-import { DataLayerModule } from '@tempus/shared-domain';
 import { ProfileResumeController } from './controllers/profile-resume.controller';
 import { ProfileViewController } from './controllers/profile-view.controller';
 import { CertificationService } from './services';
@@ -10,7 +10,7 @@ import { SkillsService } from './services/skill.service';
 import { ViewsService } from './services/view.service';
 
 @Module({
-	imports: [DataLayerModule, forwardRef(() => AccountModule)],
+	imports: [ApiSharedEntityModule, forwardRef(() => AccountModule)],
 	controllers: [ProfileResumeController, ProfileViewController],
 	providers: [EducationService, ExperienceService, SkillsService, ViewsService, CertificationService],
 	exports: [EducationService, ExperienceService, SkillsService, ViewsService, CertificationService],

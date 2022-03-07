@@ -15,6 +15,7 @@ import {
 	ResumeComponentsDto,
 } from '@tempus/shared-domain';
 import { ApiTags } from '@nestjs/swagger';
+import { CertificationEntity, EducationEntity, ExperienceEntity, SkillEntity } from '@tempus/api/shared/entity';
 import { EducationService } from '../services/education.service';
 import { ExperienceService } from '../services/experience.service';
 import { SkillsService } from '../services/skill.service';
@@ -36,7 +37,7 @@ export class ProfileResumeController {
 		@Param('userId') userId: number,
 		@Body() createEducationData: CreateEducationDto,
 	): Promise<Education> {
-		let educationEntity = CreateEducationDto.toEntity(createEducationData);
+		let educationEntity = EducationEntity.fromDto(createEducationData);
 		educationEntity = await this.educationService.createEducation(userId, educationEntity);
 		return educationEntity;
 	}
@@ -46,14 +47,14 @@ export class ProfileResumeController {
 		@Param('userId') userId: number,
 		@Body() createExperienceData: CreateExperienceDto,
 	): Promise<Experience> {
-		let experienceEntity = CreateExperienceDto.toEntity(createExperienceData);
+		let experienceEntity = ExperienceEntity.fromDto(createExperienceData);
 		experienceEntity = await this.experienceService.createExperience(userId, experienceEntity);
 		return experienceEntity;
 	}
 
 	@Post('/skill/:userId')
 	async createSkill(@Param('userId') userId: number, @Body() createSkillData: CreateSkillDto): Promise<Skill> {
-		let skillEntity = CreateSkillDto.toEntity(createSkillData);
+		let skillEntity = SkillEntity.fromDto(createSkillData);
 		skillEntity = await this.skillService.createSkill(userId, skillEntity);
 		return skillEntity;
 	}
@@ -63,7 +64,7 @@ export class ProfileResumeController {
 		@Param('userId') userId: number,
 		@Body() createCertificationData: CreateCertificationDto,
 	): Promise<Certification> {
-		let certificationEntity = CreateCertificationDto.toEntity(createCertificationData);
+		let certificationEntity = CertificationEntity.fromDto(createCertificationData);
 		certificationEntity = await this.certificationService.createCertification(userId, certificationEntity);
 		return certificationEntity;
 	}
