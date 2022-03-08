@@ -30,5 +30,6 @@ import { ResumeUploadComponent } from './resume-upload/resume-upload.component';
 		]),
 	],
 	declarations: [ConfirmResumeUploadComponent, ResumeUploadComponent],
+	exports: [ResumeUploadComponent],
 })
 export class OnboardingClientSignupFeatureUploadResumeModule {}

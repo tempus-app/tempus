@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 
 @Component({
@@ -12,12 +12,10 @@ import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 		},
 	],
 })
-export class StepperComponent implements OnInit {
+export class StepperComponent {
 	@Input() steps: Array<string> = [];
 
 	@Input() color = 'primary';
 
-	constructor() {}
-
-	ngOnInit(): void {}
+	@Input() inputedIndex = 0;
 }

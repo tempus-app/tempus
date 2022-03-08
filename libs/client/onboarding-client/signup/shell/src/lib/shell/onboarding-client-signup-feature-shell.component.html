@@ -1,1 +1,29 @@
+<tempus-stepper [steps]="steps" [inputedIndex]="stepperIndex"></tempus-stepper>
 <router-outlet></router-outlet>
+<div
+	[ngClass]="{
+		'button-container': stepperIndex > 0 && stepperIndex < steps.length - 1,
+		'next-button': stepperIndex === 0
+	}"
+>
+	<button
+		*ngIf="stepperIndex > 0"
+		color="primary"
+		mat-raised-button
+		matStepperPrevious
+		type="button"
+		(click)="decrementStep()"
+	>
+		Back
+	</button>
+	<button
+		*ngIf="stepperIndex < steps.length - 1"
+		color="primary"
+		mat-raised-button
+		matStepperNext="button"
+		(click)="incrementStep()"
+	>
+		Next
+	</button>
+</div>
+<tempus-footer></tempus-footer>
