@@ -21,6 +21,7 @@
 		"onboarding-client-shell": "libs/client/onboarding-client/shell",
 		"onboarding-client-signup-feature-create-credentials": "libs/client/onboarding-client/signup/features/feature-create-credentials",
 		"onboarding-client-signup-feature-my-info-one": "libs/client/onboarding-client/signup/features/feature-myinfo-one",
+		"onboarding-client-signup-feature-myinfo-three": "libs/client/onboarding-client/signup/features/feature-myinfo-three",
 		"onboarding-client-signup-feature-myinfo-two": "libs/client/onboarding-client/signup/features/feature-myinfo-two",
 		"onboarding-client-signup-feature-review-info": "libs/client/onboarding-client/signup/features/feature-review-info",
 		"onboarding-client-signup-feature-upload-resume": "libs/client/onboarding-client/signup/features/feature-upload-resume",

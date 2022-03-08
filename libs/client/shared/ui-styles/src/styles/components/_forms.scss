@@ -6,3 +6,12 @@
 	border-radius: 10px;
 	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
 }
+
+@mixin info-title($width, $padding-right) {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	width: $width;
+	border-bottom: 2px solid abs.$primary-300;
+	padding-right: $padding-right;
+}

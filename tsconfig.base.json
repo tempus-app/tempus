@@ -39,6 +39,9 @@
 			"@tempus/onboarding-client/signup/feature-myinfo-one": [
 				"libs/client/onboarding-client/signup/features/feature-myinfo-one/src/index.ts"
 			],
+			"@tempus/onboarding-client/signup/feature-myinfo-three": [
+				"libs/client/onboarding-client/signup/features/feature-myinfo-three/src/index.ts"
+			],
 			"@tempus/onboarding-client/signup/feature-myinfo-two": [
 				"libs/client/onboarding-client/signup/features/feature-myinfo-two/src/index.ts"
 			],

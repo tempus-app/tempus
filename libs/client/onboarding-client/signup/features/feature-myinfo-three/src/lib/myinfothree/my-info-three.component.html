@@ -1,0 +1,205 @@
+<ng-container>
+	<mat-grid-list cols="2" rowHeight="55px" [gutterSize]="'0.25em'">
+		<mat-grid-tile colspan="2" rowspan="{{ buttonSpacing }}">
+			<div class="info-title">
+				<h2 class="mat-h2">Education and Training</h2>
+				<button
+					mat-mini-fab
+					(click)="addEducationSections()"
+					matTooltip="Add more education sections"
+					class="header-button"
+					color="primary"
+				>
+					<mat-icon>add</mat-icon>
+				</button>
+			</div>
+		</mat-grid-tile>
+		<mat-grid-tile colspan="2" rowspan="4">
+			<tempus-card>
+				<form>
+					<h3 class="mat-h3" color="primary">Education Summary</h3>
+					<tempus-text-area id="education-summary" placeholder="Summary"></tempus-text-area>
+				</form>
+			</tempus-card>
+		</mat-grid-tile>
+		<mat-grid-tile
+			colspan="2"
+			rowspan="{{ rows }}"
+			*ngFor="let numEducation of numberEducationSections; let index = index"
+			id="education-{{ index }}"
+		>
+			<tempus-card>
+				<form>
+					<div class="card-header">
+						<div class="header-button">
+							<button
+								mat-mini-fab
+								(click)="removeEducationSection(index)"
+								matTooltip="Remove education section"
+								color="primary"
+							>
+								<mat-icon>remove</mat-icon>
+							</button>
+						</div>
+						<div>
+							<h3 class="mat-h3" color="primary">Qualification {{ index + 1 }}</h3>
+						</div>
+					</div>
+					<mat-grid-list cols="6" rowHeight="100px">
+						<mat-grid-tile colspan="{{ educationCols }}">
+							<tempus-text-input
+								id="institution-{{ numEducation }}"
+								placeholder="Institution"
+								cssClass="secondary"
+							></tempus-text-input>
+						</mat-grid-tile>
+						<mat-grid-tile colspan="{{ educationCols }}">
+							<tempus-text-input
+								id="field-{{ numEducation }}"
+								placeholder="Field"
+								cssClass="secondary"
+							></tempus-text-input>
+						</mat-grid-tile>
+						<mat-grid-tile colspan="{{ locationCols }}">
+							<tempus-search-box
+								id="country-{{ numEducation }}"
+								[options]="countries"
+								placeholder="Country"
+								cssClass="secondary"
+								(optionSelect)="updateStateOptions($event)"
+							></tempus-search-box>
+						</mat-grid-tile>
+						<mat-grid-tile colspan="{{ locationCols }}">
+							<tempus-dropdown
+								id="state-{{ numEducation }}"
+								[options]="states"
+								label="State"
+								cssClass="secondary"
+							></tempus-dropdown>
+						</mat-grid-tile>
+						<mat-grid-tile colspan="{{ locationCols }}">
+							<tempus-text-input
+								id="city-{{ numEducation }}"
+								placeholder="City"
+								cssClass="secondary"
+							></tempus-text-input>
+						</mat-grid-tile>
+						<mat-grid-tile colspan="{{ educationCols }}">
+							<tempus-text-input
+								id="start-date-{{ numEducation }}"
+								[inputType]="InputType.DATE"
+								placeholder="Start date"
+								cssClass="secondary"
+							></tempus-text-input>
+						</mat-grid-tile>
+						<mat-grid-tile colspan="{{ educationCols }}">
+							<tempus-text-input
+								id="end-date-{{ numEducation }}"
+								[inputType]="InputType.DATE"
+								placeholder="End date"
+								cssClass="secondary"
+							></tempus-text-input>
+						</mat-grid-tile>
+					</mat-grid-list>
+				</form>
+			</tempus-card>
+		</mat-grid-tile>
+		<mat-grid-tile colspan="2" rowspan="2">
+			<div class="info-title">
+				<h2 class="mat-h2">Certifications</h2>
+				<button
+					mat-mini-fab
+					(click)="addCertificationSections()"
+					matTooltip="Add more certifications sections"
+					class="header-button"
+					color="primary"
+				>
+					<mat-icon>add</mat-icon>
+				</button>
+			</div>
+		</mat-grid-tile>
+		<mat-grid-tile
+			colspan="2"
+			rowspan="{{ certRows }}"
+			*ngFor="let numCertification of numberCertificationSections; let index = index"
+			id="certification-{{ index }}"
+		>
+			<tempus-card>
+				<form>
+					<div class="card-header">
+						<div class="header-button">
+							<button
+								mat-mini-fab
+								(click)="removeCertificationSection(index)"
+								matTooltip="Remove certification section"
+								color="primary"
+							>
+								<mat-icon>remove</mat-icon>
+							</button>
+						</div>
+						<div>
+							<h3 class="mat-h3">Certfication {{ index + 1 }}</h3>
+						</div>
+					</div>
+					<mat-grid-list cols="2" rowHeight="50px">
+						<mat-grid-tile colspan="{{ cols }}" rowspan="2">
+							<tempus-text-input
+								id="certifying-authority-{{ numCertification }}"
+								placeholder="Certifying Authority"
+								cssClass="secondary"
+							></tempus-text-input>
+						</mat-grid-tile>
+						<mat-grid-tile colspan="{{ cols }}" rowspan="2">
+							<tempus-text-input
+								id="title-{{ numCertification }}"
+								placeholder="Title"
+								cssClass="secondary"
+							></tempus-text-input>
+						</mat-grid-tile>
+						<mat-grid-tile colspan="2" rowspan="2">
+							<tempus-text-area id="summary-{{ numCertification }}" placeholder="Summary"></tempus-text-area>
+						</mat-grid-tile>
+					</mat-grid-list>
+				</form>
+			</tempus-card>
+		</mat-grid-tile>
+		<mat-grid-tile colspan="2" rowspan="2">
+			<div class="info-title">
+				<h2 class="mat-h2">Skills</h2>
+			</div>
+		</mat-grid-tile>
+		<mat-grid-tile colspan="2" rowspan="6">
+			<tempus-card>
+				<tempus-text-area id="skill-summary" placeholder="Summary"></tempus-text-area>
+				<form>
+					<mat-grid-list cols="2" rowHeight="40px">
+						<mat-grid-tile colspan="1" rowspan="1">
+							<input
+								class="mat-body"
+								id="skillChipInput"
+								placeholder="Add a skill..."
+								[matChipInputFor]="chipList"
+								[matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+								[matChipInputAddOnBlur]="addOnBlur"
+								(matChipInputTokenEnd)="addSkill($event)"
+							/>
+						</mat-grid-tile>
+						<mat-grid-tile colspan="2" rowspan="2">
+							<mat-chip-list #chipList aria-label="Skill tags">
+								<tempus-chip
+									*ngFor="let skill of skills"
+									[removable]="true"
+									id="skill-dark"
+									typography="mat-body"
+									content="{{ skill }}"
+									(onRemove)="removeSkill(skill)"
+								>
+								</tempus-chip>
+							</mat-chip-list>
+						</mat-grid-tile>
+					</mat-grid-list>
+				</form>
+			</tempus-card>
+		</mat-grid-tile>
+	</mat-grid-list>
+</ng-container>
