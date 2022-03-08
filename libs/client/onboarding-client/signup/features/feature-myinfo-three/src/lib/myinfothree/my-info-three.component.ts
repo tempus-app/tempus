@@ -1,5 +1,6 @@
 import { Component, OnDestroy } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { Country, State } from 'country-state-city';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { InputType } from '@tempus/client/shared/ui-components/input';
@@ -16,11 +17,13 @@ export class MyInfoThreeComponent implements OnDestroy {
 
 	cols = '1';
 
-	fieldSpacing = '1';
-
 	buttonSpacing = '2';
 
 	certRows = '6';
+
+	educationCols = '3';
+
+	locationCols = '2';
 
 	rows = '12';
 
@@ -36,6 +39,14 @@ export class MyInfoThreeComponent implements OnDestroy {
 
 	numberCertificationSections: number[] = [0];
 
+	countries: string[] = Country.getAllCountries().map(country => {
+		return country.name;
+	});
+
+	states: string[] = State.getAllStates().map(state => {
+		return state.name;
+	});
+
 	constructor(breakpointObserver: BreakpointObserver) {
 		breakpointObserver
 			.observe([Breakpoints.XSmall, Breakpoints.Small, Breakpoints.Medium, Breakpoints.Large, Breakpoints.XLarge])
@@ -44,17 +55,19 @@ export class MyInfoThreeComponent implements OnDestroy {
 				for (const query of Object.keys(result.breakpoints)) {
 					if (result.breakpoints[query]) {
 						if (query === Breakpoints.XSmall) {
-							this.rows = '12';
+							this.rows = '16';
 							this.cols = '2';
-							this.fieldSpacing = '0';
 							this.buttonSpacing = '3';
 							this.certRows = '8';
+							this.educationCols = '6';
+							this.locationCols = '6';
 						} else {
 							this.rows = '8';
 							this.cols = '1';
-							this.fieldSpacing = '1';
 							this.buttonSpacing = '2';
 							this.certRows = '6';
+							this.educationCols = '3';
+							this.locationCols = '2';
 						}
 					}
 				}
@@ -113,5 +126,13 @@ export class MyInfoThreeComponent implements OnDestroy {
 		if (index >= 0) {
 			this.skills.splice(index, 1);
 		}
+	}
+
+	updateStateOptions(inputtedCountry: string) {
+		const countryCode = Country.getAllCountries().find(country => country.name === inputtedCountry);
+		if (countryCode != null)
+			this.states = State.getStatesOfCountry(countryCode.isoCode).map(state => {
+				return state.name;
+			});
 	}
 }

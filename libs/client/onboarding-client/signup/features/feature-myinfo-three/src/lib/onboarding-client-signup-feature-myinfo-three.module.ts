@@ -31,6 +31,5 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 		]),
 	],
 	declarations: [MyInfoThreeComponent],
-	exports: [MyInfoThreeComponent],
 })
 export class OnboardingClientSignupFeatureMyInfoThreeModule {}

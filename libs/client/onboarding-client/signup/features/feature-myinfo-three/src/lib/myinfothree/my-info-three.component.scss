@@ -4,8 +4,9 @@
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
-	width: 80%;
+	width: 78%;
 	border-bottom: 2px solid abs.$primary-300;
+	padding-right: 40px;
 }
 
 .header-button {
@@ -65,5 +66,8 @@ tempus-text-area {
 @media only screen and (max-width: 900px) {
 	tempus-card {
 		width: 90%;
+	}
+	.info-title {
+		width: 85%;
 	}
 }
