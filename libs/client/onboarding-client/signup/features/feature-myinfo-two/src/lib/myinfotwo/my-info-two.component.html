@@ -2,7 +2,7 @@
 	<mat-grid-list cols="2" rowHeight="50px" [gutterSize]="'0.8em'">
 		<mat-grid-tile colspan="2" rowspan="3">
 			<div class="info-title">
-				<h2 class="mat-h2 section-header">Work Experience</h2>
+				<h2 class="mat-h2">Work Experience</h2>
 				<button
 					mat-mini-fab
 					(click)="addWorkSections()"
@@ -35,24 +35,43 @@
 								</button>
 							</div>
 							<div>
-								<h3 class="mat-h3" color="accent">Work Experience {{ index + 1 }}</h3>
+								<h3 class="mat-h3">Work Experience {{ index + 1 }}</h3>
 							</div>
 						</div>
-						<mat-grid-list cols="2" rowHeight="100px">
-							<mat-grid-tile colspan="{{ cols }}">
+						<mat-grid-list cols="6" rowHeight="100px">
+							<mat-grid-tile colspan="{{ workCols }}">
 								<tempus-text-input id="title-{{ numExperience }}" placeholder="Title" cssClass="secondary">
 								</tempus-text-input>
 							</mat-grid-tile>
-							<mat-grid-tile colspan="{{ cols }}">
+							<mat-grid-tile colspan="{{ workCols }}">
 								<tempus-text-input id="company-{{ numExperience }}" placeholder="Company" cssClass="secondary">
 								</tempus-text-input>
 							</mat-grid-tile>
-							<mat-grid-tile colspan="{{ cols }}">
-								<tempus-text-input id="location-{{ numExperience }}" placeholder="Location" cssClass="secondary">
-								</tempus-text-input>
+							<mat-grid-tile colspan="{{ locationCols }}">
+								<tempus-search-box
+									id="country-{{ numExperience }}"
+									[options]="countries"
+									placeholder="Country"
+									cssClass="secondary"
+									(optionSelect)="updateStateOptions($event)"
+								></tempus-search-box>
 							</mat-grid-tile>
-							<mat-grid-tile *ngIf="hideElement" colspan="1"></mat-grid-tile>
-							<mat-grid-tile colspan="{{ cols }}">
+							<mat-grid-tile colspan="{{ locationCols }}">
+								<tempus-dropdown
+									id="state-{{ numExperience }}"
+									[options]="states"
+									label="State"
+									cssClass="secondary"
+								></tempus-dropdown>
+							</mat-grid-tile>
+							<mat-grid-tile colspan="{{ locationCols }}">
+								<tempus-text-input
+									id="city-{{ numExperience }}"
+									placeholder="City"
+									cssClass="secondary"
+								></tempus-text-input>
+							</mat-grid-tile>
+							<mat-grid-tile colspan="3">
 								<tempus-text-input
 									id="start-date-{{ numExperience }}"
 									[inputType]="InputType.DATE"
@@ -60,7 +79,7 @@
 									cssClass="secondary"
 								></tempus-text-input>
 							</mat-grid-tile>
-							<mat-grid-tile colspan="{{ cols }}">
+							<mat-grid-tile colspan="3">
 								<tempus-text-input
 									id="end-date-{{ numExperience }}"
 									[inputType]="InputType.DATE"
@@ -68,7 +87,7 @@
 									cssClass="secondary"
 								></tempus-text-input>
 							</mat-grid-tile>
-							<mat-grid-tile colspan="2" rowspan="2">
+							<mat-grid-tile colspan="6" rowspan="2">
 								<tempus-text-area id="description-{{ numExperience }}" placeholder="Description" cssClass="secondary">
 								</tempus-text-area>
 							</mat-grid-tile>

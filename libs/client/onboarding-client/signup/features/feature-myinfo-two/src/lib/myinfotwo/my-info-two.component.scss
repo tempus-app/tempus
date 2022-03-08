@@ -2,7 +2,7 @@
 @use 'components/helper' as cmp;
 
 .info-title {
-	width: 80%;
+	@include cmp.info-title(78%, 50px);
 }
 
 .section-header {
@@ -22,15 +22,27 @@
 	float: right;
 }
 
+h3 {
+	text-align: left;
+	color: abs.$primary-800;
+}
+
 tempus-card {
 	width: 80%;
 	margin: 2em auto;
 	text-align: center;
 }
+
 tempus-text-input {
 	text-align: center;
 	width: 90%;
-	padding: 4.5em 0em 2em 0em;
+	padding: 3em 0em 2em 0em;
+}
+
+tempus-search-box {
+	text-align: center;
+	width: 90%;
+	padding: 3em 0em 2em 0em;
 }
 
 tempus-dropdown {
@@ -40,13 +52,14 @@ tempus-dropdown {
 }
 
 tempus-text-area {
-	text-align: center;
-	width: 90%;
-	padding: 3em 0em 2em 0em;
+	width: 95%;
 }
 
 @media only screen and (max-width: 900px) {
 	tempus-card {
 		width: 90%;
+	}
+	.info-title {
+		width: 85%;
 	}
 }

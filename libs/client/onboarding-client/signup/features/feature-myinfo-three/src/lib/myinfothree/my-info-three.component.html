@@ -1,5 +1,5 @@
 <ng-container>
-	<mat-grid-list cols="2" rowHeight="50px" [gutterSize]="'0.25em'">
+	<mat-grid-list cols="2" rowHeight="55px" [gutterSize]="'0.25em'">
 		<mat-grid-tile colspan="2" rowspan="{{ buttonSpacing }}">
 			<div class="info-title">
 				<h2 class="mat-h2">Education and Training</h2>
@@ -62,6 +62,7 @@
 						</mat-grid-tile>
 						<mat-grid-tile colspan="{{ locationCols }}">
 							<tempus-search-box
+								id="country-{{ numEducation }}"
 								[options]="countries"
 								placeholder="Country"
 								cssClass="secondary"
@@ -69,10 +70,19 @@
 							></tempus-search-box>
 						</mat-grid-tile>
 						<mat-grid-tile colspan="{{ locationCols }}">
-							<tempus-dropdown [options]="states" label="State" cssClass="secondary"></tempus-dropdown>
+							<tempus-dropdown
+								id="state-{{ numEducation }}"
+								[options]="states"
+								label="State"
+								cssClass="secondary"
+							></tempus-dropdown>
 						</mat-grid-tile>
 						<mat-grid-tile colspan="{{ locationCols }}">
-							<tempus-text-input placeholder="City" cssClass="secondary"></tempus-text-input>
+							<tempus-text-input
+								id="city-{{ numEducation }}"
+								placeholder="City"
+								cssClass="secondary"
+							></tempus-text-input>
 						</mat-grid-tile>
 						<mat-grid-tile colspan="{{ educationCols }}">
 							<tempus-text-input
