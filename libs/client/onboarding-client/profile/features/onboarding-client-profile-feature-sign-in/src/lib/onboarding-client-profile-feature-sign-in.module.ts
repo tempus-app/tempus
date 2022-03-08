@@ -27,6 +27,5 @@ import { SignInComponent } from './signin/sign-in.component';
 		]),
 	],
 	declarations: [SignInComponent],
-	exports: [SignInComponent],
 })
 export class OnboardingClientSignupFeatureSignInModule {}

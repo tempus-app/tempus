@@ -14,7 +14,7 @@ import {
 	ClientEntity,
 	ProjectEntity,
 	TaskEntity,
-} from '@tempus/shared-domain';
+} from '@tempus/api/shared/entity';
 
 const config: PostgresConnectionOptions = {
 	type: 'postgres',

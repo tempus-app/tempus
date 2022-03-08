@@ -1,12 +1,9 @@
-import { CreateExperienceDto } from '../experience/createExperience.dto';
-import { CreateSkillDto } from '../skill/createSkill.dto';
-import { CreateEducationDto } from '../education/createEduation.dto';
-import { ViewType } from '../../../enums';
 import { ApiProperty } from '@nestjs/swagger';
-import { ViewEntity } from '../../../entities/profile-entities/view.entity';
-import { CreateSkillTypeDto } from '../skill/createSkillType.dto';
-import { CertificationEntity, EducationEntity, ExperienceEntity, SkillEntity } from '../../..';
-import { CreateCertificationDto } from '..';
+import { ViewType } from '../../../enums';
+import { CreateCertificationDto } from '../certification';
+import { CreateEducationDto } from '../education';
+import { CreateExperienceDto } from '../experience';
+import { CreateSkillDto } from '../skill';
 
 export class CreateViewDto {
 	@ApiProperty()
@@ -25,25 +22,25 @@ export class CreateViewDto {
 	type: string;
 
 	@ApiProperty()
-	skills: SkillEntity[];
+	skills: CreateSkillDto[];
 
 	@ApiProperty()
-	experiences: ExperienceEntity[];
+	experiences: CreateExperienceDto[];
 
 	@ApiProperty()
-	educations: EducationEntity[];
+	educations: CreateEducationDto[];
 
 	@ApiProperty()
-	certifications: CertificationEntity[];
+	certifications: CreateCertificationDto[];
 
 	@ApiProperty({ enum: ['PRIMARY', 'SECONDARY'] })
 	viewType: ViewType;
 
 	constructor(
-		skills: SkillEntity[],
-		experiences: ExperienceEntity[],
-		educations: EducationEntity[],
-		certifications: CertificationEntity[],
+		skills: CreateSkillDto[],
+		experiences: CreateExperienceDto[],
+		educations: CreateEducationDto[],
+		certifications: CreateCertificationDto[],
 		viewType: ViewType,
 		type: string,
 		skillsSummary: string,
@@ -61,24 +58,5 @@ export class CreateViewDto {
 		this.experiencesSummary = experiencesSummary;
 		this.certifications = certifications;
 		this.type = type;
-	}
-
-	public static toEntity(dto: CreateViewDto): ViewEntity {
-		if (dto == null) return new ViewEntity();
-		return new ViewEntity(
-			null,
-			dto.profileSummary,
-			dto.skillsSummary,
-			dto.educationsSummary,
-			dto.experiencesSummary,
-			dto.type,
-			[],
-			dto.skills,
-			dto.experiences,
-			dto.educations,
-			dto.certifications,
-			null,
-			dto.viewType,
-		);
 	}
 }

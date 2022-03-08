@@ -15,6 +15,7 @@
 		"skipDefaultLibCheck": true,
 		"baseUrl": ".",
 		"paths": {
+			"@tempus/api/shared/entity": ["libs/api/shared/entity/src/index.ts"],
 			"@tempus/api/shared/feature-auth": ["libs/api/shared/feature-auth/src/index.ts"],
 			"@tempus/api/shared/feature-core": ["libs/api/shared/feature-core/src/index.ts"],
 			"@tempus/api/shared/feature-email": ["libs/api/shared/feature-email/src/index.ts"],
@@ -51,7 +52,8 @@
 				"libs/client/onboarding-client/signup/features/feature-upload-resume/src/index.ts"
 			],
 			"@tempus/onboarding-client/signup/shell": ["libs/client/onboarding-client/signup/shell/src/index.ts"],
-			"@tempus/shared-domain": ["libs/shared/domain/src/index.ts"]
+			"@tempus/shared-domain": ["libs/shared/domain/src/index.ts"],
+			"@tempus/shared/util": ["libs/shared/util/src/index.ts"]
 		}
 	},
 	"exclude": ["node_modules", "tmp"]

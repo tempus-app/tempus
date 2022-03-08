@@ -1,6 +1,7 @@
 {
 	"version": 2,
 	"projects": {
+		"api-shared-entity": "libs/api/shared/entity",
 		"api-shared-feature-auth": "libs/api/shared/feature-auth",
 		"api-shared-feature-core": "libs/api/shared/feature-core",
 		"api-shared-feature-email": "libs/api/shared/feature-email",
@@ -26,6 +27,7 @@
 		"onboarding-client-signup-feature-upload-resume": "libs/client/onboarding-client/signup/features/feature-upload-resume",
 		"onboarding-client-signup-shell": "libs/client/onboarding-client/signup/shell",
 		"shared-domain": "libs/shared/domain",
+		"shared-util": "libs/shared/util",
 		"tempus-e2e": "apps/tempus-e2e"
 	}
 }

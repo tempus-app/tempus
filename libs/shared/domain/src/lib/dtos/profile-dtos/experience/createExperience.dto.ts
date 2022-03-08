@@ -1,5 +1,4 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { ExperienceEntity } from '../../..';
 import { CreateLocationDto } from '../../common-dtos';
 
 export class CreateExperienceDto {
@@ -40,19 +39,5 @@ export class CreateExperienceDto {
 		this.startDate = startDate;
 		this.endDate = endDate;
 		this.location = location;
-	}
-
-	public static toEntity(dto: CreateExperienceDto): ExperienceEntity {
-		if (dto == null) return new ExperienceEntity();
-		return new ExperienceEntity(
-			null,
-			dto.title,
-			dto.company,
-			dto.summary,
-			dto.description,
-			dto.startDate,
-			dto.endDate,
-			CreateLocationDto.toEntity(dto.location),
-		);
 	}
 }

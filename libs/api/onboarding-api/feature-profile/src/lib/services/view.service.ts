@@ -1,7 +1,8 @@
 import { ForbiddenException, forwardRef, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { ViewEntity } from '@tempus/api/shared/entity';
 import { ResourceService } from '@tempus/onboarding-api/feature-account';
-import { CreateViewDto, View, ViewEntity, ViewType } from '@tempus/shared-domain';
+import { CreateViewDto, View, ViewType } from '@tempus/shared-domain';
 import { Repository } from 'typeorm';
 
 @Injectable()
@@ -17,7 +18,7 @@ export class ViewsService {
 		// error check
 		const resourceEntity = await this.resourceService.getResourceInfo(resourceId);
 
-		const viewEntity = CreateViewDto.toEntity(createViewDto);
+		const viewEntity = ViewEntity.fromDto(createViewDto);
 		viewEntity.resource = resourceEntity;
 
 		const newView = await this.viewsRepository.save(viewEntity);

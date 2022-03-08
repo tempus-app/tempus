@@ -1,43 +1,9 @@
 import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import {
-	LinkEntity,
-	ResourceEntity,
-	UserEntity,
-	LocationEntity,
-	CertificationEntity,
-	EducationEntity,
-	ExperienceEntity,
-	RevisionEntity,
-	SkillEntity,
-	SkillTypeEntity,
-	ViewEntity,
-	ClientEntity,
-	ProjectEntity,
-	TaskEntity,
-} from './entities';
 
 @Module({
-	imports: [
-		TypeOrmModule.forFeature([
-			LinkEntity,
-			ResourceEntity,
-			UserEntity,
-			LocationEntity,
-			CertificationEntity,
-			EducationEntity,
-			ExperienceEntity,
-			RevisionEntity,
-			SkillEntity,
-			SkillTypeEntity,
-			ViewEntity,
-			ClientEntity,
-			ProjectEntity,
-			TaskEntity,
-		]),
-	],
+	imports: [],
 	controllers: [],
 	providers: [],
-	exports: [TypeOrmModule],
+	exports: [],
 })
 export class DataLayerModule {}
