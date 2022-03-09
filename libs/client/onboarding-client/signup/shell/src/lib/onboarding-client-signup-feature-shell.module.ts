@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
-import { FlexLayoutModule } from '@angular/flex-layout';
 import { SignupShellComponent } from './shell/onboarding-client-signup-feature-shell.component';
 
 const routes: Routes = [
@@ -58,6 +57,6 @@ const routes: Routes = [
 
 @NgModule({
 	declarations: [SignupShellComponent],
-	imports: [CommonModule, FlexLayoutModule, RouterModule.forChild(routes)],
+	imports: [CommonModule, RouterModule.forChild(routes)],
 })
 export class OnboardingClientSignupFeatureShellModule {}

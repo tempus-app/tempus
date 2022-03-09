@@ -8,6 +8,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { CredentialsComponent } from './credentials/credentials.component';
 import { SignUpComponent } from './sign-up/sign-up.component';
+import { LandingCtaComponent } from './landing-cta/landing-cta.component';
 
 @NgModule({
 	imports: [
@@ -26,6 +27,6 @@ import { SignUpComponent } from './sign-up/sign-up.component';
 			},
 		]),
 	],
-	declarations: [CredentialsComponent, SignUpComponent],
+	declarations: [CredentialsComponent, SignUpComponent, LandingCtaComponent],
 })
 export class OnboardingClientSignupFeatureCreateCredentialsModule {}
