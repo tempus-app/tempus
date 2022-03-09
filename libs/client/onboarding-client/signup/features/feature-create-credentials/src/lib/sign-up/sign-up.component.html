@@ -1,0 +1,76 @@
+<div fxflex fxLayout="column" fxLayoutAlign="space-around center">
+	<tempus-card class="card">
+		<div class="header">
+			<div class="info-title">
+				<h2 class="mat-h2">Sign Up</h2>
+			</div>
+		</div>
+		<div class="input-text">
+			<tempus-text-input
+				id="email"
+				placeholder="email@email.com"
+				cssClass="secondary"
+				[formControlName]="$any(formGroup).get('email')"
+			>
+			</tempus-text-input>
+		</div>
+
+		<div class="input-text">
+			<tempus-text-input
+				id="email"
+				placeholder="Password"
+				cssClass="secondary"
+				[inputType]="InputType.PASSWORD"
+				[formControlName]="$any(formGroup).get('password')"
+			>
+			</tempus-text-input>
+			<mat-error
+				class="mat-body-2"
+				*ngIf="
+					$any(formGroup).get('password').invalid &&
+					($any(formGroup).get('password').touched || $any(formGroup).get('password').dirty)
+				"
+			>
+				<div *ngIf="$any(formGroup).get('password').hasError('required')">Password is required.</div>
+				<div *ngIf="$any(formGroup).get('password').hasError('pattern')">
+					Password must contain at least 8 characters, one uppercase, one lowercase, one number, and one special
+					character.
+				</div>
+			</mat-error>
+		</div>
+		<div class="input-text">
+			<tempus-text-input
+				id="email"
+				placeholder="Confirm password"
+				cssClass="secondary"
+				[inputType]="InputType.PASSWORD"
+				[formControlName]="$any(formGroup).get('confirmPassword')"
+			>
+			</tempus-text-input>
+
+			<mat-error
+				class="mat-body-2"
+				*ngIf="
+					formGroup.invalid && (formGroup.touched || formGroup.dirty) && formGroup.hasError('doesNotMatch');
+					else confirmError
+				"
+			>
+				Passwords do not match.
+			</mat-error>
+			<ng-template #confirmError>
+				<mat-error
+					class="mat-body-2"
+					*ngIf="
+						$any(formGroup).get('confirmPassword').invalid &&
+						($any(formGroup).get('confirmPassword').touched || $any(formGroup).get('confirmPassword').dirty)
+					"
+				>
+					Please retype your password.
+				</mat-error>
+			</ng-template>
+		</div>
+		<div class="sign-up-button">
+			<button mat-raised-button color="accent" (click)="signUp()">SIGN UP</button>
+		</div>
+	</tempus-card>
+</div>

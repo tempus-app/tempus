@@ -1,0 +1,22 @@
+@use 'components/helper' as cmp;
+.info-title {
+	text-align: center;
+	border-bottom: 2px solid #93c2d3;
+}
+
+.header {
+	padding-bottom: 7%;
+}
+
+.card {
+	width: 80%;
+}
+
+.input-text {
+	margin: 5%;
+}
+
+.sign-up-button {
+	margin: 8%;
+	text-align: center;
+}
