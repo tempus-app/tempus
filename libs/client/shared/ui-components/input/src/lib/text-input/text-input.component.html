@@ -1,5 +1,12 @@
 <ng-container>
 	<mat-form-field class="{{ cssClass }}" appearance="fill">
-		<input type="{{ inputType }}" id="{{ id }}" matInput placeholder="{{ placeholder }}" />
+		<input
+			type="{{ inputType }}"
+			id="{{ id }}"
+			matInput
+			placeholder="{{ placeholder }}"
+			[formControl]="formControlName"
+			[value]="formControlName.value"
+		/>
 	</mat-form-field>
 </ng-container>

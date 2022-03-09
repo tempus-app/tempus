@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { InputType } from './text-input-enum';
 
 @Component({
@@ -14,4 +15,6 @@ export class TextInputComponent {
 	@Input() id = '';
 
 	@Input() inputType: InputType = InputType.TEXT;
+
+	@Input() formControlName: FormControl = new FormControl();
 }

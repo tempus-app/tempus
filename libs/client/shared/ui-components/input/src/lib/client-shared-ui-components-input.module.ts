@@ -18,6 +18,7 @@ import { DropdownComponent } from './dropdown/dropdown.component';
 @NgModule({
 	imports: [
 		CommonModule,
+		FormsModule,
 		MatInputModule,
 		MatIconModule,
 		MatSelectModule,
