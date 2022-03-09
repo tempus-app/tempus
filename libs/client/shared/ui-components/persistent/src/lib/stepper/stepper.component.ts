@@ -1,5 +1,8 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { StepperSelectionEvent, STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
+import { StepperOrientation } from '@angular/material/stepper';
+import { BreakpointObserver } from '@angular/cdk/layout';
+import { map, Observable } from 'rxjs';
 
 @Component({
 	selector: 'tempus-stepper',
@@ -21,7 +24,15 @@ export class StepperComponent {
 
 	@Output() stepClicked = new EventEmitter<number>();
 
+	stepperOrientation: Observable<StepperOrientation> | undefined;
+
 	stepClick(value: StepperSelectionEvent) {
 		this.stepClicked.emit(value.selectedIndex);
+	}
+
+	constructor(breakpointObserver: BreakpointObserver) {
+		this.stepperOrientation = breakpointObserver
+			.observe('(min-width: 800px)')
+			.pipe(map(({ matches }) => (matches ? 'horizontal' : 'vertical')));
 	}
 }
