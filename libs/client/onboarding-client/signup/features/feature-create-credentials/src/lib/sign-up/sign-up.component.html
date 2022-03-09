@@ -10,18 +10,21 @@
 				id="email"
 				placeholder="email@email.com"
 				cssClass="disabled"
-				[formControlName]="$any(formGroup).get('email')"
+				[control]="$any(formGroup).get('email')"
 			>
 			</tempus-text-input>
 		</div>
 
 		<div class="input-text">
+			<mat-label>
+				<h3 class="mat-h3">Set a password</h3>
+			</mat-label>
 			<tempus-text-input
-				id="email"
+				id="password"
 				placeholder="Password"
 				cssClass="secondary"
 				[inputType]="InputType.PASSWORD"
-				[formControlName]="$any(formGroup).get('password')"
+				[control]="$any(formGroup).get('password')"
 			>
 			</tempus-text-input>
 			<mat-error
@@ -32,19 +35,28 @@
 				"
 			>
 				<div *ngIf="$any(formGroup).get('password').hasError('required')">Password is required.</div>
-				<div *ngIf="$any(formGroup).get('password').hasError('pattern')">
-					Password must contain at least 8 characters, one uppercase, one lowercase, one number, and one special
-					character.
-				</div>
+				<div *ngIf="$any(formGroup).get('password').hasError('pattern')">Password does not match defined criteria.</div>
 			</mat-error>
+			<mat-label>
+				<div class="password-criteria">
+					<p class="mat-body-1 criteria-label">Password must be:</p>
+					<ul class="mat-body-1 criteria-list">
+						<li class="list-item">min 8 characters</li>
+						<li class="list-item">1 uppercase letter</li>
+						<li class="list-item">1 lowercase letter</li>
+						<li class="list-item">1 number</li>
+						<li class="list-item">1 special character.</li>
+					</ul>
+				</div>
+			</mat-label>
 		</div>
 		<div class="input-text">
 			<tempus-text-input
-				id="email"
+				id="confirmPassword"
 				placeholder="Confirm password"
 				cssClass="secondary"
 				[inputType]="InputType.PASSWORD"
-				[formControlName]="$any(formGroup).get('confirmPassword')"
+				[control]="$any(formGroup).get('confirmPassword')"
 			>
 			</tempus-text-input>
 
@@ -68,6 +80,20 @@
 					Please retype your password.
 				</mat-error>
 			</ng-template>
+		</div>
+		<div class="input-text">
+			<mat-checkbox class="checkbox" [formControl]="$any(formGroup).get('consent')">
+				<p class="mat-body-2 checkbox-label">I agree to CAL & Associates Privacy Policy and Terms of Service</p>
+			</mat-checkbox>
+			<mat-error
+				class="mat-body-2"
+				*ngIf="
+					$any(formGroup).get('consent').invalid &&
+					($any(formGroup).get('consent').touched || $any(formGroup).get('consent').dirty)
+				"
+			>
+				You must agree to the terms and conditions to continue.
+			</mat-error>
 		</div>
 		<div class="sign-up-button-container">
 			<button class="sign-up-button" mat-raised-button color="accent" (click)="signUp()">SIGN UP</button>

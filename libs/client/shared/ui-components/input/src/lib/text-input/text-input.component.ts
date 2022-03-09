@@ -16,5 +16,5 @@ export class TextInputComponent {
 
 	@Input() inputType: InputType = InputType.TEXT;
 
-	@Input() formControlName: FormControl = new FormControl();
+	@Input() control: FormControl = new FormControl();
 }

@@ -25,6 +25,7 @@ export class SignUpComponent implements OnInit {
 					// taken from: https://stackoverflow.com/questions/40529817/reactive-forms-mark-fields-as-touched
 				]),
 				confirmPassword: new FormControl(null, Validators.required),
+				consent: new FormControl(null, Validators.requiredTrue),
 			},
 			{ validators: validatePasswords },
 		);

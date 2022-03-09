@@ -5,23 +5,52 @@
 }
 
 .header {
-	padding-bottom: 7%;
+	padding-bottom: 3%;
 }
 
 .card {
-	width: 85%;
+	width: 95%;
 }
 
 .input-text {
-	margin: 5%;
+	margin: 2%;
 }
 
 .sign-up-button-container {
-	margin: 10%;
+	margin: 5%;
 	text-align: center;
 }
 
 .sign-up-button {
 	padding: 10px 30px 10px 30px;
 	border-radius: 10px;
+}
+
+.list-item {
+	padding-bottom: 5px;
+}
+
+.criteria-label {
+	margin-bottom: 5px;
+}
+
+.criteria-list {
+	margin: 3px;
+}
+
+.checkbox {
+	padding-bottom: 0.8rem;
+}
+
+.checkbox-label {
+	margin-bottom: 0px;
+}
+
+//https://github.com/angular/components/issues/8416
+::ng-deep .mat-checkbox-layout {
+	white-space: normal !important;
+}
+
+::ng-deep .mat-checkbox-inner-container {
+	margin-top: 15px !important;
 }

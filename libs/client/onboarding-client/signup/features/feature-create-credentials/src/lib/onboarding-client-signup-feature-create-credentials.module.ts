@@ -6,6 +6,8 @@ import { ClientSharedUiComponentsInputModule } from '@tempus/client/shared/ui-co
 import { ClientSharedUiComponentsPresentationalModule } from '@tempus/client/shared/ui-components/presentational';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CredentialsComponent } from './credentials/credentials.component';
 import { SignUpComponent } from './sign-up/sign-up.component';
 import { LandingCtaComponent } from './landing-cta/landing-cta.component';
@@ -18,6 +20,9 @@ import { LandingCtaComponent } from './landing-cta/landing-cta.component';
 		FlexLayoutModule,
 		MatButtonModule,
 		MatFormFieldModule,
+		MatCheckboxModule,
+		FormsModule,
+		ReactiveFormsModule,
 
 		RouterModule.forChild([
 			{
