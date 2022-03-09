@@ -40,6 +40,13 @@ const routes: Routes = [
 					),
 			},
 			{
+				path: 'myinfothree',
+				loadChildren: () =>
+					import('@tempus/onboarding-client/signup/feature-myinfo-three').then(
+						m => m.OnboardingClientSignupFeatureMyInfoThreeModule,
+					),
+			},
+			{
 				path: 'review',
 				loadChildren: () =>
 					import('@tempus/onboarding-client/signup/feature-review-info').then(

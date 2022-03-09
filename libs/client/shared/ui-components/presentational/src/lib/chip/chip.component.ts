@@ -12,6 +12,8 @@ export class ChipComponent implements OnInit {
 
 	@Input() typography = 'subheading-1';
 
+	@Input() content = 'placeholder';
+
 	@Output() onRemove: EventEmitter<any> = new EventEmitter();
 
 	removeChip() {
