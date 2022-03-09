@@ -4,6 +4,7 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { InputType } from '@tempus/client/shared/ui-components/input';
+import { Router } from '@angular/router';
 
 @Component({
 	selector: 'tempus-my-info-two',
@@ -31,7 +32,7 @@ export class MyInfoTwoComponent implements OnDestroy {
 		return state.name;
 	});
 
-	constructor(breakpointObserver: BreakpointObserver) {
+	constructor(breakpointObserver: BreakpointObserver, private router: Router) {
 		breakpointObserver
 			.observe([Breakpoints.XSmall, Breakpoints.Small, Breakpoints.Medium, Breakpoints.Large, Breakpoints.XLarge])
 			.pipe(takeUntil(this.destroyed))
@@ -77,5 +78,13 @@ export class MyInfoTwoComponent implements OnDestroy {
 			this.states = State.getStatesOfCountry(countryCode.isoCode).map(state => {
 				return state.name;
 			});
+	}
+
+	nextStep() {
+		this.router.navigateByUrl(`token/myinfothree`);
+	}
+
+	backStep() {
+		this.router.navigateByUrl(`token/myinfoone`);
 	}
 }

@@ -63,7 +63,8 @@
 									cssClass="secondary"
 									(optionSelect)="updateStateOptions($event)"
 									formControlName="country"
-								></tempus-search-box>
+								>
+								</tempus-search-box>
 							</mat-grid-tile>
 							<mat-grid-tile colspan="{{ cols }}">
 								<tempus-dropdown
@@ -74,7 +75,7 @@
 								></tempus-dropdown>
 							</mat-grid-tile>
 							<mat-grid-tile colspan="{{ cols }}">
-								<tempus-text-input placeholder="City" cssClass="secondary" formControlName="city"></tempus-text-input>
+								<tempus-text-input placeholder="City" cssClass="secondary" formControlName="city"> </tempus-text-input>
 							</mat-grid-tile>
 						</mat-grid-list>
 					</form>
@@ -82,4 +83,8 @@
 			</tempus-card>
 		</mat-grid-tile>
 	</mat-grid-list>
+	<div class="button-container">
+		<button color="primary" mat-raised-button matStepperPrevious type="button" (click)="backStep()">Back</button>
+		<button color="primary" mat-raised-button matStepperNext="button" (click)="nextStep()">Next</button>
+	</div>
 </ng-container>

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, Event, NavigationEnd } from '@angular/router';
 
 @Component({
 	selector: 'tempus-signup-shell',
@@ -11,22 +11,24 @@ export class SignupShellComponent {
 
 	links = ['uploadresume', 'myinfoone', 'myinfotwo', 'myinfothree', 'review'];
 
+	isDisabled = false;
+
 	stepperIndex = 0;
-
-	nextStep() {
-		this.stepperIndex += 1;
-		this.router.navigateByUrl(`token/${this.links[this.stepperIndex]}`);
-	}
-
-	backStep() {
-		this.stepperIndex -= 1;
-		this.router.navigateByUrl(`token/${this.links[this.stepperIndex]}`);
-	}
 
 	navigateToStep(stepIndex: number) {
 		this.stepperIndex = stepIndex;
 		this.router.navigateByUrl(`token/${this.links[this.stepperIndex]}`);
 	}
 
-	constructor(private router: Router) {}
+	constructor(private router: Router) {
+		this.router.events.subscribe((event: Event) => {
+			if (event instanceof NavigationEnd) {
+				for (let i = 0; i < this.links.length; i += 1) {
+					if (event.url.includes(this.links[i])) {
+						this.stepperIndex = i;
+					}
+				}
+			}
+		});
+	}
 }

@@ -6,6 +6,7 @@ import { takeUntil } from 'rxjs/operators';
 import { InputType } from '@tempus/client/shared/ui-components/input';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { MatChipInputEvent } from '@angular/material/chips';
+import { Router } from '@angular/router';
 
 @Component({
 	selector: 'tempus-my-info-three',
@@ -47,7 +48,7 @@ export class MyInfoThreeComponent implements OnDestroy {
 		return state.name;
 	});
 
-	constructor(breakpointObserver: BreakpointObserver) {
+	constructor(breakpointObserver: BreakpointObserver, private router: Router) {
 		breakpointObserver
 			.observe([Breakpoints.XSmall, Breakpoints.Small, Breakpoints.Medium, Breakpoints.Large, Breakpoints.XLarge])
 			.pipe(takeUntil(this.destroyed))
@@ -134,5 +135,13 @@ export class MyInfoThreeComponent implements OnDestroy {
 			this.states = State.getStatesOfCountry(countryCode.isoCode).map(state => {
 				return state.name;
 			});
+	}
+
+	nextStep() {
+		this.router.navigateByUrl(`token/review`);
+	}
+
+	backStep() {
+		this.router.navigateByUrl(`token/myinfotwo`);
 	}
 }
