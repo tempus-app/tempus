@@ -34,6 +34,7 @@ export class MyInfoTwoComponent implements OnDestroy, OnInit {
 	});
 
 	myInfoForm = this.fb.group({
+		workExperienceSummary: [''],
 		workExperience: this.fb.array([]),
 	});
 

@@ -14,6 +14,18 @@
 				</button>
 			</div>
 		</mat-grid-tile>
+		<mat-grid-tile colspan="2" rowspan="4">
+			<tempus-card>
+				<form>
+					<h3 class="mat-h3" color="primary">Work Experience Summary</h3>
+					<tempus-text-area
+						id="work-experience-summary"
+						placeholder="Summary"
+						[control]="$any(myInfoForm).get('workExperienceSummary')"
+					></tempus-text-area>
+				</form>
+			</tempus-card>
+		</mat-grid-tile>
 		<mat-grid-tile
 			*ngFor="let numExperience of totalWorkExperience.controls; let index = index"
 			colspan="2"
