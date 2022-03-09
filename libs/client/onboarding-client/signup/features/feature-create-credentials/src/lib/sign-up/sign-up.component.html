@@ -9,7 +9,7 @@
 			<tempus-text-input
 				id="email"
 				placeholder="email@email.com"
-				cssClass="secondary"
+				cssClass="disabled"
 				[formControlName]="$any(formGroup).get('email')"
 			>
 			</tempus-text-input>
@@ -51,7 +51,7 @@
 			<mat-error
 				class="mat-body-2"
 				*ngIf="
-					formGroup.invalid && (formGroup.touched || formGroup.dirty) && formGroup.hasError('doesNotMatch');
+					formGroup?.invalid && (formGroup?.touched || formGroup?.dirty) && formGroup?.hasError('doesNotMatch');
 					else confirmError
 				"
 			>
@@ -69,8 +69,8 @@
 				</mat-error>
 			</ng-template>
 		</div>
-		<div class="sign-up-button">
-			<button mat-raised-button color="accent" (click)="signUp()">SIGN UP</button>
+		<div class="sign-up-button-container">
+			<button class="sign-up-button" mat-raised-button color="accent" (click)="signUp()">SIGN UP</button>
 		</div>
 	</tempus-card>
 </div>

@@ -16,7 +16,12 @@
 	margin: 5%;
 }
 
-.sign-up-button {
-	margin: 8%;
+.sign-up-button-container {
+	margin: 10%;
 	text-align: center;
+}
+
+.sign-up-button {
+	padding: 10px 30px 10px 30px;
+	border-radius: 10px;
 }
