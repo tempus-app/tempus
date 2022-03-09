@@ -1,4 +1,4 @@
-import { Component, Input, Injector, forwardRef } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { InputType } from './text-input-enum';
 
