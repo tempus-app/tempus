@@ -1,5 +1,5 @@
-import { Component, Input } from '@angular/core';
-import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { StepperSelectionEvent, STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 
 @Component({
 	selector: 'tempus-stepper',
@@ -18,4 +18,10 @@ export class StepperComponent {
 	@Input() color = 'primary';
 
 	@Input() inputedIndex = 0;
+
+	@Output() stepClicked = new EventEmitter<number>();
+
+	stepClick(value: StepperSelectionEvent) {
+		this.stepClicked.emit(value.selectedIndex);
+	}
 }

@@ -1,7 +1,14 @@
 <ng-container>
 	<mat-form-field class="{{ cssClass }}" appearance="fill">
 		<mat-label>{{ placeholder }}</mat-label>
-		<input type="text" aria-label="Search" matInput [formControl]="myControl" [matAutocomplete]="auto" />
+		<input
+			type="text"
+			aria-label="Search"
+			matInput
+			[formControl]="myControl"
+			[matAutocomplete]="auto"
+			[(ngModel)]="value"
+		/>
 		<mat-autocomplete #auto="matAutocomplete">
 			<mat-option (click)="optionSelected(option)" *ngFor="let option of filteredOptions | async" [value]="option">
 				{{ option }}

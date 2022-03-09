@@ -8,19 +8,38 @@
 		<mat-grid-tile colspan="2" rowspan="{{ rows }}">
 			<tempus-card>
 				<mat-card-content>
-					<form>
+					<form [formGroup]="myInfoForm">
 						<mat-grid-list cols="2" rowHeight="100px">
 							<mat-grid-tile colspan="{{ cols }}">
-								<tempus-text-input placeholder="First Name" cssClass="secondary"></tempus-text-input>
+								<tempus-text-input
+									[inputType]="InputType.TEXT"
+									placeholder="First Name"
+									cssClass="secondary"
+									formControlName="firstName"
+								></tempus-text-input>
 							</mat-grid-tile>
 							<mat-grid-tile colspan="{{ cols }}">
-								<tempus-text-input placeholder="Last Name" cssClass="secondary"></tempus-text-input>
+								<tempus-text-input
+									[inputType]="InputType.TEXT"
+									placeholder="Last Name"
+									cssClass="secondary"
+									formControlName="lastName"
+								></tempus-text-input>
 							</mat-grid-tile>
 							<mat-grid-tile colspan="{{ cols }}">
-								<tempus-text-input placeholder="Phone Number" cssClass="secondary"></tempus-text-input>
+								<tempus-text-input
+									placeholder="Phone Number"
+									cssClass="secondary"
+									formControlName="phoneNumber"
+								></tempus-text-input>
 							</mat-grid-tile>
 							<mat-grid-tile colspan="{{ cols }}">
-								<tempus-text-input placeholder="Email" cssClass="secondary"></tempus-text-input>
+								<tempus-text-input
+									[inputType]="InputType.EMAIL"
+									placeholder="Email"
+									cssClass="secondary"
+									formControlName="email"
+								></tempus-text-input>
 							</mat-grid-tile>
 						</mat-grid-list>
 					</form>
@@ -35,7 +54,7 @@
 		<mat-grid-tile colspan="2" rowspan="{{ rows }}">
 			<tempus-card>
 				<mat-card-content>
-					<form>
+					<form [formGroup]="myInfoForm">
 						<mat-grid-list cols="2" rowHeight="100px">
 							<mat-grid-tile colspan="{{ cols }}">
 								<tempus-search-box
@@ -43,13 +62,19 @@
 									placeholder="Country"
 									cssClass="secondary"
 									(optionSelect)="updateStateOptions($event)"
+									formControlName="country"
 								></tempus-search-box>
 							</mat-grid-tile>
 							<mat-grid-tile colspan="{{ cols }}">
-								<tempus-dropdown [options]="states" label="State" cssClass="secondary"></tempus-dropdown>
+								<tempus-dropdown
+									[options]="states"
+									label="State"
+									cssClass="secondary"
+									formControlName="state"
+								></tempus-dropdown>
 							</mat-grid-tile>
 							<mat-grid-tile colspan="{{ cols }}">
-								<tempus-text-input placeholder="City" cssClass="secondary"></tempus-text-input>
+								<tempus-text-input placeholder="City" cssClass="secondary" formControlName="city"></tempus-text-input>
 							</mat-grid-tile>
 						</mat-grid-list>
 					</form>

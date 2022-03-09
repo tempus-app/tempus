@@ -1,5 +1,11 @@
 <ng-container>
-	<mat-stepper [disableRipple]="true" linear [labelPosition]="'bottom'" selectedIndex=" {{ inputedIndex }}">
+	<mat-stepper
+		[disableRipple]="true"
+		linear
+		[labelPosition]="'bottom'"
+		selectedIndex=" {{ inputedIndex }}"
+		(selectionChange)="stepClick($event)"
+	>
 		<mat-step *ngFor="let step of steps" label="{{ step }}" state="default"> </mat-step>
 
 		<!-- Icon overrides. -->

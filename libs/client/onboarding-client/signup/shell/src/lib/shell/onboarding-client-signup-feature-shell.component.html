@@ -1,4 +1,4 @@
-<tempus-stepper [steps]="steps" [inputedIndex]="stepperIndex"></tempus-stepper>
+<tempus-stepper [steps]="steps" [inputedIndex]="stepperIndex" (stepClicked)="navigateToStep($event)"></tempus-stepper>
 <router-outlet></router-outlet>
 <div
 	[ngClass]="{
@@ -12,7 +12,7 @@
 		mat-raised-button
 		matStepperPrevious
 		type="button"
-		(click)="decrementStep()"
+		(click)="backStep()"
 	>
 		Back
 	</button>
@@ -21,9 +21,9 @@
 		color="primary"
 		mat-raised-button
 		matStepperNext="button"
-		(click)="incrementStep()"
+		(click)="nextStep()"
 	>
 		Next
 	</button>
 </div>
-<tempus-footer></tempus-footer>
+<!-- <tempus-footer></tempus-footer> -->

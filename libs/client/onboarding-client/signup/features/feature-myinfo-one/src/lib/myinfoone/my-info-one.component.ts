@@ -1,8 +1,10 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, Output, EventEmitter } from '@angular/core';
 import { Country, State } from 'country-state-city';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { FormBuilder, Validators } from '@angular/forms';
+import { InputType } from '@tempus/client/shared/ui-components/input';
 
 @Component({
 	selector: 'tempus-my-info-one',
@@ -10,6 +12,18 @@ import { takeUntil } from 'rxjs/operators';
 	styleUrls: ['./my-info-one.component.scss'],
 })
 export class MyInfoOneComponent implements OnDestroy {
+	myInfoForm = this.fb.group({
+		firstName: ['', Validators.required],
+		lastName: ['', Validators.required],
+		phoneNumber: ['', Validators.required],
+		email: ['', [Validators.required, Validators.email]],
+		country: ['', Validators.required],
+		state: ['', Validators.required],
+		city: ['', Validators.required],
+	});
+
+	InputType = InputType;
+
 	countries: string[] = Country.getAllCountries().map(country => {
 		return country.name;
 	});
@@ -33,7 +47,9 @@ export class MyInfoOneComponent implements OnDestroy {
 		[Breakpoints.XLarge, 'XLarge'],
 	]);
 
-	constructor(breakpointObserver: BreakpointObserver) {
+	@Output() formIsValid = new EventEmitter<boolean>();
+
+	constructor(breakpointObserver: BreakpointObserver, private fb: FormBuilder) {
 		breakpointObserver
 			.observe([Breakpoints.XSmall, Breakpoints.Small, Breakpoints.Medium, Breakpoints.Large, Breakpoints.XLarge])
 			.pipe(takeUntil(this.destroyed))
@@ -50,6 +66,11 @@ export class MyInfoOneComponent implements OnDestroy {
 					}
 				}
 			});
+		this.myInfoForm.statusChanges.subscribe(result => {
+			if (result === 'VALID') {
+				this.formIsValid.emit(true);
+			}
+		});
 	}
 
 	ngOnDestroy() {
