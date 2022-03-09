@@ -1,12 +1,19 @@
 @use 'components/helper' as c;
 @use 'abstracts/helper' as abs;
-
 mat-form-field {
 	width: 100%;
 }
 
 input {
 	height: 50%;
+}
+
+::ng-deep .primary .mat-form-field-wrapper {
+	padding-bottom: 0.8rem;
+}
+
+::ng-deep .secondary .mat-form-field-wrapper {
+	padding-bottom: 0.8rem;
 }
 
 ::ng-deep .primary .mat-form-field-wrapper .mat-form-field-flex {
@@ -18,6 +25,13 @@ input {
 
 ::ng-deep .secondary .mat-form-field-wrapper .mat-form-field-flex {
 	@include c.tempus-form(white);
+	+ .mat-form-field-underline {
+		display: none;
+	}
+}
+
+::ng-deep .disabled .mat-form-field-wrapper .mat-form-field-flex {
+	@include c.tempus-form(abs.$primary-200);
 	+ .mat-form-field-underline {
 		display: none;
 	}
