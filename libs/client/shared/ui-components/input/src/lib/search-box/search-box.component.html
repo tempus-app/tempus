@@ -5,9 +5,9 @@
 			type="text"
 			aria-label="Search"
 			matInput
-			[formControl]="myControl"
+			[formControl]="control"
+			[value]="control.value"
 			[matAutocomplete]="auto"
-			[(ngModel)]="value"
 		/>
 		<mat-autocomplete #auto="matAutocomplete">
 			<mat-option (click)="optionSelected(option)" *ngFor="let option of filteredOptions | async" [value]="option">

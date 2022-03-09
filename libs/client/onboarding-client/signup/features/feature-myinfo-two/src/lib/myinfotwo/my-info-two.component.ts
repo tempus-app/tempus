@@ -1,17 +1,18 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Country, State } from 'country-state-city';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { InputType } from '@tempus/client/shared/ui-components/input';
 import { Router } from '@angular/router';
+import { FormArray, FormBuilder, Validators } from '@angular/forms';
 
 @Component({
 	selector: 'tempus-my-info-two',
 	templateUrl: './my-info-two.component.html',
 	styleUrls: ['./my-info-two.component.scss'],
 })
-export class MyInfoTwoComponent implements OnDestroy {
+export class MyInfoTwoComponent implements OnDestroy, OnInit {
 	destroyed = new Subject<void>();
 
 	rows = '10';
@@ -32,7 +33,15 @@ export class MyInfoTwoComponent implements OnDestroy {
 		return state.name;
 	});
 
-	constructor(breakpointObserver: BreakpointObserver, private router: Router) {
+	myInfoForm = this.fb.group({
+		workExperience: this.fb.array([]),
+	});
+
+	get totalWorkExperience() {
+		return this.myInfoForm.controls.workExperience as FormArray;
+	}
+
+	constructor(private fb: FormBuilder, breakpointObserver: BreakpointObserver, private router: Router) {
 		breakpointObserver
 			.observe([Breakpoints.XSmall, Breakpoints.Small, Breakpoints.Medium, Breakpoints.Large, Breakpoints.XLarge])
 			.pipe(takeUntil(this.destroyed))
@@ -53,6 +62,21 @@ export class MyInfoTwoComponent implements OnDestroy {
 			});
 	}
 
+	ngOnInit() {
+		const workExperience = this.fb.group({
+			title: ['', Validators.required],
+			company: ['', Validators.required],
+			country: ['', Validators.required],
+			state: ['', Validators.required],
+			city: ['', Validators.required],
+			startDate: ['', Validators.required],
+			endDate: ['', Validators.required],
+			description: ['', Validators.required],
+		});
+
+		this.totalWorkExperience.push(workExperience);
+	}
+
 	ngOnDestroy() {
 		this.destroyed.next();
 		this.destroyed.complete();
@@ -66,10 +90,23 @@ export class MyInfoTwoComponent implements OnDestroy {
 			const lastElement = this.numberWorkSections[this.numberWorkSections.length - 1];
 			this.numberWorkSections.push(lastElement + 1);
 		}
+		const workExperience = this.fb.group({
+			title: ['', Validators.required],
+			company: ['', Validators.required],
+			country: ['', Validators.required],
+			state: ['', Validators.required],
+			city: ['', Validators.required],
+			startDate: ['', Validators.required],
+			endDate: ['', Validators.required],
+			description: ['', Validators.required],
+		});
+
+		this.totalWorkExperience.push(workExperience);
 	}
 
 	removeWorkSection(index: number) {
 		this.numberWorkSections.splice(index, 1);
+		this.totalWorkExperience.removeAt(index);
 	}
 
 	updateStateOptions(inputtedCountry: string) {

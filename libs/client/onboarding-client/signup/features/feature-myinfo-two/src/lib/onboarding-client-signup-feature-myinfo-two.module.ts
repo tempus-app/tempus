@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule } from '@angular/forms';
 import { ClientSharedUiComponentsInputModule } from '@tempus/client/shared/ui-components/input';
 import { ClientSharedUiComponentsPresentationalModule } from '@tempus/client/shared/ui-components/presentational';
 import { MatIconModule } from '@angular/material/icon';
@@ -18,6 +19,7 @@ import { MyInfoTwoComponent } from './myinfotwo/my-info-two.component';
 		ClientSharedUiComponentsInputModule,
 		ClientSharedUiComponentsPresentationalModule,
 		MatGridListModule,
+		ReactiveFormsModule,
 		RouterModule.forChild([
 			{
 				path: '',

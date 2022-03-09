@@ -1,16 +1,15 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { FormControl } from '@angular/forms';
 
 @Component({
 	selector: 'tempus-text-area',
 	templateUrl: './text-area.component.html',
 	styleUrls: ['./text-area.component.scss'],
 })
-export class TextAreaComponent implements OnInit {
+export class TextAreaComponent {
 	@Input() cssClass = 'secondary';
 
 	@Input() placeholder = '';
 
-	constructor() {}
-
-	ngOnInit(): void {}
+	@Input() control: FormControl = new FormControl();
 }

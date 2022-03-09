@@ -8,29 +8,46 @@
 		<mat-grid-tile colspan="2" rowspan="{{ rows }}">
 			<tempus-card>
 				<mat-card-content>
-					<form [formGroup]="myInfoForm">
+					<form>
+						<div></div>
 						<mat-grid-list cols="2" rowHeight="100px">
 							<mat-grid-tile colspan="{{ cols }}">
 								<tempus-text-input
 									[inputType]="InputType.TEXT"
 									placeholder="First Name"
 									cssClass="secondary"
-									formControlName="firstName"
-								></tempus-text-input>
+									[control]="$any(myInfoForm).get('firstName')"
+								>
+								</tempus-text-input>
 							</mat-grid-tile>
 							<mat-grid-tile colspan="{{ cols }}">
 								<tempus-text-input
 									[inputType]="InputType.TEXT"
 									placeholder="Last Name"
 									cssClass="secondary"
-									formControlName="lastName"
-								></tempus-text-input>
+									[control]="$any(myInfoForm).get('lastName')"
+								>
+								</tempus-text-input>
 							</mat-grid-tile>
+							<!-- <mat-grid-tile colspan="{{ cols }}" *ngIf="
+							$any(myInfoForm).get('firstName').invalid && ($any(myInfoForm).get('firstName').touched || $any(myInfoForm).get('firstName').dirty)
+							">
+								<mat-error class="mat-body-2" >
+									You must enter your first name.
+								</mat-error>
+							</mat-grid-tile>
+							<mat-grid-tile colspan="{{ cols }}" *ngIf="
+							$any(myInfoForm).get('lastName').invalid && ($any(myInfoForm).get('lastName').touched || $any(myInfoForm).get('lastName').dirty)
+							">
+								<mat-error class="mat-body-2" >
+								You must enter your first name.
+								</mat-error>
+							</mat-grid-tile> -->
 							<mat-grid-tile colspan="{{ cols }}">
 								<tempus-text-input
 									placeholder="Phone Number"
 									cssClass="secondary"
-									formControlName="phoneNumber"
+									[control]="$any(myInfoForm).get('phoneNumber')"
 								></tempus-text-input>
 							</mat-grid-tile>
 							<mat-grid-tile colspan="{{ cols }}">
@@ -38,7 +55,7 @@
 									[inputType]="InputType.EMAIL"
 									placeholder="Email"
 									cssClass="secondary"
-									formControlName="email"
+									[control]="$any(myInfoForm).get('email')"
 								></tempus-text-input>
 							</mat-grid-tile>
 						</mat-grid-list>
@@ -62,7 +79,7 @@
 									placeholder="Country"
 									cssClass="secondary"
 									(optionSelect)="updateStateOptions($event)"
-									formControlName="country"
+									[control]="$any(myInfoForm).get('country')"
 								>
 								</tempus-search-box>
 							</mat-grid-tile>
@@ -71,11 +88,12 @@
 									[options]="states"
 									label="State"
 									cssClass="secondary"
-									formControlName="state"
+									[control]="$any(myInfoForm).get('state')"
 								></tempus-dropdown>
 							</mat-grid-tile>
 							<mat-grid-tile colspan="{{ cols }}">
-								<tempus-text-input placeholder="City" cssClass="secondary" formControlName="city"> </tempus-text-input>
+								<tempus-text-input placeholder="City" cssClass="secondary" [control]="$any(myInfoForm).get('city')">
+								</tempus-text-input>
 							</mat-grid-tile>
 						</mat-grid-list>
 					</form>
@@ -85,6 +103,14 @@
 	</mat-grid-list>
 	<div class="button-container">
 		<button color="primary" mat-raised-button matStepperPrevious type="button" (click)="backStep()">Back</button>
-		<button color="primary" mat-raised-button matStepperNext="button" (click)="nextStep()">Next</button>
+		<button
+			color="primary"
+			mat-raised-button
+			matStepperNext="button"
+			[disabled]="!myInfoForm.valid"
+			(click)="nextStep()"
+		>
+			Next
+		</button>
 	</div>
 </ng-container>
