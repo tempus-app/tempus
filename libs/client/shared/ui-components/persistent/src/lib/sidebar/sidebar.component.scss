@@ -1,0 +1,79 @@
+@use 'abstracts/helper' as abs;
+
+.container {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+}
+
+.user-container {
+	height: 18em;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+mat-sidenav {
+	background: abs.$primary-200;
+	width: 15em;
+	box-shadow: 1px 1px 3px 1px rgba(0, 0, 0, 0.05);
+}
+
+mat-button-toggle-group {
+	width: 15em;
+	+ .mat-button-toggle-checked,
+	.cdk-focused,
+	.cdk-mouse-focused {
+		background-color: abs.$accent-300;
+		font-weight: 900 !important;
+		color: abs.$primary-800;
+	}
+}
+
+mat-button-toggle {
+	background-color: abs.$primary-200;
+	border-bottom-color: abs.$accent-800;
+	border-right: none;
+	padding: 1em;
+	color: abs.$primary-800;
+}
+
+.mat-button-toggle-checked.mat-button-toggle-appearance-standard {
+	color: abs.$primary-800;
+}
+
+.menu-button {
+	text-align: left;
+	padding: none;
+}
+
+#icon {
+	width: 4em;
+	height: 4em;
+	border-radius: 100%;
+	background-color: abs.$accent-300;
+	margin-bottom: 1em;
+	margin-top: 1em;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+#initials {
+	color: white;
+	letter-spacing: 0.25em;
+	text-indent: 0.25em;
+	font-weight: 900 !important;
+}
+p {
+	color: abs.$primary-800;
+	margin: none;
+}
+h2 {
+	font-size: 1.5em !important;
+	color: abs.$primary-800;
+	margin: 0.25em;
+}

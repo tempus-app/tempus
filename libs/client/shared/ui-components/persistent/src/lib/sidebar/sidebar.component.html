@@ -1,0 +1,23 @@
+<mat-sidenav-container class="container">
+	<mat-sidenav mode="side" opened>
+		<button mat-button class="menu-button">
+			<mat-icon>menu</mat-icon>
+		</button>
+		<div class="user-container">
+			<div class="mat-h3" id="icon">
+				<div id="initials">RR</div>
+			</div>
+			<h2 class="mat-h2">Roxanne Ritchi</h2>
+			<p class="mat-body-2">rritchi@email.com</p>
+		</div>
+		<mat-button-toggle-group name="fontStyle" vertical>
+			<mat-button-toggle value="discover">
+				<div class="mat-body-2">Discover Resources</div>
+			</mat-button-toggle>
+			<mat-button-toggle value="manage">
+				<div class="mat-body-2">Manage Resources</div>
+			</mat-button-toggle>
+		</mat-button-toggle-group>
+	</mat-sidenav>
+	<mat-sidenav-content>Main content</mat-sidenav-content>
+</mat-sidenav-container>
