@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output, forwardRef } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { map, Observable, of, startWith } from 'rxjs';
 
@@ -8,7 +8,7 @@ import { map, Observable, of, startWith } from 'rxjs';
 	styleUrls: ['./search-box.component.scss'],
 })
 export class SearchBoxComponent implements OnInit {
-	myControl = new FormControl();
+	@Input() control = new FormControl();
 
 	search = '';
 
@@ -27,7 +27,7 @@ export class SearchBoxComponent implements OnInit {
 	}
 
 	ngOnInit() {
-		this.filteredOptions = this.myControl.valueChanges.pipe(
+		this.filteredOptions = this.control.valueChanges.pipe(
 			startWith(''),
 			map(value => this._filter(value)),
 		);
@@ -39,7 +39,6 @@ export class SearchBoxComponent implements OnInit {
 
 	private _filter(value: string): string[] {
 		const filterValue = value.toLowerCase();
-
 		return this.options.filter(option => option.toLowerCase().includes(filterValue));
 	}
 }

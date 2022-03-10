@@ -3,6 +3,7 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { FormControl, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
 	selector: 'tempus-resume-upload',
@@ -20,7 +21,7 @@ export class ResumeUploadComponent {
 
 	rows = '10';
 
-	constructor(breakpointObserver: BreakpointObserver) {
+	constructor(private router: Router, breakpointObserver: BreakpointObserver, private route: ActivatedRoute) {
 		breakpointObserver
 			.observe([Breakpoints.XSmall, Breakpoints.Small, Breakpoints.Medium, Breakpoints.Large, Breakpoints.XLarge])
 			.pipe(takeUntil(this.destroyed))
@@ -60,5 +61,9 @@ export class ResumeUploadComponent {
 		this.fileData.markAsDirty();
 
 		this.fileUploaded = false;
+	}
+
+	nextStep() {
+		this.router.navigate(['../myinfoone'], { relativeTo: this.route });
 	}
 }

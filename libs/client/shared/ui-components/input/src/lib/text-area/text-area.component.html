@@ -1,5 +1,5 @@
 <ng-container>
 	<mat-form-field class="{{ cssClass }}" appearance="fill">
-		<textarea matInput placeholder="{{ placeholder }}"></textarea>
+		<textarea matInput placeholder="{{ placeholder }}" [formControl]="control" [value]="control.value"></textarea>
 	</mat-form-field>
 </ng-container>
