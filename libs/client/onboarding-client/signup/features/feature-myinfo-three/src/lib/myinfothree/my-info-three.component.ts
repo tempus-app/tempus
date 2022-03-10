@@ -1,4 +1,4 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Country, State } from 'country-state-city';
 import { Subject } from 'rxjs';
@@ -6,13 +6,15 @@ import { takeUntil } from 'rxjs/operators';
 import { InputType } from '@tempus/client/shared/ui-components/input';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { MatChipInputEvent } from '@angular/material/chips';
+import { ActivatedRoute, Router } from '@angular/router';
+import { FormArray, FormBuilder, Validators } from '@angular/forms';
 
 @Component({
 	selector: 'tempus-my-info-three',
 	templateUrl: './my-info-three.component.html',
 	styleUrls: ['./my-info-three.component.scss'],
 })
-export class MyInfoThreeComponent implements OnDestroy {
+export class MyInfoThreeComponent implements OnDestroy, OnInit {
 	destroyed = new Subject<void>();
 
 	cols = '1';
@@ -47,7 +49,29 @@ export class MyInfoThreeComponent implements OnDestroy {
 		return state.name;
 	});
 
-	constructor(breakpointObserver: BreakpointObserver) {
+	myInfoForm = this.fb.group({
+		educationSummary: [''],
+		qualifications: this.fb.array([]),
+		certifications: this.fb.array([]),
+		skills: [this.skills],
+	});
+
+	get qualifications() {
+		// eslint-disable-next-line @typescript-eslint/dot-notation
+		return this.myInfoForm.controls['qualifications'] as FormArray;
+	}
+
+	get certifications() {
+		// eslint-disable-next-line @typescript-eslint/dot-notation
+		return this.myInfoForm.controls['certifications'] as FormArray;
+	}
+
+	constructor(
+		private route: ActivatedRoute,
+		private fb: FormBuilder,
+		breakpointObserver: BreakpointObserver,
+		private router: Router,
+	) {
 		breakpointObserver
 			.observe([Breakpoints.XSmall, Breakpoints.Small, Breakpoints.Medium, Breakpoints.Large, Breakpoints.XLarge])
 			.pipe(takeUntil(this.destroyed))
@@ -74,6 +98,27 @@ export class MyInfoThreeComponent implements OnDestroy {
 			});
 	}
 
+	ngOnInit() {
+		const qualification = this.fb.group({
+			institution: ['', Validators.required],
+			field: ['', Validators.required],
+			country: [''],
+			state: [''],
+			city: [''],
+			startDate: ['', Validators.required],
+			endDate: ['', Validators.required],
+		});
+
+		const certification = this.fb.group({
+			certifyingAuthority: ['', Validators.required],
+			title: ['', Validators.required],
+			summary: [''],
+		});
+
+		this.qualifications.push(qualification);
+		this.certifications.push(certification);
+	}
+
 	ngOnDestroy() {
 		this.destroyed.next();
 		this.destroyed.complete();
@@ -87,12 +132,25 @@ export class MyInfoThreeComponent implements OnDestroy {
 			const lastElement = this.numberEducationSections[this.numberEducationSections.length - 1];
 			this.numberEducationSections.push(lastElement + 1);
 		}
+
+		const qualification = this.fb.group({
+			institution: ['', Validators.required],
+			field: ['', Validators.required],
+			country: [''],
+			state: [''],
+			city: [''],
+			startDate: ['', Validators.required],
+			endDate: ['', Validators.required],
+		});
+
+		this.qualifications.push(qualification);
 	}
 
 	removeEducationSection(index: number) {
 		if (this.numberEducationSections.length > 1) {
 			this.numberEducationSections.splice(index, 1);
 		}
+		this.qualifications.removeAt(index);
 	}
 
 	addCertificationSections() {
@@ -103,10 +161,17 @@ export class MyInfoThreeComponent implements OnDestroy {
 			const lastElement = this.numberCertificationSections[this.numberCertificationSections.length - 1];
 			this.numberCertificationSections.push(lastElement + 1);
 		}
+		const certification = this.fb.group({
+			certifyingAuthority: ['', Validators.required],
+			title: ['', Validators.required],
+			description: [''],
+		});
+		this.certifications.push(certification);
 	}
 
 	removeCertificationSection(index: number) {
 		this.numberCertificationSections.splice(index, 1);
+		this.certifications.removeAt(index);
 	}
 
 	addSkill(event: MatChipInputEvent): void {
@@ -134,5 +199,13 @@ export class MyInfoThreeComponent implements OnDestroy {
 			this.states = State.getStatesOfCountry(countryCode.isoCode).map(state => {
 				return state.name;
 			});
+	}
+
+	nextStep() {
+		this.router.navigate(['../review'], { relativeTo: this.route });
+	}
+
+	backStep() {
+		this.router.navigate(['../myinfotwo'], { relativeTo: this.route });
 	}
 }

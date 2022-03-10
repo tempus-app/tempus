@@ -1,4 +1,6 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, forwardRef } from '@angular/core';
+import { FormControl } from '@angular/forms';
+
 @Component({
 	selector: 'tempus-dropdown',
 	templateUrl: './dropdown.component.html',
@@ -10,6 +12,8 @@ export class DropdownComponent {
 	@Input() cssClass = 'secondary';
 
 	@Input() label = '';
+
+	@Input() control: FormControl = new FormControl();
 
 	@Output() optionSelect = new EventEmitter();
 

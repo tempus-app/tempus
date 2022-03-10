@@ -18,14 +18,18 @@
 			<tempus-card>
 				<form>
 					<h3 class="mat-h3" color="primary">Education Summary</h3>
-					<tempus-text-area id="education-summary" placeholder="Summary"></tempus-text-area>
+					<tempus-text-area
+						id="education-summary"
+						placeholder="Summary"
+						[control]="$any(myInfoForm).get('educationSummary')"
+					></tempus-text-area>
 				</form>
 			</tempus-card>
 		</mat-grid-tile>
 		<mat-grid-tile
 			colspan="2"
 			rowspan="{{ rows }}"
-			*ngFor="let numEducation of numberEducationSections; let index = index"
+			*ngFor="let numEducation of qualifications.controls; let index = index"
 			id="education-{{ index }}"
 		>
 			<tempus-card>
@@ -48,56 +52,63 @@
 					<mat-grid-list cols="6" rowHeight="100px">
 						<mat-grid-tile colspan="{{ educationCols }}">
 							<tempus-text-input
-								id="institution-{{ numEducation }}"
+								id="institution-{{ index }}"
 								placeholder="Institution"
 								cssClass="secondary"
+								[control]="$any(numEducation).get('institution')"
 							></tempus-text-input>
 						</mat-grid-tile>
 						<mat-grid-tile colspan="{{ educationCols }}">
 							<tempus-text-input
-								id="field-{{ numEducation }}"
+								id="field-{{ index }}"
 								placeholder="Field"
 								cssClass="secondary"
+								[control]="$any(numEducation).get('field')"
 							></tempus-text-input>
 						</mat-grid-tile>
 						<mat-grid-tile colspan="{{ locationCols }}">
 							<tempus-search-box
-								id="country-{{ numEducation }}"
+								id="country-{{ index }}"
 								[options]="countries"
 								placeholder="Country"
 								cssClass="secondary"
 								(optionSelect)="updateStateOptions($event)"
+								[control]="$any(numEducation).get('country')"
 							></tempus-search-box>
 						</mat-grid-tile>
 						<mat-grid-tile colspan="{{ locationCols }}">
 							<tempus-dropdown
-								id="state-{{ numEducation }}"
+								id="state-{{ index }}"
 								[options]="states"
 								label="State"
 								cssClass="secondary"
+								[control]="$any(numEducation).get('state')"
 							></tempus-dropdown>
 						</mat-grid-tile>
 						<mat-grid-tile colspan="{{ locationCols }}">
 							<tempus-text-input
-								id="city-{{ numEducation }}"
+								id="city-{{ index }}"
 								placeholder="City"
 								cssClass="secondary"
+								[control]="$any(numEducation).get('city')"
 							></tempus-text-input>
 						</mat-grid-tile>
 						<mat-grid-tile colspan="{{ educationCols }}">
 							<tempus-text-input
-								id="start-date-{{ numEducation }}"
+								id="start-date-{{ index }}"
 								[inputType]="InputType.DATE"
 								placeholder="Start date"
 								cssClass="secondary"
+								[control]="$any(numEducation).get('startDate')"
 							></tempus-text-input>
 						</mat-grid-tile>
 						<mat-grid-tile colspan="{{ educationCols }}">
 							<tempus-text-input
-								id="end-date-{{ numEducation }}"
+								id="end-date-{{ index }}"
 								[inputType]="InputType.DATE"
 								placeholder="End date"
 								cssClass="secondary"
+								[control]="$any(numEducation).get('endDate')"
 							></tempus-text-input>
 						</mat-grid-tile>
 					</mat-grid-list>
@@ -121,7 +132,7 @@
 		<mat-grid-tile
 			colspan="2"
 			rowspan="{{ certRows }}"
-			*ngFor="let numCertification of numberCertificationSections; let index = index"
+			*ngFor="let numCertification of certifications.controls; let index = index"
 			id="certification-{{ index }}"
 		>
 			<tempus-card>
@@ -144,20 +155,26 @@
 					<mat-grid-list cols="2" rowHeight="50px">
 						<mat-grid-tile colspan="{{ cols }}" rowspan="2">
 							<tempus-text-input
-								id="certifying-authority-{{ numCertification }}"
+								id="certifying-authority-{{ index }}"
 								placeholder="Certifying Authority"
 								cssClass="secondary"
+								[control]="$any(numCertification).get('certifyingAuthority')"
 							></tempus-text-input>
 						</mat-grid-tile>
 						<mat-grid-tile colspan="{{ cols }}" rowspan="2">
 							<tempus-text-input
-								id="title-{{ numCertification }}"
+								id="title-{{ index }}"
 								placeholder="Title"
 								cssClass="secondary"
+								[control]="$any(numCertification).get('title')"
 							></tempus-text-input>
 						</mat-grid-tile>
 						<mat-grid-tile colspan="2" rowspan="2">
-							<tempus-text-area id="summary-{{ numCertification }}" placeholder="Summary"></tempus-text-area>
+							<tempus-text-area
+								id="summary-{{ index }}"
+								placeholder="Summary"
+								[control]="$any(numCertification).get('summary')"
+							></tempus-text-area>
 						</mat-grid-tile>
 					</mat-grid-list>
 				</form>
@@ -202,4 +219,16 @@
 			</tempus-card>
 		</mat-grid-tile>
 	</mat-grid-list>
+	<div class="button-container">
+		<button color="primary" mat-raised-button matStepperPrevious type="button" (click)="backStep()">Back</button>
+		<button
+			color="primary"
+			mat-raised-button
+			matStepperNext="button"
+			[disabled]="!myInfoForm.valid"
+			(click)="nextStep()"
+		>
+			Next
+		</button>
+	</div>
 </ng-container>

@@ -33,3 +33,15 @@ tempus-card {
 .file-upload-button {
 	color: white;
 }
+
+.button-container {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	position: relative;
+	bottom: 0;
+}
+
+.next-button {
+	text-align: right;
+}

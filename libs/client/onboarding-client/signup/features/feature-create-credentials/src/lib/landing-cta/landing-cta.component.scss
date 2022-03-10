@@ -1,0 +1,15 @@
+.landing-text {
+	text-align: left;
+	@media only screen and (max-width: 960px) {
+		text-align: center;
+	}
+}
+
+ul {
+	padding: 0;
+	list-style-type: none;
+}
+
+.tempus-image {
+	max-width: 100%;
+}

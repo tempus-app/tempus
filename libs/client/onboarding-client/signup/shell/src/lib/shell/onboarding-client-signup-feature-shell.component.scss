@@ -1,0 +1,12 @@
+.button-container {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	position: relative;
+	bottom: 0;
+}
+
+//Display when user can't go back so only the next button is available
+.next-button {
+	text-align: right;
+}

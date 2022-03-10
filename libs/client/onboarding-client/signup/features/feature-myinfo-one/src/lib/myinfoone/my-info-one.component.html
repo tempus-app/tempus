@@ -9,18 +9,54 @@
 			<tempus-card>
 				<mat-card-content>
 					<form>
+						<div></div>
 						<mat-grid-list cols="2" rowHeight="100px">
 							<mat-grid-tile colspan="{{ cols }}">
-								<tempus-text-input placeholder="First Name" cssClass="secondary"></tempus-text-input>
+								<tempus-text-input
+									[inputType]="InputType.TEXT"
+									placeholder="First Name"
+									cssClass="secondary"
+									[control]="$any(myInfoForm).get('firstName')"
+								>
+								</tempus-text-input>
 							</mat-grid-tile>
 							<mat-grid-tile colspan="{{ cols }}">
-								<tempus-text-input placeholder="Last Name" cssClass="secondary"></tempus-text-input>
+								<tempus-text-input
+									[inputType]="InputType.TEXT"
+									placeholder="Last Name"
+									cssClass="secondary"
+									[control]="$any(myInfoForm).get('lastName')"
+								>
+								</tempus-text-input>
+							</mat-grid-tile>
+							<!-- <mat-grid-tile colspan="{{ cols }}" *ngIf="
+							$any(myInfoForm).get('firstName').invalid && ($any(myInfoForm).get('firstName').touched || $any(myInfoForm).get('firstName').dirty)
+							">
+								<mat-error class="mat-body-2" >
+									You must enter your first name.
+								</mat-error>
+							</mat-grid-tile>
+							<mat-grid-tile colspan="{{ cols }}" *ngIf="
+							$any(myInfoForm).get('lastName').invalid && ($any(myInfoForm).get('lastName').touched || $any(myInfoForm).get('lastName').dirty)
+							">
+								<mat-error class="mat-body-2" >
+								You must enter your first name.
+								</mat-error>
+							</mat-grid-tile> -->
+							<mat-grid-tile colspan="{{ cols }}">
+								<tempus-text-input
+									placeholder="Phone Number"
+									cssClass="secondary"
+									[control]="$any(myInfoForm).get('phoneNumber')"
+								></tempus-text-input>
 							</mat-grid-tile>
 							<mat-grid-tile colspan="{{ cols }}">
-								<tempus-text-input placeholder="Phone Number" cssClass="secondary"></tempus-text-input>
-							</mat-grid-tile>
-							<mat-grid-tile colspan="{{ cols }}">
-								<tempus-text-input placeholder="Email" cssClass="secondary"></tempus-text-input>
+								<tempus-text-input
+									[inputType]="InputType.EMAIL"
+									placeholder="Email"
+									cssClass="secondary"
+									[control]="$any(myInfoForm).get('email')"
+								></tempus-text-input>
 							</mat-grid-tile>
 						</mat-grid-list>
 					</form>
@@ -35,7 +71,7 @@
 		<mat-grid-tile colspan="2" rowspan="{{ rows }}">
 			<tempus-card>
 				<mat-card-content>
-					<form>
+					<form [formGroup]="myInfoForm">
 						<mat-grid-list cols="2" rowHeight="100px">
 							<mat-grid-tile colspan="{{ cols }}">
 								<tempus-search-box
@@ -43,13 +79,21 @@
 									placeholder="Country"
 									cssClass="secondary"
 									(optionSelect)="updateStateOptions($event)"
-								></tempus-search-box>
+									[control]="$any(myInfoForm).get('country')"
+								>
+								</tempus-search-box>
 							</mat-grid-tile>
 							<mat-grid-tile colspan="{{ cols }}">
-								<tempus-dropdown [options]="states" label="State" cssClass="secondary"></tempus-dropdown>
+								<tempus-dropdown
+									[options]="states"
+									label="State"
+									cssClass="secondary"
+									[control]="$any(myInfoForm).get('state')"
+								></tempus-dropdown>
 							</mat-grid-tile>
 							<mat-grid-tile colspan="{{ cols }}">
-								<tempus-text-input placeholder="City" cssClass="secondary"></tempus-text-input>
+								<tempus-text-input placeholder="City" cssClass="secondary" [control]="$any(myInfoForm).get('city')">
+								</tempus-text-input>
 							</mat-grid-tile>
 						</mat-grid-list>
 					</form>
@@ -57,4 +101,16 @@
 			</tempus-card>
 		</mat-grid-tile>
 	</mat-grid-list>
+	<div class="button-container">
+		<button color="primary" mat-raised-button matStepperPrevious type="button" (click)="backStep()">Back</button>
+		<button
+			color="primary"
+			mat-raised-button
+			matStepperNext="button"
+			[disabled]="!myInfoForm.valid"
+			(click)="nextStep()"
+		>
+			Next
+		</button>
+	</div>
 </ng-container>

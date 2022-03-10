@@ -14,8 +14,20 @@
 				</button>
 			</div>
 		</mat-grid-tile>
+		<mat-grid-tile colspan="2" rowspan="4">
+			<tempus-card>
+				<form>
+					<h3 class="mat-h3" color="primary">Work Experience Summary</h3>
+					<tempus-text-area
+						id="work-experience-summary"
+						placeholder="Summary"
+						[control]="$any(myInfoForm).get('workExperienceSummary')"
+					></tempus-text-area>
+				</form>
+			</tempus-card>
+		</mat-grid-tile>
 		<mat-grid-tile
-			*ngFor="let numExperience of numberWorkSections; let index = index"
+			*ngFor="let numExperience of totalWorkExperience.controls; let index = index"
 			colspan="2"
 			rowspan="{{ rows }}"
 			id="work-experience-{{ index }}"
@@ -40,55 +52,75 @@
 						</div>
 						<mat-grid-list cols="6" rowHeight="100px">
 							<mat-grid-tile colspan="{{ workCols }}">
-								<tempus-text-input id="title-{{ numExperience }}" placeholder="Title" cssClass="secondary">
+								<tempus-text-input
+									id="title-{{ index }}"
+									placeholder="Title"
+									cssClass="secondary"
+									[control]="$any(numExperience).get('title')"
+								>
 								</tempus-text-input>
 							</mat-grid-tile>
 							<mat-grid-tile colspan="{{ workCols }}">
-								<tempus-text-input id="company-{{ numExperience }}" placeholder="Company" cssClass="secondary">
+								<tempus-text-input
+									id="company-{{ index }}"
+									placeholder="Company"
+									cssClass="secondary"
+									[control]="$any(numExperience).get('company')"
+								>
 								</tempus-text-input>
 							</mat-grid-tile>
 							<mat-grid-tile colspan="{{ locationCols }}">
 								<tempus-search-box
-									id="country-{{ numExperience }}"
+									id="country-{{ index }}"
 									[options]="countries"
 									placeholder="Country"
 									cssClass="secondary"
 									(optionSelect)="updateStateOptions($event)"
+									[control]="$any(numExperience).get('country')"
 								></tempus-search-box>
 							</mat-grid-tile>
 							<mat-grid-tile colspan="{{ locationCols }}">
 								<tempus-dropdown
-									id="state-{{ numExperience }}"
+									id="state-{{ index }}"
 									[options]="states"
 									label="State"
 									cssClass="secondary"
+									[control]="$any(numExperience).get('state')"
 								></tempus-dropdown>
 							</mat-grid-tile>
 							<mat-grid-tile colspan="{{ locationCols }}">
 								<tempus-text-input
-									id="city-{{ numExperience }}"
+									id="city-{{ index }}"
 									placeholder="City"
 									cssClass="secondary"
+									[control]="$any(numExperience).get('city')"
 								></tempus-text-input>
 							</mat-grid-tile>
 							<mat-grid-tile colspan="3">
 								<tempus-text-input
-									id="start-date-{{ numExperience }}"
+									id="start-date-{{ index }}"
 									[inputType]="InputType.DATE"
 									placeholder="Start Date"
 									cssClass="secondary"
+									[control]="$any(numExperience).get('startDate')"
 								></tempus-text-input>
 							</mat-grid-tile>
 							<mat-grid-tile colspan="3">
 								<tempus-text-input
-									id="end-date-{{ numExperience }}"
+									id="end-date-{{ index }}"
 									[inputType]="InputType.DATE"
 									placeholder="End Date"
 									cssClass="secondary"
+									[control]="$any(numExperience).get('endDate')"
 								></tempus-text-input>
 							</mat-grid-tile>
 							<mat-grid-tile colspan="6" rowspan="2">
-								<tempus-text-area id="description-{{ numExperience }}" placeholder="Description" cssClass="secondary">
+								<tempus-text-area
+									id="description-{{ index }}"
+									placeholder="Description"
+									cssClass="secondary"
+									[control]="$any(numExperience).get('description')"
+								>
 								</tempus-text-area>
 							</mat-grid-tile>
 						</mat-grid-list>
@@ -97,4 +129,16 @@
 			</tempus-card>
 		</mat-grid-tile>
 	</mat-grid-list>
+	<div class="button-container">
+		<button color="primary" mat-raised-button matStepperPrevious type="button" (click)="backStep()">Back</button>
+		<button
+			color="primary"
+			mat-raised-button
+			matStepperNext="button"
+			[disabled]="!myInfoForm.valid"
+			(click)="nextStep()"
+		>
+			Next
+		</button>
+	</div>
 </ng-container>
