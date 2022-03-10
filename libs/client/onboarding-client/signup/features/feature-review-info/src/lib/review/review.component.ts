@@ -3,7 +3,7 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Subject, takeUntil } from 'rxjs';
 import { formatDateRange } from '@tempus/shared/util';
 import { Experience, Education } from '@tempus/shared-domain';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
 	selector: 'tempus-review',
@@ -45,7 +45,7 @@ export class ReviewComponent {
 		[Breakpoints.XLarge, 'XLarge'],
 	]);
 
-	constructor(breakpointObserver: BreakpointObserver, private router: Router) {
+	constructor(breakpointObserver: BreakpointObserver, private router: Router, private route: ActivatedRoute) {
 		breakpointObserver
 			.observe([Breakpoints.XSmall, Breakpoints.Small, Breakpoints.Medium, Breakpoints.Large, Breakpoints.XLarge])
 			.pipe(takeUntil(this.destroyed))
@@ -73,6 +73,6 @@ export class ReviewComponent {
 	}
 
 	backStep() {
-		this.router.navigateByUrl(`token/myinfothree`);
+		this.router.navigate(['../myinfothree'], { relativeTo: this.route });
 	}
 }

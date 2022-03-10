@@ -4,7 +4,7 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { FormBuilder, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { InputType } from '@tempus/client/shared/ui-components/input';
 
 @Component({
@@ -50,7 +50,12 @@ export class MyInfoOneComponent implements OnDestroy {
 
 	@Output() formIsValid = new EventEmitter<boolean>();
 
-	constructor(private fb: FormBuilder, breakpointObserver: BreakpointObserver, private router: Router) {
+	constructor(
+		private fb: FormBuilder,
+		breakpointObserver: BreakpointObserver,
+		private router: Router,
+		private route: ActivatedRoute,
+	) {
 		breakpointObserver
 			.observe([Breakpoints.XSmall, Breakpoints.Small, Breakpoints.Medium, Breakpoints.Large, Breakpoints.XLarge])
 			.pipe(takeUntil(this.destroyed))
@@ -83,10 +88,10 @@ export class MyInfoOneComponent implements OnDestroy {
 	}
 
 	nextStep() {
-		this.router.navigateByUrl(`token/myinfotwo`);
+		this.router.navigate(['../myinfotwo'], { relativeTo: this.route });
 	}
 
 	backStep() {
-		this.router.navigateByUrl(`token/uploadresume`);
+		this.router.navigate(['../uploadresume'], { relativeTo: this.route });
 	}
 }

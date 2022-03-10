@@ -4,7 +4,7 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { InputType } from '@tempus/client/shared/ui-components/input';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FormArray, FormBuilder, Validators } from '@angular/forms';
 
 @Component({
@@ -39,10 +39,16 @@ export class MyInfoTwoComponent implements OnDestroy, OnInit {
 	});
 
 	get totalWorkExperience() {
-		return this.myInfoForm.controls.workExperience as FormArray;
+		// eslint-disable-next-line @typescript-eslint/dot-notation
+		return this.myInfoForm.controls['workExperience'] as FormArray;
 	}
 
-	constructor(private fb: FormBuilder, breakpointObserver: BreakpointObserver, private router: Router) {
+	constructor(
+		private route: ActivatedRoute,
+		private fb: FormBuilder,
+		breakpointObserver: BreakpointObserver,
+		private router: Router,
+	) {
 		breakpointObserver
 			.observe([Breakpoints.XSmall, Breakpoints.Small, Breakpoints.Medium, Breakpoints.Large, Breakpoints.XLarge])
 			.pipe(takeUntil(this.destroyed))
@@ -119,10 +125,10 @@ export class MyInfoTwoComponent implements OnDestroy, OnInit {
 	}
 
 	nextStep() {
-		this.router.navigateByUrl(`token/myinfothree`);
+		this.router.navigate(['../myinfothree'], { relativeTo: this.route });
 	}
 
 	backStep() {
-		this.router.navigateByUrl(`token/myinfoone`);
+		this.router.navigate(['../myinfoone'], { relativeTo: this.route });
 	}
 }

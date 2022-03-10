@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import { InputType } from '@tempus/client/shared/ui-components/input';
 import { validatePasswords } from './sign-up.validators';
 
@@ -15,13 +16,14 @@ export class SignUpComponent implements OnInit {
 
 	InputType = InputType;
 
+	constructor(private router: Router, private route: ActivatedRoute) {}
+
 	ngOnInit(): void {
 		this.formGroup = new FormGroup(
 			{
 				email: new FormControl({ value: this.email, disabled: true }, Validators.required),
 				password: new FormControl(null, [
 					Validators.required,
-					Validators.pattern(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,}$/),
 					// taken from: https://stackoverflow.com/questions/40529817/reactive-forms-mark-fields-as-touched
 				]),
 				confirmPassword: new FormControl(null, Validators.required),
@@ -34,7 +36,7 @@ export class SignUpComponent implements OnInit {
 	signUp() {
 		this.formGroup?.markAllAsTouched();
 		if (this.formGroup?.valid) {
-			// do something (add to store)
+			this.router.navigate(['../uploadresume'], { relativeTo: this.route });
 		}
 	}
 }

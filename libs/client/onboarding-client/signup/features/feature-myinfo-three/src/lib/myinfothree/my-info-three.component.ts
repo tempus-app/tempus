@@ -6,7 +6,7 @@ import { takeUntil } from 'rxjs/operators';
 import { InputType } from '@tempus/client/shared/ui-components/input';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { MatChipInputEvent } from '@angular/material/chips';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FormArray, FormBuilder, Validators } from '@angular/forms';
 
 @Component({
@@ -57,14 +57,21 @@ export class MyInfoThreeComponent implements OnDestroy, OnInit {
 	});
 
 	get qualifications() {
-		return this.myInfoForm.controls.qualifications as FormArray;
+		// eslint-disable-next-line @typescript-eslint/dot-notation
+		return this.myInfoForm.controls['qualifications'] as FormArray;
 	}
 
 	get certifications() {
-		return this.myInfoForm.controls.certifications as FormArray;
+		// eslint-disable-next-line @typescript-eslint/dot-notation
+		return this.myInfoForm.controls['certifications'] as FormArray;
 	}
 
-	constructor(private fb: FormBuilder, breakpointObserver: BreakpointObserver, private router: Router) {
+	constructor(
+		private route: ActivatedRoute,
+		private fb: FormBuilder,
+		breakpointObserver: BreakpointObserver,
+		private router: Router,
+	) {
 		breakpointObserver
 			.observe([Breakpoints.XSmall, Breakpoints.Small, Breakpoints.Medium, Breakpoints.Large, Breakpoints.XLarge])
 			.pipe(takeUntil(this.destroyed))
@@ -195,10 +202,10 @@ export class MyInfoThreeComponent implements OnDestroy, OnInit {
 	}
 
 	nextStep() {
-		this.router.navigateByUrl(`token/review`);
+		this.router.navigate(['../review'], { relativeTo: this.route });
 	}
 
 	backStep() {
-		this.router.navigateByUrl(`token/myinfotwo`);
+		this.router.navigate(['../myinfotwo'], { relativeTo: this.route });
 	}
 }
