@@ -2,12 +2,26 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Country, State } from 'country-state-city';
 import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { filter, switchMap, take, takeUntil, tap } from 'rxjs/operators';
 import { InputType } from '@tempus/client/shared/ui-components/input';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormArray, FormBuilder, Validators } from '@angular/forms';
+import { Store } from '@ngrx/store';
+import {
+	createTrainingAndSkillDetails,
+	selectResourceData,
+	selectTrainingAndSkillsCreated,
+	SignupState,
+} from '@tempus/client/onboarding-client/signup/data-access';
+import {
+	CreateCertificationDto,
+	CreateEducationDto,
+	CreateLocationDto,
+	CreateSkillDto,
+	CreateSkillTypeDto,
+} from '@tempus/shared-domain';
 
 @Component({
 	selector: 'tempus-my-info-three',
@@ -35,6 +49,8 @@ export class MyInfoThreeComponent implements OnDestroy, OnInit {
 
 	readonly separatorKeysCodes = [ENTER, COMMA] as const;
 
+	createdTrainingAndSkills: boolean | undefined;
+
 	skills: string[] = [];
 
 	numberEducationSections: number[] = [0];
@@ -54,6 +70,7 @@ export class MyInfoThreeComponent implements OnDestroy, OnInit {
 		qualifications: this.fb.array([]),
 		certifications: this.fb.array([]),
 		skills: [this.skills],
+		skillsSummary: [''],
 	});
 
 	get qualifications() {
@@ -71,6 +88,7 @@ export class MyInfoThreeComponent implements OnDestroy, OnInit {
 		private fb: FormBuilder,
 		breakpointObserver: BreakpointObserver,
 		private router: Router,
+		private store: Store<SignupState>,
 	) {
 		breakpointObserver
 			.observe([Breakpoints.XSmall, Breakpoints.Small, Breakpoints.Medium, Breakpoints.Large, Breakpoints.XLarge])
@@ -99,24 +117,54 @@ export class MyInfoThreeComponent implements OnDestroy, OnInit {
 	}
 
 	ngOnInit() {
-		const qualification = this.fb.group({
-			institution: ['', Validators.required],
-			field: ['', Validators.required],
-			country: [''],
-			state: [''],
-			city: [''],
-			startDate: ['', Validators.required],
-			endDate: ['', Validators.required],
-		});
+		this.store
+			.select(selectTrainingAndSkillsCreated)
+			.pipe(
+				take(1),
+				tap(created => {
+					this.createdTrainingAndSkills = created;
+				}),
+				filter(created => created),
+				switchMap(_ => this.store.select(selectResourceData)),
+				take(1),
+			)
+			.subscribe(createResourceDto => {
+				// eslint-disable-next-line @typescript-eslint/dot-notation
+				const educationsArray = this.qualifications;
+				createResourceDto.educations.forEach(education => {
+					educationsArray.push(
+						this.fb.group({
+							institution: [education.institution, Validators.required],
+							field: [education.degree, Validators.required],
+							country: [education.location.country],
+							state: [education.location.province],
+							city: [education.location.city],
+							startDate: [education.startDate, Validators.required],
+							endDate: [education.endDate, Validators.required],
+						}),
+					);
+				});
 
-		const certification = this.fb.group({
-			certifyingAuthority: ['', Validators.required],
-			title: ['', Validators.required],
-			summary: [''],
-		});
+				const certificationsArray = this.certifications;
+				createResourceDto.certifications.forEach(certification => {
+					certificationsArray.push(
+						this.fb.group({
+							certifyingAuthority: [certification.institution, Validators.required],
+							title: [certification.title, Validators.required],
+							summary: [''],
+						}),
+					);
+				});
 
-		this.qualifications.push(qualification);
-		this.certifications.push(certification);
+				createResourceDto.skills.forEach(skill => {
+					this.skills.push(skill.skill.name);
+				});
+
+				this.myInfoForm.patchValue({
+					educationSummary: createResourceDto.educationsSummary,
+					skillsSummary: createResourceDto.skillsSummary,
+				});
+			});
 	}
 
 	ngOnDestroy() {
@@ -202,6 +250,41 @@ export class MyInfoThreeComponent implements OnDestroy, OnInit {
 	}
 
 	nextStep() {
+		this.myInfoForm?.markAllAsTouched();
+		if (this.myInfoForm?.valid) {
+			this.store.dispatch(
+				createTrainingAndSkillDetails({
+					skillsSummary: this.myInfoForm.get('skillsSummary')?.value,
+					educationsSummary: this.myInfoForm.get('educationSummary')?.value,
+					educations: this.qualifications.value.map(qualification => {
+						return {
+							degree: qualification.degree?.value,
+							institution: qualification.institution?.value,
+							startDate: qualification.startDate?.value,
+							endDate: qualification.endDate?.value,
+							location: {
+								country: qualification.country?.value,
+								city: qualification.city?.value,
+								province: qualification.state?.value,
+							} as CreateLocationDto,
+						} as CreateEducationDto;
+					}),
+					skills: this.skills.map(skill => {
+						return {
+							skill: {
+								name: skill,
+							} as CreateSkillTypeDto,
+						} as CreateSkillDto;
+					}),
+					certifications: this.certifications.value.map(certification => {
+						return {
+							title: certification.title?.value,
+							institution: certification.institution?.value,
+						} as CreateCertificationDto;
+					}),
+				}),
+			);
+		}
 		this.router.navigate(['../review'], { relativeTo: this.route });
 	}
 

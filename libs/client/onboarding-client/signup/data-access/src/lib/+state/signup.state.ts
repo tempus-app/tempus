@@ -1,6 +1,6 @@
 import { ActionReducerMap, createFeatureSelector } from '@ngrx/store';
 import { linkReducer, LinkState, LINK_FEATURE_KEY } from './link/link.reducers';
-import { resourceReducer, ResourceState, RESOURCE_FEATURE_KEY } from './resource/resource.reducers';
+import { resourceReducer, ResourceState, RESOURCE_FEATURE_KEY } from './createResource/createResource.reducers';
 
 export const SIGNUP_FEATURE_KEY = 'signup';
 

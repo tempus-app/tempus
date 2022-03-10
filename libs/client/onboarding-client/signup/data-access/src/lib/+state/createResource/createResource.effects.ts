@@ -4,9 +4,9 @@ import { of, switchMap } from 'rxjs';
 import { map, catchError, withLatestFrom } from 'rxjs/operators';
 import { OnboardingClientResourceService } from '@tempus/client/onboarding-client/shared/data-access';
 import { Store } from '@ngrx/store';
-import { createResource, createResourceFailure, createResourceSuccess } from './resource.actions';
+import { createResource, createResourceFailure, createResourceSuccess } from './createResource.actions';
 import { SignupState } from '../signup.state';
-import { selectResourceData } from './resource.selectors';
+import { selectResourceData } from './createResource.selectors';
 
 @Injectable()
 export class ResourceEffects {
