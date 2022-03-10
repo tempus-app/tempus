@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { ClientSharedUiComponentsPersistentModule } from '@tempus/client/shared/ui-components/persistent';
+import { OnboardingClientSharedDataAccessModule } from '@tempus/client/onboarding-client/shared/data-access';
 import { SignupShellComponent } from './shell/onboarding-client-signup-feature-shell.component';
 
 const routes: Routes = [
@@ -59,6 +60,12 @@ const routes: Routes = [
 
 @NgModule({
 	declarations: [SignupShellComponent],
-	imports: [CommonModule, RouterModule.forChild(routes), ClientSharedUiComponentsPersistentModule, MatButtonModule],
+	imports: [
+		CommonModule,
+		OnboardingClientSharedDataAccessModule,
+		RouterModule.forChild(routes),
+		ClientSharedUiComponentsPersistentModule,
+		MatButtonModule,
+	],
 })
 export class OnboardingClientSignupFeatureShellModule {}

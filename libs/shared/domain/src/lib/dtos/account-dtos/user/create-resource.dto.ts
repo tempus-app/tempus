@@ -4,9 +4,7 @@ import { CreateCertificationDto } from '../../profile-dtos/certification/createC
 import { CreateEducationDto } from '../../profile-dtos/education/createEduation.dto';
 import { CreateExperienceDto } from '../../profile-dtos/experience/createExperience.dto';
 import { CreateSkillDto } from '../../profile-dtos/skill/createSkill.dto';
-import { CreateViewDto } from '../../profile-dtos/view/createView.dto';
 import { CreateLocationDto } from '../../common-dtos/createLocation.dto';
-import { CreateProjectDto } from '../../project-dtos/project/createProject.dto';
 import { CreateUserDto } from './create-user.dto';
 
 export class CreateResourceDto extends CreateUserDto {
@@ -21,12 +19,6 @@ export class CreateResourceDto extends CreateUserDto {
 
 	@ApiProperty()
 	location: CreateLocationDto;
-
-	@ApiProperty()
-	projects: CreateProjectDto[];
-
-	@ApiProperty()
-	views: CreateViewDto[];
 
 	@ApiProperty()
 	experiences: CreateExperienceDto[];
@@ -61,8 +53,6 @@ export class CreateResourceDto extends CreateUserDto {
 		phoneNumber: string,
 		title: string,
 		location: CreateLocationDto,
-		projects: CreateProjectDto[],
-		views: CreateViewDto[],
 		experiences: CreateExperienceDto[],
 		educations: CreateEducationDto[],
 		skills: CreateSkillDto[],
@@ -77,8 +67,6 @@ export class CreateResourceDto extends CreateUserDto {
 		this.phoneNumber = phoneNumber;
 		this.title = title;
 		this.location = location;
-		this.projects = projects;
-		this.views = views;
 		this.experiences = experiences;
 		this.educations = educations;
 		this.skills = skills;
