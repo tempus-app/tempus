@@ -1,23 +1,25 @@
 <mat-sidenav-container class="container">
-	<mat-sidenav mode="side" opened>
-		<button mat-button class="menu-button">
+	<mat-sidenav #sidebar mode="side" opened="{{ isVisible }}">
+		<button mat-button class="menu-button" (click)="toggleSidebar()">
 			<mat-icon>menu</mat-icon>
 		</button>
 		<div class="user-container">
 			<div class="mat-h3" id="icon">
-				<div id="initials">RR</div>
+				<div id="initials">{{ initials }}</div>
 			</div>
-			<h2 class="mat-h2">Roxanne Ritchi</h2>
-			<p class="mat-body-2">rritchi@email.com</p>
+			<h2 class="mat-h2">{{ name }}</h2>
+			<p class="mat-body-2">{{ email }}</p>
 		</div>
-		<mat-button-toggle-group name="fontStyle" vertical>
-			<mat-button-toggle value="discover">
-				<div class="mat-body-2">Discover Resources</div>
-			</mat-button-toggle>
-			<mat-button-toggle value="manage">
-				<div class="mat-body-2">Manage Resources</div>
+		<mat-button-toggle-group name="userBar" vertical>
+			<mat-button-toggle (click)="selectedTab(tab)" *ngFor="let tab of tabs" [value]="tab">
+				<div class="mat-body-2">{{ tab }}</div>
 			</mat-button-toggle>
 		</mat-button-toggle-group>
 	</mat-sidenav>
-	<mat-sidenav-content>Main content</mat-sidenav-content>
+	<mat-sidenav-content class="content">
+		<button mat-button class="menu-button" *ngIf="!isVisible" (click)="toggleSidebar()">
+			<mat-icon>menu</mat-icon>
+		</button>
+		<ng-content></ng-content>
+	</mat-sidenav-content>
 </mat-sidenav-container>
