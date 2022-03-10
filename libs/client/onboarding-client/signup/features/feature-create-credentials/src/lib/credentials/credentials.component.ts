@@ -1,6 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { Store } from '@ngrx/store';
+import {
+	loadLinkData,
+	selectLinkData,
+	selectLinkErrorStatus,
+	SignupState,
+} from '@tempus/client/onboarding-client/signup/data-access';
 import { Link } from '@tempus/shared-domain';
+import { take, map } from 'rxjs/operators';
 
 @Component({
 	selector: 'tempus-credentials',
@@ -12,15 +20,24 @@ export class CredentialsComponent implements OnInit {
 
 	link: Link | undefined;
 
-	constructor(private route: ActivatedRoute) {}
+	errorStatus$ = this.store.select(selectLinkErrorStatus);
+
+	constructor(private route: ActivatedRoute, private store: Store<SignupState>) {}
 
 	ngOnInit() {
-		this.tokenId = this.route.snapshot.paramMap.get('token') || '';
-		this.getLinkData();
-	}
-
-	getLinkData() {
-		// TODO: implement me
-		this.link = { email: 'testCal@gmail.com' };
+		this.store.select(selectLinkData).pipe(
+			map(link => {
+				if (!link.id) {
+					this.store.dispatch(
+						loadLinkData({
+							linkId: this.route.snapshot.paramMap.get('token') || '',
+						}),
+					);
+					this.link = undefined;
+				} else {
+					this.link = link;
+				}
+			}),
+		);
 	}
 }

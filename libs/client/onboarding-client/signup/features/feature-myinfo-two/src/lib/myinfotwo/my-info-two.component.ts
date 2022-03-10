@@ -161,21 +161,32 @@ export class MyInfoTwoComponent implements OnDestroy, OnInit {
 			this.store.dispatch(
 				createWorkExperienceDetails({
 					experiencesSummary: this.myInfoForm.get('workExperienceSummary')?.value,
-					experiences: this.totalWorkExperience.value.map(workExperience => {
-						return {
-							title: workExperience.title?.value,
-							company: workExperience.company?.value,
-							location: {
-								country: workExperience.country?.value,
-								province: workExperience.province?.value,
-								city: workExperience.city?.value,
-							} as CreateLocationDto,
-							startDate: workExperience.startDate?.value,
-							endDate: workExperience.endDate?.value,
-							summary: workExperience.description?.value,
-							description: [workExperience.description?.value],
-						} as CreateExperienceDto;
-					}),
+					experiences: this.totalWorkExperience.value.map(
+						(workExperience: {
+							title: { value: string };
+							company: { value: string };
+							country: { value: string };
+							province: { value: string };
+							city: { value: string };
+							startDate: { value: Date };
+							endDate: { value: Date };
+							description: { value: string };
+						}) => {
+							return {
+								title: workExperience.title?.value,
+								company: workExperience.company?.value,
+								location: {
+									country: workExperience.country?.value,
+									province: workExperience.province?.value,
+									city: workExperience.city?.value,
+								} as CreateLocationDto,
+								startDate: workExperience.startDate?.value,
+								endDate: workExperience.endDate?.value,
+								summary: workExperience.description?.value,
+								description: [workExperience.description?.value],
+							} as CreateExperienceDto;
+						},
+					),
 				}),
 			);
 			this.router.navigate(['../myinfothree'], { relativeTo: this.route });

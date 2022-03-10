@@ -256,19 +256,29 @@ export class MyInfoThreeComponent implements OnDestroy, OnInit {
 				createTrainingAndSkillDetails({
 					skillsSummary: this.myInfoForm.get('skillsSummary')?.value,
 					educationsSummary: this.myInfoForm.get('educationSummary')?.value,
-					educations: this.qualifications.value.map(qualification => {
-						return {
-							degree: qualification.degree?.value,
-							institution: qualification.institution?.value,
-							startDate: qualification.startDate?.value,
-							endDate: qualification.endDate?.value,
-							location: {
-								country: qualification.country?.value,
-								city: qualification.city?.value,
-								province: qualification.state?.value,
-							} as CreateLocationDto,
-						} as CreateEducationDto;
-					}),
+					educations: this.qualifications.value.map(
+						(qualification: {
+							degree: { value: string };
+							institution: { value: string };
+							startDate: { value: Date };
+							endDate: { value: Date };
+							country: { value: string };
+							city: { value: string };
+							state: { value: string };
+						}) => {
+							return {
+								degree: qualification.degree?.value,
+								institution: qualification.institution?.value,
+								startDate: qualification.startDate?.value,
+								endDate: qualification.endDate?.value,
+								location: {
+									country: qualification.country?.value,
+									city: qualification.city?.value,
+									province: qualification.state?.value,
+								} as CreateLocationDto,
+							} as CreateEducationDto;
+						},
+					),
 					skills: this.skills.map(skill => {
 						return {
 							skill: {
@@ -276,12 +286,14 @@ export class MyInfoThreeComponent implements OnDestroy, OnInit {
 							} as CreateSkillTypeDto,
 						} as CreateSkillDto;
 					}),
-					certifications: this.certifications.value.map(certification => {
-						return {
-							title: certification.title?.value,
-							institution: certification.institution?.value,
-						} as CreateCertificationDto;
-					}),
+					certifications: this.certifications.value.map(
+						(certification: { title: { value: string }; institution: { value: string } }) => {
+							return {
+								title: certification.title?.value,
+								institution: certification.institution?.value,
+							} as CreateCertificationDto;
+						},
+					),
 				}),
 			);
 		}
