@@ -15,6 +15,7 @@
 		"skipDefaultLibCheck": true,
 		"baseUrl": ".",
 		"paths": {
+			"@tempus/api/shared/dto": ["libs/api/shared/dto/src/index.ts"],
 			"@tempus/api/shared/entity": ["libs/api/shared/entity/src/index.ts"],
 			"@tempus/api/shared/feature-auth": ["libs/api/shared/feature-auth/src/index.ts"],
 			"@tempus/api/shared/feature-core": ["libs/api/shared/feature-core/src/index.ts"],

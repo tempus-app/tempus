@@ -1,5 +1,5 @@
 import { Request, Controller, Post, UseGuards } from '@nestjs/common';
-import { AuthDto } from '@tempus/shared-domain';
+import { AuthDto } from '@tempus/api/shared/dto';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { AuthService } from './auth.service';
 

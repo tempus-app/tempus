@@ -10,7 +10,15 @@ import { AppService } from './app.service';
 import { AppController } from './app.controller';
 
 @Module({
-	imports: [CoreModule, AccountModule, ProfileModule, EmailModule, PdfgeneratorModule, AuthModule],
+	imports: [
+		CoreModule,
+		ApiSharedEntityModule,
+		AccountModule,
+		ProfileModule,
+		EmailModule,
+		PdfgeneratorModule,
+		AuthModule,
+	],
 	controllers: [AppController],
 	providers: [AppService],
 })

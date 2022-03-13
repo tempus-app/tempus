@@ -1,4 +1,5 @@
-import { Certification, CreateCertificationDto } from '@tempus/shared-domain';
+import { CreateCertificationDto } from '@tempus/api/shared/dto';
+import { Certification } from '@tempus/shared-domain';
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
 import { ResourceEntity } from '../account-entities';
 

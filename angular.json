@@ -1,12 +1,12 @@
 {
 	"version": 2,
 	"projects": {
+		"api-shared-dto": "libs/api/shared/dto",
 		"api-shared-entity": "libs/api/shared/entity",
 		"api-shared-feature-auth": "libs/api/shared/feature-auth",
 		"api-shared-feature-core": "libs/api/shared/feature-core",
 		"api-shared-feature-email": "libs/api/shared/feature-email",
 		"api-shared-feature-pdfgenerator": "libs/api/shared/feature-pdfgenerator",
-		"onboarding-client-signup-guards": "libs/client/onboarding-client/signup/guards",
 		"client-shared-ui-assets": "libs/client/shared/ui-assets",
 		"client-shared-ui-components-input": "libs/client/shared/ui-components/input",
 		"client-shared-ui-components-persistent": "libs/client/shared/ui-components/persistent",
@@ -28,6 +28,7 @@
 		"onboarding-client-signup-feature-myinfo-two": "libs/client/onboarding-client/signup/features/feature-myinfo-two",
 		"onboarding-client-signup-feature-review-info": "libs/client/onboarding-client/signup/features/feature-review-info",
 		"onboarding-client-signup-feature-upload-resume": "libs/client/onboarding-client/signup/features/feature-upload-resume",
+		"onboarding-client-signup-guards": "libs/client/onboarding-client/signup/guards",
 		"onboarding-client-signup-shell": "libs/client/onboarding-client/signup/shell",
 		"shared-domain": "libs/shared/domain",
 		"shared-util": "libs/shared/util",

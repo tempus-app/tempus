@@ -1,2 +1,2 @@
-export * from './createCertification.dto';
-export * from './updateCertification.dto';
+export * from './IcreateCertification.dto';
+export * from './IupdateCertification.dto';
