@@ -6,7 +6,6 @@ import { createMock } from '@golevelup/ts-jest';
 import { Repository } from 'typeorm';
 import { StatusType, UpdatelinkDto } from '@tempus/shared-domain';
 import { NotFoundException } from '@nestjs/common';
-
 import { LinkService } from '../../services/link.service';
 import { createLinkEntity, dbLink, expiredDBLink, linkEntity } from '../mocks/link.mock';
 
@@ -43,6 +42,10 @@ describe('LinkService', () => {
 
 		// more imports
 	});
+
+	afterEach(() => {
+		jest.clearAllMocks();
+	});
 	describe('createLink()', () => {
 		it('should successfully create a link from entity and send email', async () => {
 			const createdLink = { ...createLinkEntity, id: 3, status: StatusType.ACTIVE, token: 'fake-uuid' };
@@ -72,6 +75,20 @@ describe('LinkService', () => {
 			expect(mockRepository.save).toBeCalledWith(expect.objectContaining({ ...createdLink, id: null }));
 
 			expect(res).toEqual(expect.objectContaining({ ...createdLink, id: 3 }));
+		});
+
+		it('should not save the link if email linking fails', async () => {
+			mockEmailService.sendInvitationEmail.mockRejectedValue(new Error('timeout'));
+
+			let error;
+			try {
+				await linkService.createLink(createLinkEntity);
+			} catch (e) {
+				error = e;
+			}
+			expect(error).toBeInstanceOf(Error);
+			expect(error.message).toBe('timeout');
+			expect(mockRepository.save).not.toBeCalled();
 		});
 	});
 	describe('findLinkById()', () => {
