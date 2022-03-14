@@ -29,6 +29,12 @@ export const createTrainingAndSkillDetails = createAction(
 		certifications: ICreateCertificationDto[];
 	}>(),
 );
+export const setResourceLinkId = createAction(
+	'[Signup Credentials Page] Set Resource Link Id',
+	props<{
+		linkId: number;
+	}>(),
+);
 
 export const createResource = createAction('[Signup Review Page] Create Resource');
 

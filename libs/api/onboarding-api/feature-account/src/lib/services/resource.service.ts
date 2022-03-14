@@ -4,11 +4,12 @@ import { Injectable, InternalServerErrorException, NotFoundException } from '@ne
 import { InjectRepository } from '@nestjs/typeorm';
 import { ConfigService } from '@nestjs/config';
 import { ViewsService } from '@tempus/onboarding-api/feature-profile';
-import { Resource, ViewType } from '@tempus/shared-domain';
-import { Repository } from 'typeorm';
+import { Resource, StatusType, ViewType } from '@tempus/shared-domain';
+import { Repository, Transaction, TransactionRepository } from 'typeorm';
 import { genSalt, hash } from 'bcrypt';
 import { ResourceEntity } from '@tempus/api/shared/entity';
 import { CreateResourceDto, UpdateResourceDto } from '@tempus/api/shared/dto';
+import { LinkService } from './link.service';
 
 @Injectable()
 export class ResourceService {
@@ -17,6 +18,7 @@ export class ResourceService {
 		private resourceRepository: Repository<ResourceEntity>,
 		private viewsService: ViewsService,
 		private configService: ConfigService,
+		private linkService: LinkService,
 	) {}
 
 	async createResource(resource: CreateResourceDto): Promise<Resource> {
@@ -41,6 +43,7 @@ export class ResourceService {
 		createdResource.views.push(view);
 		createdResource = await this.resourceRepository.save(createdResource);
 		createdResource.password = null;
+		this.linkService.editLinkStatus(resource.linkId, StatusType.COMPLETED);
 		return createdResource;
 	}
 

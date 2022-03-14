@@ -113,10 +113,8 @@
 		</mat-grid-tile>
 		<mat-grid-tile *ngIf="hideElement" colspan="1" rowspan="3"></mat-grid-tile>
 	</mat-grid-list>
-	<div>
-		<button color="primary" mat-raised-button matStepperPrevious type="button" (click)="backStep()">Back</button>
-	</div>
 	<div class="button-container">
+		<button color="primary" mat-raised-button matStepperPrevious type="button" (click)="backStep()">Back</button>
 		<button color="primary" mat-raised-button (click)="submit()">Submit</button>
 	</div>
 	<tempus-spinner [showSpinner]="loading"></tempus-spinner>

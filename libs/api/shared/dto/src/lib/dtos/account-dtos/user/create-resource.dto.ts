@@ -8,6 +8,9 @@ import { CreateLocationDto } from '../../common-dtos/createLocation.dto';
 import { CreateUserDto } from './create-user.dto';
 
 export class CreateResourceDto extends CreateUserDto implements ICreateResourceDto {
+	@ApiProperty()
+	linkId?: number;
+
 	@ApiProperty({ enum: ['ASSIGNED_RESOURCE', 'AVAILABLE_RESOURCE', 'SUPERVISOR'] })
 	override roles: RoleType[];
 

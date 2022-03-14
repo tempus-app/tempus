@@ -9,6 +9,8 @@ import {
 import { ICreateUserDto } from './IcreateUser.dto';
 
 export interface ICreateResourceDto extends ICreateUserDto {
+	tokenId?: number;
+
 	roles: RoleType[];
 
 	phoneNumber: string;

@@ -7,11 +7,12 @@ import {
 	loadLinkData,
 	selectLinkData,
 	selectLinkErrorStatus,
+	setResourceLinkId,
 	SignupState,
 } from '@tempus/client/onboarding-client/signup/data-access';
 import { Link, StatusType } from '@tempus/shared-domain';
 import { Subscription } from 'rxjs';
-import { tap, switchMap, map, filter, withLatestFrom } from 'rxjs/operators';
+import { tap, filter } from 'rxjs/operators';
 import { SignupErrorModalComponent } from './error.modal';
 
 @Component({
@@ -64,6 +65,7 @@ export class CredentialsComponent implements OnInit, OnDestroy {
 					if (link?.id) {
 						if (link?.status === StatusType.ACTIVE) {
 							this.link = link;
+							this.store.dispatch(setResourceLinkId({ linkId: link.id }));
 						} else if (link?.status === StatusType.COMPLETED) {
 							this.openDialog('Link has already been used');
 						}

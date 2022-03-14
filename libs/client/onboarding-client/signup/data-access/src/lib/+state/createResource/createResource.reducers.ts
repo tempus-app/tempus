@@ -62,6 +62,7 @@ export const resourceReducer = createReducer(
 			},
 		}),
 	),
+	on(ResourceActions.setResourceLinkId, (state, { linkId }) => ({ ...state, linkId })),
 	on(ResourceActions.createResource, state => ({ ...state, status: AsyncRequestState.LOADING })),
 	on(ResourceActions.createResourceSuccess, state => ({
 		...state,
