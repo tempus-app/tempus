@@ -37,8 +37,8 @@ export class LinkService {
 		if (!linkEntity) {
 			throw new NotFoundException(`Could not find token with id ${linkId}`);
 		}
-		if (!LinkService.isLinkExpired(linkEntity)) {
-			await this.editLinkStatus(linkId, StatusType.INACTIVE, linkEntity);
+		if (LinkService.isLinkExpired(linkEntity)) {
+			return this.editLinkStatus(linkId, StatusType.INACTIVE, linkEntity);
 		}
 		return linkEntity;
 	}
@@ -51,7 +51,7 @@ export class LinkService {
 			throw new NotFoundException(`Could not find link with token ${token}`);
 		}
 		if (LinkService.isLinkExpired(linkEntity)) {
-			return this.editLinkStatus(linkEntity.id, StatusType.INACTIVE);
+			return this.editLinkStatus(linkEntity.id, StatusType.INACTIVE, linkEntity);
 		}
 		return linkEntity;
 	}
@@ -62,15 +62,15 @@ export class LinkService {
 
 	async editLinkStatus(linkId: number, newStatus: StatusType, linkEntity?: LinkEntity): Promise<Link> {
 		let existingLinkEntity = linkEntity;
-		if (!linkEntity) {
+		if (!existingLinkEntity) {
 			existingLinkEntity = await this.linkRepository.findOne(linkId);
 		}
+		// recheck
 		if (!existingLinkEntity) {
-			throw new NotFoundException(`Could not find link with id ${existingLinkEntity.id}`);
+			throw new NotFoundException(`Could not find link with id ${linkId}`);
 		}
 
 		existingLinkEntity.status = newStatus;
-
 		return this.linkRepository.save(existingLinkEntity);
 	}
 
