@@ -1,6 +1,5 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Country, State } from 'country-state-city';
-import { Subject } from 'rxjs';
 import { InputType } from '@tempus/client/shared/ui-components/input';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormArray, FormBuilder, Validators } from '@angular/forms';
@@ -10,15 +9,7 @@ import { FormArray, FormBuilder, Validators } from '@angular/forms';
 	templateUrl: './my-info-two.component.html',
 	styleUrls: ['./my-info-two.component.scss'],
 })
-export class MyInfoTwoComponent implements OnDestroy, OnInit {
-	destroyed = new Subject<void>();
-
-	rows = '10';
-
-	workCols = '3';
-
-	locationCols = '2';
-
+export class MyInfoTwoComponent implements OnInit {
 	numberWorkSections: number[] = [0];
 
 	InputType = InputType;
@@ -56,11 +47,6 @@ export class MyInfoTwoComponent implements OnDestroy, OnInit {
 		});
 
 		this.totalWorkExperience.push(workExperience);
-	}
-
-	ngOnDestroy() {
-		this.destroyed.next();
-		this.destroyed.complete();
 	}
 
 	addWorkSections() {

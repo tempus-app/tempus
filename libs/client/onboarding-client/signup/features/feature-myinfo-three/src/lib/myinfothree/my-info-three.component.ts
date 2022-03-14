@@ -1,6 +1,5 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Country, State } from 'country-state-city';
-import { Subject } from 'rxjs';
 import { InputType } from '@tempus/client/shared/ui-components/input';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { MatChipInputEvent } from '@angular/material/chips';
@@ -12,21 +11,7 @@ import { FormArray, FormBuilder, Validators } from '@angular/forms';
 	templateUrl: './my-info-three.component.html',
 	styleUrls: ['./my-info-three.component.scss'],
 })
-export class MyInfoThreeComponent implements OnDestroy, OnInit {
-	destroyed = new Subject<void>();
-
-	cols = '1';
-
-	buttonSpacing = '2';
-
-	certRows = '6';
-
-	educationCols = '3';
-
-	locationCols = '2';
-
-	rows = '12';
-
+export class MyInfoThreeComponent implements OnInit {
 	InputType = InputType;
 
 	addOnBlur = true;
@@ -85,11 +70,6 @@ export class MyInfoThreeComponent implements OnDestroy, OnInit {
 
 		this.qualifications.push(qualification);
 		this.certifications.push(certification);
-	}
-
-	ngOnDestroy() {
-		this.destroyed.next();
-		this.destroyed.complete();
 	}
 
 	addEducationSections() {

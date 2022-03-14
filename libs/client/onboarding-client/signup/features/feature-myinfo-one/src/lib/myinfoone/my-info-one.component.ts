@@ -1,6 +1,5 @@
-import { Component, OnDestroy, Output, EventEmitter } from '@angular/core';
+import { Component, Output, EventEmitter } from '@angular/core';
 import { Country, State } from 'country-state-city';
-import { Subject } from 'rxjs';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { InputType } from '@tempus/client/shared/ui-components/input';
@@ -10,7 +9,7 @@ import { InputType } from '@tempus/client/shared/ui-components/input';
 	templateUrl: './my-info-one.component.html',
 	styleUrls: ['./my-info-one.component.scss'],
 })
-export class MyInfoOneComponent implements OnDestroy {
+export class MyInfoOneComponent {
 	myInfoForm = this.fb.group({
 		firstName: ['', Validators.required],
 		lastName: ['', Validators.required],
@@ -31,20 +30,9 @@ export class MyInfoOneComponent implements OnDestroy {
 		return state.name;
 	});
 
-	destroyed = new Subject<void>();
-
-	cols = '1';
-
-	rows = '5';
-
 	@Output() formIsValid = new EventEmitter<boolean>();
 
 	constructor(private fb: FormBuilder, private router: Router, private route: ActivatedRoute) {}
-
-	ngOnDestroy() {
-		this.destroyed.next();
-		this.destroyed.complete();
-	}
 
 	updateStateOptions(inputtedCountry: string) {
 		const countryCode = Country.getAllCountries().find(country => country.name === inputtedCountry);

@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { Subject, takeUntil } from 'rxjs';
+import { Subject } from 'rxjs';
 import { formatDateRange } from '@tempus/shared/util';
 import { Experience, Education } from '@tempus/shared-domain';
 import { ActivatedRoute, Router } from '@angular/router';
