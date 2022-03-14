@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ClientSharedUiComponentsInputModule } from '@tempus/client/shared/ui-components/input';
 import { ClientSharedUiComponentsPresentationalModule } from '@tempus/client/shared/ui-components/presentational';
+import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -19,6 +20,7 @@ import { MyInfoTwoComponent } from './myinfotwo/my-info-two.component';
 		ClientSharedUiComponentsInputModule,
 		ClientSharedUiComponentsPresentationalModule,
 		MatGridListModule,
+		FlexLayoutModule,
 		ReactiveFormsModule,
 		RouterModule.forChild([
 			{

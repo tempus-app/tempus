@@ -1,4 +1,5 @@
 @use 'abstracts/helper' as abs;
+
 tempus-card {
 	width: 80%;
 }
@@ -15,15 +16,6 @@ tempus-card {
 .section-header {
 	padding: 0.5em 0em 0.5em 0em;
 	border-bottom: 2px solid abs.$primary-300;
-}
-
-.grid-container {
-	padding-left: 10%;
-	padding-right: 10%;
-	@media screen and (max-width: 1024px) {
-		padding-left: 0px;
-		padding-right: 0px;
-	}
 }
 
 .view-file-container {

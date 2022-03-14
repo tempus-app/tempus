@@ -1,35 +1,130 @@
 <ng-container>
-	<mat-grid-list cols="2" rowHeight="50px">
-		<mat-grid-tile colspan="2" rowspan="2">
+	<div fxLayout="column" fxFill>
+		<div class="container" fxFlex>
+			<div fxFlex="5"></div>
 			<div class="info-title">
-				<h2 class="mat-h2 section-header">Name</h2>
+				<h2 class="mat-h2">Name</h2>
 			</div>
-		</mat-grid-tile>
-		<mat-grid-tile colspan="2" rowspan="{{ rows }}">
+			<div fxFlex="5"></div>
+		</div>
+		<div class="container">
+			<div fxFlex="5"></div>
 			<tempus-card>
 				<mat-card-content>
 					<form>
-						<div></div>
-						<mat-grid-list cols="2" rowHeight="100px">
-							<mat-grid-tile colspan="{{ cols }}">
-								<tempus-text-input
-									[inputType]="InputType.TEXT"
-									placeholder="First Name"
-									cssClass="secondary"
-									[control]="$any(myInfoForm).get('firstName')"
-								>
-								</tempus-text-input>
-							</mat-grid-tile>
-							<mat-grid-tile colspan="{{ cols }}">
-								<tempus-text-input
-									[inputType]="InputType.TEXT"
-									placeholder="Last Name"
-									cssClass="secondary"
-									[control]="$any(myInfoForm).get('lastName')"
-								>
-								</tempus-text-input>
-							</mat-grid-tile>
-							<!-- <mat-grid-tile colspan="{{ cols }}" *ngIf="
+						<div fxLayout="column" fxLayoutGap="10px" class="container">
+							<div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxFlex="33%" class="block-2">
+								<div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="center center" fxFlexFill class="grid-item">
+									<tempus-text-input
+										[inputType]="InputType.TEXT"
+										placeholder="First Name"
+										cssClass="secondary"
+										[control]="$any(myInfoForm).get('firstName')"
+									>
+									</tempus-text-input>
+								</div>
+								<div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="center center" fxFlexFill class="grid-item">
+									<tempus-text-input
+										[inputType]="InputType.TEXT"
+										placeholder="Last Name"
+										cssClass="secondary"
+										[control]="$any(myInfoForm).get('lastName')"
+									>
+									</tempus-text-input>
+								</div>
+							</div>
+							<div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxFlex="33%" class="block-2">
+								<div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="center center" fxFlexFill class="grid-item">
+									<tempus-text-input
+										placeholder="Phone Number"
+										cssClass="secondary"
+										[control]="$any(myInfoForm).get('phoneNumber')"
+									></tempus-text-input>
+								</div>
+								<div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="center center" fxFlexFill class="grid-item">
+									<tempus-text-input
+										[inputType]="InputType.EMAIL"
+										placeholder="Email"
+										cssClass="secondary"
+										[control]="$any(myInfoForm).get('email')"
+									>
+									</tempus-text-input>
+								</div>
+							</div>
+						</div>
+					</form>
+				</mat-card-content>
+			</tempus-card>
+			<div fxFlex="5"></div>
+		</div>
+		<div class="container" fxFlex>
+			<div fxFlex="5"></div>
+			<div class="info-title">
+				<h2 class="mat-h2">Address</h2>
+			</div>
+			<div fxFlex="5"></div>
+		</div>
+		<div class="container">
+			<div fxFlex="5"></div>
+			<tempus-card>
+				<mat-card-content>
+					<form>
+						<div fxLayout="column" fxLayoutGap="10px" class="container">
+							<div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxFlex="33%" class="block-2">
+								<div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="center center" fxFlexFill class="grid-item">
+									<tempus-search-box
+										[options]="countries"
+										placeholder="Country"
+										cssClass="secondary"
+										(optionSelect)="updateStateOptions($event)"
+										[control]="$any(myInfoForm).get('country')"
+									>
+									</tempus-search-box>
+								</div>
+								<div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="center center" fxFlexFill class="grid-item">
+									<tempus-dropdown
+										[options]="states"
+										label="State"
+										cssClass="secondary"
+										[control]="$any(myInfoForm).get('state')"
+									></tempus-dropdown>
+								</div>
+							</div>
+							<div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxFlex="33%" class="block-2">
+								<div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="center center" fxFlexFill class="grid-item">
+									<tempus-text-input placeholder="City" cssClass="secondary" [control]="$any(myInfoForm).get('city')">
+									</tempus-text-input>
+								</div>
+								<div
+									fxFlex.gt-sm="50%"
+									fxFlex.lt-md="50%"
+									fxLayoutAlign="center center"
+									fxFlexFill
+									class="grid-item"
+								></div>
+							</div>
+						</div>
+					</form>
+				</mat-card-content>
+			</tempus-card>
+			<div fxFlex="5"></div>
+		</div>
+		<div class="container button-container">
+			<button color="primary" mat-raised-button matStepperPrevious type="button" (click)="backStep()">Back</button>
+			<button
+				color="primary"
+				mat-raised-button
+				matStepperNext="button"
+				[disabled]="!myInfoForm.valid"
+				(click)="nextStep()"
+			>
+				Next
+			</button>
+		</div>
+	</div>
+</ng-container>
+
+<!-- <mat-grid-tile colspan="{{ cols }}" *ngIf="
 							$any(myInfoForm).get('firstName').invalid && ($any(myInfoForm).get('firstName').touched || $any(myInfoForm).get('firstName').dirty)
 							">
 								<mat-error class="mat-body-2" >
@@ -43,74 +138,3 @@
 								You must enter your first name.
 								</mat-error>
 							</mat-grid-tile> -->
-							<mat-grid-tile colspan="{{ cols }}">
-								<tempus-text-input
-									placeholder="Phone Number"
-									cssClass="secondary"
-									[control]="$any(myInfoForm).get('phoneNumber')"
-								></tempus-text-input>
-							</mat-grid-tile>
-							<mat-grid-tile colspan="{{ cols }}">
-								<tempus-text-input
-									[inputType]="InputType.EMAIL"
-									placeholder="Email"
-									cssClass="secondary"
-									[control]="$any(myInfoForm).get('email')"
-								></tempus-text-input>
-							</mat-grid-tile>
-						</mat-grid-list>
-					</form>
-				</mat-card-content>
-			</tempus-card>
-		</mat-grid-tile>
-		<mat-grid-tile colspan="2" rowspan="2">
-			<div class="info-title">
-				<h2 class="mat-h2 section-header">Address</h2>
-			</div>
-		</mat-grid-tile>
-		<mat-grid-tile colspan="2" rowspan="{{ rows }}">
-			<tempus-card>
-				<mat-card-content>
-					<form [formGroup]="myInfoForm">
-						<mat-grid-list cols="2" rowHeight="100px">
-							<mat-grid-tile colspan="{{ cols }}">
-								<tempus-search-box
-									[options]="countries"
-									placeholder="Country"
-									cssClass="secondary"
-									(optionSelect)="updateStateOptions($event)"
-									[control]="$any(myInfoForm).get('country')"
-								>
-								</tempus-search-box>
-							</mat-grid-tile>
-							<mat-grid-tile colspan="{{ cols }}">
-								<tempus-dropdown
-									[options]="states"
-									label="State"
-									cssClass="secondary"
-									[control]="$any(myInfoForm).get('state')"
-								></tempus-dropdown>
-							</mat-grid-tile>
-							<mat-grid-tile colspan="{{ cols }}">
-								<tempus-text-input placeholder="City" cssClass="secondary" [control]="$any(myInfoForm).get('city')">
-								</tempus-text-input>
-							</mat-grid-tile>
-						</mat-grid-list>
-					</form>
-				</mat-card-content>
-			</tempus-card>
-		</mat-grid-tile>
-	</mat-grid-list>
-	<div class="button-container">
-		<button color="primary" mat-raised-button matStepperPrevious type="button" (click)="backStep()">Back</button>
-		<button
-			color="primary"
-			mat-raised-button
-			matStepperNext="button"
-			[disabled]="!myInfoForm.valid"
-			(click)="nextStep()"
-		>
-			Next
-		</button>
-	</div>
-</ng-container>

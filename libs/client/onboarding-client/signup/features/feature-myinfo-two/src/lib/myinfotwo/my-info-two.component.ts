@@ -1,8 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Country, State } from 'country-state-city';
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
 import { InputType } from '@tempus/client/shared/ui-components/input';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormArray, FormBuilder, Validators } from '@angular/forms';
@@ -43,31 +41,7 @@ export class MyInfoTwoComponent implements OnDestroy, OnInit {
 		return this.myInfoForm.controls['workExperience'] as FormArray;
 	}
 
-	constructor(
-		private route: ActivatedRoute,
-		private fb: FormBuilder,
-		breakpointObserver: BreakpointObserver,
-		private router: Router,
-	) {
-		breakpointObserver
-			.observe([Breakpoints.XSmall, Breakpoints.Small, Breakpoints.Medium, Breakpoints.Large, Breakpoints.XLarge])
-			.pipe(takeUntil(this.destroyed))
-			.subscribe(result => {
-				for (const query of Object.keys(result.breakpoints)) {
-					if (result.breakpoints[query]) {
-						if (query === Breakpoints.XSmall || query === Breakpoints.Small) {
-							this.rows = '16';
-							this.workCols = '6';
-							this.locationCols = '6';
-						} else {
-							this.rows = '11';
-							this.workCols = '3';
-							this.locationCols = '2';
-						}
-					}
-				}
-			});
-	}
+	constructor(private route: ActivatedRoute, private fb: FormBuilder, private router: Router) {}
 
 	ngOnInit() {
 		const workExperience = this.fb.group({

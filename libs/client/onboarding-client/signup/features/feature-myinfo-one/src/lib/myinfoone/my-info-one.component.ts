@@ -1,8 +1,6 @@
 import { Component, OnDestroy, Output, EventEmitter } from '@angular/core';
 import { Country, State } from 'country-state-city';
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { InputType } from '@tempus/client/shared/ui-components/input';
@@ -39,40 +37,9 @@ export class MyInfoOneComponent implements OnDestroy {
 
 	rows = '5';
 
-	// Create a map to display breakpoint names for demonstration purposes.
-	displayNameMap = new Map([
-		[Breakpoints.XSmall, '1'],
-		[Breakpoints.Small, 'Small'],
-		[Breakpoints.Medium, 'Medium'],
-		[Breakpoints.Large, 'Large'],
-		[Breakpoints.XLarge, 'XLarge'],
-	]);
-
 	@Output() formIsValid = new EventEmitter<boolean>();
 
-	constructor(
-		private fb: FormBuilder,
-		breakpointObserver: BreakpointObserver,
-		private router: Router,
-		private route: ActivatedRoute,
-	) {
-		breakpointObserver
-			.observe([Breakpoints.XSmall, Breakpoints.Small, Breakpoints.Medium, Breakpoints.Large, Breakpoints.XLarge])
-			.pipe(takeUntil(this.destroyed))
-			.subscribe(result => {
-				for (const query of Object.keys(result.breakpoints)) {
-					if (result.breakpoints[query]) {
-						if (query === Breakpoints.XSmall || query === Breakpoints.Small) {
-							this.rows = '8';
-							this.cols = '2';
-						} else {
-							this.rows = '5';
-							this.cols = '1';
-						}
-					}
-				}
-			});
-	}
+	constructor(private fb: FormBuilder, private router: Router, private route: ActivatedRoute) {}
 
 	ngOnDestroy() {
 		this.destroyed.next();

@@ -9,7 +9,7 @@ const routes: Routes = [
 		component: OnboardingClientShellComponent,
 		children: [
 			{
-				path: 'signup/:token',
+				path: 'signup/token',
 				loadChildren: () =>
 					import('@tempus/onboarding-client/signup/shell').then(m => m.OnboardingClientSignupFeatureShellModule),
 			},
