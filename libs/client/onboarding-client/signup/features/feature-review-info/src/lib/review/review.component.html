@@ -43,37 +43,39 @@
 			<div fxFlex="5"></div>
 		</div>
 		<div *ngFor="let workExperience of workExperienceSummary">
-			<div fxFlex.lt-sm="5"></div>
-			<tempus-card>
-				<div fxLayout="column" fxLayoutGap="30px">
-					<div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxFlex="33%" class="block-2">
-						<div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="start start" fxFlexFill class="grid-item">
-							<div class="left-card-header">
-								<h3 class="mat-h3">{{ workExperience.company }}</h3>
-								<p class="mat-body-2">{{ workExperience.title }}</p>
+			<div fxFlex="5"></div>
+			<div>
+				<tempus-card>
+					<div fxLayout="column" fxLayoutGap="30px">
+						<div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxFlex="33%" class="block-2">
+							<div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="start start" fxFlexFill class="grid-item">
+								<div class="left-card-header">
+									<h3 class="mat-h3">{{ workExperience.company }}</h3>
+									<p class="mat-body-2">{{ workExperience.title }}</p>
+								</div>
+							</div>
+							<div
+								fxFlex.gt-sm="50%"
+								fxFlex.lt-md="50%"
+								fxLayoutAlign="end end"
+								fxLayoutAlign.lt-md="start start"
+								fxFlexFill
+								class="grid-item"
+							>
+								<div>
+									<p class="mat-body-2">{{ formatDate(workExperience.startDate, workExperience.endDate) }}</p>
+								</div>
 							</div>
 						</div>
-						<div
-							fxFlex.gt-sm="50%"
-							fxFlex.lt-md="50%"
-							fxLayoutAlign="end end"
-							fxLayoutAlign.lt-md="start start"
-							fxFlexFill
-							class="grid-item"
-						>
-							<div>
-								<p class="mat-body-2">{{ formatDate(workExperience.startDate, workExperience.endDate) }}</p>
+						<div>
+							<div *ngFor="let desc of workExperience.description">
+								<p class="mat-body-2">{{ desc }}</p>
 							</div>
 						</div>
 					</div>
-					<div>
-						<div *ngFor="let desc of workExperience.description">
-							<p class="mat-body-2">{{ desc }}</p>
-						</div>
-					</div>
-				</div>
-			</tempus-card>
-			<div fxFlex.lt-sm="5"></div>
+				</tempus-card>
+			</div>
+			<div fxFlex="5"></div>
 		</div>
 		<div fxFlex>
 			<div fxFlex="5"></div>
@@ -84,30 +86,32 @@
 		</div>
 		<div *ngFor="let education of educationSummary">
 			<div fxFlex="30" fxFlex.lt-md="5"></div>
-			<tempus-card>
-				<div fxLayout="column" fxLayoutGap="30px">
-					<div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxFlex="33%" class="block-2">
-						<div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="start start" fxFlexFill class="grid-item">
-							<div class="left-card-header">
-								<h3 class="mat-h3">{{ education.institution }}</h3>
-								<p class="mat-body-2">{{ education.degree }}</p>
+			<div fxFlex="40" fxFlex.lt-md="90">
+				<tempus-card>
+					<div fxLayout="column" fxLayoutGap="30px">
+						<div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxFlex="33%" class="block-2">
+							<div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="start start" fxFlexFill class="grid-item">
+								<div class="left-card-header">
+									<h3 class="mat-h3">{{ education.institution }}</h3>
+									<p class="mat-body-2">{{ education.degree }}</p>
+								</div>
 							</div>
-						</div>
-						<div
-							fxFlex.gt-sm="50%"
-							fxFlex.lt-md="50%"
-							fxLayoutAlign="end end"
-							fxLayoutAlign.lt-md="start start"
-							fxFlexFill
-							class="grid-item"
-						>
-							<div>
-								<p class="mat-body-2">{{ formatDate(education.startDate, education.endDate) }}</p>
+							<div
+								fxFlex.gt-sm="50%"
+								fxFlex.lt-md="50%"
+								fxLayoutAlign="end end"
+								fxLayoutAlign.lt-md="start start"
+								fxFlexFill
+								class="grid-item"
+							>
+								<div>
+									<p class="mat-body-2">{{ formatDate(education.startDate, education.endDate) }}</p>
+								</div>
 							</div>
 						</div>
 					</div>
-				</div>
-			</tempus-card>
+				</tempus-card>
+			</div>
 			<div fxFlex="30" fxFlex.lt-md="5"></div>
 		</div>
 		<div fxFlex>
