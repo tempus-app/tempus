@@ -29,4 +29,5 @@ export const linkReducer = createReducer(
 		status: AsyncRequestState.SUCCESS,
 	})),
 	on(LinkActions.loadLinkDataFailure, (state, { error }) => ({ ...state, error, status: AsyncRequestState.ERROR })),
+	on(LinkActions.resetLinkState, state => initialState),
 );

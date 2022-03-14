@@ -37,6 +37,7 @@ export class ResourceService {
 			type: 'PROFILE',
 		});
 
+		if (!createdResource.views) createdResource.views = [];
 		createdResource.views.push(view);
 		createdResource = await this.resourceRepository.save(createdResource);
 		createdResource.password = null;

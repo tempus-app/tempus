@@ -73,4 +73,5 @@ export const resourceReducer = createReducer(
 		status: AsyncRequestState.ERROR,
 		error,
 	})),
+	on(ResourceActions.resetCreateResourceState, state => initialState),
 );

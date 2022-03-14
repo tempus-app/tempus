@@ -8,8 +8,12 @@ export class CreateCertificationDto implements ICreateCertificationDto {
 	@ApiProperty()
 	institution: string;
 
-	constructor(title: string, institution: string) {
+	@ApiProperty()
+	summary: string;
+
+	constructor(title: string, institution: string, summary: string) {
 		this.title = title;
 		this.institution = institution;
+		this.summary = summary;
 	}
 }

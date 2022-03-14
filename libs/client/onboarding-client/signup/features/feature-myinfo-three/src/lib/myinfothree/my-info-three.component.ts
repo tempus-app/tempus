@@ -146,7 +146,7 @@ export class MyInfoThreeComponent implements OnDestroy, OnInit {
 						this.fb.group({
 							certifyingAuthority: [certification.institution, Validators.required],
 							title: [certification.title, Validators.required],
-							summary: [''],
+							summary: [certification.summary],
 						}),
 					);
 				});
@@ -207,7 +207,7 @@ export class MyInfoThreeComponent implements OnDestroy, OnInit {
 		const certification = this.fb.group({
 			certifyingAuthority: ['', Validators.required],
 			title: ['', Validators.required],
-			description: [''],
+			summary: [''],
 		});
 		this.certifications.push(certification);
 	}
@@ -253,7 +253,7 @@ export class MyInfoThreeComponent implements OnDestroy, OnInit {
 					educationsSummary: this.myInfoForm.get('educationSummary')?.value,
 					educations: this.qualifications.value.map(
 						(qualification: {
-							degree: string;
+							field: string;
 							institution: string;
 							startDate: Date;
 							endDate: Date;
@@ -262,7 +262,7 @@ export class MyInfoThreeComponent implements OnDestroy, OnInit {
 							state: string;
 						}) => {
 							return {
-								degree: qualification.degree,
+								degree: qualification.field,
 								institution: qualification.institution,
 								startDate: qualification.startDate,
 								endDate: qualification.endDate,
@@ -281,12 +281,15 @@ export class MyInfoThreeComponent implements OnDestroy, OnInit {
 							} as ICreateSkillTypeDto,
 						} as ICreateSkillDto;
 					}),
-					certifications: this.certifications.value.map((certification: { title: string; institution: string }) => {
-						return {
-							title: certification.title,
-							institution: certification.institution,
-						} as ICreateCertificationDto;
-					}),
+					certifications: this.certifications.value.map(
+						(certification: { title: string; certifyingAuthority: string; summary: string }) => {
+							return {
+								title: certification.title,
+								institution: certification.certifyingAuthority,
+								summary: certification.summary,
+							} as ICreateCertificationDto;
+						},
+					),
 				}),
 			);
 		}

@@ -9,7 +9,11 @@
 			<tempus-card>
 				<div class="card-header">
 					<h3 class="mat-h3 section-header">Legal Name</h3>
-					<p class="mat-body-1">{{ name }}</p>
+					<p class="mat-body-1">{{ firstName }}</p>
+				</div>
+				<div class="card-header">
+					<h3 class="mat-h3 section-header">Family Name</h3>
+					<p class="mat-body-1">{{ lastName }}</p>
 				</div>
 				<div class="card-header">
 					<h3 class="mat-h3 section-header">Email</h3>
@@ -32,9 +36,15 @@
 				<h2 class="mat-h2">Work Experience</h2>
 			</div>
 		</mat-grid-tile>
-		<mat-grid-tile *ngFor="let workExperience of workExperienceSummary" colspan="2" rowspan="6">
+		<mat-grid-tile rowspan="3">
+			<p class="mat-body-2">{{ experiencesSummary }}</p>
+		</mat-grid-tile>
+		<mat-grid-tile *ngFor="let workExperience of workExperiences" colspan="2" rowspan="6">
 			<tempus-card class="work-experience-card">
 				<mat-grid-list cols="2" rowHeight="50px">
+					<mat-grid-tile colspan="2" rowspan="3">
+						<p class="mat-body-2">{{ workExperience.summary }}</p>
+					</mat-grid-tile>
 					<mat-grid-tile colspan="{{ cols }}" rowspan="2">
 						<div class="left-card-header">
 							<h3 class="mat-h3">{{ workExperience.company }}</h3>
@@ -62,7 +72,10 @@
 			</div>
 		</mat-grid-tile>
 		<mat-grid-tile *ngIf="hideElement" colspan="1" rowspan="3"></mat-grid-tile>
-		<mat-grid-tile *ngFor="let education of educationSummary" colspan="{{ skillsEducationCols }}" rowspan="3">
+		<mat-grid-tile rowspan="3">
+			<p class="mat-body-2">{{ educationsSummary }}</p>
+		</mat-grid-tile>
+		<mat-grid-tile *ngFor="let education of educations" colspan="{{ skillsEducationCols }}" rowspan="3">
 			<tempus-card>
 				<mat-grid-list cols="2" rowHeight="3em">
 					<mat-grid-tile colspan="{{ cols }}" rowspan="2">
@@ -85,6 +98,9 @@
 				<h2 class="mat-h2">Skills</h2>
 			</div>
 		</mat-grid-tile>
+		<mat-grid-tile rowspan="3">
+			<p class="mat-body-2">{{ skillsSummary }}</p>
+		</mat-grid-tile>
 		<mat-grid-tile *ngIf="hideElement" colspan="1" rowspan="3"></mat-grid-tile>
 		<mat-grid-tile colspan="{{ skillsEducationCols }}" rowspan="5">
 			<tempus-card>
@@ -100,4 +116,8 @@
 	<div>
 		<button color="primary" mat-raised-button matStepperPrevious type="button" (click)="backStep()">Back</button>
 	</div>
+	<div class="button-container">
+		<button color="primary" mat-raised-button (click)="submit()">Submit</button>
+	</div>
+	<tempus-spinner [showSpinner]="loading"></tempus-spinner>
 </ng-container>

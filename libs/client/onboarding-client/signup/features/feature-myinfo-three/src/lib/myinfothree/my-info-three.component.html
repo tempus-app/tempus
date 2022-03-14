@@ -187,7 +187,11 @@
 		</mat-grid-tile>
 		<mat-grid-tile colspan="2" rowspan="6">
 			<tempus-card>
-				<tempus-text-area id="skill-summary" placeholder="Summary"></tempus-text-area>
+				<tempus-text-area
+					id="skill-summary"
+					placeholder="Summary"
+					[control]="$any(myInfoForm).get('skillsSummary')"
+				></tempus-text-area>
 				<form>
 					<mat-grid-list cols="2" rowHeight="40px">
 						<mat-grid-tile colspan="1" rowspan="1">

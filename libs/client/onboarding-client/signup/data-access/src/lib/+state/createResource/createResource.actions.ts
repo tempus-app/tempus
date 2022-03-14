@@ -32,6 +32,8 @@ export const createTrainingAndSkillDetails = createAction(
 
 export const createResource = createAction('[Signup Review Page] Create Resource');
 
+export const resetCreateResourceState = createAction('[Signup Review Page] Reset Create Resource State');
+
 export const createResourceSuccess = createAction('[Onboarding Client User API] Create Resource Success');
 
 export const createResourceFailure = createAction(
