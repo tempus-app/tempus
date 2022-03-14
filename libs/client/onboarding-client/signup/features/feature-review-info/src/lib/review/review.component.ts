@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Subject, takeUntil } from 'rxjs';
-import { formatDateRange } from '@tempus/shared/util';
 import { Experience, Education } from '@tempus/shared-domain';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -68,8 +67,30 @@ export class ReviewComponent {
 			});
 	}
 
+	formatDateRange(startDate: Date, endDate: Date): string {
+		const months = [
+			'January',
+			'February',
+			'March',
+			'April',
+			'May',
+			'June',
+			'July',
+			'August',
+			'September',
+			'October',
+			'November',
+			'December',
+		];
+
+		const startMonth = months[startDate.getMonth()];
+		const endMonth = months[startDate.getMonth()];
+
+		return `${startMonth}. ${startDate.getFullYear()} - ${endMonth}. ${endDate.getFullYear()}`;
+	}
+
 	formatDate(startDate: Date, endDate: Date) {
-		return formatDateRange(startDate, endDate);
+		return this.formatDateRange(startDate, endDate);
 	}
 
 	backStep() {

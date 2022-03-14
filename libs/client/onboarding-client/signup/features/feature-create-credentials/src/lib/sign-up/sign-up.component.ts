@@ -1,11 +1,10 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { InputType } from '@tempus/client/shared/ui-components/input';
 import { Store } from '@ngrx/store';
 import {
 	createCredentials,
-	createResource,
 	selectCredentialsCreated,
 	selectResourceData,
 	SignupState,
@@ -40,6 +39,11 @@ export class SignUpComponent implements OnInit {
 	InputType = InputType;
 
 	constructor(private router: Router, private route: ActivatedRoute, private store: Store<SignupState>) {}
+
+	ngOnChanges(changes: SimpleChanges): void {
+		// eslint-disable-next-line @typescript-eslint/dot-notation
+		this.formGroup.get('email')?.setValue(changes['email'].currentValue);
+	}
 
 	ngOnInit(): void {
 		this.store

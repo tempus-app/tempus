@@ -13,7 +13,7 @@ import {
 	selectWorkExperienceDetailsCreated,
 	SignupState,
 } from '@tempus/client/onboarding-client/signup/data-access';
-import { CreateExperienceDto, CreateLocationDto } from '@tempus/shared-domain';
+import { ICreateExperienceDto, ICreateLocationDto } from '@tempus/shared-domain';
 
 @Component({
 	selector: 'tempus-my-info-two',
@@ -22,8 +22,6 @@ import { CreateExperienceDto, CreateLocationDto } from '@tempus/shared-domain';
 })
 export class MyInfoTwoComponent implements OnDestroy, OnInit {
 	destroyed = new Subject<void>();
-
-	createdWorkExperiences: boolean | undefined;
 
 	rows = '10';
 
@@ -85,9 +83,6 @@ export class MyInfoTwoComponent implements OnDestroy, OnInit {
 			.select(selectWorkExperienceDetailsCreated)
 			.pipe(
 				take(1),
-				tap(created => {
-					this.createdWorkExperiences = created;
-				}),
 				filter(created => created),
 				switchMap(_ => this.store.select(selectResourceData)),
 				take(1),
@@ -163,28 +158,28 @@ export class MyInfoTwoComponent implements OnDestroy, OnInit {
 					experiencesSummary: this.myInfoForm.get('workExperienceSummary')?.value,
 					experiences: this.totalWorkExperience.value.map(
 						(workExperience: {
-							title: { value: string };
-							company: { value: string };
-							country: { value: string };
-							province: { value: string };
-							city: { value: string };
-							startDate: { value: Date };
-							endDate: { value: Date };
-							description: { value: string };
+							title: string;
+							company: string;
+							country: string;
+							state: string;
+							city: string;
+							startDate: Date;
+							endDate: Date;
+							description: string; // Need to be fixed to be array of strings
 						}) => {
 							return {
-								title: workExperience.title?.value,
-								company: workExperience.company?.value,
+								title: workExperience.title,
+								company: workExperience.company,
 								location: {
-									country: workExperience.country?.value,
-									province: workExperience.province?.value,
-									city: workExperience.city?.value,
-								} as CreateLocationDto,
-								startDate: workExperience.startDate?.value,
-								endDate: workExperience.endDate?.value,
-								summary: workExperience.description?.value,
-								description: [workExperience.description?.value],
-							} as CreateExperienceDto;
+									country: workExperience.country,
+									province: workExperience.state,
+									city: workExperience.city,
+								} as ICreateLocationDto,
+								startDate: workExperience.startDate,
+								endDate: workExperience.endDate,
+								summary: workExperience.description,
+								description: [workExperience.description],
+							} as ICreateExperienceDto;
 						},
 					),
 				}),

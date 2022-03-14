@@ -1,28 +1,29 @@
 import { createReducer, on } from '@ngrx/store';
-import { CreateResourceDto } from '@tempus/shared-domain';
+import { AsyncRequestState } from '@tempus/client/onboarding-client/shared/data-access';
+import { ICreateResourceDto } from '@tempus/shared-domain';
 
 import * as ResourceActions from './createResource.actions';
 
 export const RESOURCE_FEATURE_KEY = 'resource';
 
 export interface ResourceState {
-	createResourceData: CreateResourceDto;
+	createResourceData: ICreateResourceDto;
 	credentialsCreated: boolean;
 	userDetailsCreated: boolean;
 	workExperienceDetailsCreated: boolean;
 	trainingAndSkillDetailsCreated: boolean;
 	error: string | null;
-	status: 'pending' | 'loading' | 'error' | 'success';
+	status: AsyncRequestState;
 }
 
 export const initialState: ResourceState = {
-	createResourceData: {} as CreateResourceDto,
+	createResourceData: {} as ICreateResourceDto,
 	credentialsCreated: false,
 	userDetailsCreated: false,
 	workExperienceDetailsCreated: false,
 	trainingAndSkillDetailsCreated: false,
 	error: null,
-	status: 'pending',
+	status: AsyncRequestState.IDLE,
 };
 
 export const resourceReducer = createReducer(
@@ -56,19 +57,20 @@ export const resourceReducer = createReducer(
 				educationsSummary,
 				skillsSummary,
 				skills,
+				educations,
 				certifications,
 			},
 		}),
 	),
-	on(ResourceActions.createResource, state => ({ ...state, status: 'pending' })),
+	on(ResourceActions.createResource, state => ({ ...state, status: AsyncRequestState.LOADING })),
 	on(ResourceActions.createResourceSuccess, state => ({
 		...state,
-		status: 'success',
+		status: AsyncRequestState.SUCCESS,
 		error: null,
 	})),
 	on(ResourceActions.createResourceFailure, (state, { error }) => ({
 		...state,
-		status: 'error',
+		status: AsyncRequestState.ERROR,
 		error,
 	})),
 );

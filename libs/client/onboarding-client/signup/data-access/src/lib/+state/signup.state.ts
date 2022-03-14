@@ -14,4 +14,4 @@ export const reducers: ActionReducerMap<SignupState> = {
 	[RESOURCE_FEATURE_KEY]: resourceReducer,
 };
 
-export const getSignupState = createFeatureSelector<SignupState>(SIGNUP_FEATURE_KEY);
+export const selectSignupState = createFeatureSelector<SignupState>(SIGNUP_FEATURE_KEY);

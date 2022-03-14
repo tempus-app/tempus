@@ -16,11 +16,11 @@ import {
 	SignupState,
 } from '@tempus/client/onboarding-client/signup/data-access';
 import {
-	CreateCertificationDto,
-	CreateEducationDto,
-	CreateLocationDto,
-	CreateSkillDto,
-	CreateSkillTypeDto,
+	ICreateCertificationDto,
+	ICreateEducationDto,
+	ICreateLocationDto,
+	ICreateSkillDto,
+	ICreateSkillTypeDto,
 } from '@tempus/shared-domain';
 
 @Component({
@@ -48,8 +48,6 @@ export class MyInfoThreeComponent implements OnDestroy, OnInit {
 	addOnBlur = true;
 
 	readonly separatorKeysCodes = [ENTER, COMMA] as const;
-
-	createdTrainingAndSkills: boolean | undefined;
 
 	skills: string[] = [];
 
@@ -121,9 +119,6 @@ export class MyInfoThreeComponent implements OnDestroy, OnInit {
 			.select(selectTrainingAndSkillsCreated)
 			.pipe(
 				take(1),
-				tap(created => {
-					this.createdTrainingAndSkills = created;
-				}),
 				filter(created => created),
 				switchMap(_ => this.store.select(selectResourceData)),
 				take(1),
@@ -258,42 +253,40 @@ export class MyInfoThreeComponent implements OnDestroy, OnInit {
 					educationsSummary: this.myInfoForm.get('educationSummary')?.value,
 					educations: this.qualifications.value.map(
 						(qualification: {
-							degree: { value: string };
-							institution: { value: string };
-							startDate: { value: Date };
-							endDate: { value: Date };
-							country: { value: string };
-							city: { value: string };
-							state: { value: string };
+							degree: string;
+							institution: string;
+							startDate: Date;
+							endDate: Date;
+							country: string;
+							city: string;
+							state: string;
 						}) => {
 							return {
-								degree: qualification.degree?.value,
-								institution: qualification.institution?.value,
-								startDate: qualification.startDate?.value,
-								endDate: qualification.endDate?.value,
+								degree: qualification.degree,
+								institution: qualification.institution,
+								startDate: qualification.startDate,
+								endDate: qualification.endDate,
 								location: {
-									country: qualification.country?.value,
-									city: qualification.city?.value,
-									province: qualification.state?.value,
-								} as CreateLocationDto,
-							} as CreateEducationDto;
+									country: qualification.country,
+									city: qualification.city,
+									province: qualification.state,
+								} as ICreateLocationDto,
+							} as ICreateEducationDto;
 						},
 					),
 					skills: this.skills.map(skill => {
 						return {
 							skill: {
 								name: skill,
-							} as CreateSkillTypeDto,
-						} as CreateSkillDto;
+							} as ICreateSkillTypeDto,
+						} as ICreateSkillDto;
 					}),
-					certifications: this.certifications.value.map(
-						(certification: { title: { value: string }; institution: { value: string } }) => {
-							return {
-								title: certification.title?.value,
-								institution: certification.institution?.value,
-							} as CreateCertificationDto;
-						},
-					),
+					certifications: this.certifications.value.map((certification: { title: string; institution: string }) => {
+						return {
+							title: certification.title,
+							institution: certification.institution,
+						} as ICreateCertificationDto;
+					}),
 				}),
 			);
 		}

@@ -1,11 +1,11 @@
 import { createSelector } from '@ngrx/store';
 
-import { SignupState } from '../signup.state';
-import { ResourceState } from './createResource.reducers';
+import { selectSignupState, SignupState } from '../signup.state';
+import { ResourceState, RESOURCE_FEATURE_KEY } from './createResource.reducers';
 
-export const selectResource = (state: SignupState) => state.resource;
+export const selectResource = createSelector(selectSignupState, (state: SignupState) => state[RESOURCE_FEATURE_KEY]);
+
 export const selectResourceData = createSelector(selectResource, (state: ResourceState) => state.createResourceData);
-
 export const selectCredentialsCreated = createSelector(
 	selectResource,
 	(state: ResourceState) => state.credentialsCreated,

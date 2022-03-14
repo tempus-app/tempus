@@ -30,8 +30,6 @@ export class MyInfoOneComponent implements OnDestroy {
 		city: ['', Validators.required],
 	});
 
-	createdUserDetails: boolean | undefined;
-
 	InputType = InputType;
 
 	countries: string[] = Country.getAllCountries().map(country => {
@@ -87,9 +85,6 @@ export class MyInfoOneComponent implements OnDestroy {
 			.select(selectUserDetailsCreated)
 			.pipe(
 				take(1),
-				tap(created => {
-					this.createdUserDetails = created;
-				}),
 				filter(created => created),
 				switchMap(_ => this.store.select(selectResourceData)),
 				take(1),

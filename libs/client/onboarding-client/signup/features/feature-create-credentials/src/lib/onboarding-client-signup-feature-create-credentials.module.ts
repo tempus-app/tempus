@@ -8,6 +8,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatDialogModule } from '@angular/material/dialog';
 import { CredentialsComponent } from './credentials/credentials.component';
 import { SignUpComponent } from './sign-up/sign-up.component';
 import { LandingCtaComponent } from './landing-cta/landing-cta.component';
@@ -15,6 +16,7 @@ import { LandingCtaComponent } from './landing-cta/landing-cta.component';
 @NgModule({
 	imports: [
 		CommonModule,
+		MatDialogModule,
 		ClientSharedUiComponentsInputModule,
 		ClientSharedUiComponentsPresentationalModule,
 		FlexLayoutModule,
