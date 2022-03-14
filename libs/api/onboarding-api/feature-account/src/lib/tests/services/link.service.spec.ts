@@ -8,7 +8,7 @@ import { StatusType, UpdatelinkDto } from '@tempus/shared-domain';
 import { NotFoundException } from '@nestjs/common';
 
 import { LinkService } from '../../services/link.service';
-import { createLinkEntity, dbLink, expiredDBLink, mockEntity } from '../mocks/link.mock';
+import { createLinkEntity, dbLink, expiredDBLink, linkEntity } from '../mocks/link.mock';
 
 // mock depdencies
 const mockRepository = createMock<Repository<LinkEntity>>();
@@ -79,7 +79,7 @@ describe('LinkService', () => {
 			mockRepository.findOne.mockResolvedValue(dbLink);
 			const res = await linkService.findLinkById(3);
 			expect(mockRepository.findOne).toBeCalledWith(3);
-			expect(res).toEqual(mockEntity);
+			expect(res).toEqual(linkEntity);
 		});
 
 		it('should successfully get link by ID and update status if expired', async () => {
@@ -89,7 +89,7 @@ describe('LinkService', () => {
 			const res = await linkService.findLinkById(3);
 			expect(mockRepository.findOne).toBeCalledWith(3);
 
-			expect(res).toEqual({ ...mockEntity, expiry: new Date('01-01-2000'), status: StatusType.INACTIVE });
+			expect(res).toEqual({ ...linkEntity, expiry: new Date('01-01-2000'), status: StatusType.INACTIVE });
 		});
 
 		it('should throw an error if id not found', async () => {
@@ -109,7 +109,7 @@ describe('LinkService', () => {
 			mockRepository.find.mockResolvedValue([dbLink]);
 			const res = await linkService.findLinkByToken('random-string');
 			expect(mockRepository.find).toBeCalledWith({ where: { token: 'random-string' } });
-			expect(res).toEqual(mockEntity);
+			expect(res).toEqual(linkEntity);
 		});
 
 		it('should successfully get link by token and update status if expired', async () => {
@@ -118,7 +118,7 @@ describe('LinkService', () => {
 
 			const res = await linkService.findLinkByToken('random-string');
 			expect(mockRepository.find).toBeCalledWith({ where: { token: 'random-string' } });
-			expect(res).toEqual({ ...mockEntity, expiry: new Date('01-01-2000'), status: StatusType.INACTIVE });
+			expect(res).toEqual({ ...linkEntity, expiry: new Date('01-01-2000'), status: StatusType.INACTIVE });
 		});
 
 		it('should successfully get link by token and update status if expired', async () => {

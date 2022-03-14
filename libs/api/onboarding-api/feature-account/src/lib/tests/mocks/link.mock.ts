@@ -1,7 +1,7 @@
 import { LinkEntity } from '@tempus/api/shared/entity';
 import { Link, StatusType } from '@tempus/shared-domain';
 
-export const mockEntity: Link = {
+export const linkEntity: Link = {
 	firstName: 'john',
 	lastName: 'doe',
 	token: 'random-string',

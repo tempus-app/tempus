@@ -2,18 +2,12 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { CreateLinkDto, StatusType, UpdatelinkDto } from '@tempus/shared-domain';
 import { LinkService } from '../../services/link.service';
 import { LinkController } from '../../controllers/link.controller';
-import { mockEntity } from '../mocks/link.mock';
+import { linkEntity } from '../mocks/link.mock';
 
 export const mockLinkService = {
-	findLinkById: jest.fn(() => {
-		return mockEntity;
-	}),
-	editLink: jest.fn(() => {
-		return { ...mockEntity, status: 'COMPLETED' };
-	}),
-	findLinkByToken: jest.fn(() => {
-		return mockEntity;
-	}),
+	findLinkById: jest.fn().mockResolvedValue(linkEntity),
+	editLink: jest.fn().mockResolvedValue({ ...linkEntity, status: 'COMPLETED' }),
+	findLinkByToken: jest.fn().mockResolvedValue(linkEntity),
 	createLink: jest.fn(dto => {
 		return { ...dto, id: 5, token: 10 };
 	}),
@@ -38,13 +32,13 @@ describe('LinkController', () => {
 		it('should successfully get by ID', async () => {
 			const res = await linkController.getLink(3);
 			expect(mockLinkService.findLinkById).toBeCalledWith(3);
-			expect(res).toEqual(mockEntity);
+			expect(res).toEqual(linkEntity);
 		});
 
 		it('should successfully get by token value', async () => {
 			const res = await linkController.getLinkByToken('random-string');
 			expect(mockLinkService.findLinkByToken).toBeCalledWith('random-string');
-			expect(res).toEqual(mockEntity);
+			expect(res).toEqual(linkEntity);
 		});
 	});
 
@@ -53,7 +47,7 @@ describe('LinkController', () => {
 			const updatelinkDto: UpdatelinkDto = new UpdatelinkDto(3, StatusType.COMPLETED);
 			const res = await linkController.editLinkStatus(updatelinkDto);
 			expect(mockLinkService.editLink).toBeCalledWith(updatelinkDto);
-			expect(res).toEqual({ ...mockEntity, status: 'COMPLETED' });
+			expect(res).toEqual({ ...linkEntity, status: 'COMPLETED' });
 		});
 	});
 
