@@ -11,6 +11,10 @@ export const createCredentials = createAction(
 	'[Signup Credentials Page] Create Credentials',
 	props<{ password: string; email: string }>(),
 );
+export const createResumeUpload = createAction(
+	'[Signup Resume Upload Page] Create Resume Upload',
+	props<{ resume: File }>(),
+);
 export const createUserDetails = createAction(
 	'[Signup MyInfoOne Page] Create User Details',
 	props<{ firstName: string; lastName: string; phoneNumber: string; email: string; location: ICreateLocationDto }>(),

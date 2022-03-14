@@ -24,12 +24,17 @@ export const selectUserDetailsCreated = createSelector(
 	selectResource,
 	(state: ResourceState) => state.userDetailsCreated,
 );
+export const slectResumeUploadCreated = createSelector(
+	selectResource,
+	(state: ResourceState) => state.resumeUploadCreated,
+);
 export const selectTrainingAndSkillsCreated = createSelector(
 	selectResource,
 	(state: ResourceState) => state.trainingAndSkillDetailsCreated,
 );
 export const selectAllResumeComponentsCreated = createSelector(selectResource, (state: ResourceState) => ({
 	userDetailsCreated: state.userDetailsCreated,
+	resumeUploadCreated: state.resumeUploadCreated,
 	credentialsCreated: state.credentialsCreated,
 	trainingAndSkillsCreated: state.trainingAndSkillDetailsCreated,
 	experienceCreated: state.workExperienceDetailsCreated,

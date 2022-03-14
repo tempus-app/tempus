@@ -53,6 +53,7 @@ export class SignupShellComponent implements OnInit, OnDestroy {
 			.select(selectAllResumeComponentsCreated)
 			.pipe(takeUntil(this.destroyed$))
 			.subscribe(createdComponents => {
+				this.completed[1] = createdComponents.resumeUploadCreated;
 				this.completed[2] = createdComponents.userDetailsCreated;
 				this.completed[3] = createdComponents.experienceCreated;
 				this.completed[4] = createdComponents.trainingAndSkillsCreated;

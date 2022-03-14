@@ -9,9 +9,11 @@ export const RESOURCE_FEATURE_KEY = 'resource';
 export interface ResourceState {
 	createResourceData: ICreateResourceDto;
 	credentialsCreated: boolean;
+	resumeUploadCreated: boolean;
 	userDetailsCreated: boolean;
 	workExperienceDetailsCreated: boolean;
 	trainingAndSkillDetailsCreated: boolean;
+	uploadedResume: File | null;
 	error: string | null;
 	status: AsyncRequestState;
 }
@@ -19,9 +21,11 @@ export interface ResourceState {
 export const initialState: ResourceState = {
 	createResourceData: {} as ICreateResourceDto,
 	credentialsCreated: false,
+	resumeUploadCreated: false,
 	userDetailsCreated: false,
 	workExperienceDetailsCreated: false,
 	trainingAndSkillDetailsCreated: false,
+	uploadedResume: null,
 	error: null,
 	status: AsyncRequestState.IDLE,
 };
@@ -32,6 +36,11 @@ export const resourceReducer = createReducer(
 		...state,
 		credentialsCreated: true,
 		createResourceData: { ...state.createResourceData, email, password },
+	})),
+	on(ResourceActions.createResumeUpload, (state, { resume }) => ({
+		...state,
+		resumeUploadCreated: true,
+		uploadedResume: resume,
 	})),
 	on(ResourceActions.createUserDetails, (state, { firstName, lastName, phoneNumber, email, location }) => ({
 		...state,

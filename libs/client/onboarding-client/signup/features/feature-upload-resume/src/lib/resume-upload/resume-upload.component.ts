@@ -4,6 +4,8 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { createResumeUpload, SignupState } from '@tempus/client/onboarding-client/signup/data-access';
+import { Store } from '@ngrx/store';
 
 @Component({
 	selector: 'tempus-resume-upload',
@@ -21,7 +23,12 @@ export class ResumeUploadComponent implements OnDestroy {
 
 	rows = '10';
 
-	constructor(private router: Router, breakpointObserver: BreakpointObserver, private route: ActivatedRoute) {
+	constructor(
+		private router: Router,
+		breakpointObserver: BreakpointObserver,
+		private route: ActivatedRoute,
+		private store: Store<SignupState>,
+	) {
 		breakpointObserver
 			.observe([Breakpoints.XSmall, Breakpoints.Small, Breakpoints.Medium, Breakpoints.Large, Breakpoints.XLarge])
 			.pipe(takeUntil(this.destroyed$))
@@ -69,6 +76,14 @@ export class ResumeUploadComponent implements OnDestroy {
 	}
 
 	nextStep() {
-		this.router.navigate(['../myinfoone'], { relativeTo: this.route });
+		this.fileData?.markAllAsTouched();
+		if (this.fileData.valid) {
+			this.store.dispatch(
+				createResumeUpload({
+					resume: this.fileData.value,
+				}),
+			);
+			this.router.navigate(['../myinfoone'], { relativeTo: this.route });
+		}
 	}
 }
