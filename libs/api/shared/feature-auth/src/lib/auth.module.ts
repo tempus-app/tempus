@@ -10,6 +10,8 @@ import { LocalAuthGuard } from './guards/local-auth.guard';
 import { LocalStrategy } from './strategies/local.strategy';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import { JwtRefreshStrategy } from './strategies/jwt-refresh.strategy';
+import { JwtRefreshGuard } from './guards/jwt-refresh.guard';
 
 @Module({
 	imports: [
@@ -17,12 +19,20 @@ import { JwtAuthGuard } from './guards/jwt-auth.guard';
 		PassportModule,
 		ConfigModule,
 		JwtModule.register({
-			secret: process.env.JWT_SECRET,
-			signOptions: { expiresIn: '900s' },
+			// secret: process.env.JWT_SECRET,
+			// signOptions: { expiresIn: '900s' },
 		}),
 	],
 	controllers: [AuthController],
-	providers: [AuthService, LocalStrategy, JwtStrategy, LocalAuthGuard, JwtAuthGuard],
-	exports: [LocalAuthGuard, JwtAuthGuard],
+	providers: [
+		AuthService,
+		LocalStrategy,
+		JwtStrategy,
+		JwtRefreshStrategy,
+		LocalAuthGuard,
+		JwtAuthGuard,
+		JwtRefreshGuard,
+	],
+	exports: [AuthService, LocalAuthGuard, JwtAuthGuard, JwtRefreshGuard],
 })
 export class AuthModule {}

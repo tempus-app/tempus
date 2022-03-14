@@ -6,12 +6,13 @@ import { JwtPayload, User } from '@tempus/shared-domain';
 import { AuthService } from '../auth.service';
 
 @Injectable()
-export class JwtStrategy extends PassportStrategy(Strategy, 'jwt-access') {
+export class JwtRefreshStrategy extends PassportStrategy(Strategy, 'jwt-refresh') {
 	constructor(private authService: AuthService, private configService: ConfigService) {
 		super({
+			// will we be sending refresh in header or body?
 			jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
 			ignoreExpiration: false,
-			secretOrKey: configService.get('jwtAccessSecret'),
+			secretOrKey: configService.get('jwtRefreshSecret'),
 		});
 	}
 

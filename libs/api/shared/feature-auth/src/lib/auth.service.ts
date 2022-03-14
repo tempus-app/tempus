@@ -1,10 +1,11 @@
-import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
-import { AuthDto, RoleType, User } from '@tempus/shared-domain';
+import { Inject, Injectable, InternalServerErrorException, NotFoundException, Scope } from '@nestjs/common';
+import { Tokens, RoleType, User } from '@tempus/shared-domain';
 import { JwtService } from '@nestjs/jwt';
 import { compare } from 'bcrypt';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ResourceEntity, UserEntity } from '@tempus/api/shared/entity';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class AuthService {
@@ -14,6 +15,7 @@ export class AuthService {
 		private userRepository: Repository<UserEntity>,
 		@InjectRepository(ResourceEntity)
 		private resourceRepository: Repository<ResourceEntity>,
+		private configService: ConfigService,
 	) {}
 
 	async validateUser(email: string, password: string): Promise<User> {
@@ -32,17 +34,10 @@ export class AuthService {
 		return null;
 	}
 
-	async login(user: User): Promise<AuthDto> {
-		const partialUser = user;
-		const payload = {
-			email: partialUser.email,
-			roles: partialUser.roles,
-		};
-		partialUser.password = null;
-		const accessToken = this.jwtService.sign(payload);
-		const result = new AuthDto(partialUser, accessToken);
+	async login(user: User): Promise<Tokens> {
+		const tokens = this.createTokens(user);
 
-		return result;
+		return tokens;
 	}
 
 	private static comparePassword(password: string, encryptedPassword: string): boolean {
@@ -75,5 +70,29 @@ export class AuthService {
 			throw new NotFoundException(`Could not find resource with email ${email}`);
 		}
 		return resourceEntity;
+	}
+
+	private async createTokens(user: User): Promise<Tokens> {
+		const accessToken = await this.jwtService.signAsync(
+			{
+				email: user.email,
+				roles: user.roles,
+			},
+			{
+				secret: this.configService.get('jwtAccessSecret'),
+				expiresIn: 60 * 15,
+			},
+		);
+		const refreshToken = await this.jwtService.signAsync(
+			{
+				email: user.email,
+			},
+			{
+				secret: this.configService.get('jwtRefreshSecret'),
+				expiresIn: 60 * 15,
+			},
+		);
+		const tokens = new Tokens(accessToken, refreshToken);
+		return tokens;
 	}
 }

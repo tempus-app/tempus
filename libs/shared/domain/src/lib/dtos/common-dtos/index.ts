@@ -1,4 +1,4 @@
-export * from './auth.dto';
+export * from './tokens.dto';
 export * from './jwtpayload.dto';
 export * from './createLocation.dto';
 export * from './resumeComponents.dto';

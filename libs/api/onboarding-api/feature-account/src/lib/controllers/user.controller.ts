@@ -17,10 +17,13 @@ import { UserService } from '../services/user.service';
 @ApiTags('User')
 @Controller('user')
 export class UserController {
-	constructor(private userService: UserService, private resourceService: ResourceService) {}
+	constructor(
+		private userService: UserService,
+		private resourceService: ResourceService, // private authService: AuthService,
+	) {}
 
 	@UseGuards(JwtAuthGuard, RolesGuard)
-	@Roles(RoleType.BUSINESS_OWNER)
+	@Roles(RoleType.USER) // Replace with BUSINESS_OWNER
 	@Get()
 	// TODO: filtering
 	async getUsers(): Promise<User[]> {
@@ -38,6 +41,7 @@ export class UserController {
 	}
 
 	// gets a User or Resource
+	@UseGuards(JwtAuthGuard, RolesGuard)
 	@Get(':userId')
 	async getUser(@Param('userId') userId: number): Promise<User | Resource> {
 		return this.userService.getUser(userId);
