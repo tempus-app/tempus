@@ -6,6 +6,9 @@ import { MatStepperModule } from '@angular/material/stepper';
 import { OnboardingClientSignupFeatureUploadResumeModule } from '@tempus/onboarding-client/signup/feature-upload-resume';
 import { FooterComponent } from './footer/footer.component';
 import { StepperComponent } from './stepper/stepper.component';
+import { SidebarComponent } from './sidebar/sidebar.component';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 
 @NgModule({
 	imports: [
@@ -13,9 +16,11 @@ import { StepperComponent } from './stepper/stepper.component';
 		MatIconModule,
 		MatButtonModule,
 		MatStepperModule,
+		MatSidenavModule,
+		MatButtonToggleModule,
 		OnboardingClientSignupFeatureUploadResumeModule,
 	],
-	declarations: [FooterComponent, StepperComponent],
-	exports: [FooterComponent, StepperComponent],
+	declarations: [FooterComponent, StepperComponent, SidebarComponent],
+	exports: [FooterComponent, StepperComponent, SidebarComponent],
 })
 export class ClientSharedUiComponentsPersistentModule {}
