@@ -1,8 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Country, State } from 'country-state-city';
 import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
 import { InputType } from '@tempus/client/shared/ui-components/input';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { MatChipInputEvent } from '@angular/material/chips';
@@ -66,37 +64,7 @@ export class MyInfoThreeComponent implements OnDestroy, OnInit {
 		return this.myInfoForm.controls['certifications'] as FormArray;
 	}
 
-	constructor(
-		private route: ActivatedRoute,
-		private fb: FormBuilder,
-		breakpointObserver: BreakpointObserver,
-		private router: Router,
-	) {
-		breakpointObserver
-			.observe([Breakpoints.XSmall, Breakpoints.Small, Breakpoints.Medium, Breakpoints.Large, Breakpoints.XLarge])
-			.pipe(takeUntil(this.destroyed))
-			.subscribe(result => {
-				for (const query of Object.keys(result.breakpoints)) {
-					if (result.breakpoints[query]) {
-						if (query === Breakpoints.XSmall) {
-							this.rows = '16';
-							this.cols = '2';
-							this.buttonSpacing = '3';
-							this.certRows = '8';
-							this.educationCols = '6';
-							this.locationCols = '6';
-						} else {
-							this.rows = '8';
-							this.cols = '1';
-							this.buttonSpacing = '2';
-							this.certRows = '6';
-							this.educationCols = '3';
-							this.locationCols = '2';
-						}
-					}
-				}
-			});
-	}
+	constructor(private route: ActivatedRoute, private fb: FormBuilder, private router: Router) {}
 
 	ngOnInit() {
 		const qualification = this.fb.group({

@@ -2,7 +2,7 @@
 @use 'components/helper' as cmp;
 
 .info-title {
-	@include cmp.info-title(30%, 50px);
+	@include cmp.info-title(100%, 50px);
 }
 
 .button-container {

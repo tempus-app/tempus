@@ -29,44 +29,7 @@ export class ReviewComponent {
 
 	destroyed = new Subject<void>();
 
-	cols = '1';
-
-	skillsEducationCols = '1';
-
-	skillsChipsCols = '2';
-
-	hideElement = false;
-
-	displayNameMap = new Map([
-		[Breakpoints.XSmall, '1'],
-		[Breakpoints.Small, 'Small'],
-		[Breakpoints.Medium, 'Medium'],
-		[Breakpoints.Large, 'Large'],
-		[Breakpoints.XLarge, 'XLarge'],
-	]);
-
-	constructor(breakpointObserver: BreakpointObserver, private router: Router, private route: ActivatedRoute) {
-		breakpointObserver
-			.observe([Breakpoints.XSmall, Breakpoints.Small, Breakpoints.Medium, Breakpoints.Large, Breakpoints.XLarge])
-			.pipe(takeUntil(this.destroyed))
-			.subscribe(result => {
-				for (const query of Object.keys(result.breakpoints)) {
-					if (result.breakpoints[query]) {
-						if (query === Breakpoints.XSmall || query === Breakpoints.Small) {
-							this.cols = '2';
-							this.skillsChipsCols = '1';
-							this.skillsEducationCols = '3';
-							this.hideElement = false;
-						} else {
-							this.cols = '1';
-							this.skillsChipsCols = '2';
-							this.skillsEducationCols = '1';
-							this.hideElement = true;
-						}
-					}
-				}
-			});
-	}
+	constructor(private router: Router, private route: ActivatedRoute) {}
 
 	formatDate(startDate: Date, endDate: Date) {
 		return formatDateRange(startDate, endDate);
@@ -75,4 +38,6 @@ export class ReviewComponent {
 	backStep() {
 		this.router.navigate(['../myinfothree'], { relativeTo: this.route });
 	}
+
+	submit() {}
 }
