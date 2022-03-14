@@ -40,7 +40,7 @@ export class MyInfoOneComponent implements OnDestroy {
 		return state.name;
 	});
 
-	destroyed = new Subject<void>();
+	destroyed$ = new Subject<void>();
 
 	cols = '1';
 
@@ -64,7 +64,7 @@ export class MyInfoOneComponent implements OnDestroy {
 	) {
 		breakpointObserver
 			.observe([Breakpoints.XSmall, Breakpoints.Small, Breakpoints.Medium, Breakpoints.Large, Breakpoints.XLarge])
-			.pipe(takeUntil(this.destroyed))
+			.pipe(takeUntil(this.destroyed$))
 			.subscribe(result => {
 				for (const query of Object.keys(result.breakpoints)) {
 					if (result.breakpoints[query]) {
@@ -103,8 +103,8 @@ export class MyInfoOneComponent implements OnDestroy {
 	}
 
 	ngOnDestroy() {
-		this.destroyed.next();
-		this.destroyed.complete();
+		this.destroyed$.next();
+		this.destroyed$.complete();
 	}
 
 	updateStateOptions(inputtedCountry: string) {

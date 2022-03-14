@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -10,21 +10,21 @@ import { ActivatedRoute, Router } from '@angular/router';
 	templateUrl: './resume-upload.component.html',
 	styleUrls: ['./resume-upload.component.scss'],
 })
-export class ResumeUploadComponent {
+export class ResumeUploadComponent implements OnDestroy {
 	fileData = new FormControl(null, { validators: [Validators.required] });
 
 	fileType = 'application/pdf,application/msword,.doc,.docx,text/plain';
 
 	fileUploaded = false;
 
-	destroyed = new Subject<void>();
+	destroyed$ = new Subject<void>();
 
 	rows = '10';
 
 	constructor(private router: Router, breakpointObserver: BreakpointObserver, private route: ActivatedRoute) {
 		breakpointObserver
 			.observe([Breakpoints.XSmall, Breakpoints.Small, Breakpoints.Medium, Breakpoints.Large, Breakpoints.XLarge])
-			.pipe(takeUntil(this.destroyed))
+			.pipe(takeUntil(this.destroyed$))
 			.subscribe(result => {
 				for (const query of Object.keys(result.breakpoints)) {
 					if (result.breakpoints[query]) {
@@ -36,6 +36,11 @@ export class ResumeUploadComponent {
 					}
 				}
 			});
+	}
+
+	ngOnDestroy(): void {
+		this.destroyed$.next();
+		this.destroyed$.complete();
 	}
 
 	onChange(event: Event) {

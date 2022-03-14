@@ -28,3 +28,9 @@ export const selectTrainingAndSkillsCreated = createSelector(
 	selectResource,
 	(state: ResourceState) => state.trainingAndSkillDetailsCreated,
 );
+export const selectAllResumeComponentsCreated = createSelector(selectResource, (state: ResourceState) => ({
+	userDetailsCreated: state.userDetailsCreated,
+	credentialsCreated: state.credentialsCreated,
+	trainingAndSkillsCreated: state.trainingAndSkillDetailsCreated,
+	experienceCreated: state.workExperienceDetailsCreated,
+}));

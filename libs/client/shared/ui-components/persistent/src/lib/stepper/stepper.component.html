@@ -6,7 +6,13 @@
 		(selectionChange)="stepClick($event)"
 		[orientation]="(stepperOrientation | async)!"
 	>
-		<mat-step *ngFor="let step of steps" label="{{ step }}" state="default"> </mat-step>
+		<mat-step
+			*ngFor="let step of steps; let i = index"
+			completed="{{ completed[i] }}"
+			label="{{ step }}"
+			state="default"
+		>
+		</mat-step>
 
 		<!-- Icon overrides. -->
 		<ng-template matStepperIcon="selected">

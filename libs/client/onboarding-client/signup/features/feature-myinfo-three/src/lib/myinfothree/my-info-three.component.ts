@@ -29,7 +29,7 @@ import {
 	styleUrls: ['./my-info-three.component.scss'],
 })
 export class MyInfoThreeComponent implements OnDestroy, OnInit {
-	destroyed = new Subject<void>();
+	destroyed$ = new Subject<void>();
 
 	cols = '1';
 
@@ -90,7 +90,7 @@ export class MyInfoThreeComponent implements OnDestroy, OnInit {
 	) {
 		breakpointObserver
 			.observe([Breakpoints.XSmall, Breakpoints.Small, Breakpoints.Medium, Breakpoints.Large, Breakpoints.XLarge])
-			.pipe(takeUntil(this.destroyed))
+			.pipe(takeUntil(this.destroyed$))
 			.subscribe(result => {
 				for (const query of Object.keys(result.breakpoints)) {
 					if (result.breakpoints[query]) {
@@ -163,8 +163,8 @@ export class MyInfoThreeComponent implements OnDestroy, OnInit {
 	}
 
 	ngOnDestroy() {
-		this.destroyed.next();
-		this.destroyed.complete();
+		this.destroyed$.next();
+		this.destroyed$.complete();
 	}
 
 	addEducationSections() {
