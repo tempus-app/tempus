@@ -1,4 +1,5 @@
 export * from './tokens.dto';
+export * from './auth.dto';
 export * from './jwtpayload.dto';
 export * from './jwtRefreshPayloadWithToken.dto';
 export * from './IcreateLocation.dto';

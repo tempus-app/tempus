@@ -1,5 +1,5 @@
 import { ForbiddenException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
-import { Tokens, RoleType, User, JwtPayload, JwtRefreshPayloadWithToken } from '@tempus/shared-domain';
+import { Tokens, RoleType, User, JwtPayload, JwtRefreshPayloadWithToken, AuthDto } from '@tempus/shared-domain';
 import { JwtService } from '@nestjs/jwt';
 import { compare, genSalt, hash } from 'bcrypt';
 import { Repository } from 'typeorm';
@@ -18,10 +18,11 @@ export class AuthService {
 		private configService: ConfigService,
 	) {}
 
-	async login(user: User): Promise<Tokens> {
+	async login(user: User): Promise<AuthDto> {
 		const tokens = await this.createTokens(user);
 		await this.updateRefreshTokenHash(user, tokens.refreshToken);
-		return tokens;
+		const result = new AuthDto(user, tokens.accessToken, tokens.refreshToken);
+		return result;
 	}
 
 	async logout(token: JwtPayload) {

@@ -1,5 +1,5 @@
 import { Request, Controller, Post, UseGuards, NotImplementedException, HttpCode, HttpStatus } from '@nestjs/common';
-import { Tokens } from '@tempus/shared-domain';
+import { Tokens, AuthDto } from '@tempus/shared-domain';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { AuthService } from './auth.service';
 import { JwtRefreshGuard } from './guards/jwt-refresh.guard';
@@ -12,7 +12,7 @@ export class AuthController {
 	@UseGuards(LocalAuthGuard)
 	@HttpCode(HttpStatus.OK)
 	@Post('login')
-	login(@Request() req): Promise<Tokens> {
+	login(@Request() req): Promise<AuthDto> {
 		return this.authService.login(req.user);
 	}
 
