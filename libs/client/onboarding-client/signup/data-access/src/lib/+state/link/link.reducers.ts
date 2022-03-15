@@ -8,8 +8,7 @@ export const LINK_FEATURE_KEY = 'link';
 
 export interface LinkState {
 	link: Link | null;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	error: any | null;
+	error: Error | null;
 	status: AsyncRequestState;
 }
 

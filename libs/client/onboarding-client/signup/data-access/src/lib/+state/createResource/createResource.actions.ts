@@ -49,6 +49,6 @@ export const createResourceSuccess = createAction('[Onboarding Client User API] 
 export const createResourceFailure = createAction(
 	'[Onboarding Client User API] Create Resource Failure',
 	props<{
-		error: string;
+		error: Error;
 	}>(),
 );

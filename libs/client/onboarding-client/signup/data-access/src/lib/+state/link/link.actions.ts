@@ -10,7 +10,7 @@ export const loadLinkDataSucess = createAction(
 
 export const loadLinkDataFailure = createAction(
 	'[Onboarding Client Link API] Load Link Data Failure',
-	props<{ error: string }>(),
+	props<{ error: Error }>(),
 );
 
 export const resetLinkState = createAction('[Signup Review Page] Reset Link State');

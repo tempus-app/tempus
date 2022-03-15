@@ -8,9 +8,9 @@ import { handleError } from './errorHandler';
 export class OnboardingClientLinkService {
 	constructor(private http: HttpClient) {}
 
-	url = 'http://localhost:3000/onboarding';
+	url = 'http://localhost:3000/onboarding/link';
 
 	public loadLink(linkToken: string): Observable<Link> {
-		return this.http.get<Link>(`${this.url}/link?token=${linkToken}`).pipe(catchError(handleError));
+		return this.http.get<Link>(`${this.url}?token=${linkToken}`).pipe(catchError(handleError));
 	}
 }

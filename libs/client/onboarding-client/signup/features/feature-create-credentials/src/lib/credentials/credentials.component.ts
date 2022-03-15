@@ -52,7 +52,7 @@ export class CredentialsComponent implements OnInit, OnDestroy {
 			if (errStatus.status === AsyncRequestState.LOADING) {
 				this.loading = true;
 			} else if (errStatus.status === AsyncRequestState.ERROR) {
-				this.openDialog(errStatus.error.message);
+				this.openDialog(errStatus.error?.message || 'Generic Error');
 				this.loading = false;
 			} else {
 				this.loading = false;

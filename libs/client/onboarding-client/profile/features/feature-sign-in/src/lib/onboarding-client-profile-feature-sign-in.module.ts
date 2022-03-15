@@ -7,6 +7,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatCardModule } from '@angular/material/card';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
 import { SignInComponent } from './signin/sign-in.component';
 
 @NgModule({
@@ -17,6 +19,9 @@ import { SignInComponent } from './signin/sign-in.component';
 		MatIconModule,
 		MatButtonModule,
 		MatGridListModule,
+		ReactiveFormsModule,
+		MatFormFieldModule,
+		FormsModule,
 		MatCardModule,
 		RouterModule.forChild([
 			{

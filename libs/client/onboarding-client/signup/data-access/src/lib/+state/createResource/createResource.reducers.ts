@@ -4,7 +4,7 @@ import { ICreateResourceDto } from '@tempus/shared-domain';
 
 import * as ResourceActions from './createResource.actions';
 
-export const RESOURCE_FEATURE_KEY = 'resource';
+export const RESOURCE_FEATURE_KEY = 'createResource';
 
 export interface ResourceState {
 	createResourceData: ICreateResourceDto;
@@ -14,7 +14,7 @@ export interface ResourceState {
 	workExperienceDetailsCreated: boolean;
 	trainingAndSkillDetailsCreated: boolean;
 	uploadedResume: File | null;
-	error: string | null;
+	error: Error | null;
 	status: AsyncRequestState;
 }
 
@@ -71,7 +71,10 @@ export const resourceReducer = createReducer(
 			},
 		}),
 	),
-	on(ResourceActions.setResourceLinkId, (state, { linkId }) => ({ ...state, linkId })),
+	on(ResourceActions.setResourceLinkId, (state, { linkId }) => ({
+		...state,
+		createResourceData: { ...state.createResourceData, linkId },
+	})),
 	on(ResourceActions.createResource, state => ({ ...state, status: AsyncRequestState.LOADING })),
 	on(ResourceActions.createResourceSuccess, state => ({
 		...state,

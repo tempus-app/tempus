@@ -1,0 +1,26 @@
+{
+	"projectType": "library",
+	"root": "libs/client/onboarding-client/profile/data-access",
+	"sourceRoot": "libs/client/onboarding-client/profile/data-access/src",
+	"prefix": "tempus",
+	"targets": {
+		"test": {
+			"executor": "@nrwl/jest:jest",
+			"outputs": ["coverage/libs/client/onboarding-client/profile/data-access"],
+			"options": {
+				"jestConfig": "libs/client/onboarding-client/profile/data-access/jest.config.js",
+				"passWithNoTests": true
+			}
+		},
+		"lint": {
+			"executor": "@nrwl/linter:eslint",
+			"options": {
+				"lintFilePatterns": [
+					"libs/client/onboarding-client/profile/data-access/src/**/*.ts",
+					"libs/client/onboarding-client/profile/data-access/src/**/*.html"
+				]
+			}
+		}
+	},
+	"tags": []
+}

@@ -7,9 +7,9 @@ import { Observable } from 'rxjs';
 export class OnboardingClientResourceService {
 	constructor(private http: HttpClient) {}
 
-	url = 'http://localhost:3000/onboarding';
+	url = 'http://localhost:3000/onboarding/user';
 
 	public createResource(createResourceDto: ICreateResourceDto): Observable<Resource> {
-		return this.http.post<Resource>(`${this.url}/user/resource`, createResourceDto);
+		return this.http.post<Resource>(`${this.url}/resource`, createResourceDto);
 	}
 }
