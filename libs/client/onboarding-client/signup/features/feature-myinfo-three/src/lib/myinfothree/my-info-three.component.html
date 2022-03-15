@@ -54,7 +54,14 @@
 						</div>
 						<div fxLayout="column" fxLayoutGap="30px">
 							<div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxFlex="33%" class="block-2">
-								<div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="center center" fxFlexFill class="grid-item">
+								<div
+									fxFlex.gt-sm="50%"
+									fxFlex.lt-md="50%"
+									fxLayoutAlign="start center"
+									fxLayoutAlign.lt-md="center center"
+									fxFlexFill
+									class="grid-item"
+								>
 									<tempus-text-input
 										id="institution-{{ index }}"
 										placeholder="Institution"
@@ -63,7 +70,14 @@
 									>
 									</tempus-text-input>
 								</div>
-								<div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="center center" fxFlexFill class="grid-item">
+								<div
+									fxFlex.gt-sm="50%"
+									fxFlex.lt-md="50%"
+									fxLayoutAlign="end center"
+									fxLayoutAlign.lt-md="center center"
+									fxFlexFill
+									class="grid-item"
+								>
 									<tempus-text-input
 										id="field-{{ index }}"
 										placeholder="Field"
@@ -73,7 +87,14 @@
 								</div>
 							</div>
 							<div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxFlex="33%" class="block-2">
-								<div fxFlex.gt-sm="50%" fxFlex.lt-md="33%" fxLayoutAlign="center center" fxFlexFill class="grid-item">
+								<div
+									fxFlex.gt-sm="50%"
+									fxFlex.lt-md="33%"
+									fxLayoutAlign="start center"
+									fxLayoutAlign.lt-md="center center"
+									fxFlexFill
+									class="grid-item"
+								>
 									<tempus-search-box
 										id="country-{{ index }}"
 										[options]="countries"
@@ -93,7 +114,14 @@
 									>
 									</tempus-dropdown>
 								</div>
-								<div fxFlex.gt-sm="50%" fxFlex.lt-md="33%" fxLayoutAlign="center center" fxFlexFill class="grid-item">
+								<div
+									fxFlex.gt-sm="50%"
+									fxFlex.lt-md="33%"
+									fxLayoutAlign="end center"
+									fxLayoutAlign.lt-md="center center"
+									fxFlexFill
+									class="grid-item"
+								>
 									<tempus-text-input
 										id="city-{{ index }}"
 										placeholder="City"
@@ -103,7 +131,14 @@
 								</div>
 							</div>
 							<div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxFlex="33%" class="block-2">
-								<div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="center center" fxFlexFill class="grid-item">
+								<div
+									fxFlex.gt-sm="50%"
+									fxFlex.lt-md="50%"
+									fxLayoutAlign="start center"
+									fxLayoutAlign.lt-md="center center"
+									fxFlexFill
+									class="grid-item"
+								>
 									<tempus-text-input
 										id="start-date-{{ index }}"
 										[inputType]="InputType.DATE"
@@ -112,7 +147,14 @@
 										[control]="$any(numEducation).get('startDate')"
 									></tempus-text-input>
 								</div>
-								<div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="center center" fxFlexFill class="grid-item">
+								<div
+									fxFlex.gt-sm="50%"
+									fxFlex.lt-md="50%"
+									fxLayoutAlign="end center"
+									fxLayoutAlign.lt-md="center center"
+									fxFlexFill
+									class="grid-item"
+								>
 									<tempus-text-input
 										id="end-date-{{ index }}"
 										[inputType]="InputType.DATE"
@@ -168,7 +210,14 @@
 						</div>
 						<div fxLayout="column" fxLayoutGap="30px">
 							<div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxFlex="33%" class="block-2">
-								<div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="center center" fxFlexFill class="grid-item">
+								<div
+									fxFlex.gt-sm="50%"
+									fxFlex.lt-md="50%"
+									fxLayoutAlign="start center"
+									fxLayoutAlign.lt-md="center center"
+									fxFlexFill
+									class="grid-item"
+								>
 									<tempus-text-input
 										id="certifying-authority-{{ index }}"
 										placeholder="Certifying Authority"
@@ -177,7 +226,14 @@
 									>
 									</tempus-text-input>
 								</div>
-								<div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="center center" fxFlexFill class="grid-item">
+								<div
+									fxFlex.gt-sm="50%"
+									fxFlex.lt-md="50%"
+									fxLayoutAlign="end center"
+									fxLayoutAlign.lt-md="center center"
+									fxFlexFill
+									class="grid-item"
+								>
 									<tempus-text-input
 										id="title-{{ index }}"
 										placeholder="Title"
