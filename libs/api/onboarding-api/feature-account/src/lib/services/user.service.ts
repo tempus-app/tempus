@@ -1,10 +1,11 @@
-import { Resource, RoleType, User, UpdateUserDto, CreateUserDto } from '@tempus/shared-domain';
+import { Resource, User } from '@tempus/shared-domain';
 import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ConfigService } from '@nestjs/config';
 import { Repository } from 'typeorm';
 import { genSalt, hash } from 'bcrypt';
 import { UserEntity } from '@tempus/api/shared/entity';
+import { CreateUserDto, UpdateUserDto } from '@tempus/api/shared/dto';
 import { ResourceService } from './resource.service';
 
 @Injectable()

@@ -1,5 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany, ManyToMany, JoinTable, ManyToOne } from 'typeorm';
-import { CreateViewDto, View, ViewType } from '@tempus/shared-domain';
+import { View, ViewType } from '@tempus/shared-domain';
+import { CreateViewDto } from '@tempus/api/shared/dto';
 import { SkillEntity } from './skill.entity';
 import { RevisionEntity } from './revision.entity';
 import { ExperienceEntity } from './experience.entity';

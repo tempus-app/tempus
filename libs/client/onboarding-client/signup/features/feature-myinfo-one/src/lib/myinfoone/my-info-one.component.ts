@@ -2,10 +2,17 @@ import { Component, OnDestroy, Output, EventEmitter } from '@angular/core';
 import { Country, State } from 'country-state-city';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { filter, switchMap, take, takeUntil, tap } from 'rxjs/operators';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { InputType } from '@tempus/client/shared/ui-components/input';
+import {
+	createUserDetails,
+	selectResourceData,
+	selectUserDetailsCreated,
+	SignupState,
+} from '@tempus/client/onboarding-client/signup/data-access';
+import { Store } from '@ngrx/store';
 
 @Component({
 	selector: 'tempus-my-info-one',
@@ -33,7 +40,7 @@ export class MyInfoOneComponent implements OnDestroy {
 		return state.name;
 	});
 
-	destroyed = new Subject<void>();
+	destroyed$ = new Subject<void>();
 
 	cols = '1';
 
@@ -48,17 +55,16 @@ export class MyInfoOneComponent implements OnDestroy {
 		[Breakpoints.XLarge, 'XLarge'],
 	]);
 
-	@Output() formIsValid = new EventEmitter<boolean>();
-
 	constructor(
 		private fb: FormBuilder,
 		breakpointObserver: BreakpointObserver,
 		private router: Router,
 		private route: ActivatedRoute,
+		private store: Store<SignupState>,
 	) {
 		breakpointObserver
 			.observe([Breakpoints.XSmall, Breakpoints.Small, Breakpoints.Medium, Breakpoints.Large, Breakpoints.XLarge])
-			.pipe(takeUntil(this.destroyed))
+			.pipe(takeUntil(this.destroyed$))
 			.subscribe(result => {
 				for (const query of Object.keys(result.breakpoints)) {
 					if (result.breakpoints[query]) {
@@ -74,9 +80,31 @@ export class MyInfoOneComponent implements OnDestroy {
 			});
 	}
 
+	ngOnInit() {
+		this.store
+			.select(selectUserDetailsCreated)
+			.pipe(
+				take(1),
+				filter(created => created),
+				switchMap(_ => this.store.select(selectResourceData)),
+				take(1),
+			)
+			.subscribe(createResourceDto => {
+				this.myInfoForm.setValue({
+					firstName: createResourceDto.firstName,
+					lastName: createResourceDto.lastName,
+					email: createResourceDto.email,
+					phoneNumber: createResourceDto.phoneNumber,
+					country: createResourceDto.location.country,
+					state: createResourceDto.location.province,
+					city: createResourceDto.location.city,
+				});
+			});
+	}
+
 	ngOnDestroy() {
-		this.destroyed.next();
-		this.destroyed.complete();
+		this.destroyed$.next();
+		this.destroyed$.complete();
 	}
 
 	updateStateOptions(inputtedCountry: string) {
@@ -88,7 +116,23 @@ export class MyInfoOneComponent implements OnDestroy {
 	}
 
 	nextStep() {
-		this.router.navigate(['../myinfotwo'], { relativeTo: this.route });
+		this.myInfoForm?.markAllAsTouched();
+		if (this.myInfoForm?.valid) {
+			this.store.dispatch(
+				createUserDetails({
+					firstName: this.myInfoForm.get('firstName')?.value,
+					lastName: this.myInfoForm.get('lastName')?.value,
+					phoneNumber: this.myInfoForm.get('phoneNumber')?.value,
+					email: this.myInfoForm.get('email')?.value,
+					location: {
+						city: this.myInfoForm.get('city')?.value,
+						province: this.myInfoForm.get('state')?.value,
+						country: this.myInfoForm.get('country')?.value,
+					},
+				}),
+			);
+			this.router.navigate(['../myinfotwo'], { relativeTo: this.route });
+		}
 	}
 
 	backStep() {

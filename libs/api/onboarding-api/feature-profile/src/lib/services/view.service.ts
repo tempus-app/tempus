@@ -1,8 +1,9 @@
 import { ForbiddenException, forwardRef, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { CreateViewDto } from '@tempus/api/shared/dto';
 import { ViewEntity } from '@tempus/api/shared/entity';
 import { ResourceService } from '@tempus/onboarding-api/feature-account';
-import { CreateViewDto, View, ViewType } from '@tempus/shared-domain';
+import { View, ViewType } from '@tempus/shared-domain';
 import { Repository } from 'typeorm';
 
 @Injectable()

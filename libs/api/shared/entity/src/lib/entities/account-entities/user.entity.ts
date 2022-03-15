@@ -1,4 +1,5 @@
-import { CreateUserDto, RoleType, UpdateUserDto, User } from '@tempus/shared-domain';
+import { CreateUserDto, UpdateUserDto } from '@tempus/api/shared/dto';
+import { RoleType, User } from '@tempus/shared-domain';
 import { Entity, Column, PrimaryGeneratedColumn, TableInheritance } from 'typeorm';
 
 @Entity()

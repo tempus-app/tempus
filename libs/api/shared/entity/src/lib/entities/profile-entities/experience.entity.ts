@@ -1,4 +1,5 @@
-import { CreateExperienceDto, Experience } from '@tempus/shared-domain';
+import { CreateExperienceDto } from '@tempus/api/shared/dto';
+import { Experience } from '@tempus/shared-domain';
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToOne } from 'typeorm';
 import { ResourceEntity } from '../account-entities';
 import { LocationEntity } from '../common-entities';

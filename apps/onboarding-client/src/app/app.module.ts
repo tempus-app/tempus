@@ -7,12 +7,14 @@ import { HttpClientModule } from '@angular/common/http';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { OnboardingClientSignupFeatureMyInfoTwoModule } from '@tempus/onboarding-client/signup/feature-myinfo-two';
-import { RouterModule } from '@angular/router';
-import { OnboardingClientSignupFeatureShellModule } from '@tempus/onboarding-client/signup/shell';
 import { OnboardingClientShellModule } from '@tempus/client/onboarding-client/shell';
-import { NxWelcomeComponent } from './nx-welcome.component';
+import { StoreModule } from '@ngrx/store';
+import { EffectsModule } from '@ngrx/effects';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { StoreRouterConnectingModule } from '@ngrx/router-store';
+import { environment } from '../environments/environment';
 import { AppComponent } from './app.component';
+import { NxWelcomeComponent } from './nx-welcome.component';
 
 @NgModule({
 	declarations: [AppComponent, NxWelcomeComponent],
@@ -25,6 +27,19 @@ import { AppComponent } from './app.component';
 		MatPaginatorModule,
 		BrowserAnimationsModule,
 		OnboardingClientShellModule,
+		StoreModule.forRoot(
+			{},
+			{
+				metaReducers: !environment.production ? [] : [],
+				runtimeChecks: {
+					strictActionImmutability: true,
+					strictStateImmutability: true,
+				},
+			},
+		),
+		EffectsModule.forRoot([]),
+		!environment.production ? StoreDevtoolsModule.instrument({ name: 'Tempus Onboarding Client App' }) : [],
+		StoreRouterConnectingModule.forRoot(),
 		// RouterModule.forRoot([
 		// 	{
 		// 		path: '',

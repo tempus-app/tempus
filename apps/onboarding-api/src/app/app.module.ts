@@ -1,7 +1,6 @@
-import { forwardRef, Module } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { CoreModule } from '@tempus/api/shared/feature-core';
 import { AccountModule } from '@tempus/onboarding-api/feature-account';
-import { DataLayerModule } from '@tempus/shared-domain';
 import { ProfileModule } from '@tempus/onboarding-api/feature-profile';
 import { EmailModule } from '@tempus/api/shared/feature-email';
 import { PdfgeneratorModule } from '@tempus/api/shared/feature-pdfgenerator';

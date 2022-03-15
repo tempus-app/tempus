@@ -1,2 +1,2 @@
-export * from './createLink.dto';
-export * from './updateLink.dto';
+export * from './IcreateLink.dto';
+export * from './IupdateLink.dto';

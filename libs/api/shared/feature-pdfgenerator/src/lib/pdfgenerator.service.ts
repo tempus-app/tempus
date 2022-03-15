@@ -3,8 +3,8 @@ import * as puppeteer from 'puppeteer';
 import * as path from 'path';
 import * as handlebars from 'handlebars';
 import * as fs from 'fs';
-import { PdfTemplateDtoInterface, HandleBarHelper, ResumePdfTemplateDto } from '@tempus/shared-domain';
 import { ConfigService } from '@nestjs/config';
+import { HandleBarHelper, PdfTemplateDtoInterface, ResumePdfTemplateDto } from '@tempus/api/shared/dto';
 import { SampleView } from './testdata/sampleView';
 
 @Injectable()

@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
+import { OnboardingClientProfileDataAccessModule } from '@tempus/client/onboarding-client/profile/data-access';
+import { AuthGuard } from '@tempus/client/onboarding-client/profile/guards';
 import { ProfileShellComponent } from './shell/onboarding-client-profile-feature-shell.component';
 
 const routes: Routes = [
@@ -11,7 +13,11 @@ const routes: Routes = [
 			{
 				path: '',
 				pathMatch: 'full',
-				redirectTo: 'signin',
+				canLoad: [AuthGuard],
+				loadChildren: () =>
+					import('@tempus/onboarding-client/profile/feature-profile').then(
+						m => m.OnboardingClientProfileFeatureProfileModule,
+					),
 			},
 			{
 				path: 'signin',
@@ -26,6 +32,6 @@ const routes: Routes = [
 
 @NgModule({
 	declarations: [ProfileShellComponent],
-	imports: [CommonModule, RouterModule.forChild(routes)],
+	imports: [CommonModule, RouterModule.forChild(routes), OnboardingClientProfileDataAccessModule],
 })
 export class OnboardingClientProfileFeatureShellModule {}

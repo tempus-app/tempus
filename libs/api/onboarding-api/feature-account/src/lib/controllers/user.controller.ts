@@ -1,16 +1,9 @@
 /* eslint-disable @typescript-eslint/return-await */
 import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards } from '@nestjs/common';
-import {
-	CreateResourceDto,
-	CreateUserDto,
-	Resource,
-	RoleType,
-	UpdateResourceDto,
-	UpdateUserDto,
-	User,
-} from '@tempus/shared-domain';
+import { Resource, RoleType, User } from '@tempus/shared-domain';
 import { JwtAuthGuard, Roles, RolesGuard } from '@tempus/api/shared/feature-auth';
 import { ApiTags } from '@nestjs/swagger';
+import { CreateUserDto, CreateResourceDto, UpdateUserDto, UpdateResourceDto } from '@tempus/api/shared/dto';
 import { ResourceService } from '../services/resource.service';
 import { UserService } from '../services/user.service';
 
