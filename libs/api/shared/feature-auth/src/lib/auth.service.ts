@@ -31,7 +31,9 @@ export class AuthService {
 
 	async refreshToken(payload: JwtRefreshPayloadWithToken) {
 		const user = await this.findByEmail(payload.email);
-
+		if (!user.refreshToken) {
+			throw new ForbiddenException('User not logged in');
+		}
 		if (await AuthService.compareData(payload.refreshToken, user.refreshToken)) {
 			const tokens = await this.createTokens(user);
 			await this.updateRefreshTokenHash(user, tokens.refreshToken);
@@ -47,14 +49,6 @@ export class AuthService {
 		}
 		return null;
 	}
-
-	// async getUserFromJWT(email: string) {
-	// 	const user = await this.findByEmail(email);
-	// 	if (user) {
-	// 		return user;
-	// 	}
-	// 	return null;
-	// }
 
 	private static compareData(data: string, hashedData: string): boolean {
 		try {
@@ -95,11 +89,10 @@ export class AuthService {
 		if (!refreshToken) {
 			tokenOwner.refreshToken = refreshToken;
 		} else {
-			const hashedRefreshToken = hash(refreshToken, salt);
+			const hashedRefreshToken = await hash(refreshToken, salt);
 			tokenOwner.refreshToken = hashedRefreshToken;
 		}
-
-		this.userRepository.save(tokenOwner);
+		await this.userRepository.save(tokenOwner);
 	}
 
 	private async createTokens(user: User): Promise<Tokens> {
