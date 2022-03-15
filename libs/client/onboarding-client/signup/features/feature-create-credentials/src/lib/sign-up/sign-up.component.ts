@@ -27,7 +27,7 @@ export class SignUpComponent implements OnInit {
 			email: new FormControl({ value: this.email, disabled: true }, Validators.required),
 			password: new FormControl(null, [
 				Validators.required,
-				// Validators.pattern(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,}$/),
+				Validators.pattern(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#_?&]{8,}$/),
 				// taken from: https://stackoverflow.com/questions/40529817/reactive-forms-mark-fields-as-touched
 			]),
 			confirmPassword: new FormControl(null, Validators.required),
