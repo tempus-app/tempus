@@ -1,6 +1,7 @@
 import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { CreateViewDto, View } from '@tempus/shared-domain';
+import { CreateViewDto } from '@tempus/api/shared/dto';
+import { View } from '@tempus/shared-domain';
 import { ViewsService } from '../services/view.service';
 
 @ApiTags('Profile Views')

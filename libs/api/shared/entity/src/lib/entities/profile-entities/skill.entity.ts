@@ -1,4 +1,5 @@
-import { CreateSkillDto, Skill } from '@tempus/shared-domain';
+import { CreateSkillDto } from '@tempus/api/shared/dto';
+import { Skill } from '@tempus/shared-domain';
 import { Entity, Column, PrimaryGeneratedColumn, JoinColumn, ManyToOne } from 'typeorm';
 import { ResourceEntity } from '../account-entities';
 import { SkillTypeEntity } from './skilltype.entity';

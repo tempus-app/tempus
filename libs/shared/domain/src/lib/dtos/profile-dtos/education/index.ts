@@ -1,2 +1,2 @@
-export * from './createEduation.dto';
-export * from './updateEducation.dto';
+export * from './IcreateEducation.dto';
+export * from './IupdateEducation.dto';

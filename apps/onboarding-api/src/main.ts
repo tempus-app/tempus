@@ -25,6 +25,7 @@ function setupSwagger(app: INestApplication) {
 
 async function bootstrap() {
 	const app = await NestFactory.create(AppModule);
+	app.enableCors();
 	const config = app.get(ConfigService);
 	const globalPrefix = 'onboarding';
 

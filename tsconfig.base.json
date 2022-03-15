@@ -15,12 +15,24 @@
 		"skipDefaultLibCheck": true,
 		"baseUrl": ".",
 		"paths": {
+			"@tempus/api/shared/dto": ["libs/api/shared/dto/src/index.ts"],
 			"@tempus/api/shared/entity": ["libs/api/shared/entity/src/index.ts"],
 			"@tempus/api/shared/feature-auth": ["libs/api/shared/feature-auth/src/index.ts"],
 			"@tempus/api/shared/feature-core": ["libs/api/shared/feature-core/src/index.ts"],
 			"@tempus/api/shared/feature-email": ["libs/api/shared/feature-email/src/index.ts"],
 			"@tempus/api/shared/feature-pdfgenerator": ["libs/api/shared/feature-pdfgenerator/src/index.ts"],
+			"@tempus/client/onboarding-client/profile/data-access": [
+				"libs/client/onboarding-client/profile/data-access/src/index.ts"
+			],
+			"@tempus/client/onboarding-client/profile/guards": ["libs/client/onboarding-client/profile/guards/src/index.ts"],
+			"@tempus/client/onboarding-client/shared/data-access": [
+				"libs/client/onboarding-client/shared/data-access/src/index.ts"
+			],
 			"@tempus/client/onboarding-client/shell": ["libs/client/onboarding-client/shell/src/index.ts"],
+			"@tempus/client/onboarding-client/signup/data-access": [
+				"libs/client/onboarding-client/signup/data-access/src/index.ts"
+			],
+			"@tempus/client/onboarding-client/signup/guards": ["libs/client/onboarding-client/signup/guards/src/index.ts"],
 			"@tempus/client/shared/ui-components/input": ["libs/client/shared/ui-components/input/src/index.ts"],
 			"@tempus/client/shared/ui-components/persistent": ["libs/client/shared/ui-components/persistent/src/index.ts"],
 			"@tempus/client/shared/ui-components/presentational": [
@@ -29,8 +41,11 @@
 			"@tempus/onboarding-api/feature-account": ["libs/api/onboarding-api/feature-account/src/index.ts"],
 			"@tempus/onboarding-api/feature-profile": ["libs/api/onboarding-api/feature-profile/src/index.ts"],
 			"@tempus/onboarding-api/feature-project": ["libs/api/onboarding-api/feature-project/src/index.ts"],
+			"@tempus/onboarding-client/profile/feature-profile": [
+				"libs/client/onboarding-client/profile/features/feature-profile/src/index.ts"
+			],
 			"@tempus/onboarding-client/profile/feature-sign-in": [
-				"libs/client/onboarding-client/profile/features/onboarding-client-profile-feature-sign-in/src/index.ts"
+				"libs/client/onboarding-client/profile/features/feature-sign-in/src/index.ts"
 			],
 			"@tempus/onboarding-client/profile/shell": ["libs/client/onboarding-client/profile/shell/src/index.ts"],
 			"@tempus/onboarding-client/signup/feature-create-credentials": [

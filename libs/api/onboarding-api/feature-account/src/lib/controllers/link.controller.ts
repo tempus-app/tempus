@@ -1,7 +1,8 @@
 import { Body, Controller, Get, Param, Patch, Post, Query } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
+import { CreateLinkDto, UpdatelinkDto } from '@tempus/api/shared/dto';
 import { LinkEntity } from '@tempus/api/shared/entity';
-import { CreateLinkDto, Link, UpdatelinkDto } from '@tempus/shared-domain';
+import { Link } from '@tempus/shared-domain';
 import { LinkService } from '../services/link.service';
 
 @ApiTags('Link Components')

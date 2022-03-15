@@ -1,4 +1,4 @@
-import { Resource, User } from '../..';
+import { Resource, User } from '@tempus/shared-domain';
 
 export class AuthDto {
 	user: User | Resource;

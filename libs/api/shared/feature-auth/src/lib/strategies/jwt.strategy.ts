@@ -2,7 +2,8 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { ConfigService } from '@nestjs/config';
-import { JwtPayload, User } from '@tempus/shared-domain';
+import { User } from '@tempus/shared-domain';
+import { JwtPayload } from '@tempus/api/shared/dto';
 import { AuthService } from '../auth.service';
 
 @Injectable()

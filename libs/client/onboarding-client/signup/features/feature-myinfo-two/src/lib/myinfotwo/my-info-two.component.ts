@@ -2,10 +2,18 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Country, State } from 'country-state-city';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { filter, switchMap, take, takeUntil, tap } from 'rxjs/operators';
 import { InputType } from '@tempus/client/shared/ui-components/input';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormArray, FormBuilder, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Store } from '@ngrx/store';
+import {
+	createWorkExperienceDetails,
+	selectResourceData,
+	selectWorkExperienceDetailsCreated,
+	SignupState,
+} from '@tempus/client/onboarding-client/signup/data-access';
+import { ICreateExperienceDto, ICreateLocationDto } from '@tempus/shared-domain';
 
 @Component({
 	selector: 'tempus-my-info-two',
@@ -13,7 +21,7 @@ import { FormArray, FormBuilder, Validators } from '@angular/forms';
 	styleUrls: ['./my-info-two.component.scss'],
 })
 export class MyInfoTwoComponent implements OnDestroy, OnInit {
-	destroyed = new Subject<void>();
+	destroyed$ = new Subject<void>();
 
 	rows = '10';
 
@@ -48,10 +56,11 @@ export class MyInfoTwoComponent implements OnDestroy, OnInit {
 		private fb: FormBuilder,
 		breakpointObserver: BreakpointObserver,
 		private router: Router,
+		private store: Store<SignupState>,
 	) {
 		breakpointObserver
 			.observe([Breakpoints.XSmall, Breakpoints.Small, Breakpoints.Medium, Breakpoints.Large, Breakpoints.XLarge])
-			.pipe(takeUntil(this.destroyed))
+			.pipe(takeUntil(this.destroyed$))
 			.subscribe(result => {
 				for (const query of Object.keys(result.breakpoints)) {
 					if (result.breakpoints[query]) {
@@ -70,23 +79,40 @@ export class MyInfoTwoComponent implements OnDestroy, OnInit {
 	}
 
 	ngOnInit() {
-		const workExperience = this.fb.group({
-			title: ['', Validators.required],
-			company: ['', Validators.required],
-			country: ['', Validators.required],
-			state: ['', Validators.required],
-			city: ['', Validators.required],
-			startDate: ['', Validators.required],
-			endDate: ['', Validators.required],
-			description: ['', Validators.required],
-		});
-
-		this.totalWorkExperience.push(workExperience);
+		this.store
+			.select(selectWorkExperienceDetailsCreated)
+			.pipe(
+				take(1),
+				filter(created => created),
+				switchMap(_ => this.store.select(selectResourceData)),
+				take(1),
+			)
+			.subscribe(createResourceDto => {
+				// eslint-disable-next-line @typescript-eslint/dot-notation
+				const workExperienceArray = this.totalWorkExperience;
+				createResourceDto.experiences.forEach(experience => {
+					workExperienceArray.push(
+						this.fb.group({
+							title: [experience.title, Validators.required],
+							company: [experience.company, Validators.required],
+							country: [experience.location.country, Validators.required],
+							state: [experience.location.province, Validators.required],
+							city: [experience.location.city, Validators.required],
+							startDate: [experience.startDate, Validators.required],
+							endDate: [experience.endDate, Validators.required],
+							description: [experience.description, Validators.required],
+						}),
+					);
+				});
+				this.myInfoForm.patchValue({
+					workExperienceSummary: createResourceDto.experiencesSummary,
+				});
+			});
 	}
 
 	ngOnDestroy() {
-		this.destroyed.next();
-		this.destroyed.complete();
+		this.destroyed$.next();
+		this.destroyed$.complete();
 	}
 
 	addWorkSections() {
@@ -125,7 +151,41 @@ export class MyInfoTwoComponent implements OnDestroy, OnInit {
 	}
 
 	nextStep() {
-		this.router.navigate(['../myinfothree'], { relativeTo: this.route });
+		this.myInfoForm?.markAllAsTouched();
+		if (this.myInfoForm?.valid) {
+			this.store.dispatch(
+				createWorkExperienceDetails({
+					experiencesSummary: this.myInfoForm.get('workExperienceSummary')?.value,
+					experiences: this.totalWorkExperience.value.map(
+						(workExperience: {
+							title: string;
+							company: string;
+							country: string;
+							state: string;
+							city: string;
+							startDate: Date;
+							endDate: Date;
+							description: string; // Need to be fixed to be array of strings
+						}) => {
+							return {
+								title: workExperience.title,
+								company: workExperience.company,
+								location: {
+									country: workExperience.country,
+									province: workExperience.state,
+									city: workExperience.city,
+								} as ICreateLocationDto,
+								startDate: workExperience.startDate,
+								endDate: workExperience.endDate,
+								summary: workExperience.description,
+								description: [workExperience.description],
+							} as ICreateExperienceDto;
+						},
+					),
+				}),
+			);
+			this.router.navigate(['../myinfothree'], { relativeTo: this.route });
+		}
 	}
 
 	backStep() {

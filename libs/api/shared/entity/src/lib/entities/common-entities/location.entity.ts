@@ -1,5 +1,6 @@
 import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { CreateLocationDto, Location } from '@tempus/shared-domain';
+import { Location } from '@tempus/shared-domain';
+import { CreateLocationDto } from '@tempus/api/shared/dto';
 import { EducationEntity, ExperienceEntity, ResourceEntity } from '..';
 
 @Entity()

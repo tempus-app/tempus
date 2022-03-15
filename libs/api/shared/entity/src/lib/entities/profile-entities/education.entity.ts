@@ -1,4 +1,5 @@
-import { CreateEducationDto, Education } from '@tempus/shared-domain';
+import { CreateEducationDto } from '@tempus/api/shared/dto';
+import { Education } from '@tempus/shared-domain';
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToOne } from 'typeorm';
 import { ResourceEntity } from '../account-entities';
 import { LocationEntity } from '../common-entities';

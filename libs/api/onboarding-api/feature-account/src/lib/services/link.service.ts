@@ -1,8 +1,9 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { UpdatelinkDto } from '@tempus/api/shared/dto';
 import { LinkEntity } from '@tempus/api/shared/entity';
 import { EmailService } from '@tempus/api/shared/feature-email';
-import { Link, StatusType, UpdatelinkDto } from '@tempus/shared-domain';
+import { Link, StatusType } from '@tempus/shared-domain';
 import { Repository } from 'typeorm';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -24,7 +25,7 @@ export class LinkService {
 			expiryDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() + 7);
 		}
 		const fullLink = { ...link, token: uniqueToken, status: StatusType.ACTIVE, expiry: expiryDate };
-		await this.emailService.sendInvitationEmail(fullLink);
+		// await this.emailService.sendInvitationEmail(fullLink);
 		return this.linkRepository.save(fullLink);
 	}
 

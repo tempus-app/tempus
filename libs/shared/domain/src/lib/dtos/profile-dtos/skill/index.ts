@@ -1,2 +1,2 @@
-export * from './createSkill.dto';
-export * from './createSkillType.dto';
+export * from './IcreateSkill.dto';
+export * from './IcreateSkillType.dto';

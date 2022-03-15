@@ -17,6 +17,7 @@ export const SampleView: View = {
 			id: 1,
 			title: 'Certification 1',
 			institution: 'Udemy',
+			summary: 'summary 1',
 			resource: null,
 		},
 	],
