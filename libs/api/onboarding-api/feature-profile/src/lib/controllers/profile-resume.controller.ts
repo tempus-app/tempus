@@ -1,5 +1,5 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
-import { Certification, Education, Experience, Skill, SkillType } from '@tempus/shared-domain';
+import { Certification, Education, Experience, ResumeComponentsDto, Skill, SkillType } from '@tempus/shared-domain';
 import { ApiTags } from '@nestjs/swagger';
 import { CertificationEntity, EducationEntity, ExperienceEntity, SkillEntity } from '@tempus/api/shared/entity';
 import {
@@ -10,7 +10,6 @@ import {
 	UpdateEducationDto,
 	UpdateExperienceDto,
 	UpdateCertificationDto,
-	ResumeComponentsDto,
 } from '@tempus/api/shared/dto';
 import { EducationService } from '../services/education.service';
 import { ExperienceService } from '../services/experience.service';
