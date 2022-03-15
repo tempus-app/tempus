@@ -1,7 +1,7 @@
-import { Inject, Injectable, InternalServerErrorException, NotFoundException, Scope } from '@nestjs/common';
-import { Tokens, RoleType, User } from '@tempus/shared-domain';
+import { ForbiddenException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
+import { Tokens, RoleType, User, JwtPayload, JwtRefreshPayloadWithToken } from '@tempus/shared-domain';
 import { JwtService } from '@nestjs/jwt';
-import { compare } from 'bcrypt';
+import { compare, genSalt, hash } from 'bcrypt';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ResourceEntity, UserEntity } from '@tempus/api/shared/entity';
@@ -18,31 +18,47 @@ export class AuthService {
 		private configService: ConfigService,
 	) {}
 
-	async validateUser(email: string, password: string): Promise<User> {
-		const user = await this.findByEmail(email);
-		if (user && (await AuthService.comparePassword(password, user.password))) {
-			return user;
-		}
-		return null;
-	}
-
-	async getUserFromJWT(email: string) {
-		const user = await this.findByEmail(email);
-		if (user) {
-			return user;
-		}
-		return null;
-	}
-
 	async login(user: User): Promise<Tokens> {
-		const tokens = this.createTokens(user);
-
+		const tokens = await this.createTokens(user);
+		await this.updateRefreshTokenHash(user, tokens.refreshToken);
 		return tokens;
 	}
 
-	private static comparePassword(password: string, encryptedPassword: string): boolean {
+	async logout(token: JwtPayload) {
+		const user = await this.findByEmail(token.email);
+		await this.updateRefreshTokenHash(user, null);
+	}
+
+	async refreshToken(payload: JwtRefreshPayloadWithToken) {
+		const user = await this.findByEmail(payload.email);
+
+		if (await AuthService.compareData(payload.refreshToken, user.refreshToken)) {
+			const tokens = await this.createTokens(user);
+			await this.updateRefreshTokenHash(user, tokens.refreshToken);
+			return tokens;
+		}
+		throw new ForbiddenException('Access Denied');
+	}
+
+	async validateUser(email: string, password: string): Promise<User> {
+		const user = await this.findByEmail(email);
+		if (user && (await AuthService.compareData(password, user.password))) {
+			return user;
+		}
+		return null;
+	}
+
+	// async getUserFromJWT(email: string) {
+	// 	const user = await this.findByEmail(email);
+	// 	if (user) {
+	// 		return user;
+	// 	}
+	// 	return null;
+	// }
+
+	private static compareData(data: string, hashedData: string): boolean {
 		try {
-			return compare(password, encryptedPassword);
+			return compare(data, hashedData);
 		} catch (e) {
 			throw new InternalServerErrorException(e);
 		}
@@ -70,6 +86,20 @@ export class AuthService {
 			throw new NotFoundException(`Could not find resource with email ${email}`);
 		}
 		return resourceEntity;
+	}
+
+	private async updateRefreshTokenHash(user: User, refreshToken: string) {
+		const tokenOwner = user;
+		const salt = await genSalt(this.configService.get('saltSecret'));
+
+		if (!refreshToken) {
+			tokenOwner.refreshToken = refreshToken;
+		} else {
+			const hashedRefreshToken = hash(refreshToken, salt);
+			tokenOwner.refreshToken = hashedRefreshToken;
+		}
+
+		this.userRepository.save(tokenOwner);
 	}
 
 	private async createTokens(user: User): Promise<Tokens> {

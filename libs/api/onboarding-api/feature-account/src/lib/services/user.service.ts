@@ -76,7 +76,7 @@ export class UserService {
 
 	private async hashPassword(password: string): Promise<string> {
 		try {
-			const salt = await genSalt(password, this.configService.get('saltSecret'));
+			const salt = await genSalt(this.configService.get('saltSecret'));
 			return hash(password, salt);
 		} catch (e) {
 			throw new InternalServerErrorException(e);

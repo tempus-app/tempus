@@ -15,11 +15,12 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt-access') {
 		});
 	}
 
-	async validate(payload: JwtPayload): Promise<User> {
-		const user = await this.authService.getUserFromJWT(payload.email);
-		if (!user) {
-			throw new UnauthorizedException('Incorrect credentials.');
-		}
-		return user;
+	async validate(payload: JwtPayload): Promise<JwtPayload> {
+		// const user = await this.authService.getUserFromJWT(payload.email);
+		// if (!user) {
+		// 	throw new UnauthorizedException('Incorrect credentials.');
+		// }
+		// return user;
+		return payload;
 	}
 }
