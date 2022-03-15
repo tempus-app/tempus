@@ -2,7 +2,7 @@ import { ForbiddenException, Injectable, UnauthorizedException } from '@nestjs/c
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { ConfigService } from '@nestjs/config';
-import { JwtPayload, JwtRefreshPayloadWithToken, User } from '@tempus/shared-domain';
+import { JwtPayload, JwtRefreshPayloadWithToken } from '@tempus/shared-domain';
 import { Request } from 'express';
 
 @Injectable()
