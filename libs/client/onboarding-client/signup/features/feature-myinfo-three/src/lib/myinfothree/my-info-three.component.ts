@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { Country, State } from 'country-state-city';
-import { Subject } from 'rxjs';
 import { filter, switchMap, take, takeUntil, tap } from 'rxjs/operators';
 import { InputType } from '@tempus/client/shared/ui-components/input';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
@@ -27,7 +26,6 @@ import {
 	templateUrl: './my-info-three.component.html',
 	styleUrls: ['./my-info-three.component.scss'],
 })
-
 export class MyInfoThreeComponent implements OnInit {
 	InputType = InputType;
 
@@ -67,7 +65,12 @@ export class MyInfoThreeComponent implements OnInit {
 		return this.myInfoForm.controls['certifications'] as FormArray;
 	}
 
-	constructor(private route: ActivatedRoute, private fb: FormBuilder, private router: Router, private store: Store<SignupState>) {}
+	constructor(
+		private route: ActivatedRoute,
+		private fb: FormBuilder,
+		private router: Router,
+		private store: Store<SignupState>,
+	) {}
 
 	ngOnInit() {
 		this.store

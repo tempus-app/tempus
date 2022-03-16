@@ -1,9 +1,5 @@
-import { Component } from '@angular/core';
-import { formatDateRange } from '@tempus/shared/util';
-import { Experience, Education } from '@tempus/shared-domain';
 import { Component, OnInit } from '@angular/core';
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { Subject, take, takeUntil, tap } from 'rxjs';
+import { formatDateRange } from '@tempus/shared/util';
 import {
 	Experience,
 	Education,
@@ -11,8 +7,12 @@ import {
 	ICreateEducationDto,
 	ICreateCertificationDto,
 } from '@tempus/shared-domain';
+
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { Subject, take, takeUntil, tap } from 'rxjs';
+
 import { ActivatedRoute, Router } from '@angular/router';
-import { formatDateRange } from '@tempus/shared/util';
+
 import {
 	createResource,
 	resetCreateResourceState,
@@ -58,8 +58,8 @@ export class ReviewComponent implements OnInit {
 
 	destroyed$ = new Subject<void>();
 
-  loading = false;
-  
+	loading = false;
+
 	constructor(private router: Router, private route: ActivatedRoute, private store: Store<SignupState>) {}
 
 	ngOnInit(): void {
@@ -110,5 +110,4 @@ export class ReviewComponent implements OnInit {
 	submit() {
 		this.store.dispatch(createResource());
 	}
-
 }

@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { Country, State } from 'country-state-city';
-import { Subject } from 'rxjs';
 import { filter, switchMap, take, takeUntil, tap } from 'rxjs/operators';
 import { InputType } from '@tempus/client/shared/ui-components/input';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -19,7 +18,6 @@ import { ICreateExperienceDto, ICreateLocationDto } from '@tempus/shared-domain'
 	templateUrl: './my-info-two.component.html',
 	styleUrls: ['./my-info-two.component.scss'],
 })
-
 export class MyInfoTwoComponent implements OnInit {
 	numberWorkSections: number[] = [0];
 
@@ -43,7 +41,12 @@ export class MyInfoTwoComponent implements OnInit {
 		return this.myInfoForm.controls['workExperience'] as FormArray;
 	}
 
-	constructor(private route: ActivatedRoute, private fb: FormBuilder, private router: Router, private store: Store<SignupState>) {}
+	constructor(
+		private route: ActivatedRoute,
+		private fb: FormBuilder,
+		private router: Router,
+		private store: Store<SignupState>,
+	) {}
 
 	ngOnInit() {
 		this.store

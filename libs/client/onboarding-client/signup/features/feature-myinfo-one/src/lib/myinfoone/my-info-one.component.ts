@@ -1,7 +1,5 @@
-import { Component, Output, EventEmitter } from '@angular/core';
+import { Component, Output, EventEmitter, OnInit } from '@angular/core';
 import { Country, State } from 'country-state-city';
-
-import { Subject } from 'rxjs';
 import { filter, switchMap, take, takeUntil, tap } from 'rxjs/operators';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -19,7 +17,7 @@ import { Store } from '@ngrx/store';
 	templateUrl: './my-info-one.component.html',
 	styleUrls: ['./my-info-one.component.scss'],
 })
-export class MyInfoOneComponent {
+export class MyInfoOneComponent implements OnInit {
 	myInfoForm = this.fb.group({
 		firstName: ['', Validators.required],
 		lastName: ['', Validators.required],
@@ -42,7 +40,12 @@ export class MyInfoOneComponent {
 
 	@Output() formIsValid = new EventEmitter<boolean>();
 
-	constructor(private fb: FormBuilder, private router: Router, private route: ActivatedRoute, private store: Store<SignupState>) {}
+	constructor(
+		private fb: FormBuilder,
+		private router: Router,
+		private route: ActivatedRoute,
+		private store: Store<SignupState>,
+	) {}
 
 	ngOnInit() {
 		this.store

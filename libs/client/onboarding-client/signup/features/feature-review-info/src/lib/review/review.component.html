@@ -14,7 +14,11 @@
 						<tempus-card>
 							<div class="card-header">
 								<h3 class="mat-h3 section-header">Legal Name</h3>
-								<p class="mat-body-1">{{ firstName }}  {{ lastName }}</p>
+								<p class="mat-body-1">{{ firstName }}</p>
+							</div>
+							<div class="card-header">
+								<h3 class="mat-h3 section-header">Family Name</h3>
+								<p class="mat-body-1">{{ lastName }}</p>
 							</div>
 							<div class="card-header">
 								<h3 class="mat-h3 section-header">Email</h3>
@@ -42,9 +46,9 @@
 			</div>
 			<div fxFlex="5"></div>
 		</div>
-		<div *ngFor="let workExperience of workExperienceSummary">
+		<div *ngFor="let workExperience of workExperiences">
 			<div fxFlex="5"></div>
-			<div>
+			<div fxFlex="90">
 				<tempus-card>
 					<div fxLayout="column" fxLayoutGap="30px">
 						<div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxFlex="33%" class="block-2">
@@ -84,7 +88,7 @@
 			</div>
 			<div fxFlex="5"></div>
 		</div>
-		<div *ngFor="let education of educationSummary">
+		<div *ngFor="let education of educations">
 			<div fxFlex="5"></div>
 			<div fxFlex="90">
 				<tempus-card>
@@ -127,7 +131,7 @@
 				<tempus-card>
 					<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutAlign="space-between center" fxLayoutGap="16px grid">
 						<div *ngFor="let skill of skills">
-							<tempus-chip [removable]="false"></tempus-chip>
+							<tempus-chip [removable]="false" [content]="skill"></tempus-chip>
 						</div>
 					</div>
 				</tempus-card>
