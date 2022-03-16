@@ -14,7 +14,7 @@
 						<tempus-card>
 							<div class="card-header">
 								<h3 class="mat-h3 section-header">Legal Name</h3>
-								<p class="mat-body-1">{{ name }}</p>
+								<p class="mat-body-1">{{ firstName }}  {{ lastName }}</p>
 							</div>
 							<div class="card-header">
 								<h3 class="mat-h3 section-header">Email</h3>
@@ -139,4 +139,5 @@
 			<button color="primary" mat-raised-button matStepperNext="button" (click)="submit()">Submit</button>
 		</div>
 	</div>
+	<tempus-spinner [showSpinner]="loading"></tempus-spinner>
 </ng-container>

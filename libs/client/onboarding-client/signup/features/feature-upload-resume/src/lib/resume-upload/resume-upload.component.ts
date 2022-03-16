@@ -1,6 +1,11 @@
 import { Component } from '@angular/core';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { createResumeUpload, SignupState } from '@tempus/client/onboarding-client/signup/data-access';
+import { Store } from '@ngrx/store';
 
 @Component({
 	selector: 'tempus-resume-upload',
@@ -14,7 +19,13 @@ export class ResumeUploadComponent {
 
 	fileUploaded = false;
 
-	constructor(private router: Router, private route: ActivatedRoute) {}
+	constructor(private router: Router, private route: ActivatedRoute, private store: Store<SignupState>) {}
+
+
+	ngOnDestroy(): void {
+		this.destroyed$.next();
+		this.destroyed$.complete();
+	}
 
 	onChange(event: Event) {
 		const input = event.currentTarget as HTMLInputElement;
@@ -42,6 +53,14 @@ export class ResumeUploadComponent {
 	}
 
 	nextStep() {
-		this.router.navigate(['../myinfoone'], { relativeTo: this.route });
+		this.fileData?.markAllAsTouched();
+		if (this.fileData.valid) {
+			this.store.dispatch(
+				createResumeUpload({
+					resume: this.fileData.value,
+				}),
+			);
+			this.router.navigate(['../myinfoone'], { relativeTo: this.route });
+		}
 	}
 }

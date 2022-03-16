@@ -1,5 +1,4 @@
+export * from './IcreateLocation.dto';
+export * from './IupdateLocation.dto';
 export * from './auth.dto';
-export * from './jwtpayload.dto';
-export * from './createLocation.dto';
 export * from './resumeComponents.dto';
-export * from './updateLocation.dto';

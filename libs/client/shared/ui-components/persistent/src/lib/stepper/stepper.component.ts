@@ -18,6 +18,8 @@ import { map, Observable } from 'rxjs';
 export class StepperComponent {
 	@Input() steps: Array<string> = [];
 
+	@Input() completed: Array<boolean> = [true, true, true, true, true, true];
+
 	@Input() color = 'primary';
 
 	@Input() inputedIndex = 0;

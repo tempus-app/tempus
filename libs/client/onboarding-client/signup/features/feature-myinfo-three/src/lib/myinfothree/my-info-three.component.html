@@ -266,7 +266,11 @@
 			<div fxFlex="5"></div>
 
 			<tempus-card>
-				<tempus-text-area id="skill-summary" placeholder="Summary"></tempus-text-area>
+				<tempus-text-area
+					id="skill-summary"
+					placeholder="Summary"
+					[control]="$any(myInfoForm).get('skillsSummary')"
+				></tempus-text-area>
 				<form>
 					<div fxLayout="column" fxLayoutGap="30px">
 						<div fxLayoutAlign="left center">

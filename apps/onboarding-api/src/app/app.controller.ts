@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Post, Res } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { CreateUserDto } from '@tempus/shared-domain';
+import { CreateUserDto } from '@tempus/api/shared/dto';
 
 import { AppService } from './app.service';
 

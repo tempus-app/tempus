@@ -1,4 +1,5 @@
-import { CreateResourceDto, Resource, RoleType } from '@tempus/shared-domain';
+import { CreateResourceDto } from '@tempus/api/shared/dto';
+import { Resource, RoleType } from '@tempus/shared-domain';
 import { ChildEntity, Column, JoinTable, ManyToMany, OneToMany, OneToOne } from 'typeorm';
 import { LocationEntity } from '../common-entities';
 import { CertificationEntity, EducationEntity, ExperienceEntity, SkillEntity, ViewEntity } from '../profile-entities';

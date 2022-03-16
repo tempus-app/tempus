@@ -1,4 +1,5 @@
-import { CreateLinkDto, Link, StatusType } from '@tempus/shared-domain';
+import { CreateLinkDto } from '@tempus/api/shared/dto';
+import { Link, StatusType } from '@tempus/shared-domain';
 import { Column, CreateDateColumn, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { UserEntity } from './user.entity';
 

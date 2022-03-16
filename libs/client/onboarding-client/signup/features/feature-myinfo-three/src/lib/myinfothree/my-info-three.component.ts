@@ -1,16 +1,33 @@
 import { Component, OnInit } from '@angular/core';
 import { Country, State } from 'country-state-city';
+import { Subject } from 'rxjs';
+import { filter, switchMap, take, takeUntil, tap } from 'rxjs/operators';
 import { InputType } from '@tempus/client/shared/ui-components/input';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormArray, FormBuilder, Validators } from '@angular/forms';
+import { Store } from '@ngrx/store';
+import {
+	createTrainingAndSkillDetails,
+	selectResourceData,
+	selectTrainingAndSkillsCreated,
+	SignupState,
+} from '@tempus/client/onboarding-client/signup/data-access';
+import {
+	ICreateCertificationDto,
+	ICreateEducationDto,
+	ICreateLocationDto,
+	ICreateSkillDto,
+	ICreateSkillTypeDto,
+} from '@tempus/shared-domain';
 
 @Component({
 	selector: 'tempus-my-info-three',
 	templateUrl: './my-info-three.component.html',
 	styleUrls: ['./my-info-three.component.scss'],
 })
+
 export class MyInfoThreeComponent implements OnInit {
 	InputType = InputType;
 
@@ -37,6 +54,7 @@ export class MyInfoThreeComponent implements OnInit {
 		qualifications: this.fb.array([]),
 		certifications: this.fb.array([]),
 		skills: [this.skills],
+		skillsSummary: [''],
 	});
 
 	get qualifications() {
@@ -49,27 +67,54 @@ export class MyInfoThreeComponent implements OnInit {
 		return this.myInfoForm.controls['certifications'] as FormArray;
 	}
 
-	constructor(private route: ActivatedRoute, private fb: FormBuilder, private router: Router) {}
+	constructor(private route: ActivatedRoute, private fb: FormBuilder, private router: Router, private store: Store<SignupState>) {}
 
 	ngOnInit() {
-		const qualification = this.fb.group({
-			institution: ['', Validators.required],
-			field: ['', Validators.required],
-			country: [''],
-			state: [''],
-			city: [''],
-			startDate: ['', Validators.required],
-			endDate: ['', Validators.required],
-		});
+		this.store
+			.select(selectTrainingAndSkillsCreated)
+			.pipe(
+				take(1),
+				filter(created => created),
+				switchMap(_ => this.store.select(selectResourceData)),
+				take(1),
+			)
+			.subscribe(createResourceDto => {
+				// eslint-disable-next-line @typescript-eslint/dot-notation
+				const educationsArray = this.qualifications;
+				createResourceDto.educations.forEach(education => {
+					educationsArray.push(
+						this.fb.group({
+							institution: [education.institution, Validators.required],
+							field: [education.degree, Validators.required],
+							country: [education.location.country],
+							state: [education.location.province],
+							city: [education.location.city],
+							startDate: [education.startDate, Validators.required],
+							endDate: [education.endDate, Validators.required],
+						}),
+					);
+				});
 
-		const certification = this.fb.group({
-			certifyingAuthority: ['', Validators.required],
-			title: ['', Validators.required],
-			summary: [''],
-		});
+				const certificationsArray = this.certifications;
+				createResourceDto.certifications.forEach(certification => {
+					certificationsArray.push(
+						this.fb.group({
+							certifyingAuthority: [certification.institution, Validators.required],
+							title: [certification.title, Validators.required],
+							summary: [certification.summary],
+						}),
+					);
+				});
 
-		this.qualifications.push(qualification);
-		this.certifications.push(certification);
+				createResourceDto.skills.forEach(skill => {
+					this.skills.push(skill.skill.name);
+				});
+
+				this.myInfoForm.patchValue({
+					educationSummary: createResourceDto.educationsSummary,
+					skillsSummary: createResourceDto.skillsSummary,
+				});
+			});
 	}
 
 	addEducationSections() {
@@ -112,7 +157,7 @@ export class MyInfoThreeComponent implements OnInit {
 		const certification = this.fb.group({
 			certifyingAuthority: ['', Validators.required],
 			title: ['', Validators.required],
-			description: [''],
+			summary: [''],
 		});
 		this.certifications.push(certification);
 	}
@@ -150,6 +195,54 @@ export class MyInfoThreeComponent implements OnInit {
 	}
 
 	nextStep() {
+		this.myInfoForm?.markAllAsTouched();
+		if (this.myInfoForm?.valid) {
+			this.store.dispatch(
+				createTrainingAndSkillDetails({
+					skillsSummary: this.myInfoForm.get('skillsSummary')?.value,
+					educationsSummary: this.myInfoForm.get('educationSummary')?.value,
+					educations: this.qualifications.value.map(
+						(qualification: {
+							field: string;
+							institution: string;
+							startDate: Date;
+							endDate: Date;
+							country: string;
+							city: string;
+							state: string;
+						}) => {
+							return {
+								degree: qualification.field,
+								institution: qualification.institution,
+								startDate: qualification.startDate,
+								endDate: qualification.endDate,
+								location: {
+									country: qualification.country,
+									city: qualification.city,
+									province: qualification.state,
+								} as ICreateLocationDto,
+							} as ICreateEducationDto;
+						},
+					),
+					skills: this.skills.map(skill => {
+						return {
+							skill: {
+								name: skill,
+							} as ICreateSkillTypeDto,
+						} as ICreateSkillDto;
+					}),
+					certifications: this.certifications.value.map(
+						(certification: { title: string; certifyingAuthority: string; summary: string }) => {
+							return {
+								title: certification.title,
+								institution: certification.certifyingAuthority,
+								summary: certification.summary,
+							} as ICreateCertificationDto;
+						},
+					),
+				}),
+			);
+		}
 		this.router.navigate(['../review'], { relativeTo: this.route });
 	}
 
