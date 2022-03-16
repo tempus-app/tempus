@@ -1,7 +1,8 @@
 export const configuration = () => ({
 	environment: process.env.NODE_ENV,
 	port: parseInt(process.env.PORT || '3000', 10),
-	jwtSecret: process.env.JWT_SECRET,
+	jwtAccessSecret: process.env.JWT_ACCESS_SECRET,
+	jwtRefreshSecret: process.env.JWT_REFRESH_SECRET,
 	saltSecret: parseInt(process.env.SALT_SECRET),
 	emailHost: process.env.EMAIL_HOST,
 	emailPort: parseInt(process.env.EMAIL_PORT || '547', 10),

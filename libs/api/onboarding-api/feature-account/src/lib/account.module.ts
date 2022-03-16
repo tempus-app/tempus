@@ -3,6 +3,7 @@ import { forwardRef, Module } from '@nestjs/common';
 import { ProfileModule } from '@tempus/onboarding-api/feature-profile';
 import { ConfigModule } from '@nestjs/config';
 import { ApiSharedEntityModule } from '@tempus/api/shared/entity';
+import { AuthModule } from '@tempus/api/shared/feature-auth';
 import { LinkController } from './controllers/link.controller';
 import { LinkService } from './services/link.service';
 import { UserService } from './services/user.service';
