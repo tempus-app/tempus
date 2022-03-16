@@ -35,21 +35,38 @@
 							</div>
 							<div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxFlex="33%" class="block-2">
 								<div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="center center" fxFlexFill class="grid-item">
+									<mat-error
+										class="mat-body-2"
+										*ngIf="$any(myInfoForm).get('firstName').invalid && $any(myInfoForm).get('firstName').touched"
+									>
+										Please enter a first name.
+									</mat-error>
+								</div>
+								<div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="center center" fxFlexFill class="grid-item">
+									<mat-error
+										class="mat-body-2"
+										*ngIf="$any(myInfoForm).get('lastName').invalid && $any(myInfoForm).get('lastName').touched"
+									>
+										Please enter a last name.
+									</mat-error>
+								</div>
+							</div>
+							<div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxFlex="33%" class="block-2">
+								<div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="center center" fxFlexFill class="grid-item">
 									<tempus-text-input
 										placeholder="Phone Number"
 										cssClass="secondary"
 										[control]="$any(myInfoForm).get('phoneNumber')"
 									></tempus-text-input>
 								</div>
-								<div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="center center" fxFlexFill class="grid-item">
-									<tempus-text-input
-										[inputType]="InputType.EMAIL"
-										placeholder="Email"
-										cssClass="secondary"
-										[control]="$any(myInfoForm).get('email')"
-									>
-									</tempus-text-input>
-								</div>
+							</div>
+							<div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="center center" fxFlexFill class="grid-item">
+								<mat-error
+									class="mat-body-2"
+									*ngIf="$any(myInfoForm).get('phoneNumber').invalid && $any(myInfoForm).get('phoneNumber').touched"
+								>
+									Please enter a valid phone number.
+								</mat-error>
 							</div>
 						</div>
 					</form>
@@ -92,16 +109,37 @@
 							</div>
 							<div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxFlex="33%" class="block-2">
 								<div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="center center" fxFlexFill class="grid-item">
+									<mat-error
+										class="mat-body-2"
+										*ngIf="$any(myInfoForm).get('country').invalid && $any(myInfoForm).get('country').touched"
+									>
+										Please enter a valid country.
+									</mat-error>
+								</div>
+								<div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="center center" fxFlexFill class="grid-item">
+									<mat-error
+										class="mat-body-2"
+										*ngIf="$any(myInfoForm).get('state').invalid && $any(myInfoForm).get('state').touched"
+									>
+										Please enter a valid state.
+									</mat-error>
+								</div>
+							</div>
+							<div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxFlex="33%" class="block-2">
+								<div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="center center" fxFlexFill class="grid-item">
 									<tempus-text-input placeholder="City" cssClass="secondary" [control]="$any(myInfoForm).get('city')">
 									</tempus-text-input>
 								</div>
-								<div
-									fxFlex.gt-sm="50%"
-									fxFlex.lt-md="50%"
-									fxLayoutAlign="center center"
-									fxFlexFill
-									class="grid-item"
-								></div>
+							</div>
+							<div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxFlex="33%" class="block-2">
+								<div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="center center" fxFlexFill class="grid-item">
+									<mat-error
+										class="mat-body-2"
+										*ngIf="$any(myInfoForm).get('city').invalid && $any(myInfoForm).get('city').touched"
+									>
+										Please enter a valid city.
+									</mat-error>
+								</div>
 							</div>
 						</div>
 					</form>

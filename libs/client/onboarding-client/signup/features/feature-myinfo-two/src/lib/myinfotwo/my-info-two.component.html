@@ -52,7 +52,8 @@
 								<h3 class="mat-h3">Work Experience {{ index + 1 }}</h3>
 							</div>
 						</div>
-						<div fxLayout="column" fxLayoutGap="30px">
+
+						<div fxLayout="column" fxLayoutGap="10px">
 							<div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxFlex="33%" class="block-2">
 								<div
 									fxFlex.gt-sm="50%"
@@ -87,6 +88,40 @@
 									</tempus-text-input>
 								</div>
 							</div>
+
+							<div fxLayout.gt-sm="row" fxLayout.lt-md="column">
+								<div
+									fxFlex.gt-sm="50%"
+									fxFlex.lt-md="50%"
+									fxLayoutAlign="center center"
+									fxLayoutAlign.lt-md="center center"
+									fxFlexFill
+									class="grid-item"
+								>
+									<mat-error
+										class="mat-body-2"
+										*ngIf="$any(numExperience).get('title').invalid && $any(numExperience).get('title').touched"
+									>
+										Please enter a position title.
+									</mat-error>
+								</div>
+								<div
+									fxFlex.gt-sm="50%"
+									fxFlex.lt-md="50%"
+									fxLayoutAlign="center center"
+									fxLayoutAlign.lt-md="center center"
+									fxFlexFill
+									class="grid-item"
+								>
+									<mat-error
+										class="mat-body-2"
+										*ngIf="$any(numExperience).get('company').invalid && $any(numExperience).get('company').touched"
+									>
+										Please enter a company name.
+									</mat-error>
+								</div>
+							</div>
+
 							<div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxFlex="33%" class="block-2">
 								<div
 									fxFlex.gt-sm="50%"
@@ -131,6 +166,48 @@
 									></tempus-text-input>
 								</div>
 							</div>
+
+							<div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxFlex="33%" class="block-2">
+								<div
+									fxFlex.gt-sm="50%"
+									fxFlex.lt-md="33%"
+									fxLayoutAlign="center center"
+									fxLayoutAlign.lt-md="center center"
+									fxFlexFill
+									class="grid-item"
+								>
+									<mat-error
+										class="mat-body-2"
+										*ngIf="$any(numExperience).get('country').invalid && $any(numExperience).get('country').touched"
+									>
+										Please enter a valid country.
+									</mat-error>
+								</div>
+								<div fxFlex.gt-sm="50%" fxFlex.lt-md="33%" fxLayoutAlign="center center" fxFlexFill class="grid-item">
+									<mat-error
+										class="mat-body-2"
+										*ngIf="$any(numExperience).get('state').invalid && $any(numExperience).get('state').touched"
+									>
+										Please enter a valid state.
+									</mat-error>
+								</div>
+								<div
+									fxFlex.gt-sm="50%"
+									fxFlex.lt-md="33%"
+									fxLayoutAlign="center center"
+									fxLayoutAlign.lt-md="center center"
+									fxFlexFill
+									class="grid-item"
+								>
+									<mat-error
+										class="mat-body-2"
+										*ngIf="$any(numExperience).get('city').invalid && $any(numExperience).get('city').touched"
+									>
+										Please enter a valid city.
+									</mat-error>
+								</div>
+							</div>
+
 							<div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxFlex="33%" class="block-2">
 								<div
 									fxFlex.gt-sm="50%"
@@ -165,6 +242,40 @@
 									></tempus-text-input>
 								</div>
 							</div>
+
+							<div fxLayout.gt-sm="row" fxLayout.lt-md="column">
+								<div
+									fxFlex.gt-sm="50%"
+									fxFlex.lt-md="50%"
+									fxLayoutAlign="center center"
+									fxLayoutAlign.lt-md="center center"
+									fxFlexFill
+									class="grid-item"
+								>
+									<mat-error
+										class="mat-body-2"
+										*ngIf="$any(numExperience).get('startDate').invalid && $any(numExperience).get('startDate').touched"
+									>
+										Please enter a valid start date.
+									</mat-error>
+								</div>
+								<div
+									fxFlex.gt-sm="50%"
+									fxFlex.lt-md="50%"
+									fxLayoutAlign="center center"
+									fxLayoutAlign.lt-md="center center"
+									fxFlexFill
+									class="grid-item"
+								>
+									<mat-error
+										class="mat-body-2"
+										*ngIf="$any(numExperience).get('endDate').invalid && $any(numExperience).get('endDate').touched"
+									>
+										Please enter a valid end date.
+									</mat-error>
+								</div>
+							</div>
+
 							<div>
 								<tempus-text-area
 									id="description-{{ index }}"
@@ -173,6 +284,16 @@
 									[control]="$any(numExperience).get('description')"
 								>
 								</tempus-text-area>
+							</div>
+							<div>
+								<mat-error
+									class="mat-body-2"
+									*ngIf="
+										$any(numExperience).get('description').invalid && $any(numExperience).get('description').touched
+									"
+								>
+									Please enter a description.
+								</mat-error>
 							</div>
 						</div>
 					</form>

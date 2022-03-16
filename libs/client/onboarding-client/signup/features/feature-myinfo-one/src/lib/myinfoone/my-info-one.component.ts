@@ -22,7 +22,6 @@ export class MyInfoOneComponent implements OnInit {
 		firstName: ['', Validators.required],
 		lastName: ['', Validators.required],
 		phoneNumber: ['', Validators.required],
-		email: ['', [Validators.required, Validators.email]],
 		country: ['', Validators.required],
 		state: ['', Validators.required],
 		city: ['', Validators.required],
@@ -60,7 +59,6 @@ export class MyInfoOneComponent implements OnInit {
 				this.myInfoForm.setValue({
 					firstName: createResourceDto.firstName,
 					lastName: createResourceDto.lastName,
-					email: createResourceDto.email,
 					phoneNumber: createResourceDto.phoneNumber,
 					country: createResourceDto.location.country,
 					state: createResourceDto.location.province,
@@ -85,7 +83,6 @@ export class MyInfoOneComponent implements OnInit {
 					firstName: this.myInfoForm.get('firstName')?.value,
 					lastName: this.myInfoForm.get('lastName')?.value,
 					phoneNumber: this.myInfoForm.get('phoneNumber')?.value,
-					email: this.myInfoForm.get('email')?.value,
 					location: {
 						city: this.myInfoForm.get('city')?.value,
 						province: this.myInfoForm.get('state')?.value,

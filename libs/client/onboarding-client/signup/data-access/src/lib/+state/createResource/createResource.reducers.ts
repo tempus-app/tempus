@@ -42,10 +42,10 @@ export const resourceReducer = createReducer(
 		resumeUploadCreated: true,
 		uploadedResume: resume,
 	})),
-	on(ResourceActions.createUserDetails, (state, { firstName, lastName, phoneNumber, email, location }) => ({
+	on(ResourceActions.createUserDetails, (state, { firstName, lastName, phoneNumber, location }) => ({
 		...state,
 		userDetailsCreated: true,
-		createResourceData: { ...state.createResourceData, firstName, lastName, phoneNumber, email, location },
+		createResourceData: { ...state.createResourceData, firstName, lastName, phoneNumber, location },
 	})),
 	on(ResourceActions.createWorkExperienceDetails, (state, { experiencesSummary, experiences }) => ({
 		...state,
