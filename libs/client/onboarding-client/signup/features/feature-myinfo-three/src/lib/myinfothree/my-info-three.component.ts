@@ -1,7 +1,5 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { Component, OnInit } from '@angular/core';
 import { Country, State } from 'country-state-city';
-import { Subject } from 'rxjs';
 import { filter, switchMap, take, takeUntil, tap } from 'rxjs/operators';
 import { InputType } from '@tempus/client/shared/ui-components/input';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
@@ -28,21 +26,7 @@ import {
 	templateUrl: './my-info-three.component.html',
 	styleUrls: ['./my-info-three.component.scss'],
 })
-export class MyInfoThreeComponent implements OnDestroy, OnInit {
-	destroyed$ = new Subject<void>();
-
-	cols = '1';
-
-	buttonSpacing = '2';
-
-	certRows = '6';
-
-	educationCols = '3';
-
-	locationCols = '2';
-
-	rows = '12';
-
+export class MyInfoThreeComponent implements OnInit {
 	InputType = InputType;
 
 	addOnBlur = true;
@@ -84,35 +68,9 @@ export class MyInfoThreeComponent implements OnDestroy, OnInit {
 	constructor(
 		private route: ActivatedRoute,
 		private fb: FormBuilder,
-		breakpointObserver: BreakpointObserver,
 		private router: Router,
 		private store: Store<SignupState>,
-	) {
-		breakpointObserver
-			.observe([Breakpoints.XSmall, Breakpoints.Small, Breakpoints.Medium, Breakpoints.Large, Breakpoints.XLarge])
-			.pipe(takeUntil(this.destroyed$))
-			.subscribe(result => {
-				for (const query of Object.keys(result.breakpoints)) {
-					if (result.breakpoints[query]) {
-						if (query === Breakpoints.XSmall) {
-							this.rows = '16';
-							this.cols = '2';
-							this.buttonSpacing = '3';
-							this.certRows = '8';
-							this.educationCols = '6';
-							this.locationCols = '6';
-						} else {
-							this.rows = '8';
-							this.cols = '1';
-							this.buttonSpacing = '2';
-							this.certRows = '6';
-							this.educationCols = '3';
-							this.locationCols = '2';
-						}
-					}
-				}
-			});
-	}
+	) {}
 
 	ngOnInit() {
 		this.store
@@ -160,11 +118,6 @@ export class MyInfoThreeComponent implements OnDestroy, OnInit {
 					skillsSummary: createResourceDto.skillsSummary,
 				});
 			});
-	}
-
-	ngOnDestroy() {
-		this.destroyed$.next();
-		this.destroyed$.complete();
 	}
 
 	addEducationSections() {

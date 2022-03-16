@@ -1,8 +1,11 @@
 <ng-container>
-	<mat-grid-list cols="2" rowHeight="55px" [gutterSize]="'0.25em'">
-		<mat-grid-tile colspan="2" rowspan="{{ buttonSpacing }}">
+	<div fxLayout="column" fxFill fxLayoutGap="30px">
+		<div fxFlex>
+			<div fxFlex="5"></div>
 			<div class="info-title">
 				<h2 class="mat-h2">Education and Training</h2>
+			</div>
+			<div>
 				<button
 					mat-mini-fab
 					(click)="addEducationSections()"
@@ -13,8 +16,10 @@
 					<mat-icon>add</mat-icon>
 				</button>
 			</div>
-		</mat-grid-tile>
-		<mat-grid-tile colspan="2" rowspan="4">
+			<div fxFlex="5"></div>
+		</div>
+		<div fxFlex>
+			<div fxFlex="5"></div>
 			<tempus-card>
 				<form>
 					<h3 class="mat-h3" color="primary">Education Summary</h3>
@@ -25,99 +30,152 @@
 					></tempus-text-area>
 				</form>
 			</tempus-card>
-		</mat-grid-tile>
-		<mat-grid-tile
-			colspan="2"
-			rowspan="{{ rows }}"
-			*ngFor="let numEducation of qualifications.controls; let index = index"
-			id="education-{{ index }}"
-		>
+			<div fxFlex="5"></div>
+		</div>
+		<div *ngFor="let numEducation of qualifications.controls; let index = index">
+			<div fxFlex="5"></div>
 			<tempus-card>
-				<form>
-					<div class="card-header">
-						<div class="header-button">
-							<button
-								mat-mini-fab
-								(click)="removeEducationSection(index)"
-								matTooltip="Remove education section"
-								color="primary"
-							>
-								<mat-icon>remove</mat-icon>
-							</button>
+				<mat-card-content>
+					<form>
+						<div class="card-header">
+							<div class="header-button">
+								<button
+									mat-mini-fab
+									(click)="removeEducationSection(index)"
+									matTooltip="Remove education section"
+									color="primary"
+								>
+									<mat-icon>remove</mat-icon>
+								</button>
+							</div>
+							<div>
+								<h3 class="mat-h3" color="primary">Qualification {{ index + 1 }}</h3>
+							</div>
 						</div>
-						<div>
-							<h3 class="mat-h3" color="primary">Qualification {{ index + 1 }}</h3>
+						<div fxLayout="column" fxLayoutGap="30px">
+							<div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxFlex="33%" class="block-2">
+								<div
+									fxFlex.gt-sm="50%"
+									fxFlex.lt-md="50%"
+									fxLayoutAlign="start center"
+									fxLayoutAlign.lt-md="center center"
+									fxFlexFill
+									class="grid-item"
+								>
+									<tempus-text-input
+										id="institution-{{ index }}"
+										placeholder="Institution"
+										cssClass="secondary"
+										[control]="$any(numEducation).get('institution')"
+									>
+									</tempus-text-input>
+								</div>
+								<div
+									fxFlex.gt-sm="50%"
+									fxFlex.lt-md="50%"
+									fxLayoutAlign="end center"
+									fxLayoutAlign.lt-md="center center"
+									fxFlexFill
+									class="grid-item"
+								>
+									<tempus-text-input
+										id="field-{{ index }}"
+										placeholder="Field"
+										cssClass="secondary"
+										[control]="$any(numEducation).get('field')"
+									></tempus-text-input>
+								</div>
+							</div>
+							<div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxFlex="33%" class="block-2">
+								<div
+									fxFlex.gt-sm="50%"
+									fxFlex.lt-md="33%"
+									fxLayoutAlign="start center"
+									fxLayoutAlign.lt-md="center center"
+									fxFlexFill
+									class="grid-item"
+								>
+									<tempus-search-box
+										id="country-{{ index }}"
+										[options]="countries"
+										placeholder="Country"
+										cssClass="secondary"
+										(optionSelect)="updateStateOptions($event)"
+										[control]="$any(numEducation).get('country')"
+									></tempus-search-box>
+								</div>
+								<div fxFlex.gt-sm="50%" fxFlex.lt-md="33%" fxLayoutAlign="center center" fxFlexFill class="grid-item">
+									<tempus-dropdown
+										id="state-{{ index }}"
+										[options]="states"
+										label="State"
+										cssClass="secondary"
+										[control]="$any(numEducation).get('state')"
+									>
+									</tempus-dropdown>
+								</div>
+								<div
+									fxFlex.gt-sm="50%"
+									fxFlex.lt-md="33%"
+									fxLayoutAlign="end center"
+									fxLayoutAlign.lt-md="center center"
+									fxFlexFill
+									class="grid-item"
+								>
+									<tempus-text-input
+										id="city-{{ index }}"
+										placeholder="City"
+										cssClass="secondary"
+										[control]="$any(numEducation).get('city')"
+									></tempus-text-input>
+								</div>
+							</div>
+							<div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxFlex="33%" class="block-2">
+								<div
+									fxFlex.gt-sm="50%"
+									fxFlex.lt-md="50%"
+									fxLayoutAlign="start center"
+									fxLayoutAlign.lt-md="center center"
+									fxFlexFill
+									class="grid-item"
+								>
+									<tempus-text-input
+										id="start-date-{{ index }}"
+										[inputType]="InputType.DATE"
+										placeholder="Start date"
+										cssClass="secondary"
+										[control]="$any(numEducation).get('startDate')"
+									></tempus-text-input>
+								</div>
+								<div
+									fxFlex.gt-sm="50%"
+									fxFlex.lt-md="50%"
+									fxLayoutAlign="end center"
+									fxLayoutAlign.lt-md="center center"
+									fxFlexFill
+									class="grid-item"
+								>
+									<tempus-text-input
+										id="end-date-{{ index }}"
+										[inputType]="InputType.DATE"
+										placeholder="End date"
+										cssClass="secondary"
+										[control]="$any(numEducation).get('endDate')"
+									></tempus-text-input>
+								</div>
+							</div>
 						</div>
-					</div>
-					<mat-grid-list cols="6" rowHeight="100px">
-						<mat-grid-tile colspan="{{ educationCols }}">
-							<tempus-text-input
-								id="institution-{{ index }}"
-								placeholder="Institution"
-								cssClass="secondary"
-								[control]="$any(numEducation).get('institution')"
-							></tempus-text-input>
-						</mat-grid-tile>
-						<mat-grid-tile colspan="{{ educationCols }}">
-							<tempus-text-input
-								id="field-{{ index }}"
-								placeholder="Field"
-								cssClass="secondary"
-								[control]="$any(numEducation).get('field')"
-							></tempus-text-input>
-						</mat-grid-tile>
-						<mat-grid-tile colspan="{{ locationCols }}">
-							<tempus-search-box
-								id="country-{{ index }}"
-								[options]="countries"
-								placeholder="Country"
-								cssClass="secondary"
-								(optionSelect)="updateStateOptions($event)"
-								[control]="$any(numEducation).get('country')"
-							></tempus-search-box>
-						</mat-grid-tile>
-						<mat-grid-tile colspan="{{ locationCols }}">
-							<tempus-dropdown
-								id="state-{{ index }}"
-								[options]="states"
-								label="State"
-								cssClass="secondary"
-								[control]="$any(numEducation).get('state')"
-							></tempus-dropdown>
-						</mat-grid-tile>
-						<mat-grid-tile colspan="{{ locationCols }}">
-							<tempus-text-input
-								id="city-{{ index }}"
-								placeholder="City"
-								cssClass="secondary"
-								[control]="$any(numEducation).get('city')"
-							></tempus-text-input>
-						</mat-grid-tile>
-						<mat-grid-tile colspan="{{ educationCols }}">
-							<tempus-text-input
-								id="start-date-{{ index }}"
-								[inputType]="InputType.DATE"
-								placeholder="Start date"
-								cssClass="secondary"
-								[control]="$any(numEducation).get('startDate')"
-							></tempus-text-input>
-						</mat-grid-tile>
-						<mat-grid-tile colspan="{{ educationCols }}">
-							<tempus-text-input
-								id="end-date-{{ index }}"
-								[inputType]="InputType.DATE"
-								placeholder="End date"
-								cssClass="secondary"
-								[control]="$any(numEducation).get('endDate')"
-							></tempus-text-input>
-						</mat-grid-tile>
-					</mat-grid-list>
-				</form>
+					</form>
+				</mat-card-content>
 			</tempus-card>
-		</mat-grid-tile>
-		<mat-grid-tile colspan="2" rowspan="2">
+			<div fxFlex="5"></div>
+		</div>
+		<div fxFlex>
+			<div fxFlex="5"></div>
 			<div class="info-title">
 				<h2 class="mat-h2">Certifications</h2>
+			</div>
+			<div>
 				<button
 					mat-mini-fab
 					(click)="addCertificationSections()"
@@ -128,64 +186,85 @@
 					<mat-icon>add</mat-icon>
 				</button>
 			</div>
-		</mat-grid-tile>
-		<mat-grid-tile
-			colspan="2"
-			rowspan="{{ certRows }}"
-			*ngFor="let numCertification of certifications.controls; let index = index"
-			id="certification-{{ index }}"
-		>
+			<div fxFlex="5"></div>
+		</div>
+		<div *ngFor="let numCertification of certifications.controls; let index = index">
+			<div fxFlex="5"></div>
 			<tempus-card>
-				<form>
-					<div class="card-header">
-						<div class="header-button">
-							<button
-								mat-mini-fab
-								(click)="removeCertificationSection(index)"
-								matTooltip="Remove certification section"
-								color="primary"
-							>
-								<mat-icon>remove</mat-icon>
-							</button>
+				<mat-card-content>
+					<form>
+						<div class="card-header container">
+							<div class="header-button">
+								<button
+									mat-mini-fab
+									(click)="removeCertificationSection(index)"
+									matTooltip="Remove certification section"
+									color="primary"
+								>
+									<mat-icon>remove</mat-icon>
+								</button>
+							</div>
+							<div>
+								<h3 class="mat-h3">Certfication {{ index + 1 }}</h3>
+							</div>
 						</div>
-						<div>
-							<h3 class="mat-h3">Certfication {{ index + 1 }}</h3>
+						<div fxLayout="column" fxLayoutGap="30px">
+							<div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxFlex="33%" class="block-2">
+								<div
+									fxFlex.gt-sm="50%"
+									fxFlex.lt-md="50%"
+									fxLayoutAlign="start center"
+									fxLayoutAlign.lt-md="center center"
+									fxFlexFill
+									class="grid-item"
+								>
+									<tempus-text-input
+										id="certifying-authority-{{ index }}"
+										placeholder="Certifying Authority"
+										cssClass="secondary"
+										[control]="$any(numCertification).get('certifyingAuthority')"
+									>
+									</tempus-text-input>
+								</div>
+								<div
+									fxFlex.gt-sm="50%"
+									fxFlex.lt-md="50%"
+									fxLayoutAlign="end center"
+									fxLayoutAlign.lt-md="center center"
+									fxFlexFill
+									class="grid-item"
+								>
+									<tempus-text-input
+										id="title-{{ index }}"
+										placeholder="Title"
+										cssClass="secondary"
+										[control]="$any(numCertification).get('title')"
+									></tempus-text-input>
+								</div>
+							</div>
+							<div>
+								<tempus-text-area
+									id="summary-{{ index }}"
+									placeholder="Summary"
+									[control]="$any(numCertification).get('summary')"
+								></tempus-text-area>
+							</div>
 						</div>
-					</div>
-					<mat-grid-list cols="2" rowHeight="50px">
-						<mat-grid-tile colspan="{{ cols }}" rowspan="2">
-							<tempus-text-input
-								id="certifying-authority-{{ index }}"
-								placeholder="Certifying Authority"
-								cssClass="secondary"
-								[control]="$any(numCertification).get('certifyingAuthority')"
-							></tempus-text-input>
-						</mat-grid-tile>
-						<mat-grid-tile colspan="{{ cols }}" rowspan="2">
-							<tempus-text-input
-								id="title-{{ index }}"
-								placeholder="Title"
-								cssClass="secondary"
-								[control]="$any(numCertification).get('title')"
-							></tempus-text-input>
-						</mat-grid-tile>
-						<mat-grid-tile colspan="2" rowspan="2">
-							<tempus-text-area
-								id="summary-{{ index }}"
-								placeholder="Summary"
-								[control]="$any(numCertification).get('summary')"
-							></tempus-text-area>
-						</mat-grid-tile>
-					</mat-grid-list>
-				</form>
+					</form>
+				</mat-card-content>
 			</tempus-card>
-		</mat-grid-tile>
-		<mat-grid-tile colspan="2" rowspan="2">
+			<div fxFlex="5"></div>
+		</div>
+		<div fxFlex>
+			<div fxFlex="5"></div>
 			<div class="info-title">
 				<h2 class="mat-h2">Skills</h2>
 			</div>
-		</mat-grid-tile>
-		<mat-grid-tile colspan="2" rowspan="6">
+			<div fxFlex="5"></div>
+		</div>
+		<div fxFlex>
+			<div fxFlex="5"></div>
+
 			<tempus-card>
 				<tempus-text-area
 					id="skill-summary"
@@ -193,19 +272,21 @@
 					[control]="$any(myInfoForm).get('skillsSummary')"
 				></tempus-text-area>
 				<form>
-					<mat-grid-list cols="2" rowHeight="40px">
-						<mat-grid-tile colspan="1" rowspan="1">
-							<input
-								class="mat-body"
-								id="skillChipInput"
-								placeholder="Add a skill..."
-								[matChipInputFor]="chipList"
-								[matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-								[matChipInputAddOnBlur]="addOnBlur"
-								(matChipInputTokenEnd)="addSkill($event)"
-							/>
-						</mat-grid-tile>
-						<mat-grid-tile colspan="2" rowspan="2">
+					<div fxLayout="column" fxLayoutGap="30px">
+						<div fxLayoutAlign="left center">
+							<div>
+								<input
+									class="mat-body"
+									id="skillChipInput"
+									placeholder="Add a skill..."
+									[matChipInputFor]="chipList"
+									[matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+									[matChipInputAddOnBlur]="addOnBlur"
+									(matChipInputTokenEnd)="addSkill($event)"
+								/>
+							</div>
+						</div>
+						<div fxLayoutAlign="center center">
 							<mat-chip-list #chipList aria-label="Skill tags">
 								<tempus-chip
 									*ngFor="let skill of skills"
@@ -217,22 +298,23 @@
 								>
 								</tempus-chip>
 							</mat-chip-list>
-						</mat-grid-tile>
-					</mat-grid-list>
+						</div>
+					</div>
 				</form>
 			</tempus-card>
-		</mat-grid-tile>
-	</mat-grid-list>
-	<div class="button-container">
-		<button color="primary" mat-raised-button matStepperPrevious type="button" (click)="backStep()">Back</button>
-		<button
-			color="primary"
-			mat-raised-button
-			matStepperNext="button"
-			[disabled]="!myInfoForm.valid"
-			(click)="nextStep()"
-		>
-			Next
-		</button>
+			<div fxFlex="5"></div>
+		</div>
+		<div class="container button-container">
+			<button color="primary" mat-raised-button matStepperPrevious type="button" (click)="backStep()">Back</button>
+			<button
+				color="primary"
+				mat-raised-button
+				matStepperNext="button"
+				[disabled]="!myInfoForm.valid"
+				(click)="nextStep()"
+			>
+				Next
+			</button>
+		</div>
 	</div>
 </ng-container>

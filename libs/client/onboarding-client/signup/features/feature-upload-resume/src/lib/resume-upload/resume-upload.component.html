@@ -1,16 +1,18 @@
 <ng-container>
-	<mat-grid-list cols="1" rowHeight="50px">
-		<mat-grid-tile class="container" colspan="1" rowspan="2">
+	<div fxLayout="column" fxFill fxLayoutGap="20px">
+		<div class="container" fxFlex>
+			<div fxFlex="10"></div>
 			<div class="info-title">
 				<h2 class="mat-h2 section-header">Upload Resume</h2>
 			</div>
-		</mat-grid-tile>
-		<mat-grid-tile class="container" colspan="1" rowspan="1">
+			<div fxFlex="10"></div>
+		</div>
+		<div class="container">
 			<h3 class="mat-body-2">Please make sure your resume is one of the following: <b>DOX, DOC, PDF, TXT</b></h3>
-		</mat-grid-tile>
-		<mat-grid-tile class="container" colspan="1" rowspan="{{ rows }}">
+		</div>
+		<div class="container">
 			<tempus-card>
-				<mat-grid-list cols="1" rowHeight="270px" class="grid-container">
+				<div>
 					<tempus-file-upload
 						[fileType]="fileType"
 						[displayPreview]="false"
@@ -18,38 +20,46 @@
                         here, or upload using the button"
 						(fileUploadChange)="onUpload($event)"
 					></tempus-file-upload>
-				</mat-grid-list>
-				<mat-grid-list cols="1">
-					<button mat-raised-button color="accent" class="file-upload-button">
-						<input
-							id="file-input"
-							type="file"
-							hidden
-							value="UPLOAD"
-							formControlName="fileData"
-							[accept]="fileType"
-							(change)="onChange($event)"
-						/>
-						<label for="file-input">UPLOAD</label>
-					</button>
-				</mat-grid-list>
-				<mat-grid-list cols="1" class="grid-container view-file-container">
-					<div *ngIf="fileUploaded">
-						<tempus-confirm-resume-upload [file]="fileData.value" (confirmDeleteSelected)="onDelete()">
-						</tempus-confirm-resume-upload>
+				</div>
+				<div fxLayout="column" fxFill fxLayoutGap="20px">
+					<div>
+						<button mat-raised-button color="accent" class="file-upload-button">
+							<input
+								id="file-input"
+								type="file"
+								hidden
+								value="UPLOAD"
+								formControlName="fileData"
+								[accept]="fileType"
+								(change)="onChange($event)"
+							/>
+							<label for="file-input">UPLOAD</label>
+						</button>
 					</div>
-				</mat-grid-list>
-				<mat-grid-list cols="1" class="grid-container">
-					<mat-error *ngIf="fileData.invalid && fileData.dirty">
-						<p class="mat-body-2">Please upload a resume.</p>
-					</mat-error>
-				</mat-grid-list>
+					<div>
+						<div *ngIf="fileUploaded">
+							<tempus-confirm-resume-upload [file]="fileData.value" (confirmDeleteSelected)="onDelete()">
+							</tempus-confirm-resume-upload>
+						</div>
+					</div>
+					<div>
+						<mat-error *ngIf="fileData.invalid && fileData.dirty">
+							<p class="mat-body-2">Please upload a resume.</p>
+						</mat-error>
+					</div>
+				</div>
 			</tempus-card>
-		</mat-grid-tile>
-	</mat-grid-list>
-	<div class="next-button">
-		<button color="primary" mat-raised-button matStepperNext="button" [disabled]="!fileData.valid" (click)="nextStep()">
-			Next
-		</button>
+		</div>
+		<div class="container next-button">
+			<button
+				color="primary"
+				mat-raised-button
+				matStepperNext="button"
+				[disabled]="!fileData.valid"
+				(click)="nextStep()"
+			>
+				Next
+			</button>
+		</div>
 	</div>
 </ng-container>

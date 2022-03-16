@@ -1,7 +1,4 @@
-import { Component, OnDestroy } from '@angular/core';
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { Component } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { createResumeUpload, SignupState } from '@tempus/client/onboarding-client/signup/data-access';
@@ -12,43 +9,14 @@ import { Store } from '@ngrx/store';
 	templateUrl: './resume-upload.component.html',
 	styleUrls: ['./resume-upload.component.scss'],
 })
-export class ResumeUploadComponent implements OnDestroy {
+export class ResumeUploadComponent {
 	fileData = new FormControl(null, { validators: [Validators.required] });
 
 	fileType = 'application/pdf,application/msword,.doc,.docx,text/plain';
 
 	fileUploaded = false;
 
-	destroyed$ = new Subject<void>();
-
-	rows = '10';
-
-	constructor(
-		private router: Router,
-		breakpointObserver: BreakpointObserver,
-		private route: ActivatedRoute,
-		private store: Store<SignupState>,
-	) {
-		breakpointObserver
-			.observe([Breakpoints.XSmall, Breakpoints.Small, Breakpoints.Medium, Breakpoints.Large, Breakpoints.XLarge])
-			.pipe(takeUntil(this.destroyed$))
-			.subscribe(result => {
-				for (const query of Object.keys(result.breakpoints)) {
-					if (result.breakpoints[query]) {
-						if (query === Breakpoints.XSmall || query === Breakpoints.Small) {
-							this.rows = '12';
-						} else {
-							this.rows = '10';
-						}
-					}
-				}
-			});
-	}
-
-	ngOnDestroy(): void {
-		this.destroyed$.next();
-		this.destroyed$.complete();
-	}
+	constructor(private router: Router, private route: ActivatedRoute, private store: Store<SignupState>) {}
 
 	onChange(event: Event) {
 		const input = event.currentTarget as HTMLInputElement;

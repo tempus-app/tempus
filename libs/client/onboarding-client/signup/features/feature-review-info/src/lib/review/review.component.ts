@@ -1,6 +1,5 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { Subject, take, takeUntil, tap } from 'rxjs';
+import { Component, OnInit } from '@angular/core';
+import { formatDateRange } from '@tempus/shared/util';
 import {
 	Experience,
 	Education,
@@ -8,8 +7,12 @@ import {
 	ICreateEducationDto,
 	ICreateCertificationDto,
 } from '@tempus/shared-domain';
+
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { Subject, take, takeUntil, tap } from 'rxjs';
+
 import { ActivatedRoute, Router } from '@angular/router';
-import { formatDateRange } from '@tempus/shared/util';
+
 import {
 	createResource,
 	resetCreateResourceState,
@@ -26,7 +29,7 @@ import { AsyncRequestState } from '@tempus/client/onboarding-client/shared/data-
 	templateUrl: './review.component.html',
 	styleUrls: ['./review.component.scss'],
 })
-export class ReviewComponent implements OnInit, OnDestroy {
+export class ReviewComponent implements OnInit {
 	firstName = '';
 
 	lastName = '';
@@ -55,56 +58,9 @@ export class ReviewComponent implements OnInit, OnDestroy {
 
 	destroyed$ = new Subject<void>();
 
-	cols = '1';
-
-	skillsEducationCols = '1';
-
-	skillsChipsCols = '2';
-
-	hideElement = false;
-
-	displayNameMap = new Map([
-		[Breakpoints.XSmall, '1'],
-		[Breakpoints.Small, 'Small'],
-		[Breakpoints.Medium, 'Medium'],
-		[Breakpoints.Large, 'Large'],
-		[Breakpoints.XLarge, 'XLarge'],
-	]);
-
 	loading = false;
 
-	constructor(
-		breakpointObserver: BreakpointObserver,
-		private router: Router,
-		private route: ActivatedRoute,
-		private store: Store<SignupState>,
-	) {
-		breakpointObserver
-			.observe([Breakpoints.XSmall, Breakpoints.Small, Breakpoints.Medium, Breakpoints.Large, Breakpoints.XLarge])
-			.pipe(takeUntil(this.destroyed$))
-			.subscribe(result => {
-				for (const query of Object.keys(result.breakpoints)) {
-					if (result.breakpoints[query]) {
-						if (query === Breakpoints.XSmall || query === Breakpoints.Small) {
-							this.cols = '2';
-							this.skillsChipsCols = '1';
-							this.skillsEducationCols = '3';
-							this.hideElement = false;
-						} else {
-							this.cols = '1';
-							this.skillsChipsCols = '2';
-							this.skillsEducationCols = '1';
-							this.hideElement = true;
-						}
-					}
-				}
-			});
-	}
-
-	ngOnDestroy(): void {
-		this.destroyed$.next();
-		this.destroyed$.complete();
-	}
+	constructor(private router: Router, private route: ActivatedRoute, private store: Store<SignupState>) {}
 
 	ngOnInit(): void {
 		this.store
