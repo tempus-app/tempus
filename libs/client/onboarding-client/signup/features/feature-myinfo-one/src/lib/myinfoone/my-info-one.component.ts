@@ -1,9 +1,9 @@
-import { Component, OnDestroy, Output, EventEmitter } from '@angular/core';
-import { Country, State } from 'country-state-city';
+import { Component, OnDestroy, Output, EventEmitter, OnInit } from '@angular/core';
+import { City, Country, State } from 'country-state-city';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Subject } from 'rxjs';
 import { filter, switchMap, take, takeUntil, tap } from 'rxjs/operators';
-import { FormBuilder, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, ValidatorFn, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { InputType } from '@tempus/client/shared/ui-components/input';
 import {
@@ -19,7 +19,7 @@ import { Store } from '@ngrx/store';
 	templateUrl: './my-info-one.component.html',
 	styleUrls: ['./my-info-one.component.scss'],
 })
-export class MyInfoOneComponent implements OnDestroy {
+export class MyInfoOneComponent implements OnDestroy, OnInit {
 	myInfoForm = this.fb.group({
 		firstName: ['', Validators.required],
 		lastName: ['', Validators.required],
@@ -36,15 +36,21 @@ export class MyInfoOneComponent implements OnDestroy {
 		return country.name;
 	});
 
-	states: string[] = State.getAllStates().map(state => {
-		return state.name;
-	});
+	states: string[] = [];
+
+	cities: string[] = [];
 
 	destroyed$ = new Subject<void>();
 
 	cols = '1';
 
 	rows = '5';
+
+	countryCode = '';
+
+	stateCode = '';
+
+	cityName = '';
 
 	// Create a map to display breakpoint names for demonstration purposes.
 	displayNameMap = new Map([
@@ -109,10 +115,24 @@ export class MyInfoOneComponent implements OnDestroy {
 
 	updateStateOptions(inputtedCountry: string) {
 		const countryCode = Country.getAllCountries().find(country => country.name === inputtedCountry);
+		this.countryCode = countryCode?.isoCode || '';
 		if (countryCode != null)
 			this.states = State.getStatesOfCountry(countryCode.isoCode).map(state => {
 				return state.name;
 			});
+	}
+
+	updateCityOptions(inputtedState: string) {
+		const stateCode = State.getAllStates().find(state => state.name === inputtedState);
+		this.stateCode = stateCode?.isoCode || '';
+		if (stateCode != null)
+			this.cities = City.getCitiesOfState(this.countryCode, stateCode.isoCode).map(city => {
+				return city.name;
+			});
+	}
+
+	selectCity(inputtedCity: string) {
+		this.cityName = inputtedCity;
 	}
 
 	nextStep() {

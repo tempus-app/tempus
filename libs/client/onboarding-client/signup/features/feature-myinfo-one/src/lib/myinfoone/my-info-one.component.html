@@ -88,12 +88,19 @@
 									[options]="states"
 									label="State"
 									cssClass="secondary"
+									(optionSelect)="updateCityOptions($event)"
 									[control]="$any(myInfoForm).get('state')"
 								></tempus-dropdown>
 							</mat-grid-tile>
 							<mat-grid-tile colspan="{{ cols }}">
-								<tempus-text-input placeholder="City" cssClass="secondary" [control]="$any(myInfoForm).get('city')">
-								</tempus-text-input>
+								<tempus-search-box
+									[options]="cities"
+									placeholder="City"
+									cssClass="secondary"
+									(optionSelect)="selectCity($event)"
+									[control]="$any(myInfoForm).get('city')"
+								>
+								</tempus-search-box>
 							</mat-grid-tile>
 						</mat-grid-list>
 					</form>
