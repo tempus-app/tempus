@@ -4,8 +4,8 @@ import { LinkEntity } from '@tempus/api/shared/entity';
 import { EmailService } from '@tempus/api/shared/feature-email';
 import { createMock } from '@golevelup/ts-jest';
 import { Repository } from 'typeorm';
-import { StatusType, UpdatelinkDto } from '@tempus/shared-domain';
-import { NotFoundException } from '@nestjs/common';
+import { StatusType, IUpdateLinkDto } from '@tempus/shared-domain';
+import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { LinkService } from '../../services/link.service';
 import { createLinkEntity, dbLink, expiredDBLink, linkEntity } from '../mocks/link.mock';
 
@@ -75,6 +75,18 @@ describe('LinkService', () => {
 			expect(mockRepository.save).toBeCalledWith(expect.objectContaining({ ...createdLink, id: null }));
 
 			expect(res).toEqual(expect.objectContaining({ ...createdLink, id: 3 }));
+		});
+
+		it('should throw an erray if the linke is in the past or today', async () => {
+			let error;
+			try {
+				await linkService.createLink({ ...createLinkEntity, expiry: new Date() });
+			} catch (e) {
+				error = e;
+			}
+			expect(error).toBeInstanceOf(BadRequestException);
+			expect(error.message).toBe('Expiry Date must be in the future');
+			expect(mockRepository.save).not.toBeCalled();
 		});
 
 		it('should not save the link if email linking fails', async () => {
@@ -153,7 +165,7 @@ describe('LinkService', () => {
 		it('should successfully edit token status', async () => {
 			mockRepository.findOne.mockResolvedValue(dbLink);
 			mockRepository.save.mockResolvedValue({ ...dbLink, status: StatusType.COMPLETED });
-			const updatelinkDto = new UpdatelinkDto(3, StatusType.COMPLETED);
+			const updatelinkDto: IUpdateLinkDto = { id: 3, status: StatusType.COMPLETED };
 			const res = await linkService.editLink(updatelinkDto);
 			expect(mockRepository.save).toBeCalledWith({ ...dbLink, status: StatusType.COMPLETED });
 			expect(res).toEqual({ ...dbLink, status: StatusType.COMPLETED });
@@ -163,7 +175,7 @@ describe('LinkService', () => {
 			mockRepository.findOne.mockResolvedValue(undefined);
 			let error;
 			try {
-				const updatelinkDto = new UpdatelinkDto(3, StatusType.COMPLETED);
+				const updatelinkDto: IUpdateLinkDto = { id: 3, status: StatusType.COMPLETED };
 				await linkService.editLink(updatelinkDto);
 			} catch (e) {
 				error = e;
