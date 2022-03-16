@@ -14,15 +14,7 @@ import { JwtRefreshStrategy } from './strategies/jwt-refresh.strategy';
 import { JwtRefreshGuard } from './guards/jwt-refresh.guard';
 
 @Module({
-	imports: [
-		ApiSharedEntityModule,
-		PassportModule,
-		ConfigModule,
-		JwtModule.register({
-			// secret: process.env.JWT_SECRET,
-			// signOptions: { expiresIn: '900s' },
-		}),
-	],
+	imports: [ApiSharedEntityModule, PassportModule, ConfigModule, JwtModule.register({})],
 	controllers: [AuthController],
 	providers: [
 		AuthService,

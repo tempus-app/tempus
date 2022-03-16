@@ -21,7 +21,9 @@ export class AuthService {
 	async login(user: User): Promise<AuthDto> {
 		const tokens = await this.createTokens(user);
 		await this.updateRefreshTokenHash(user, tokens.refreshToken);
-		const result = new AuthDto(user, tokens.accessToken, tokens.refreshToken);
+		const partialUser = user;
+		partialUser.password = null;
+		const result = new AuthDto(partialUser, tokens.accessToken, tokens.refreshToken);
 		return result;
 	}
 
