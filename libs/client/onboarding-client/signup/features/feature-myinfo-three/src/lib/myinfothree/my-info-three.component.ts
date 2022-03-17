@@ -28,7 +28,6 @@ import {
 	ICreateSkillDto,
 	ICreateSkillTypeDto,
 } from '@tempus/shared-domain';
-import { CustomeDateValidators } from './CustomDateValidator';
 
 @Component({
 	selector: 'tempus-my-info-three',
