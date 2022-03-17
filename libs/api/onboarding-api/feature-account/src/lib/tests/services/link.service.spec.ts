@@ -4,8 +4,9 @@ import { LinkEntity } from '@tempus/api/shared/entity';
 import { EmailService } from '@tempus/api/shared/feature-email';
 import { createMock } from '@golevelup/ts-jest';
 import { Repository } from 'typeorm';
-import { StatusType, IUpdateLinkDto } from '@tempus/shared-domain';
+import { StatusType } from '@tempus/shared-domain';
 import { BadRequestException, NotFoundException } from '@nestjs/common';
+import { UpdatelinkDto } from '@tempus/api/shared/dto';
 import { LinkService } from '../../services/link.service';
 import { createLinkEntity, dbLink, expiredDBLink, linkEntity } from '../mocks/link.mock';
 
@@ -165,7 +166,7 @@ describe('LinkService', () => {
 		it('should successfully edit token status', async () => {
 			mockRepository.findOne.mockResolvedValue(dbLink);
 			mockRepository.save.mockResolvedValue({ ...dbLink, status: StatusType.COMPLETED });
-			const updatelinkDto: IUpdateLinkDto = { id: 3, status: StatusType.COMPLETED };
+			const updatelinkDto = new UpdatelinkDto(3, StatusType.COMPLETED);
 			const res = await linkService.editLink(updatelinkDto);
 			expect(mockRepository.save).toBeCalledWith({ ...dbLink, status: StatusType.COMPLETED });
 			expect(res).toEqual({ ...dbLink, status: StatusType.COMPLETED });
@@ -175,7 +176,7 @@ describe('LinkService', () => {
 			mockRepository.findOne.mockResolvedValue(undefined);
 			let error;
 			try {
-				const updatelinkDto: IUpdateLinkDto = { id: 3, status: StatusType.COMPLETED };
+				const updatelinkDto = new UpdatelinkDto(3, StatusType.COMPLETED);
 				await linkService.editLink(updatelinkDto);
 			} catch (e) {
 				error = e;

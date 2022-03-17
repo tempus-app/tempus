@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { ICreateLinkDto, StatusType, IUpdateLinkDto } from '@tempus/shared-domain';
 import { BadRequestException, NotFoundException } from '@nestjs/common';
+import { CreateLinkDto, UpdatelinkDto } from '@tempus/api/shared/dto';
 import { LinkService } from '../../services/link.service';
 import { LinkController } from '../../controllers/link.controller';
 import { linkEntity } from '../mocks/link.mock';
@@ -77,7 +78,7 @@ describe('LinkController', () => {
 
 	describe('EDIT', () => {
 		it('should successfully edit a link', async () => {
-			const updatelinkDto: IUpdateLinkDto = { id: 3, status: StatusType.COMPLETED };
+			const updatelinkDto = new UpdatelinkDto(3, StatusType.COMPLETED);
 			const res = await linkController.editLinkStatus(updatelinkDto);
 			expect(mockLinkService.editLink).toBeCalledWith(updatelinkDto);
 			expect(res).toEqual({ ...linkEntity, status: 'COMPLETED' });
@@ -85,7 +86,7 @@ describe('LinkController', () => {
 
 		it('should bubble up Edit Link error', async () => {
 			mockLinkService.editLink.mockRejectedValue(new TypeError('bad type'));
-			const updatelinkDto: IUpdateLinkDto = { id: 3, status: StatusType.COMPLETED };
+			const updatelinkDto = new UpdatelinkDto(3, StatusType.COMPLETED);
 			let error;
 			try {
 				await linkController.editLinkStatus(updatelinkDto);
@@ -99,12 +100,7 @@ describe('LinkController', () => {
 
 	describe('CREATE', () => {
 		it('should successfully create a link', async () => {
-			const createLinkDto: ICreateLinkDto = {
-				firstName: 'john',
-				lastName: 'doe',
-				email: 'test@email.com',
-				expiry: new Date('01-03-2022'),
-			};
+			const createLinkDto = new CreateLinkDto('john', 'doe', 'test@email.com', new Date('01-03-2022'));
 			const res = await linkController.createLink(createLinkDto);
 			expect(mockLinkService.createLink).toBeCalledWith(createLinkDto);
 			expect(res).toEqual({ ...createLinkDto, id: 5, token: 10 });
@@ -112,13 +108,7 @@ describe('LinkController', () => {
 
 		it('should bubble up Create error', async () => {
 			mockLinkService.createLink.mockRejectedValue(new BadRequestException('could not create link'));
-			const createLinkDto: ICreateLinkDto = {
-				firstName: 'john',
-				lastName: 'doe',
-				email: 'test@email.com',
-				expiry: new Date('01-03-2022'),
-			};
-
+			const createLinkDto = new CreateLinkDto('john', 'doe', 'test@email.com', new Date('01-03-2022'));
 			let error;
 			try {
 				await linkController.createLink(createLinkDto);
