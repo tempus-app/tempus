@@ -3,7 +3,7 @@ import { Country, State } from 'country-state-city';
 import { filter, switchMap, take, takeUntil, tap } from 'rxjs/operators';
 import { InputType } from '@tempus/client/shared/ui-components/input';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import {
 	createWorkExperienceDetails,
@@ -62,16 +62,19 @@ export class MyInfoTwoComponent implements OnInit {
 				const workExperienceArray = this.totalWorkExperience;
 				createResourceDto.experiences.forEach(experience => {
 					workExperienceArray.push(
-						this.fb.group({
-							title: [experience.title, Validators.required],
-							company: [experience.company, Validators.required],
-							country: [experience.location.country, Validators.required],
-							state: [experience.location.province, Validators.required],
-							city: [experience.location.city, Validators.required],
-							startDate: [experience.startDate, Validators.required],
-							endDate: [experience.endDate, Validators.required],
-							description: [experience.description, Validators.required],
-						}),
+						this.fb.group(
+							{
+								title: [experience.title, Validators.required],
+								company: [experience.company, Validators.required],
+								country: [experience.location.country, Validators.required],
+								state: [experience.location.province, Validators.required],
+								city: [experience.location.city, Validators.required],
+								startDate: [experience.startDate, Validators.required],
+								endDate: [experience.endDate, Validators.required],
+								description: [experience.description, Validators.required],
+							},
+							{ validators: this.checkEnteredDates() },
+						),
 					);
 				});
 				this.myInfoForm.patchValue({
@@ -88,16 +91,19 @@ export class MyInfoTwoComponent implements OnInit {
 			const lastElement = this.numberWorkSections[this.numberWorkSections.length - 1];
 			this.numberWorkSections.push(lastElement + 1);
 		}
-		const workExperience = this.fb.group({
-			title: ['', Validators.required],
-			company: ['', Validators.required],
-			country: ['', Validators.required],
-			state: ['', Validators.required],
-			city: ['', Validators.required],
-			startDate: ['', Validators.required],
-			endDate: ['', Validators.required],
-			description: ['', Validators.required],
-		});
+		const workExperience = this.fb.group(
+			{
+				title: ['', Validators.required],
+				company: ['', Validators.required],
+				country: ['', Validators.required],
+				state: ['', Validators.required],
+				city: ['', Validators.required],
+				startDate: ['', Validators.required],
+				endDate: ['', Validators.required],
+				description: ['', Validators.required],
+			},
+			{ validators: this.checkEnteredDates() },
+		);
 
 		this.totalWorkExperience.push(workExperience);
 	}
@@ -113,6 +119,22 @@ export class MyInfoTwoComponent implements OnInit {
 			this.states = State.getStatesOfCountry(countryCode.isoCode).map(state => {
 				return state.name;
 			});
+	}
+
+	checkEnteredDates() {
+		return (controls: AbstractControl) => {
+			if (controls) {
+				const formStartDate = controls.get('startDate')?.value;
+				const formEndDate = controls.get('endDate')?.value;
+				if (formStartDate > formEndDate) {
+					// this is an error set for a specific control which you can use in a mat-error
+					controls.get('startDate')?.setErrors({ startDateGreaterThan: true });
+					// this is the returned error for the form normally used to disable a submit button
+					return { dateError: true };
+				}
+			}
+			return null;
+		};
 	}
 
 	nextStep() {

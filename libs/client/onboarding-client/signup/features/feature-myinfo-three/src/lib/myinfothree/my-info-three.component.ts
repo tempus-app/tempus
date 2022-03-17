@@ -5,7 +5,15 @@ import { InputType } from '@tempus/client/shared/ui-components/input';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormArray, FormBuilder, Validators } from '@angular/forms';
+import {
+	AbstractControl,
+	FormArray,
+	FormBuilder,
+	FormGroup,
+	ValidationErrors,
+	ValidatorFn,
+	Validators,
+} from '@angular/forms';
 import { Store } from '@ngrx/store';
 import {
 	createTrainingAndSkillDetails,
@@ -20,6 +28,7 @@ import {
 	ICreateSkillDto,
 	ICreateSkillTypeDto,
 } from '@tempus/shared-domain';
+import { CustomeDateValidators } from './CustomDateValidator';
 
 @Component({
 	selector: 'tempus-my-info-three',
@@ -85,8 +94,8 @@ export class MyInfoThreeComponent implements OnInit {
 				// eslint-disable-next-line @typescript-eslint/dot-notation
 				const educationsArray = this.qualifications;
 				createResourceDto.educations.forEach(education => {
-					educationsArray.push(
-						this.fb.group({
+					const educationForm = this.fb.group(
+						{
 							institution: [education.institution, Validators.required],
 							field: [education.degree, Validators.required],
 							country: [education.location.country],
@@ -94,8 +103,10 @@ export class MyInfoThreeComponent implements OnInit {
 							city: [education.location.city],
 							startDate: [education.startDate, Validators.required],
 							endDate: [education.endDate, Validators.required],
-						}),
+						},
+						{ validators: this.checkEnteredDates() },
 					);
+					educationsArray.push(educationForm);
 				});
 
 				const certificationsArray = this.certifications;
@@ -129,15 +140,18 @@ export class MyInfoThreeComponent implements OnInit {
 			this.numberEducationSections.push(lastElement + 1);
 		}
 
-		const qualification = this.fb.group({
-			institution: ['', Validators.required],
-			field: ['', Validators.required],
-			country: [''],
-			state: [''],
-			city: [''],
-			startDate: ['', Validators.required],
-			endDate: ['', Validators.required],
-		});
+		const qualification = this.fb.group(
+			{
+				institution: ['', Validators.required],
+				field: ['', Validators.required],
+				country: [''],
+				state: [''],
+				city: [''],
+				startDate: ['', Validators.required],
+				endDate: ['', Validators.required],
+			},
+			{ validators: this.checkEnteredDates() },
+		);
 
 		this.qualifications.push(qualification);
 	}
@@ -195,6 +209,22 @@ export class MyInfoThreeComponent implements OnInit {
 			this.states = State.getStatesOfCountry(countryCode.isoCode).map(state => {
 				return state.name;
 			});
+	}
+
+	checkEnteredDates() {
+		return (controls: AbstractControl) => {
+			if (controls) {
+				const formStartDate = controls.get('startDate')?.value;
+				const formEndDate = controls.get('endDate')?.value;
+				if (formStartDate > formEndDate) {
+					// this is an error set for a specific control which you can use in a mat-error
+					controls.get('startDate')?.setErrors({ startDateGreaterThan: true });
+					// this is the returned error for the form normally used to disable a submit button
+					return { dateError: true };
+				}
+			}
+			return null;
+		};
 	}
 
 	nextStep() {
