@@ -4,8 +4,9 @@ import { LinkEntity } from '@tempus/api/shared/entity';
 import { EmailService } from '@tempus/api/shared/feature-email';
 import { createMock } from '@golevelup/ts-jest';
 import { Repository } from 'typeorm';
-import { StatusType, UpdatelinkDto } from '@tempus/shared-domain';
-import { NotFoundException } from '@nestjs/common';
+import { StatusType } from '@tempus/shared-domain';
+import { BadRequestException, NotFoundException } from '@nestjs/common';
+import { UpdatelinkDto } from '@tempus/api/shared/dto';
 import { LinkService } from '../../services/link.service';
 import { createLinkEntity, dbLink, expiredDBLink, linkEntity } from '../mocks/link.mock';
 
@@ -75,6 +76,18 @@ describe('LinkService', () => {
 			expect(mockRepository.save).toBeCalledWith(expect.objectContaining({ ...createdLink, id: null }));
 
 			expect(res).toEqual(expect.objectContaining({ ...createdLink, id: 3 }));
+		});
+
+		it('should throw an erray if the linke is in the past or today', async () => {
+			let error;
+			try {
+				await linkService.createLink({ ...createLinkEntity, expiry: new Date() });
+			} catch (e) {
+				error = e;
+			}
+			expect(error).toBeInstanceOf(BadRequestException);
+			expect(error.message).toBe('Expiry Date must be in the future');
+			expect(mockRepository.save).not.toBeCalled();
 		});
 
 		it('should not save the link if email linking fails', async () => {
