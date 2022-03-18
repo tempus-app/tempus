@@ -13,4 +13,7 @@ export interface Resource extends User {
 	educations: Education[];
 	skills: Skill[];
 	certifications: Certification[];
+	linkedInLink: string;
+	githubLink: string;
+	otherLink: string;
 }

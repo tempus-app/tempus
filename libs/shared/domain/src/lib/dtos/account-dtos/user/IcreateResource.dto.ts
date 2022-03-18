@@ -17,7 +17,11 @@ export interface ICreateResourceDto extends ICreateUserDto {
 
 	title: string;
 
-	personalURL: string;
+	linkedInLink: string;
+
+	githubLink: string;
+
+	otherLink: string;
 
 	location: ICreateLocationDto;
 

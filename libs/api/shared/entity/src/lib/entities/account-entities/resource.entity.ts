@@ -12,6 +12,9 @@ export class ResourceEntity extends UserEntity implements Resource {
 		id?: number,
 		phoneNumber?: string,
 		title?: string,
+		linkedInLink?: string,
+		githubLink?: string,
+		otherLink?: string,
 		location?: LocationEntity,
 		projects?: ProjectEntity[],
 		views?: ViewEntity[],
@@ -35,10 +38,22 @@ export class ResourceEntity extends UserEntity implements Resource {
 		this.educations = educations;
 		this.skills = skills;
 		this.certifications = certifications;
+		this.linkedInLink = linkedInLink;
+		this.githubLink = githubLink;
+		this.otherLink = otherLink;
 	}
 
 	@Column({ nullable: true })
 	phoneNumber: string;
+
+	@Column({ nullable: true })
+	linkedInLink: string;
+
+	@Column({ nullable: true })
+	githubLink: string;
+
+	@Column({ nullable: true })
+	otherLink: string;
 
 	@Column({ nullable: true })
 	title: string;
@@ -71,6 +86,9 @@ export class ResourceEntity extends UserEntity implements Resource {
 			undefined,
 			dto.phoneNumber,
 			dto.title,
+			dto.linkedInLink,
+			dto.githubLink,
+			dto.otherLink,
 			LocationEntity.fromDto(dto.location),
 			undefined,
 			undefined,

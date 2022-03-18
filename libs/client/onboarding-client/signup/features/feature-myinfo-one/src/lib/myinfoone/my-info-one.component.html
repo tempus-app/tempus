@@ -69,13 +69,6 @@
 										[control]="$any(myInfoForm).get('phoneNumber')"
 									></tempus-text-input>
 								</div>
-								<div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="center center" fxFlexFill class="grid-item">
-									<tempus-text-input
-										placeholder="Website URL"
-										cssClass="secondary"
-										[control]="$any(myInfoForm).get('personalURL')"
-									></tempus-text-input>
-								</div>
 							</div>
 							<div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxFlex="33%" class="block-2">
 								<div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="center center" fxFlexFill class="grid-item">
@@ -98,6 +91,57 @@
 			</tempus-card>
 			<div fxFlex="5"></div>
 		</div>
+
+		<div fxFlex>
+			<div fxFlex="5"></div>
+			<div class="info-title">
+				<h2 class="mat-h2">Links</h2>
+			</div>
+			<div fxFlex="5"></div>
+		</div>
+
+		<div>
+			<div fxFlex="5"></div>
+			<tempus-card>
+				<mat-card-content>
+					<form>
+						<div fxLayout="column" fxLayoutGap="10px">
+							<div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxFlex="33%" class="block-2">
+								<div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="center center" fxFlexFill class="grid-item">
+									<tempus-text-input
+										[inputType]="InputType.TEXT"
+										placeholder="LinkedIn "
+										cssClass="secondary"
+										[control]="$any(myInfoForm).get('linkedInLink')"
+									>
+									</tempus-text-input>
+								</div>
+								<div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="center center" fxFlexFill class="grid-item">
+									<tempus-text-input
+										[inputType]="InputType.TEXT"
+										placeholder="Github"
+										cssClass="secondary"
+										[control]="$any(myInfoForm).get('githubLink')"
+									>
+									</tempus-text-input>
+								</div>
+							</div>
+							<div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxFlex="33%" class="block-2">
+								<div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="center center" fxFlexFill class="grid-item">
+									<tempus-text-input
+										placeholder="Other"
+										cssClass="secondary"
+										[control]="$any(myInfoForm).get('otherLink')"
+									></tempus-text-input>
+								</div>
+							</div>
+						</div>
+					</form>
+				</mat-card-content>
+			</tempus-card>
+			<div fxFlex="5"></div>
+		</div>
+
 		<div fxFlex>
 			<div fxFlex="5"></div>
 			<div class="info-title">

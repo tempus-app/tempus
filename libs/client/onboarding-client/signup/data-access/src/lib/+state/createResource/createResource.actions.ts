@@ -21,7 +21,9 @@ export const createUserDetails = createAction(
 		firstName: string;
 		lastName: string;
 		phoneNumber: string;
-		personalURL: string;
+		linkedInLink: string;
+		githubLink: string;
+		otherLink: string;
 		location: ICreateLocationDto;
 	}>(),
 );
