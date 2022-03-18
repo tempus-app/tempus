@@ -56,6 +56,7 @@
 		"class-validator": "^0.13.2",
 		"country-state-city": "^3.0.1",
 		"esbuild": "^0.14.23",
+		"express": "^4.17.3",
 		"handlebars": "^4.7.7",
 		"install": "^0.13.0",
 		"joi": "^17.6.0",

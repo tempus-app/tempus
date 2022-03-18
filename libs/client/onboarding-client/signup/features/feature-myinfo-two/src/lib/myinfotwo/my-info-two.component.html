@@ -1,8 +1,11 @@
 <ng-container>
-	<mat-grid-list cols="2" rowHeight="50px" [gutterSize]="'0.8em'">
-		<mat-grid-tile colspan="2" rowspan="3">
+	<div fxLayout="column" fxFill fxLayoutGap="30px">
+		<div fxFlex>
+			<div fxFlex="5"></div>
 			<div class="info-title">
 				<h2 class="mat-h2">Work Experience</h2>
+			</div>
+			<div>
 				<button
 					mat-mini-fab
 					(click)="addWorkSections()"
@@ -13,8 +16,10 @@
 					<mat-icon>add</mat-icon>
 				</button>
 			</div>
-		</mat-grid-tile>
-		<mat-grid-tile colspan="2" rowspan="4">
+			<div fxFlex="8"></div>
+		</div>
+		<div fxFlex>
+			<div fxFlex="5"></div>
 			<tempus-card>
 				<form>
 					<h3 class="mat-h3" color="primary">Work Experience Summary</h3>
@@ -25,13 +30,10 @@
 					></tempus-text-area>
 				</form>
 			</tempus-card>
-		</mat-grid-tile>
-		<mat-grid-tile
-			*ngFor="let numExperience of totalWorkExperience.controls; let index = index"
-			colspan="2"
-			rowspan="{{ rows }}"
-			id="work-experience-{{ index }}"
-		>
+			<div fxFlex="5"></div>
+		</div>
+		<div *ngFor="let numExperience of totalWorkExperience.controls; let index = index">
+			<div fxFlex="5"></div>
 			<tempus-card>
 				<mat-card-content>
 					<form>
@@ -50,71 +52,120 @@
 								<h3 class="mat-h3">Work Experience {{ index + 1 }}</h3>
 							</div>
 						</div>
-						<mat-grid-list cols="6" rowHeight="100px">
-							<mat-grid-tile colspan="{{ workCols }}">
-								<tempus-text-input
-									id="title-{{ index }}"
-									placeholder="Title"
-									cssClass="secondary"
-									[control]="$any(numExperience).get('title')"
+						<div fxLayout="column" fxLayoutGap="30px">
+							<div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxFlex="33%" class="block-2">
+								<div
+									fxFlex.gt-sm="50%"
+									fxFlex.lt-md="50%"
+									fxLayoutAlign="start center"
+									fxLayoutAlign.lt-md="center center"
+									fxFlexFill
+									class="grid-item"
 								>
-								</tempus-text-input>
-							</mat-grid-tile>
-							<mat-grid-tile colspan="{{ workCols }}">
-								<tempus-text-input
-									id="company-{{ index }}"
-									placeholder="Company"
-									cssClass="secondary"
-									[control]="$any(numExperience).get('company')"
+									<tempus-text-input
+										id="title-{{ index }}"
+										placeholder="Title"
+										cssClass="secondary"
+										[control]="$any(numExperience).get('title')"
+									>
+									</tempus-text-input>
+								</div>
+								<div
+									fxFlex.gt-sm="50%"
+									fxFlex.lt-md="50%"
+									fxLayoutAlign="end center"
+									fxLayoutAlign.lt-md="center center"
+									fxFlexFill
+									class="grid-item"
 								>
-								</tempus-text-input>
-							</mat-grid-tile>
-							<mat-grid-tile colspan="{{ locationCols }}">
-								<tempus-search-box
-									id="country-{{ index }}"
-									[options]="countries"
-									placeholder="Country"
-									cssClass="secondary"
-									(optionSelect)="updateStateOptions($event)"
-									[control]="$any(numExperience).get('country')"
-								></tempus-search-box>
-							</mat-grid-tile>
-							<mat-grid-tile colspan="{{ locationCols }}">
-								<tempus-dropdown
-									id="state-{{ index }}"
-									[options]="states"
-									label="State"
-									cssClass="secondary"
-									[control]="$any(numExperience).get('state')"
-								></tempus-dropdown>
-							</mat-grid-tile>
-							<mat-grid-tile colspan="{{ locationCols }}">
-								<tempus-text-input
-									id="city-{{ index }}"
-									placeholder="City"
-									cssClass="secondary"
-									[control]="$any(numExperience).get('city')"
-								></tempus-text-input>
-							</mat-grid-tile>
-							<mat-grid-tile colspan="3">
-								<tempus-text-input
-									id="start-date-{{ index }}"
-									[inputType]="InputType.DATE"
-									placeholder="Start Date"
-									cssClass="secondary"
-									[control]="$any(numExperience).get('startDate')"
-								></tempus-text-input>
-							</mat-grid-tile>
-							<mat-grid-tile colspan="3">
-								<tempus-text-input
-									id="end-date-{{ index }}"
-									[inputType]="InputType.DATE"
-									placeholder="End Date"
-									cssClass="secondary"
-									[control]="$any(numExperience).get('endDate')"
-								></tempus-text-input>
-							</mat-grid-tile>
-							<mat-grid-tile colspan="6" rowspan="2">
+									<tempus-text-input
+										id="company-{{ index }}"
+										placeholder="Company"
+										cssClass="secondary"
+										[control]="$any(numExperience).get('company')"
+									>
+									</tempus-text-input>
+								</div>
+							</div>
+							<div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxFlex="33%" class="block-2">
+								<div
+									fxFlex.gt-sm="50%"
+									fxFlex.lt-md="33%"
+									fxLayoutAlign="start center"
+									fxLayoutAlign.lt-md="center center"
+									fxFlexFill
+									class="grid-item"
+								>
+									<tempus-search-box
+										id="country-{{ index }}"
+										[options]="countries"
+										placeholder="Country"
+										cssClass="secondary"
+										(optionSelect)="updateStateOptions($event)"
+										[control]="$any(numExperience).get('country')"
+									></tempus-search-box>
+								</div>
+								<div fxFlex.gt-sm="50%" fxFlex.lt-md="33%" fxLayoutAlign="center center" fxFlexFill class="grid-item">
+									<tempus-dropdown
+										id="state-{{ index }}"
+										[options]="states"
+										label="State"
+										cssClass="secondary"
+										[control]="$any(numExperience).get('state')"
+									>
+									</tempus-dropdown>
+								</div>
+								<div
+									fxFlex.gt-sm="50%"
+									fxFlex.lt-md="33%"
+									fxLayoutAlign="end center"
+									fxLayoutAlign.lt-md="center center"
+									fxFlexFill
+									class="grid-item"
+								>
+									<tempus-text-input
+										id="city-{{ index }}"
+										placeholder="City"
+										cssClass="secondary"
+										[control]="$any(numExperience).get('city')"
+									></tempus-text-input>
+								</div>
+							</div>
+							<div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxFlex="33%" class="block-2">
+								<div
+									fxFlex.gt-sm="50%"
+									fxFlex.lt-md="50%"
+									fxLayoutAlign="start center"
+									fxLayoutAlign.lt-md="center center"
+									fxFlexFill
+									class="grid-item"
+								>
+									<tempus-text-input
+										id="start-date-{{ index }}"
+										[inputType]="InputType.DATE"
+										placeholder="Start Date"
+										cssClass="secondary"
+										[control]="$any(numExperience).get('startDate')"
+									></tempus-text-input>
+								</div>
+								<div
+									fxFlex.gt-sm="50%"
+									fxFlex.lt-md="50%"
+									fxLayoutAlign="end center"
+									fxLayoutAlign.lt-md="center center"
+									fxFlexFill
+									class="grid-item"
+								>
+									<tempus-text-input
+										id="end-date-{{ index }}"
+										[inputType]="InputType.DATE"
+										placeholder="End Date"
+										cssClass="secondary"
+										[control]="$any(numExperience).get('endDate')"
+									></tempus-text-input>
+								</div>
+							</div>
+							<div>
 								<tempus-text-area
 									id="description-{{ index }}"
 									placeholder="Description"
@@ -122,23 +173,24 @@
 									[control]="$any(numExperience).get('description')"
 								>
 								</tempus-text-area>
-							</mat-grid-tile>
-						</mat-grid-list>
+							</div>
+						</div>
 					</form>
 				</mat-card-content>
 			</tempus-card>
-		</mat-grid-tile>
-	</mat-grid-list>
-	<div class="button-container">
-		<button color="primary" mat-raised-button matStepperPrevious type="button" (click)="backStep()">Back</button>
-		<button
-			color="primary"
-			mat-raised-button
-			matStepperNext="button"
-			[disabled]="!myInfoForm.valid"
-			(click)="nextStep()"
-		>
-			Next
-		</button>
+			<div fxFlex="5"></div>
+		</div>
+		<div class="container button-container">
+			<button color="primary" mat-raised-button matStepperPrevious type="button" (click)="backStep()">Back</button>
+			<button
+				color="primary"
+				mat-raised-button
+				matStepperNext="button"
+				[disabled]="!myInfoForm.valid"
+				(click)="nextStep()"
+			>
+				Next
+			</button>
+		</div>
 	</div>
 </ng-container>

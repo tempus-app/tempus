@@ -36,6 +36,9 @@ export class UserEntity implements User {
 	@Column({ nullable: true })
 	password: string;
 
+	@Column({ nullable: true })
+	refreshToken: string;
+
 	@Column({
 		type: 'enum',
 		enum: RoleType,

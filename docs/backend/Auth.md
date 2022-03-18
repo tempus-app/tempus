@@ -45,6 +45,22 @@ For hashing, use `bcrypt`.
     - Local
     - JWT
 
+## General Flow of Login
+1. User logs in by hitting `Login` endpoint
+```ts
+	@UseGuards(LocalAuthGuard)
+	@Post('login')
+	login(@Request() req): Promise<Tokens> {
+		return this.authService.login(req.user);
+	}
+```
+2.  [`LocalAuthGuard`](../libs/api/shared/feature-auth/src/lib/guards/local-auth.guard.ts) takes request (email, password) and uses [`Local Strategy`](../libs/api/shared/feature-auth/src/lib/strategies/locat.strategy.ts) to validate and find the user by calling the `validateUser()` method in [`Auth Service`](../libs/api/shared/feature-auth/src/lib/auth.service.ts).
+
+3. If the user is found, `Local Strategy` returns the user within the `Request` object. The user can be accessed through `req.user`.
+```ts
+	return this.authService.login(req.user);
+```
+
 ---
 
 ## Resources

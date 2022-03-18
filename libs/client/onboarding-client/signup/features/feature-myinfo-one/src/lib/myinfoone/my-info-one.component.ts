@@ -1,7 +1,7 @@
-import { Component, OnDestroy, Output, EventEmitter, OnInit } from '@angular/core';
-import { City, Country, State } from 'country-state-city';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Subject } from 'rxjs';
+import { Component, Output, EventEmitter, OnInit } from '@angular/core';
+import { City, Country, State } from 'country-state-city';
 import { filter, switchMap, take, takeUntil, tap } from 'rxjs/operators';
 import { AbstractControl, FormBuilder, FormControl, ValidatorFn, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -19,7 +19,7 @@ import { Store } from '@ngrx/store';
 	templateUrl: './my-info-one.component.html',
 	styleUrls: ['./my-info-one.component.scss'],
 })
-export class MyInfoOneComponent implements OnDestroy, OnInit {
+export class MyInfoOneComponent implements OnInit {
 	myInfoForm = this.fb.group(
 		{
 			firstName: ['', Validators.required],
@@ -64,30 +64,14 @@ export class MyInfoOneComponent implements OnDestroy, OnInit {
 		[Breakpoints.XLarge, 'XLarge'],
 	]);
 
+	@Output() formIsValid = new EventEmitter<boolean>();
+
 	constructor(
 		private fb: FormBuilder,
-		breakpointObserver: BreakpointObserver,
 		private router: Router,
 		private route: ActivatedRoute,
 		private store: Store<SignupState>,
-	) {
-		breakpointObserver
-			.observe([Breakpoints.XSmall, Breakpoints.Small, Breakpoints.Medium, Breakpoints.Large, Breakpoints.XLarge])
-			.pipe(takeUntil(this.destroyed$))
-			.subscribe(result => {
-				for (const query of Object.keys(result.breakpoints)) {
-					if (result.breakpoints[query]) {
-						if (query === Breakpoints.XSmall || query === Breakpoints.Small) {
-							this.rows = '8';
-							this.cols = '2';
-						} else {
-							this.rows = '5';
-							this.cols = '1';
-						}
-					}
-				}
-			});
-	}
+	) {}
 
 	ngOnInit() {
 		this.store
@@ -109,11 +93,6 @@ export class MyInfoOneComponent implements OnDestroy, OnInit {
 					city: createResourceDto.location.city,
 				});
 			});
-	}
-
-	ngOnDestroy() {
-		this.destroyed$.next();
-		this.destroyed$.complete();
 	}
 
 	updateStateOptions(inputtedCountry: string) {

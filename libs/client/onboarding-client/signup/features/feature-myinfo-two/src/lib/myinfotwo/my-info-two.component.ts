@@ -1,7 +1,5 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Country, State } from 'country-state-city';
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { Subject } from 'rxjs';
 import { filter, switchMap, take, takeUntil, tap } from 'rxjs/operators';
 import { InputType } from '@tempus/client/shared/ui-components/input';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -20,15 +18,7 @@ import { ICreateExperienceDto, ICreateLocationDto } from '@tempus/shared-domain'
 	templateUrl: './my-info-two.component.html',
 	styleUrls: ['./my-info-two.component.scss'],
 })
-export class MyInfoTwoComponent implements OnDestroy, OnInit {
-	destroyed$ = new Subject<void>();
-
-	rows = '10';
-
-	workCols = '3';
-
-	locationCols = '2';
-
+export class MyInfoTwoComponent implements OnInit {
 	numberWorkSections: number[] = [0];
 
 	InputType = InputType;
@@ -54,29 +44,9 @@ export class MyInfoTwoComponent implements OnDestroy, OnInit {
 	constructor(
 		private route: ActivatedRoute,
 		private fb: FormBuilder,
-		breakpointObserver: BreakpointObserver,
 		private router: Router,
 		private store: Store<SignupState>,
-	) {
-		breakpointObserver
-			.observe([Breakpoints.XSmall, Breakpoints.Small, Breakpoints.Medium, Breakpoints.Large, Breakpoints.XLarge])
-			.pipe(takeUntil(this.destroyed$))
-			.subscribe(result => {
-				for (const query of Object.keys(result.breakpoints)) {
-					if (result.breakpoints[query]) {
-						if (query === Breakpoints.XSmall || query === Breakpoints.Small) {
-							this.rows = '16';
-							this.workCols = '6';
-							this.locationCols = '6';
-						} else {
-							this.rows = '11';
-							this.workCols = '3';
-							this.locationCols = '2';
-						}
-					}
-				}
-			});
-	}
+	) {}
 
 	ngOnInit() {
 		this.store
@@ -108,11 +78,6 @@ export class MyInfoTwoComponent implements OnDestroy, OnInit {
 					workExperienceSummary: createResourceDto.experiencesSummary,
 				});
 			});
-	}
-
-	ngOnDestroy() {
-		this.destroyed$.next();
-		this.destroyed$.complete();
 	}
 
 	addWorkSections() {

@@ -20,7 +20,7 @@ export class AuthEffects {
 			ofType(login),
 			switchMap(action =>
 				this.authService.login(action.password, action.email).pipe(
-					map(data => loginSuccess({ accessToken: data.jwtAccessToken, loggedInUserId: data.user.id })),
+					map(data => loginSuccess({ accessToken: data.accessToken, loggedInUserId: data.user.id })),
 					catchError(error => of(loginFailure({ error }))),
 				),
 			),

@@ -14,7 +14,7 @@ export class OnboardingClientAuthService {
 	public login(password: string, email: string): Observable<AuthDto> {
 		return this.http.post<AuthDto>(`${this.url}/login`, { password, email }).pipe(
 			tap(data => {
-				this.setUserDataInSessionStorage(data.jwtAccessToken, data.user.id);
+				this.setUserDataInSessionStorage(data.accessToken, data.user.id);
 			}),
 			catchError(handleError),
 		);

@@ -12,6 +12,8 @@ import { CardComponent } from './card/card.component';
 import { ChipComponent } from './chip/chip.component';
 import { TableComponent } from './table/table.component';
 import { SpinnerComponent } from './spinner/spinner.component';
+import { ButtonComponent } from './button/button.component';
+import { MatButtonModule } from '@angular/material/button';
 
 @NgModule({
 	imports: [
@@ -23,9 +25,10 @@ import { SpinnerComponent } from './spinner/spinner.component';
 		MatCardModule,
 		MatFormFieldModule,
 		MatTableModule,
+		MatButtonModule,
 		MatSortModule,
 	],
-	declarations: [CardComponent, ChipComponent, TableComponent, SpinnerComponent],
-	exports: [CardComponent, ChipComponent, TableComponent, SpinnerComponent],
+	declarations: [CardComponent, ChipComponent, ButtonComponent, TableComponent, SpinnerComponent],
+	exports: [CardComponent, ChipComponent, ButtonComponent, TableComponent, SpinnerComponent],
 })
 export class ClientSharedUiComponentsPresentationalModule {}

@@ -1,0 +1,8 @@
+<ng-container>
+	<button mat-raised-button color="{{ color }}" class="{{ type }}">
+		<div id="button-container">
+			<mat-icon *ngIf="icon != ''">{{ icon }}</mat-icon>
+			<div class="label">{{ label }}</div>
+		</div>
+	</button>
+</ng-container>

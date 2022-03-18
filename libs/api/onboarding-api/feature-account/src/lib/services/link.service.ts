@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UpdatelinkDto } from '@tempus/api/shared/dto';
 import { LinkEntity } from '@tempus/api/shared/entity';
@@ -17,15 +17,16 @@ export class LinkService {
 
 	async createLink(link: LinkEntity): Promise<Link> {
 		const uniqueToken = uuidv4();
-		let expiryDate = link.expiry;
-
+		let expiryDate = new Date(link.expiry);
+		const currentDate = new Date();
 		// if custom expiry not defined, link expires in a week
 		if (!link.expiry) {
-			const currentDate = new Date();
 			expiryDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() + 7);
+		} else if (currentDate >= expiryDate) {
+			throw new BadRequestException('Expiry Date must be in the future');
 		}
 		const fullLink = { ...link, token: uniqueToken, status: StatusType.ACTIVE, expiry: expiryDate };
-		// await this.emailService.sendInvitationEmail(fullLink);
+		await this.emailService.sendInvitationEmail(fullLink);
 		return this.linkRepository.save(fullLink);
 	}
 

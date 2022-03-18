@@ -2,20 +2,11 @@
 @use 'components/helper' as cmp;
 
 .info-title {
-	@include cmp.info-title(78%, 50px);
+	@include cmp.info-title(100%, 50px);
 }
 
 .section-header {
-	padding: 0.5em 0em 0.5em 0em;
 	border-bottom: 2px solid abs.$primary-300;
-}
-
-.card-header {
-	width: 95%;
-	margin: auto;
-	padding-top: 1em;
-	text-align: left;
-	display: inline;
 }
 
 .experience-button {
@@ -36,7 +27,7 @@ h3 {
 }
 
 tempus-card {
-	width: 80%;
+	width: 100%;
 	margin: 2em auto;
 	text-align: center;
 }
@@ -44,30 +35,18 @@ tempus-card {
 tempus-text-input {
 	text-align: center;
 	width: 90%;
-	padding: 3em 0em 2em 0em;
 }
 
 tempus-search-box {
 	text-align: center;
 	width: 90%;
-	padding: 3em 0em 2em 0em;
 }
 
 tempus-dropdown {
 	text-align: center;
 	width: 90%;
-	padding: 3em 0em 2em 0em;
 }
 
 tempus-text-area {
 	width: 95%;
-}
-
-@media only screen and (max-width: 900px) {
-	tempus-card {
-		width: 90%;
-	}
-	.info-title {
-		width: 85%;
-	}
 }

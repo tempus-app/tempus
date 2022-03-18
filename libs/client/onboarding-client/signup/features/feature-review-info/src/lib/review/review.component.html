@@ -1,121 +1,147 @@
 <ng-container>
-	<mat-grid-list cols="2" rowHeight="50px">
-		<mat-grid-tile class="container" colspan="2" rowspan="3">
+	<div fxLayout="column" fxFill fxLayoutGap="30px">
+		<div fxFlex>
+			<div fxFlex="5"></div>
 			<div class="info-title">
 				<h2 class="mat-h2 section-header">Review</h2>
 			</div>
-		</mat-grid-tile>
-		<mat-grid-tile colspan="{{ cols }}" rowspan="6">
-			<tempus-card>
-				<div class="card-header">
-					<h3 class="mat-h3 section-header">Legal Name</h3>
-					<p class="mat-body-1">{{ firstName }}</p>
+			<div fxFlex="5"></div>
+		</div>
+		<div>
+			<div fxLayout="column" fxLayoutGap="30px">
+				<div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxFlex="33%" class="block-2">
+					<div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="center center" fxFlexFill class="grid-item">
+						<tempus-card>
+							<div class="card-header">
+								<h3 class="mat-h3 section-header">Legal Name</h3>
+								<p class="mat-body-1">{{ firstName }}</p>
+							</div>
+							<div class="card-header">
+								<h3 class="mat-h3 section-header">Family Name</h3>
+								<p class="mat-body-1">{{ lastName }}</p>
+							</div>
+							<div class="card-header">
+								<h3 class="mat-h3 section-header">Email</h3>
+								<p class="mat-body-1">{{ email }}</p>
+							</div>
+						</tempus-card>
+					</div>
+					<div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="center center" fxFlexFill class="grid-item">
+						<tempus-card>
+							<div class="card-header">
+								<h3 class="mat-h3 section-header">Address</h3>
+								<p class="mat-body-1">{{ country }}</p>
+								<p class="mat-body-1">{{ state }}</p>
+								<p class="mat-body-1">{{ city }}</p>
+							</div>
+						</tempus-card>
+					</div>
 				</div>
-				<div class="card-header">
-					<h3 class="mat-h3 section-header">Family Name</h3>
-					<p class="mat-body-1">{{ lastName }}</p>
-				</div>
-				<div class="card-header">
-					<h3 class="mat-h3 section-header">Email</h3>
-					<p class="mat-body-1">{{ email }}</p>
-				</div>
-			</tempus-card>
-		</mat-grid-tile>
-		<mat-grid-tile colspan="{{ cols }}" rowspan="6">
-			<tempus-card>
-				<div class="card-header">
-					<h3 class="mat-h3 section-header">Address</h3>
-					<p class="mat-body-1">{{ country }}</p>
-					<p class="mat-body-1">{{ state }}</p>
-					<p class="mat-body-1">{{ city }}</p>
-				</div>
-			</tempus-card>
-		</mat-grid-tile>
-		<mat-grid-tile class="container" colspan="2" rowspan="2">
+			</div>
+		</div>
+		<div fxFlex>
+			<div fxFlex="5"></div>
 			<div class="info-title">
 				<h2 class="mat-h2">Work Experience</h2>
 			</div>
-		</mat-grid-tile>
-		<mat-grid-tile rowspan="3">
-			<p class="mat-body-2">{{ experiencesSummary }}</p>
-		</mat-grid-tile>
-		<mat-grid-tile *ngFor="let workExperience of workExperiences" colspan="2" rowspan="6">
-			<tempus-card class="work-experience-card">
-				<mat-grid-list cols="2" rowHeight="50px">
-					<mat-grid-tile colspan="2" rowspan="3">
-						<p class="mat-body-2">{{ workExperience.summary }}</p>
-					</mat-grid-tile>
-					<mat-grid-tile colspan="{{ cols }}" rowspan="2">
-						<div class="left-card-header">
-							<h3 class="mat-h3">{{ workExperience.company }}</h3>
-							<p class="mat-body-2">{{ workExperience.title }}</p>
+			<div fxFlex="5"></div>
+		</div>
+		<div *ngFor="let workExperience of workExperiences">
+			<div fxFlex="5"></div>
+			<div fxFlex="90">
+				<tempus-card>
+					<div fxLayout="column" fxLayoutGap="30px">
+						<div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxFlex="33%" class="block-2">
+							<div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="start start" fxFlexFill class="grid-item">
+								<div class="left-card-header">
+									<h3 class="mat-h3">{{ workExperience.company }}</h3>
+									<p class="mat-body-2">{{ workExperience.title }}</p>
+								</div>
+							</div>
+							<div
+								fxFlex.gt-sm="50%"
+								fxFlex.lt-md="50%"
+								fxLayoutAlign="end end"
+								fxLayoutAlign.lt-md="start start"
+								fxFlexFill
+								class="grid-item"
+							>
+								<div>
+									<p class="mat-body-2">{{ formatDate(workExperience.startDate, workExperience.endDate) }}</p>
+								</div>
+							</div>
 						</div>
-					</mat-grid-tile>
-					<mat-grid-tile colspan="{{ cols }}">
-						<div [ngClass]="{ 'card-date': hideElement, 'left-card-header': !hideElement }">
-							<p class="mat-body-2">{{ formatDate(workExperience.startDate, workExperience.endDate) }}</p>
+						<div>
+							<div *ngFor="let desc of workExperience.description">
+								<p class="mat-body-2">{{ desc }}</p>
+							</div>
 						</div>
-					</mat-grid-tile>
-					<mat-grid-tile colspan="2" rowspan="3">
-						<div *ngFor="let desc of workExperience.description">
-							<p class="mat-body-2">{{ desc }}</p>
-						</div>
-					</mat-grid-tile>
-				</mat-grid-list>
-			</tempus-card>
-		</mat-grid-tile>
-	</mat-grid-list>
-	<mat-grid-list cols="3" rowHeight="50px">
-		<mat-grid-tile class="container" colspan="3" rowspan="2">
+					</div>
+				</tempus-card>
+			</div>
+			<div fxFlex="5"></div>
+		</div>
+		<div fxFlex>
+			<div fxFlex="5"></div>
 			<div class="info-title">
 				<h2 class="mat-h2">Education</h2>
 			</div>
-		</mat-grid-tile>
-		<mat-grid-tile *ngIf="hideElement" colspan="1" rowspan="3"></mat-grid-tile>
-		<mat-grid-tile rowspan="3">
-			<p class="mat-body-2">{{ educationsSummary }}</p>
-		</mat-grid-tile>
-		<mat-grid-tile *ngFor="let education of educations" colspan="{{ skillsEducationCols }}" rowspan="3">
-			<tempus-card>
-				<mat-grid-list cols="2" rowHeight="3em">
-					<mat-grid-tile colspan="{{ cols }}" rowspan="2">
-						<div class="left-card-header">
-							<h3 class="mat-h3">{{ education.institution }}</h3>
-							<p class="mat-body-2">{{ education.degree }}</p>
+			<div fxFlex="5"></div>
+		</div>
+		<div *ngFor="let education of educations">
+			<div fxFlex="5"></div>
+			<div fxFlex="90">
+				<tempus-card>
+					<div fxLayout="column" fxLayoutGap="30px">
+						<div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxFlex="33%" class="block-2">
+							<div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="start start" fxFlexFill class="grid-item">
+								<div class="left-card-header">
+									<h3 class="mat-h3">{{ education.institution }}</h3>
+									<p class="mat-body-2">{{ education.degree }}</p>
+								</div>
+							</div>
+							<div
+								fxFlex.gt-sm="50%"
+								fxFlex.lt-md="50%"
+								fxLayoutAlign="end end"
+								fxLayoutAlign.lt-md="start start"
+								fxFlexFill
+								class="grid-item"
+							>
+								<div>
+									<p class="mat-body-2">{{ formatDate(education.startDate, education.endDate) }}</p>
+								</div>
+							</div>
 						</div>
-					</mat-grid-tile>
-					<mat-grid-tile colspan="{{ cols }}">
-						<div [ngClass]="{ 'card-date': hideElement, 'left-card-header': !hideElement }">
-							<p class="mat-body-2">{{ formatDate(education.startDate, education.endDate) }}</p>
-						</div>
-					</mat-grid-tile>
-				</mat-grid-list>
-			</tempus-card>
-		</mat-grid-tile>
-		<mat-grid-tile *ngIf="hideElement" colspan="1" rowspan="3"></mat-grid-tile>
-		<mat-grid-tile class="container" colspan="3" rowspan="2">
+					</div>
+				</tempus-card>
+			</div>
+			<div fxFlex="5"></div>
+		</div>
+		<div fxFlex>
+			<div fxFlex="5"></div>
 			<div class="info-title">
 				<h2 class="mat-h2">Skills</h2>
 			</div>
-		</mat-grid-tile>
-		<mat-grid-tile rowspan="3">
-			<p class="mat-body-2">{{ skillsSummary }}</p>
-		</mat-grid-tile>
-		<mat-grid-tile *ngIf="hideElement" colspan="1" rowspan="3"></mat-grid-tile>
-		<mat-grid-tile colspan="{{ skillsEducationCols }}" rowspan="5">
-			<tempus-card>
-				<mat-grid-list cols="{{ skillsChipsCols }}" rowHeight="50px">
-					<mat-grid-tile *ngFor="let skill of skills" colspan="1">
-						<tempus-chip [removable]="false"></tempus-chip>
-					</mat-grid-tile>
-				</mat-grid-list>
-			</tempus-card>
-		</mat-grid-tile>
-		<mat-grid-tile *ngIf="hideElement" colspan="1" rowspan="3"></mat-grid-tile>
-	</mat-grid-list>
-	<div class="button-container">
-		<button color="primary" mat-raised-button matStepperPrevious type="button" (click)="backStep()">Back</button>
-		<button color="primary" mat-raised-button (click)="submit()">Submit</button>
+			<div fxFlex="5"></div>
+		</div>
+		<div>
+			<div fxFlex="5"></div>
+			<div fxFlex="90">
+				<tempus-card>
+					<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutAlign="space-between center" fxLayoutGap="16px grid">
+						<div *ngFor="let skill of skills">
+							<tempus-chip [removable]="false" [content]="skill"></tempus-chip>
+						</div>
+					</div>
+				</tempus-card>
+			</div>
+			<div fxFlex="5"></div>
+		</div>
+		<div class="container button-container">
+			<button color="primary" mat-raised-button matStepperPrevious type="button" (click)="backStep()">Back</button>
+			<button color="primary" mat-raised-button matStepperNext="button" (click)="submit()">Submit</button>
+		</div>
 	</div>
 	<tempus-spinner [showSpinner]="loading"></tempus-spinner>
 </ng-container>
