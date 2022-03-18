@@ -6,15 +6,6 @@ export class UpdateResourceDto extends PartialType(CreateResourceDto) implements
 	@ApiProperty()
 	id: number;
 
-	@ApiProperty()
-	linkedInLink: string;
-
-	@ApiProperty()
-	githubLink: string;
-
-	@ApiProperty()
-	otherLink: string;
-
 	constructor(id: number) {
 		super();
 		this.id = id;
