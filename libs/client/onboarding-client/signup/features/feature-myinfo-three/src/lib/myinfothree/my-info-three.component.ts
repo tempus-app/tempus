@@ -5,6 +5,7 @@ import { InputType } from '@tempus/client/shared/ui-components/input';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { ActivatedRoute, Router } from '@angular/router';
+import { checkEnteredDates } from '@tempus/shared/util';
 import {
 	AbstractControl,
 	FormArray,
@@ -103,7 +104,7 @@ export class MyInfoThreeComponent implements OnInit {
 							startDate: [education.startDate, Validators.required],
 							endDate: [education.endDate, Validators.required],
 						},
-						{ validators: this.checkEnteredDates() },
+						{ validators: checkEnteredDates() },
 					);
 					educationsArray.push(educationForm);
 				});
@@ -149,7 +150,7 @@ export class MyInfoThreeComponent implements OnInit {
 				startDate: ['', Validators.required],
 				endDate: ['', Validators.required],
 			},
-			{ validators: this.checkEnteredDates() },
+			{ validators: checkEnteredDates() },
 		);
 
 		this.qualifications.push(qualification);
@@ -208,20 +209,6 @@ export class MyInfoThreeComponent implements OnInit {
 			this.states = State.getStatesOfCountry(countryCode.isoCode).map(state => {
 				return state.name;
 			});
-	}
-
-	checkEnteredDates() {
-		return (controls: AbstractControl) => {
-			if (controls) {
-				const formStartDate = controls.get('startDate')?.value;
-				const formEndDate = controls.get('endDate')?.value;
-				if (formStartDate > formEndDate && formEndDate !== '') {
-					// this is the returned error to display the mat error
-					return { dateError: true };
-				}
-			}
-			return null;
-		};
 	}
 
 	nextStep() {

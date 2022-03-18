@@ -4,6 +4,7 @@ import { filter, switchMap, take, takeUntil, tap } from 'rxjs/operators';
 import { InputType } from '@tempus/client/shared/ui-components/input';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { checkEnteredDates } from '@tempus/shared/util';
 import { Store } from '@ngrx/store';
 import {
 	createWorkExperienceDetails,
@@ -73,7 +74,7 @@ export class MyInfoTwoComponent implements OnInit {
 								endDate: [experience.endDate, Validators.required],
 								description: [experience.description, Validators.required],
 							},
-							{ validators: this.checkEnteredDates() },
+							{ validators: checkEnteredDates() },
 						),
 					);
 				});
@@ -102,7 +103,7 @@ export class MyInfoTwoComponent implements OnInit {
 				endDate: ['', Validators.required],
 				description: ['', Validators.required],
 			},
-			{ validators: this.checkEnteredDates() },
+			{ validators: checkEnteredDates() },
 		);
 
 		this.totalWorkExperience.push(workExperience);
@@ -119,20 +120,6 @@ export class MyInfoTwoComponent implements OnInit {
 			this.states = State.getStatesOfCountry(countryCode.isoCode).map(state => {
 				return state.name;
 			});
-	}
-
-	checkEnteredDates() {
-		return (controls: AbstractControl) => {
-			if (controls) {
-				const formStartDate = controls.get('startDate')?.value;
-				const formEndDate = controls.get('endDate')?.value;
-				if (formStartDate > formEndDate && formEndDate !== '') {
-					// this is the returned error to display the mat error
-					return { dateError: true };
-				}
-			}
-			return null;
-		};
 	}
 
 	nextStep() {

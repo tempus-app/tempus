@@ -67,7 +67,7 @@
 								>
 									<tempus-text-input
 										id="institution-{{ index }}"
-										placeholder="Institution"
+										placeholder="Institution *"
 										cssClass="secondary"
 										[control]="$any(numEducation).get('institution')"
 									>
@@ -83,7 +83,7 @@
 								>
 									<tempus-text-input
 										id="field-{{ index }}"
-										placeholder="Field"
+										placeholder="Field *"
 										cssClass="secondary"
 										[control]="$any(numEducation).get('field')"
 									></tempus-text-input>
@@ -94,34 +94,42 @@
 								<div
 									fxFlex.gt-sm="50%"
 									fxFlex.lt-md="50%"
-									fxLayoutAlign="center center"
+									fxLayoutAlign="start center"
 									fxLayoutAlign.lt-md="center center"
 									fxFlexFill
 									class="grid-item"
 								>
-									<mat-error
-										class="mat-body-2"
-										*ngIf="
-											$any(numEducation).get('institution').invalid && $any(numEducation).get('institution').touched
-										"
-									>
-										Please enter an institution name.
-									</mat-error>
+									<div class="error-container">
+										<mat-error
+											class="mat-body-2"
+											*ngIf="
+												$any(numEducation).get('institution').invalid &&
+												($any(numEducation).get('institution').touched || $any(numEducation).get('institution').dirty)
+											"
+										>
+											Please enter an institution name.
+										</mat-error>
+									</div>
 								</div>
 								<div
 									fxFlex.gt-sm="50%"
 									fxFlex.lt-md="50%"
-									fxLayoutAlign="center center"
+									fxLayoutAlign="end center"
 									fxLayoutAlign.lt-md="center center"
 									fxFlexFill
 									class="grid-item"
 								>
-									<mat-error
-										class="mat-body-2"
-										*ngIf="$any(numEducation).get('field').invalid && $any(numEducation).get('field').touched"
-									>
-										Please enter a qualification field.
-									</mat-error>
+									<div class="error-container">
+										<mat-error
+											class="mat-body-2"
+											*ngIf="
+												$any(numEducation).get('field').invalid &&
+												($any(numEducation).get('field').touched || $any(numEducation).get('field').dirty)
+											"
+										>
+											Please enter a qualification field.
+										</mat-error>
+									</div>
 								</div>
 							</div>
 
@@ -209,32 +217,42 @@
 								<div
 									fxFlex.gt-sm="50%"
 									fxFlex.lt-md="50%"
-									fxLayoutAlign="center center"
+									fxLayoutAlign="start center"
 									fxLayoutAlign.lt-md="center center"
 									fxFlexFill
 									class="grid-item"
 								>
-									<mat-error
-										class="mat-body-2"
-										*ngIf="$any(numEducation).get('startDate').invalid && $any(numEducation).get('startDate').touched"
-									>
-										Please enter a valid start date.
-									</mat-error>
+									<div class="error-container">
+										<mat-error
+											class="mat-body-2"
+											*ngIf="
+												$any(numEducation).get('startDate').invalid &&
+												($any(numEducation).get('startDate').touched || $any(numEducation).get('startDate').dirty)
+											"
+										>
+											Please enter a valid start date.
+										</mat-error>
+									</div>
 								</div>
 								<div
 									fxFlex.gt-sm="50%"
 									fxFlex.lt-md="50%"
-									fxLayoutAlign="center center"
+									fxLayoutAlign="end center"
 									fxLayoutAlign.lt-md="center center"
 									fxFlexFill
 									class="grid-item"
 								>
-									<mat-error
-										class="mat-body-2"
-										*ngIf="$any(numEducation).get('endDate').invalid && $any(numEducation).get('endDate').touched"
-									>
-										Please enter a valid end date.
-									</mat-error>
+									<div class="error-container">
+										<mat-error
+											class="mat-body-2"
+											*ngIf="
+												$any(numEducation).get('endDate').invalid &&
+												($any(numEducation).get('endDate').touched || $any(numEducation).get('endDate').dirty)
+											"
+										>
+											Please enter a valid end date.
+										</mat-error>
+									</div>
 								</div>
 							</div>
 							<div>
@@ -298,7 +316,7 @@
 								>
 									<tempus-text-input
 										id="certifying-authority-{{ index }}"
-										placeholder="Certifying Authority"
+										placeholder="Certifying Authority *"
 										cssClass="secondary"
 										[control]="$any(numCertification).get('certifyingAuthority')"
 									>
@@ -314,7 +332,7 @@
 								>
 									<tempus-text-input
 										id="title-{{ index }}"
-										placeholder="Title"
+										placeholder="Title *"
 										cssClass="secondary"
 										[control]="$any(numCertification).get('title')"
 									></tempus-text-input>
@@ -325,35 +343,43 @@
 								<div
 									fxFlex.gt-sm="50%"
 									fxFlex.lt-md="50%"
-									fxLayoutAlign="center center"
+									fxLayoutAlign="start center"
 									fxLayoutAlign.lt-md="center center"
 									fxFlexFill
 									class="grid-item"
 								>
-									<mat-error
-										class="mat-body-2"
-										*ngIf="
-											$any(numCertification).get('certifyingAuthority').invalid &&
-											$any(numCertification).get('certifyingAuthority').touched
-										"
-									>
-										Please enter a certifying authority.
-									</mat-error>
+									<div class="error-container">
+										<mat-error
+											class="mat-body-2"
+											*ngIf="
+												$any(numCertification).get('certifyingAuthority').invalid &&
+												($any(numCertification).get('certifyingAuthority').touched ||
+													$any(numCertification).get('certifyingAuthority').dirty)
+											"
+										>
+											Please enter a certifying authority.
+										</mat-error>
+									</div>
 								</div>
 								<div
 									fxFlex.gt-sm="50%"
 									fxFlex.lt-md="50%"
-									fxLayoutAlign="center center"
+									fxLayoutAlign="end center"
 									fxLayoutAlign.lt-md="center center"
 									fxFlexFill
 									class="grid-item"
 								>
-									<mat-error
-										class="mat-body-2"
-										*ngIf="$any(numCertification).get('title').invalid && $any(numCertification).get('title').touched"
-									>
-										Please enter a title.
-									</mat-error>
+									<div class="error-container">
+										<mat-error
+											class="mat-body-2"
+											*ngIf="
+												$any(numCertification).get('title').invalid &&
+												($any(numCertification).get('title').touched || $any(numCertification).get('title').dirty)
+											"
+										>
+											Please enter a title.
+										</mat-error>
+									</div>
 								</div>
 							</div>
 
