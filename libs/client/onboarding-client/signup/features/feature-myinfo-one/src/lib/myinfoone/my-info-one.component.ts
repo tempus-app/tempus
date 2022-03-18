@@ -11,6 +11,7 @@ import {
 	SignupState,
 } from '@tempus/client/onboarding-client/signup/data-access';
 import { Store } from '@ngrx/store';
+import { V } from '@angular/cdk/keycodes';
 
 @Component({
 	selector: 'tempus-my-info-one',
@@ -22,6 +23,7 @@ export class MyInfoOneComponent implements OnInit {
 		firstName: ['', Validators.required],
 		lastName: ['', Validators.required],
 		phoneNumber: ['', Validators.required],
+		personalURL: [''],
 		country: ['', Validators.required],
 		state: ['', Validators.required],
 		city: ['', Validators.required],
@@ -60,6 +62,7 @@ export class MyInfoOneComponent implements OnInit {
 					firstName: createResourceDto.firstName,
 					lastName: createResourceDto.lastName,
 					phoneNumber: createResourceDto.phoneNumber,
+					personalURL: createResourceDto.personalURL,
 					country: createResourceDto.location.country,
 					state: createResourceDto.location.province,
 					city: createResourceDto.location.city,
@@ -83,6 +86,7 @@ export class MyInfoOneComponent implements OnInit {
 					firstName: this.myInfoForm.get('firstName')?.value,
 					lastName: this.myInfoForm.get('lastName')?.value,
 					phoneNumber: this.myInfoForm.get('phoneNumber')?.value,
+					personalURL: this.myInfoForm.get('personalURL')?.value,
 					location: {
 						city: this.myInfoForm.get('city')?.value,
 						province: this.myInfoForm.get('state')?.value,

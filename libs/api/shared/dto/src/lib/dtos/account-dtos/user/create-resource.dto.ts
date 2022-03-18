@@ -18,6 +18,9 @@ export class CreateResourceDto extends CreateUserDto implements ICreateResourceD
 	phoneNumber: string;
 
 	@ApiProperty()
+	personalURL: string;
+
+	@ApiProperty()
 	title: string;
 
 	@ApiProperty()

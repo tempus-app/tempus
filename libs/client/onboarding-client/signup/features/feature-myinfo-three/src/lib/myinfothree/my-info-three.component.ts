@@ -215,10 +215,8 @@ export class MyInfoThreeComponent implements OnInit {
 			if (controls) {
 				const formStartDate = controls.get('startDate')?.value;
 				const formEndDate = controls.get('endDate')?.value;
-				if (formStartDate > formEndDate) {
-					// this is an error set for a specific control which you can use in a mat-error
-					controls.get('startDate')?.setErrors({ startDateGreaterThan: true });
-					// this is the returned error for the form normally used to disable a submit button
+				if (formStartDate > formEndDate && formEndDate !== '') {
+					// this is the returned error to display the mat error
 					return { dateError: true };
 				}
 			}

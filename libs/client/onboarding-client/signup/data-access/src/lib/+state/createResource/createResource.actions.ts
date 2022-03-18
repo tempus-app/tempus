@@ -17,7 +17,13 @@ export const createResumeUpload = createAction(
 );
 export const createUserDetails = createAction(
 	'[Signup MyInfoOne Page] Create User Details',
-	props<{ firstName: string; lastName: string; phoneNumber: string; location: ICreateLocationDto }>(),
+	props<{
+		firstName: string;
+		lastName: string;
+		phoneNumber: string;
+		personalURL: string;
+		location: ICreateLocationDto;
+	}>(),
 );
 export const createWorkExperienceDetails = createAction(
 	'[Signup MyInfoTwo Page] Create Work Experience Details',

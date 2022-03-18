@@ -3,7 +3,7 @@
 		<div fxFlex>
 			<div fxFlex="5"></div>
 			<div class="info-title">
-				<h2 class="mat-h2">Name</h2>
+				<h2 class="mat-h2">Personal Information</h2>
 			</div>
 			<div fxFlex="5"></div>
 		</div>
@@ -59,8 +59,15 @@
 										[control]="$any(myInfoForm).get('phoneNumber')"
 									></tempus-text-input>
 								</div>
+								<div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="center center" fxFlexFill class="grid-item">
+									<tempus-text-input
+										placeholder="Website URL"
+										cssClass="secondary"
+										[control]="$any(myInfoForm).get('personalURL')"
+									></tempus-text-input>
+								</div>
 							</div>
-							<div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="center center" fxFlexFill class="grid-item">
+							<div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="start center" fxFlexFill class="grid-item">
 								<mat-error
 									class="mat-body-2"
 									*ngIf="$any(myInfoForm).get('phoneNumber').invalid && $any(myInfoForm).get('phoneNumber').touched"
