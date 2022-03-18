@@ -277,6 +277,12 @@
 							</div>
 
 							<div>
+								<mat-error class="mat-body-2" *ngIf="$any(numExperience).errors?.['dateError']">
+									Please make sure the start date is before the end date.
+								</mat-error>
+							</div>
+
+							<div>
 								<tempus-text-area
 									id="description-{{ index }}"
 									placeholder="Description"
