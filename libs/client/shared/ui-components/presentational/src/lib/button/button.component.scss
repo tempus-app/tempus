@@ -1,0 +1,30 @@
+#button-container {
+	display: flex;
+	flex-direction: row;
+	gap: 0.25em;
+	justify-content: center;
+	align-items: center;
+	padding: 0 0.5em 0 0.5em;
+}
+
+.label {
+	display: flex;
+	align-self: center;
+	text-align: center;
+	margin: none;
+	justify-content: center;
+}
+
+::ng-deep .mat-raised-button {
+	text-transform: uppercase;
+	border-radius: 10px !important;
+}
+::ng-deep .mat-icon {
+	width: 0.5em;
+	height: 0.5em;
+	line-height: 1em;
+	display: flex;
+	position: relative;
+	align-self: center;
+	justify-content: center !important;
+}
