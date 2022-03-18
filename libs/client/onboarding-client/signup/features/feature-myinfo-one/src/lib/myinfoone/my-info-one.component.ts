@@ -3,7 +3,7 @@ import { City, Country, State } from 'country-state-city';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Subject } from 'rxjs';
 import { filter, switchMap, take, takeUntil, tap } from 'rxjs/operators';
-import { AbstractControl, FormBuilder, ValidatorFn, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormControl, ValidatorFn, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { InputType } from '@tempus/client/shared/ui-components/input';
 import {
@@ -20,15 +20,18 @@ import { Store } from '@ngrx/store';
 	styleUrls: ['./my-info-one.component.scss'],
 })
 export class MyInfoOneComponent implements OnDestroy, OnInit {
-	myInfoForm = this.fb.group({
-		firstName: ['', Validators.required],
-		lastName: ['', Validators.required],
-		phoneNumber: ['', Validators.required],
-		email: ['', [Validators.required, Validators.email]],
-		country: ['', Validators.required],
-		state: ['', Validators.required],
-		city: ['', Validators.required],
-	});
+	myInfoForm = this.fb.group(
+		{
+			firstName: ['', Validators.required],
+			lastName: ['', Validators.required],
+			phoneNumber: ['', Validators.required],
+			email: ['', [Validators.required, Validators.email]],
+			country: ['', Validators.required],
+			state: ['', Validators.required],
+			city: ['', Validators.required],
+		},
+		{ validators: this.checkCountryState() },
+	);
 
 	InputType = InputType;
 
@@ -131,8 +134,26 @@ export class MyInfoOneComponent implements OnDestroy, OnInit {
 			});
 	}
 
-	selectCity(inputtedCity: string) {
-		this.cityName = inputtedCity;
+	checkCountryState() {
+		return (controls: AbstractControl) => {
+			if (controls) {
+				const formCountry = controls.get('country')?.value;
+				const formState = controls.get('state')?.value;
+				const countryCode = Country.getAllCountries().find(country => country.name === formCountry);
+				if (countryCode === undefined) {
+					return { stateError: true };
+				}
+				if (countryCode != null) {
+					const states = State.getStatesOfCountry(countryCode?.isoCode).map(state => {
+						return state.name;
+					});
+					if (!states.find(state => state === formState)) {
+						return { stateError: true };
+					}
+				}
+			}
+			return null;
+		};
 	}
 
 	nextStep() {
