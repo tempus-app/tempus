@@ -128,11 +128,54 @@
 							</div>
 							<div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxFlex="33%" class="block-2">
 								<div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="center center" fxFlexFill class="grid-item">
+									<div class="error-container">
+										<mat-error
+											class="mat-body-2"
+											*ngIf="
+												$any(myInfoForm).get('linkedInLink').invalid &&
+												($any(myInfoForm).get('linkedInLink').touched || $any(myInfoForm).get('linkedInLink').dirty)
+											"
+										>
+											Please enter a valid URL.
+										</mat-error>
+									</div>
+								</div>
+								<div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="center center" fxFlexFill class="grid-item">
+									<div class="error-container">
+										<mat-error
+											class="mat-body-2"
+											*ngIf="
+												$any(myInfoForm).get('githubLink').invalid &&
+												($any(myInfoForm).get('githubLink').touched || $any(myInfoForm).get('githubLink').dirty)
+											"
+										>
+											Please enter a valid URL.
+										</mat-error>
+									</div>
+								</div>
+							</div>
+							<div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxFlex="33%" class="block-2">
+								<div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="center center" fxFlexFill class="grid-item">
 									<tempus-text-input
 										placeholder="Other"
 										cssClass="secondary"
 										[control]="$any(myInfoForm).get('otherLink')"
 									></tempus-text-input>
+								</div>
+							</div>
+							<div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxFlex="33%" class="block-2">
+								<div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="center center" fxFlexFill class="grid-item">
+									<div class="error-container">
+										<mat-error
+											class="mat-body-2"
+											*ngIf="
+												$any(myInfoForm).get('otherLink').invalid &&
+												($any(myInfoForm).get('otherLink').touched || $any(myInfoForm).get('otherLink').dirty)
+											"
+										>
+											Please enter a valid URL.
+										</mat-error>
+									</div>
 								</div>
 							</div>
 						</div>
