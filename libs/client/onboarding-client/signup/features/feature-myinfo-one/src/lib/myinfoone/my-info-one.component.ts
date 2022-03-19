@@ -11,6 +11,7 @@ import {
 	SignupState,
 } from '@tempus/client/onboarding-client/signup/data-access';
 import { Store } from '@ngrx/store';
+import { V } from '@angular/cdk/keycodes';
 
 @Component({
 	selector: 'tempus-my-info-one',
@@ -21,8 +22,27 @@ export class MyInfoOneComponent implements OnInit {
 	myInfoForm = this.fb.group({
 		firstName: ['', Validators.required],
 		lastName: ['', Validators.required],
-		phoneNumber: ['', Validators.required],
-		email: ['', [Validators.required, Validators.email]],
+		// Taken from https://stackoverflow.com/questions/16699007/regular-expression-to-match-standard-10-digit-phone-number
+		phoneNumber: ['', [Validators.required, Validators.pattern(/^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/)]],
+		// Taken from https://stackoverflow.com/questions/3809401/what-is-a-good-regular-expression-to-match-a-url
+		linkedInLink: [
+			'',
+			Validators.pattern(
+				/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/,
+			),
+		],
+		githubLink: [
+			'',
+			Validators.pattern(
+				/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/,
+			),
+		],
+		otherLink: [
+			'',
+			Validators.pattern(
+				/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/,
+			),
+		],
 		country: ['', Validators.required],
 		state: ['', Validators.required],
 		city: ['', Validators.required],
@@ -60,8 +80,10 @@ export class MyInfoOneComponent implements OnInit {
 				this.myInfoForm.setValue({
 					firstName: createResourceDto.firstName,
 					lastName: createResourceDto.lastName,
-					email: createResourceDto.email,
 					phoneNumber: createResourceDto.phoneNumber,
+					linkedInLink: createResourceDto.linkedInLink,
+					githubLink: createResourceDto.githubLink,
+					otherLink: createResourceDto.otherLink,
 					country: createResourceDto.location.country,
 					state: createResourceDto.location.province,
 					city: createResourceDto.location.city,
@@ -85,7 +107,9 @@ export class MyInfoOneComponent implements OnInit {
 					firstName: this.myInfoForm.get('firstName')?.value,
 					lastName: this.myInfoForm.get('lastName')?.value,
 					phoneNumber: this.myInfoForm.get('phoneNumber')?.value,
-					email: this.myInfoForm.get('email')?.value,
+					linkedInLink: this.myInfoForm.get('linkedInLink')?.value,
+					githubLink: this.myInfoForm.get('githubLink')?.value,
+					otherLink: this.myInfoForm.get('otherLink')?.value,
 					location: {
 						city: this.myInfoForm.get('city')?.value,
 						province: this.myInfoForm.get('state')?.value,

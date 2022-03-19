@@ -5,6 +5,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { RouterModule } from '@angular/router';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatGridListModule } from '@angular/material/grid-list';
+import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
 import { ClientSharedUiComponentsPresentationalModule } from '@tempus/client/shared/ui-components/presentational';
@@ -21,6 +22,7 @@ import { MyInfoThreeComponent } from './myinfothree/my-info-three.component';
 		MatGridListModule,
 		FlexLayoutModule,
 		MatCardModule,
+		MatFormFieldModule,
 		MatChipsModule,
 		MatButtonModule,
 		MatTooltipModule,

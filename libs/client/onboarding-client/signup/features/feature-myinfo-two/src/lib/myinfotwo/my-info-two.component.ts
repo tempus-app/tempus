@@ -3,7 +3,8 @@ import { Country, State } from 'country-state-city';
 import { filter, switchMap, take, takeUntil, tap } from 'rxjs/operators';
 import { InputType } from '@tempus/client/shared/ui-components/input';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { checkEnteredDates } from '@tempus/shared/util';
 import { Store } from '@ngrx/store';
 import {
 	createWorkExperienceDetails,
@@ -62,16 +63,19 @@ export class MyInfoTwoComponent implements OnInit {
 				const workExperienceArray = this.totalWorkExperience;
 				createResourceDto.experiences.forEach(experience => {
 					workExperienceArray.push(
-						this.fb.group({
-							title: [experience.title, Validators.required],
-							company: [experience.company, Validators.required],
-							country: [experience.location.country, Validators.required],
-							state: [experience.location.province, Validators.required],
-							city: [experience.location.city, Validators.required],
-							startDate: [experience.startDate, Validators.required],
-							endDate: [experience.endDate, Validators.required],
-							description: [experience.description, Validators.required],
-						}),
+						this.fb.group(
+							{
+								title: [experience.title, Validators.required],
+								company: [experience.company, Validators.required],
+								country: [experience.location.country, Validators.required],
+								state: [experience.location.province, Validators.required],
+								city: [experience.location.city, Validators.required],
+								startDate: [experience.startDate, Validators.required],
+								endDate: [experience.endDate, Validators.required],
+								description: [experience.description, Validators.required],
+							},
+							{ validators: checkEnteredDates() },
+						),
 					);
 				});
 				this.myInfoForm.patchValue({
@@ -88,16 +92,19 @@ export class MyInfoTwoComponent implements OnInit {
 			const lastElement = this.numberWorkSections[this.numberWorkSections.length - 1];
 			this.numberWorkSections.push(lastElement + 1);
 		}
-		const workExperience = this.fb.group({
-			title: ['', Validators.required],
-			company: ['', Validators.required],
-			country: ['', Validators.required],
-			state: ['', Validators.required],
-			city: ['', Validators.required],
-			startDate: ['', Validators.required],
-			endDate: ['', Validators.required],
-			description: ['', Validators.required],
-		});
+		const workExperience = this.fb.group(
+			{
+				title: ['', Validators.required],
+				company: ['', Validators.required],
+				country: ['', Validators.required],
+				state: ['', Validators.required],
+				city: ['', Validators.required],
+				startDate: ['', Validators.required],
+				endDate: ['', Validators.required],
+				description: ['', Validators.required],
+			},
+			{ validators: checkEnteredDates() },
+		);
 
 		this.totalWorkExperience.push(workExperience);
 	}

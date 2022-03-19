@@ -5,6 +5,11 @@
 	@include cmp.info-title(100%, 50px);
 }
 
+.error-container {
+	width: 90%;
+	text-align: left;
+}
+
 .section-header {
 	border-bottom: 2px solid abs.$primary-300;
 }
@@ -49,4 +54,8 @@ tempus-dropdown {
 
 tempus-text-area {
 	width: 95%;
+}
+
+mat-error {
+	padding-bottom: 2em;
 }

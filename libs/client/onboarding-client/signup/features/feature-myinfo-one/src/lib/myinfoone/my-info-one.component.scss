@@ -5,6 +5,11 @@
 	@include cmp.info-title(100%, 50px);
 }
 
+.error-container {
+	width: 90%;
+	text-align: left;
+}
+
 .button-container {
 	display: flex;
 	flex-direction: row;
@@ -31,4 +36,8 @@ tempus-search-box {
 tempus-dropdown {
 	text-align: center;
 	width: 90%;
+}
+
+mat-error {
+	padding-bottom: 2em;
 }

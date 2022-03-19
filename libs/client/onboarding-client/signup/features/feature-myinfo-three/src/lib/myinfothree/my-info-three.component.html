@@ -18,6 +18,7 @@
 			</div>
 			<div fxFlex="5"></div>
 		</div>
+
 		<div fxFlex>
 			<div fxFlex="5"></div>
 			<tempus-card>
@@ -32,6 +33,7 @@
 			</tempus-card>
 			<div fxFlex="5"></div>
 		</div>
+
 		<div *ngFor="let numEducation of qualifications.controls; let index = index">
 			<div fxFlex="5"></div>
 			<tempus-card>
@@ -52,7 +54,8 @@
 								<h3 class="mat-h3" color="primary">Qualification {{ index + 1 }}</h3>
 							</div>
 						</div>
-						<div fxLayout="column" fxLayoutGap="30px">
+
+						<div fxLayout="column" fxLayoutGap="10px">
 							<div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxFlex="33%" class="block-2">
 								<div
 									fxFlex.gt-sm="50%"
@@ -64,7 +67,7 @@
 								>
 									<tempus-text-input
 										id="institution-{{ index }}"
-										placeholder="Institution"
+										placeholder="Institution *"
 										cssClass="secondary"
 										[control]="$any(numEducation).get('institution')"
 									>
@@ -80,12 +83,56 @@
 								>
 									<tempus-text-input
 										id="field-{{ index }}"
-										placeholder="Field"
+										placeholder="Field *"
 										cssClass="secondary"
 										[control]="$any(numEducation).get('field')"
 									></tempus-text-input>
 								</div>
 							</div>
+
+							<div fxLayout.gt-sm="row" fxLayout.lt-md="column">
+								<div
+									fxFlex.gt-sm="50%"
+									fxFlex.lt-md="50%"
+									fxLayoutAlign="start center"
+									fxLayoutAlign.lt-md="center center"
+									fxFlexFill
+									class="grid-item"
+								>
+									<div class="error-container">
+										<mat-error
+											class="mat-body-2"
+											*ngIf="
+												$any(numEducation).get('institution').invalid &&
+												($any(numEducation).get('institution').touched || $any(numEducation).get('institution').dirty)
+											"
+										>
+											Please enter an institution name.
+										</mat-error>
+									</div>
+								</div>
+								<div
+									fxFlex.gt-sm="50%"
+									fxFlex.lt-md="50%"
+									fxLayoutAlign="end center"
+									fxLayoutAlign.lt-md="center center"
+									fxFlexFill
+									class="grid-item"
+								>
+									<div class="error-container">
+										<mat-error
+											class="mat-body-2"
+											*ngIf="
+												$any(numEducation).get('field').invalid &&
+												($any(numEducation).get('field').touched || $any(numEducation).get('field').dirty)
+											"
+										>
+											Please enter a qualification field.
+										</mat-error>
+									</div>
+								</div>
+							</div>
+
 							<div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxFlex="33%" class="block-2">
 								<div
 									fxFlex.gt-sm="50%"
@@ -130,6 +177,7 @@
 									></tempus-text-input>
 								</div>
 							</div>
+
 							<div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxFlex="33%" class="block-2">
 								<div
 									fxFlex.gt-sm="50%"
@@ -163,6 +211,54 @@
 										[control]="$any(numEducation).get('endDate')"
 									></tempus-text-input>
 								</div>
+							</div>
+
+							<div fxLayout.gt-sm="row" fxLayout.lt-md="column">
+								<div
+									fxFlex.gt-sm="50%"
+									fxFlex.lt-md="50%"
+									fxLayoutAlign="start center"
+									fxLayoutAlign.lt-md="center center"
+									fxFlexFill
+									class="grid-item"
+								>
+									<div class="error-container">
+										<mat-error
+											class="mat-body-2"
+											*ngIf="
+												$any(numEducation).get('startDate').invalid &&
+												($any(numEducation).get('startDate').touched || $any(numEducation).get('startDate').dirty)
+											"
+										>
+											Please enter a valid start date.
+										</mat-error>
+									</div>
+								</div>
+								<div
+									fxFlex.gt-sm="50%"
+									fxFlex.lt-md="50%"
+									fxLayoutAlign="end center"
+									fxLayoutAlign.lt-md="center center"
+									fxFlexFill
+									class="grid-item"
+								>
+									<div class="error-container">
+										<mat-error
+											class="mat-body-2"
+											*ngIf="
+												$any(numEducation).get('endDate').invalid &&
+												($any(numEducation).get('endDate').touched || $any(numEducation).get('endDate').dirty)
+											"
+										>
+											Please enter a valid end date.
+										</mat-error>
+									</div>
+								</div>
+							</div>
+							<div>
+								<mat-error class="mat-body-2" *ngIf="$any(numEducation).errors?.['dateError']">
+									Please make sure the start date is before the end date.
+								</mat-error>
 							</div>
 						</div>
 					</form>
@@ -208,7 +304,7 @@
 								<h3 class="mat-h3">Certfication {{ index + 1 }}</h3>
 							</div>
 						</div>
-						<div fxLayout="column" fxLayoutGap="30px">
+						<div fxLayout="column" fxLayoutGap="10px">
 							<div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxFlex="33%" class="block-2">
 								<div
 									fxFlex.gt-sm="50%"
@@ -220,7 +316,7 @@
 								>
 									<tempus-text-input
 										id="certifying-authority-{{ index }}"
-										placeholder="Certifying Authority"
+										placeholder="Certifying Authority *"
 										cssClass="secondary"
 										[control]="$any(numCertification).get('certifyingAuthority')"
 									>
@@ -236,12 +332,57 @@
 								>
 									<tempus-text-input
 										id="title-{{ index }}"
-										placeholder="Title"
+										placeholder="Title *"
 										cssClass="secondary"
 										[control]="$any(numCertification).get('title')"
 									></tempus-text-input>
 								</div>
 							</div>
+
+							<div fxLayout.gt-sm="row" fxLayout.lt-md="column">
+								<div
+									fxFlex.gt-sm="50%"
+									fxFlex.lt-md="50%"
+									fxLayoutAlign="start center"
+									fxLayoutAlign.lt-md="center center"
+									fxFlexFill
+									class="grid-item"
+								>
+									<div class="error-container">
+										<mat-error
+											class="mat-body-2"
+											*ngIf="
+												$any(numCertification).get('certifyingAuthority').invalid &&
+												($any(numCertification).get('certifyingAuthority').touched ||
+													$any(numCertification).get('certifyingAuthority').dirty)
+											"
+										>
+											Please enter a certifying authority.
+										</mat-error>
+									</div>
+								</div>
+								<div
+									fxFlex.gt-sm="50%"
+									fxFlex.lt-md="50%"
+									fxLayoutAlign="end center"
+									fxLayoutAlign.lt-md="center center"
+									fxFlexFill
+									class="grid-item"
+								>
+									<div class="error-container">
+										<mat-error
+											class="mat-body-2"
+											*ngIf="
+												$any(numCertification).get('title').invalid &&
+												($any(numCertification).get('title').touched || $any(numCertification).get('title').dirty)
+											"
+										>
+											Please enter a title.
+										</mat-error>
+									</div>
+								</div>
+							</div>
+
 							<div>
 								<tempus-text-area
 									id="summary-{{ index }}"

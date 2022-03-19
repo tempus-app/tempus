@@ -3,7 +3,7 @@
 		<div fxFlex>
 			<div fxFlex="5"></div>
 			<div class="info-title">
-				<h2 class="mat-h2">Name</h2>
+				<h2 class="mat-h2">Personal Information</h2>
 			</div>
 			<div fxFlex="5"></div>
 		</div>
@@ -17,7 +17,7 @@
 								<div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="center center" fxFlexFill class="grid-item">
 									<tempus-text-input
 										[inputType]="InputType.TEXT"
-										placeholder="First Name"
+										placeholder="First Name *"
 										cssClass="secondary"
 										[control]="$any(myInfoForm).get('firstName')"
 									>
@@ -26,7 +26,7 @@
 								<div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="center center" fxFlexFill class="grid-item">
 									<tempus-text-input
 										[inputType]="InputType.TEXT"
-										placeholder="Last Name"
+										placeholder="Last Name *"
 										cssClass="secondary"
 										[control]="$any(myInfoForm).get('lastName')"
 									>
@@ -35,20 +35,54 @@
 							</div>
 							<div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxFlex="33%" class="block-2">
 								<div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="center center" fxFlexFill class="grid-item">
+									<div class="error-container">
+										<mat-error
+											class="mat-body-2"
+											*ngIf="
+												$any(myInfoForm).get('firstName').invalid &&
+												($any(myInfoForm).get('firstName').touched || $any(myInfoForm).get('firstName').dirty)
+											"
+										>
+											Please enter a first name.
+										</mat-error>
+									</div>
+								</div>
+								<div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="center center" fxFlexFill class="grid-item">
+									<div class="error-container">
+										<mat-error
+											class="mat-body-2"
+											*ngIf="
+												$any(myInfoForm).get('lastName').invalid &&
+												($any(myInfoForm).get('lastName').touched || $any(myInfoForm).get('lastName').dirty)
+											"
+										>
+											Please enter a last name.
+										</mat-error>
+									</div>
+								</div>
+							</div>
+							<div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxFlex="33%" class="block-2">
+								<div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="center center" fxFlexFill class="grid-item">
 									<tempus-text-input
-										placeholder="Phone Number"
+										placeholder="Phone Number *"
 										cssClass="secondary"
 										[control]="$any(myInfoForm).get('phoneNumber')"
 									></tempus-text-input>
 								</div>
+							</div>
+							<div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxFlex="33%" class="block-2">
 								<div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="center center" fxFlexFill class="grid-item">
-									<tempus-text-input
-										[inputType]="InputType.EMAIL"
-										placeholder="Email"
-										cssClass="secondary"
-										[control]="$any(myInfoForm).get('email')"
-									>
-									</tempus-text-input>
+									<div class="error-container">
+										<mat-error
+											class="mat-body-2"
+											*ngIf="
+												$any(myInfoForm).get('phoneNumber').invalid &&
+												($any(myInfoForm).get('phoneNumber').touched || $any(myInfoForm).get('phoneNumber').dirty)
+											"
+										>
+											Please enter a valid phone number.
+										</mat-error>
+									</div>
 								</div>
 							</div>
 						</div>
@@ -57,6 +91,100 @@
 			</tempus-card>
 			<div fxFlex="5"></div>
 		</div>
+
+		<div fxFlex>
+			<div fxFlex="5"></div>
+			<div class="info-title">
+				<h2 class="mat-h2">Links</h2>
+			</div>
+			<div fxFlex="5"></div>
+		</div>
+
+		<div>
+			<div fxFlex="5"></div>
+			<tempus-card>
+				<mat-card-content>
+					<form>
+						<div fxLayout="column" fxLayoutGap="10px">
+							<div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxFlex="33%" class="block-2">
+								<div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="center center" fxFlexFill class="grid-item">
+									<tempus-text-input
+										[inputType]="InputType.TEXT"
+										placeholder="LinkedIn "
+										cssClass="secondary"
+										[control]="$any(myInfoForm).get('linkedInLink')"
+									>
+									</tempus-text-input>
+								</div>
+								<div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="center center" fxFlexFill class="grid-item">
+									<tempus-text-input
+										[inputType]="InputType.TEXT"
+										placeholder="Github"
+										cssClass="secondary"
+										[control]="$any(myInfoForm).get('githubLink')"
+									>
+									</tempus-text-input>
+								</div>
+							</div>
+							<div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxFlex="33%" class="block-2">
+								<div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="center center" fxFlexFill class="grid-item">
+									<div class="error-container">
+										<mat-error
+											class="mat-body-2"
+											*ngIf="
+												$any(myInfoForm).get('linkedInLink').invalid &&
+												($any(myInfoForm).get('linkedInLink').touched || $any(myInfoForm).get('linkedInLink').dirty)
+											"
+										>
+											Please enter a valid URL.
+										</mat-error>
+									</div>
+								</div>
+								<div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="center center" fxFlexFill class="grid-item">
+									<div class="error-container">
+										<mat-error
+											class="mat-body-2"
+											*ngIf="
+												$any(myInfoForm).get('githubLink').invalid &&
+												($any(myInfoForm).get('githubLink').touched || $any(myInfoForm).get('githubLink').dirty)
+											"
+										>
+											Please enter a valid URL.
+										</mat-error>
+									</div>
+								</div>
+							</div>
+							<div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxFlex="33%" class="block-2">
+								<div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="center center" fxFlexFill class="grid-item">
+									<tempus-text-input
+										placeholder="Other"
+										cssClass="secondary"
+										[control]="$any(myInfoForm).get('otherLink')"
+									></tempus-text-input>
+								</div>
+							</div>
+							<div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxFlex="33%" class="block-2">
+								<div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="center center" fxFlexFill class="grid-item">
+									<div class="error-container">
+										<mat-error
+											class="mat-body-2"
+											*ngIf="
+												$any(myInfoForm).get('otherLink').invalid &&
+												($any(myInfoForm).get('otherLink').touched || $any(myInfoForm).get('otherLink').dirty)
+											"
+										>
+											Please enter a valid URL.
+										</mat-error>
+									</div>
+								</div>
+							</div>
+						</div>
+					</form>
+				</mat-card-content>
+			</tempus-card>
+			<div fxFlex="5"></div>
+		</div>
+
 		<div fxFlex>
 			<div fxFlex="5"></div>
 			<div class="info-title">
@@ -92,16 +220,52 @@
 							</div>
 							<div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxFlex="33%" class="block-2">
 								<div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="center center" fxFlexFill class="grid-item">
-									<tempus-text-input placeholder="City" cssClass="secondary" [control]="$any(myInfoForm).get('city')">
+									<div class="error-container">
+										<mat-error
+											class="mat-body-2"
+											*ngIf="
+												$any(myInfoForm).get('country').invalid &&
+												($any(myInfoForm).get('country').touched || $any(myInfoForm).get('country').dirty)
+											"
+										>
+											Please enter a valid country.
+										</mat-error>
+									</div>
+								</div>
+								<div fxFlex.gt-sm="50%" fxFlex.lt-m d="50%" fxLayoutAlign="center center" fxFlexFill class="grid-item">
+									<div class="error-container">
+										<mat-error
+											class="mat-body-2"
+											*ngIf="
+												$any(myInfoForm).get('state').invalid &&
+												($any(myInfoForm).get('state').touched || $any(myInfoForm).get('state').dirty)
+											"
+										>
+											Please enter a valid state.
+										</mat-error>
+									</div>
+								</div>
+							</div>
+							<div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxFlex="33%" class="block-2">
+								<div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="center center" fxFlexFill class="grid-item">
+									<tempus-text-input placeholder="City *" cssClass="secondary" [control]="$any(myInfoForm).get('city')">
 									</tempus-text-input>
 								</div>
-								<div
-									fxFlex.gt-sm="50%"
-									fxFlex.lt-md="50%"
-									fxLayoutAlign="center center"
-									fxFlexFill
-									class="grid-item"
-								></div>
+							</div>
+							<div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxFlex="33%" class="block-2">
+								<div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="center center" fxFlexFill class="grid-item">
+									<div class="error-container">
+										<mat-error
+											class="mat-body-2"
+											*ngIf="
+												$any(myInfoForm).get('city').invalid &&
+												($any(myInfoForm).get('city').touched || $any(myInfoForm).get('city').dirty)
+											"
+										>
+											Please enter a valid city.
+										</mat-error>
+									</div>
+								</div>
 							</div>
 						</div>
 					</form>
@@ -123,18 +287,3 @@
 		</div>
 	</div>
 </ng-container>
-
-<!-- <mat-grid-tile colspan="{{ cols }}" *ngIf="
-							$any(myInfoForm).get('firstName').invalid && ($any(myInfoForm).get('firstName').touched || $any(myInfoForm).get('firstName').dirty)
-							">
-								<mat-error class="mat-body-2" >
-									You must enter your first name.
-								</mat-error>
-							</mat-grid-tile>
-							<mat-grid-tile colspan="{{ cols }}" *ngIf="
-							$any(myInfoForm).get('lastName').invalid && ($any(myInfoForm).get('lastName').touched || $any(myInfoForm).get('lastName').dirty)
-							">
-								<mat-error class="mat-body-2" >
-								You must enter your first name.
-								</mat-error>
-							</mat-grid-tile> -->

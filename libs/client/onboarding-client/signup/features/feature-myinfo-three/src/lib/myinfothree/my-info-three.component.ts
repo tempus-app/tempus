@@ -5,7 +5,16 @@ import { InputType } from '@tempus/client/shared/ui-components/input';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormArray, FormBuilder, Validators } from '@angular/forms';
+import { checkEnteredDates } from '@tempus/shared/util';
+import {
+	AbstractControl,
+	FormArray,
+	FormBuilder,
+	FormGroup,
+	ValidationErrors,
+	ValidatorFn,
+	Validators,
+} from '@angular/forms';
 import { Store } from '@ngrx/store';
 import {
 	createTrainingAndSkillDetails,
@@ -85,8 +94,8 @@ export class MyInfoThreeComponent implements OnInit {
 				// eslint-disable-next-line @typescript-eslint/dot-notation
 				const educationsArray = this.qualifications;
 				createResourceDto.educations.forEach(education => {
-					educationsArray.push(
-						this.fb.group({
+					const educationForm = this.fb.group(
+						{
 							institution: [education.institution, Validators.required],
 							field: [education.degree, Validators.required],
 							country: [education.location.country],
@@ -94,8 +103,10 @@ export class MyInfoThreeComponent implements OnInit {
 							city: [education.location.city],
 							startDate: [education.startDate, Validators.required],
 							endDate: [education.endDate, Validators.required],
-						}),
+						},
+						{ validators: checkEnteredDates() },
 					);
+					educationsArray.push(educationForm);
 				});
 
 				const certificationsArray = this.certifications;
@@ -129,15 +140,18 @@ export class MyInfoThreeComponent implements OnInit {
 			this.numberEducationSections.push(lastElement + 1);
 		}
 
-		const qualification = this.fb.group({
-			institution: ['', Validators.required],
-			field: ['', Validators.required],
-			country: [''],
-			state: [''],
-			city: [''],
-			startDate: ['', Validators.required],
-			endDate: ['', Validators.required],
-		});
+		const qualification = this.fb.group(
+			{
+				institution: ['', Validators.required],
+				field: ['', Validators.required],
+				country: [''],
+				state: [''],
+				city: [''],
+				startDate: ['', Validators.required],
+				endDate: ['', Validators.required],
+			},
+			{ validators: checkEnteredDates() },
+		);
 
 		this.qualifications.push(qualification);
 	}

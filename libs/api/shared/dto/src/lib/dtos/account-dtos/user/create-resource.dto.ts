@@ -18,6 +18,15 @@ export class CreateResourceDto extends CreateUserDto implements ICreateResourceD
 	phoneNumber: string;
 
 	@ApiProperty()
+	linkedInLink: string;
+
+	@ApiProperty()
+	githubLink: string;
+
+	@ApiProperty()
+	otherLink: string;
+
+	@ApiProperty()
 	title: string;
 
 	@ApiProperty()
@@ -55,6 +64,9 @@ export class CreateResourceDto extends CreateUserDto implements ICreateResourceD
 		roles: RoleType[],
 		phoneNumber: string,
 		title: string,
+		linkedInLink: string,
+		githubLink: string,
+		otherLink: string,
 		location: CreateLocationDto,
 		experiences: CreateExperienceDto[],
 		educations: CreateEducationDto[],
@@ -78,5 +90,8 @@ export class CreateResourceDto extends CreateUserDto implements ICreateResourceD
 		this.educationsSummary = educationsSummary;
 		this.profileSummary = profileSummary;
 		this.skillsSummary = skillsSummary;
+		this.linkedInLink = linkedInLink;
+		this.githubLink = githubLink;
+		this.otherLink = otherLink;
 	}
 }
