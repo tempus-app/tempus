@@ -1,5 +1,5 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { MatIconModule } from '@angular/material/icon';
+import { Component, Input, OnInit } from '@angular/core';
+import { ButtonType } from './button-type-enum';
 
 @Component({
 	selector: 'tempus-button',
@@ -7,7 +7,7 @@ import { MatIconModule } from '@angular/material/icon';
 	styleUrls: ['./button.component.scss'],
 })
 export class ButtonComponent implements OnInit {
-	@Input() type = '';
+	@Input() buttonType?: ButtonType = undefined;
 
 	@Input() label = 'placeholder';
 
@@ -16,25 +16,25 @@ export class ButtonComponent implements OnInit {
 	@Input() color = 'primary';
 
 	setButtonType() {
-		this.label = this.type !== '' ? this.type : this.label;
-		switch (this.type) {
-			case 'edit': {
+		this.label = this.buttonType != undefined ? this.buttonType : this.label;
+		switch (this.buttonType) {
+			case ButtonType.EDIT: {
 				this.icon = 'edit';
 				break;
 			}
-			case 'filter': {
+			case ButtonType.FILTER: {
 				this.icon = 'filter_alt';
 				break;
 			}
-			case 'invite': {
+			case ButtonType.INVITE: {
 				this.icon = 'mail_outline';
 				break;
 			}
-			case 'download view': {
+			case ButtonType.DOWNLOAD_VIEW: {
 				this.icon = 'cloud_download';
 				break;
 			}
-			case 'create new view': {
+			case ButtonType.CREATE_NEW_VIEW: {
 				this.icon = 'add';
 				break;
 			}

@@ -29,16 +29,16 @@
 ### Button: tempus-button
 
 - wrapper around material UI button, with predefined style options for convenience:
-  - `type`: [filter, invite, edit, download view, create new view]
+  - `buttonType`: ButtonType [FILTER, EDIT, INVITE, CREATE_NEW_VIEW, DOWNLOAD_VIEW]
   - `color`: [primary, accent, warn]
   - `label`: button label string
   - `icon`: mat-icon name
 
-Using `type`:
+Using `buttonType`:
 
 ```
 <tempus-button
-  type="invite"
+  [buttonType]="ButtonType.FILTER"
   color="primary"
   (click)="someEvent()">
 </tempus-button>
@@ -52,6 +52,18 @@ Custom styling:
   color="warn"
   icon="cancel">
 </tempus-button>
+```
+
+### Sidebar: tempus-sidebar
+
+- side navbar based off of material UI sidenav
+  - `userType`: UserType [RESOURCE, OWNER]
+  - `[tabs]`: array of tab labels (excluding logout)
+  - `name`: user name
+  - `email`: user email
+
+```
+<tempus-sidebar [userType]="UserType.OWNER">
 ```
 
 ### Stepper: tempus-stepper

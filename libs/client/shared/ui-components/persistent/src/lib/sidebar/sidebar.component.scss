@@ -50,6 +50,14 @@ mat-button-toggle {
 	padding: none;
 }
 
+.mat-icon {
+	color: abs.$primary-800;
+	display: flex;
+	position: relative;
+	align-self: center;
+	justify-content: center !important;
+}
+
 #icon {
 	width: 4em;
 	height: 4em;
@@ -68,12 +76,31 @@ mat-button-toggle {
 	text-indent: 0.25em;
 	font-weight: 900 !important;
 }
+
 p {
 	color: abs.$primary-800;
-	margin: none;
+	text-align: center;
+}
+h3 {
+	color: abs.$primary-800;
+	font-size: 1.25em !important;
+	display: flex;
+	align-self: center;
+	text-align: center;
+	margin: none !important;
+	justify-content: center;
 }
 h2 {
 	font-size: 1.5em !important;
 	color: abs.$primary-800;
 	margin: 0.25em;
+}
+
+#logout-container {
+	position: relative;
+	display: flex;
+	flex-direction: row;
+	gap: 1em;
+	justify-content: center;
+	align-items: center;
 }

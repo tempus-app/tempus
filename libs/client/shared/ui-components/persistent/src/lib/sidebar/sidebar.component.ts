@@ -1,4 +1,5 @@
 import { Component, Input, Output, OnInit, EventEmitter } from '@angular/core';
+import { UserType } from './sidebar-type-enum';
 
 @Component({
 	selector: 'tempus-sidebar',
@@ -7,10 +8,12 @@ import { Component, Input, Output, OnInit, EventEmitter } from '@angular/core';
 })
 export class SidebarComponent implements OnInit {
 	ngOnInit(): void {
+		this.setUserTabs();
 		this.getInitials(this.name);
 		this.isVisible = true;
 	}
 
+	@Input() userType?: UserType = undefined;
 	@Input() tabs: string[] = [];
 	@Input() name: string = 'Placeholder Name';
 	@Input() email: string = 'Placeholder email';
@@ -18,6 +21,14 @@ export class SidebarComponent implements OnInit {
 
 	initials = '';
 	isVisible = true;
+
+	setUserTabs() {
+		if (this.userType === UserType.OWNER) {
+			this.tabs = ['Manage Resources', 'Pending Approvals'];
+		} else if (this.userType === UserType.RESOURCE) {
+			this.tabs = ['Primary View', 'My Views', 'My Projects'];
+		}
+	}
 
 	selectedTab(tab: string) {
 		this.selectTab.emit(tab);
