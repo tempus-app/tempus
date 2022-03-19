@@ -42,11 +42,19 @@ export class ReviewComponent implements OnInit {
 
 	email = '';
 
+	phoneNumber = '';
+
 	country = '';
 
 	state = '';
 
 	city = '';
+
+	linkedInLink = '';
+
+	githubLink = '';
+
+	otherLink = '';
 
 	workExperiences: Array<ICreateExperienceDto> = [];
 
@@ -70,9 +78,13 @@ export class ReviewComponent implements OnInit {
 				this.firstName = resData?.firstName;
 				this.lastName = resData?.lastName;
 				this.email = resData?.email;
+				this.phoneNumber = resData?.phoneNumber;
 				this.country = resData?.location?.country;
 				this.state = resData?.location?.province;
 				this.city = resData?.location?.city;
+				this.linkedInLink = resData?.linkedInLink;
+				this.githubLink = resData?.githubLink;
+				this.otherLink = resData?.otherLink;
 				this.skillsSummary = resData?.skillsSummary;
 				this.educationsSummary = resData?.educationsSummary;
 				this.experiencesSummary = resData?.experiencesSummary;
@@ -101,6 +113,14 @@ export class ReviewComponent implements OnInit {
 
 	formatDate(startDate: Date, endDate: Date) {
 		return formatDateRange(new Date(startDate), new Date(endDate));
+	}
+
+	formatAddress(country: string, state: string, city: string) {
+		return city + ', ' + state + ', ' + country;
+	}
+
+	formatName(first: string, last: string) {
+		return first + ' ' + last;
 	}
 
 	backStep() {

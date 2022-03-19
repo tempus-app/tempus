@@ -7,109 +7,90 @@
 			</div>
 			<div fxFlex="5"></div>
 		</div>
-		<div>
+
+		<div fxFlex="90">
+			<div fxFlex="5"></div>
 			<div fxLayout="column" fxLayoutGap="30px">
-				<div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxFlex="33%" class="block-2">
-					<div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="center center" fxFlexFill class="grid-item">
-						<tempus-card>
-							<div class="card-header">
-								<h3 class="mat-h3 section-header">Legal Name</h3>
-								<p class="mat-body-1">{{ firstName }}</p>
+				<div class="grid-item">
+					<tempus-card>
+						<div fxLayout="column">
+							<div fxLayout.lt-sm="column" fxLayout="row" fxLayoutGap="30px">
+								<div fxFlex>
+									<h3 class="mat-h3 section-header">Personal Information</h3>
+									<p class="mat-body-1"><strong>Name: </strong>{{ formatName(firstName, lastName) }}</p>
+									<p class="mat-body-1"><strong>Address: </strong>{{ formatAddress(country, state, city) }}</p>
+									<p class="mat-body-1"><strong>Phone number: </strong>{{ phoneNumber }}</p>
+									<p class="mat-body-1"><strong>Email: </strong>{{ email }}</p>
+								</div>
+								<div fxFlex>
+									<h3 class="mat-h3 section-header">Links</h3>
+									<p class="mat-body-1"><strong>Resume: </strong>resume.pdf</p>
+									<p class="mat-body-1"><strong>LinkedIn: </strong>{{ linkedInLink }}</p>
+									<p class="mat-body-1"><strong>GitHub: </strong>{{ githubLink }}</p>
+									<p class="mat-body-1"><strong>Other: </strong>{{ otherLink }}</p>
+								</div>
 							</div>
-							<div class="card-header">
-								<h3 class="mat-h3 section-header">Family Name</h3>
-								<p class="mat-body-1">{{ lastName }}</p>
+							<div fxFlex>
+								<p class="mat-body-1">
+									Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur dapibus ligula elit, vitae
+									tincidunt tortor mattis sit amet. Nulla facilisi. Ut et nisl in ex auctor tincidunt quis non metus.
+									Nulla commodo vel dolor a ullamcorper. In hac habitasse platea dictumst. Donec vulputate leo sit amet
+									ipsum fringilla, non ultricies libero scelerisque. Nullam ut odio vitae tellus vulputate interdum.
+									Pellentesque condimentum hendrerit lacus in vulputate. Duis lacinia auctor nisi, ut semper nibh
+									viverra a. Nullam fringilla leo at nunc luctus, at congue tellus blandit.
+								</p>
 							</div>
-							<div class="card-header">
-								<h3 class="mat-h3 section-header">Email</h3>
-								<p class="mat-body-1">{{ email }}</p>
-							</div>
-						</tempus-card>
-					</div>
-					<div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="center center" fxFlexFill class="grid-item">
-						<tempus-card>
-							<div class="card-header">
-								<h3 class="mat-h3 section-header">Address</h3>
-								<p class="mat-body-1">{{ country }}</p>
-								<p class="mat-body-1">{{ state }}</p>
-								<p class="mat-body-1">{{ city }}</p>
-							</div>
-						</tempus-card>
-					</div>
+						</div>
+					</tempus-card>
 				</div>
 			</div>
+			<div fxFlex="5"></div>
 		</div>
+
 		<div fxFlex>
 			<div fxFlex="5"></div>
 			<div class="info-title">
-				<h2 class="mat-h2">Work Experience</h2>
-			</div>
-			<div fxFlex="5"></div>
-		</div>
-		<div *ngFor="let workExperience of workExperiences">
-			<div fxFlex="5"></div>
-			<div fxFlex="90">
+				<div class="mat-h2 card-title">Work Experience</div>
 				<tempus-card>
-					<div fxLayout="column" fxLayoutGap="30px">
-						<div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxFlex="33%" class="block-2">
-							<div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="start start" fxFlexFill class="grid-item">
-								<div class="left-card-header">
-									<h3 class="mat-h3">{{ workExperience.company }}</h3>
-									<p class="mat-body-2">{{ workExperience.title }}</p>
+					<div class="mat-body-1">{{ experiencesSummary }}</div>
+					<div *ngFor="let workExperience of workExperiences">
+						<div class="section-block">
+							<div fxLayout="column">
+								<div fxFlex="30" fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxFlex="33%">
+									<div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="start start" fxFlexFill class="grid-item">
+										<div class="left-card-header">
+											<h3 class="mat-h3">{{ workExperience.company }}</h3>
+											<p class="mat-body-2">{{ workExperience.title }}</p>
+											<p class="mat-body-2">
+												{{
+													formatAddress(
+														workExperience.location.country,
+														workExperience.location.province,
+														workExperience.location.city
+													)
+												}}
+											</p>
+										</div>
+									</div>
+									<div
+										class="right-align"
+										fxFlex.gt-sm="50%"
+										fxFlex.lt-md="50%"
+										fxLayoutAlign="end end"
+										fxLayoutAlign.lt-md="start start"
+										fxFlexFill
+										fxLayout="column"
+										class="grid-item"
+									>
+										<div fxFill>
+											<p class="mat-body-2 right-align">
+												{{ formatDate(workExperience.startDate, workExperience.endDate) }}
+											</p>
+										</div>
+									</div>
 								</div>
-							</div>
-							<div
-								fxFlex.gt-sm="50%"
-								fxFlex.lt-md="50%"
-								fxLayoutAlign="end end"
-								fxLayoutAlign.lt-md="start start"
-								fxFlexFill
-								class="grid-item"
-							>
-								<div>
-									<p class="mat-body-2">{{ formatDate(workExperience.startDate, workExperience.endDate) }}</p>
-								</div>
-							</div>
-						</div>
-						<div>
-							<div *ngFor="let desc of workExperience.description">
-								<p class="mat-body-2">{{ desc }}</p>
-							</div>
-						</div>
-					</div>
-				</tempus-card>
-			</div>
-			<div fxFlex="5"></div>
-		</div>
-		<div fxFlex>
-			<div fxFlex="5"></div>
-			<div class="info-title">
-				<h2 class="mat-h2">Education</h2>
-			</div>
-			<div fxFlex="5"></div>
-		</div>
-		<div *ngFor="let education of educations">
-			<div fxFlex="5"></div>
-			<div fxFlex="90">
-				<tempus-card>
-					<div fxLayout="column" fxLayoutGap="30px">
-						<div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxFlex="33%" class="block-2">
-							<div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="start start" fxFlexFill class="grid-item">
-								<div class="left-card-header">
-									<h3 class="mat-h3">{{ education.institution }}</h3>
-									<p class="mat-body-2">{{ education.degree }}</p>
-								</div>
-							</div>
-							<div
-								fxFlex.gt-sm="50%"
-								fxFlex.lt-md="50%"
-								fxLayoutAlign="end end"
-								fxLayoutAlign.lt-md="start start"
-								fxFlexFill
-								class="grid-item"
-							>
-								<div>
-									<p class="mat-body-2">{{ formatDate(education.startDate, education.endDate) }}</p>
+								<div *ngFor="let desc of workExperience.description">
+									<p class="mat-body-1">{{ desc }}</p>
 								</div>
 							</div>
 						</div>
@@ -118,20 +99,97 @@
 			</div>
 			<div fxFlex="5"></div>
 		</div>
+
 		<div fxFlex>
 			<div fxFlex="5"></div>
 			<div class="info-title">
-				<h2 class="mat-h2">Skills</h2>
+				<div class="mat-h2 card-title">Education and Training</div>
+				<tempus-card>
+					<div class="mat-body-1">{{ educationsSummary }}</div>
+					<div *ngFor="let education of educations">
+						<div class="section-block">
+							<div fxLayout="column">
+								<div fxFlex="30" fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxFlex="33%">
+									<div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="start start" fxFlexFill class="grid-item">
+										<div class="left-card-header">
+											<h3 class="mat-h3">{{ education.institution }}</h3>
+											<p class="mat-body-2">{{ education.degree }}</p>
+											<p class="mat-body-2">
+												{{
+													formatAddress(
+														education.location.country,
+														education.location.province,
+														education.location.city
+													)
+												}}
+											</p>
+										</div>
+									</div>
+									<div
+										class="right-align"
+										fxFlex.gt-sm="50%"
+										fxFlex.lt-md="50%"
+										fxLayoutAlign="end end"
+										fxLayoutAlign.lt-md="start start"
+										fxFlexFill
+										fxLayout="column"
+										class="grid-item"
+									>
+										<div fxFill>
+											<p class="mat-body-2 right-align">
+												{{ formatDate(education.startDate, education.endDate) }}
+											</p>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</tempus-card>
 			</div>
 			<div fxFlex="5"></div>
 		</div>
-		<div>
+
+		<div fxFlex>
+			<div fxFlex="5"></div>
+			<div class="info-title">
+				<div class="mat-h2 card-title">Certifications</div>
+				<tempus-card>
+					<div *ngFor="let certification of certifications">
+						<div class="section-block">
+							<h3 class="mat-h3">{{ certification.institution }}</h3>
+							<p class="mat-body-2">{{ certification.title }}</p>
+							<p class="mat-body-1">
+								{{ certification.summary }}
+							</p>
+						</div>
+					</div>
+				</tempus-card>
+			</div>
+			<div fxFlex="5"></div>
+		</div>
+
+		<div fxFlex>
+			<div fxFlex="5"></div>
+			<div class="mat-h2 card-title">Skills</div>
+			<div fxFlex="5"></div>
+		</div>
+		<div fxFlex>
 			<div fxFlex="5"></div>
 			<div fxFlex="90">
 				<tempus-card>
-					<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutAlign="space-between center" fxLayoutGap="16px grid">
-						<div *ngFor="let skill of skills">
-							<tempus-chip [removable]="false" [content]="skill"></tempus-chip>
+					<div fxLayout="column" fxLayoutGap="10px">
+						<div fxFlex class="mat-body-1">{{ skillsSummary }}</div>
+						<div
+							fxFlex
+							fxLayout="row wrap"
+							fxLayout.lt-sm="column"
+							fxLayoutAlign="space-between center"
+							fxLayoutGap="16px grid"
+						>
+							<div *ngFor="let skill of skills">
+								<tempus-chip [removable]="false" [content]="skill"></tempus-chip>
+							</div>
 						</div>
 					</div>
 				</tempus-card>

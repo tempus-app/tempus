@@ -1,5 +1,15 @@
 @use 'abstracts/helper' as abs;
 
+// font-weight for chrome
+* {
+	-webkit-font-smoothing: antialiased;
+	color: abs.$primary-800;
+}
+
+#name {
+	font-size: 1.5em;
+}
+
 .container {
 	display: block;
 	text-align: center;
@@ -23,6 +33,11 @@
 	text-align: left;
 }
 
+.section-block {
+	border-top: 2px solid abs.$primary-300;
+	margin: 1.5em 0;
+	padding: 1.5em 0;
+}
 .section-header {
 	border-bottom: 2px solid abs.$primary-300;
 }
@@ -35,11 +50,18 @@
 	bottom: 0;
 }
 
+.card-title {
+	font-size: 1.5em;
+}
+
 tempus-card {
 	width: 80%;
 	height: 100%;
-	margin: 2em auto;
-	text-align: center;
+	text-align: left;
+}
+
+.right-align {
+	text-align: right;
 }
 
 .button-container {
