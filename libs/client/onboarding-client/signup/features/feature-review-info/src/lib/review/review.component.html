@@ -24,7 +24,7 @@
 								</div>
 								<div fxFlex>
 									<h3 class="mat-h3 section-header">Links</h3>
-									<p class="mat-body-1"><strong>Resume: </strong>resume.pdf</p>
+									<p class="mat-body-1"><strong>Resume: </strong></p>
 									<p class="mat-body-1"><strong>LinkedIn: </strong>{{ linkedInLink }}</p>
 									<p class="mat-body-1"><strong>GitHub: </strong>{{ githubLink }}</p>
 									<p class="mat-body-1"><strong>Other: </strong>{{ otherLink }}</p>
@@ -52,6 +52,9 @@
 			<div class="info-title">
 				<div class="mat-h2 card-title">Work Experience</div>
 				<tempus-card>
+					<div *ngIf="workExperiences.length == 0">
+						<p class="mat-body-2">You have not entered information for this section.</p>
+					</div>
 					<div class="mat-body-1">{{ experiencesSummary }}</div>
 					<div *ngFor="let workExperience of workExperiences">
 						<div class="section-block">
@@ -105,6 +108,9 @@
 			<div class="info-title">
 				<div class="mat-h2 card-title">Education and Training</div>
 				<tempus-card>
+					<div *ngIf="educations.length == 0">
+						<p class="mat-body-2">You have not entered information for this section.</p>
+					</div>
 					<div class="mat-body-1">{{ educationsSummary }}</div>
 					<div *ngFor="let education of educations">
 						<div class="section-block">
@@ -155,6 +161,9 @@
 			<div class="info-title">
 				<div class="mat-h2 card-title">Certifications</div>
 				<tempus-card>
+					<div *ngIf="certifications.length == 0">
+						<p class="mat-body-2">You have not entered information for this section.</p>
+					</div>
 					<div *ngFor="let certification of certifications">
 						<div class="section-block">
 							<h3 class="mat-h3">{{ certification.institution }}</h3>
@@ -178,6 +187,9 @@
 			<div fxFlex="5"></div>
 			<div fxFlex="90">
 				<tempus-card>
+					<div *ngIf="skills.length == 0">
+						<p class="mat-body-2">You have not entered information for this section.</p>
+					</div>
 					<div fxLayout="column" fxLayoutGap="10px">
 						<div fxFlex class="mat-body-1">{{ skillsSummary }}</div>
 						<div
