@@ -3,7 +3,6 @@
 // font-weight for chrome
 * {
 	-webkit-font-smoothing: antialiased;
-	color: abs.$primary-800;
 }
 
 #name {
@@ -54,14 +53,13 @@
 	font-size: 1.5em;
 }
 
-tempus-card {
+::ng-deep tempus-card {
 	width: 80%;
 	height: 100%;
 	text-align: left;
-}
-
-.right-align {
-	text-align: right;
+	.mat-card {
+		color: abs.$primary-800 !important;
+	}
 }
 
 .button-container {

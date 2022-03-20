@@ -53,7 +53,7 @@
 						<div class="section-block">
 							<div fxLayout="column">
 								<div fxFlex="30" fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxFlex="33%">
-									<div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="start start" fxFlexFill class="grid-item">
+									<div fxFlex.gt-sm="75%" fxFlex.lt-md="75%" fxLayoutAlign="start start" fxFlexFill class="grid-item">
 										<div class="left-card-header">
 											<h3 class="mat-h3">{{ workExperience.company }}</h3>
 											<p class="mat-body-2">{{ workExperience.title }}</p>
@@ -69,9 +69,8 @@
 										</div>
 									</div>
 									<div
-										class="right-align"
-										fxFlex.gt-sm="50%"
-										fxFlex.lt-md="50%"
+										fxFlex.gt-sm="25%"
+										fxFlex.lt-md="25%"
 										fxLayoutAlign="end end"
 										fxLayoutAlign.lt-md="start start"
 										fxFlexFill
@@ -79,7 +78,7 @@
 										class="grid-item"
 									>
 										<div fxFill>
-											<p class="mat-body-2 right-align">
+											<p class="mat-body-2">
 												{{ formatDate(workExperience.startDate, workExperience.endDate) }}
 											</p>
 										</div>
@@ -109,11 +108,11 @@
 						<div class="section-block">
 							<div fxLayout="column">
 								<div fxFlex="30" fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxFlex="33%">
-									<div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="start start" fxFlexFill class="grid-item">
+									<div fxFlex.gt-sm="75%" fxFlex.lt-md="75%" fxLayoutAlign="start start" fxFlexFill class="grid-item">
 										<div class="left-card-header">
 											<h3 class="mat-h3">{{ education.institution }}</h3>
 											<p class="mat-body-2">{{ education.degree }}</p>
-											<p class="mat-body-2">
+											<p *ngIf="education.location.country !== ''" class="mat-body-2">
 												{{
 													formatAddress(
 														education.location.country,
@@ -125,9 +124,8 @@
 										</div>
 									</div>
 									<div
-										class="right-align"
-										fxFlex.gt-sm="50%"
-										fxFlex.lt-md="50%"
+										fxFlex.gt-sm="25%"
+										fxFlex.lt-md="25%"
 										fxLayoutAlign="end end"
 										fxLayoutAlign.lt-md="start start"
 										fxFlexFill
@@ -135,7 +133,7 @@
 										class="grid-item"
 									>
 										<div fxFill>
-											<p class="mat-body-2 right-align">
+											<p class="mat-body-2">
 												{{ formatDate(education.startDate, education.endDate) }}
 											</p>
 										</div>
@@ -183,15 +181,9 @@
 					<div *ngIf="skills.length == 0">
 						<p class="mat-body-2">You have not entered information for this section.</p>
 					</div>
-					<div fxLayout="column" fxLayoutGap="10px">
+					<div fxLayout="column" fxLayoutGap="30px">
 						<div fxFlex class="mat-body-1">{{ skillsSummary }}</div>
-						<div
-							fxFlex
-							fxLayout="row wrap"
-							fxLayout.lt-sm="column"
-							fxLayoutAlign="space-between center"
-							fxLayoutGap="16px grid"
-						>
+						<div fxFlex fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutAlign="start" fxLayoutGap="16px grid">
 							<div *ngFor="let skill of skills">
 								<tempus-chip [removable]="false" [content]="skill"></tempus-chip>
 							</div>
