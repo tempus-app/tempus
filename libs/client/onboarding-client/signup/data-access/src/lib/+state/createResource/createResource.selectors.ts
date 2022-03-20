@@ -6,6 +6,9 @@ import { ResourceState, RESOURCE_FEATURE_KEY } from './createResource.reducers';
 export const selectResource = createSelector(selectSignupState, (state: SignupState) => state[RESOURCE_FEATURE_KEY]);
 
 export const selectResourceData = createSelector(selectResource, (state: ResourceState) => state.createResourceData);
+
+export const selectUploadedResume = createSelector(selectResource, (state: ResourceState) => state.uploadedResume);
+
 export const selectResourceStatus = createSelector(selectResource, (state: ResourceState) => {
 	return {
 		status: state.status,
@@ -24,7 +27,7 @@ export const selectUserDetailsCreated = createSelector(
 	selectResource,
 	(state: ResourceState) => state.userDetailsCreated,
 );
-export const slectResumeUploadCreated = createSelector(
+export const selectResumeUploadCreated = createSelector(
 	selectResource,
 	(state: ResourceState) => state.resumeUploadCreated,
 );

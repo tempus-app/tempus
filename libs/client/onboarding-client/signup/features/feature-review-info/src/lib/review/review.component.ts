@@ -19,6 +19,7 @@ import {
 	resetLinkState,
 	selectResourceData,
 	selectResourceStatus,
+	selectUploadedResume,
 	SignupState,
 } from '@tempus/client/onboarding-client/signup/data-access';
 import { Store } from '@ngrx/store';
@@ -70,6 +71,8 @@ export class ReviewComponent implements OnInit {
 
 	loading = false;
 
+	resume: File | null = null;
+
 	constructor(private router: Router, private route: ActivatedRoute, private store: Store<SignupState>) {}
 
 	ngOnInit(): void {
@@ -96,6 +99,9 @@ export class ReviewComponent implements OnInit {
 				this.certifications = resData?.certifications;
 				this.educations = resData?.educations;
 			});
+		this.store.select(selectUploadedResume).subscribe(resumeData => {
+			this.resume = resumeData;
+		});
 		this.store.select(selectResourceStatus).subscribe(reqStatusData => {
 			if (reqStatusData.status === AsyncRequestState.LOADING) {
 				this.loading = true;

@@ -24,10 +24,16 @@
 								</div>
 								<div fxFlex>
 									<h3 class="mat-h3 section-header">Links</h3>
-									<p class="mat-body-1"><strong>Resume: </strong></p>
-									<p *ngIf="linkedInLink !== ''" class="mat-body-1"><strong>LinkedIn: </strong>{{ linkedInLink }}</p>
-									<p *ngIf="githubLink !== ''" class="mat-body-1"><strong>GitHub: </strong>{{ githubLink }}</p>
-									<p *ngIf="otherLink !== ''" class="mat-body-1"><strong>Other: </strong>{{ otherLink }}</p>
+									<p class="mat-body-1"><strong>Resume: </strong>{{ resume?.name }}</p>
+									<p *ngIf="linkedInLink !== ''" class="mat-body-1">
+										<strong>LinkedIn: </strong><a href="{{ linkedInLink }}">{{ linkedInLink }}</a>
+									</p>
+									<p *ngIf="githubLink !== ''" class="mat-body-1">
+										<strong>GitHub: </strong><a href="{{ githubLink }}">{{ githubLink }}</a>
+									</p>
+									<p *ngIf="otherLink !== ''" class="mat-body-1">
+										<strong>Other: </strong><a href="{{ otherLink }}">{{ otherLink }}</a>
+									</p>
 								</div>
 							</div>
 							<div fxFlexFill>
@@ -45,7 +51,7 @@
 			<div class="info-title">
 				<div class="mat-h2 card-title">Work Experience</div>
 				<tempus-card>
-					<div *ngIf="workExperiences.length == 0">
+					<div *ngIf="workExperiences.length == 0 && experiencesSummary == ''">
 						<p class="mat-body-2">You have not entered information for this section.</p>
 					</div>
 					<div class="mat-body-1">{{ experiencesSummary }}</div>
@@ -100,7 +106,7 @@
 			<div class="info-title">
 				<div class="mat-h2 card-title">Education and Training</div>
 				<tempus-card>
-					<div *ngIf="educations.length == 0">
+					<div *ngIf="educations.length == 0 && educationsSummary == ''">
 						<p class="mat-body-2">You have not entered information for this section.</p>
 					</div>
 					<div class="mat-body-1">{{ educationsSummary }}</div>
@@ -178,7 +184,7 @@
 			<div fxFlex="5"></div>
 			<div fxFlex="90">
 				<tempus-card>
-					<div *ngIf="skills.length == 0">
+					<div *ngIf="skills.length == 0 && skillsSummary == ''">
 						<p class="mat-body-2">You have not entered information for this section.</p>
 					</div>
 					<div fxLayout="column" fxLayoutGap="30px">
