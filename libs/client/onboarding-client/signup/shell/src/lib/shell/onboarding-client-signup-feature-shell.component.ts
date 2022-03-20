@@ -14,7 +14,7 @@ import { Subject, takeUntil } from 'rxjs';
 	styleUrls: ['./onboarding-client-signup-feature-shell.component.scss'],
 })
 export class SignupShellComponent implements OnInit, OnDestroy {
-	steps = ['Signup', 'Upload Resume', 'My Information 1', 'My Information 2', 'My Information 3', 'Review'];
+	steps = ['Signup', 'Upload Resume', 'My Information', 'Work Experience', 'Education', 'Review'];
 
 	links = ['credentials', 'uploadresume', 'myinfoone', 'myinfotwo', 'myinfothree', 'review'];
 
