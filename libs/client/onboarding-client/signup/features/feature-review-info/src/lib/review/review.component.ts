@@ -40,6 +40,8 @@ export class ReviewComponent implements OnInit {
 
 	skillsSummary = '';
 
+	profileSummary = '';
+
 	email = '';
 
 	phoneNumber = '';
@@ -85,6 +87,7 @@ export class ReviewComponent implements OnInit {
 				this.linkedInLink = resData?.linkedInLink;
 				this.githubLink = resData?.githubLink;
 				this.otherLink = resData?.otherLink;
+				this.profileSummary = resData?.profileSummary;
 				this.skillsSummary = resData?.skillsSummary;
 				this.educationsSummary = resData?.educationsSummary;
 				this.experiencesSummary = resData?.experiencesSummary;

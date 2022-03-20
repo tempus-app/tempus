@@ -44,7 +44,7 @@ export const resourceReducer = createReducer(
 	})),
 	on(
 		ResourceActions.createUserDetails,
-		(state, { firstName, lastName, phoneNumber, linkedInLink, githubLink, otherLink, location }) => ({
+		(state, { firstName, lastName, phoneNumber, linkedInLink, githubLink, otherLink, location, profileSummary }) => ({
 			...state,
 			userDetailsCreated: true,
 			createResourceData: {
@@ -56,6 +56,7 @@ export const resourceReducer = createReducer(
 				githubLink,
 				otherLink,
 				location,
+				profileSummary,
 			},
 		}),
 	),

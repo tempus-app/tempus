@@ -8,9 +8,9 @@
 			<div fxFlex="5"></div>
 		</div>
 
-		<div fxFlex="90">
+		<div fxFlex>
 			<div fxFlex="5"></div>
-			<div fxLayout="column" fxLayoutGap="30px">
+			<div fxFlex="90" fxLayout="column" fxLayoutGap="30px">
 				<div class="grid-item">
 					<tempus-card>
 						<div fxLayout="column">
@@ -25,20 +25,13 @@
 								<div fxFlex>
 									<h3 class="mat-h3 section-header">Links</h3>
 									<p class="mat-body-1"><strong>Resume: </strong></p>
-									<p class="mat-body-1"><strong>LinkedIn: </strong>{{ linkedInLink }}</p>
-									<p class="mat-body-1"><strong>GitHub: </strong>{{ githubLink }}</p>
-									<p class="mat-body-1"><strong>Other: </strong>{{ otherLink }}</p>
+									<p *ngIf="linkedInLink !== ''" class="mat-body-1"><strong>LinkedIn: </strong>{{ linkedInLink }}</p>
+									<p *ngIf="githubLink !== ''" class="mat-body-1"><strong>GitHub: </strong>{{ githubLink }}</p>
+									<p *ngIf="otherLink !== ''" class="mat-body-1"><strong>Other: </strong>{{ otherLink }}</p>
 								</div>
 							</div>
-							<div fxFlex>
-								<p class="mat-body-1">
-									Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur dapibus ligula elit, vitae
-									tincidunt tortor mattis sit amet. Nulla facilisi. Ut et nisl in ex auctor tincidunt quis non metus.
-									Nulla commodo vel dolor a ullamcorper. In hac habitasse platea dictumst. Donec vulputate leo sit amet
-									ipsum fringilla, non ultricies libero scelerisque. Nullam ut odio vitae tellus vulputate interdum.
-									Pellentesque condimentum hendrerit lacus in vulputate. Duis lacinia auctor nisi, ut semper nibh
-									viverra a. Nullam fringilla leo at nunc luctus, at congue tellus blandit.
-								</p>
+							<div fxFlexFill>
+								<p class="mat-body-1">{{ profileSummary }}</p>
 							</div>
 						</div>
 					</tempus-card>

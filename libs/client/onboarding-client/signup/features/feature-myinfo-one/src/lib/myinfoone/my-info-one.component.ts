@@ -22,6 +22,7 @@ export class MyInfoOneComponent implements OnInit {
 	myInfoForm = this.fb.group({
 		firstName: ['', Validators.required],
 		lastName: ['', Validators.required],
+		profileSummary: '',
 		// Taken from https://stackoverflow.com/questions/16699007/regular-expression-to-match-standard-10-digit-phone-number
 		phoneNumber: ['', [Validators.required, Validators.pattern(/^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/)]],
 		// Taken from https://stackoverflow.com/questions/3809401/what-is-a-good-regular-expression-to-match-a-url
@@ -87,6 +88,7 @@ export class MyInfoOneComponent implements OnInit {
 					country: createResourceDto.location.country,
 					state: createResourceDto.location.province,
 					city: createResourceDto.location.city,
+					profileSummary: createResourceDto.profileSummary,
 				});
 			});
 	}
@@ -115,6 +117,7 @@ export class MyInfoOneComponent implements OnInit {
 						province: this.myInfoForm.get('state')?.value,
 						country: this.myInfoForm.get('country')?.value,
 					},
+					profileSummary: this.myInfoForm.get('profileSummary')?.value,
 				}),
 			);
 			this.router.navigate(['../myinfotwo'], { relativeTo: this.route });

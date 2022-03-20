@@ -25,6 +25,7 @@ export const createUserDetails = createAction(
 		githubLink: string;
 		otherLink: string;
 		location: ICreateLocationDto;
+		profileSummary: string;
 	}>(),
 );
 export const createWorkExperienceDetails = createAction(
