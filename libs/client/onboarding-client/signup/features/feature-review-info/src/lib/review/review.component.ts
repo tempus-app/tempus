@@ -132,6 +132,17 @@ export class ReviewComponent implements OnInit {
 		return first + ' ' + last;
 	}
 
+	downloadResume() {
+		if (this.resume !== null) {
+			let url = URL.createObjectURL(this.resume);
+			let link = document.createElement('a');
+			link.href = url;
+			link.download = this.resume?.name || 'download';
+			link.click();
+			URL.revokeObjectURL(url);
+		}
+	}
+
 	backStep() {
 		this.router.navigate(['../myinfothree'], { relativeTo: this.route });
 	}

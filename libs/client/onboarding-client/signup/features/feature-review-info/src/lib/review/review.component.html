@@ -24,7 +24,10 @@
 								</div>
 								<div fxFlex>
 									<h3 class="mat-h3 section-header">Links</h3>
-									<p class="mat-body-1"><strong>Resume: </strong>{{ resume?.name }}</p>
+									<p class="mat-body-1">
+										<strong>Resume: </strong>
+										<a href="javascript:;" (click)="downloadResume()">{{ resume?.name }}</a>
+									</p>
 									<p *ngIf="linkedInLink !== ''" class="mat-body-1">
 										<strong>LinkedIn: </strong><a href="{{ linkedInLink }}">{{ linkedInLink }}</a>
 									</p>
