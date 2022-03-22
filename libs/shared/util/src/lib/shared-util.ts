@@ -17,7 +17,7 @@ export function formatDateRange(startDate: Date, endDate: Date): string {
 	];
 
 	const startMonth = months[startDate.getMonth()];
-	const endMonth = months[startDate.getMonth()];
+	const endMonth = months[endDate.getMonth()];
 
 	return `${startMonth}. ${startDate.getFullYear()} - ${endMonth}. ${endDate.getFullYear()}`;
 }

@@ -85,6 +85,15 @@
 									</div>
 								</div>
 							</div>
+							<div fxLayout="row" fxLayoutAlign="center start" fxFlex="33%" class="block-2">
+								<div fxFlex="95" class="grid-item">
+									<tempus-text-area
+										id="profile-summary"
+										placeholder="Personal summary"
+										[control]="$any(myInfoForm).get('profileSummary')"
+									></tempus-text-area>
+								</div>
+							</div>
 						</div>
 					</form>
 				</mat-card-content>

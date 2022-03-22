@@ -19,6 +19,7 @@ import {
 	resetLinkState,
 	selectResourceData,
 	selectResourceStatus,
+	selectUploadedResume,
 	SignupState,
 } from '@tempus/client/onboarding-client/signup/data-access';
 import { Store } from '@ngrx/store';
@@ -40,13 +41,23 @@ export class ReviewComponent implements OnInit {
 
 	skillsSummary = '';
 
+	profileSummary = '';
+
 	email = '';
+
+	phoneNumber = '';
 
 	country = '';
 
 	state = '';
 
 	city = '';
+
+	linkedInLink = '';
+
+	githubLink = '';
+
+	otherLink = '';
 
 	workExperiences: Array<ICreateExperienceDto> = [];
 
@@ -60,6 +71,8 @@ export class ReviewComponent implements OnInit {
 
 	loading = false;
 
+	resume: File | null = null;
+
 	constructor(private router: Router, private route: ActivatedRoute, private store: Store<SignupState>) {}
 
 	ngOnInit(): void {
@@ -70,9 +83,14 @@ export class ReviewComponent implements OnInit {
 				this.firstName = resData?.firstName;
 				this.lastName = resData?.lastName;
 				this.email = resData?.email;
+				this.phoneNumber = resData?.phoneNumber;
 				this.country = resData?.location?.country;
 				this.state = resData?.location?.province;
 				this.city = resData?.location?.city;
+				this.linkedInLink = resData?.linkedInLink;
+				this.githubLink = resData?.githubLink;
+				this.otherLink = resData?.otherLink;
+				this.profileSummary = resData?.profileSummary;
 				this.skillsSummary = resData?.skillsSummary;
 				this.educationsSummary = resData?.educationsSummary;
 				this.experiencesSummary = resData?.experiencesSummary;
@@ -81,6 +99,9 @@ export class ReviewComponent implements OnInit {
 				this.certifications = resData?.certifications;
 				this.educations = resData?.educations;
 			});
+		this.store.select(selectUploadedResume).subscribe(resumeData => {
+			this.resume = resumeData;
+		});
 		this.store.select(selectResourceStatus).subscribe(reqStatusData => {
 			if (reqStatusData.status === AsyncRequestState.LOADING) {
 				this.loading = true;
@@ -101,6 +122,25 @@ export class ReviewComponent implements OnInit {
 
 	formatDate(startDate: Date, endDate: Date) {
 		return formatDateRange(new Date(startDate), new Date(endDate));
+	}
+
+	formatAddress(country: string, state: string, city: string) {
+		return city + ', ' + state + ', ' + country;
+	}
+
+	formatName(first: string, last: string) {
+		return first + ' ' + last;
+	}
+
+	downloadResume() {
+		if (this.resume !== null) {
+			let url = URL.createObjectURL(this.resume);
+			let link = document.createElement('a');
+			link.href = url;
+			link.download = this.resume?.name || 'download';
+			link.click();
+			URL.revokeObjectURL(url);
+		}
 	}
 
 	backStep() {

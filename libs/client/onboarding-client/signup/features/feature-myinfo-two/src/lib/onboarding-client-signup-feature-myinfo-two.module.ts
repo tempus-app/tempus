@@ -9,6 +9,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatGridListModule } from '@angular/material/grid-list';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { RouterModule } from '@angular/router';
 import { MyInfoTwoComponent } from './myinfotwo/my-info-two.component';
 
@@ -24,6 +25,7 @@ import { MyInfoTwoComponent } from './myinfotwo/my-info-two.component';
 		MatFormFieldModule,
 		FlexLayoutModule,
 		ReactiveFormsModule,
+		MatTooltipModule,
 		RouterModule.forChild([
 			{
 				path: '',
