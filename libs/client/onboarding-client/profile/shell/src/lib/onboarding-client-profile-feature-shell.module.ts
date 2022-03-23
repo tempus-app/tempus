@@ -13,7 +13,7 @@ const routes: Routes = [
 			{
 				path: '',
 				pathMatch: 'full',
-				canLoad: [AuthGuard],
+				//canLoad: [AuthGuard],
 				loadChildren: () =>
 					import('@tempus/onboarding-client/profile/feature-profile').then(
 						m => m.OnboardingClientProfileFeatureProfileModule,

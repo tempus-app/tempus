@@ -1,1 +1,6 @@
 @use 'abstracts/helper' as abs;
+
+// font-weight for chrome
+* {
+	-webkit-font-smoothing: antialiased;
+}
