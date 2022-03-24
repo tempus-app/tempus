@@ -8,6 +8,10 @@ import { RouterModule } from '@angular/router';
 import { ClientSharedUiComponentsInputModule } from '@tempus/client/shared/ui-components/input';
 import { ClientSharedUiComponentsPresentationalModule } from '@tempus/client/shared/ui-components/presentational';
 import { PersonalInformationComponent } from './personal-information/personal-information.component';
+import { WorkExperienceComponent } from './work-experience/work-experience.component';
+import { EducationComponent } from './education/education.component';
+import { CertificationsComponent } from './certifications/certifications.component';
+import { SkillsComponent } from './skills/skills.component';
 
 @NgModule({
 	imports: [
@@ -20,7 +24,19 @@ import { PersonalInformationComponent } from './personal-information/personal-in
 		ClientSharedUiComponentsInputModule,
 		ClientSharedUiComponentsPresentationalModule,
 	],
-	declarations: [PersonalInformationComponent],
-	exports: [PersonalInformationComponent],
+	declarations: [
+		PersonalInformationComponent,
+		WorkExperienceComponent,
+		EducationComponent,
+		CertificationsComponent,
+		SkillsComponent,
+	],
+	exports: [
+		PersonalInformationComponent,
+		WorkExperienceComponent,
+		EducationComponent,
+		CertificationsComponent,
+		SkillsComponent,
+	],
 })
-export class OnboardingClientSharedPresentationalResourceDisplayModule {}
+export class ClientSharedPresentationalResourceDisplayModule {}
