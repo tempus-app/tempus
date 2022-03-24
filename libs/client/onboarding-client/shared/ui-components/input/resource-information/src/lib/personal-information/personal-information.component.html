@@ -1,0 +1,77 @@
+<ng-container>
+	<tempus-card>
+		<form>
+			<div fxLayout="column" fxLayoutGap="10px">
+				<div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxFlex="33%" class="block-2">
+					<div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="center center" fxFlexFill class="grid-item">
+						<tempus-search-box
+							[options]="countries"
+							placeholder="Country"
+							cssClass="secondary"
+							(optionSelect)="updateStateOptions($event)"
+							[control]="$any(myInfoForm).get('country')"
+						>
+						</tempus-search-box>
+					</div>
+					<div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="center center" fxFlexFill class="grid-item">
+						<tempus-dropdown
+							[options]="states"
+							label="State"
+							cssClass="secondary"
+							[control]="$any(myInfoForm).get('state')"
+						></tempus-dropdown>
+					</div>
+				</div>
+				<div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxFlex="33%" class="block-2">
+					<div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="center center" fxFlexFill class="grid-item">
+						<div class="error-container">
+							<mat-error
+								class="mat-body-2"
+								*ngIf="
+									$any(myInfoForm).get('country').invalid &&
+									($any(myInfoForm).get('country').touched || $any(myInfoForm).get('country').dirty)
+								"
+							>
+								Please enter a valid country.
+							</mat-error>
+						</div>
+					</div>
+					<div fxFlex.gt-sm="50%" fxFlex.lt-m d="50%" fxLayoutAlign="center center" fxFlexFill class="grid-item">
+						<div class="error-container">
+							<mat-error
+								class="mat-body-2"
+								*ngIf="
+									$any(myInfoForm).get('state').invalid &&
+									($any(myInfoForm).get('state').touched || $any(myInfoForm).get('state').dirty)
+								"
+							>
+								Please enter a valid state.
+							</mat-error>
+						</div>
+					</div>
+				</div>
+				<div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxFlex="33%" class="block-2">
+					<div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="center center" fxFlexFill class="grid-item">
+						<tempus-text-input placeholder="City *" cssClass="secondary" [control]="$any(myInfoForm).get('city')">
+						</tempus-text-input>
+					</div>
+				</div>
+				<div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxFlex="33%" class="block-2">
+					<div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="center center" fxFlexFill class="grid-item">
+						<div class="error-container">
+							<mat-error
+								class="mat-body-2"
+								*ngIf="
+									$any(myInfoForm).get('city').invalid &&
+									($any(myInfoForm).get('city').touched || $any(myInfoForm).get('city').dirty)
+								"
+							>
+								Please enter a valid city.
+							</mat-error>
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
+	</tempus-card>
+</ng-container>
