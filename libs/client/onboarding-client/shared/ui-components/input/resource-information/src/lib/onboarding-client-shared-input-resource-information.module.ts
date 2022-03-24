@@ -24,17 +24,17 @@ import { SkillsComponent } from './skills/skills.component';
 	],
 	declarations: [
 		PersonalInformationComponent,
-		// WorkExperienceComponent,
-		// EducationComponent,
-		// CertificationsComponent,
-		// SkillsComponent,
+		WorkExperienceComponent,
+		EducationComponent,
+		CertificationsComponent,
+		SkillsComponent,
 	],
 	exports: [
 		PersonalInformationComponent,
-		// WorkExperienceComponent,
-		// EducationComponent,
-		// CertificationsComponent,
-		// SkillsComponent,
+		WorkExperienceComponent,
+		EducationComponent,
+		CertificationsComponent,
+		SkillsComponent,
 	],
 })
 export class ClientSharedInputResourceInformationModule {}

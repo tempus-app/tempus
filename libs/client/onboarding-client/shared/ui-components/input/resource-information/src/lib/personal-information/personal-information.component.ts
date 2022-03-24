@@ -1,19 +1,10 @@
 import { Component, Output, EventEmitter, OnInit } from '@angular/core';
-import { Country, State } from 'country-state-city';
-import { filter, switchMap, take, takeUntil, tap } from 'rxjs/operators';
 import { FormBuilder, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
 import { InputType } from '@tempus/client/shared/ui-components/input';
-import {
-	createUserDetails,
-	selectResourceData,
-	selectUserDetailsCreated,
-	SignupState,
-} from '@tempus/client/onboarding-client/signup/data-access';
-import { Store } from '@ngrx/store';
+import { Country, State } from 'country-state-city';
 
 @Component({
-	selector: 'tempus-resource-info-education',
+	selector: 'tempus-resource-info-personal-information',
 	templateUrl: './personal-information.component.html',
 	styleUrls: ['./personal-information.component.scss'],
 })
@@ -48,8 +39,6 @@ export class PersonalInformationComponent implements OnInit {
 		city: ['', Validators.required],
 	});
 
-	InputType = InputType;
-
 	countries: string[] = Country.getAllCountries().map(country => {
 		return country.name;
 	});
@@ -58,38 +47,16 @@ export class PersonalInformationComponent implements OnInit {
 		return state.name;
 	});
 
+	InputType = InputType;
+
+	@Output() formGroup = new EventEmitter();
+
 	@Output() formIsValid = new EventEmitter<boolean>();
 
-	constructor(
-		private fb: FormBuilder,
-		private router: Router,
-		private route: ActivatedRoute,
-		private store: Store<SignupState>,
-	) {}
+	constructor(private fb: FormBuilder) {}
 
-	ngOnInit() {
-		this.store
-			.select(selectUserDetailsCreated)
-			.pipe(
-				take(1),
-				filter(created => created),
-				switchMap(_ => this.store.select(selectResourceData)),
-				take(1),
-			)
-			.subscribe(createResourceDto => {
-				this.myInfoForm.setValue({
-					firstName: createResourceDto.firstName,
-					lastName: createResourceDto.lastName,
-					phoneNumber: createResourceDto.phoneNumber,
-					linkedInLink: createResourceDto.linkedInLink,
-					githubLink: createResourceDto.githubLink,
-					otherLink: createResourceDto.otherLink,
-					country: createResourceDto.location.country,
-					state: createResourceDto.location.province,
-					city: createResourceDto.location.city,
-					profileSummary: createResourceDto.profileSummary,
-				});
-			});
+	ngOnInit(): void {
+		this.formGroup.emit(this.myInfoForm);
 	}
 
 	updateStateOptions(inputtedCountry: string) {
