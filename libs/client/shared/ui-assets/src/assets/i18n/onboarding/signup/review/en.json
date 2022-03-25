@@ -1,0 +1,34 @@
+{
+	"onboardingSignupReview": {
+		"title": "Review",
+		"noInfoSection": "You have not entered information for this section",
+		"initialInfo": {
+			"personalInfo": {
+				"title": "Personal Information",
+				"name": "Name: ",
+				"address": "Address: ",
+				"phoneNumber": "Phone Number: ",
+				"email": "Email: "
+			},
+			"links": {
+				"title": "Links",
+				"resume": "Resume: ",
+				"linkedIn": "LinkedIn: ",
+				"github": "Github: ",
+				"other": "Other: "
+			}
+		},
+		"workExperience": {
+			"title": "Work Experience"
+		},
+		"educationAndTraining": {
+			"title": "Education and Training"
+		},
+		"certifications": {
+			"title": "Certifications"
+		},
+		"skills": {
+			"title": "Skills"
+		}
+	}
+}

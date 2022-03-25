@@ -11,7 +11,14 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { RouterModule } from '@angular/router';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { HttpClient } from '@angular/common/http';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { MyInfoTwoComponent } from './myinfotwo/my-info-two.component';
+
+function createTranslateLoader(http: HttpClient) {
+	return new TranslateHttpLoader(http, './assets/i18n/onboarding/signup/myinfotwo/', '.json');
+}
 
 @NgModule({
 	imports: [
@@ -33,6 +40,15 @@ import { MyInfoTwoComponent } from './myinfotwo/my-info-two.component';
 				component: MyInfoTwoComponent,
 			},
 		]),
+		TranslateModule.forChild({
+			loader: {
+				provide: TranslateLoader,
+				useFactory: createTranslateLoader,
+				deps: [HttpClient],
+			},
+			extend: true,
+			isolate: false,
+		}),
 	],
 	declarations: [MyInfoTwoComponent],
 })

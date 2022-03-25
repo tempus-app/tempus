@@ -6,7 +6,14 @@ import { ClientSharedUiComponentsPersistentModule } from '@tempus/client/shared/
 import { OnboardingClientSharedDataAccessModule } from '@tempus/client/onboarding-client/shared/data-access';
 import { ValidLinkGuard } from '@tempus/client/onboarding-client/signup/guards';
 import { OnboardingClientSignupDataAccessModule } from '@tempus/client/onboarding-client/signup/data-access';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { HttpClient } from '@angular/common/http';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { SignupShellComponent } from './shell/onboarding-client-signup-feature-shell.component';
+
+function createTranslateLoader(http: HttpClient) {
+	return new TranslateHttpLoader(http, './assets/i18n/onboarding/signup/', '.json');
+}
 
 const routes: Routes = [
 	{
@@ -74,6 +81,15 @@ const routes: Routes = [
 		RouterModule.forChild(routes),
 		ClientSharedUiComponentsPersistentModule,
 		MatButtonModule,
+		TranslateModule.forChild({
+			loader: {
+				provide: TranslateLoader,
+				useFactory: createTranslateLoader,
+				deps: [HttpClient],
+			},
+			isolate: false,
+			extend: true,
+		}),
 	],
 })
 export class OnboardingClientSignupFeatureShellModule {}

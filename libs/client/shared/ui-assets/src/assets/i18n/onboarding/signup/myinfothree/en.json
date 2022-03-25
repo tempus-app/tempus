@@ -1,0 +1,32 @@
+{
+	"onboardingSignupMyInfoThree": {
+		"education": {
+			"title": "Education and Training",
+			"addMoreTooltip": "Add more education sections",
+			"summary": "Education Summary",
+			"summaryPlaceholder": "Summary",
+			"removeTooltip": "Remove education section",
+			"qualificationItemLabel": "Qualification ",
+			"institutionPlaceholder": "Institution *",
+			"fieldPlaceholder": "Field *",
+			"institutionErr": "Please enter an institution name.",
+			"qualificationErr": "Please enter a qualification field."
+		},
+		"certifications": {
+			"title": "Certifications",
+			"addMoreTooltip": "Add more certification sections",
+			"removeTooltip": "Remove certification section",
+			"certificationItemLabel": "Certification ",
+			"certifyingAuthorityPlaceholder": "Certifying Authority *",
+			"titlePlaceholder": "Title *",
+			"certifyingAuthorityErr": "Please enter a certifying authority.",
+			"titleErr": "Please enter a title",
+			"summaryPlaceholder": "Summary"
+		},
+		"skills": {
+			"title": "Skills",
+			"summary": "Summary",
+			"addPlaceholder": "Add a Skill..."
+		}
+	}
+}

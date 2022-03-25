@@ -3,7 +3,7 @@
 		<div fxFlex>
 			<div fxFlex="5"></div>
 			<div class="info-title">
-				<h2 class="mat-h2">Personal Information</h2>
+				<h2 class="mat-h2">{{ myinfoonePrefix + 'title' | translate }}</h2>
 			</div>
 			<div fxFlex="5"></div>
 		</div>
@@ -17,7 +17,7 @@
 								<div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="center center" fxFlexFill class="grid-item">
 									<tempus-text-input
 										[inputType]="InputType.TEXT"
-										placeholder="First Name *"
+										placeholder="{{ myinfoonePrefix + 'personalInfo.firstNamePlaceholder' | translate }}"
 										cssClass="secondary"
 										[control]="$any(myInfoForm).get('firstName')"
 									>
@@ -26,7 +26,7 @@
 								<div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="center center" fxFlexFill class="grid-item">
 									<tempus-text-input
 										[inputType]="InputType.TEXT"
-										placeholder="Last Name *"
+										placeholder="{{ myinfoonePrefix + 'personalInfo.lastNamePlaceholder' | translate }}"
 										cssClass="secondary"
 										[control]="$any(myInfoForm).get('lastName')"
 									>
@@ -43,7 +43,7 @@
 												($any(myInfoForm).get('firstName').touched || $any(myInfoForm).get('firstName').dirty)
 											"
 										>
-											Please enter a first name.
+											{{ myinfoonePrefix + 'personalInfo.firstNameErr' | translate }}
 										</mat-error>
 									</div>
 								</div>
@@ -56,7 +56,7 @@
 												($any(myInfoForm).get('lastName').touched || $any(myInfoForm).get('lastName').dirty)
 											"
 										>
-											Please enter a last name.
+											{{ myinfoonePrefix + 'personalInfo.lastNameErr' | translate }}
 										</mat-error>
 									</div>
 								</div>
@@ -64,7 +64,7 @@
 							<div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxFlex="33%" class="block-2">
 								<div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="center center" fxFlexFill class="grid-item">
 									<tempus-text-input
-										placeholder="Phone Number *"
+										placeholder="{{ myinfoonePrefix + 'personalInfo.phNumPlaceholder' | translate }}"
 										cssClass="secondary"
 										[control]="$any(myInfoForm).get('phoneNumber')"
 									></tempus-text-input>
@@ -80,7 +80,7 @@
 												($any(myInfoForm).get('phoneNumber').touched || $any(myInfoForm).get('phoneNumber').dirty)
 											"
 										>
-											Please enter a valid phone number.
+											{{ myinfoonePrefix + 'personalInfo.phNumError' | translate }}
 										</mat-error>
 									</div>
 								</div>
@@ -89,7 +89,7 @@
 								<div fxFlex="95" class="grid-item">
 									<tempus-text-area
 										id="profile-summary"
-										placeholder="Personal summary"
+										placeholder="{{ myinfoonePrefix + 'personalInfo.personalSummaryPlaceholder' | translate }}"
 										[control]="$any(myInfoForm).get('profileSummary')"
 									></tempus-text-area>
 								</div>
@@ -104,7 +104,7 @@
 		<div fxFlex>
 			<div fxFlex="5"></div>
 			<div class="info-title">
-				<h2 class="mat-h2">Links</h2>
+				<h2 class="mat-h2">{{ myinfoonePrefix + 'links.title' | translate }}</h2>
 			</div>
 			<div fxFlex="5"></div>
 		</div>
@@ -119,7 +119,7 @@
 								<div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="center center" fxFlexFill class="grid-item">
 									<tempus-text-input
 										[inputType]="InputType.TEXT"
-										placeholder="LinkedIn "
+										placeholder="{{ myinfoonePrefix + 'links.linkedinLinkPlaceholder' | translate }} "
 										cssClass="secondary"
 										[control]="$any(myInfoForm).get('linkedInLink')"
 									>
@@ -128,7 +128,7 @@
 								<div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="center center" fxFlexFill class="grid-item">
 									<tempus-text-input
 										[inputType]="InputType.TEXT"
-										placeholder="Github"
+										placeholder="{{ myinfoonePrefix + 'links.githubLinkPlaceholder' | translate }}"
 										cssClass="secondary"
 										[control]="$any(myInfoForm).get('githubLink')"
 									>
@@ -145,7 +145,7 @@
 												($any(myInfoForm).get('linkedInLink').touched || $any(myInfoForm).get('linkedInLink').dirty)
 											"
 										>
-											Please enter a valid URL.
+											{{ myinfoonePrefix + 'links.invalidUrlErr' | translate }}
 										</mat-error>
 									</div>
 								</div>
@@ -158,7 +158,7 @@
 												($any(myInfoForm).get('githubLink').touched || $any(myInfoForm).get('githubLink').dirty)
 											"
 										>
-											Please enter a valid URL.
+											{{ myinfoonePrefix + 'links.invalidUrlErr' | translate }}
 										</mat-error>
 									</div>
 								</div>
@@ -166,7 +166,7 @@
 							<div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxFlex="33%" class="block-2">
 								<div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="center center" fxFlexFill class="grid-item">
 									<tempus-text-input
-										placeholder="Other"
+										placeholder="{{ myinfoonePrefix + 'links.otherLinkPlaceholder' | translate }}"
 										cssClass="secondary"
 										[control]="$any(myInfoForm).get('otherLink')"
 									></tempus-text-input>
@@ -182,7 +182,7 @@
 												($any(myInfoForm).get('otherLink').touched || $any(myInfoForm).get('otherLink').dirty)
 											"
 										>
-											Please enter a valid URL.
+											{{ myinfoonePrefix + 'links.invalidUrlErr' | translate }}
 										</mat-error>
 									</div>
 								</div>
@@ -197,7 +197,7 @@
 		<div fxFlex>
 			<div fxFlex="5"></div>
 			<div class="info-title">
-				<h2 class="mat-h2">Address</h2>
+				<h2 class="mat-h2">{{ 'onboardingSignup.location.address' | translate }}</h2>
 			</div>
 			<div fxFlex="5"></div>
 		</div>
@@ -211,7 +211,7 @@
 								<div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="center center" fxFlexFill class="grid-item">
 									<tempus-search-box
 										[options]="countries"
-										placeholder="Country"
+										placeholder="{{ 'onboardingSignup.location.countryPlaceholder' | translate }}"
 										cssClass="secondary"
 										(optionSelect)="updateStateOptions($event)"
 										[control]="$any(myInfoForm).get('country')"
@@ -221,7 +221,7 @@
 								<div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="center center" fxFlexFill class="grid-item">
 									<tempus-dropdown
 										[options]="states"
-										label="State"
+										label="{{ 'onboardingSignup.location.statePlaceholder' | translate }}"
 										cssClass="secondary"
 										[control]="$any(myInfoForm).get('state')"
 									></tempus-dropdown>
@@ -237,7 +237,7 @@
 												($any(myInfoForm).get('country').touched || $any(myInfoForm).get('country').dirty)
 											"
 										>
-											Please enter a valid country.
+											{{ 'onboardingSignup.location.validCountryErr' | translate }}
 										</mat-error>
 									</div>
 								</div>
@@ -250,14 +250,18 @@
 												($any(myInfoForm).get('state').touched || $any(myInfoForm).get('state').dirty)
 											"
 										>
-											Please enter a valid state.
+											{{ 'onboardingSignup.location.validStateErr' | translate }}
 										</mat-error>
 									</div>
 								</div>
 							</div>
 							<div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxFlex="33%" class="block-2">
 								<div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="center center" fxFlexFill class="grid-item">
-									<tempus-text-input placeholder="City *" cssClass="secondary" [control]="$any(myInfoForm).get('city')">
+									<tempus-text-input
+										placeholder="{{ 'onboardingSignup.location.cityPlaceholder' | translate }}"
+										cssClass="secondary"
+										[control]="$any(myInfoForm).get('city')"
+									>
 									</tempus-text-input>
 								</div>
 							</div>
@@ -271,7 +275,7 @@
 												($any(myInfoForm).get('city').touched || $any(myInfoForm).get('city').dirty)
 											"
 										>
-											Please enter a valid city.
+											{{ 'onboardingSignup.location.validCityErr' | translate }}
 										</mat-error>
 									</div>
 								</div>
@@ -283,7 +287,9 @@
 			<div fxFlex="5"></div>
 		</div>
 		<div class="container button-container">
-			<button color="primary" mat-raised-button matStepperPrevious type="button" (click)="backStep()">Back</button>
+			<button color="primary" mat-raised-button matStepperPrevious type="button" (click)="backStep()">
+				{{ 'onboardingSignup.CTA.back' | translate }}
+			</button>
 			<button
 				color="primary"
 				mat-raised-button
@@ -291,7 +297,7 @@
 				[disabled]="!myInfoForm.valid"
 				(click)="nextStep()"
 			>
-				Next
+				{{ 'onboardingSignup.CTA.next' | translate }}
 			</button>
 		</div>
 	</div>

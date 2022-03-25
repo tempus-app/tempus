@@ -3,6 +3,7 @@ import { FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { createResumeUpload, SignupState } from '@tempus/client/onboarding-client/signup/data-access';
 import { Store } from '@ngrx/store';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
 	selector: 'tempus-resume-upload',
@@ -16,7 +17,19 @@ export class ResumeUploadComponent {
 
 	fileUploaded = false;
 
-	constructor(private router: Router, private route: ActivatedRoute, private store: Store<SignupState>) {}
+	uploadResumePrefix = 'onboardingSignupUploadResume.resumeUpload.';
+
+	constructor(
+		private router: Router,
+		private route: ActivatedRoute,
+		private store: Store<SignupState>,
+		private translateService: TranslateService,
+	) {
+		const { currentLang } = translateService;
+		// eslint-disable-next-line no-param-reassign
+		translateService.currentLang = '';
+		translateService.use(currentLang);
+	}
 
 	onChange(event: Event) {
 		const input = event.currentTarget as HTMLInputElement;

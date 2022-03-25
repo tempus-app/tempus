@@ -1,0 +1,17 @@
+{
+	"onboardingSignupMyInfoTwo": {
+		"workExp": {
+			"title": "Work Experience",
+			"addMoreToolTip": "Add more work experience sections",
+			"summary": "Work Experience Summary",
+			"summaryPlaceholder": "Summary",
+			"removeTooltip": "Remove work experience section",
+			"itemLabel": "Work Experience ",
+			"expTitlePlaceholder": "Title *",
+			"companyPlaceholder": "Company *",
+			"posErr": "Please enter a position title",
+			"companyErr": "Please enter a company name",
+			"descriptionErr": "Please enter a description."
+		}
+	}
+}

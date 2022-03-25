@@ -24,6 +24,7 @@ import {
 } from '@tempus/client/onboarding-client/signup/data-access';
 import { Store } from '@ngrx/store';
 import { AsyncRequestState } from '@tempus/client/onboarding-client/shared/data-access';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
 	selector: 'tempus-review',
@@ -73,7 +74,19 @@ export class ReviewComponent implements OnInit {
 
 	resume: File | null = null;
 
-	constructor(private router: Router, private route: ActivatedRoute, private store: Store<SignupState>) {}
+	reviewPrefix = 'onboardingSignupReview.';
+
+	constructor(
+		private router: Router,
+		private route: ActivatedRoute,
+		private store: Store<SignupState>,
+		private translateService: TranslateService,
+	) {
+		const { currentLang } = translateService;
+		// eslint-disable-next-line no-param-reassign
+		translateService.currentLang = '';
+		translateService.use(currentLang);
+	}
 
 	ngOnInit(): void {
 		this.store
@@ -125,17 +138,17 @@ export class ReviewComponent implements OnInit {
 	}
 
 	formatAddress(country: string, state: string, city: string) {
-		return city + ', ' + state + ', ' + country;
+		return `${city}, ${state}, ${country}`;
 	}
 
 	formatName(first: string, last: string) {
-		return first + ' ' + last;
+		return `${first} ${last}`;
 	}
 
 	downloadResume() {
 		if (this.resume !== null) {
-			let url = URL.createObjectURL(this.resume);
-			let link = document.createElement('a');
+			const url = URL.createObjectURL(this.resume);
+			const link = document.createElement('a');
 			link.href = url;
 			link.download = this.resume?.name || 'download';
 			link.click();

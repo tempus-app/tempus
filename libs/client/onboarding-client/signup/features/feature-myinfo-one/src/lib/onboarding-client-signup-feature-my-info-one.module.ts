@@ -10,7 +10,14 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatCardModule } from '@angular/material/card';
 import { ClientSharedUiComponentsPresentationalModule } from '@tempus/client/shared/ui-components/presentational';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { HttpClient } from '@angular/common/http';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { MyInfoOneComponent } from './myinfoone/my-info-one.component';
+
+function createTranslateLoader(http: HttpClient) {
+	return new TranslateHttpLoader(http, './assets/i18n/onboarding/signup/myinfoone/', '.json');
+}
 
 @NgModule({
 	imports: [
@@ -31,6 +38,15 @@ import { MyInfoOneComponent } from './myinfoone/my-info-one.component';
 				component: MyInfoOneComponent,
 			},
 		]),
+		TranslateModule.forChild({
+			loader: {
+				provide: TranslateLoader,
+				useFactory: createTranslateLoader,
+				deps: [HttpClient],
+			},
+			extend: true,
+			isolate: false,
+		}),
 	],
 	declarations: [MyInfoOneComponent],
 })

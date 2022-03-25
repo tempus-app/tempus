@@ -1,0 +1,14 @@
+{
+	"onboardingSignupUploadResume": {
+		"resumeUpload": {
+			"title": "Upload Resume",
+			"subHeader": "Please make sure your resume is one of the following: <b>DOX, DOC, PDF, TXT</b>",
+			"fileUploadInfo": "Drag and drop your files here, or upload using the button",
+			"upload": "UPLOAD",
+			"uploadErr": "Please upload a resume"
+		},
+		"confirmUpload": {
+			"success": "Successfully uploaded"
+		}
+	}
+}

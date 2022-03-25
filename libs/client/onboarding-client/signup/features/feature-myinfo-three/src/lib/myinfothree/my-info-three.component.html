@@ -3,13 +3,13 @@
 		<div fxFlex>
 			<div fxFlex="5"></div>
 			<div class="info-title">
-				<h2 class="mat-h2">Education and Training</h2>
+				<h2 class="mat-h2">{{ myInfoThreePrefix + 'education.title' | translate }}</h2>
 			</div>
 			<div>
 				<button
 					mat-mini-fab
 					(click)="addEducationSections()"
-					matTooltip="Add more education sections"
+					matTooltip="{{ myInfoThreePrefix + 'education.addMoreTooltip' | translate }}"
 					class="header-button"
 					color="primary"
 				>
@@ -23,10 +23,10 @@
 			<div fxFlex="5"></div>
 			<tempus-card>
 				<form>
-					<h3 class="mat-h3" color="primary">Education Summary</h3>
+					<h3 class="mat-h3" color="primary">{{ myInfoThreePrefix + 'education.summary' | translate }}</h3>
 					<tempus-text-area
 						id="education-summary"
-						placeholder="Summary"
+						placeholder="{{ myInfoThreePrefix + 'education.summaryPlaceholder' | translate }}"
 						[control]="$any(myInfoForm).get('educationSummary')"
 					></tempus-text-area>
 				</form>
@@ -44,14 +44,17 @@
 								<button
 									mat-mini-fab
 									(click)="removeEducationSection(index)"
-									matTooltip="Remove education section"
+									matTooltip="{{ myInfoThreePrefix + 'education.removeTooltip' | translate }}"
 									color="primary"
 								>
 									<mat-icon>remove</mat-icon>
 								</button>
 							</div>
 							<div>
-								<h3 class="mat-h3" color="primary">Qualification {{ index + 1 }}</h3>
+								<h3 class="mat-h3" color="primary">
+									<span>{{ myInfoThreePrefix + 'education.qualificationItemLabel' | translate }}</span
+									>{{ index + 1 }}
+								</h3>
 							</div>
 						</div>
 
@@ -67,7 +70,7 @@
 								>
 									<tempus-text-input
 										id="institution-{{ index }}"
-										placeholder="Institution *"
+										placeholder="{{ myInfoThreePrefix + 'education.institutionPlaceholder' | translate }}"
 										cssClass="secondary"
 										[control]="$any(numEducation).get('institution')"
 									>
@@ -83,7 +86,7 @@
 								>
 									<tempus-text-input
 										id="field-{{ index }}"
-										placeholder="Field *"
+										placeholder="{{ myInfoThreePrefix + 'education.fieldPlaceholder' | translate }}"
 										cssClass="secondary"
 										[control]="$any(numEducation).get('field')"
 									></tempus-text-input>
@@ -107,7 +110,7 @@
 												($any(numEducation).get('institution').touched || $any(numEducation).get('institution').dirty)
 											"
 										>
-											Please enter an institution name.
+											{{ myInfoThreePrefix + 'education.institutionErr' | translate }}
 										</mat-error>
 									</div>
 								</div>
@@ -127,7 +130,7 @@
 												($any(numEducation).get('field').touched || $any(numEducation).get('field').dirty)
 											"
 										>
-											Please enter a qualification field.
+											{{ myInfoThreePrefix + 'education.qualificationErr' | translate }}
 										</mat-error>
 									</div>
 								</div>
@@ -145,7 +148,7 @@
 									<tempus-search-box
 										id="country-{{ index }}"
 										[options]="countries"
-										placeholder="Country"
+										placeholder="{{ 'onboardingSignup.location.countryPlaceholder' | translate }}"
 										cssClass="secondary"
 										(optionSelect)="updateStateOptions($event)"
 										[control]="$any(numEducation).get('country')"
@@ -155,7 +158,7 @@
 									<tempus-dropdown
 										id="state-{{ index }}"
 										[options]="states"
-										label="State"
+										label="{{ 'onboardingSignup.location.statePlaceholder' | translate }}"
 										cssClass="secondary"
 										[control]="$any(numEducation).get('state')"
 									>
@@ -171,7 +174,7 @@
 								>
 									<tempus-text-input
 										id="city-{{ index }}"
-										placeholder="City"
+										placeholder="{{ 'onboardingSignup.location.cityPlaceholder' | translate }}"
 										cssClass="secondary"
 										[control]="$any(numEducation).get('city')"
 									></tempus-text-input>
@@ -190,7 +193,7 @@
 									<tempus-text-input
 										id="start-date-{{ index }}"
 										[inputType]="InputType.DATE"
-										placeholder="Start date"
+										placeholder="{{ 'onboardingSignup.dates.startPlaceholder' | translate }}"
 										cssClass="secondary"
 										[control]="$any(numEducation).get('startDate')"
 									></tempus-text-input>
@@ -206,7 +209,7 @@
 									<tempus-text-input
 										id="end-date-{{ index }}"
 										[inputType]="InputType.DATE"
-										placeholder="End date"
+										placeholder="{{ 'onboardingSignup.dates.endPlaceholder' | translate }}"
 										cssClass="secondary"
 										[control]="$any(numEducation).get('endDate')"
 									></tempus-text-input>
@@ -230,7 +233,7 @@
 												($any(numEducation).get('startDate').touched || $any(numEducation).get('startDate').dirty)
 											"
 										>
-											Please enter a valid start date.
+											{{ 'onboardingSignup.dates.validStartDateErr' | translate }}
 										</mat-error>
 									</div>
 								</div>
@@ -250,14 +253,14 @@
 												($any(numEducation).get('endDate').touched || $any(numEducation).get('endDate').dirty)
 											"
 										>
-											Please enter a valid end date.
+											{{ 'onboardingSignup.dates.validEndDateErr' | translate }}
 										</mat-error>
 									</div>
 								</div>
 							</div>
 							<div>
 								<mat-error class="mat-body-2" *ngIf="$any(numEducation).errors?.['dateError']">
-									Please make sure the start date is before the end date.
+									{{ 'onboardingSignup.dates.startBeforeEndErr' | translate }}
 								</mat-error>
 							</div>
 						</div>
@@ -269,13 +272,13 @@
 		<div fxFlex>
 			<div fxFlex="5"></div>
 			<div class="info-title">
-				<h2 class="mat-h2">Certifications</h2>
+				<h2 class="mat-h2">{{ myInfoThreePrefix + 'certifications.title' | translate }}</h2>
 			</div>
 			<div>
 				<button
 					mat-mini-fab
 					(click)="addCertificationSections()"
-					matTooltip="Add more certifications sections"
+					matTooltip="{{ myInfoThreePrefix + 'certifications.addMoreTooltip' | translate }}"
 					class="header-button"
 					color="primary"
 				>
@@ -294,14 +297,17 @@
 								<button
 									mat-mini-fab
 									(click)="removeCertificationSection(index)"
-									matTooltip="Remove certification section"
+									matTooltip="{{ myInfoThreePrefix + 'certifications.removeTooltip' | translate }}"
 									color="primary"
 								>
 									<mat-icon>remove</mat-icon>
 								</button>
 							</div>
 							<div>
-								<h3 class="mat-h3">Certfication {{ index + 1 }}</h3>
+								<h3 class="mat-h3">
+									<span>{{ myInfoThreePrefix + 'certifications.certificationItemLabel' | translate }}</span
+									>{{ index + 1 }}
+								</h3>
 							</div>
 						</div>
 						<div fxLayout="column" fxLayoutGap="10px">
@@ -316,7 +322,7 @@
 								>
 									<tempus-text-input
 										id="certifying-authority-{{ index }}"
-										placeholder="Certifying Authority *"
+										placeholder="{{ myInfoThreePrefix + 'certifications.certifyingAuthorityPlaceholder' | translate }}"
 										cssClass="secondary"
 										[control]="$any(numCertification).get('certifyingAuthority')"
 									>
@@ -332,7 +338,7 @@
 								>
 									<tempus-text-input
 										id="title-{{ index }}"
-										placeholder="Title *"
+										placeholder="{{ myInfoThreePrefix + 'certifications.titlePlaceholder' | translate }}"
 										cssClass="secondary"
 										[control]="$any(numCertification).get('title')"
 									></tempus-text-input>
@@ -357,7 +363,7 @@
 													$any(numCertification).get('certifyingAuthority').dirty)
 											"
 										>
-											Please enter a certifying authority.
+											{{ myInfoThreePrefix + 'certifications.certifyingAuthorityErr' | translate }}
 										</mat-error>
 									</div>
 								</div>
@@ -377,7 +383,7 @@
 												($any(numCertification).get('title').touched || $any(numCertification).get('title').dirty)
 											"
 										>
-											Please enter a title.
+											{{ myInfoThreePrefix + 'certifications.titleErr' | translate }}
 										</mat-error>
 									</div>
 								</div>
@@ -386,7 +392,7 @@
 							<div>
 								<tempus-text-area
 									id="summary-{{ index }}"
-									placeholder="Summary"
+									placeholder="{{ myInfoThreePrefix + 'certifications.summaryPlaceholder' | translate }}"
 									[control]="$any(numCertification).get('summary')"
 								></tempus-text-area>
 							</div>
@@ -399,7 +405,7 @@
 		<div fxFlex>
 			<div fxFlex="5"></div>
 			<div class="info-title">
-				<h2 class="mat-h2">Skills</h2>
+				<h2 class="mat-h2">{{ myInfoThreePrefix + 'skills.title' | translate }}</h2>
 			</div>
 			<div fxFlex="5"></div>
 		</div>
@@ -409,7 +415,7 @@
 			<tempus-card>
 				<tempus-text-area
 					id="skill-summary"
-					placeholder="Summary"
+					placeholder="{{ myInfoThreePrefix + 'skills.summary' | translate }}"
 					[control]="$any(myInfoForm).get('skillsSummary')"
 				></tempus-text-area>
 				<form>
@@ -419,7 +425,7 @@
 								<input
 									class="mat-body"
 									id="skillChipInput"
-									placeholder="Add a skill..."
+									placeholder="{{ myInfoThreePrefix + 'skills.addPlaceholder' | translate }}"
 									[matChipInputFor]="chipList"
 									[matChipInputSeparatorKeyCodes]="separatorKeysCodes"
 									[matChipInputAddOnBlur]="addOnBlur"
@@ -446,7 +452,9 @@
 			<div fxFlex="5"></div>
 		</div>
 		<div class="container button-container">
-			<button color="primary" mat-raised-button matStepperPrevious type="button" (click)="backStep()">Back</button>
+			<button color="primary" mat-raised-button matStepperPrevious type="button" (click)="backStep()">
+				{{ 'onboardingSignup.CTA.back' | translate }}
+			</button>
 			<button
 				color="primary"
 				mat-raised-button
@@ -454,7 +462,7 @@
 				[disabled]="!myInfoForm.valid"
 				(click)="nextStep()"
 			>
-				Next
+				{{ 'onboardingSignup.CTA.next' | translate }}
 			</button>
 		</div>
 	</div>

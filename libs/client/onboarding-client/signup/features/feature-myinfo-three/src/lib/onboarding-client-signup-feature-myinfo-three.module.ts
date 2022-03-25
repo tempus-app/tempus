@@ -11,7 +11,14 @@ import { MatChipsModule } from '@angular/material/chips';
 import { ClientSharedUiComponentsPresentationalModule } from '@tempus/client/shared/ui-components/presentational';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { HttpClient } from '@angular/common/http';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { MyInfoThreeComponent } from './myinfothree/my-info-three.component';
+
+function createTranslateLoader(http: HttpClient) {
+	return new TranslateHttpLoader(http, './assets/i18n/onboarding/signup/myinfothree/', '.json');
+}
 
 @NgModule({
 	imports: [
@@ -33,6 +40,15 @@ import { MyInfoThreeComponent } from './myinfothree/my-info-three.component';
 				component: MyInfoThreeComponent,
 			},
 		]),
+		TranslateModule.forChild({
+			loader: {
+				provide: TranslateLoader,
+				useFactory: createTranslateLoader,
+				deps: [HttpClient],
+			},
+			extend: true,
+			isolate: false,
+		}),
 	],
 	declarations: [MyInfoThreeComponent],
 })

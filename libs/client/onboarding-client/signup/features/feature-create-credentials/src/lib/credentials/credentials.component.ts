@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
+import { TranslateService } from '@ngx-translate/core';
 import { AsyncRequestState } from '@tempus/client/onboarding-client/shared/data-access';
 import {
 	loadLinkData,
@@ -31,7 +32,34 @@ export class CredentialsComponent implements OnInit, OnDestroy {
 
 	linkData$?: Subscription;
 
-	constructor(private route: ActivatedRoute, private store: Store<SignupState>, public dialog: MatDialog) {}
+	linkUsedErr = '';
+
+	linkExpiredErr = '';
+
+	genericLinkErr = '';
+
+	constructor(
+		private route: ActivatedRoute,
+		private store: Store<SignupState>,
+		public dialog: MatDialog,
+		private translateService: TranslateService,
+	) {
+		const { currentLang } = translateService;
+		// eslint-disable-next-line no-param-reassign
+		translateService.currentLang = '';
+		translateService.use(currentLang);
+		translateService
+			.get([
+				'onboardingSignupCredentials.main.linkUsedErr',
+				'onboardingSignupCredentials.main.expiredLinkErr',
+				'onboardingSignupCredentials.main.linkUsedErr',
+			])
+			.subscribe(data => {
+				this.linkUsedErr = data['onboardingSignupCredentials.main.linkUsedErr'];
+				this.linkExpiredErr = data['onboardingSignupCredentials.main.expiredLinkErr'];
+				this.genericLinkErr = data['onboardingSignupCredentials.main.linkUsedErr'];
+			});
+	}
 
 	ngOnDestroy(): void {
 		this.errorStatus$?.unsubscribe();
@@ -52,7 +80,7 @@ export class CredentialsComponent implements OnInit, OnDestroy {
 			if (errStatus.status === AsyncRequestState.LOADING) {
 				this.loading = true;
 			} else if (errStatus.status === AsyncRequestState.ERROR) {
-				this.openDialog(errStatus.error?.message || 'Generic Error');
+				this.openDialog(errStatus.error?.message || this.genericLinkErr);
 				this.loading = false;
 			} else {
 				this.loading = false;
@@ -67,7 +95,9 @@ export class CredentialsComponent implements OnInit, OnDestroy {
 							this.link = link;
 							this.store.dispatch(setResourceLinkId({ linkId: link.id }));
 						} else if (link?.status === StatusType.COMPLETED) {
-							this.openDialog('Link has already been used');
+							this.openDialog(this.linkUsedErr);
+						} else if (link?.status === StatusType.INACTIVE) {
+							this.openDialog(this.linkExpiredErr);
 						}
 					}
 				}),

@@ -13,6 +13,7 @@ import {
 	SignupState,
 } from '@tempus/client/onboarding-client/signup/data-access';
 import { ICreateExperienceDto, ICreateLocationDto } from '@tempus/shared-domain';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
 	selector: 'tempus-my-info-two',
@@ -23,6 +24,8 @@ export class MyInfoTwoComponent implements OnInit {
 	numberWorkSections: number[] = [0];
 
 	InputType = InputType;
+
+	myInfoTwoPrefix = 'onboardingSignupMyInfoTwo.workExp.';
 
 	countries: string[] = Country.getAllCountries().map(country => {
 		return country.name;
@@ -47,7 +50,13 @@ export class MyInfoTwoComponent implements OnInit {
 		private fb: FormBuilder,
 		private router: Router,
 		private store: Store<SignupState>,
-	) {}
+		private translateService: TranslateService,
+	) {
+		const { currentLang } = translateService;
+		// eslint-disable-next-line no-param-reassign
+		translateService.currentLang = '';
+		translateService.use(currentLang);
+	}
 
 	ngOnInit() {
 		this.store

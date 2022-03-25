@@ -8,7 +8,14 @@ import { RouterModule } from '@angular/router';
 import { ClientSharedUiComponentsInputModule } from '@tempus/client/shared/ui-components/input';
 import { ClientSharedUiComponentsPresentationalModule } from '@tempus/client/shared/ui-components/presentational';
 
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { HttpClient } from '@angular/common/http';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { ReviewComponent } from './review/review.component';
+
+function createTranslateLoader(http: HttpClient) {
+	return new TranslateHttpLoader(http, './assets/i18n/onboarding/signup/review/', '.json');
+}
 
 @NgModule({
 	imports: [
@@ -26,6 +33,15 @@ import { ReviewComponent } from './review/review.component';
 				component: ReviewComponent,
 			},
 		]),
+		TranslateModule.forChild({
+			loader: {
+				provide: TranslateLoader,
+				useFactory: createTranslateLoader,
+				deps: [HttpClient],
+			},
+			extend: true,
+			isolate: false,
+		}),
 	],
 	declarations: [ReviewComponent],
 })

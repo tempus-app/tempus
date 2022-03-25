@@ -29,6 +29,7 @@ import {
 	ICreateSkillDto,
 	ICreateSkillTypeDto,
 } from '@tempus/shared-domain';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
 	selector: 'tempus-my-info-three',
@@ -56,6 +57,8 @@ export class MyInfoThreeComponent implements OnInit {
 		return state.name;
 	});
 
+	myInfoThreePrefix = 'onboardingSignupMyInfoThree.';
+
 	myInfoForm = this.fb.group({
 		educationSummary: [''],
 		qualifications: this.fb.array([]),
@@ -79,7 +82,13 @@ export class MyInfoThreeComponent implements OnInit {
 		private fb: FormBuilder,
 		private router: Router,
 		private store: Store<SignupState>,
-	) {}
+		private translateService: TranslateService,
+	) {
+		const { currentLang } = translateService;
+		// eslint-disable-next-line no-param-reassign
+		translateService.currentLang = '';
+		translateService.use(currentLang);
+	}
 
 	ngOnInit() {
 		this.store

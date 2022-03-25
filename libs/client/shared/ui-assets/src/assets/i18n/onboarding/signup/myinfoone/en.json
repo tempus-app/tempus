@@ -1,0 +1,21 @@
+{
+	"onboardingSignupMyInfoOne": {
+		"title": "Personal Information",
+		"personalInfo": {
+			"firstNamePlaceholder": "First Name *",
+			"lastNamePlaceholder": "Last Name *",
+			"firstNameErr": "Please enter a first name.",
+			"lastNameErr": "Please enter a last name.",
+			"phNumPlaceholder": "Phone Number *",
+			"phNumError": "Please enter a valid phone number.",
+			"personalSummaryPlaceholder": "Personal Summary"
+		},
+		"links": {
+			"title": "Links",
+			"linkedinLinkPlaceholder": "LinkedIn",
+			"githubLinkPlaceholder": "Github",
+			"otherLinkPlaceholder": "Other",
+			"invalidUrlErr": "Please enter a valid URL."
+		}
+	}
+}

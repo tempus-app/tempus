@@ -3,13 +3,13 @@
 		<div fxFlex>
 			<div fxFlex="5"></div>
 			<div class="info-title">
-				<h2 class="mat-h2">Work Experience</h2>
+				<h2 class="mat-h2">{{ myInfoTwoPrefix + 'title' | translate }}</h2>
 			</div>
 			<div>
 				<button
 					mat-mini-fab
 					(click)="addWorkSections()"
-					matTooltip="Add more work experience sections"
+					matTooltip="{{ myInfoTwoPrefix + 'addMoreToolTip' | translate }}"
 					class="experience-button"
 					color="primary"
 				>
@@ -22,10 +22,10 @@
 			<div fxFlex="5"></div>
 			<tempus-card>
 				<form>
-					<h3 class="mat-h3" color="primary">Work Experience Summary</h3>
+					<h3 class="mat-h3" color="primary">{{ myInfoTwoPrefix + 'summary' | translate }}</h3>
 					<tempus-text-area
 						id="work-experience-summary"
-						placeholder="Summary"
+						placeholder="{{ myInfoTwoPrefix + 'summaryPlaceholder' | translate }}"
 						[control]="$any(myInfoForm).get('workExperienceSummary')"
 					></tempus-text-area>
 				</form>
@@ -42,14 +42,17 @@
 								<button
 									mat-mini-fab
 									(click)="removeWorkSection(index)"
-									matTooltip="Remove work experience section"
+									matTooltip="{{ myInfoTwoPrefix + 'removeTooltip' | translate }}"
 									color="primary"
 								>
 									<mat-icon>remove</mat-icon>
 								</button>
 							</div>
 							<div>
-								<h3 class="mat-h3">Work Experience {{ index + 1 }}</h3>
+								<h3 class="mat-h3">
+									<span>{{ myInfoTwoPrefix + 'itemLabel' | translate }}</span
+									>{{ index + 1 }}
+								</h3>
 							</div>
 						</div>
 
@@ -65,7 +68,7 @@
 								>
 									<tempus-text-input
 										id="title-{{ index }}"
-										placeholder="Title *"
+										placeholder="{{ myInfoTwoPrefix + 'expTitlePlaceholder' | translate }}"
 										cssClass="secondary"
 										[control]="$any(numExperience).get('title')"
 									>
@@ -81,7 +84,7 @@
 								>
 									<tempus-text-input
 										id="company-{{ index }}"
-										placeholder="Company *"
+										placeholder="{{ myInfoTwoPrefix + 'companyPlaceholder' | translate }}"
 										cssClass="secondary"
 										[control]="$any(numExperience).get('company')"
 									>
@@ -106,7 +109,7 @@
 												($any(numExperience).get('title').touched || $any(numExperience).get('title').dirty)
 											"
 										>
-											Please enter a position title.
+											{{ myInfoTwoPrefix + 'posErr' | translate }}
 										</mat-error>
 									</div>
 								</div>
@@ -126,7 +129,7 @@
 												($any(numExperience).get('company').touched || $any(numExperience).get('company').dirty)
 											"
 										>
-											Please enter a company name.
+											{{ myInfoTwoPrefix + 'companyErr' | translate }}
 										</mat-error>
 									</div>
 								</div>
@@ -144,7 +147,7 @@
 									<tempus-search-box
 										id="country-{{ index }}"
 										[options]="countries"
-										placeholder="Country"
+										placeholder="{{ 'onboardingSignup.location.countryPlaceholder' | translate }}"
 										cssClass="secondary"
 										(optionSelect)="updateStateOptions($event)"
 										[control]="$any(numExperience).get('country')"
@@ -154,7 +157,7 @@
 									<tempus-dropdown
 										id="state-{{ index }}"
 										[options]="states"
-										label="State"
+										label="{{ 'onboardingSignup.location.statePlaceholder' | translate }}"
 										cssClass="secondary"
 										[control]="$any(numExperience).get('state')"
 									>
@@ -170,7 +173,7 @@
 								>
 									<tempus-text-input
 										id="city-{{ index }}"
-										placeholder="City *"
+										placeholder="{{ 'onboardingSignup.location.cityPlaceholder' | translate }}"
 										cssClass="secondary"
 										[control]="$any(numExperience).get('city')"
 									></tempus-text-input>
@@ -194,7 +197,7 @@
 												($any(numExperience).get('country').touched || $any(numExperience).get('country').dirty)
 											"
 										>
-											Please enter a valid country.
+											{{ 'onboardingSignup.location.validCountryErr' | translate }}
 										</mat-error>
 									</div>
 								</div>
@@ -207,7 +210,7 @@
 												($any(numExperience).get('state').touched || $any(numExperience).get('state').dirty)
 											"
 										>
-											Please enter a valid state.
+											{{ 'onboardingSignup.location.validStateErr' | translate }}
 										</mat-error>
 									</div>
 								</div>
@@ -227,7 +230,7 @@
 												($any(numExperience).get('city').touched || $any(numExperience).get('city').dirty)
 											"
 										>
-											Please enter a valid city.
+											{{ 'onboardingSignup.location.validCityErr' | translate }}
 										</mat-error>
 									</div>
 								</div>
@@ -245,7 +248,7 @@
 									<tempus-text-input
 										id="start-date-{{ index }}"
 										[inputType]="InputType.DATE"
-										placeholder="Start Date *"
+										placeholder="{{ 'onboardingSignup.dates.startPlaceholder' | translate }} *"
 										cssClass="secondary"
 										[control]="$any(numExperience).get('startDate')"
 									></tempus-text-input>
@@ -261,7 +264,7 @@
 									<tempus-text-input
 										id="end-date-{{ index }}"
 										[inputType]="InputType.DATE"
-										placeholder="End Date *"
+										placeholder="{{ 'onboardingSignup.dates.endPlaceholder' | translate }} *"
 										cssClass="secondary"
 										[control]="$any(numExperience).get('endDate')"
 									></tempus-text-input>
@@ -285,7 +288,7 @@
 												($any(numExperience).get('startDate').touched || $any(numExperience).get('startDate').dirty)
 											"
 										>
-											Please enter a valid start date.
+											{{ 'onboardingSignup.dates.validStartDateErr' | translate }}
 										</mat-error>
 									</div>
 								</div>
@@ -305,7 +308,7 @@
 												($any(numExperience).get('endDate').touched || $any(numExperience).get('endDate').dirty)
 											"
 										>
-											Please enter a valid end date.
+											{{ 'onboardingSignup.dates.validEndDateErr' | translate }}
 										</mat-error>
 									</div>
 								</div>
@@ -313,7 +316,7 @@
 
 							<div>
 								<mat-error class="mat-body-2" *ngIf="$any(numExperience).errors?.['dateError']">
-									Please make sure the start date is before the end date.
+									{{ 'onboardingSignup.dates.starteBeforeEndErr' | translate }}
 								</mat-error>
 							</div>
 
@@ -335,7 +338,7 @@
 											($any(numExperience).get('description').touched || $any(numExperience).get('description').dirty)
 										"
 									>
-										Please enter a description.
+										{{ myInfoTwoPrefix + 'descriptionErr' | translate }}
 									</mat-error>
 								</div>
 							</div>
@@ -346,7 +349,9 @@
 			<div fxFlex="5"></div>
 		</div>
 		<div class="container button-container">
-			<button color="primary" mat-raised-button matStepperPrevious type="button" (click)="backStep()">Back</button>
+			<button color="primary" mat-raised-button matStepperPrevious type="button" (click)="backStep()">
+				{{ 'onboardingSignup.CTA.back' | translate }}
+			</button>
 			<button
 				color="primary"
 				mat-raised-button
@@ -354,7 +359,7 @@
 				[disabled]="!myInfoForm.valid"
 				(click)="nextStep()"
 			>
-				Next
+				{{ 'onboardingSignup.CTA.next' | translate }}
 			</button>
 		</div>
 	</div>

@@ -42,6 +42,8 @@ export const createTrainingAndSkillDetails = createAction(
 		certifications: ICreateCertificationDto[];
 	}>(),
 );
+
+// ACTION NEVER USED -- TODO COME BACK LATERE
 export const setResourceLinkId = createAction(
 	'[Signup Credentials Page] Set Resource Link Id',
 	props<{

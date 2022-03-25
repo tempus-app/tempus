@@ -3,7 +3,7 @@
 		<div fxFlex>
 			<div fxFlex="5"></div>
 			<div class="info-title">
-				<h2 class="mat-h2 section-header">Review</h2>
+				<h2 class="mat-h2 section-header">{{ reviewPrefix + 'title' | translate }}</h2>
 			</div>
 			<div fxFlex="5"></div>
 		</div>
@@ -16,26 +16,43 @@
 						<div fxLayout="column">
 							<div fxLayout.lt-sm="column" fxLayout="row" fxLayoutGap="30px">
 								<div fxFlex>
-									<h3 class="mat-h3 section-header">Personal Information</h3>
-									<p class="mat-body-1"><strong>Name: </strong>{{ formatName(firstName, lastName) }}</p>
-									<p class="mat-body-1"><strong>Address: </strong>{{ formatAddress(country, state, city) }}</p>
-									<p class="mat-body-1"><strong>Phone number: </strong>{{ phoneNumber }}</p>
-									<p class="mat-body-1"><strong>Email: </strong>{{ email }}</p>
+									<h3 class="mat-h3 section-header">
+										{{ reviewPrefix + 'initialInfo.personalInfo.title' | translate }}
+									</h3>
+									<p class="mat-body-1">
+										<strong>{{ reviewPrefix + 'initialInfo.personalInfo.name' | translate }}</strong
+										>{{ formatName(firstName, lastName) }}
+									</p>
+									<p class="mat-body-1">
+										<strong>{{ reviewPrefix + 'initialInfo.personalInfo.address' | translate }}</strong
+										>{{ formatAddress(country, state, city) }}
+									</p>
+									<p class="mat-body-1">
+										<strong>{{ reviewPrefix + 'initialInfo.personalInfo.phoneNumber' | translate }}</strong
+										>{{ phoneNumber }}
+									</p>
+									<p class="mat-body-1">
+										<strong>{{ reviewPrefix + 'initialInfo.personalInfo.email' | translate }}</strong
+										>{{ email }}
+									</p>
 								</div>
 								<div fxFlex>
-									<h3 class="mat-h3 section-header">Links</h3>
+									<h3 class="mat-h3 section-header">{{ reviewPrefix + 'initialInfo.links.title' | translate }}</h3>
 									<p class="mat-body-1">
-										<strong>Resume: </strong>
+										<strong>{{ reviewPrefix + 'initialInfo.links.resume' | translate }}</strong>
 										<a href="javascript:;" (click)="downloadResume()">{{ resume?.name }}</a>
 									</p>
 									<p *ngIf="linkedInLink !== ''" class="mat-body-1">
-										<strong>LinkedIn: </strong><a href="{{ linkedInLink }}">{{ linkedInLink }}</a>
+										<strong>{{ reviewPrefix + 'initialInfo.links.linkedIn' | translate }}</strong
+										><a href="{{ linkedInLink }}">{{ linkedInLink }}</a>
 									</p>
 									<p *ngIf="githubLink !== ''" class="mat-body-1">
-										<strong>GitHub: </strong><a href="{{ githubLink }}">{{ githubLink }}</a>
+										<strong>{{ reviewPrefix + 'initialInfo.links.github' | translate }}</strong
+										><a href="{{ githubLink }}">{{ githubLink }}</a>
 									</p>
 									<p *ngIf="otherLink !== ''" class="mat-body-1">
-										<strong>Other: </strong><a href="{{ otherLink }}">{{ otherLink }}</a>
+										<strong>{{ reviewPrefix + 'initialInfo.links.other' | translate }}</strong
+										><a href="{{ otherLink }}">{{ otherLink }}</a>
 									</p>
 								</div>
 							</div>
@@ -52,10 +69,10 @@
 		<div fxFlex>
 			<div fxFlex="5"></div>
 			<div class="info-title">
-				<div class="mat-h2 card-title">Work Experience</div>
+				<div class="mat-h2 card-title">{{ reviewPrefix + 'workExperience.title' | translate }}</div>
 				<tempus-card>
-					<div *ngIf="workExperiences.length == 0 && experiencesSummary == ''">
-						<p class="mat-body-2">You have not entered information for this section.</p>
+					<div *ngIf="workExperiences.length === 0 && experiencesSummary === ''">
+						<p class="mat-body-2">{{ reviewPrefix + 'noInfoSection' | translate }}</p>
 					</div>
 					<div class="mat-body-1">{{ experiencesSummary }}</div>
 					<div *ngFor="let workExperience of workExperiences">
@@ -107,10 +124,10 @@
 		<div fxFlex>
 			<div fxFlex="5"></div>
 			<div class="info-title">
-				<div class="mat-h2 card-title">Education and Training</div>
+				<div class="mat-h2 card-title">{{ reviewPrefix + 'educationAndTraining.title' | translate }}</div>
 				<tempus-card>
-					<div *ngIf="educations.length == 0 && educationsSummary == ''">
-						<p class="mat-body-2">You have not entered information for this section.</p>
+					<div *ngIf="educations.length === 0 && educationsSummary === ''">
+						<p class="mat-body-2">{{ reviewPrefix + 'noInfoSection' | translate }}</p>
 					</div>
 					<div class="mat-body-1">{{ educationsSummary }}</div>
 					<div *ngFor="let education of educations">
@@ -159,10 +176,10 @@
 		<div fxFlex>
 			<div fxFlex="5"></div>
 			<div class="info-title">
-				<div class="mat-h2 card-title">Certifications</div>
+				<div class="mat-h2 card-title">{{ reviewPrefix + 'certifications.title' | translate }}</div>
 				<tempus-card>
-					<div *ngIf="certifications.length == 0">
-						<p class="mat-body-2">You have not entered information for this section.</p>
+					<div *ngIf="certifications.length === 0">
+						<p class="mat-body-2">{{ reviewPrefix + 'noInfoSection' | translate }}</p>
 					</div>
 					<div *ngFor="let certification of certifications">
 						<div class="section-block">
@@ -180,15 +197,15 @@
 
 		<div fxFlex>
 			<div fxFlex="5"></div>
-			<div class="mat-h2 card-title">Skills</div>
+			<div class="mat-h2 card-title">{{ reviewPrefix + 'skills.title' | translate }}</div>
 			<div fxFlex="5"></div>
 		</div>
 		<div fxFlex>
 			<div fxFlex="5"></div>
 			<div fxFlex="90">
 				<tempus-card>
-					<div *ngIf="skills.length == 0 && skillsSummary == ''">
-						<p class="mat-body-2">You have not entered information for this section.</p>
+					<div *ngIf="skills.length === 0 && skillsSummary === ''">
+						<p class="mat-body-2">{{ reviewPrefix + 'noInfoSection' | translate }}</p>
 					</div>
 					<div fxLayout="column" fxLayoutGap="30px">
 						<div fxFlex class="mat-body-1">{{ skillsSummary }}</div>

@@ -1,0 +1,9 @@
+{
+	"onboardingProfileSignin": {
+		"title": "Signin",
+		"usernamePlaceholder": "Username",
+		"passwordPlaceholder": "Password",
+		"forgotPass": "Forgot your password?",
+		"loginCTA": "Login"
+	}
+}

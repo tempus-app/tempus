@@ -9,9 +9,16 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatDialogModule } from '@angular/material/dialog';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { HttpClient } from '@angular/common/http';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { CredentialsComponent } from './credentials/credentials.component';
 import { SignUpComponent } from './sign-up/sign-up.component';
 import { LandingCtaComponent } from './landing-cta/landing-cta.component';
+
+function createTranslateLoader(http: HttpClient) {
+	return new TranslateHttpLoader(http, './assets/i18n/onboarding/signup/credentials/', '.json');
+}
 
 @NgModule({
 	imports: [
@@ -33,6 +40,15 @@ import { LandingCtaComponent } from './landing-cta/landing-cta.component';
 				component: CredentialsComponent,
 			},
 		]),
+		TranslateModule.forChild({
+			loader: {
+				provide: TranslateLoader,
+				useFactory: createTranslateLoader,
+				deps: [HttpClient],
+			},
+			extend: true,
+			isolate: false,
+		}),
 	],
 	declarations: [CredentialsComponent, SignUpComponent, LandingCtaComponent],
 })

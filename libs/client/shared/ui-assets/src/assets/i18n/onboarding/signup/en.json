@@ -1,0 +1,33 @@
+{
+	"onboardingSignup": {
+		"CTA": {
+			"next": "Next",
+			"back": "Back",
+			"submit": "Submit"
+		},
+		"location": {
+			"address": "Address",
+			"countryPlaceholder": "Country",
+			"cityPlaceholder": "City",
+			"statePlaceholder": "State",
+			"validCountryErr": "Please enter a valid country.",
+			"validStateErr": "Please enter a valid state.",
+			"validCityErr": "Please enter a valid city"
+		},
+		"dates": {
+			"startPlaceholder": "Start Date",
+			"endPlaceholder": "End Date",
+			"validStartDateErr": "Please enter a valid start date.",
+			"validEndDateErr": "Please enter a valid end date.",
+			"starteBeforeEndErr": "Please make sure the start date is before the end date."
+		},
+		"stepper": {
+			"signup": "Signup",
+			"uploadResume": "Upload Resume",
+			"myInfo": "My Information",
+			"workExperience": "Work Experience",
+			"Education": "Education",
+			"review": "Review"
+		}
+	}
+}

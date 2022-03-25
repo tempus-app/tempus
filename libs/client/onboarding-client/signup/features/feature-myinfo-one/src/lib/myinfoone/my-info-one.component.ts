@@ -11,7 +11,7 @@ import {
 	SignupState,
 } from '@tempus/client/onboarding-client/signup/data-access';
 import { Store } from '@ngrx/store';
-import { V } from '@angular/cdk/keycodes';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
 	selector: 'tempus-my-info-one',
@@ -19,6 +19,8 @@ import { V } from '@angular/cdk/keycodes';
 	styleUrls: ['./my-info-one.component.scss'],
 })
 export class MyInfoOneComponent implements OnInit {
+	myinfoonePrefix = 'onboardingSignupMyInfoOne.';
+
 	myInfoForm = this.fb.group({
 		firstName: ['', Validators.required],
 		lastName: ['', Validators.required],
@@ -66,7 +68,13 @@ export class MyInfoOneComponent implements OnInit {
 		private router: Router,
 		private route: ActivatedRoute,
 		private store: Store<SignupState>,
-	) {}
+		private translateService: TranslateService,
+	) {
+		const { currentLang } = translateService;
+		// eslint-disable-next-line no-param-reassign
+		translateService.currentLang = '';
+		translateService.use(currentLang);
+	}
 
 	ngOnInit() {
 		this.store

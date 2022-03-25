@@ -1,12 +1,13 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router, Event, NavigationEnd, ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
+import { TranslateService } from '@ngx-translate/core';
 import {
 	selectAllResumeComponentsCreated,
 	selectResourceData,
 	SignupState,
 } from '@tempus/client/onboarding-client/signup/data-access';
-import { Subject, takeUntil } from 'rxjs';
+import { Subject, take, takeUntil } from 'rxjs';
 
 @Component({
 	selector: 'tempus-signup-shell',
@@ -14,7 +15,7 @@ import { Subject, takeUntil } from 'rxjs';
 	styleUrls: ['./onboarding-client-signup-feature-shell.component.scss'],
 })
 export class SignupShellComponent implements OnInit, OnDestroy {
-	steps = ['Signup', 'Upload Resume', 'My Information', 'Work Experience', 'Education', 'Review'];
+	steps = [];
 
 	links = ['credentials', 'uploadresume', 'myinfoone', 'myinfotwo', 'myinfothree', 'review'];
 
@@ -31,7 +32,22 @@ export class SignupShellComponent implements OnInit, OnDestroy {
 		// this.router.navigate([`../${this.links[this.stepperIndex]}`], { relativeTo: this.route });
 	}
 
-	constructor(private router: Router, private store: Store<SignupState>, private route: ActivatedRoute) {
+	constructor(
+		private router: Router,
+		private store: Store<SignupState>,
+		private route: ActivatedRoute,
+		private translateService: TranslateService,
+	) {
+		const { currentLang } = translateService;
+		// eslint-disable-next-line no-param-reassign
+		translateService.currentLang = '';
+		translateService.use(currentLang);
+		translateService
+			.getTranslation('en')
+			.pipe(take(1))
+			.subscribe(data => {
+				this.steps = this.steps.concat(Object.values(data.onboardingSignup.stepper));
+			});
 		this.router.events.subscribe((event: Event) => {
 			if (event instanceof NavigationEnd) {
 				for (let i = 0; i < this.links.length; i += 1) {

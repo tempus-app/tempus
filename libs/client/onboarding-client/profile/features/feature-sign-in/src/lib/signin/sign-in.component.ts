@@ -10,6 +10,7 @@ import {
 } from '@tempus/client/onboarding-client/profile/data-access';
 import { AsyncRequestState } from '@tempus/client/onboarding-client/shared/data-access';
 import { Subject, takeUntil } from 'rxjs';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
 	selector: 'tempus-sign-in',
@@ -22,7 +23,15 @@ export class SignInComponent implements OnInit, OnDestroy {
 		private router: Router,
 		private route: ActivatedRoute,
 		private fb: FormBuilder,
-	) {}
+		private translateService: TranslateService,
+	) {
+		const { currentLang } = translateService;
+		// eslint-disable-next-line no-param-reassign
+		translateService.currentLang = '';
+		translateService.use(currentLang);
+	}
+
+	signInPrefix = 'onboardingProfileSignin.';
 
 	destroyed$ = new Subject<void>();
 
