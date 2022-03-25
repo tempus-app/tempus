@@ -4,6 +4,9 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatChipsModule } from '@angular/material/chips';
 import { ClientSharedUiComponentsInputModule } from '@tempus/client/shared/ui-components/input';
 import { ClientSharedUiComponentsPresentationalModule } from '@tempus/client/shared/ui-components/presentational';
 import { PersonalInformationComponent } from './personal-information/personal-information.component';
@@ -19,6 +22,9 @@ import { SkillsComponent } from './skills/skills.component';
 		MatGridListModule,
 		MatFormFieldModule,
 		MatButtonModule,
+		MatTooltipModule,
+		MatChipsModule,
+		MatIconModule,
 		ClientSharedUiComponentsInputModule,
 		ClientSharedUiComponentsPresentationalModule,
 	],

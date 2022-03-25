@@ -1,14 +1,51 @@
-import { Component, Input } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { COMMA, ENTER } from '@angular/cdk/keycodes';
+import { MatChipInputEvent } from '@angular/material/chips';
+import { FormBuilder } from '@angular/forms';
 
 @Component({
 	selector: 'tempus-resource-info-skills',
 	templateUrl: './skills.component.html',
 	styleUrls: ['./skills.component.scss'],
 })
-export class SkillsComponent {
-	@Input()
-	skills: Array<string> = [];
+export class SkillsComponent implements OnInit {
+	addOnBlur = true;
 
-	@Input()
-	skillsSummary: string = '';
+	readonly separatorKeysCodes = [ENTER, COMMA] as const;
+
+	skills: string[] = [];
+
+	@Output() formGroup = new EventEmitter();
+
+	@Output() formIsValid = new EventEmitter<boolean>();
+
+	constructor(private fb: FormBuilder) {}
+
+	ngOnInit(): void {
+		this.formGroup.emit(this.myInfoForm);
+	}
+
+	myInfoForm = this.fb.group({
+		skills: [this.skills],
+		skillsSummary: [''],
+	});
+
+	addSkill(event: MatChipInputEvent): void {
+		const value = (event.value || '').trim().substring(0, 50);
+
+		if (value) {
+			this.skills.push(value);
+		}
+		if (event.chipInput !== undefined) {
+			event.chipInput.clear();
+		}
+	}
+
+	removeSkill(skill: string): void {
+		const index = this.skills.indexOf(skill);
+
+		if (index >= 0) {
+			this.skills.splice(index, 1);
+		}
+	}
 }

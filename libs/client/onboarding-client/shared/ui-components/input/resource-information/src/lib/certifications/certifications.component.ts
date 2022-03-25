@@ -1,21 +1,71 @@
-import { Component, Input } from '@angular/core';
-import { formatDateRange, formatAddress, formatName } from '@tempus/shared/util';
-import { ICreateCertificationDto } from '@tempus/shared-domain';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Country, State } from 'country-state-city';
+import { InputType } from '@tempus/client/shared/ui-components/input';
+import { FormArray, FormBuilder, Validators } from '@angular/forms';
 
 @Component({
 	selector: 'tempus-resource-info-certifications',
 	templateUrl: './certifications.component.html',
 	styleUrls: ['./certifications.component.scss'],
 })
-export class CertificationsComponent {
-	@Input()
-	certifications: Array<ICreateCertificationDto> = [];
+export class CertificationsComponent implements OnInit {
+	InputType = InputType;
 
-	formatDate(startDate: Date, endDate: Date) {
-		return formatDateRange(new Date(startDate), new Date(endDate));
+	numberCertificationSections: number[] = [0];
+
+	countries: string[] = Country.getAllCountries().map(country => {
+		return country.name;
+	});
+
+	states: string[] = State.getAllStates().map(state => {
+		return state.name;
+	});
+
+	@Output() formGroup = new EventEmitter();
+
+	@Output() formIsValid = new EventEmitter<boolean>();
+
+	constructor(private fb: FormBuilder) {}
+
+	myInfoForm = this.fb.group({
+		certifications: this.fb.array([]),
+	});
+
+	ngOnInit(): void {
+		this.formGroup.emit(this.myInfoForm);
 	}
 
-	formatAddress(country: string, state: string, city: string) {
-		return formatAddress(country, state, city);
+	get certifications() {
+		// eslint-disable-next-line @typescript-eslint/dot-notation
+		return this.myInfoForm.controls['certifications'] as FormArray;
+	}
+
+	addCertificationSections() {
+		// Prevent duplicate numbers which can cause an error when splicing a work experience section out
+		if (this.numberCertificationSections.length === 0) {
+			this.numberCertificationSections.push(0);
+		} else {
+			const lastElement = this.numberCertificationSections[this.numberCertificationSections.length - 1];
+			this.numberCertificationSections.push(lastElement + 1);
+		}
+		const certification = this.fb.group({
+			certifyingAuthority: ['', Validators.required],
+			title: ['', Validators.required],
+			summary: [''],
+		});
+		this.certifications.push(certification);
+	}
+
+	removeCertificationSection(index: number) {
+		this.numberCertificationSections.splice(index, 1);
+		this.certifications.removeAt(index);
+	}
+
+	updateStateOptions(inputtedCountry: string) {
+		const countryCode = Country.getAllCountries().find(country => country.name === inputtedCountry);
+		if (countryCode != null)
+			this.states = State.getStatesOfCountry(countryCode.isoCode).map(state => {
+				return state.name;
+			});
 	}
 }
