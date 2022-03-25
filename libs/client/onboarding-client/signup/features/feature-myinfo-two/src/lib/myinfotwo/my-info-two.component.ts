@@ -1,9 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { Country, State } from 'country-state-city';
-import { filter, switchMap, take, takeUntil, tap } from 'rxjs/operators';
-import { InputType } from '@tempus/client/shared/ui-components/input';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { filter, switchMap, take } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { checkEnteredDates } from '@tempus/shared/util';
 import { Store } from '@ngrx/store';
 import {
@@ -20,22 +18,9 @@ import { ICreateExperienceDto, ICreateLocationDto } from '@tempus/shared-domain'
 	styleUrls: ['./my-info-two.component.scss'],
 })
 export class MyInfoTwoComponent implements OnInit {
-	numberWorkSections: number[] = [0];
+	myInfoForm = this.fb.group({});
 
-	InputType = InputType;
-
-	countries: string[] = Country.getAllCountries().map(country => {
-		return country.name;
-	});
-
-	states: string[] = State.getAllStates().map(state => {
-		return state.name;
-	});
-
-	myInfoForm = this.fb.group({
-		workExperienceSummary: [''],
-		workExperience: this.fb.array([]),
-	});
+	@Output() formIsValid = new EventEmitter<boolean>();
 
 	get totalWorkExperience() {
 		// eslint-disable-next-line @typescript-eslint/dot-notation
@@ -84,42 +69,8 @@ export class MyInfoTwoComponent implements OnInit {
 			});
 	}
 
-	addWorkSections() {
-		// Prevent duplicate numbers which can cause an error when splicing a work experience section out
-		if (this.numberWorkSections.length === 0) {
-			this.numberWorkSections.push(0);
-		} else {
-			const lastElement = this.numberWorkSections[this.numberWorkSections.length - 1];
-			this.numberWorkSections.push(lastElement + 1);
-		}
-		const workExperience = this.fb.group(
-			{
-				title: ['', Validators.required],
-				company: ['', Validators.required],
-				country: ['', Validators.required],
-				state: ['', Validators.required],
-				city: ['', Validators.required],
-				startDate: ['', Validators.required],
-				endDate: ['', Validators.required],
-				description: ['', Validators.required],
-			},
-			{ validators: checkEnteredDates() },
-		);
-
-		this.totalWorkExperience.push(workExperience);
-	}
-
-	removeWorkSection(index: number) {
-		this.numberWorkSections.splice(index, 1);
-		this.totalWorkExperience.removeAt(index);
-	}
-
-	updateStateOptions(inputtedCountry: string) {
-		const countryCode = Country.getAllCountries().find(country => country.name === inputtedCountry);
-		if (countryCode != null)
-			this.states = State.getStatesOfCountry(countryCode.isoCode).map(state => {
-				return state.name;
-			});
+	loadFormGroup(eventData: FormGroup) {
+		this.myInfoForm = eventData;
 	}
 
 	nextStep() {

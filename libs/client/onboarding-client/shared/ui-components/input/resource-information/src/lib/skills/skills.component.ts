@@ -17,12 +17,15 @@ export class SkillsComponent implements OnInit {
 
 	@Output() formGroup = new EventEmitter();
 
+	@Output() emitSkills = new EventEmitter();
+
 	@Output() formIsValid = new EventEmitter<boolean>();
 
 	constructor(private fb: FormBuilder) {}
 
 	ngOnInit(): void {
 		this.formGroup.emit(this.myInfoForm);
+		this.emitSkills.emit(this.skills);
 	}
 
 	myInfoForm = this.fb.group({
