@@ -19,7 +19,8 @@
 			"endPlaceholder": "End Date",
 			"validStartDateErr": "Please enter a valid start date.",
 			"validEndDateErr": "Please enter a valid end date.",
-			"starteBeforeEndErr": "Please make sure the start date is before the end date."
+			"starteBeforeEndErr": "Please make sure the start date is before the end date.",
+			"present": "Present"
 		},
 		"stepper": {
 			"signup": "Signup",
