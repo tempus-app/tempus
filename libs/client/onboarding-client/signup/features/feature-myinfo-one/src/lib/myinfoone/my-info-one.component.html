@@ -86,7 +86,7 @@
 										[options]="states"
 										label="State"
 										cssClass="secondary"
-                    (optionSelect)="updateCityOptions($event)"
+										(optionSelect)="updateCityOptions($event)"
 										[control]="$any(myInfoForm).get('state')"
 									></tempus-dropdown>
 								</div>
@@ -94,12 +94,12 @@
 							<div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxFlex="33%" class="block-2">
 								<div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="center center" fxFlexFill class="grid-item">
 									<tempus-search-box
-									[options]="cities"
-									placeholder="City"
-									cssClass="secondary"
-									[control]="$any(myInfoForm).get('city')"
-								  >
-								  </tempus-search-box>
+										[options]="cities"
+										placeholder="City"
+										cssClass="secondary"
+										[control]="$any(myInfoForm).get('city')"
+									>
+									</tempus-search-box>
 								</div>
 								<div
 									fxFlex.gt-sm="50%"

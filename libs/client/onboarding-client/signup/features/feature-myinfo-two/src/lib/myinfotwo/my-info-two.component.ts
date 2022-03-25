@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { Country, State } from 'country-state-city';
+import { City, Country, State } from 'country-state-city';
 import { filter, switchMap, take, takeUntil, tap } from 'rxjs/operators';
 import { InputType } from '@tempus/client/shared/ui-components/input';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import {
 	createWorkExperienceDetails,
@@ -27,9 +27,13 @@ export class MyInfoTwoComponent implements OnInit {
 		return country.name;
 	});
 
-	states: string[] = State.getAllStates().map(state => {
-		return state.name;
-	});
+	states: string[] = [];
+
+	cities: string[] = [];
+
+	countryCode = '';
+
+	stateCode = '';
 
 	myInfoForm = this.fb.group({
 		workExperienceSummary: [''],
@@ -62,16 +66,19 @@ export class MyInfoTwoComponent implements OnInit {
 				const workExperienceArray = this.totalWorkExperience;
 				createResourceDto.experiences.forEach(experience => {
 					workExperienceArray.push(
-						this.fb.group({
-							title: [experience.title, Validators.required],
-							company: [experience.company, Validators.required],
-							country: [experience.location.country, Validators.required],
-							state: [experience.location.province, Validators.required],
-							city: [experience.location.city, Validators.required],
-							startDate: [experience.startDate, Validators.required],
-							endDate: [experience.endDate, Validators.required],
-							description: [experience.description, Validators.required],
-						}),
+						this.fb.group(
+							{
+								title: [experience.title, Validators.required],
+								company: [experience.company, Validators.required],
+								country: [experience.location.country, Validators.required],
+								state: [experience.location.province, Validators.required],
+								city: [experience.location.city, Validators.required],
+								startDate: [experience.startDate, Validators.required],
+								endDate: [experience.endDate, Validators.required],
+								description: [experience.description, Validators.required],
+							},
+							{ validators: this.checkCountryState() },
+						),
 					);
 				});
 				this.myInfoForm.patchValue({
@@ -109,10 +116,42 @@ export class MyInfoTwoComponent implements OnInit {
 
 	updateStateOptions(inputtedCountry: string) {
 		const countryCode = Country.getAllCountries().find(country => country.name === inputtedCountry);
+		this.countryCode = countryCode?.isoCode || '';
 		if (countryCode != null)
 			this.states = State.getStatesOfCountry(countryCode.isoCode).map(state => {
 				return state.name;
 			});
+	}
+
+	updateCityOptions(inputtedState: string) {
+		const stateCode = State.getAllStates().find(state => state.name === inputtedState);
+		this.stateCode = stateCode?.isoCode || '';
+		if (stateCode != null)
+			this.cities = City.getCitiesOfState(this.countryCode, stateCode.isoCode).map(city => {
+				return city.name;
+			});
+	}
+
+	checkCountryState() {
+		return (controls: AbstractControl) => {
+			if (controls) {
+				const formCountry = controls.get('country')?.value;
+				const formState = controls.get('state')?.value;
+				const countryCode = Country.getAllCountries().find(country => country.name === formCountry);
+				if (countryCode === undefined) {
+					return { stateError: true };
+				}
+				if (countryCode != null) {
+					const states = State.getStatesOfCountry(countryCode?.isoCode).map(state => {
+						return state.name;
+					});
+					if (!states.find(state => state === formState)) {
+						return { stateError: true };
+					}
+				}
+			}
+			return null;
+		};
 	}
 
 	nextStep() {

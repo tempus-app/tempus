@@ -111,6 +111,7 @@
 										[options]="states"
 										label="State"
 										cssClass="secondary"
+										(optionSelect)="updateCityOptions($event)"
 										[control]="$any(numExperience).get('state')"
 									>
 									</tempus-dropdown>
@@ -123,12 +124,13 @@
 									fxFlexFill
 									class="grid-item"
 								>
-									<tempus-text-input
+									<tempus-search-box
 										id="city-{{ index }}"
+										[options]="cities"
 										placeholder="City"
 										cssClass="secondary"
 										[control]="$any(numExperience).get('city')"
-									></tempus-text-input>
+									></tempus-search-box>
 								</div>
 							</div>
 							<div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxFlex="33%" class="block-2">
