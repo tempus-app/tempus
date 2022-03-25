@@ -1,4 +1,4 @@
-import { Component, Output, EventEmitter, OnInit } from '@angular/core';
+import { Component, Output, EventEmitter, OnInit, Input } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { InputType } from '@tempus/client/shared/ui-components/input';
 import { Country, State } from 'country-state-city';
@@ -49,6 +49,26 @@ export class PersonalInformationComponent implements OnInit {
 
 	InputType = InputType;
 
+	@Input() firstName = '';
+
+	@Input() lastName = '';
+
+	@Input() phoneNumber = '';
+
+	@Input() linkedInLink = '';
+
+	@Input() githubLink = '';
+
+	@Input() otherLink = '';
+
+	@Input() country = '';
+
+	@Input() state = '';
+
+	@Input() city = '';
+
+	@Input() profileSummary = '';
+
 	@Output() formGroup = new EventEmitter();
 
 	@Output() formIsValid = new EventEmitter<boolean>();
@@ -56,7 +76,23 @@ export class PersonalInformationComponent implements OnInit {
 	constructor(private fb: FormBuilder) {}
 
 	ngOnInit(): void {
+		this.loadStoreData();
 		this.formGroup.emit(this.myInfoForm);
+	}
+
+	loadStoreData() {
+		this.myInfoForm.patchValue({
+			firstName: this.firstName,
+			lastName: this.lastName,
+			phoneNumber: this.phoneNumber,
+			linkedInLink: this.linkedInLink,
+			githubLink: this.githubLink,
+			otherLink: this.otherLink,
+			country: this.country,
+			state: this.state,
+			city: this.city,
+			profileSummary: this.profileSummary,
+		});
 	}
 
 	updateStateOptions(inputtedCountry: string) {

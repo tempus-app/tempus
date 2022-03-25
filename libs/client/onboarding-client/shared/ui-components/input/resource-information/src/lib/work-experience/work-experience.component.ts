@@ -1,7 +1,8 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { Country, State } from 'country-state-city';
 import { InputType } from '@tempus/client/shared/ui-components/input';
 import { FormArray, FormBuilder, Validators } from '@angular/forms';
+import { ICreateExperienceDto } from '@tempus/shared-domain';
 import { checkEnteredDates } from '@tempus/shared/util';
 
 @Component({
@@ -14,6 +15,10 @@ export class WorkExperienceComponent implements OnInit {
 
 	InputType = InputType;
 
+	@Input() experiencesSummary = '';
+
+	@Input() workExperiences: Array<ICreateExperienceDto> = [];
+
 	@Output() formGroup = new EventEmitter();
 
 	@Output() formIsValid = new EventEmitter<boolean>();
@@ -21,7 +26,15 @@ export class WorkExperienceComponent implements OnInit {
 	constructor(private fb: FormBuilder) {}
 
 	ngOnInit(): void {
+		this.loadStoreData();
 		this.formGroup.emit(this.myInfoForm);
+	}
+
+	loadStoreData() {
+		this.myInfoForm.patchValue({
+			experiencesSummary: this.experiencesSummary,
+			workExperiences: this.workExperiences,
+		});
 	}
 
 	countries: string[] = Country.getAllCountries().map(country => {

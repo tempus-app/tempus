@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { FormBuilder } from '@angular/forms';
@@ -13,7 +13,11 @@ export class SkillsComponent implements OnInit {
 
 	readonly separatorKeysCodes = [ENTER, COMMA] as const;
 
-	skills: string[] = [];
+	//skills: string[] = [];
+
+	@Input() skillsSummary = '';
+
+	@Input() skills: string[] = [];
 
 	@Output() formGroup = new EventEmitter();
 
@@ -24,8 +28,16 @@ export class SkillsComponent implements OnInit {
 	constructor(private fb: FormBuilder) {}
 
 	ngOnInit(): void {
+		this.loadStoreData();
 		this.formGroup.emit(this.myInfoForm);
 		this.emitSkills.emit(this.skills);
+	}
+
+	loadStoreData() {
+		this.myInfoForm.patchValue({
+			skillsSummary: this.skillsSummary,
+			skills: this.skills,
+		});
 	}
 
 	myInfoForm = this.fb.group({

@@ -17,8 +17,10 @@ import { ICreateExperienceDto, ICreateLocationDto } from '@tempus/shared-domain'
 	templateUrl: './my-info-two.component.html',
 	styleUrls: ['./my-info-two.component.scss'],
 })
-export class MyInfoTwoComponent implements OnInit {
+export class MyInfoTwoComponent {
 	myInfoForm = this.fb.group({});
+	experiencesSummary = '';
+	workExperiences: Array<ICreateExperienceDto> = [];
 
 	@Output() formIsValid = new EventEmitter<boolean>();
 
@@ -34,7 +36,8 @@ export class MyInfoTwoComponent implements OnInit {
 		private store: Store<SignupState>,
 	) {}
 
-	ngOnInit() {
+	loadFormGroup(eventData: FormGroup) {
+		this.myInfoForm = eventData;
 		this.store
 			.select(selectWorkExperienceDetailsCreated)
 			.pipe(
@@ -67,10 +70,6 @@ export class MyInfoTwoComponent implements OnInit {
 					workExperienceSummary: createResourceDto.experiencesSummary,
 				});
 			});
-	}
-
-	loadFormGroup(eventData: FormGroup) {
-		this.myInfoForm = eventData;
 	}
 
 	nextStep() {

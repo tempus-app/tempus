@@ -1,8 +1,9 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { Country, State } from 'country-state-city';
 import { InputType } from '@tempus/client/shared/ui-components/input';
 import { FormArray, FormBuilder, Validators } from '@angular/forms';
 import { checkEnteredDates } from '@tempus/shared/util';
+import { ICreateEducationDto } from '@tempus/shared-domain';
 
 @Component({
 	selector: 'tempus-resource-info-education',
@@ -11,6 +12,10 @@ import { checkEnteredDates } from '@tempus/shared/util';
 })
 export class EducationComponent implements OnInit {
 	InputType = InputType;
+
+	@Input() educationSummary = '';
+
+	@Input() educations: Array<ICreateEducationDto> = [];
 
 	@Output() formGroup = new EventEmitter();
 
@@ -34,7 +39,15 @@ export class EducationComponent implements OnInit {
 	constructor(private fb: FormBuilder) {}
 
 	ngOnInit(): void {
+		this.loadStoreData();
 		this.formGroup.emit(this.myInfoForm);
+	}
+
+	loadStoreData() {
+		this.myInfoForm.patchValue({
+			educationSummary: this.educationSummary,
+			qualifications: this.educations,
+		});
 	}
 
 	get qualifications() {

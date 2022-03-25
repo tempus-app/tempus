@@ -16,10 +16,18 @@ import { Store } from '@ngrx/store';
 	templateUrl: './my-info-one.component.html',
 	styleUrls: ['./my-info-one.component.scss'],
 })
-export class MyInfoOneComponent implements OnInit {
+export class MyInfoOneComponent {
 	myInfoForm = this.fb.group({});
 	firstName = '';
 	lastName = '';
+	phoneNumber = '';
+	linkedInLink = '';
+	githubLink = '';
+	otherLink = '';
+	country = '';
+	state = '';
+	city = '';
+	profileSummary = '';
 
 	InputType = InputType;
 
@@ -31,8 +39,6 @@ export class MyInfoOneComponent implements OnInit {
 		private route: ActivatedRoute,
 		private store: Store<SignupState>,
 	) {}
-
-	ngOnInit() {}
 
 	loadFormGroup(eventData: FormGroup) {
 		this.myInfoForm = eventData;
@@ -85,6 +91,14 @@ export class MyInfoOneComponent implements OnInit {
 				.subscribe(resData => {
 					this.firstName = resData?.firstName;
 					this.lastName = resData?.lastName;
+					this.phoneNumber = resData?.phoneNumber;
+					this.country = resData?.location?.country;
+					this.state = resData?.location?.province;
+					this.city = resData?.location?.city;
+					this.linkedInLink = resData?.linkedInLink;
+					this.githubLink = resData?.githubLink;
+					this.otherLink = resData?.otherLink;
+					this.profileSummary = resData?.profileSummary;
 				});
 			this.router.navigate(['../myinfotwo'], { relativeTo: this.route });
 		}

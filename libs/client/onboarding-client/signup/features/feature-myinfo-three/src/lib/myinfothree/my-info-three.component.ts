@@ -23,10 +23,15 @@ import {
 	templateUrl: './my-info-three.component.html',
 	styleUrls: ['./my-info-three.component.scss'],
 })
-export class MyInfoThreeComponent implements OnInit {
+export class MyInfoThreeComponent {
 	certificationsForm = this.fb.group({});
 	educationsForm = this.fb.group({});
 	skillsForm = this.fb.group({});
+
+	skillsSummary = '';
+	educationSummary = '';
+	educations: Array<ICreateEducationDto> = [];
+	certificationsArray: Array<ICreateCertificationDto> = [];
 
 	skills: string[] = [];
 
@@ -49,7 +54,49 @@ export class MyInfoThreeComponent implements OnInit {
 		return this.certificationsForm.controls['certifications'] as FormArray;
 	}
 
-	ngOnInit() {
+	loadSkillsGroup(eventData: FormGroup) {
+		this.skillsForm = eventData;
+		this.store
+			.select(selectTrainingAndSkillsCreated)
+			.pipe(
+				take(1),
+				filter(created => created),
+				switchMap(_ => this.store.select(selectResourceData)),
+				take(1),
+			)
+			.subscribe(createResourceDto => {
+				this.skillsForm.patchValue({
+					skillsSummary: createResourceDto.skillsSummary,
+				});
+			});
+	}
+
+	loadCertificationsGroup(eventData: FormGroup) {
+		this.certificationsForm = eventData;
+		this.store
+			.select(selectTrainingAndSkillsCreated)
+			.pipe(
+				take(1),
+				filter(created => created),
+				switchMap(_ => this.store.select(selectResourceData)),
+				take(1),
+			)
+			.subscribe(createResourceDto => {
+				const certificationsArray = this.certifications;
+				createResourceDto.certifications.forEach(certification => {
+					certificationsArray.push(
+						this.fb.group({
+							certifyingAuthority: [certification.institution, Validators.required],
+							title: [certification.title, Validators.required],
+							summary: [certification.summary],
+						}),
+					);
+				});
+			});
+	}
+
+	loadEducationsGroup(eventData: FormGroup) {
+		this.educationsForm = eventData;
 		this.store
 			.select(selectTrainingAndSkillsCreated)
 			.pipe(
@@ -77,45 +124,27 @@ export class MyInfoThreeComponent implements OnInit {
 					educationsArray.push(educationForm);
 				});
 
-				const certificationsArray = this.certifications;
-				createResourceDto.certifications.forEach(certification => {
-					certificationsArray.push(
-						this.fb.group({
-							certifyingAuthority: [certification.institution, Validators.required],
-							title: [certification.title, Validators.required],
-							summary: [certification.summary],
-						}),
-					);
-				});
-
-				createResourceDto.skills.forEach(skill => {
-					this.skills.push(skill.skill.name);
-				});
-
-				this.skillsForm.patchValue({
-					skillsSummary: createResourceDto.skillsSummary,
-				});
-
 				this.educationsForm.patchValue({
 					educationSummary: createResourceDto.educationsSummary,
 				});
 			});
 	}
 
-	loadSkillsGroup(eventData: FormGroup) {
-		this.skillsForm = eventData;
-	}
-
-	loadCertificationsGroup(eventData: FormGroup) {
-		this.certificationsForm = eventData;
-	}
-
-	loadEducationsGroup(eventData: FormGroup) {
-		this.educationsForm = eventData;
-	}
-
 	loadSkills(eventData: string[]) {
 		this.skills = eventData;
+		this.store
+			.select(selectTrainingAndSkillsCreated)
+			.pipe(
+				take(1),
+				filter(created => created),
+				switchMap(_ => this.store.select(selectResourceData)),
+				take(1),
+			)
+			.subscribe(createResourceDto => {
+				createResourceDto.skills.forEach(skill => {
+					this.skills.push(skill.skill.name);
+				});
+			});
 	}
 
 	isValid() {

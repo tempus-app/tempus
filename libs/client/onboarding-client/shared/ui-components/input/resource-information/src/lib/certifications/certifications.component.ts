@@ -1,7 +1,8 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Country, State } from 'country-state-city';
 import { InputType } from '@tempus/client/shared/ui-components/input';
 import { FormArray, FormBuilder, Validators } from '@angular/forms';
+import { ICreateCertificationDto } from '@tempus/shared-domain';
 
 @Component({
 	selector: 'tempus-resource-info-certifications',
@@ -21,6 +22,8 @@ export class CertificationsComponent implements OnInit {
 		return state.name;
 	});
 
+	@Input() certificationsArray: Array<ICreateCertificationDto> = [];
+
 	@Output() formGroup = new EventEmitter();
 
 	@Output() formIsValid = new EventEmitter<boolean>();
@@ -32,7 +35,14 @@ export class CertificationsComponent implements OnInit {
 	});
 
 	ngOnInit(): void {
+		this.loadStoreData();
 		this.formGroup.emit(this.myInfoForm);
+	}
+
+	loadStoreData() {
+		this.myInfoForm.patchValue({
+			certifications: this.certificationsArray,
+		});
 	}
 
 	get certifications() {

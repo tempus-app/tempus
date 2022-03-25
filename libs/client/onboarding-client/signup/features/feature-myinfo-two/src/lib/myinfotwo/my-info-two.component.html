@@ -1,7 +1,11 @@
 <ng-container>
 	<div fxLayout="column" fxFill fxLayoutGap="30px">
 		<div fxFlex>
-			<tempus-resource-info-work-experience (formGroup)="loadFormGroup($event)"></tempus-resource-info-work-experience>
+			<tempus-resource-info-work-experience
+				(formGroup)="loadFormGroup($event)"
+				[experiencesSummary]="experiencesSummary"
+				[workExperiences]="workExperiences"
+			></tempus-resource-info-work-experience>
 		</div>
 		<div class="container button-container">
 			<button color="primary" mat-raised-button matStepperPrevious type="button" (click)="backStep()">Back</button>

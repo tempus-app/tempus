@@ -98,7 +98,7 @@ export class ReviewComponent implements OnInit {
 			if (reqStatusData.status === AsyncRequestState.LOADING) {
 				this.loading = true;
 			} else if (reqStatusData.status === AsyncRequestState.SUCCESS) {
-				alert('Resource Created Succesffully');
+				alert('Resource Created Succesfully');
 				this.loading = false;
 				this.store.dispatch(resetLinkState());
 				this.store.dispatch(resetCreateResourceState());
