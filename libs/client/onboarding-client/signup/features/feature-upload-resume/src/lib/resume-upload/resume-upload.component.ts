@@ -1,16 +1,21 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { createResumeUpload, SignupState } from '@tempus/client/onboarding-client/signup/data-access';
+import {
+	createResumeUpload,
+	selectUploadedResume,
+	SignupState,
+} from '@tempus/client/onboarding-client/signup/data-access';
 import { Store } from '@ngrx/store';
 import { TranslateService } from '@ngx-translate/core';
+import { take } from 'rxjs';
 
 @Component({
 	selector: 'tempus-resume-upload',
 	templateUrl: './resume-upload.component.html',
 	styleUrls: ['./resume-upload.component.scss'],
 })
-export class ResumeUploadComponent {
+export class ResumeUploadComponent implements OnInit {
 	fileData = new FormControl(null, { validators: [Validators.required] });
 
 	fileType = 'application/pdf,application/msword,.doc,.docx,text/plain';
@@ -31,6 +36,15 @@ export class ResumeUploadComponent {
 		translateService.use(currentLang);
 	}
 
+	ngOnInit(): void {
+		this.store
+			.select(selectUploadedResume)
+			.pipe(take(1))
+			.subscribe(data => {
+				this.onUpload(data);
+			});
+	}
+
 	onChange(event: Event) {
 		const input = event.currentTarget as HTMLInputElement;
 		const { files } = input;
@@ -43,10 +57,12 @@ export class ResumeUploadComponent {
 		}
 	}
 
-	onUpload(file: File) {
-		this.fileData.patchValue(file);
-		this.fileData.markAsDirty();
-		this.fileUploaded = true;
+	onUpload(file: File | null) {
+		if (file) {
+			this.fileData.patchValue(file);
+			this.fileData.markAsDirty();
+			this.fileUploaded = true;
+		}
 	}
 
 	onDelete() {
