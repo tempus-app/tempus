@@ -37,9 +37,9 @@ export function checkEnteredDates() {
 }
 
 export function formatAddress(country: string, state: string, city: string) {
-	return city + ', ' + state + ', ' + country;
+	return `${city}, ${state}, ${country}`;
 }
 
 export function formatName(first: string, last: string) {
-	return first + ' ' + last;
+	return `${first} ${last}`;
 }
