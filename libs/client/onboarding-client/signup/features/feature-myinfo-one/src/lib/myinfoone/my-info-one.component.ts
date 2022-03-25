@@ -24,7 +24,13 @@ export class MyInfoOneComponent implements OnInit {
 		lastName: ['', Validators.required],
 		profileSummary: '',
 		// Taken from https://stackoverflow.com/questions/16699007/regular-expression-to-match-standard-10-digit-phone-number
-		phoneNumber: ['', [Validators.required, Validators.pattern(/^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/)]],
+		phoneNumber: [
+			'',
+			[
+				Validators.required,
+				Validators.pattern(/^\s*(?:\+?(\d{1,3}))?[-. (]*(\d{3})[-. )]*(\d{3})[-. ]*(\d{4})(?: *x(\d+))?\s*$/),
+			],
+		],
 		// Taken from https://stackoverflow.com/questions/3809401/what-is-a-good-regular-expression-to-match-a-url
 		linkedInLink: [
 			'',
