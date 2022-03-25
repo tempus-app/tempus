@@ -69,7 +69,6 @@ export class ResumeUploadComponent {
 	async onUpload(file: File) {
 		(await this.parseFile(file)).subscribe((event: any) => {
 			if (typeof event === 'object') {
-				console.log(JSON.parse(event.body));
 				this.createUserDetails(JSON.parse(event.body));
 				this.createWorkDetails(JSON.parse(event.body));
 				this.createTrainingandSkilsDetails(JSON.parse(event.body));
