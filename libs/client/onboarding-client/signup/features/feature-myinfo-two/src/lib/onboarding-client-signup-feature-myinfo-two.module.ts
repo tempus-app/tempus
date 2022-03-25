@@ -14,6 +14,7 @@ import { RouterModule } from '@angular/router';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { HttpClient } from '@angular/common/http';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MyInfoTwoComponent } from './myinfotwo/my-info-two.component';
 
 function createTranslateLoader(http: HttpClient) {
@@ -33,6 +34,7 @@ function createTranslateLoader(http: HttpClient) {
 		FlexLayoutModule,
 		ReactiveFormsModule,
 		MatTooltipModule,
+		MatCheckboxModule,
 		RouterModule.forChild([
 			{
 				path: '',

@@ -14,6 +14,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { HttpClient } from '@angular/common/http';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MyInfoThreeComponent } from './myinfothree/my-info-three.component';
 
 function createTranslateLoader(http: HttpClient) {
@@ -33,6 +34,7 @@ function createTranslateLoader(http: HttpClient) {
 		MatChipsModule,
 		MatButtonModule,
 		MatTooltipModule,
+		MatCheckboxModule,
 		RouterModule.forChild([
 			{
 				path: '',

@@ -80,7 +80,7 @@ export class MyInfoTwoComponent implements OnInit {
 								state: [experience.location.province, Validators.required],
 								city: [experience.location.city, Validators.required],
 								startDate: [experience.startDate, Validators.required],
-								endDate: [experience.endDate, Validators.required],
+								endDate: [{ value: experience.endDate, disabled: !experience.endDate }, Validators.required],
 								description: [experience.description, Validators.required],
 							},
 							{ validators: checkEnteredDates() },
@@ -91,6 +91,16 @@ export class MyInfoTwoComponent implements OnInit {
 					workExperienceSummary: createResourceDto.experiencesSummary,
 				});
 			});
+	}
+
+	setCheck(checked: boolean, numExp: AbstractControl) {
+		if (checked) {
+			numExp.patchValue({ endDate: null });
+			numExp.get('endDate')?.disable();
+		} else {
+			numExp.patchValue({ endDate: '' });
+			numExp.get('endDate')?.enable();
+		}
 	}
 
 	addWorkSections() {
@@ -157,7 +167,7 @@ export class MyInfoTwoComponent implements OnInit {
 									city: workExperience.city,
 								} as ICreateLocationDto,
 								startDate: workExperience.startDate,
-								endDate: workExperience.endDate,
+								endDate: workExperience.endDate ? workExperience.endDate : null,
 								summary: workExperience.description,
 								description: [workExperience.description],
 							} as ICreateExperienceDto;

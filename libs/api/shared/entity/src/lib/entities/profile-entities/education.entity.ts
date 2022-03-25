@@ -36,8 +36,8 @@ export class EducationEntity implements Education {
 	@Column()
 	startDate: Date;
 
-	@Column()
-	endDate: Date;
+	@Column({ nullable: true })
+	endDate: Date | null;
 
 	@OneToOne(() => LocationEntity, location => location.education, {
 		cascade: ['insert', 'update'],

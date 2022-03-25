@@ -19,7 +19,7 @@ export class CreateExperienceDto implements ICreateExperienceDto {
 	startDate: Date;
 
 	@ApiProperty()
-	endDate: Date;
+	endDate: Date | null;
 
 	@ApiProperty()
 	location: CreateLocationDto;
@@ -30,7 +30,7 @@ export class CreateExperienceDto implements ICreateExperienceDto {
 		description: string[],
 		company: string,
 		startDate: Date,
-		endDate: Date,
+		endDate: Date | null,
 		location: CreateLocationDto,
 	) {
 		this.title = title;

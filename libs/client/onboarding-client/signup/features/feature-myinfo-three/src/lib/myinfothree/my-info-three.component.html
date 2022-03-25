@@ -204,6 +204,8 @@
 									fxLayoutAlign="end center"
 									fxLayoutAlign.lt-md="center center"
 									fxFlexFill
+									fxLayout.lt-md="column"
+									fxLayout="column"
 									class="grid-item"
 								>
 									<tempus-text-input
@@ -213,6 +215,15 @@
 										cssClass="secondary"
 										[control]="$any(numEducation).get('endDate')"
 									></tempus-text-input>
+									<div style="display: flex; justify-content: flex-start; width: 100%; margin-left: 3rem">
+										<mat-checkbox
+											class="checkbox"
+											[checked]="$any(numEducation).get('endDate').disabled"
+											(change)="setCheck($event.checked, numEducation)"
+										>
+											<p class="mat-body-2 checkbox-label">Present</p>
+										</mat-checkbox>
+									</div>
 								</div>
 							</div>
 

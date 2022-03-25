@@ -46,8 +46,8 @@ export class ExperienceEntity implements Experience {
 	@Column()
 	startDate: Date;
 
-	@Column()
-	endDate: Date;
+	@Column({ nullable: true })
+	endDate: Date | null;
 
 	@OneToOne(() => LocationEntity, location => location.experience, { cascade: ['insert', 'update'] })
 	location: LocationEntity;

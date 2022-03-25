@@ -13,12 +13,12 @@ export class CreateEducationDto implements ICreateEducationDto {
 	startDate: Date;
 
 	@ApiProperty()
-	endDate: Date;
+	endDate: Date | null;
 
 	@ApiProperty()
 	location: CreateLocationDto;
 
-	constructor(degree: string, institution: string, startDate: Date, endDate: Date, location: CreateLocationDto) {
+	constructor(degree: string, institution: string, startDate: Date, endDate: Date | null, location: CreateLocationDto) {
 		this.degree = degree;
 		this.institution = institution;
 		this.startDate = startDate;

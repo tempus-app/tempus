@@ -11,7 +11,7 @@ export interface ICreateExperienceDto {
 
 	startDate: Date;
 
-	endDate: Date;
+	endDate: Date | null;
 
 	location: ICreateLocationDto;
 }

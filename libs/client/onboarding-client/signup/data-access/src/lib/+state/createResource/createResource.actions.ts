@@ -43,7 +43,6 @@ export const createTrainingAndSkillDetails = createAction(
 	}>(),
 );
 
-// ACTION NEVER USED -- TODO COME BACK LATERE
 export const setResourceLinkId = createAction(
 	'[Signup Credentials Page] Set Resource Link Id',
 	props<{

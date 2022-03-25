@@ -133,8 +133,8 @@ export class ReviewComponent implements OnInit {
 		});
 	}
 
-	formatDate(startDate: Date, endDate: Date) {
-		return formatDateRange(new Date(startDate), new Date(endDate));
+	formatDate(startDate: Date, endDate: Date | null) {
+		return formatDateRange(new Date(startDate), endDate ? new Date(endDate) : endDate);
 	}
 
 	formatAddress(country: string, state: string, city: string) {

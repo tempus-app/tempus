@@ -7,7 +7,7 @@ export interface ICreateEducationDto {
 
 	startDate: Date;
 
-	endDate: Date;
+	endDate: Date | null;
 
 	location: ICreateLocationDto;
 }

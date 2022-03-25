@@ -111,7 +111,7 @@ export class MyInfoThreeComponent implements OnInit {
 							state: [education.location.province],
 							city: [education.location.city],
 							startDate: [education.startDate, Validators.required],
-							endDate: [education.endDate, Validators.required],
+							endDate: [{ value: education.endDate, disabled: !education.endDate }, Validators.required],
 						},
 						{ validators: checkEnteredDates() },
 					);
@@ -138,6 +138,16 @@ export class MyInfoThreeComponent implements OnInit {
 					skillsSummary: createResourceDto.skillsSummary,
 				});
 			});
+	}
+
+	setCheck(checked: boolean, numEdu: AbstractControl) {
+		if (checked) {
+			numEdu.patchValue({ endDate: null });
+			numEdu.get('endDate')?.disable();
+		} else {
+			numEdu.patchValue({ endDate: '' });
+			numEdu.get('endDate')?.enable();
+		}
 	}
 
 	addEducationSections() {
@@ -241,7 +251,7 @@ export class MyInfoThreeComponent implements OnInit {
 								degree: qualification.field,
 								institution: qualification.institution,
 								startDate: qualification.startDate,
-								endDate: qualification.endDate,
+								endDate: qualification.endDate ? qualification.endDate : null,
 								location: {
 									country: qualification.country,
 									city: qualification.city,
