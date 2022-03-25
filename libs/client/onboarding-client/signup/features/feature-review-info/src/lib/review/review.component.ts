@@ -125,17 +125,17 @@ export class ReviewComponent implements OnInit {
 	}
 
 	formatAddress(country: string, state: string, city: string) {
-		return city + ', ' + state + ', ' + country;
+		return `${city}, ${state}, ${country}`;
 	}
 
 	formatName(first: string, last: string) {
-		return first + ' ' + last;
+		return `${first} ${last}`;
 	}
 
 	downloadResume() {
 		if (this.resume !== null) {
-			let url = URL.createObjectURL(this.resume);
-			let link = document.createElement('a');
+			const url = URL.createObjectURL(this.resume);
+			const link = document.createElement('a');
 			link.href = url;
 			link.download = this.resume?.name || 'download';
 			link.click();

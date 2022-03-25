@@ -84,6 +84,7 @@ export class MyInfoOneComponent implements OnInit {
 				take(1),
 			)
 			.subscribe(createResourceDto => {
+				this.updateStateOptions(createResourceDto.location.country);
 				this.myInfoForm.setValue({
 					firstName: createResourceDto.firstName,
 					lastName: createResourceDto.lastName,

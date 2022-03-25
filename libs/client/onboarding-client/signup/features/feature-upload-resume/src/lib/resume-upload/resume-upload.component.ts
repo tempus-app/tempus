@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Country } from 'country-state-city';
 import {
 	createResumeUpload,
 	SignupState,
@@ -89,11 +90,20 @@ export class ResumeUploadComponent {
 				skillsSummary: '',
 				educationsSummary: '',
 				educations: parsedResumeJSON.schools.map((qualification: ParsedEducation) => {
+					let formattedStartDate;
+					let formattedEndDate;
+					// Add a 0 in front of the month if it's under 10 to follow date standard format
+					if (qualification.start) {
+						formattedStartDate = `${qualification.start.year}-${`0${qualification.start.month}`.slice(-2)}-01`;
+					}
+					if (qualification.end) {
+						formattedEndDate = `${qualification.end.year}-${`0${qualification.end.month}`.slice(-2)}-01`;
+					}
 					return {
 						degree: qualification.degree,
 						institution: qualification.org,
-						startDate: new Date(),
-						endDate: new Date(),
+						startDate: formattedStartDate || undefined,
+						endDate: formattedEndDate || undefined,
 						location: {
 							country: '',
 							city: '',
@@ -118,6 +128,15 @@ export class ResumeUploadComponent {
 			createWorkExperienceDetails({
 				experiencesSummary: '',
 				experiences: parsedResumeJSON.positions.map((workExperience: ParsedWorkExperience) => {
+					let formattedStartDate;
+					let formattedEndDate;
+					// Add a 0 in front of the month if it's under 10 to follow date standard format
+					if (workExperience.start) {
+						formattedStartDate = `${workExperience.start.year}-${`0${workExperience.start.month}`.slice(-2)}-01`;
+					}
+					if (workExperience.end) {
+						formattedEndDate = `${workExperience.end.year}-${`0${workExperience.end.month}`.slice(-2)}-01`;
+					}
 					return {
 						title: workExperience.title,
 						company: workExperience.org,
@@ -126,8 +145,8 @@ export class ResumeUploadComponent {
 							province: '',
 							city: '',
 						} as ICreateLocationDto,
-						startDate: new Date(),
-						endDate: new Date(),
+						startDate: formattedStartDate || undefined,
+						endDate: formattedEndDate || undefined,
 						summary: '',
 						description: [workExperience.summary],
 					} as ICreateExperienceDto;
@@ -138,6 +157,10 @@ export class ResumeUploadComponent {
 
 	createUserDetails(parsedResumeJSON: ParsedResume) {
 		const splitNames = parsedResumeJSON.names[0].split(' ');
+		let country;
+		if (parsedResumeJSON.location.address) {
+			country = Country.getCountryByCode(parsedResumeJSON.location.address.CountryCode)?.name;
+		}
 		this.store.dispatch(
 			createUserDetails({
 				firstName: splitNames[0],
@@ -147,9 +170,9 @@ export class ResumeUploadComponent {
 				githubLink: '',
 				otherLink: '',
 				location: {
-					city: parsedResumeJSON.location.name,
-					province: parsedResumeJSON.location.name,
-					country: parsedResumeJSON.location.name,
+					city: '',
+					province: '',
+					country: country || '',
 				},
 				profileSummary: parsedResumeJSON.summary.executiveSummary,
 			}),
