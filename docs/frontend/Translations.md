@@ -36,6 +36,8 @@ The path provided above should be according to the needs and point to the releva
 	}),
 ```
 
+NOTE: The above code block is also what you would use if you need to use translations in a non lazy loaded module (just a normal imported module such as any under shared ui components).
+
 The code block above depicts the typical structure of using the translate module wherein one defines a loader that will use http calls to retrieve a translation file at run time (for lazy loaded modules such as feature pages and even shells, the files will only be loaded when the module is loaded). The properties `isolate` and `extend` are important as they configure the ability of a module to make use of previously loaded translation files by parent modules. Hence, they must be set to false and true respectively.
 
 Furthermore, one must also add the following to the constructor of every one of these child modules:
