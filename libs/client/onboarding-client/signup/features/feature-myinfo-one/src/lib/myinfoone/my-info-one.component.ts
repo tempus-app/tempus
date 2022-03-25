@@ -1,6 +1,6 @@
 import { Component, Output, EventEmitter, OnInit } from '@angular/core';
 import { filter, switchMap, take } from 'rxjs/operators';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { InputType } from '@tempus/client/shared/ui-components/input';
 import {
@@ -18,6 +18,8 @@ import { Store } from '@ngrx/store';
 })
 export class MyInfoOneComponent implements OnInit {
 	myInfoForm = this.fb.group({});
+	firstName = '';
+	lastName = '';
 
 	InputType = InputType;
 
@@ -30,7 +32,10 @@ export class MyInfoOneComponent implements OnInit {
 		private store: Store<SignupState>,
 	) {}
 
-	ngOnInit() {
+	ngOnInit() {}
+
+	loadFormGroup(eventData: FormGroup) {
+		this.myInfoForm = eventData;
 		this.store
 			.select(selectUserDetailsCreated)
 			.pipe(
@@ -55,10 +60,6 @@ export class MyInfoOneComponent implements OnInit {
 			});
 	}
 
-	loadFormGroup(eventData: FormGroup) {
-		this.myInfoForm = eventData;
-	}
-
 	nextStep() {
 		this.myInfoForm?.markAllAsTouched();
 		if (this.myInfoForm?.valid) {
@@ -78,6 +79,13 @@ export class MyInfoOneComponent implements OnInit {
 					profileSummary: this.myInfoForm.get('profileSummary')?.value,
 				}),
 			);
+			this.store
+				.select(selectResourceData)
+				.pipe(take(1))
+				.subscribe(resData => {
+					this.firstName = resData?.firstName;
+					this.lastName = resData?.lastName;
+				});
 			this.router.navigate(['../myinfotwo'], { relativeTo: this.route });
 		}
 	}
