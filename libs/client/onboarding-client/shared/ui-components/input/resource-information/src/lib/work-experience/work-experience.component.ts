@@ -3,7 +3,7 @@ import { Country, State } from 'country-state-city';
 import { InputType } from '@tempus/client/shared/ui-components/input';
 import { FormArray, FormBuilder, Validators } from '@angular/forms';
 import { ICreateExperienceDto } from '@tempus/shared-domain';
-import { checkEnteredDates } from '@tempus/shared/util';
+import { checkEnteredDates } from '@tempus/client/shared/util';
 
 @Component({
 	selector: 'tempus-resource-info-work-experience',

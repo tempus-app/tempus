@@ -1,6 +1,7 @@
 {
 	"version": 2,
 	"projects": {
+		"api-shared-api-assets": "libs/api/shared/api-assets",
 		"api-shared-dto": "libs/api/shared/dto",
 		"api-shared-entity": "libs/api/shared/entity",
 		"api-shared-feature-auth": "libs/api/shared/feature-auth",
@@ -23,8 +24,8 @@
 		"onboarding-client-resource-feature-profile": "libs/client/onboarding-client/resource/features/feature-profile",
 		"onboarding-client-resource-feature-shell": "libs/client/onboarding-client/resource/shell",
 		"onboarding-client-resource-feature-sign-in": "libs/client/onboarding-client/resource/features/feature-sign-in",
-		"onboarding-client-resource-guards": "libs/client/onboarding-client/resource/guards",
 		"onboarding-client-shared-data-access": "libs/client/onboarding-client/shared/data-access",
+		"onboarding-client-shared-guards": "libs/client/onboarding-client/shared/guards",
 		"onboarding-client-shared-input-resource-information": "libs/client/onboarding-client/shared/ui-components/input/resource-information",
 		"onboarding-client-shared-presentational-resource-display": "libs/client/onboarding-client/shared/ui-components/presentational/resource-display",
 		"onboarding-client-shell": "libs/client/onboarding-client/shell",
@@ -38,7 +39,6 @@
 		"onboarding-client-signup-guards": "libs/client/onboarding-client/signup/guards",
 		"onboarding-client-signup-shell": "libs/client/onboarding-client/signup/shell",
 		"shared-domain": "libs/shared/domain",
-		"shared-util": "libs/shared/util",
 		"tempus-e2e": "apps/tempus-e2e"
 	}
 }

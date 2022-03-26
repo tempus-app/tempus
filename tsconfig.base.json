@@ -15,6 +15,7 @@
 		"skipDefaultLibCheck": true,
 		"baseUrl": ".",
 		"paths": {
+			"@tempus/api/shared/api-assets": ["libs/api/shared/api-assets/src/index.ts"],
 			"@tempus/api/shared/dto": ["libs/api/shared/dto/src/index.ts"],
 			"@tempus/api/shared/entity": ["libs/api/shared/entity/src/index.ts"],
 			"@tempus/api/shared/feature-auth": ["libs/api/shared/feature-auth/src/index.ts"],
@@ -24,12 +25,10 @@
 			"@tempus/client/onboarding-client/resource/data-access": [
 				"libs/client/onboarding-client/resource/data-access/src/index.ts"
 			],
-			"@tempus/client/onboarding-client/resource/guards": [
-				"libs/client/onboarding-client/resource/guards/src/index.ts"
-			],
 			"@tempus/client/onboarding-client/shared/data-access": [
 				"libs/client/onboarding-client/shared/data-access/src/index.ts"
 			],
+			"@tempus/client/onboarding-client/shared/guards": ["libs/client/onboarding-client/shared/guards/src/index.ts"],
 			"@tempus/client/onboarding-client/shared/ui-components/input/resource-information": [
 				"libs/client/onboarding-client/shared/ui-components/input/resource-information/src/index.ts"
 			],
@@ -46,6 +45,7 @@
 			"@tempus/client/shared/ui-components/presentational": [
 				"libs/client/shared/ui-components/presentational/src/index.ts"
 			],
+			"@tempus/client/shared/util": ["libs/client/shared/util/src/index.ts"],
 			"@tempus/onboarding-api/feature-account": ["libs/api/onboarding-api/feature-account/src/index.ts"],
 			"@tempus/onboarding-api/feature-profile": ["libs/api/onboarding-api/feature-profile/src/index.ts"],
 			"@tempus/onboarding-api/feature-project": ["libs/api/onboarding-api/feature-project/src/index.ts"],
@@ -81,8 +81,7 @@
 				"libs/client/onboarding-client/signup/features/feature-upload-resume/src/index.ts"
 			],
 			"@tempus/onboarding-client/signup/shell": ["libs/client/onboarding-client/signup/shell/src/index.ts"],
-			"@tempus/shared-domain": ["libs/shared/domain/src/index.ts"],
-			"@tempus/shared/util": ["libs/shared/util/src/index.ts"]
+			"@tempus/shared-domain": ["libs/shared/domain/src/index.ts"]
 		}
 	},
 	"exclude": ["node_modules", "tmp"]

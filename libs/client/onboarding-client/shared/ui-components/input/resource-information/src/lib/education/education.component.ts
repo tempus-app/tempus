@@ -2,7 +2,7 @@ import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { Country, State } from 'country-state-city';
 import { InputType } from '@tempus/client/shared/ui-components/input';
 import { FormArray, FormBuilder, Validators } from '@angular/forms';
-import { checkEnteredDates } from '@tempus/shared/util';
+import { checkEnteredDates } from '@tempus/client/shared/util';
 import { ICreateEducationDto } from '@tempus/shared-domain';
 
 @Component({
