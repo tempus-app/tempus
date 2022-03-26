@@ -1,7 +1,6 @@
 import { Component, Output, EventEmitter, OnInit } from '@angular/core';
-import { Country, State } from 'country-state-city';
-import { filter, switchMap, take, takeUntil, tap } from 'rxjs/operators';
-import { FormBuilder, Validators } from '@angular/forms';
+import { filter, switchMap, take } from 'rxjs/operators';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { InputType } from '@tempus/client/shared/ui-components/input';
 import {
@@ -11,53 +10,36 @@ import {
 	SignupState,
 } from '@tempus/client/onboarding-client/signup/data-access';
 import { Store } from '@ngrx/store';
-import { V } from '@angular/cdk/keycodes';
 
 @Component({
 	selector: 'tempus-my-info-one',
 	templateUrl: './my-info-one.component.html',
 	styleUrls: ['./my-info-one.component.scss'],
 })
-export class MyInfoOneComponent implements OnInit {
-	myInfoForm = this.fb.group({
-		firstName: ['', Validators.required],
-		lastName: ['', Validators.required],
-		profileSummary: '',
-		// Taken from https://stackoverflow.com/questions/16699007/regular-expression-to-match-standard-10-digit-phone-number
-		phoneNumber: ['', [Validators.required, Validators.pattern(/^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/)]],
-		// Taken from https://stackoverflow.com/questions/3809401/what-is-a-good-regular-expression-to-match-a-url
-		linkedInLink: [
-			'',
-			Validators.pattern(
-				/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/,
-			),
-		],
-		githubLink: [
-			'',
-			Validators.pattern(
-				/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/,
-			),
-		],
-		otherLink: [
-			'',
-			Validators.pattern(
-				/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/,
-			),
-		],
-		country: ['', Validators.required],
-		state: ['', Validators.required],
-		city: ['', Validators.required],
-	});
+export class MyInfoOneComponent {
+	myInfoForm = this.fb.group({});
+
+	firstName = '';
+
+	lastName = '';
+
+	phoneNumber = '';
+
+	linkedInLink = '';
+
+	githubLink = '';
+
+	otherLink = '';
+
+	country = '';
+
+	state = '';
+
+	city = '';
+
+	profileSummary = '';
 
 	InputType = InputType;
-
-	countries: string[] = Country.getAllCountries().map(country => {
-		return country.name;
-	});
-
-	states: string[] = State.getAllStates().map(state => {
-		return state.name;
-	});
 
 	@Output() formIsValid = new EventEmitter<boolean>();
 
@@ -68,7 +50,8 @@ export class MyInfoOneComponent implements OnInit {
 		private store: Store<SignupState>,
 	) {}
 
-	ngOnInit() {
+	loadFormGroup(eventData: FormGroup) {
+		this.myInfoForm = eventData;
 		this.store
 			.select(selectUserDetailsCreated)
 			.pipe(
@@ -93,14 +76,6 @@ export class MyInfoOneComponent implements OnInit {
 			});
 	}
 
-	updateStateOptions(inputtedCountry: string) {
-		const countryCode = Country.getAllCountries().find(country => country.name === inputtedCountry);
-		if (countryCode != null)
-			this.states = State.getStatesOfCountry(countryCode.isoCode).map(state => {
-				return state.name;
-			});
-	}
-
 	nextStep() {
 		this.myInfoForm?.markAllAsTouched();
 		if (this.myInfoForm?.valid) {
@@ -120,6 +95,21 @@ export class MyInfoOneComponent implements OnInit {
 					profileSummary: this.myInfoForm.get('profileSummary')?.value,
 				}),
 			);
+			this.store
+				.select(selectResourceData)
+				.pipe(take(1))
+				.subscribe(resData => {
+					this.firstName = resData?.firstName;
+					this.lastName = resData?.lastName;
+					this.phoneNumber = resData?.phoneNumber;
+					this.country = resData?.location?.country;
+					this.state = resData?.location?.province;
+					this.city = resData?.location?.city;
+					this.linkedInLink = resData?.linkedInLink;
+					this.githubLink = resData?.githubLink;
+					this.otherLink = resData?.otherLink;
+					this.profileSummary = resData?.profileSummary;
+				});
 			this.router.navigate(['../myinfotwo'], { relativeTo: this.route });
 		}
 	}

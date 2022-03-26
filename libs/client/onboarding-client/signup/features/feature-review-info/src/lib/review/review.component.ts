@@ -1,15 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { formatDateRange } from '@tempus/shared/util';
-import {
-	Experience,
-	Education,
-	ICreateExperienceDto,
-	ICreateEducationDto,
-	ICreateCertificationDto,
-} from '@tempus/shared-domain';
+import { ICreateExperienceDto, ICreateEducationDto, ICreateCertificationDto } from '@tempus/shared-domain';
 
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { Subject, take, takeUntil, tap } from 'rxjs';
+import { Subject, take } from 'rxjs';
 
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -106,7 +98,7 @@ export class ReviewComponent implements OnInit {
 			if (reqStatusData.status === AsyncRequestState.LOADING) {
 				this.loading = true;
 			} else if (reqStatusData.status === AsyncRequestState.SUCCESS) {
-				alert('Resource Created Succesffully');
+				alert('Resource Created Succesfully');
 				this.loading = false;
 				this.store.dispatch(resetLinkState());
 				this.store.dispatch(resetCreateResourceState());
@@ -118,29 +110,6 @@ export class ReviewComponent implements OnInit {
 				this.loading = false;
 			}
 		});
-	}
-
-	formatDate(startDate: Date, endDate: Date) {
-		return formatDateRange(new Date(startDate), new Date(endDate));
-	}
-
-	formatAddress(country: string, state: string, city: string) {
-		return city + ', ' + state + ', ' + country;
-	}
-
-	formatName(first: string, last: string) {
-		return first + ' ' + last;
-	}
-
-	downloadResume() {
-		if (this.resume !== null) {
-			let url = URL.createObjectURL(this.resume);
-			let link = document.createElement('a');
-			link.href = url;
-			link.download = this.resume?.name || 'download';
-			link.click();
-			URL.revokeObjectURL(url);
-		}
 	}
 
 	backStep() {
