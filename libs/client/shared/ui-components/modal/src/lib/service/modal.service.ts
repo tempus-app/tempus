@@ -34,6 +34,8 @@ export class ModalService {
 					modalType: options.modalType,
 				},
 				minWidth: '50%',
+				maxWidth: '65%',
+				height: 'auto',
 				autoFocus: false,
 			});
 		} else {
@@ -45,6 +47,8 @@ export class ModalService {
 					template: options.template,
 				},
 				minWidth: '50%',
+				maxWidth: '70%',
+				height: 'auto',
 				autoFocus: false,
 			});
 		}

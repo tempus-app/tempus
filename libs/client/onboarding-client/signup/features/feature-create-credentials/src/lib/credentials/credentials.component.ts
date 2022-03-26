@@ -41,6 +41,10 @@ export class CredentialsComponent implements OnInit, OnDestroy {
 
 	constructor(private route: ActivatedRoute, private store: Store<SignupState>, public modalService: ModalService) {}
 
+	static generateErrorMessage(errorMessage: string) {
+		return `${errorMessage}.\nPlease Contact email@email.com for a new link`;
+	}
+
 	ngOnDestroy(): void {
 		this.errorStatus$?.unsubscribe();
 		this.linkData$?.unsubscribe();
@@ -62,7 +66,7 @@ export class CredentialsComponent implements OnInit, OnDestroy {
 			if (errStatus.status === AsyncRequestState.LOADING) {
 				this.loading = true;
 			} else if (errStatus.status === AsyncRequestState.ERROR) {
-				this.openDialog(errStatus.error?.message || 'Generic Error');
+				this.openDialog(CredentialsComponent.generateErrorMessage(errStatus.error?.message || 'Something went wrong'));
 				this.loading = false;
 			} else {
 				this.loading = false;
