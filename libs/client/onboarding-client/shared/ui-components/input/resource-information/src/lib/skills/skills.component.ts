@@ -13,8 +13,6 @@ export class SkillsComponent implements OnInit {
 
 	readonly separatorKeysCodes = [ENTER, COMMA] as const;
 
-	//skills: string[] = [];
-
 	@Input() skillsSummary = '';
 
 	@Input() skills: string[] = [];
@@ -24,6 +22,11 @@ export class SkillsComponent implements OnInit {
 	@Output() emitSkills = new EventEmitter();
 
 	@Output() formIsValid = new EventEmitter<boolean>();
+
+	myInfoForm = this.fb.group({
+		skills: [this.skills],
+		skillsSummary: [''],
+	});
 
 	constructor(private fb: FormBuilder) {}
 
@@ -39,11 +42,6 @@ export class SkillsComponent implements OnInit {
 			skills: this.skills,
 		});
 	}
-
-	myInfoForm = this.fb.group({
-		skills: [this.skills],
-		skillsSummary: [''],
-	});
 
 	addSkill(event: MatChipInputEvent): void {
 		const value = (event.value || '').trim().substring(0, 50);

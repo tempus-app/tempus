@@ -25,12 +25,17 @@ import {
 })
 export class MyInfoThreeComponent {
 	certificationsForm = this.fb.group({});
+
 	educationsForm = this.fb.group({});
+
 	skillsForm = this.fb.group({});
 
 	skillsSummary = '';
+
 	educationSummary = '';
+
 	educations: Array<ICreateEducationDto> = [];
+
 	certificationsArray: Array<ICreateCertificationDto> = [];
 
 	skills: string[] = [];

@@ -10,5 +10,5 @@ export class SkillsComponent {
 	skills: Array<string> = [];
 
 	@Input()
-	skillsSummary: string = '';
+	skillsSummary = '';
 }

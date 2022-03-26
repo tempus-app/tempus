@@ -25,18 +25,6 @@ export class WorkExperienceComponent implements OnInit {
 
 	constructor(private fb: FormBuilder) {}
 
-	ngOnInit(): void {
-		this.loadStoreData();
-		this.formGroup.emit(this.myInfoForm);
-	}
-
-	loadStoreData() {
-		this.myInfoForm.patchValue({
-			experiencesSummary: this.experiencesSummary,
-			workExperiences: this.workExperiences,
-		});
-	}
-
 	countries: string[] = Country.getAllCountries().map(country => {
 		return country.name;
 	});
@@ -49,6 +37,18 @@ export class WorkExperienceComponent implements OnInit {
 		workExperienceSummary: [''],
 		workExperience: this.fb.array([]),
 	});
+
+	ngOnInit(): void {
+		this.loadStoreData();
+		this.formGroup.emit(this.myInfoForm);
+	}
+
+	loadStoreData() {
+		this.myInfoForm.patchValue({
+			experiencesSummary: this.experiencesSummary,
+			workExperiences: this.workExperiences,
+		});
+	}
 
 	get totalWorkExperience() {
 		// eslint-disable-next-line @typescript-eslint/dot-notation

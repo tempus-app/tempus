@@ -8,40 +8,40 @@ import { formatDateRange, formatAddress, formatName } from '@tempus/shared/util'
 })
 export class PersonalInformationComponent {
 	@Input()
-	firstName: string = '';
+	firstName = '';
 
 	@Input()
-	lastName: string = '';
+	lastName = '';
 
 	@Input()
-	country: string = '';
+	country = '';
 
 	@Input()
-	state: string = '';
+	state = '';
 
 	@Input()
-	city: string = '';
+	city = '';
 
 	@Input()
-	phoneNumber: string = '';
+	phoneNumber = '';
 
 	@Input()
-	email: string = '';
+	email = '';
 
 	@Input()
 	resume: File | null = null;
 
 	@Input()
-	linkedInLink: string = '';
+	linkedInLink = '';
 
 	@Input()
-	githubLink: string = '';
+	githubLink = '';
 
 	@Input()
-	otherLink: string = '';
+	otherLink = '';
 
 	@Input()
-	profileSummary: string = '';
+	profileSummary = '';
 
 	formatDate(startDate: Date, endDate: Date) {
 		return formatDateRange(new Date(startDate), new Date(endDate));
@@ -57,8 +57,8 @@ export class PersonalInformationComponent {
 
 	downloadResume() {
 		if (this.resume !== null) {
-			let url = URL.createObjectURL(this.resume);
-			let link = document.createElement('a');
+			const url = URL.createObjectURL(this.resume);
+			const link = document.createElement('a');
 			link.href = url;
 			link.download = this.resume?.name || 'download';
 			link.click();

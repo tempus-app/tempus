@@ -12,7 +12,7 @@ export class EducationComponent {
 	educations: Array<ICreateEducationDto> = [];
 
 	@Input()
-	educationsSummary: string = '';
+	educationsSummary = '';
 
 	formatDate(startDate: Date, endDate: Date) {
 		return formatDateRange(new Date(startDate), new Date(endDate));

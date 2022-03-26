@@ -12,7 +12,7 @@ export class WorkExperienceComponent {
 	workExperiences: Array<ICreateExperienceDto> = [];
 
 	@Input()
-	experiencesSummary: string = '';
+	experiencesSummary = '';
 
 	formatDate(startDate: Date, endDate: Date) {
 		return formatDateRange(new Date(startDate), new Date(endDate));

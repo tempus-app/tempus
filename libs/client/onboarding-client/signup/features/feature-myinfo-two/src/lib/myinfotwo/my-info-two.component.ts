@@ -19,7 +19,9 @@ import { ICreateExperienceDto, ICreateLocationDto } from '@tempus/shared-domain'
 })
 export class MyInfoTwoComponent {
 	myInfoForm = this.fb.group({});
+
 	experiencesSummary = '';
+
 	workExperiences: Array<ICreateExperienceDto> = [];
 
 	@Output() formIsValid = new EventEmitter<boolean>();

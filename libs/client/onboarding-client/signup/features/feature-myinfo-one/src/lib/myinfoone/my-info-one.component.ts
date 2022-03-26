@@ -18,15 +18,25 @@ import { Store } from '@ngrx/store';
 })
 export class MyInfoOneComponent {
 	myInfoForm = this.fb.group({});
+
 	firstName = '';
+
 	lastName = '';
+
 	phoneNumber = '';
+
 	linkedInLink = '';
+
 	githubLink = '';
+
 	otherLink = '';
+
 	country = '';
+
 	state = '';
+
 	city = '';
+
 	profileSummary = '';
 
 	InputType = InputType;
