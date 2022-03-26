@@ -1,0 +1,26 @@
+{
+	"projectType": "library",
+	"root": "libs/client/shared/ui-components/modal",
+	"sourceRoot": "libs/client/shared/ui-components/modal/src",
+	"prefix": "tempus",
+	"targets": {
+		"test": {
+			"executor": "@nrwl/jest:jest",
+			"outputs": ["coverage/libs/client/shared/ui-components/modal"],
+			"options": {
+				"jestConfig": "libs/client/shared/ui-components/modal/jest.config.js",
+				"passWithNoTests": true
+			}
+		},
+		"lint": {
+			"executor": "@nrwl/linter:eslint",
+			"options": {
+				"lintFilePatterns": [
+					"libs/client/shared/ui-components/modal/src/**/*.ts",
+					"libs/client/shared/ui-components/modal/src/**/*.html"
+				]
+			}
+		}
+	},
+	"tags": []
+}

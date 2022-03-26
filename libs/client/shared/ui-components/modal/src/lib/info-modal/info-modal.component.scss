@@ -1,0 +1,24 @@
+@use 'abstracts/helper' as abs;
+.warn_outline {
+	color: abs.$warning;
+	width: 30px;
+	height: 30px;
+	font-size: 30px;
+	margin-right: 10px;
+}
+
+.error_outline {
+	color: abs.$failure;
+	width: 30px;
+	height: 30px;
+	font-size: 30px;
+	margin-right: 10px;
+}
+
+.info_outline {
+	color: abs.$primary-300;
+	width: 30px;
+	height: 30px;
+	font-size: 30px;
+	margin-right: 10px;
+}

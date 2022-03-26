@@ -1,0 +1,23 @@
+<div fxLayout="column" class="modal-container">
+	<div fxLayout="column" fxLayoutAlign="end end">
+		<div>
+			<button mat-icon-button aria-label="close dialog" mat-dialog-close>
+				<mat-icon class="close-icon" inline>close</mat-icon>
+			</button>
+		</div>
+	</div>
+	<div fxFlex="10" fxLayout="row" class="header">
+		<mat-icon aria-hidden="false" aria-label="modal icon" [ngClass]="data.modalType">{{ data.modalType }}</mat-icon>
+		<span fxFlex="80">
+			<h3 class="mat-h3 header-text">
+				{{ data.title }}
+			</h3>
+		</span>
+	</div>
+	<div mat-dialog-content>
+		<p class="mat-body-2">{{ data.message }}</p>
+	</div>
+	<div mat-dialog-actions fxLayout="column" fxLayoutAlign="end end">
+		<tempus-button color="accent" [label]="data.closeText" (click)="selectConfirm()"></tempus-button>
+	</div>
+</div>
