@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { filter, switchMap, take } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -17,7 +17,7 @@ import { ICreateExperienceDto, ICreateLocationDto } from '@tempus/shared-domain'
 	templateUrl: './my-info-two.component.html',
 	styleUrls: ['./my-info-two.component.scss'],
 })
-export class MyInfoTwoComponent {
+export class MyInfoTwoComponent implements AfterViewInit {
 	myInfoForm = this.fb.group({});
 
 	experiencesSummary = '';
@@ -36,7 +36,12 @@ export class MyInfoTwoComponent {
 		private fb: FormBuilder,
 		private router: Router,
 		private store: Store<SignupState>,
+		private changeDetector: ChangeDetectorRef,
 	) {}
+
+	ngAfterViewInit(): void {
+		this.changeDetector.detectChanges();
+	}
 
 	loadFormGroup(eventData: FormGroup) {
 		this.myInfoForm = eventData;
@@ -50,6 +55,8 @@ export class MyInfoTwoComponent {
 			)
 			.subscribe(createResourceDto => {
 				// eslint-disable-next-line @typescript-eslint/dot-notation
+				this.experiencesSummary = createResourceDto.experiencesSummary;
+				this.workExperiences = createResourceDto.experiences;
 				const workExperienceArray = this.totalWorkExperience;
 				createResourceDto.experiences.forEach(experience => {
 					workExperienceArray.push(

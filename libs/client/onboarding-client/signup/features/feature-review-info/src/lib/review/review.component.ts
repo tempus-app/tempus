@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ICreateExperienceDto, ICreateEducationDto, ICreateCertificationDto } from '@tempus/shared-domain';
 
 import { Subject, take } from 'rxjs';
@@ -22,7 +22,7 @@ import { AsyncRequestState } from '@tempus/client/onboarding-client/shared/data-
 	templateUrl: './review.component.html',
 	styleUrls: ['./review.component.scss'],
 })
-export class ReviewComponent implements OnInit {
+export class ReviewComponent implements OnInit, AfterViewInit {
 	firstName = '';
 
 	lastName = '';
@@ -65,7 +65,16 @@ export class ReviewComponent implements OnInit {
 
 	resume: File | null = null;
 
-	constructor(private router: Router, private route: ActivatedRoute, private store: Store<SignupState>) {}
+	constructor(
+		private router: Router,
+		private route: ActivatedRoute,
+		private store: Store<SignupState>,
+		private changeDetector: ChangeDetectorRef,
+	) {}
+
+	ngAfterViewInit(): void {
+		this.changeDetector.detectChanges();
+	}
 
 	ngOnInit(): void {
 		this.store

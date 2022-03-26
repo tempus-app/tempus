@@ -1,4 +1,4 @@
-import { Component, Output, EventEmitter, OnInit } from '@angular/core';
+import { Component, Output, EventEmitter, OnInit, ChangeDetectorRef, AfterViewInit } from '@angular/core';
 import { filter, switchMap, take } from 'rxjs/operators';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -16,7 +16,7 @@ import { Store } from '@ngrx/store';
 	templateUrl: './my-info-one.component.html',
 	styleUrls: ['./my-info-one.component.scss'],
 })
-export class MyInfoOneComponent {
+export class MyInfoOneComponent implements AfterViewInit {
 	myInfoForm = this.fb.group({});
 
 	firstName = '';
@@ -48,7 +48,12 @@ export class MyInfoOneComponent {
 		private router: Router,
 		private route: ActivatedRoute,
 		private store: Store<SignupState>,
+		private changeDetector: ChangeDetectorRef,
 	) {}
+
+	ngAfterViewInit(): void {
+		this.changeDetector.detectChanges();
+	}
 
 	loadFormGroup(eventData: FormGroup) {
 		this.myInfoForm = eventData;
@@ -61,7 +66,16 @@ export class MyInfoOneComponent {
 				take(1),
 			)
 			.subscribe(createResourceDto => {
-				this.updateStateOptions(createResourceDto.location.country);
+				this.firstName = createResourceDto?.firstName;
+				this.lastName = createResourceDto?.lastName;
+				this.phoneNumber = createResourceDto?.phoneNumber;
+				this.country = createResourceDto?.location?.country;
+				this.state = createResourceDto?.location?.province;
+				this.city = createResourceDto?.location?.city;
+				this.linkedInLink = createResourceDto?.linkedInLink;
+				this.githubLink = createResourceDto?.githubLink;
+				this.otherLink = createResourceDto?.otherLink;
+				this.profileSummary = createResourceDto?.profileSummary;
 				this.myInfoForm.setValue({
 					firstName: createResourceDto.firstName,
 					lastName: createResourceDto.lastName,
@@ -96,21 +110,6 @@ export class MyInfoOneComponent {
 					profileSummary: this.myInfoForm.get('profileSummary')?.value,
 				}),
 			);
-			this.store
-				.select(selectResourceData)
-				.pipe(take(1))
-				.subscribe(resData => {
-					this.firstName = resData?.firstName;
-					this.lastName = resData?.lastName;
-					this.phoneNumber = resData?.phoneNumber;
-					this.country = resData?.location?.country;
-					this.state = resData?.location?.province;
-					this.city = resData?.location?.city;
-					this.linkedInLink = resData?.linkedInLink;
-					this.githubLink = resData?.githubLink;
-					this.otherLink = resData?.otherLink;
-					this.profileSummary = resData?.profileSummary;
-				});
 			this.router.navigate(['../myinfotwo'], { relativeTo: this.route });
 		}
 	}

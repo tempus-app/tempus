@@ -57,7 +57,6 @@ export class ResumeUploadComponent {
 	}
 
 	async parseFile(file: File) {
-		// Simple POST request with a JSON body using fetch
 		const params = new HttpParams();
 
 		const formData = new FormData();

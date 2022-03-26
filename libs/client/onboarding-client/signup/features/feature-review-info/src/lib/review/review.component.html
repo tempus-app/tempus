@@ -35,64 +35,10 @@
 			<div fxFlex="5"></div>
 			<div class="info-title">
 				<div class="mat-h2 card-title">Work Experience</div>
-				<<<<<<< HEAD
-				<tempus-card>
-					<div *ngIf="workExperiences.length == 0 && experiencesSummary === ''">
-						<p class="mat-body-2">You have not entered information for this section.</p>
-					</div>
-					<div class="mat-body-1">{{ experiencesSummary }}</div>
-					<div *ngFor="let workExperience of workExperiences">
-						<div class="section-block">
-							<div fxLayout="column">
-								<div fxFlex="30" fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxFlex="33%">
-									<div fxFlex.gt-sm="75%" fxFlex.lt-md="75%" fxLayoutAlign="start start" fxFlexFill class="grid-item">
-										<div class="left-card-header">
-											<h3 class="mat-h3">{{ workExperience.company }}</h3>
-											<p class="mat-body-2">{{ workExperience.title }}</p>
-											<p class="mat-body-2">
-												{{
-													formatAddress(
-														workExperience.location.country,
-														workExperience.location.province,
-														workExperience.location.city
-													)
-												}}
-											</p>
-										</div>
-									</div>
-									<div
-										fxFlex.gt-sm="25%"
-										fxFlex.lt-md="25%"
-										fxLayoutAlign="end end"
-										fxLayoutAlign.lt-md="start start"
-										fxFlexFill
-										fxLayout="column"
-										class="grid-item"
-									>
-										<div fxFill>
-											<p class="mat-body-2">
-												{{
-													workExperience.startDate && workExperience.endDate
-														? formatDate(workExperience.startDate, workExperience.endDate)
-														: ''
-												}}
-											</p>
-										</div>
-									</div>
-								</div>
-								<div *ngFor="let desc of workExperience.description">
-									<p class="mat-body-1">{{ desc }}</p>
-								</div>
-							</div>
-						</div>
-					</div>
-				</tempus-card>
-				=======
 				<tempus-resource-display-work-experience
 					[experiencesSummary]="experiencesSummary"
 					[workExperiences]="workExperiences"
 				></tempus-resource-display-work-experience>
-				>>>>>>> 75c05c98972cd5cd97a2fe0ec66575d1edc528d1
 			</div>
 			<div fxFlex="5"></div>
 		</div>
@@ -101,61 +47,10 @@
 			<div fxFlex="5"></div>
 			<div class="info-title">
 				<div class="mat-h2 card-title">Education and Training</div>
-				<<<<<<< HEAD
-				<tempus-card>
-					<div *ngIf="educations.length == 0 && educationsSummary === ''">
-						<p class="mat-body-2">You have not entered information for this section.</p>
-					</div>
-					<div class="mat-body-1">{{ educationsSummary }}</div>
-					<div *ngFor="let education of educations">
-						<div class="section-block">
-							<div fxLayout="column">
-								<div fxFlex="30" fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxFlex="33%">
-									<div fxFlex.gt-sm="75%" fxFlex.lt-md="75%" fxLayoutAlign="start start" fxFlexFill class="grid-item">
-										<div class="left-card-header">
-											<h3 class="mat-h3">{{ education.institution }}</h3>
-											<p class="mat-body-2">{{ education.degree }}</p>
-											<p *ngIf="education.location.country !== ''" class="mat-body-2">
-												{{
-													formatAddress(
-														education.location.country,
-														education.location.province,
-														education.location.city
-													)
-												}}
-											</p>
-										</div>
-									</div>
-									<div
-										fxFlex.gt-sm="25%"
-										fxFlex.lt-md="25%"
-										fxLayoutAlign="end end"
-										fxLayoutAlign.lt-md="start start"
-										fxFlexFill
-										fxLayout="column"
-										class="grid-item"
-									>
-										<div fxFill>
-											<p class="mat-body-2">
-												{{
-													education.startDate && education.endDate
-														? formatDate(education.startDate, education.endDate)
-														: ''
-												}}
-											</p>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</tempus-card>
-				=======
 				<tempus-resource-display-education
 					[educationsSummary]="educationsSummary"
 					[educations]="educations"
 				></tempus-resource-display-education>
-				>>>>>>> 75c05c98972cd5cd97a2fe0ec66575d1edc528d1
 			</div>
 			<div fxFlex="5"></div>
 		</div>
@@ -179,26 +74,10 @@
 		<div fxFlex>
 			<div fxFlex="5"></div>
 			<div fxFlex="90">
-				<<<<<<< HEAD
-				<tempus-card>
-					<div *ngIf="skills.length == 0 && skillsSummary === ''">
-						<p class="mat-body-2">You have not entered information for this section.</p>
-					</div>
-					<div fxLayout="column" fxLayoutGap="30px">
-						<div fxFlex class="mat-body-1">{{ skillsSummary }}</div>
-						<div fxFlex fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutAlign="start" fxLayoutGap="16px grid">
-							<div *ngFor="let skill of skills">
-								<tempus-chip [removable]="false" [content]="skill"></tempus-chip>
-							</div>
-						</div>
-					</div>
-				</tempus-card>
-				=======
 				<tempus-resource-display-skills
 					[skills]="skills"
 					[skillsSummary]="skillsSummary"
 				></tempus-resource-display-skills>
-				>>>>>>> 75c05c98972cd5cd97a2fe0ec66575d1edc528d1
 			</div>
 			<div fxFlex="5"></div>
 		</div>
