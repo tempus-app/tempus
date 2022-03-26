@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
+import { AuthGuard } from '@tempus/client/onboarding-client/shared/guards';
 import { BusinessOnwerShellComponent } from './shell/onboarding-client-business-owner-feature-shellcomponent';
 
 const routes: Routes = [
@@ -11,6 +12,8 @@ const routes: Routes = [
 			{ path: '', pathMatch: 'full', redirectTo: 'manage-resources' },
 			{
 				path: 'manage-resources',
+				canLoad: [AuthGuard],
+				canActivate: [AuthGuard],
 				loadChildren: () =>
 					import('@tempus/onboarding-client/business-owner/feature-manage-resources').then(
 						m => m.OnboardingClientBusinessOwnerFeatureManageResourcesModule,

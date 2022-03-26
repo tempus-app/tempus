@@ -62,6 +62,8 @@ export class SignInComponent implements OnInit, OnDestroy {
 						accessTokenAndRoles.roles.includes(RoleType.ASSIGNED_RESOURCE)
 					) {
 						this.router.navigate(['../resource'], { relativeTo: this.route });
+					} else {
+						this.errorMessage = 'No defined roles';
 					}
 				}
 			});
