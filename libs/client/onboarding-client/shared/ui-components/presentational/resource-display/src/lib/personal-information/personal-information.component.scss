@@ -1,0 +1,14 @@
+@use 'abstracts/helper' as abs;
+
+.section-header {
+	border-bottom: 2px solid abs.$primary-300;
+}
+
+::ng-deep tempus-card {
+	width: 80%;
+	height: 100%;
+	text-align: left;
+	.mat-card {
+		color: abs.$primary-800 !important;
+	}
+}

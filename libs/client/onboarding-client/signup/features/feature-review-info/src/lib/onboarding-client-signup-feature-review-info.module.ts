@@ -7,18 +7,22 @@ import { MatButtonModule } from '@angular/material/button';
 import { RouterModule } from '@angular/router';
 import { ClientSharedUiComponentsInputModule } from '@tempus/client/shared/ui-components/input';
 import { ClientSharedUiComponentsPresentationalModule } from '@tempus/client/shared/ui-components/presentational';
+import { ClientSharedInputResourceInformationModule } from '@tempus/client/onboarding-client/shared/ui-components/input/resource-information';
+import { ClientSharedPresentationalResourceDisplayModule } from '@tempus/client/onboarding-client/shared/ui-components/presentational/resource-display';
 
 import { ReviewComponent } from './review/review.component';
 
 @NgModule({
 	imports: [
-		MatGridListModule,
-		MatFormFieldModule,
 		CommonModule,
 		FlexLayoutModule,
-		ClientSharedUiComponentsInputModule,
 		MatButtonModule,
+		MatGridListModule,
+		MatFormFieldModule,
+		ClientSharedUiComponentsInputModule,
 		ClientSharedUiComponentsPresentationalModule,
+		ClientSharedInputResourceInformationModule,
+		ClientSharedPresentationalResourceDisplayModule,
 		RouterModule.forChild([
 			{
 				path: '',

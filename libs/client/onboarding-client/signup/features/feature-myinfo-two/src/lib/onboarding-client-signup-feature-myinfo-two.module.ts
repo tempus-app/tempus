@@ -1,31 +1,17 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule } from '@angular/forms';
-import { ClientSharedUiComponentsInputModule } from '@tempus/client/shared/ui-components/input';
-import { ClientSharedUiComponentsPresentationalModule } from '@tempus/client/shared/ui-components/presentational';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { MatIconModule } from '@angular/material/icon';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatCardModule } from '@angular/material/card';
-import { MatButtonModule } from '@angular/material/button';
-import { MatGridListModule } from '@angular/material/grid-list';
-import { MatTooltipModule } from '@angular/material/tooltip';
 import { RouterModule } from '@angular/router';
+import { MatButtonModule } from '@angular/material/button';
+import { ClientSharedInputResourceInformationModule } from '@tempus/client/onboarding-client/shared/ui-components/input/resource-information';
 import { MyInfoTwoComponent } from './myinfotwo/my-info-two.component';
 
 @NgModule({
 	imports: [
 		CommonModule,
-		MatIconModule,
-		MatButtonModule,
-		MatCardModule,
-		ClientSharedUiComponentsInputModule,
-		ClientSharedUiComponentsPresentationalModule,
-		MatGridListModule,
-		MatFormFieldModule,
+		ClientSharedInputResourceInformationModule,
 		FlexLayoutModule,
-		ReactiveFormsModule,
-		MatTooltipModule,
+		MatButtonModule,
 		RouterModule.forChild([
 			{
 				path: '',

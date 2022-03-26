@@ -1,74 +1,7 @@
-@use 'abstracts/helper' as abs;
-@use 'components/helper' as cmp;
-
-.info-title {
-	@include cmp.info-title(100%, 50px);
-}
-
-.error-container {
-	width: 90%;
-	text-align: left;
-}
-
-.header-button {
-	float: right;
-}
-
-.example-chip-list {
-	width: 100%;
-}
-
 .button-container {
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
 	position: relative;
 	bottom: 0;
-}
-
-#skillChipInput {
-	text-align: left;
-}
-
-h3 {
-	text-align: left;
-	color: abs.$primary-800;
-}
-
-mat-chip-list {
-	align-items: left;
-	width: 100%;
-}
-
-tempus-chip {
-	margin: 0.25em;
-}
-
-tempus-card {
-	width: 100%;
-	margin: 2em auto;
-	text-align: center;
-}
-
-tempus-text-input {
-	text-align: center;
-	width: 90%;
-}
-
-tempus-search-box {
-	text-align: center;
-	width: 90%;
-}
-
-tempus-dropdown {
-	text-align: center;
-	width: 90%;
-}
-
-tempus-text-area {
-	width: 95%;
-}
-
-mat-error {
-	padding-bottom: 2em;
 }
