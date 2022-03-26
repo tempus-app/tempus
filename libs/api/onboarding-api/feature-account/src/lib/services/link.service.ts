@@ -26,7 +26,7 @@ export class LinkService {
 			throw new BadRequestException('Expiry Date must be in the future');
 		}
 		const fullLink = { ...link, token: uniqueToken, status: StatusType.ACTIVE, expiry: expiryDate };
-		await this.emailService.sendInvitationEmail(fullLink);
+		// await this.emailService.sendInvitationEmail(fullLink);
 		return this.linkRepository.save(fullLink);
 	}
 

@@ -1,20 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { Country, State } from 'country-state-city';
-import { filter, switchMap, take, takeUntil, tap } from 'rxjs/operators';
-import { InputType } from '@tempus/client/shared/ui-components/input';
-import { COMMA, ENTER } from '@angular/cdk/keycodes';
-import { MatChipInputEvent } from '@angular/material/chips';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { filter, switchMap, take } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
 import { checkEnteredDates } from '@tempus/shared/util';
-import {
-	AbstractControl,
-	FormArray,
-	FormBuilder,
-	FormGroup,
-	ValidationErrors,
-	ValidatorFn,
-	Validators,
-} from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import {
 	createTrainingAndSkillDetails,
@@ -35,53 +23,85 @@ import {
 	templateUrl: './my-info-three.component.html',
 	styleUrls: ['./my-info-three.component.scss'],
 })
-export class MyInfoThreeComponent implements OnInit {
-	InputType = InputType;
+export class MyInfoThreeComponent {
+	certificationsForm = this.fb.group({});
 
-	addOnBlur = true;
+	educationsForm = this.fb.group({});
 
-	readonly separatorKeysCodes = [ENTER, COMMA] as const;
+	skillsForm = this.fb.group({});
+
+	skillsSummary = '';
+
+	educationSummary = '';
+
+	educations: Array<ICreateEducationDto> = [];
+
+	certificationsArray: Array<ICreateCertificationDto> = [];
 
 	skills: string[] = [];
 
-	numberEducationSections: number[] = [0];
+	@Output() formIsValid = new EventEmitter<boolean>();
 
-	numberCertificationSections: number[] = [0];
-
-	countries: string[] = Country.getAllCountries().map(country => {
-		return country.name;
-	});
-
-	states: string[] = State.getAllStates().map(state => {
-		return state.name;
-	});
-
-	myInfoForm = this.fb.group({
-		educationSummary: [''],
-		qualifications: this.fb.array([]),
-		certifications: this.fb.array([]),
-		skills: [this.skills],
-		skillsSummary: [''],
-	});
+	constructor(
+		private fb: FormBuilder,
+		private router: Router,
+		private route: ActivatedRoute,
+		private store: Store<SignupState>,
+	) {}
 
 	get qualifications() {
 		// eslint-disable-next-line @typescript-eslint/dot-notation
-		return this.myInfoForm.controls['qualifications'] as FormArray;
+		return this.educationsForm.controls['qualifications'] as FormArray;
 	}
 
 	get certifications() {
 		// eslint-disable-next-line @typescript-eslint/dot-notation
-		return this.myInfoForm.controls['certifications'] as FormArray;
+		return this.certificationsForm.controls['certifications'] as FormArray;
 	}
 
-	constructor(
-		private route: ActivatedRoute,
-		private fb: FormBuilder,
-		private router: Router,
-		private store: Store<SignupState>,
-	) {}
+	loadSkillsGroup(eventData: FormGroup) {
+		this.skillsForm = eventData;
+		this.store
+			.select(selectTrainingAndSkillsCreated)
+			.pipe(
+				take(1),
+				filter(created => created),
+				switchMap(_ => this.store.select(selectResourceData)),
+				take(1),
+			)
+			.subscribe(createResourceDto => {
+				this.skillsForm.patchValue({
+					skillsSummary: createResourceDto.skillsSummary,
+				});
+			});
+	}
 
-	ngOnInit() {
+	loadCertificationsGroup(eventData: FormGroup) {
+		this.certificationsForm = eventData;
+		this.store
+			.select(selectTrainingAndSkillsCreated)
+			.pipe(
+				take(1),
+				filter(created => created),
+				switchMap(_ => this.store.select(selectResourceData)),
+				take(1),
+			)
+			.subscribe(createResourceDto => {
+				const certificationsArray = this.certifications;
+				createResourceDto.certifications.forEach(certification => {
+					certificationsArray.push(
+						this.fb.group({
+							certifyingAuthority: [certification.institution, Validators.required],
+							title: [certification.title, Validators.required],
+							summary: [certification.summary],
+						}),
+					);
+				});
+			});
+	}
+
+	loadEducationsGroup(eventData: FormGroup) {
+		this.educationsForm = eventData;
 		this.store
 			.select(selectTrainingAndSkillsCreated)
 			.pipe(
@@ -109,115 +129,42 @@ export class MyInfoThreeComponent implements OnInit {
 					educationsArray.push(educationForm);
 				});
 
-				const certificationsArray = this.certifications;
-				createResourceDto.certifications.forEach(certification => {
-					certificationsArray.push(
-						this.fb.group({
-							certifyingAuthority: [certification.institution, Validators.required],
-							title: [certification.title, Validators.required],
-							summary: [certification.summary],
-						}),
-					);
+				this.educationsForm.patchValue({
+					educationSummary: createResourceDto.educationsSummary,
 				});
+			});
+	}
 
+	loadSkills(eventData: string[]) {
+		this.skills = eventData;
+		this.store
+			.select(selectTrainingAndSkillsCreated)
+			.pipe(
+				take(1),
+				filter(created => created),
+				switchMap(_ => this.store.select(selectResourceData)),
+				take(1),
+			)
+			.subscribe(createResourceDto => {
 				createResourceDto.skills.forEach(skill => {
 					this.skills.push(skill.skill.name);
 				});
-
-				this.myInfoForm.patchValue({
-					educationSummary: createResourceDto.educationsSummary,
-					skillsSummary: createResourceDto.skillsSummary,
-				});
 			});
 	}
 
-	addEducationSections() {
-		// Prevent duplicate numbers which can cause an error when splicing a work experience section out
-		if (this.numberEducationSections.length === 0) {
-			this.numberEducationSections.push(0);
-		} else {
-			const lastElement = this.numberEducationSections[this.numberEducationSections.length - 1];
-			this.numberEducationSections.push(lastElement + 1);
-		}
-
-		const qualification = this.fb.group(
-			{
-				institution: ['', Validators.required],
-				field: ['', Validators.required],
-				country: [''],
-				state: [''],
-				city: [''],
-				startDate: ['', Validators.required],
-				endDate: ['', Validators.required],
-			},
-			{ validators: checkEnteredDates() },
-		);
-
-		this.qualifications.push(qualification);
-	}
-
-	removeEducationSection(index: number) {
-		if (this.numberEducationSections.length > 1) {
-			this.numberEducationSections.splice(index, 1);
-		}
-		this.qualifications.removeAt(index);
-	}
-
-	addCertificationSections() {
-		// Prevent duplicate numbers which can cause an error when splicing a work experience section out
-		if (this.numberCertificationSections.length === 0) {
-			this.numberCertificationSections.push(0);
-		} else {
-			const lastElement = this.numberCertificationSections[this.numberCertificationSections.length - 1];
-			this.numberCertificationSections.push(lastElement + 1);
-		}
-		const certification = this.fb.group({
-			certifyingAuthority: ['', Validators.required],
-			title: ['', Validators.required],
-			summary: [''],
-		});
-		this.certifications.push(certification);
-	}
-
-	removeCertificationSection(index: number) {
-		this.numberCertificationSections.splice(index, 1);
-		this.certifications.removeAt(index);
-	}
-
-	addSkill(event: MatChipInputEvent): void {
-		const value = (event.value || '').trim().substring(0, 50);
-
-		if (value) {
-			this.skills.push(value);
-		}
-		if (event.chipInput !== undefined) {
-			event.chipInput.clear();
-		}
-	}
-
-	removeSkill(skill: string): void {
-		const index = this.skills.indexOf(skill);
-
-		if (index >= 0) {
-			this.skills.splice(index, 1);
-		}
-	}
-
-	updateStateOptions(inputtedCountry: string) {
-		const countryCode = Country.getAllCountries().find(country => country.name === inputtedCountry);
-		if (countryCode != null)
-			this.states = State.getStatesOfCountry(countryCode.isoCode).map(state => {
-				return state.name;
-			});
+	isValid() {
+		return this.skillsForm?.valid && this.educationsForm?.valid && this.certificationsForm?.valid;
 	}
 
 	nextStep() {
-		this.myInfoForm?.markAllAsTouched();
-		if (this.myInfoForm?.valid) {
+		this.skillsForm?.markAllAsTouched();
+		this.educationsForm?.markAllAsTouched();
+		this.certificationsForm?.markAllAsTouched();
+		if (this.isValid()) {
 			this.store.dispatch(
 				createTrainingAndSkillDetails({
-					skillsSummary: this.myInfoForm.get('skillsSummary')?.value,
-					educationsSummary: this.myInfoForm.get('educationSummary')?.value,
+					skillsSummary: this.skillsForm.get('skillsSummary')?.value,
+					educationsSummary: this.educationsForm.get('educationSummary')?.value,
 					educations: this.qualifications.value.map(
 						(qualification: {
 							field: string;

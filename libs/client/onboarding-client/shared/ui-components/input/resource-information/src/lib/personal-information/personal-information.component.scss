@@ -1,0 +1,35 @@
+@use 'abstracts/helper' as abs;
+@use 'components/helper' as cmp;
+
+.info-title {
+	@include cmp.info-title(100%, 50px);
+}
+
+.error-container {
+	width: 90%;
+	text-align: left;
+}
+
+tempus-card {
+	width: 90%;
+	margin: 2em auto;
+	text-align: center;
+}
+tempus-text-input {
+	text-align: center;
+	width: 90%;
+}
+
+tempus-search-box {
+	text-align: center;
+	width: 90%;
+}
+
+tempus-dropdown {
+	text-align: center;
+	width: 90%;
+}
+
+mat-error {
+	padding-bottom: 2em;
+}

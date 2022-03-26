@@ -1,0 +1,15 @@
+<ng-container>
+	<tempus-card>
+		<div *ngIf="skills.length === 0 && skillsSummary === ''">
+			<p class="mat-body-2">You have not entered information for this section.</p>
+		</div>
+		<div fxLayout="column" fxLayoutGap="30px">
+			<div fxFlex class="mat-body-1">{{ skillsSummary }}</div>
+			<div fxFlex fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutAlign="start" fxLayoutGap="16px grid">
+				<div *ngFor="let skill of skills">
+					<tempus-chip [removable]="false" [content]="skill"></tempus-chip>
+				</div>
+			</div>
+		</div>
+	</tempus-card>
+</ng-container>
