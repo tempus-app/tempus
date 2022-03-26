@@ -1,6 +1,5 @@
-import { Component, ContentChild, HostListener, Inject, TemplateRef, ViewChild } from '@angular/core';
+import { Component, HostListener, Inject, TemplateRef } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Subject } from 'rxjs';
 import { ModalService } from '../service/modal.service';
 
 @Component({
@@ -24,11 +23,6 @@ export class ContentModalComponent {
 		private mdDialogRef: MatDialogRef<ContentModalComponent>,
 		private modalService: ModalService,
 	) {}
-
-	@ViewChild('childComponent')
-	private childComponent!: TemplateRef<unknown>;
-
-	confirmEventSubject: Subject<void> = new Subject<void>();
 
 	public close(value: boolean) {
 		this.mdDialogRef.close(value);

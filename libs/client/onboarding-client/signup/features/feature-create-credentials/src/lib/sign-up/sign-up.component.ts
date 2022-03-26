@@ -9,7 +9,7 @@ import {
 	selectResourceData,
 	SignupState,
 } from '@tempus/client/onboarding-client/signup/data-access';
-import { take, map, filter, switchMap, tap } from 'rxjs/operators';
+import { take, filter, switchMap, tap } from 'rxjs/operators';
 import { validatePasswords } from './sign-up.validators';
 
 @Component({

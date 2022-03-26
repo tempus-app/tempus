@@ -9,7 +9,7 @@
 	<div fxFlex="10" fxLayout="row" class="header">
 		<mat-icon aria-hidden="false" aria-label="modal icon" [ngClass]="data.modalType">{{ data.modalType }}</mat-icon>
 		<span fxFlex="80">
-			<h3 class="mat-h3 header-text">
+			<h3 class="mat-h3 header-text" id="info-header">
 				{{ data.title }}
 			</h3>
 		</span>
@@ -18,6 +18,8 @@
 		<p class="mat-body-2">{{ data.message }}</p>
 	</div>
 	<div mat-dialog-actions fxLayout="column" fxLayoutAlign="end end">
-		<tempus-button color="accent" [label]="data.closeText" (click)="selectConfirm()"></tempus-button>
+		<tempus-button *ngIf="data.closeText" color="grey" [label]="data.closeText" (click)="selectClose()"></tempus-button>
+		<tempus-button class="dialog-button" color="primary" (click)="selectConfirm()" [label]="data.confirmText">
+		</tempus-button>
 	</div>
 </div>

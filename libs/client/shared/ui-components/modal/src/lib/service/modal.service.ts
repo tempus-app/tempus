@@ -1,6 +1,6 @@
 import { Injectable, TemplateRef } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { Subject } from 'rxjs';
+import { map, Observable, of, Subject, take } from 'rxjs';
 
 import { ContentModalComponent } from '../content-modal/content-modal.component';
 import { InfoModalComponent } from '../info-modal/info-modal.component';
@@ -9,9 +9,9 @@ import { CustomModalType } from './custom-modal-type.enum';
 
 interface ModalParameters {
 	title: string;
-	closeText: string;
+	closeText?: string;
 	message?: string;
-	confirmText?: string;
+	confirmText: string;
 	modalType?: ModalType;
 	template?: TemplateRef<unknown>;
 }
@@ -21,7 +21,7 @@ export class ModalService {
 
 	dialogRef: MatDialogRef<InfoModalComponent | ContentModalComponent> | undefined;
 
-	confirmEventSubject: Subject<void> = new Subject();
+	confirmEventSubject = new Subject();
 
 	public open(options: ModalParameters, type: CustomModalType) {
 		if (type === CustomModalType.INFO) {
@@ -30,9 +30,11 @@ export class ModalService {
 					title: options.title,
 					message: options.message,
 					closeText: options.closeText,
+					confirmText: options.confirmText,
 					modalType: options.modalType,
 				},
 				minWidth: '50%',
+				autoFocus: false,
 			});
 		} else {
 			this.dialogRef = this.dialog.open(ContentModalComponent, {
@@ -43,6 +45,7 @@ export class ModalService {
 					template: options.template,
 				},
 				minWidth: '50%',
+				autoFocus: false,
 			});
 		}
 	}
@@ -52,6 +55,18 @@ export class ModalService {
 	}
 
 	public triggerConfirmEvent() {
-		this.confirmEventSubject.next();
+		this.confirmEventSubject.next(this.dialogRef);
+	}
+
+	public closed(): Observable<unknown> {
+		if (this.dialogRef) {
+			return this.dialogRef?.afterClosed().pipe(
+				take(1),
+				map(res => {
+					return res;
+				}),
+			);
+		}
+		return of();
 	}
 }

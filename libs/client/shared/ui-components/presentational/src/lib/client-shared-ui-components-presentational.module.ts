@@ -8,12 +8,12 @@ import { MatTableModule } from '@angular/material/table';
 import { MatSortModule } from '@angular/material/sort';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatButtonModule } from '@angular/material/button';
 import { CardComponent } from './card/card.component';
 import { ChipComponent } from './chip/chip.component';
 import { TableComponent } from './table/table.component';
 import { SpinnerComponent } from './spinner/spinner.component';
 import { ButtonComponent } from './button/button.component';
-import { MatButtonModule } from '@angular/material/button';
 
 @NgModule({
 	imports: [

@@ -1,5 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
+import { Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { AsyncRequestState } from '@tempus/client/onboarding-client/shared/data-access';
@@ -11,9 +10,15 @@ import {
 	SignupState,
 } from '@tempus/client/onboarding-client/signup/data-access';
 import { Link, StatusType } from '@tempus/shared-domain';
+// eslint-disable-next-line @nrwl/nx/enforce-module-boundaries
+import { ModalType } from 'libs/client/shared/ui-components/modal/src/lib/info-modal/modal-type.enum';
+// eslint-disable-next-line @nrwl/nx/enforce-module-boundaries
+import { CustomModalType } from 'libs/client/shared/ui-components/modal/src/lib/service/custom-modal-type.enum';
+// eslint-disable-next-line @nrwl/nx/enforce-module-boundaries
+import { ModalService } from 'libs/client/shared/ui-components/modal/src/lib/service/modal.service';
+
 import { Subscription } from 'rxjs';
 import { tap, filter } from 'rxjs/operators';
-import { SignupErrorModalComponent } from './error.modal';
 
 @Component({
 	selector: 'tempus-credentials',
@@ -31,7 +36,10 @@ export class CredentialsComponent implements OnInit, OnDestroy {
 
 	linkData$?: Subscription;
 
-	constructor(private route: ActivatedRoute, private store: Store<SignupState>, public dialog: MatDialog) {}
+	@ViewChild('testTemplate')
+	testTemplate!: TemplateRef<unknown>;
+
+	constructor(private route: ActivatedRoute, private store: Store<SignupState>, public modalService: ModalService) {}
 
 	ngOnDestroy(): void {
 		this.errorStatus$?.unsubscribe();
@@ -39,11 +47,13 @@ export class CredentialsComponent implements OnInit, OnDestroy {
 	}
 
 	openDialog(errorMessage: string): void {
-		this.dialog.open(SignupErrorModalComponent, {
-			width: '90%',
-			data: { error: errorMessage },
-			disableClose: true,
-			height: '90%',
+		this.modalService.open(
+			{ title: 'Error Loading Link', confirmText: 'OK', message: errorMessage, modalType: ModalType.ERROR },
+			CustomModalType.INFO,
+		);
+		this.modalService.confirmEventSubject.subscribe(() => {
+			this.modalService.close();
+			this.modalService.confirmEventSubject.unsubscribe();
 		});
 	}
 

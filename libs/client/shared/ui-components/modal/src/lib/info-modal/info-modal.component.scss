@@ -1,4 +1,9 @@
 @use 'abstracts/helper' as abs;
+#info-header {
+	padding: 0px;
+	margin: 0px;
+}
+
 .warn_outline {
 	color: abs.$warning;
 	width: 30px;
