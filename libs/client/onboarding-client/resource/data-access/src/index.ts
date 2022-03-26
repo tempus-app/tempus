@@ -1,2 +1,1 @@
-export * from './lib/onboarding-client-profile-data-access.module';
-export * from './lib/+state';
+export * from './lib/onboarding-client-resource-data-access.module';

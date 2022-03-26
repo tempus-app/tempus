@@ -19,7 +19,7 @@
 		"onboarding-client": "apps/onboarding-client",
 		"onboarding-client-business-owner-feature-manage-resources": "libs/client/onboarding-client/business-owner/features/feature-manage-resources",
 		"onboarding-client-business-owner-feature-shell": "libs/client/onboarding-client/business-owner/shell",
-		"onboarding-client-profile-data-access": "libs/client/onboarding-client/resource/data-access",
+		"onboarding-client-resource-data-access": "libs/client/onboarding-client/resource/data-access",
 		"onboarding-client-resource-feature-profile": "libs/client/onboarding-client/resource/features/feature-profile",
 		"onboarding-client-resource-feature-shell": "libs/client/onboarding-client/resource/shell",
 		"onboarding-client-resource-feature-sign-in": "libs/client/onboarding-client/resource/features/feature-sign-in",

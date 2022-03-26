@@ -1,8 +1,10 @@
 import { ActionReducer, INIT, UPDATE } from '@ngrx/store';
-import { SessionStorageKey } from '@tempus/client/onboarding-client/shared/data-access';
-import { ProfileState } from './profile.state';
+import { SessionStorageKey } from '../enum';
+import { OnboardingClientState } from './onboardingClient.state';
 
-export const hydrationMetaReducer = (reducer: ActionReducer<ProfileState>): ActionReducer<ProfileState> => {
+export const hydrationMetaReducer = (
+	reducer: ActionReducer<OnboardingClientState>,
+): ActionReducer<OnboardingClientState> => {
 	return (state, action) => {
 		let newState = { ...state };
 		if (action.type === INIT || action.type === UPDATE || action.type === '@ngrx/router-store/navigated') {
@@ -12,7 +14,7 @@ export const hydrationMetaReducer = (reducer: ActionReducer<ProfileState>): Acti
 			if (newState.auth) {
 				newState = { ...newState, auth: { ...newState.auth, accessToken, loggedInUserId: userId } };
 			}
-			return reducer(newState as ProfileState, action);
+			return reducer(newState as OnboardingClientState, action);
 		}
 		return reducer(state, action);
 	};

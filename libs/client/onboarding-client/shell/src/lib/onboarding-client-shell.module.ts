@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
+import { OnboardingClientSharedDataAccessModule } from '@tempus/client/onboarding-client/shared/data-access';
 import { OnboardingClientShellComponent } from './shell/onboarding-client-shell.component';
 
 const routes: Routes = [
@@ -32,7 +33,7 @@ const routes: Routes = [
 
 @NgModule({
 	declarations: [OnboardingClientShellComponent],
-	imports: [CommonModule, RouterModule.forRoot(routes)],
+	imports: [CommonModule, OnboardingClientSharedDataAccessModule, RouterModule.forRoot(routes)],
 	exports: [RouterModule],
 })
 export class OnboardingClientShellModule {}

@@ -3,12 +3,12 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import {
+	AsyncRequestState,
 	login,
-	ProfileState,
+	OnboardingClientState,
 	selectAccessToken,
 	selectLoginStatus,
-} from '@tempus/client/onboarding-client/resource/data-access';
-import { AsyncRequestState } from '@tempus/client/onboarding-client/shared/data-access';
+} from '@tempus/client/onboarding-client/shared/data-access';
 import { Subject, takeUntil } from 'rxjs';
 
 @Component({
@@ -18,7 +18,7 @@ import { Subject, takeUntil } from 'rxjs';
 })
 export class SignInComponent implements OnInit, OnDestroy {
 	constructor(
-		private store: Store<ProfileState>,
+		private store: Store<OnboardingClientState>,
 		private router: Router,
 		private route: ActivatedRoute,
 		private fb: FormBuilder,

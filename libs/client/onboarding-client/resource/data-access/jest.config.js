@@ -1,5 +1,5 @@
 module.exports = {
-	displayName: 'onboarding-client-profile-data-access',
+	displayName: 'onboarding-client-resource-data-access',
 	preset: '../../../../../jest.preset.js',
 	setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
 	globals: {

@@ -1,5 +1,5 @@
 import { createReducer, on } from '@ngrx/store';
-import { AsyncRequestState } from '@tempus/client/onboarding-client/shared/data-access';
+import { AsyncRequestState } from '../../enum';
 
 import * as AuthActions from './auth.actions';
 
