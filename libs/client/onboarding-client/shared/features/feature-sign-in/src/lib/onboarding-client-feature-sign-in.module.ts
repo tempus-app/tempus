@@ -33,4 +33,4 @@ import { SignInComponent } from './signin/sign-in.component';
 	],
 	declarations: [SignInComponent],
 })
-export class OnboardingClientResourceFeatureSignInModule {}
+export class OnboardingClientFeatureSignInModule {}

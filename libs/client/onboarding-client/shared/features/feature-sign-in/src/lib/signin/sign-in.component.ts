@@ -6,9 +6,10 @@ import {
 	AsyncRequestState,
 	login,
 	OnboardingClientState,
-	selectAccessToken,
+	selectAccessTokenAndRoles,
 	selectLoginStatus,
 } from '@tempus/client/onboarding-client/shared/data-access';
+import { RoleType } from '@tempus/shared-domain';
 import { Subject, takeUntil } from 'rxjs';
 
 @Component({
@@ -50,11 +51,18 @@ export class SignInComponent implements OnInit, OnDestroy {
 				}
 			});
 		this.store
-			.select(selectAccessToken)
+			.select(selectAccessTokenAndRoles)
 			.pipe(takeUntil(this.destroyed$))
-			.subscribe(accessToken => {
-				if (accessToken) {
-					this.router.navigate(['../'], { relativeTo: this.route });
+			.subscribe(accessTokenAndRoles => {
+				if (accessTokenAndRoles.accessToken) {
+					if (accessTokenAndRoles.roles.includes(RoleType.BUSINESS_OWNER)) {
+						this.router.navigate(['../owner'], { relativeTo: this.route });
+					} else if (
+						accessTokenAndRoles.roles.includes(RoleType.AVAILABLE_RESOURCE) ||
+						accessTokenAndRoles.roles.includes(RoleType.ASSIGNED_RESOURCE)
+					) {
+						this.router.navigate(['../resource'], { relativeTo: this.route });
+					}
 				}
 			});
 	}

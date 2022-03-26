@@ -9,6 +9,7 @@ export interface AuthState {
 	accessToken: string | null;
 	refreshToken: string | null;
 	loggedInUserId: number | null;
+	userRoles: string[];
 	error: Error | null;
 	status: AsyncRequestState;
 }
@@ -17,6 +18,7 @@ export const initialState: AuthState = {
 	accessToken: null,
 	refreshToken: null,
 	loggedInUserId: null,
+	userRoles: [],
 	error: null,
 	status: AsyncRequestState.IDLE,
 };
@@ -24,10 +26,11 @@ export const initialState: AuthState = {
 export const authReducer = createReducer(
 	initialState,
 	on(AuthActions.login, state => ({ ...state, status: AsyncRequestState.LOADING })),
-	on(AuthActions.loginSuccess, (state, { accessToken, loggedInUserId }) => ({
+	on(AuthActions.loginSuccess, (state, { accessToken, loggedInUserId, userRoles }) => ({
 		...state,
 		accessToken,
 		loggedInUserId,
+		userRoles,
 		status: AsyncRequestState.SUCCESS,
 		error: null,
 	})),

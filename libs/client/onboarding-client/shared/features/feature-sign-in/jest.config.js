@@ -1,5 +1,5 @@
 module.exports = {
-	displayName: 'onboarding-client-resource-feature-sign-in',
+	displayName: 'onboarding-client-feature-sign-in',
 	preset: '../../../../../../jest.preset.js',
 	setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
 	globals: {
@@ -9,7 +9,7 @@ module.exports = {
 		},
 	},
 	coverageDirectory:
-		'../../../../../../coverage/libs/client/onboarding-client/resource/features/onboarding-client-resource-feature-sign-in',
+		'../../../../../../coverage/libs/client/onboarding-client/resource/features/onboarding-client-feature-sign-in',
 	transform: {
 		'^.+\\.(ts|mjs|js|html)$': 'jest-preset-angular',
 	},

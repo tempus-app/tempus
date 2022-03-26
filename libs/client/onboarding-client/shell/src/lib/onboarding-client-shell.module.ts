@@ -9,7 +9,12 @@ const routes: Routes = [
 		path: '',
 		component: OnboardingClientShellComponent,
 		children: [
-			{ path: '', pathMatch: 'full', redirectTo: 'resource/signin' },
+			{ path: '', pathMatch: 'full', redirectTo: 'signin' },
+			{
+				path: 'signin',
+				loadChildren: () =>
+					import('@tempus/onboarding-client/shared/feature-sign-in').then(m => m.OnboardingClientFeatureSignInModule),
+			},
 			{
 				path: 'signup/:token',
 				loadChildren: () =>

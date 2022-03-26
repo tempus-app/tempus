@@ -23,7 +23,7 @@
 		"onboarding-client-resource-data-access": "libs/client/onboarding-client/resource/data-access",
 		"onboarding-client-resource-feature-profile": "libs/client/onboarding-client/resource/features/feature-profile",
 		"onboarding-client-resource-feature-shell": "libs/client/onboarding-client/resource/shell",
-		"onboarding-client-resource-feature-sign-in": "libs/client/onboarding-client/resource/features/feature-sign-in",
+		"onboarding-client-shared-feature-sign-in": "libs/client/onboarding-client/shared/features/feature-sign-in",
 		"onboarding-client-shared-data-access": "libs/client/onboarding-client/shared/data-access",
 		"onboarding-client-shared-guards": "libs/client/onboarding-client/shared/guards",
 		"onboarding-client-shared-input-resource-information": "libs/client/onboarding-client/shared/ui-components/input/resource-information",

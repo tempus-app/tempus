@@ -11,7 +11,7 @@ import {
 	UrlTree,
 } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { OnboardingClientState, selectAccessToken } from '@tempus/client/onboarding-client/shared/data-access';
+import { OnboardingClientState, selectAccessTokenAndRoles } from '@tempus/client/onboarding-client/shared/data-access';
 import { Observable } from 'rxjs';
 import { take, map } from 'rxjs/operators';
 
@@ -24,13 +24,13 @@ export class AuthGuard implements CanLoad, CanActivate {
 	) {}
 
 	authVerification = () => {
-		return this.store.select(selectAccessToken).pipe(
+		return this.store.select(selectAccessTokenAndRoles).pipe(
 			take(1),
-			map(authtoken => {
-				if (authtoken) {
+			map(authTokenAndRoles => {
+				if (authTokenAndRoles.accessToken) {
 					return true;
 				}
-				this.router.navigateByUrl('resource/signin');
+				this.router.navigateByUrl('signin');
 				return false;
 			}),
 		);

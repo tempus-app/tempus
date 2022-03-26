@@ -1,6 +1,6 @@
 import { createReducer, on } from '@ngrx/store';
 import { AsyncRequestState } from '@tempus/client/onboarding-client/shared/data-access';
-import { ICreateResourceDto } from '@tempus/shared-domain';
+import { ICreateResourceDto, RoleType } from '@tempus/shared-domain';
 
 import * as ResourceActions from './createResource.actions';
 
@@ -19,7 +19,7 @@ export interface ResourceState {
 }
 
 export const initialState: ResourceState = {
-	createResourceData: {} as ICreateResourceDto,
+	createResourceData: { roles: [RoleType.AVAILABLE_RESOURCE] } as ICreateResourceDto,
 	credentialsCreated: false,
 	resumeUploadCreated: false,
 	userDetailsCreated: false,

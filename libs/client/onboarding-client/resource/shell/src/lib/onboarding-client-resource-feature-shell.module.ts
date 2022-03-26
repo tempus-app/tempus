@@ -20,13 +20,6 @@ const routes: Routes = [
 						m => m.OnboardingClientResourceFeatureProfileModule,
 					),
 			},
-			{
-				path: 'signin',
-				loadChildren: () =>
-					import('@tempus/onboarding-client/resource/feature-sign-in').then(
-						m => m.OnboardingClientResourceFeatureSignInModule,
-					),
-			},
 		],
 	},
 ];

@@ -16,7 +16,7 @@ export class ProfileComponent implements OnDestroy {
 
 	logout() {
 		this.store.dispatch(logout());
-		this.router.navigateByUrl('/resource/signin');
+		this.router.navigateByUrl('signin');
 	}
 
 	ngOnDestroy(): void {
