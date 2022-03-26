@@ -102,7 +102,7 @@ export class ReviewComponent implements OnInit {
 				this.loading = false;
 				this.store.dispatch(resetLinkState());
 				this.store.dispatch(resetCreateResourceState());
-				this.router.navigate(['../../../profile/signin'], { relativeTo: this.route });
+				this.router.navigate(['../../../resource/signin'], { relativeTo: this.route });
 			} else if (reqStatusData.status === AsyncRequestState.ERROR) {
 				this.loading = false;
 				alert('Error creating resource');

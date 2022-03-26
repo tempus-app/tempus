@@ -1,0 +1,26 @@
+{
+	"projectType": "library",
+	"root": "libs/client/onboarding-client/business-owner/features/feature-manage-resources",
+	"sourceRoot": "libs/client/onboarding-client/business-owner/features/feature-manage-resources/src",
+	"prefix": "tempus",
+	"targets": {
+		"test": {
+			"executor": "@nrwl/jest:jest",
+			"outputs": ["coverage/libs/client/onboarding-client/business-owner/features/feature-manage-resources"],
+			"options": {
+				"jestConfig": "libs/client/onboarding-client/business-owner/features/feature-manage-resources/jest.config.js",
+				"passWithNoTests": true
+			}
+		},
+		"lint": {
+			"executor": "@nrwl/linter:eslint",
+			"options": {
+				"lintFilePatterns": [
+					"libs/client/onboarding-client/business-owner/features/feature-manage-resources/src/**/*.ts",
+					"libs/client/onboarding-client/business-owner/features/feature-manage-resources/src/**/*.html"
+				]
+			}
+		}
+	},
+	"tags": []
+}

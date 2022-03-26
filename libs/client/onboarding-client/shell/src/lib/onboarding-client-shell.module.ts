@@ -8,15 +8,23 @@ const routes: Routes = [
 		path: '',
 		component: OnboardingClientShellComponent,
 		children: [
+			{ path: '', pathMatch: 'full', redirectTo: 'resource/signin' },
 			{
 				path: 'signup/:token',
 				loadChildren: () =>
 					import('@tempus/onboarding-client/signup/shell').then(m => m.OnboardingClientSignupFeatureShellModule),
 			},
 			{
-				path: 'profile',
+				path: 'resource',
 				loadChildren: () =>
-					import('@tempus/onboarding-client/profile/shell').then(m => m.OnboardingClientProfileFeatureShellModule),
+					import('@tempus/onboarding-client/resource/shell').then(m => m.OnboardingClientResourceFeatureShellModule),
+			},
+			{
+				path: 'owner',
+				loadChildren: () =>
+					import('@tempus/onboarding-client/business-owner/shell').then(
+						m => m.OnboardingBusinessOwnerFeatureShellModule,
+					),
 			},
 		],
 	},

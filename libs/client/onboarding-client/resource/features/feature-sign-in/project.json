@@ -1,0 +1,28 @@
+{
+	"projectType": "library",
+	"root": "libs/client/onboarding-client/resource/features/onboarding-client-resource-feature-sign-in",
+	"sourceRoot": "libs/client/onboarding-client/resource/features/onboarding-client-resource-feature-sign-in/src",
+	"prefix": "tempus",
+	"targets": {
+		"test": {
+			"executor": "@nrwl/jest:jest",
+			"outputs": [
+				"coverage/libs/client/onboarding-client/resource/features/onboarding-client-resource-feature-sign-in"
+			],
+			"options": {
+				"jestConfig": "libs/client/onboarding-client/resource/features/onboarding-client-resource-feature-sign-in/jest.config.js",
+				"passWithNoTests": true
+			}
+		},
+		"lint": {
+			"executor": "@nrwl/linter:eslint",
+			"options": {
+				"lintFilePatterns": [
+					"libs/client/onboarding-client/resource/features/onboarding-client-resource-feature-sign-in/src/**/*.ts",
+					"libs/client/onboarding-client/resource/features/onboarding-client-resource-feature-sign-in/src/**/*.html"
+				]
+			}
+		}
+	},
+	"tags": []
+}
