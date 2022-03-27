@@ -20,6 +20,7 @@ export class OnboardingClientAuthService {
 		);
 	}
 
+	// UNUSED FOR NOW -- will need to figure out how to inject into hyrdationReducer to use this in there
 	public getUserDataFromSessionStorage(): { accessToken: string | null; userId: number | null } {
 		const accessToken: string | null = sessionStorage.getItem(SessionStorageKey.TEMPUS_ACCESS_TOKEN);
 		const userIdString: string | null = sessionStorage.getItem(SessionStorageKey.TEMPUS_USER_ID);
@@ -31,11 +32,12 @@ export class OnboardingClientAuthService {
 	}
 
 	public setUserDataInSessionStorage(accessToken: string, userId: number) {
-		sessionStorage.setItem('tempus_access_token', accessToken);
-		sessionStorage.setItem('tempus_user_id', userId.toString());
+		sessionStorage.setItem(SessionStorageKey.TEMPUS_ACCESS_TOKEN, accessToken);
+		sessionStorage.setItem(SessionStorageKey.TEMPUS_USER_ID, userId.toString());
 	}
 
 	public logout() {
-		sessionStorage.clear();
+		sessionStorage.removeItem(SessionStorageKey.TEMPUS_ACCESS_TOKEN);
+		sessionStorage.removeItem(SessionStorageKey.TEMPUS_USER_ID);
 	}
 }

@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { formatDateRange, formatAddress, formatName } from '@tempus/shared/util';
+import { formatDateRange, formatAddress, formatName } from '@tempus/client/shared/util';
 import { ICreateExperienceDto } from '@tempus/shared-domain';
 
 @Component({

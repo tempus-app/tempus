@@ -111,7 +111,7 @@ export class ReviewComponent implements OnInit, AfterViewInit {
 				this.loading = false;
 				this.store.dispatch(resetLinkState());
 				this.store.dispatch(resetCreateResourceState());
-				this.router.navigate(['../../../profile/signin'], { relativeTo: this.route });
+				this.router.navigate(['../../../signin'], { relativeTo: this.route });
 			} else if (reqStatusData.status === AsyncRequestState.ERROR) {
 				this.loading = false;
 				alert('Error creating resource');

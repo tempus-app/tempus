@@ -60,6 +60,7 @@
 		"handlebars": "^4.7.7",
 		"install": "^0.13.0",
 		"joi": "^17.6.0",
+		"jwt-decode": "^3.1.2",
 		"material-design-icons": "^3.0.1",
 		"mysql2": "^2.3.3",
 		"ngx-dropzone": "^3.1.0",

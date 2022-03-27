@@ -13,7 +13,7 @@
 				"assets": [
 					{
 						"glob": "**/*",
-						"input": "libs/shared/assets/",
+						"input": "libs/api/shared/api-assets/src/lib/",
 						"output": "assets"
 					}
 				]

@@ -1,0 +1,23 @@
+{
+	"root": "libs/api/shared/api-assets",
+	"sourceRoot": "libs/api/shared/api-assets/src",
+	"projectType": "library",
+	"targets": {
+		"lint": {
+			"executor": "@nrwl/linter:eslint",
+			"outputs": ["{options.outputFile}"],
+			"options": {
+				"lintFilePatterns": ["libs/api/shared/api-assets/**/*.ts"]
+			}
+		},
+		"test": {
+			"executor": "@nrwl/jest:jest",
+			"outputs": ["coverage/libs/api/shared/api-assets"],
+			"options": {
+				"jestConfig": "libs/api/shared/api-assets/jest.config.js",
+				"passWithNoTests": true
+			}
+		}
+	},
+	"tags": []
+}

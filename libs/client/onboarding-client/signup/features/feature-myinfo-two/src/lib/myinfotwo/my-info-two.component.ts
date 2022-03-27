@@ -2,7 +2,7 @@ import { AfterViewInit, ChangeDetectorRef, Component, EventEmitter, OnInit, Outp
 import { filter, switchMap, take } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { checkEnteredDates } from '@tempus/shared/util';
+import { checkEnteredDates } from '@tempus/client/shared/util';
 import { Store } from '@ngrx/store';
 import {
 	createWorkExperienceDetails,
