@@ -11,7 +11,7 @@ import { ResourceService } from './services/resource.service';
 import { UserController } from './controllers/user.controller';
 
 @Module({
-	imports: [ApiSharedEntityModule, forwardRef(() => ProfileModule), EmailModule, ConfigModule],
+	imports: [ApiSharedEntityModule, forwardRef(() => ProfileModule), EmailModule, ConfigModule, AuthModule],
 	controllers: [UserController, LinkController],
 	providers: [ResourceService, UserService, LinkService],
 	exports: [ResourceService, UserService, LinkService],

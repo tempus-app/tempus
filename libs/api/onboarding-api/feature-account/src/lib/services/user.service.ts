@@ -1,11 +1,12 @@
-import { Resource, User } from '@tempus/shared-domain';
-import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
+import { Resource, RoleType, User } from '@tempus/shared-domain';
+import { ForbiddenException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ConfigService } from '@nestjs/config';
 import { Repository } from 'typeorm';
 import { genSalt, hash } from 'bcrypt';
 import { UserEntity } from '@tempus/api/shared/entity';
-import { CreateUserDto, UpdateUserDto } from '@tempus/api/shared/dto';
+import { CreateUserDto, JwtPayload, UpdateUserDto } from '@tempus/api/shared/dto';
+import { AuthService } from '@tempus/api/shared/feature-auth';
 import { ResourceService } from './resource.service';
 
 @Injectable()
@@ -15,6 +16,7 @@ export class UserService {
 		private userRepository: Repository<UserEntity>,
 		private resourceService: ResourceService,
 		private configService: ConfigService,
+		private authService: AuthService,
 	) {}
 
 	async createUser(user: CreateUserDto): Promise<User> {
@@ -23,8 +25,13 @@ export class UserService {
 		return this.userRepository.save(userEntity);
 	}
 
-	async updateUser(updateUserData: UpdateUserDto): Promise<User> {
+	async updateUser(updateUserData: UpdateUserDto, token: JwtPayload): Promise<User> {
 		const userEntity = await this.userRepository.findOne(updateUserData.id);
+		if (!token.roles.includes(RoleType.BUSINESS_OWNER)) {
+			if (token.email !== userEntity.email) {
+				throw new ForbiddenException('Forbidden.');
+			}
+		}
 		if (!userEntity) {
 			throw new NotFoundException(`Could not find user with id ${userEntity.id}`);
 		}
@@ -39,16 +46,8 @@ export class UserService {
 		return this.userRepository.save(userEntity);
 	}
 
-	async getUser(userId: number): Promise<User | Resource> {
-		const userEntity = await this.userRepository.findOne(userId);
-		if (!userEntity) {
-			const resourceEntity = await this.resourceService.getResource(userId);
-			if (!resourceEntity) {
-				throw new NotFoundException(`Could not find user with id ${userEntity.id}`);
-			} else {
-				return resourceEntity;
-			}
-		}
+	async getUser(token: JwtPayload): Promise<User | Resource> {
+		const userEntity = await this.authService.findByEmail(token.email);
 		return userEntity;
 	}
 
@@ -67,8 +66,13 @@ export class UserService {
 		return users;
 	}
 
-	async deleteUser(userId: number): Promise<void> {
+	async deleteUser(userId: number, token: JwtPayload): Promise<void> {
 		const userEntity = await this.userRepository.findOne(userId);
+		if (!token.roles.includes(RoleType.BUSINESS_OWNER)) {
+			if (token.email !== userEntity.email) {
+				throw new ForbiddenException('Forbidden.');
+			}
+		}
 		if (!userEntity) {
 			throw new NotFoundException(`Could not find user with id ${userId}`);
 		}

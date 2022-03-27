@@ -61,7 +61,7 @@ export class AuthService {
 		}
 	}
 
-	private async findByEmail(email: string): Promise<User> {
+	async findByEmail(email: string): Promise<User> {
 		const user = (
 			await this.userRepository.find({
 				where: { email },

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/return-await */
-import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards, Request } from '@nestjs/common';
 import { Resource, RoleType, User } from '@tempus/shared-domain';
 import { JwtAuthGuard, Roles, RolesGuard } from '@tempus/api/shared/feature-auth';
 import { ApiTags } from '@nestjs/swagger';
@@ -16,7 +16,7 @@ export class UserController {
 	) {}
 
 	@UseGuards(JwtAuthGuard, RolesGuard)
-	@Roles(RoleType.USER) // Replace with BUSINESS_OWNER
+	@Roles(RoleType.BUSINESS_OWNER)
 	@Get()
 	// TODO: filtering
 	async getUsers(): Promise<User[]> {
@@ -28,16 +28,18 @@ export class UserController {
 		return this.userService.getAllUsers();
 	}
 
+	@UseGuards(JwtAuthGuard, RolesGuard)
+	@Roles(RoleType.BUSINESS_OWNER)
 	@Get('resources')
 	async getResources(): Promise<Resource[]> {
 		return this.resourceService.getAllResources();
 	}
 
 	// gets a User or Resource
-	@UseGuards(JwtAuthGuard, RolesGuard)
-	@Get(':userId')
-	async getUser(@Param('userId') userId: number): Promise<User | Resource> {
-		return this.userService.getUser(userId);
+	@UseGuards(JwtAuthGuard)
+	@Get('user')
+	async getUser(@Request() req): Promise<User | Resource> {
+		return this.userService.getUser(req.user);
 	}
 
 	// creates User
@@ -53,20 +55,23 @@ export class UserController {
 	}
 
 	// updates User information
+	@UseGuards(JwtAuthGuard)
 	@Patch()
-	async updateUser(@Body() updateUserData: UpdateUserDto): Promise<User> {
-		return await this.userService.updateUser(updateUserData);
+	async updateUser(@Request() req, @Body() updateUserData: UpdateUserDto): Promise<User> {
+		return await this.userService.updateUser(updateUserData, req.user);
 	}
 
 	// update Resource information
+	@UseGuards(JwtAuthGuard)
 	@Patch('resource')
-	async updateResource(@Body() updateResourceData: UpdateResourceDto): Promise<Resource> {
-		return await this.resourceService.editResource(updateResourceData);
+	async updateResource(@Request() req, @Body() updateResourceData: UpdateResourceDto): Promise<Resource> {
+		return await this.resourceService.editResource(updateResourceData, req.user);
 	}
 
 	// delete User or Resource
+	@UseGuards(JwtAuthGuard)
 	@Delete(':userId')
-	async deleteUser(@Param('userId') userId: number): Promise<void> {
-		return this.userService.deleteUser(userId);
+	async deleteUser(@Request() req, @Param('userId') userId: number): Promise<void> {
+		return this.userService.deleteUser(userId, req.user);
 	}
 }
