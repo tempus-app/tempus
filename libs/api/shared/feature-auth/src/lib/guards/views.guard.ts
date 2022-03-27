@@ -19,8 +19,6 @@ export class ViewsGuard implements CanActivate {
 			return false;
 		}
 
-		console.log('IM HERE');
-
 		if (!user.roles.includes(RoleType.BUSINESS_OWNER)) {
 			if (user.email !== entity.email) {
 				throw new ForbiddenException('Forbidden.');

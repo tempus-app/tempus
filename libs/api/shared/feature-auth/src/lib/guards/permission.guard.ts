@@ -14,8 +14,6 @@ export class PermissionGuard implements CanActivate {
 		const { params } = request;
 		let entity;
 
-		console.log(request.path);
-
 		if (Object.keys(params).length !== 0) {
 			entity = await this.commonService.findById(params.userId);
 		} else if (Object.keys(body).length !== 0) {

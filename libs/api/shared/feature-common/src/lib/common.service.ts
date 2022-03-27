@@ -56,21 +56,15 @@ export class CommonService {
 	}
 
 	async findUserByViewId(viewId: number): Promise<User | Resource> {
-		console.log('HELLLLOOO');
-		console.log(viewId);
-
 		const viewEntity = await this.viewsRepository.findOne({
 			relations: ['resource', 'experiences', 'educations', 'skills', 'certifications'],
 			where: {
 				id: viewId,
 			},
 		});
-		console.log(viewEntity);
 		if (!viewEntity) {
 			throw new NotFoundException(`Could not find view with id ${viewId}`);
 		}
-
-		console.log(viewEntity.resource.id);
 
 		const resourceEntity = await this.findById(viewEntity.resource.id);
 		return resourceEntity;
