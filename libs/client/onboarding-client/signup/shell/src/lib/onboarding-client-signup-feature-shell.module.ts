@@ -23,7 +23,7 @@ const routes: Routes = [
 			},
 			{
 				path: 'uploadresume',
-				// canLoad: [ValidLinkGuard],
+				canLoad: [ValidLinkGuard],
 				loadChildren: () =>
 					import('@tempus/onboarding-client/signup/feature-upload-resume').then(
 						m => m.OnboardingClientSignupFeatureUploadResumeModule,
@@ -31,7 +31,7 @@ const routes: Routes = [
 			},
 			{
 				path: 'myinfoone',
-				// canLoad: [ValidLinkGuard],
+				canLoad: [ValidLinkGuard],
 				loadChildren: () =>
 					import('@tempus/onboarding-client/signup/feature-myinfo-one').then(
 						m => m.OnboardingClientSignupFeatureMyInfoOneModule,
@@ -39,7 +39,7 @@ const routes: Routes = [
 			},
 			{
 				path: 'myinfotwo',
-				// canLoad: [ValidLinkGuard],
+				canLoad: [ValidLinkGuard],
 				loadChildren: () =>
 					import('@tempus/onboarding-client/signup/feature-myinfo-two').then(
 						m => m.OnboardingClientSignupFeatureMyInfoTwoModule,
@@ -47,7 +47,7 @@ const routes: Routes = [
 			},
 			{
 				path: 'myinfothree',
-				// canLoad: [ValidLinkGuard],
+				canLoad: [ValidLinkGuard],
 				loadChildren: () =>
 					import('@tempus/onboarding-client/signup/feature-myinfo-three').then(
 						m => m.OnboardingClientSignupFeatureMyInfoThreeModule,
@@ -55,7 +55,7 @@ const routes: Routes = [
 			},
 			{
 				path: 'review',
-				// canLoad: [ValidLinkGuard],
+				canLoad: [ValidLinkGuard],
 				loadChildren: () =>
 					import('@tempus/onboarding-client/signup/feature-review-info').then(
 						m => m.OnboardingClientSignupFeatureReviewInfoModule,
