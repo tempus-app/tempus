@@ -11,14 +11,15 @@ import {
 } from '@tempus/client/onboarding-client/signup/data-access';
 import { Store } from '@ngrx/store';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { ParsedEducation, ParsedResume, RawResume, ParsedWorkExperience } from '@tempus/shared/util';
 import {
 	ICreateLocationDto,
 	ICreateExperienceDto,
 	ICreateEducationDto,
-	ICreateCertificationDto,
 	ICreateSkillDto,
 	ICreateSkillTypeDto,
+	ParsedEducation,
+	ParsedResume,
+	ParsedWorkExperience,
 } from '@tempus/shared-domain';
 
 @Component({
