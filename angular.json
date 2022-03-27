@@ -10,6 +10,7 @@
 		"onboarding-client-shared-presentational-resource-display": "libs/client/onboarding-client/shared/ui-components/presentational/resource-display",
 		"client-shared-ui-assets": "libs/client/shared/ui-assets",
 		"client-shared-ui-components-input": "libs/client/shared/ui-components/input",
+		"client-shared-ui-components-modal": "libs/client/shared/ui-components/modal",
 		"client-shared-ui-components-persistent": "libs/client/shared/ui-components/persistent",
 		"client-shared-ui-components-presentational": "libs/client/shared/ui-components/presentational",
 		"client-shared-ui-styles": "libs/client/shared/ui-styles",

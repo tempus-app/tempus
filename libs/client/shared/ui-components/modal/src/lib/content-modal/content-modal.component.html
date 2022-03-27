@@ -1,0 +1,35 @@
+<div fxLayout="column" class="modal-container">
+	<div fxLayout="column" fxLayoutAlign="end end">
+		<div *ngIf="data.closable">
+			<button mat-icon-button aria-label="close dialog" mat-dialog-close>
+				<mat-icon class="close-icon" inline>close</mat-icon>
+			</button>
+		</div>
+	</div>
+	<div fxFlex="10" fxLayout="column" class="header">
+		<span fxFlex="80">
+			<h3 class="mat-h3 header-text">
+				{{ data.title }}
+			</h3>
+		</span>
+		<div class="info-title"></div>
+	</div>
+	<div mat-dialog-content>
+		<ng-template #childComponent [ngTemplateOutlet]="data.template"></ng-template>
+	</div>
+	<div mat-dialog-actions fxLayout="row" fxLayoutAlign="end space-around">
+		<tempus-button
+			*ngIf="data.closable"
+			class="dialog-button"
+			color="grey"
+			(click)="selectCancel()"
+			[label]="data.closeText"
+		></tempus-button>
+		<tempus-button
+			class="dialog-button"
+			color="accent"
+			(click)="selectConfirm()"
+			[label]="data.confirmText"
+		></tempus-button>
+	</div>
+</div>
