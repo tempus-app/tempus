@@ -14,35 +14,30 @@ export class OnboardingClientAuthService {
 	public login(password: string, email: string): Observable<AuthDto> {
 		return this.http.post<AuthDto>(`${this.url}/login`, { password, email }).pipe(
 			tap(data => {
-				this.setUserDataInSessionStorage(data.accessToken, data.user.id, data.user.roles);
+				this.setUserDataInSessionStorage(data.accessToken, data.user.id);
 			}),
 			catchError(handleError),
 		);
 	}
 
 	// UNUSED FOR NOW -- will need to figure out how to inject into hyrdationReducer to use this in there
-	public getUserDataFromSessionStorage(): { accessToken: string | null; userId: number | null; rolesArr: string[] } {
+	public getUserDataFromSessionStorage(): { accessToken: string | null; userId: number | null } {
 		const accessToken: string | null = sessionStorage.getItem(SessionStorageKey.TEMPUS_ACCESS_TOKEN);
 		const userIdString: string | null = sessionStorage.getItem(SessionStorageKey.TEMPUS_USER_ID);
-		const roles: string | null = sessionStorage.getItem(SessionStorageKey.TEMPUS_USER_ROLES);
-		const rolesArr = roles ? JSON.parse(roles) : [];
 		const userId: number | null = userIdString ? parseInt(userIdString, 10) : null;
 		return {
 			accessToken,
 			userId,
-			rolesArr,
 		};
 	}
 
-	public setUserDataInSessionStorage(accessToken: string, userId: number, userRoles: string[]) {
+	public setUserDataInSessionStorage(accessToken: string, userId: number) {
 		sessionStorage.setItem(SessionStorageKey.TEMPUS_ACCESS_TOKEN, accessToken);
 		sessionStorage.setItem(SessionStorageKey.TEMPUS_USER_ID, userId.toString());
-		sessionStorage.setItem(SessionStorageKey.TEMPUS_USER_ROLES, JSON.stringify(userRoles));
 	}
 
 	public logout() {
 		sessionStorage.removeItem(SessionStorageKey.TEMPUS_ACCESS_TOKEN);
 		sessionStorage.removeItem(SessionStorageKey.TEMPUS_USER_ID);
-		sessionStorage.removeItem(SessionStorageKey.TEMPUS_USER_ROLES);
 	}
 }

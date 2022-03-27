@@ -7,12 +7,7 @@ export const selectAuth = createSelector(
 	(state: OnboardingClientState) => state[AUTH_FEATURE_KEY],
 );
 
-export const selectAccessTokenAndRoles = createSelector(selectAuth, (state: AuthState) => {
-	return {
-		accessToken: state.accessToken,
-		roles: state.userRoles,
-	};
-});
+export const selectAccessToken = createSelector(selectAuth, (state: AuthState) => state.accessToken);
 export const selectLoggedInUserId = createSelector(selectAuth, (state: AuthState) => state.loggedInUserId);
 export const selectLoginStatus = createSelector(selectAuth, (state: AuthState) => {
 	return {

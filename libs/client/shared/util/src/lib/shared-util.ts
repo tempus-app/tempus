@@ -1,3 +1,4 @@
+import jwt_decode from 'jwt-decode';
 import { AbstractControl } from '@angular/forms';
 
 export function formatDateRange(startDate: Date, endDate: Date): string {
@@ -42,4 +43,9 @@ export function formatAddress(country: string, state: string, city: string) {
 
 export function formatName(first: string, last: string) {
 	return `${first} ${last}`;
+}
+
+export function decodeJwt(token: string) {
+	const decodedToken: { email: string; roles: string[]; iat: number; exp: number } = jwt_decode(token || '');
+	return decodedToken;
 }

@@ -6,9 +6,10 @@ import {
 	AsyncRequestState,
 	login,
 	OnboardingClientState,
-	selectAccessTokenAndRoles,
+	selectAccessToken,
 	selectLoginStatus,
 } from '@tempus/client/onboarding-client/shared/data-access';
+import { decodeJwt } from '@tempus/client/shared/util';
 import { RoleType } from '@tempus/shared-domain';
 import { Subject, takeUntil } from 'rxjs';
 
@@ -51,16 +52,15 @@ export class SignInComponent implements OnInit, OnDestroy {
 				}
 			});
 		this.store
-			.select(selectAccessTokenAndRoles)
+			.select(selectAccessToken)
 			.pipe(takeUntil(this.destroyed$))
-			.subscribe(accessTokenAndRoles => {
-				if (accessTokenAndRoles.accessToken) {
-					if (accessTokenAndRoles.roles.includes(RoleType.BUSINESS_OWNER)) {
+			.subscribe(accessToken => {
+				if (accessToken) {
+					const { roles } = decodeJwt(accessToken || '');
+
+					if (roles.includes(RoleType.BUSINESS_OWNER)) {
 						this.router.navigate(['../owner'], { relativeTo: this.route });
-					} else if (
-						accessTokenAndRoles.roles.includes(RoleType.AVAILABLE_RESOURCE) ||
-						accessTokenAndRoles.roles.includes(RoleType.ASSIGNED_RESOURCE)
-					) {
+					} else if (roles.includes(RoleType.AVAILABLE_RESOURCE) || roles.includes(RoleType.ASSIGNED_RESOURCE)) {
 						this.router.navigate(['../resource'], { relativeTo: this.route });
 					} else {
 						this.errorMessage = 'No defined roles';
