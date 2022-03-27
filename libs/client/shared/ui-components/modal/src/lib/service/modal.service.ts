@@ -26,9 +26,7 @@ export class ModalService {
 					modalType: options.modalType,
 					closable: options.closable,
 				},
-				minWidth: '50%',
-				maxWidth: '65%',
-				height: 'auto',
+				panelClass: 'responsive-modal',
 				autoFocus: false,
 				disableClose: !options.closable,
 			});
@@ -41,9 +39,7 @@ export class ModalService {
 					template: options.template,
 					closable: options.closable,
 				},
-				minWidth: '50%',
-				maxWidth: '70%',
-				height: 'auto',
+				panelClass: 'responsive-modal',
 				autoFocus: false,
 				disableClose: !options.closable,
 			});

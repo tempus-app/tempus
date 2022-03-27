@@ -1,6 +1,19 @@
 /* You can add global styles to this file, and also import other style files */
-@import 'theme';
 
+@use 'abstracts/helper' as abs;
+@import 'theme';
 body {
 	margin: 5%;
+}
+
+.responsive-modal {
+	@media (min-width: abs.$small) {
+		width: 60%;
+	}
+	@media (min-width: abs.$medium) {
+		width: 40%;
+	}
+	width: 70%;
+	border-radius: 8px;
+	padding: 10px;
 }
