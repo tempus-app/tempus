@@ -1,7 +1,13 @@
 <ng-container>
-	<button mat-raised-button color="{{ color }}" class="{{ buttonType }}">
+	<button
+		mat-raised-button
+		color="{{ color }}"
+		class="{{ buttonType }}"
+		(click)="buttonClicked(true)"
+		[disabled]="disabled"
+	>
 		<div id="button-container">
-			<mat-icon *ngIf="icon != ''">{{ icon }}</mat-icon>
+			<mat-icon *ngIf="icon !== ''">{{ icon }}</mat-icon>
 			<div class="label">{{ label }}</div>
 		</div>
 	</button>

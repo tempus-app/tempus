@@ -186,7 +186,7 @@ export class ResumeUploadComponent {
 
 	nextStep() {
 		this.fileData?.markAllAsTouched();
-		if (this.resumeParsed) {
+		if (this.resumeParsed && this.fileData.valid) {
 			this.store.dispatch(
 				createResumeUpload({
 					resume: this.fileData.value,
