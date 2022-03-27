@@ -50,9 +50,16 @@
 				</div>
 			</tempus-card>
 		</div>
-		<mat-progress-bar *ngIf="fileParsed" mode="indeterminate"></mat-progress-bar>
 		<div class="container next-button">
-			<tempus-button label="next" (buttonClick)="nextStep()" [disabled]="!resumeParsed"></tempus-button>
+			<button
+				color="primary"
+				mat-raised-button
+				matStepperNext="button"
+				[disabled]="!fileData.valid"
+				(click)="nextStep()"
+			>
+				Next
+			</button>
 		</div>
 	</div>
 </ng-container>
