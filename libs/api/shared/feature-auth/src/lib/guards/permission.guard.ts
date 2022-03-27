@@ -14,17 +14,19 @@ export class PermissionGuard implements CanActivate {
 		const { params } = request;
 		let entity;
 
-		if (params) {
-			entity = await this.commonService.findById(params.id);
-		} else if (body) {
-			entity = await this.commonService.findByEmail(body.id);
+		console.log(user.email);
+		if (Object.keys(params).length !== 0) {
+			console.log('hello');
+			entity = await this.commonService.findById(params.userId);
+		} else if (Object.keys(body).length !== 0) {
+			entity = await this.commonService.findById(body.id);
 		} else {
 			return false;
 		}
 
 		if (!user.roles.includes(RoleType.BUSINESS_OWNER)) {
 			if (user.email !== entity.email) {
-				throw new ForbiddenException('Forbidedn.');
+				throw new ForbiddenException('Forbidden.');
 			}
 		}
 

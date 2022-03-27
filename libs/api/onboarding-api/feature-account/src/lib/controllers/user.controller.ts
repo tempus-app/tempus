@@ -71,7 +71,7 @@ export class UserController {
 	// delete User or Resource
 	@UseGuards(JwtAuthGuard, PermissionGuard)
 	@Delete(':userId')
-	async deleteUser(@Request() req, @Param('userId') userId: number): Promise<void> {
-		return this.userService.deleteUser(userId, req.user);
+	async deleteUser(@Param('userId') userId: number): Promise<void> {
+		return this.userService.deleteUser(userId);
 	}
 }

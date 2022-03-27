@@ -24,16 +24,13 @@ export class UserService {
 	async createUser(user: CreateUserDto): Promise<User> {
 		const userEntity = UserEntity.fromDto(user);
 		userEntity.password = await this.hashPassword(userEntity.password);
-		return this.userRepository.save(userEntity);
+		const createdUser = await this.userRepository.save(userEntity);
+		createdUser.password = null;
+		return createdUser;
 	}
 
 	async updateUser(updateUserData: UpdateUserDto, token: JwtPayload): Promise<User> {
 		const userEntity = await this.userRepository.findOne(updateUserData.id);
-		// if (!token.roles.includes(RoleType.BUSINESS_OWNER)) {
-		// 	if (token.email !== userEntity.email) {
-		// 		throw new ForbiddenException('Forbidden.');
-		// 	}
-		// }
 		if (!userEntity) {
 			throw new NotFoundException(`Could not find user with id ${userEntity.id}`);
 		}
@@ -45,7 +42,10 @@ export class UserService {
 		});
 
 		Object.assign(userEntity, user);
-		return this.userRepository.save(userEntity);
+		const updatedUser = await this.userRepository.save(userEntity);
+		updatedUser.password = null;
+		updatedUser.refreshToken = null;
+		return updatedUser;
 	}
 
 	async getUser(token: JwtPayload): Promise<User | Resource> {
@@ -68,13 +68,8 @@ export class UserService {
 		return users;
 	}
 
-	async deleteUser(userId: number, token: JwtPayload): Promise<void> {
+	async deleteUser(userId: number): Promise<void> {
 		const userEntity = await this.userRepository.findOne(userId);
-		// if (!token.roles.includes(RoleType.BUSINESS_OWNER)) {
-		// 	if (token.email !== userEntity.email) {
-		// 		throw new ForbiddenException('Forbidden.');
-		// 	}
-		// }
 		if (!userEntity) {
 			throw new NotFoundException(`Could not find user with id ${userId}`);
 		}
