@@ -4,6 +4,7 @@ import { ProfileModule } from '@tempus/onboarding-api/feature-profile';
 import { ConfigModule } from '@nestjs/config';
 import { ApiSharedEntityModule } from '@tempus/api/shared/entity';
 import { AuthModule } from '@tempus/api/shared/feature-auth';
+import { CommonModule } from '@tempus/api/shared/feature-common';
 import { LinkController } from './controllers/link.controller';
 import { LinkService } from './services/link.service';
 import { UserService } from './services/user.service';
@@ -11,7 +12,14 @@ import { ResourceService } from './services/resource.service';
 import { UserController } from './controllers/user.controller';
 
 @Module({
-	imports: [ApiSharedEntityModule, forwardRef(() => ProfileModule), EmailModule, ConfigModule, AuthModule],
+	imports: [
+		ApiSharedEntityModule,
+		forwardRef(() => ProfileModule),
+		EmailModule,
+		ConfigModule,
+		AuthModule,
+		CommonModule,
+	],
 	controllers: [UserController, LinkController],
 	providers: [ResourceService, UserService, LinkService],
 	exports: [ResourceService, UserService, LinkService],

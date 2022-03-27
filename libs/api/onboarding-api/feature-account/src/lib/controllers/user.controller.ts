@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/return-await */
 import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards, Request } from '@nestjs/common';
 import { Resource, RoleType, User } from '@tempus/shared-domain';
-import { JwtAuthGuard, Roles, RolesGuard } from '@tempus/api/shared/feature-auth';
+import { JwtAuthGuard, Roles, RolesGuard, PermissionGuard } from '@tempus/api/shared/feature-auth';
 import { ApiTags } from '@nestjs/swagger';
 import { CreateUserDto, CreateResourceDto, UpdateUserDto, UpdateResourceDto } from '@tempus/api/shared/dto';
 import { ResourceService } from '../services/resource.service';
@@ -55,21 +55,21 @@ export class UserController {
 	}
 
 	// updates User information
-	@UseGuards(JwtAuthGuard)
+	@UseGuards(JwtAuthGuard, PermissionGuard)
 	@Patch()
 	async updateUser(@Request() req, @Body() updateUserData: UpdateUserDto): Promise<User> {
 		return await this.userService.updateUser(updateUserData, req.user);
 	}
 
 	// update Resource information
-	@UseGuards(JwtAuthGuard)
+	@UseGuards(JwtAuthGuard, PermissionGuard)
 	@Patch('resource')
 	async updateResource(@Request() req, @Body() updateResourceData: UpdateResourceDto): Promise<Resource> {
 		return await this.resourceService.editResource(updateResourceData, req.user);
 	}
 
 	// delete User or Resource
-	@UseGuards(JwtAuthGuard)
+	@UseGuards(JwtAuthGuard, PermissionGuard)
 	@Delete(':userId')
 	async deleteUser(@Request() req, @Param('userId') userId: number): Promise<void> {
 		return this.userService.deleteUser(userId, req.user);

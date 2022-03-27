@@ -6,6 +6,7 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ResourceEntity, UserEntity } from '@tempus/api/shared/entity';
 import { ConfigService } from '@nestjs/config';
+import { CommonService } from '@tempus/api/shared/feature-common';
 
 @Injectable()
 export class AuthService {
@@ -16,6 +17,7 @@ export class AuthService {
 		@InjectRepository(ResourceEntity)
 		private resourceRepository: Repository<ResourceEntity>,
 		private configService: ConfigService,
+		private commonService: CommonService,
 	) {}
 
 	async login(user: User): Promise<AuthDto> {
@@ -28,12 +30,12 @@ export class AuthService {
 	}
 
 	async logout(token: JwtPayload) {
-		const user = await this.findByEmail(token.email);
+		const user = await this.commonService.findByEmail(token.email);
 		await this.updateRefreshTokenHash(user, null);
 	}
 
 	async refreshToken(payload: JwtRefreshPayloadWithToken) {
-		const user = await this.findByEmail(payload.email);
+		const user = await this.commonService.findByEmail(payload.email);
 		if (!user.refreshToken) {
 			throw new ForbiddenException('User not logged in');
 		}
@@ -46,7 +48,7 @@ export class AuthService {
 	}
 
 	async validateUser(email: string, password: string): Promise<User> {
-		const user = await this.findByEmail(email);
+		const user = await this.commonService.findByEmail(email);
 		if (user && (await AuthService.compareData(password, user.password))) {
 			return user;
 		}
@@ -61,29 +63,29 @@ export class AuthService {
 		}
 	}
 
-	async findByEmail(email: string): Promise<User> {
-		const user = (
-			await this.userRepository.find({
-				where: { email },
-			})
-		)[0];
-		if (!user) {
-			throw new NotFoundException(`Could not find user with email ${email}`);
-		}
-		if (user.roles.includes(RoleType.BUSINESS_OWNER)) {
-			return user;
-		}
-		const resourceEntity = (
-			await this.resourceRepository.find({
-				where: { email },
-				relations: ['location', 'projects', 'views', 'experiences', 'educations', 'skills', 'certifications'],
-			})
-		)[0];
-		if (!resourceEntity) {
-			throw new NotFoundException(`Could not find resource with email ${email}`);
-		}
-		return resourceEntity;
-	}
+	// async findByEmail(email: string): Promise<User> {
+	// 	const user = (
+	// 		await this.userRepository.find({
+	// 			where: { email },
+	// 		})
+	// 	)[0];
+	// 	if (!user) {
+	// 		throw new NotFoundException(`Could not find user with email ${email}`);
+	// 	}
+	// 	if (user.roles.includes(RoleType.BUSINESS_OWNER)) {
+	// 		return user;
+	// 	}
+	// 	const resourceEntity = (
+	// 		await this.resourceRepository.find({
+	// 			where: { email },
+	// 			relations: ['location', 'projects', 'views', 'experiences', 'educations', 'skills', 'certifications'],
+	// 		})
+	// 	)[0];
+	// 	if (!resourceEntity) {
+	// 		throw new NotFoundException(`Could not find resource with email ${email}`);
+	// 	}
+	// 	return resourceEntity;
+	// }
 
 	private async updateRefreshTokenHash(user: User, refreshToken: string) {
 		const tokenOwner = user;

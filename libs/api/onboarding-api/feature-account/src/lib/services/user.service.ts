@@ -7,6 +7,7 @@ import { genSalt, hash } from 'bcrypt';
 import { UserEntity } from '@tempus/api/shared/entity';
 import { CreateUserDto, JwtPayload, UpdateUserDto } from '@tempus/api/shared/dto';
 import { AuthService } from '@tempus/api/shared/feature-auth';
+import { CommonService } from '@tempus/api/shared/feature-common';
 import { ResourceService } from './resource.service';
 
 @Injectable()
@@ -17,6 +18,7 @@ export class UserService {
 		private resourceService: ResourceService,
 		private configService: ConfigService,
 		private authService: AuthService,
+		private commonService: CommonService,
 	) {}
 
 	async createUser(user: CreateUserDto): Promise<User> {
@@ -27,11 +29,11 @@ export class UserService {
 
 	async updateUser(updateUserData: UpdateUserDto, token: JwtPayload): Promise<User> {
 		const userEntity = await this.userRepository.findOne(updateUserData.id);
-		if (!token.roles.includes(RoleType.BUSINESS_OWNER)) {
-			if (token.email !== userEntity.email) {
-				throw new ForbiddenException('Forbidden.');
-			}
-		}
+		// if (!token.roles.includes(RoleType.BUSINESS_OWNER)) {
+		// 	if (token.email !== userEntity.email) {
+		// 		throw new ForbiddenException('Forbidden.');
+		// 	}
+		// }
 		if (!userEntity) {
 			throw new NotFoundException(`Could not find user with id ${userEntity.id}`);
 		}
@@ -47,7 +49,7 @@ export class UserService {
 	}
 
 	async getUser(token: JwtPayload): Promise<User | Resource> {
-		const userEntity = await this.authService.findByEmail(token.email);
+		const userEntity = await this.commonService.findByEmail(token.email);
 		return userEntity;
 	}
 
@@ -68,11 +70,11 @@ export class UserService {
 
 	async deleteUser(userId: number, token: JwtPayload): Promise<void> {
 		const userEntity = await this.userRepository.findOne(userId);
-		if (!token.roles.includes(RoleType.BUSINESS_OWNER)) {
-			if (token.email !== userEntity.email) {
-				throw new ForbiddenException('Forbidden.');
-			}
-		}
+		// if (!token.roles.includes(RoleType.BUSINESS_OWNER)) {
+		// 	if (token.email !== userEntity.email) {
+		// 		throw new ForbiddenException('Forbidden.');
+		// 	}
+		// }
 		if (!userEntity) {
 			throw new NotFoundException(`Could not find user with id ${userId}`);
 		}

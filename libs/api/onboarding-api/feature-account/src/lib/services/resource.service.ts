@@ -93,11 +93,11 @@ export class ResourceService {
 	// edit resource to be used specifically when updating local information
 	async editResource(updateResourceData: UpdateResourceDto, token: JwtPayload): Promise<Resource> {
 		const resourceEntity = await this.getResource(updateResourceData.id);
-		if (!token.roles.includes(RoleType.BUSINESS_OWNER)) {
-			if (token.email !== resourceEntity.email) {
-				throw new ForbiddenException('Forbidden.');
-			}
-		}
+		// if (!token.roles.includes(RoleType.BUSINESS_OWNER)) {
+		// 	if (token.email !== resourceEntity.email) {
+		// 		throw new ForbiddenException('Forbidden.');
+		// 	}
+		// }
 
 		const updatedLocationData = updateResourceData.location;
 		delete updateResourceData.location;

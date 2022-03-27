@@ -4,6 +4,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule } from '@nestjs/config';
 import { CoreModule } from '@tempus/api/shared/feature-core';
 import { ApiSharedEntityModule } from '@tempus/api/shared/entity';
+import { CommonModule, CommonService } from '@tempus/api/shared/feature-common';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './guards/local-auth.guard';
@@ -14,7 +15,7 @@ import { JwtRefreshStrategy } from './strategies/jwt-refresh.strategy';
 import { JwtRefreshGuard } from './guards/jwt-refresh.guard';
 
 @Module({
-	imports: [ApiSharedEntityModule, PassportModule, ConfigModule, JwtModule.register({})],
+	imports: [ApiSharedEntityModule, CommonModule, PassportModule, ConfigModule, JwtModule.register({})],
 	controllers: [AuthController],
 	providers: [
 		AuthService,
@@ -24,6 +25,7 @@ import { JwtRefreshGuard } from './guards/jwt-refresh.guard';
 		LocalAuthGuard,
 		JwtAuthGuard,
 		JwtRefreshGuard,
+		CommonService,
 	],
 	exports: [AuthService, LocalAuthGuard, JwtAuthGuard, JwtRefreshGuard],
 })
