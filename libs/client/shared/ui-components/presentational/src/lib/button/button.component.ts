@@ -20,7 +20,7 @@ export class ButtonComponent implements OnInit {
 	@Input() color = 'primary';
 
 	setButtonType() {
-		this.label = this.buttonType != undefined ? this.buttonType : this.label;
+		this.label = this.buttonType !== undefined ? this.buttonType : this.label;
 		switch (this.buttonType) {
 			case ButtonType.EDIT: {
 				this.icon = 'edit';
@@ -40,6 +40,10 @@ export class ButtonComponent implements OnInit {
 			}
 			case ButtonType.CREATE_NEW_VIEW: {
 				this.icon = 'add';
+				break;
+			}
+			default: {
+				this.icon = '';
 				break;
 			}
 		}
