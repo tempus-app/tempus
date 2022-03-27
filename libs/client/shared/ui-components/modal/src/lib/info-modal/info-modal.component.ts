@@ -1,7 +1,7 @@
-import { Component, HostListener, Inject } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { InfoModal } from '../modal-parameters.interface';
 import { ModalService } from '../service/modal.service';
-import { ModalType } from './modal-type.enum';
 
 @Component({
 	selector: 'tempus-info-modal',
@@ -11,13 +11,7 @@ import { ModalType } from './modal-type.enum';
 export class InfoModalComponent {
 	constructor(
 		@Inject(MAT_DIALOG_DATA)
-		public data: {
-			confirmText: string;
-			closeText?: string;
-			message: string;
-			title: string;
-			modalType: ModalType;
-		},
+		public data: InfoModal,
 		private mdDialogRef: MatDialogRef<InfoModalComponent>,
 		private modalService: ModalService,
 	) {}
@@ -27,16 +21,13 @@ export class InfoModalComponent {
 	}
 
 	public selectClose() {
-		this.close(true);
+		if (this.data.closable) {
+			this.close(true);
+		}
 	}
 
 	public selectConfirm() {
 		// child can subscribe and make changes after listening
 		this.modalService.triggerConfirmEvent();
-	}
-
-	@HostListener('keydown.esc')
-	public onEsc() {
-		this.close(false);
 	}
 }

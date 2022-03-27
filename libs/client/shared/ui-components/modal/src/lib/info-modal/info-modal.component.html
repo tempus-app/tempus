@@ -1,6 +1,6 @@
 <div fxLayout="column" class="modal-container">
 	<div fxLayout="column" fxLayoutAlign="end end">
-		<div>
+		<div *ngIf="data.closable">
 			<button mat-icon-button aria-label="close dialog" mat-dialog-close>
 				<mat-icon class="close-icon" inline>close</mat-icon>
 			</button>
@@ -18,7 +18,12 @@
 		<p class="mat-body-2">{{ data.message }}</p>
 	</div>
 	<div mat-dialog-actions fxLayout="column" fxLayoutAlign="end end">
-		<tempus-button *ngIf="data.closeText" color="grey" [label]="data.closeText" (click)="selectClose()"></tempus-button>
+		<tempus-button
+			*ngIf="data.closable && data.closeText"
+			color="grey"
+			[label]="data.closeText"
+			(click)="selectClose()"
+		></tempus-button>
 		<tempus-button class="dialog-button" color="primary" (click)="selectConfirm()" [label]="data.confirmText">
 		</tempus-button>
 	</div>

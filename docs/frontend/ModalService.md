@@ -18,7 +18,7 @@ this.modalService.open(
 			CustomModalType.INFO,
 );
 ```
-- Required parameters: title, okText, message, modalType
+- Required parameters: title, confirmText, message, modalType, closable
 - Optional parameters: closeText (if asking simple decision this might be useful)
 
 
@@ -48,6 +48,7 @@ this.modalService.open(
 		);
 
 ```
+- Required parameters: title, confirmText,closable, closeText, message, modalType
 ### Events + Subscription 
 
 In many cases, it is useful to watch for a modalClose and a modalConfirm events

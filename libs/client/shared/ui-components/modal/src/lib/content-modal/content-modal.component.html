@@ -1,6 +1,6 @@
 <div fxLayout="column" class="modal-container">
 	<div fxLayout="column" fxLayoutAlign="end end">
-		<div>
+		<div *ngIf="data.closable">
 			<button mat-icon-button aria-label="close dialog" mat-dialog-close>
 				<mat-icon class="close-icon" inline>close</mat-icon>
 			</button>
@@ -18,7 +18,13 @@
 		<ng-template #childComponent [ngTemplateOutlet]="data.template"></ng-template>
 	</div>
 	<div mat-dialog-actions fxLayout="row" fxLayoutAlign="end space-around">
-		<tempus-button class="dialog-button" color="grey" (click)="selectCancel()" [label]="data.closeText"></tempus-button>
+		<tempus-button
+			*ngIf="data.closable"
+			class="dialog-button"
+			color="grey"
+			(click)="selectCancel()"
+			[label]="data.closeText"
+		></tempus-button>
 		<tempus-button
 			class="dialog-button"
 			color="accent"

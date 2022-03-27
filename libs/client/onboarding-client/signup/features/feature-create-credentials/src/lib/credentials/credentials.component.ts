@@ -41,7 +41,7 @@ export class CredentialsComponent implements OnInit, OnDestroy {
 
 	constructor(private route: ActivatedRoute, private store: Store<SignupState>, public modalService: ModalService) {}
 
-	static generateErrorMessage(errorMessage: string) {
+	private static generateErrorMessage(errorMessage: string) {
 		return `${errorMessage}.\nPlease Contact email@email.com for a new link`;
 	}
 
@@ -52,11 +52,17 @@ export class CredentialsComponent implements OnInit, OnDestroy {
 
 	openDialog(errorMessage: string): void {
 		this.modalService.open(
-			{ title: 'Error Loading Link', confirmText: 'OK', message: errorMessage, modalType: ModalType.ERROR },
+			{
+				title: 'Error Processing Link',
+				confirmText: 'Take Me Back',
+				message: errorMessage,
+				modalType: ModalType.ERROR,
+				closable: false,
+			},
 			CustomModalType.INFO,
 		);
 		this.modalService.confirmEventSubject.subscribe(() => {
-			this.modalService.close();
+			// TODO:  redirect
 			this.modalService.confirmEventSubject.unsubscribe();
 		});
 	}

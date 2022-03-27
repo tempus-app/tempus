@@ -1,5 +1,6 @@
-import { Component, HostListener, Inject, TemplateRef } from '@angular/core';
+import { Component, HostListener, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { ContentModal } from '../modal-parameters.interface';
 import { ModalService } from '../service/modal.service';
 
 @Component({
@@ -14,12 +15,7 @@ export class ContentModalComponent {
 	 */
 	constructor(
 		@Inject(MAT_DIALOG_DATA)
-		public data: {
-			closeText: string;
-			confirmText: string;
-			title: string;
-			template: TemplateRef<unknown>;
-		},
+		public data: ContentModal,
 		private mdDialogRef: MatDialogRef<ContentModalComponent>,
 		private modalService: ModalService,
 	) {}
@@ -34,11 +30,15 @@ export class ContentModalComponent {
 	}
 
 	public selectCancel() {
-		this.close(true);
+		if (this.data.closable) {
+			this.close(true);
+		}
 	}
 
 	@HostListener('keydown.esc')
 	public onEsc() {
-		this.close(false);
+		if (this.data.closable) {
+			this.close(true);
+		}
 	}
 }
