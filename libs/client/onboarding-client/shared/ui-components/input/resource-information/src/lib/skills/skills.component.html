@@ -1,0 +1,52 @@
+<ng-container>
+	<div fxLayout="column">
+		<div fxFlex>
+			<div fxFlex="5"></div>
+			<div class="info-title">
+				<h2 class="mat-h2">Skills</h2>
+			</div>
+			<div fxFlex="5"></div>
+		</div>
+		<div fxFlex>
+			<div fxFlex="5"></div>
+			<tempus-card>
+				<tempus-text-area
+					id="skill-summary"
+					placeholder="Summary"
+					[control]="$any(myInfoForm).get('skillsSummary')"
+				></tempus-text-area>
+				<form>
+					<div fxLayout="column" fxLayoutGap="30px">
+						<div fxLayoutAlign="left center">
+							<div>
+								<input
+									class="mat-body"
+									id="skillChipInput"
+									placeholder="Add a skill..."
+									[matChipInputFor]="chipList"
+									[matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+									[matChipInputAddOnBlur]="addOnBlur"
+									(matChipInputTokenEnd)="addSkill($event)"
+								/>
+							</div>
+						</div>
+						<div fxLayoutAlign="center center">
+							<mat-chip-list #chipList aria-label="Skill tags">
+								<tempus-chip
+									*ngFor="let skill of skills"
+									[removable]="true"
+									id="skill-dark"
+									typography="mat-body"
+									content="{{ skill }}"
+									(onRemove)="removeSkill(skill)"
+								>
+								</tempus-chip>
+							</mat-chip-list>
+						</div>
+					</div>
+				</form>
+			</tempus-card>
+			<div fxFlex="5"></div>
+		</div>
+	</div>
+</ng-container>
