@@ -2,7 +2,7 @@ import { Body, Controller, Delete, Get, Param, Post, UseGuards, Request } from '
 import { ApiTags } from '@nestjs/swagger';
 import { CreateViewDto } from '@tempus/api/shared/dto';
 import { RoleType, View } from '@tempus/shared-domain';
-import { JwtAuthGuard, PermissionGuard, Roles, RolesGuard } from '@tempus/api/shared/feature-auth';
+import { JwtAuthGuard, PermissionGuard, Roles, RolesGuard, ViewsGuard } from '@tempus/api/shared/feature-auth';
 import { ViewsService } from '../services/view.service';
 
 @ApiTags('Profile Views')
@@ -13,13 +13,13 @@ export class ProfileViewController {
 	// all views of user
 	@UseGuards(JwtAuthGuard, PermissionGuard)
 	@Get('/:userId')
-	async getViews(@Request() req, @Param('userId') userId: number): Promise<View[]> {
+	async getViews(@Param('userId') userId: number): Promise<View[]> {
 		const views = await this.viewSerivce.getViewsByResource(userId);
 		return views;
 	}
 
-	@UseGuards(JwtAuthGuard)
-	@Get('/:viewId')
+	@UseGuards(JwtAuthGuard, ViewsGuard)
+	@Get('/view/:viewId')
 	async getView(@Param('viewId') viewId: number): Promise<View> {
 		const view = await this.viewSerivce.getView(viewId);
 		return view;
@@ -40,7 +40,7 @@ export class ProfileViewController {
 	// 	throw new NotImplementedException();
 	// }
 
-	@UseGuards(JwtAuthGuard)
+	@UseGuards(JwtAuthGuard, ViewsGuard)
 	@Delete('/:viewId')
 	async deleteView(@Param('viewId') viewId: number): Promise<void> {
 		await this.viewSerivce.deleteView(viewId);

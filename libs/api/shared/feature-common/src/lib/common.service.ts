@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ResourceEntity, UserEntity } from '@tempus/api/shared/entity';
+import { ResourceEntity, UserEntity, ViewEntity } from '@tempus/api/shared/entity';
 import { Resource, RoleType, User } from '@tempus/shared-domain';
 import { Repository } from 'typeorm';
 
@@ -11,6 +11,8 @@ export class CommonService {
 		private userRepository: Repository<UserEntity>,
 		@InjectRepository(ResourceEntity)
 		private resourceRepository: Repository<ResourceEntity>,
+		@InjectRepository(ViewEntity)
+		private viewsRepository: Repository<ViewEntity>,
 	) {}
 
 	async findByEmail(email: string): Promise<User | Resource> {
@@ -37,19 +39,40 @@ export class CommonService {
 		return resourceEntity;
 	}
 
-	async findById(userId: number): Promise<User | Resource> {
-		const userEntity = await this.userRepository.findOne(userId);
+	async findById(id: number): Promise<User | Resource> {
+		const userEntity = await this.userRepository.findOne(id);
 		if (!userEntity) {
-			throw new NotFoundException(`Could not find user with id ${userId}`);
+			throw new NotFoundException(`Could not find user with id ${id}`);
 		}
 		if (userEntity.roles.includes(RoleType.BUSINESS_OWNER)) {
 			return userEntity;
 		}
 
-		const resourceEntity = await this.resourceRepository.findOne(userId);
+		const resourceEntity = await this.resourceRepository.findOne(id);
 		if (!resourceEntity) {
-			throw new NotFoundException(`Could not find resource with id ${userId}`);
+			throw new NotFoundException(`Could not find resource with id ${id}`);
 		}
+		return resourceEntity;
+	}
+
+	async findUserByViewId(viewId: number): Promise<User | Resource> {
+		console.log('HELLLLOOO');
+		console.log(viewId);
+
+		const viewEntity = await this.viewsRepository.findOne({
+			relations: ['resource', 'experiences', 'educations', 'skills', 'certifications'],
+			where: {
+				id: viewId,
+			},
+		});
+		console.log(viewEntity);
+		if (!viewEntity) {
+			throw new NotFoundException(`Could not find view with id ${viewId}`);
+		}
+
+		console.log(viewEntity.resource.id);
+
+		const resourceEntity = await this.findById(viewEntity.resource.id);
 		return resourceEntity;
 	}
 }
