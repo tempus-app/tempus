@@ -1,4 +1,4 @@
-import { Component, Output, EventEmitter, OnInit, Input } from '@angular/core';
+import { Component, Output, EventEmitter, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { InputType } from '@tempus/client/shared/ui-components/input';
 import { Country, State } from 'country-state-city';
@@ -8,13 +8,19 @@ import { Country, State } from 'country-state-city';
 	templateUrl: './personal-information.component.html',
 	styleUrls: ['./personal-information.component.scss'],
 })
-export class PersonalInformationComponent implements OnInit {
+export class PersonalInformationComponent implements OnInit, OnChanges {
 	myInfoForm = this.fb.group({
 		firstName: ['', Validators.required],
 		lastName: ['', Validators.required],
 		profileSummary: '',
 		// Taken from https://stackoverflow.com/questions/16699007/regular-expression-to-match-standard-10-digit-phone-number
-		phoneNumber: ['', [Validators.required, Validators.pattern(/^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/)]],
+		phoneNumber: [
+			'',
+			[
+				Validators.required,
+				Validators.pattern(/^\s*(?:\+?(\d{1,3}))?[-. (]*(\d{3})[-. )]*(\d{3})[-. ]*(\d{4})(?: *x(\d+))?\s*$/),
+			],
+		],
 		// Taken from https://stackoverflow.com/questions/3809401/what-is-a-good-regular-expression-to-match-a-url
 		linkedInLink: [
 			'',
@@ -101,5 +107,9 @@ export class PersonalInformationComponent implements OnInit {
 			this.states = State.getStatesOfCountry(countryCode.isoCode).map(state => {
 				return state.name;
 			});
+	}
+
+	ngOnChanges(changes: SimpleChanges) {
+		this.updateStateOptions(changes.country.currentValue);
 	}
 }

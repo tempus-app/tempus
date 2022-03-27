@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { filter, switchMap, take } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
 import { checkEnteredDates } from '@tempus/shared/util';
@@ -23,7 +23,7 @@ import {
 	templateUrl: './my-info-three.component.html',
 	styleUrls: ['./my-info-three.component.scss'],
 })
-export class MyInfoThreeComponent {
+export class MyInfoThreeComponent implements AfterViewInit {
 	certificationsForm = this.fb.group({});
 
 	educationsForm = this.fb.group({});
@@ -47,7 +47,12 @@ export class MyInfoThreeComponent {
 		private router: Router,
 		private route: ActivatedRoute,
 		private store: Store<SignupState>,
+		private changeDetector: ChangeDetectorRef,
 	) {}
+
+	ngAfterViewInit(): void {
+		this.changeDetector.detectChanges();
+	}
 
 	get qualifications() {
 		// eslint-disable-next-line @typescript-eslint/dot-notation
@@ -70,6 +75,7 @@ export class MyInfoThreeComponent {
 				take(1),
 			)
 			.subscribe(createResourceDto => {
+				this.skillsSummary = createResourceDto.skillsSummary;
 				this.skillsForm.patchValue({
 					skillsSummary: createResourceDto.skillsSummary,
 				});
@@ -87,6 +93,7 @@ export class MyInfoThreeComponent {
 				take(1),
 			)
 			.subscribe(createResourceDto => {
+				this.certificationsArray = createResourceDto.certifications;
 				const certificationsArray = this.certifications;
 				createResourceDto.certifications.forEach(certification => {
 					certificationsArray.push(
@@ -112,6 +119,7 @@ export class MyInfoThreeComponent {
 			)
 			.subscribe(createResourceDto => {
 				// eslint-disable-next-line @typescript-eslint/dot-notation
+				this.educations = createResourceDto.educations;
 				const educationsArray = this.qualifications;
 				createResourceDto.educations.forEach(education => {
 					const educationForm = this.fb.group(

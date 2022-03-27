@@ -9,9 +9,9 @@ export interface ICreateExperienceDto {
 
 	company: string;
 
-	startDate: Date;
+	startDate?: Date;
 
-	endDate: Date;
+	endDate?: Date;
 
 	location: ICreateLocationDto;
 }

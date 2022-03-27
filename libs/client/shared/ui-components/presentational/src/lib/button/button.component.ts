@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ButtonType } from './button-type-enum';
 
 @Component({
@@ -7,6 +7,10 @@ import { ButtonType } from './button-type-enum';
 	styleUrls: ['./button.component.scss'],
 })
 export class ButtonComponent implements OnInit {
+	@Output() buttonClick = new EventEmitter<boolean>();
+
+	@Input() disabled = false;
+
 	@Input() buttonType?: ButtonType = undefined;
 
 	@Input() label = 'placeholder';
@@ -47,5 +51,9 @@ export class ButtonComponent implements OnInit {
 
 	ngOnInit(): void {
 		this.setButtonType();
+	}
+
+	buttonClicked(value: boolean) {
+		this.buttonClick.emit(value);
 	}
 }

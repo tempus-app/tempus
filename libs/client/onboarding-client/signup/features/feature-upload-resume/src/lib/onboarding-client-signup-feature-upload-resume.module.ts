@@ -4,6 +4,7 @@ import { RouterModule } from '@angular/router';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatIconModule } from '@angular/material/icon';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { ClientSharedUiComponentsInputModule } from '@tempus/client/shared/ui-components/input';
@@ -22,6 +23,7 @@ import { ResumeUploadComponent } from './resume-upload/resume-upload.component';
 		MatButtonModule,
 		MatGridListModule,
 		MatCardModule,
+		MatProgressBarModule,
 		MatFormFieldModule,
 		RouterModule.forChild([
 			{
