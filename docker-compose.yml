@@ -31,11 +31,7 @@ services:
       - JWT_ACCESS_SECRET=test
       - JWT_REFRESH_SECRET=test2
       - SALT_SECRET=10
-      - EMAIL_HOST=smtp.ethereal.email
-      - EMAIL_PORT=587
-      - EMAIL_USERNAME=heloise.harris47@ethereal.email
-      - EMAIL_PASSWORD=2UhnkxGGZYATwPa8Cz
-      - EMAIL_ADDRESS=heloise.harris47@ethereal.email
+
     ports:
       - 3000:3000
     volumes:

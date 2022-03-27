@@ -64,30 +64,6 @@ export class AuthService {
 		}
 	}
 
-	// async findByEmail(email: string): Promise<User> {
-	// 	const user = (
-	// 		await this.userRepository.find({
-	// 			where: { email },
-	// 		})
-	// 	)[0];
-	// 	if (!user) {
-	// 		throw new NotFoundException(`Could not find user with email ${email}`);
-	// 	}
-	// 	if (user.roles.includes(RoleType.BUSINESS_OWNER)) {
-	// 		return user;
-	// 	}
-	// 	const resourceEntity = (
-	// 		await this.resourceRepository.find({
-	// 			where: { email },
-	// 			relations: ['location', 'projects', 'views', 'experiences', 'educations', 'skills', 'certifications'],
-	// 		})
-	// 	)[0];
-	// 	if (!resourceEntity) {
-	// 		throw new NotFoundException(`Could not find resource with email ${email}`);
-	// 	}
-	// 	return resourceEntity;
-	// }
-
 	private async updateRefreshTokenHash(user: User, refreshToken: string) {
 		const tokenOwner = user;
 		const salt = await genSalt(this.configService.get('saltSecret'));
