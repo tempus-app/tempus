@@ -91,7 +91,7 @@ export class ResourceService {
 	}
 
 	// edit resource to be used specifically when updating local information
-	async editResource(updateResourceData: UpdateResourceDto, token: JwtPayload): Promise<Resource> {
+	async editResource(updateResourceData: UpdateResourceDto): Promise<Resource> {
 		const resourceEntity = await this.getResource(updateResourceData.id);
 
 		const updatedLocationData = updateResourceData.location;

@@ -57,15 +57,15 @@ export class UserController {
 	// updates User information
 	@UseGuards(JwtAuthGuard, PermissionGuard)
 	@Patch()
-	async updateUser(@Request() req, @Body() updateUserData: UpdateUserDto): Promise<User> {
-		return await this.userService.updateUser(updateUserData, req.user);
+	async updateUser(@Body() updateUserData: UpdateUserDto): Promise<User> {
+		return await this.userService.updateUser(updateUserData);
 	}
 
 	// update Resource information
 	@UseGuards(JwtAuthGuard, PermissionGuard)
 	@Patch('resource')
-	async updateResource(@Request() req, @Body() updateResourceData: UpdateResourceDto): Promise<Resource> {
-		return await this.resourceService.editResource(updateResourceData, req.user);
+	async updateResource(@Body() updateResourceData: UpdateResourceDto): Promise<Resource> {
+		return await this.resourceService.editResource(updateResourceData);
 	}
 
 	// delete User or Resource
