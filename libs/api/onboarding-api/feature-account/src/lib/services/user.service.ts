@@ -15,9 +15,7 @@ export class UserService {
 	constructor(
 		@InjectRepository(UserEntity)
 		private userRepository: Repository<UserEntity>,
-		private resourceService: ResourceService,
 		private configService: ConfigService,
-		private authService: AuthService,
 		private commonService: CommonService,
 	) {}
 
@@ -29,7 +27,7 @@ export class UserService {
 		return createdUser;
 	}
 
-	async updateUser(updateUserData: UpdateUserDto, token: JwtPayload): Promise<User> {
+	async updateUser(updateUserData: UpdateUserDto): Promise<User> {
 		const userEntity = await this.userRepository.findOne(updateUserData.id);
 		if (!userEntity) {
 			throw new NotFoundException(`Could not find user with id ${userEntity.id}`);
