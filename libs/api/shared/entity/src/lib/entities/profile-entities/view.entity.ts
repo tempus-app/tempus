@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany, ManyToMany, JoinTable, ManyToOne } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToMany, JoinTable, ManyToOne, OneToOne } from 'typeorm';
 import { View, ViewType } from '@tempus/shared-domain';
 import { CreateViewDto } from '@tempus/api/shared/dto';
 import { SkillEntity } from './skill.entity';
@@ -16,7 +16,7 @@ export class ViewEntity implements View {
 		educationsSummary?: string,
 		experiencesSummary?: string,
 		type?: string,
-		status?: RevisionEntity[],
+		revision?: RevisionEntity,
 		skills?: SkillEntity[],
 		experiences?: ExperienceEntity[],
 		educations?: EducationEntity[],
@@ -30,7 +30,7 @@ export class ViewEntity implements View {
 		this.educationsSummary = educationsSummary;
 		this.experiencesSummary = experiencesSummary;
 		this.type = type;
-		this.status = status;
+		this.revision = revision;
 		this.skills = skills;
 		this.experiences = experiences;
 		this.educations = educations;
@@ -57,8 +57,8 @@ export class ViewEntity implements View {
 	@Column()
 	type: string;
 
-	@OneToMany(() => RevisionEntity, status => status.view)
-	status: RevisionEntity[];
+	@OneToOne(() => RevisionEntity, revision => revision.view)
+	revision: RevisionEntity;
 
 	@ManyToMany(() => SkillEntity, { cascade: ['insert', 'update'] })
 	@JoinTable()

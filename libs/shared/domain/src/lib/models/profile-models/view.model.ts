@@ -13,7 +13,7 @@ export interface View {
 	educationsSummary: string;
 	experiencesSummary: string;
 	type: string;
-	status: Revision[];
+	revision?: Revision;
 	skills: Skill[];
 	experiences: Experience[];
 	educations: Education[];

@@ -1,9 +1,9 @@
 import { ForbiddenException, forwardRef, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateViewDto } from '@tempus/api/shared/dto';
-import { ViewEntity } from '@tempus/api/shared/entity';
+import { RevisionEntity, ViewEntity } from '@tempus/api/shared/entity';
 import { ResourceService } from '@tempus/onboarding-api/feature-account';
-import { View, ViewType } from '@tempus/shared-domain';
+import { Revision, View, ViewType } from '@tempus/shared-domain';
 import { Repository } from 'typeorm';
 
 @Injectable()
@@ -13,6 +13,7 @@ export class ViewsService {
 		private viewsRepository: Repository<ViewEntity>,
 		@Inject(forwardRef(() => ResourceService))
 		private resourceService: ResourceService,
+		@InjectRepository(RevisionEntity) private revisionRepository: Repository<RevisionEntity>,
 	) {}
 
 	async createView(resourceId: number, createViewDto: CreateViewDto): Promise<View> {
@@ -27,12 +28,39 @@ export class ViewsService {
 		return newView;
 	}
 
-	// edit view
-	// async editView(view: CreateViewDto): Promise<View> {
-	// 	throw new NotImplementedException();
+	async reviseView(resourceId: number, viewId: number, newView: CreateViewDto): Promise<Revision> {
+		const view = await this.getView(viewId);
 
-	// 	// TODO: revision entity associated with view edits for approval
-	// }
+		const resourceEntity = await this.resourceService.getResourceInfo(resourceId);
+		let newViewEntity = ViewEntity.fromDto(newView);
+		newViewEntity.resource = resourceEntity;
+
+		newViewEntity = await this.viewsRepository.save(newViewEntity);
+
+		// how to decide approver? is this column even necessary
+		// revisionEntity.approver = ?
+		const revisionEntity = new RevisionEntity(null, null, null, null, null, view as ViewEntity, newViewEntity);
+		const revisionToReturn = await this.revisionRepository.save(revisionEntity);
+
+		return revisionToReturn;
+	}
+
+	async approveOrDenyView(viewId: number, approval: boolean): Promise<Revision> {
+		const revisionEntity = (
+			await this.revisionRepository.find({
+				where: {
+					view: { id: viewId },
+				},
+			})
+		)[0];
+
+		revisionEntity.approved = approval;
+
+		// if approved, maybe set up a job or something to delete the old entity and the revision? or do we just want to delete right away
+		// if denied, delete revision as well?
+
+		return this.revisionRepository.save(revisionEntity);
+	}
 
 	async getViewsByResource(resourceId: number): Promise<View[]> {
 		// error check

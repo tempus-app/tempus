@@ -1,7 +1,18 @@
-import { Body, Controller, Delete, Get, Param, Post, UseGuards, Request } from '@nestjs/common';
+import {
+	Body,
+	Controller,
+	Delete,
+	Get,
+	Param,
+	Post,
+	UseGuards,
+	Request,
+	Patch,
+	NotImplementedException,
+} from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { CreateViewDto } from '@tempus/api/shared/dto';
-import { RoleType, View } from '@tempus/shared-domain';
+import { Revision, RoleType, View } from '@tempus/shared-domain';
 import { JwtAuthGuard, PermissionGuard, Roles, RolesGuard, ViewsGuard } from '@tempus/api/shared/feature-auth';
 import { ViewsService } from '../services/view.service';
 
@@ -25,6 +36,12 @@ export class ProfileViewController {
 		return view;
 	}
 
+	@UseGuards(JwtAuthGuard)
+	@Post('/approve/:viewId')
+	async approveView(@Param('viewId') viewId: number): Promise<Revision> {
+		throw new NotImplementedException();
+	}
+
 	@UseGuards(JwtAuthGuard, PermissionGuard)
 	@Post('/:resourceId')
 	async createView(@Param('resourceId') resourceId: number, @Body() createViewDto: CreateViewDto): Promise<View> {
@@ -32,13 +49,16 @@ export class ProfileViewController {
 		return newView;
 	}
 
-	// will be used whenever someone edits within a view and presses save
-	// this should call the view service which should call individ services and CREATE new things, not edit
-	// ONLY when you edit on the main table page does it actually edit
-	// @Patch()
-	// async editView(@Body() view: any): Promise<View> {
-	// 	throw new NotImplementedException();
-	// }
+	@UseGuards(JwtAuthGuard)
+	@Patch('/:resourceId/:viewId')
+	async editView(
+		@Param('resourceId') resourceId: number,
+		@Param('viewId') viewId: number,
+		@Body() createViewDto: CreateViewDto,
+	): Promise<Revision> {
+		const revision = await this.viewSerivce.reviseView(resourceId, viewId, createViewDto);
+		return revision;
+	}
 
 	@UseGuards(JwtAuthGuard, ViewsGuard)
 	@Delete('/:viewId')

@@ -1,5 +1,5 @@
-import { ResumeSectionType, Revision } from '@tempus/shared-domain';
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, ManyToOne, OneToOne } from 'typeorm';
+import { Revision } from '@tempus/shared-domain';
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, OneToOne } from 'typeorm';
 import { UserEntity } from '../account-entities';
 import { ViewEntity } from './view.entity';
 
@@ -9,18 +9,18 @@ export class RevisionEntity implements Revision {
 		id?: number,
 		createdAt?: Date,
 		approvedAt?: Date,
-		sectionsChanged?: ResumeSectionType[],
 		approver?: UserEntity,
 		approved?: boolean,
 		view?: ViewEntity,
+		newView?: ViewEntity,
 	) {
 		this.id = id;
 		this.createdAt = createdAt;
 		this.approvedAt = approvedAt;
-		this.sectionsChanged = sectionsChanged;
 		this.approver = approver;
 		this.approved = approved;
 		this.view = view;
+		this.newView = newView;
 	}
 
 	@PrimaryGeneratedColumn()
@@ -29,23 +29,18 @@ export class RevisionEntity implements Revision {
 	@CreateDateColumn()
 	createdAt: Date;
 
-	@Column()
-	approvedAt: Date;
-
-	@Column({
-		type: 'enum',
-		enum: ResumeSectionType,
-		default: [ResumeSectionType.PERSONAL],
-		array: true,
-	})
-	sectionsChanged: ResumeSectionType[];
+	@Column({ nullable: true })
+	approvedAt?: Date;
 
 	@OneToOne(() => UserEntity)
 	approver: UserEntity;
 
-	@Column()
-	approved: boolean;
+	@Column({ nullable: true })
+	approved?: boolean;
 
-	@ManyToOne(() => ViewEntity, view => view.status)
+	@OneToOne(() => ViewEntity, view => view.revision)
 	view: ViewEntity;
+
+	@OneToOne(() => ViewEntity, view => view.revision)
+	newView: ViewEntity;
 }
