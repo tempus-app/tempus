@@ -3,12 +3,12 @@
 		<div class="container" fxFlex>
 			<div fxFlex="10"></div>
 			<div class="info-title">
-				<h2 class="mat-h2 section-header">Upload Resume</h2>
+				<h2 class="mat-h2 section-header">{{ uploadResumePrefix + 'title' | translate }}</h2>
 			</div>
 			<div fxFlex="10"></div>
 		</div>
 		<div class="container">
-			<h3 class="mat-body-2">Please make sure your resume is one of the following: <b>DOX, DOC, PDF, TXT</b></h3>
+			<h3 class="mat-body-2" [innerHTML]="uploadResumePrefix + 'subHeader' | translate"></h3>
 		</div>
 		<div class="container">
 			<tempus-card>
@@ -16,9 +16,8 @@
 					<tempus-file-upload
 						[fileType]="fileType"
 						[displayPreview]="false"
-						label="Drag and drop your files
-                        here, or upload using the button"
-						(fileUploadChange)="onUpload($event)"
+						label="{{ uploadResumePrefix + 'fileUploadInfo' | translate }}"
+						(fileUploadChange)="onUpload($event, false)"
 					></tempus-file-upload>
 				</div>
 				<div fxLayout="column" fxFill fxLayoutGap="20px">
@@ -33,7 +32,7 @@
 								[accept]="fileType"
 								(change)="onChange($event)"
 							/>
-							<label for="file-input">UPLOAD</label>
+							<label for="file-input">{{ uploadResumePrefix + 'upload' | translate }}</label>
 						</button>
 					</div>
 					<div>
@@ -44,7 +43,7 @@
 					</div>
 					<div>
 						<mat-error *ngIf="fileData.invalid && fileData.dirty">
-							<p class="mat-body-2">Please upload a resume.</p>
+							<p class="mat-body-2">{{ uploadResumePrefix + 'uploadErr' | translate }}</p>
 						</mat-error>
 					</div>
 				</div>
@@ -58,7 +57,7 @@
 				[disabled]="!fileData.valid"
 				(click)="nextStep()"
 			>
-				Next
+				{{ 'onboardingClient.input.common.CTA.next' | translate }}
 			</button>
 		</div>
 	</div>

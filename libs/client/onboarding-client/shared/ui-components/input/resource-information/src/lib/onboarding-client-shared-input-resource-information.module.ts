@@ -9,6 +9,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatChipsModule } from '@angular/material/chips';
 import { ClientSharedUiComponentsInputModule } from '@tempus/client/shared/ui-components/input';
 import { ClientSharedUiComponentsPresentationalModule } from '@tempus/client/shared/ui-components/presentational';
+import { TranslateModule } from '@ngx-translate/core';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { PersonalInformationComponent } from './personal-information/personal-information.component';
 import { WorkExperienceComponent } from './work-experience/work-experience.component';
 import { EducationComponent } from './education/education.component';
@@ -21,12 +23,17 @@ import { SkillsComponent } from './skills/skills.component';
 		FlexLayoutModule,
 		MatGridListModule,
 		MatFormFieldModule,
+		MatCheckboxModule,
 		MatButtonModule,
 		MatTooltipModule,
 		MatChipsModule,
 		MatIconModule,
 		ClientSharedUiComponentsInputModule,
 		ClientSharedUiComponentsPresentationalModule,
+		TranslateModule.forChild({
+			isolate: false,
+			extend: true,
+		}),
 	],
 	declarations: [
 		PersonalInformationComponent,

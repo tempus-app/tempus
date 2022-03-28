@@ -1,7 +1,7 @@
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { Country, State } from 'country-state-city';
 import { InputType } from '@tempus/client/shared/ui-components/input';
-import { FormArray, FormBuilder, Validators } from '@angular/forms';
+import { AbstractControl, FormArray, FormBuilder, Validators } from '@angular/forms';
 import { ICreateExperienceDto } from '@tempus/shared-domain';
 import { checkEnteredDates } from '@tempus/client/shared/util';
 
@@ -37,6 +37,10 @@ export class WorkExperienceComponent implements OnInit {
 		workExperienceSummary: [''],
 		workExperience: this.fb.array([]),
 	});
+
+	workExpPrefix = 'onboardingClient.input.workExp.';
+
+	commonPrefix = 'onboardingClient.input.common.';
 
 	ngOnInit(): void {
 		this.loadStoreData();
@@ -78,6 +82,16 @@ export class WorkExperienceComponent implements OnInit {
 		);
 
 		this.totalWorkExperience.push(workExperience);
+	}
+
+	setCheck(checked: boolean, numExp: AbstractControl) {
+		if (checked) {
+			numExp.patchValue({ endDate: null });
+			numExp.get('endDate')?.disable();
+		} else {
+			numExp.patchValue({ endDate: '' });
+			numExp.get('endDate')?.enable();
+		}
 	}
 
 	removeWorkSection(index: number) {

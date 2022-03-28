@@ -9,6 +9,7 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { MatCardModule } from '@angular/material/card';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { TranslateModule } from '@ngx-translate/core';
 import { SignInComponent } from './signin/sign-in.component';
 
 @NgModule({
@@ -30,6 +31,10 @@ import { SignInComponent } from './signin/sign-in.component';
 				component: SignInComponent,
 			},
 		]),
+		TranslateModule.forChild({
+			isolate: false,
+			extend: true,
+		}),
 	],
 	declarations: [SignInComponent],
 })

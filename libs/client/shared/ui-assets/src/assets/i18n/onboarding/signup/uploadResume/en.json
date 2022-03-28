@@ -1,0 +1,17 @@
+{
+	"onboardingSignupReview": {
+		"title": "Review",
+		"workExperience": {
+			"title": "Work Experience"
+		},
+		"educationAndTraining": {
+			"title": "Education and Training"
+		},
+		"certifications": {
+			"title": "Certifications"
+		},
+		"skills": {
+			"title": "Skills"
+		}
+	}
+}

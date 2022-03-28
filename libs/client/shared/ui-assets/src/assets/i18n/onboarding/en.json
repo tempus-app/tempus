@@ -1,0 +1,125 @@
+{
+	"onboardingClient": {
+		"signinFeature": {
+			"title": "Signin",
+			"usernamePlaceholder": "Username",
+			"passwordPlaceholder": "Password",
+			"forgotPass": "Forgot your password?",
+			"loginCTA": "Login",
+			"noRoles": "No defined roles"
+		},
+		"presentational": {
+			"noInfoSection": "You have not entered information for this section",
+			"personalInfo": {
+				"userDetails": {
+					"title": "Personal Information",
+					"name": "Name: ",
+					"address": "Address: ",
+					"phoneNumber": "Phone Number: ",
+					"email": "Email: "
+				},
+				"links": {
+					"title": "Links",
+					"resume": "Resume: ",
+					"linkedIn": "LinkedIn: ",
+					"github": "Github: ",
+					"other": "Other: "
+				}
+			}
+		},
+		"input": {
+			"common": {
+				"CTA": {
+					"next": "Next",
+					"back": "Back",
+					"submit": "Submit"
+				},
+				"location": {
+					"address": "Address",
+					"countryPlaceholder": "Country",
+					"cityPlaceholder": "City",
+					"statePlaceholder": "State",
+					"validCountryErr": "Please enter a valid country.",
+					"validStateErr": "Please enter a valid state.",
+					"validCityErr": "Please enter a valid city"
+				},
+				"dates": {
+					"startPlaceholder": "Start Date",
+					"endPlaceholder": "End Date",
+					"validStartDateErr": "Please enter a valid start date.",
+					"validEndDateErr": "Please enter a valid end date.",
+					"starteBeforeEndErr": "Please make sure the start date is before the end date.",
+					"present": "Present"
+				},
+				"stepper": {
+					"signup": "Signup",
+					"uploadResume": "Upload Resume",
+					"myInfo": "My Information",
+					"workExperience": "Work Experience",
+					"Education": "Education",
+					"review": "Review"
+				}
+			},
+			"certifications": {
+				"title": "Certifications",
+				"addMoreTooltip": "Add more certification sections",
+				"removeTooltip": "Remove certification section",
+				"certificationItemLabel": "Certification ",
+				"certifyingAuthorityPlaceholder": "Certifying Authority *",
+				"titlePlaceholder": "Title *",
+				"certifyingAuthorityErr": "Please enter a certifying authority.",
+				"titleErr": "Please enter a title",
+				"summaryPlaceholder": "Summary"
+			},
+			"education": {
+				"title": "Education and Training",
+				"addMoreTooltip": "Add more education sections",
+				"summary": "Education Summary",
+				"summaryPlaceholder": "Summary",
+				"removeTooltip": "Remove education section",
+				"qualificationItemLabel": "Qualification ",
+				"institutionPlaceholder": "Institution *",
+				"fieldPlaceholder": "Field *",
+				"institutionErr": "Please enter an institution name.",
+				"qualificationErr": "Please enter a qualification field."
+			},
+			"skills": {
+				"title": "Skills",
+				"summary": "Summary",
+				"addPlaceholder": "Add a Skill..."
+			},
+			"workExp": {
+				"title": "Work Experience",
+				"addMoreToolTip": "Add more work experience sections",
+				"summary": "Work Experience Summary",
+				"summaryPlaceholder": "Summary",
+				"removeTooltip": "Remove work experience section",
+				"itemLabel": "Work Experience ",
+				"expTitlePlaceholder": "Title *",
+				"companyPlaceholder": "Company *",
+				"posErr": "Please enter a position title",
+				"companyErr": "Please enter a company name",
+				"descriptionErr": "Please enter a description."
+			},
+			"personalInfo": {
+				"title": "Personal Information",
+				"info": {
+					"firstNamePlaceholder": "First Name *",
+					"lastNamePlaceholder": "Last Name *",
+					"firstNameErr": "Please enter a first name.",
+					"lastNameErr": "Please enter a last name.",
+					"phNumPlaceholder": "Phone Number *",
+					"phNumError": "Please enter a valid phone number.",
+					"personalSummaryPlaceholder": "Personal Summary"
+				},
+				"links": {
+					"title": "Links",
+					"linkedinLinkPlaceholder": "LinkedIn",
+					"githubLinkPlaceholder": "Github",
+					"otherLinkPlaceholder": "Other",
+					"invalidUrlErr": "Please enter a valid URL."
+				}
+			}
+		}
+	}
+}

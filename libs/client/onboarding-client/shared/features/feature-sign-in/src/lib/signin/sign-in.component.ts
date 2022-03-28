@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
+import { TranslateService } from '@ngx-translate/core';
 import {
 	AsyncRequestState,
 	login,
@@ -24,7 +25,16 @@ export class SignInComponent implements OnInit, OnDestroy {
 		private router: Router,
 		private route: ActivatedRoute,
 		private fb: FormBuilder,
-	) {}
+		private translateService: TranslateService,
+	) {
+		translateService.get(`${this.signInPrefix}noRoles`).subscribe(data => {
+			this.noDefinesRolesErr = data;
+		});
+	}
+
+	noDefinesRolesErr = '';
+
+	signInPrefix = 'onboardingClient.signinFeature.';
 
 	destroyed$ = new Subject<void>();
 
@@ -63,7 +73,7 @@ export class SignInComponent implements OnInit, OnDestroy {
 					} else if (roles.includes(RoleType.AVAILABLE_RESOURCE) || roles.includes(RoleType.ASSIGNED_RESOURCE)) {
 						this.router.navigate(['../resource'], { relativeTo: this.route });
 					} else {
-						this.errorMessage = 'No defined roles';
+						this.errorMessage = this.noDefinesRolesErr;
 					}
 				}
 			});

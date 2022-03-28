@@ -16,6 +16,7 @@ import {
 } from '@tempus/client/onboarding-client/signup/data-access';
 import { Store } from '@ngrx/store';
 import { AsyncRequestState } from '@tempus/client/onboarding-client/shared/data-access';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
 	selector: 'tempus-review',
@@ -65,12 +66,20 @@ export class ReviewComponent implements OnInit, AfterViewInit {
 
 	resume: File | null = null;
 
+	reviewPrefix = 'onboardingSignupReview.';
+
 	constructor(
 		private router: Router,
 		private route: ActivatedRoute,
 		private store: Store<SignupState>,
 		private changeDetector: ChangeDetectorRef,
-	) {}
+		private translateService: TranslateService,
+	) {
+		const { currentLang } = translateService;
+		// eslint-disable-next-line no-param-reassign
+		translateService.currentLang = '';
+		translateService.use(currentLang);
+	}
 
 	ngAfterViewInit(): void {
 		this.changeDetector.detectChanges();

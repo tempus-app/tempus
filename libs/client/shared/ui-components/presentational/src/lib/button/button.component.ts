@@ -1,4 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
+import { take } from 'rxjs';
 import { ButtonType } from './button-type-enum';
 
 @Component({
@@ -19,8 +21,19 @@ export class ButtonComponent implements OnInit {
 
 	@Input() color = 'primary';
 
+	buttonTypeLabels = {
+		[ButtonType.EDIT]: '',
+		[ButtonType.FILTER]: '',
+		[ButtonType.INVITE]: '',
+		[ButtonType.DOWNLOAD_VIEW]: '',
+		[ButtonType.CREATE_NEW_VIEW]: '',
+	};
+
+	constructor(private translateService: TranslateService) {}
+
 	setButtonType() {
-		this.label = this.buttonType !== undefined ? this.buttonType : this.label;
+		this.label = this.buttonType !== undefined ? this.buttonTypeLabels[this.buttonType] : this.label;
+		// eslint-disable-next-line default-case
 		switch (this.buttonType) {
 			case ButtonType.EDIT: {
 				this.icon = 'edit';
@@ -50,7 +63,17 @@ export class ButtonComponent implements OnInit {
 	}
 
 	ngOnInit(): void {
-		this.setButtonType();
+		this.translateService
+			.get('button')
+			.pipe(take(1))
+			.subscribe(data => {
+				this.buttonTypeLabels['create new view'] = data.createNewView;
+				this.buttonTypeLabels['download view'] = data.edit;
+				this.buttonTypeLabels.filter = data.filter;
+				this.buttonTypeLabels.invite = data.invite;
+				this.buttonTypeLabels.edit = data.edit;
+				this.setButtonType();
+			});
 	}
 
 	buttonClicked(value: boolean) {

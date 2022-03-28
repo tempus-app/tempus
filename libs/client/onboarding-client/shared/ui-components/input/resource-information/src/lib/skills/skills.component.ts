@@ -28,6 +28,8 @@ export class SkillsComponent implements OnInit {
 		skillsSummary: [''],
 	});
 
+	skillsPrefix = 'onboardingClient.input.skills.';
+
 	constructor(private fb: FormBuilder) {}
 
 	ngOnInit(): void {

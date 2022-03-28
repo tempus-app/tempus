@@ -1,0 +1,28 @@
+{
+	"dropdown": {
+		"none": "None"
+	},
+	"footer": {
+		"tempus": "Tempus"
+	},
+	"sidenav": {
+		"logout": "Logout",
+		"namePlaceholder": "Placeholder Name",
+		"emailPlaceholder": "Placeholder Email",
+		"tabs": {
+			"manageResources": "Manage Resources",
+			"pendingApprovals": "Pending Approvals",
+			"primaryView": "Primary View",
+			"myViews": "My Views",
+			"myProjects": "My Projects"
+		}
+	},
+	"button": {
+		"placeholder": "Placeholder",
+		"filter": "filter",
+		"invite": "invite",
+		"edit": "edit",
+		"downloadView": "download view",
+		"createNewView": "create new view"
+	}
+}
