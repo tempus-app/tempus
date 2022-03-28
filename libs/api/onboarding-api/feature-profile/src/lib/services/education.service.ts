@@ -29,7 +29,7 @@ export class EducationService {
 	async findEducationByResource(resourceId: number): Promise<Education[]> {
 		const educationEntities = await this.educationRepository.find({
 			where: { resource: { id: resourceId } },
-			relations: ['resource', 'location'],
+			relations: ['location'],
 		});
 		return educationEntities;
 	}

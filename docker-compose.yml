@@ -31,6 +31,7 @@ services:
       - JWT_ACCESS_SECRET=test
       - JWT_REFRESH_SECRET=test2
       - SALT_SECRET=10
+
     ports:
       - 3000:3000
     volumes:
