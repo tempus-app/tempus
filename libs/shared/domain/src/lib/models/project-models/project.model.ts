@@ -10,8 +10,6 @@ export interface Project {
 
 	endDate: Date;
 
-	hoursPerDay: number;
-
 	client: Client;
 
 	tasks: Task[];

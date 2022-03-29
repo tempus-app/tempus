@@ -1,3 +1,4 @@
+import { CreateProjectDto } from '@tempus/api/shared/dto';
 import { Project } from '@tempus/shared-domain';
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany, ManyToOne } from 'typeorm';
 import { ClientEntity } from './client.entity';
@@ -10,7 +11,6 @@ export class ProjectEntity implements Project {
 		name?: string,
 		startDate?: Date,
 		endDate?: Date,
-		hoursPerDay?: number,
 		client?: ClientEntity,
 		tasks?: TaskEntity[],
 	) {
@@ -18,7 +18,6 @@ export class ProjectEntity implements Project {
 		this.name = name;
 		this.startDate = startDate;
 		this.endDate = endDate;
-		this.hoursPerDay = hoursPerDay;
 		this.client = client;
 		this.tasks = tasks;
 	}
@@ -35,12 +34,14 @@ export class ProjectEntity implements Project {
 	@Column()
 	endDate: Date;
 
-	@Column()
-	hoursPerDay: number;
-
 	@ManyToOne(() => ClientEntity, client => client.projects)
 	client: ClientEntity;
 
 	@OneToMany(() => TaskEntity, tasks => tasks.project)
 	tasks: TaskEntity[];
+
+	public static fromDto(dto: CreateProjectDto): ProjectEntity {
+		if (dto == null) return new ProjectEntity();
+		return new ProjectEntity(null, dto.name, dto.startDate, dto.endDate, null);
+	}
 }
