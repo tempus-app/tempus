@@ -1,25 +1,18 @@
 import { CreateProjectDto } from '@tempus/api/shared/dto';
 import { Project } from '@tempus/shared-domain';
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany, ManyToOne } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, ManyToMany } from 'typeorm';
+import { ResourceEntity } from '../account-entities';
 import { ClientEntity } from './client.entity';
-import { TaskEntity } from './task.entity';
 
 @Entity()
 export class ProjectEntity implements Project {
-	constructor(
-		id?: number,
-		name?: string,
-		startDate?: Date,
-		endDate?: Date,
-		client?: ClientEntity,
-		tasks?: TaskEntity[],
-	) {
+	constructor(id?: number, name?: string, startDate?: Date, endDate?: Date, client?: ClientEntity) {
 		this.id = id;
 		this.name = name;
 		this.startDate = startDate;
 		this.endDate = endDate;
 		this.client = client;
-		this.tasks = tasks;
+		this.resources = [];
 	}
 
 	@PrimaryGeneratedColumn()
@@ -37,8 +30,8 @@ export class ProjectEntity implements Project {
 	@ManyToOne(() => ClientEntity, client => client.projects)
 	client: ClientEntity;
 
-	@OneToMany(() => TaskEntity, tasks => tasks.project)
-	tasks: TaskEntity[];
+	@ManyToMany(() => ResourceEntity, resources => resources.projects)
+	resources: ResourceEntity[];
 
 	public static fromDto(dto: CreateProjectDto): ProjectEntity {
 		if (dto == null) return new ProjectEntity();

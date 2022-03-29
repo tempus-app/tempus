@@ -7,7 +7,7 @@ import { ClientService } from '../services/client.service';
 
 @ApiTags('Client')
 @Controller('client')
-export class LinkController {
+export class ClientController {
 	constructor(private clientService: ClientService) {}
 
 	@UseGuards(JwtAuthGuard)

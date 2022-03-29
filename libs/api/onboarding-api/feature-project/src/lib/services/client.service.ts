@@ -1,3 +1,5 @@
+/* eslint-disable no-param-reassign */
+/* eslint-disable no-restricted-syntax */
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateClientDto, UpdateClientDto } from '@tempus/api/shared/dto';
@@ -22,6 +24,12 @@ export class ClientService {
 		return clientEntity;
 	}
 
+	async getClientInfo(clientId: number): Promise<Client> {
+		const clientEntity = await this.clientRepository.findOne(clientId);
+		if (!clientEntity) throw new NotFoundException(`Could not find client with id ${clientEntity.id}`);
+		return clientEntity;
+	}
+
 	async createClient(createClientDto: CreateClientDto): Promise<Client> {
 		const clientEntity = ClientEntity.fromDto(createClientDto);
 		return this.clientRepository.save(clientEntity);
@@ -32,8 +40,9 @@ export class ClientService {
 		if (!clientEntity) {
 			throw new NotFoundException(`Could not find client with id ${clientEntity.id}`);
 		}
-		const client = ClientEntity.fromDto(updateClientDto);
-		Object.assign(clientEntity, client);
+
+		for (const [key, val] of Object.entries(updateClientDto)) if (!val) delete updateClientDto[key];
+		Object.assign(clientEntity, updateClientDto);
 		return this.clientRepository.save(clientEntity);
 	}
 

@@ -1,5 +1,5 @@
+import { Resource } from '../account-models/resource.model';
 import { Client } from './client.model';
-import { Task } from './task.model';
 
 export interface Project {
 	id: number;
@@ -12,5 +12,5 @@ export interface Project {
 
 	client: Client;
 
-	tasks: Task[];
+	resources: Resource[];
 }

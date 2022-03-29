@@ -12,12 +12,12 @@ export class CreateProjectDto implements ICreateProjectDto {
 	endDate: Date;
 
 	@ApiProperty()
-	hoursPerDay: number;
+	clientId: number;
 
-	constructor(name: string, startDate: Date, endDate: Date, hoursPerDay: number) {
+	constructor(clientId: number, name: string, startDate: Date, endDate: Date) {
 		this.endDate = endDate;
 		this.name = name;
 		this.startDate = startDate;
-		this.hoursPerDay = hoursPerDay;
+		this.clientId = clientId;
 	}
 }
