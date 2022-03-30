@@ -1,7 +1,7 @@
 <ng-container>
 	<tempus-card>
 		<div *ngIf="workExperiences.length === 0 && experiencesSummary === ''">
-			<p class="mat-body-2">You have not entered information for this section.</p>
+			<p class="mat-body-2">{{ 'onboardingClient.presentational.noInfoSection' | translate }}</p>
 		</div>
 		<div class="mat-body-1">{{ experiencesSummary }}</div>
 		<div *ngFor="let workExperience of workExperiences">
@@ -37,7 +37,9 @@
 									{{
 										workExperience.startDate && workExperience.endDate
 											? formatDate(workExperience.startDate, workExperience.endDate)
-											: ''
+											: workExperience.startDate && workExperience.endDate === null
+											? formatDate(workExperience.startDate, workExperience.endDate)
+											: ' '
 									}}
 								</p>
 							</div>

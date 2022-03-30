@@ -4,8 +4,11 @@ import { PdfTemplateDtoInterface } from './pdfTemplateInterface.dto';
 
 const formatDateHelper: HandleBarHelper = {
 	helperName: 'formatdate',
-	helper: (date: Date) => {
-		return `${date.toLocaleDateString('default', { month: 'short' })} ${date.getFullYear()}`.toString();
+	helper: (date: Date | null) => {
+		if (date) {
+			return `${date.toLocaleDateString('default', { month: 'short' })} ${date.getFullYear()}`.toString();
+		}
+		return 'Present';
 	},
 };
 const lastNameHelper: HandleBarHelper = {

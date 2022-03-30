@@ -2,7 +2,7 @@
 	<tempus-card class="card">
 		<div class="header">
 			<div class="info-title">
-				<h2 class="mat-h2">Sign Up</h2>
+				<h2 class="mat-h2">{{ signupPrefix + 'title' | translate }}</h2>
 			</div>
 		</div>
 		<div class="input-text">
@@ -17,11 +17,11 @@
 
 		<div class="input-text">
 			<mat-label>
-				<h3 class="mat-h3">Set a password</h3>
+				<h3 class="mat-h3">{{ signupPrefix + 'setPassword' | translate }}</h3>
 			</mat-label>
 			<tempus-text-input
 				id="password"
-				placeholder="Password"
+				placeholder="{{ signupPrefix + 'passPlaceholder' | translate }}"
 				cssClass="secondary"
 				[inputType]="InputType.PASSWORD"
 				[control]="$any(formGroup).get('password')"
@@ -34,18 +34,22 @@
 					($any(formGroup).get('password').touched || $any(formGroup).get('password').dirty)
 				"
 			>
-				<div *ngIf="$any(formGroup).get('password').hasError('required')">Password is required.</div>
-				<div *ngIf="$any(formGroup).get('password').hasError('pattern')">Password does not match defined criteria.</div>
+				<div *ngIf="$any(formGroup).get('password').hasError('required')">
+					{{ signupPrefix + 'passErr1' | translate }}
+				</div>
+				<div *ngIf="$any(formGroup).get('password').hasError('pattern')">
+					{{ signupPrefix + 'passErr2' | translate }}
+				</div>
 			</mat-error>
 			<mat-label>
 				<div class="password-criteria">
-					<p class="mat-body-1 criteria-label">Password must be:</p>
+					<p class="mat-body-1 criteria-label">{{ signupPrefix + 'passReq.title' | translate }}</p>
 					<ul class="mat-body-1 criteria-list">
-						<li class="list-item">min 8 characters</li>
-						<li class="list-item">1 uppercase letter</li>
-						<li class="list-item">1 lowercase letter</li>
-						<li class="list-item">1 number</li>
-						<li class="list-item">1 special character.</li>
+						<li class="list-item">{{ signupPrefix + 'passReq.minChar' | translate }}</li>
+						<li class="list-item">{{ signupPrefix + 'passReq.uppercase' | translate }}</li>
+						<li class="list-item">{{ signupPrefix + 'passReq.lowercase' | translate }}</li>
+						<li class="list-item">{{ signupPrefix + 'passReq.number' | translate }}</li>
+						<li class="list-item">{{ signupPrefix + 'passReq.specialChar' | translate }}</li>
 					</ul>
 				</div>
 			</mat-label>
@@ -53,7 +57,7 @@
 		<div class="input-text">
 			<tempus-text-input
 				id="confirmPassword"
-				placeholder="Confirm password"
+				placeholder="{{ signupPrefix + 'confirmPassPlaceholder' | translate }}"
 				cssClass="secondary"
 				[inputType]="InputType.PASSWORD"
 				[control]="$any(formGroup).get('confirmPassword')"
@@ -67,7 +71,7 @@
 					else confirmError
 				"
 			>
-				Passwords do not match.
+				{{ signupPrefix + 'passDontMatchErr' | translate }}
 			</mat-error>
 			<ng-template #confirmError>
 				<mat-error
@@ -77,13 +81,13 @@
 						($any(formGroup).get('confirmPassword').touched || $any(formGroup).get('confirmPassword').dirty)
 					"
 				>
-					Please retype your password.
+					{{ signupPrefix + 'passConfirmErr' | translate }}
 				</mat-error>
 			</ng-template>
 		</div>
 		<div class="input-text">
 			<mat-checkbox class="checkbox" [formControl]="$any(formGroup).get('consent')">
-				<p class="mat-body-2 checkbox-label">I agree to CAL & Associates Privacy Policy and Terms of Service</p>
+				<p class="mat-body-2 checkbox-label">{{ signupPrefix + 'termsAndServices' | translate }}</p>
 			</mat-checkbox>
 			<mat-error
 				class="mat-body-2"
@@ -92,11 +96,13 @@
 					($any(formGroup).get('consent').touched || $any(formGroup).get('consent').dirty)
 				"
 			>
-				You must agree to the terms and conditions to continue.
+				{{ signupPrefix + 'termsAndServicesErr' | translate }}
 			</mat-error>
 		</div>
 		<div class="sign-up-button-container">
-			<button class="sign-up-button" mat-raised-button color="accent" (click)="signUp()">SIGN UP</button>
+			<button class="sign-up-button" mat-raised-button color="accent" (click)="signUp()">
+				{{ signupPrefix + 'signUpCTA' | translate }}
+			</button>
 		</div>
 	</tempus-card>
 </div>
