@@ -1,10 +1,10 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-restricted-syntax */
-import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
+import { ForbiddenException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ConfigService } from '@nestjs/config';
 import { ViewsService } from '@tempus/onboarding-api/feature-profile';
-import { Resource, StatusType, ViewType } from '@tempus/shared-domain';
+import { JwtPayload, Resource, RoleType, StatusType, ViewType } from '@tempus/shared-domain';
 import { Repository, Transaction, TransactionRepository } from 'typeorm';
 import { genSalt, hash } from 'bcrypt';
 import { ResourceEntity } from '@tempus/api/shared/entity';
@@ -22,6 +22,10 @@ export class ResourceService {
 	) {}
 
 	async createResource(resource: CreateResourceDto): Promise<Resource> {
+		const linkStatus = (await this.linkService.findLinkById(resource.linkId)).status;
+		if (linkStatus === StatusType.COMPLETED || linkStatus === StatusType.INACTIVE) {
+			throw new ForbiddenException('Link is not valid');
+		}
 		const resourceEntity = ResourceEntity.fromDto(resource);
 		resourceEntity.password = await this.hashPassword(resourceEntity.password);
 		let createdResource = await this.resourceRepository.save(resourceEntity);
@@ -100,7 +104,11 @@ export class ResourceService {
 		Object.assign(resourceEntity.location, updatedLocationData);
 		Object.assign(resourceEntity, updateResourceData);
 
-		return this.resourceRepository.save(resourceEntity);
+		const updatedResource = await this.resourceRepository.save(resourceEntity);
+		updatedResource.password = null;
+		updatedResource.refreshToken = null;
+
+		return updatedResource;
 	}
 
 	private async hashPassword(password: string): Promise<string> {

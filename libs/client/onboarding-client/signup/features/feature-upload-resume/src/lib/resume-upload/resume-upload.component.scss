@@ -1,5 +1,4 @@
 @use 'abstracts/helper' as abs;
-
 tempus-card {
 	width: 80%;
 }
@@ -18,20 +17,8 @@ tempus-card {
 	border-bottom: 2px solid abs.$primary-300;
 }
 
-.view-file-container {
-	margin-top: 30px;
-}
-
 .file-upload-button {
 	color: white;
-}
-
-.button-container {
-	display: flex;
-	flex-direction: row;
-	justify-content: space-between;
-	position: relative;
-	bottom: 0;
 }
 
 .next-button {

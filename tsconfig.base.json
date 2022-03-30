@@ -19,6 +19,7 @@
 			"@tempus/api/shared/dto": ["libs/api/shared/dto/src/index.ts"],
 			"@tempus/api/shared/entity": ["libs/api/shared/entity/src/index.ts"],
 			"@tempus/api/shared/feature-auth": ["libs/api/shared/feature-auth/src/index.ts"],
+			"@tempus/api/shared/feature-common": ["libs/api/shared/feature-common/src/index.ts"],
 			"@tempus/api/shared/feature-core": ["libs/api/shared/feature-core/src/index.ts"],
 			"@tempus/api/shared/feature-email": ["libs/api/shared/feature-email/src/index.ts"],
 			"@tempus/api/shared/feature-pdfgenerator": ["libs/api/shared/feature-pdfgenerator/src/index.ts"],
