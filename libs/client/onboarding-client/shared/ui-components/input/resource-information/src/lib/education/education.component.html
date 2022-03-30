@@ -51,8 +51,7 @@
 						</div>
 						<div>
 							<h3 class="mat-h3" color="primary">
-								<span>{{ educationsPrefix + 'qualificatioItemLabel' | translate }}</span
-								>{{ index + 1 }}
+								<span>{{ educationsPrefix + 'qualificationItemLabel' | translate }} </span>{{ index + 1 }}
 							</h3>
 						</div>
 					</div>
@@ -203,6 +202,8 @@
 								fxLayoutAlign="end center"
 								fxLayoutAlign.lt-md="center center"
 								fxFlexFill
+								fxLayout.lt-md="column"
+								fxLayout="column"
 								class="grid-item"
 							>
 								<tempus-text-input

@@ -15,7 +15,7 @@ export class ButtonComponent implements OnInit {
 
 	@Input() buttonType?: ButtonType = undefined;
 
-	@Input() label = 'placeholder';
+	@Input() label = '';
 
 	@Input() icon = '';
 
@@ -29,7 +29,14 @@ export class ButtonComponent implements OnInit {
 		[ButtonType.CREATE_NEW_VIEW]: '',
 	};
 
-	constructor(private translateService: TranslateService) {}
+	constructor(private translateService: TranslateService) {
+		if (this.label === '') {
+			translateService
+				.get('button.placeholder')
+				.pipe(take(1))
+				.subscribe(data => (this.label = data));
+		}
+	}
 
 	setButtonType() {
 		this.label = this.buttonType !== undefined ? this.buttonTypeLabels[this.buttonType] : this.label;

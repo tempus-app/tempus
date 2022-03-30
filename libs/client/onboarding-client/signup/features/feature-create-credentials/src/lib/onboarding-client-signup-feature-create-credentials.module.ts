@@ -17,7 +17,7 @@ import { SignUpComponent } from './sign-up/sign-up.component';
 import { LandingCtaComponent } from './landing-cta/landing-cta.component';
 
 function createTranslateLoader(http: HttpClient) {
-	return new TranslateHttpLoader(http, './assets/i18n/onboarding/signup/credentials', '.json');
+	return new TranslateHttpLoader(http, './assets/i18n/onboarding/signup/credentials/', '.json');
 }
 
 @NgModule({
@@ -40,7 +40,7 @@ function createTranslateLoader(http: HttpClient) {
 				component: CredentialsComponent,
 			},
 		]),
-		TranslateModule.forRoot({
+		TranslateModule.forChild({
 			loader: {
 				provide: TranslateLoader,
 				useFactory: createTranslateLoader,

@@ -18,11 +18,19 @@
 		}
 	},
 	"button": {
-		"placeholder": "Placeholder",
+		"placeholder": "yoski",
 		"filter": "filter",
 		"invite": "invite",
 		"edit": "edit",
 		"downloadView": "download view",
 		"createNewView": "create new view"
+	},
+	"stepper": {
+		"signup": "Signup",
+		"uploadResume": "Upload Resume",
+		"myInfo": "My Information",
+		"workExperience": "Work Experience",
+		"Education": "Education",
+		"review": "Review"
 	}
 }

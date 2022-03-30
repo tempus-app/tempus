@@ -17,10 +17,10 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { environment } from '../environments/environment';
 import { AppComponent } from './app.component';
 import { NxWelcomeComponent } from './nx-welcome.component';
+import { RouterModule } from '@angular/router';
 
 // AoT requires an exported function for factories
 function createTranslateLoader(http: HttpClient) {
-	console.log('hello');
 	return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
 
@@ -34,7 +34,6 @@ function createTranslateLoader(http: HttpClient) {
 		MatTooltipModule,
 		MatPaginatorModule,
 		BrowserAnimationsModule,
-		OnboardingClientShellModule,
 		StoreModule.forRoot(
 			{},
 			{
@@ -57,6 +56,19 @@ function createTranslateLoader(http: HttpClient) {
 			},
 			isolate: false,
 		}),
+		RouterModule.forRoot([
+			{
+				path: '',
+				component: AppComponent,
+				children: [
+					{
+						path: '',
+						loadChildren: () =>
+							import('@tempus/client/onboarding-client/shell').then(m => m.OnboardingClientShellModule),
+					},
+				],
+			},
+		]),
 	],
 	providers: [],
 	bootstrap: [AppComponent],

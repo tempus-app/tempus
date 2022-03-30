@@ -66,7 +66,7 @@ export class ReviewComponent implements OnInit, AfterViewInit {
 
 	resume: File | null = null;
 
-	reviewPrefix = 'onboardingSignupReview.';
+	reviewPrefix = 'onboardingClientSignupReview.';
 
 	constructor(
 		private router: Router,

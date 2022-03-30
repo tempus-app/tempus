@@ -48,7 +48,7 @@ const routes: Routes = [
 	imports: [
 		CommonModule,
 		OnboardingClientSharedDataAccessModule,
-		RouterModule.forRoot(routes),
+		RouterModule.forChild(routes),
 		TranslateModule.forChild({
 			loader: {
 				provide: TranslateLoader,

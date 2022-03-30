@@ -16,7 +16,7 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { ReviewComponent } from './review/review.component';
 
 function createTranslateLoader(http: HttpClient) {
-	return new TranslateHttpLoader(http, './assets/i18n/onboarding/signup/review', '.json');
+	return new TranslateHttpLoader(http, './assets/i18n/onboarding/signup/review/', '.json');
 }
 
 @NgModule({
@@ -37,7 +37,7 @@ function createTranslateLoader(http: HttpClient) {
 				component: ReviewComponent,
 			},
 		]),
-		TranslateModule.forRoot({
+		TranslateModule.forChild({
 			loader: {
 				provide: TranslateLoader,
 				useFactory: createTranslateLoader,

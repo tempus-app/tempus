@@ -43,10 +43,11 @@ export class SignupShellComponent implements OnInit, OnDestroy {
 		translateService.currentLang = '';
 		translateService.use(currentLang);
 		translateService
-			.getTranslation('en')
+			.get('stepper')
 			.pipe(take(1))
 			.subscribe(data => {
-				this.steps = this.steps.concat(Object.values(data.onboardingSignup.stepper));
+				console.log(data);
+				this.steps = this.steps.concat(Object.values(data));
 			});
 		this.router.events.subscribe((event: Event) => {
 			if (event instanceof NavigationEnd) {

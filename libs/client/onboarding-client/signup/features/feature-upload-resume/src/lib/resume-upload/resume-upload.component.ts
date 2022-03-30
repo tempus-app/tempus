@@ -37,8 +37,6 @@ export class ResumeUploadComponent implements OnInit {
 
 	fileUploaded = false;
 
-	fileParsed = false;
-
 	resumeParsed = false;
 
 	uploadResumePrefix = 'onboardingSignupUploadResume.resumeUpload.';
@@ -89,14 +87,12 @@ export class ResumeUploadComponent implements OnInit {
 	}
 
 	async onUpload(file: File, makeRequest: boolean) {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		if (makeRequest) {
 			(await this.parseFile(file)).subscribe((event: any) => {
 				if (typeof event === 'object') {
 					this.createUserDetails(JSON.parse(event.body));
 					this.createWorkDetails(JSON.parse(event.body));
 					this.createTrainingandSkilsDetails(JSON.parse(event.body));
-					this.fileParsed = false;
 					this.resumeParsed = true;
 				}
 			});
@@ -104,8 +100,8 @@ export class ResumeUploadComponent implements OnInit {
 		this.fileData.patchValue(file);
 		this.fileData.markAsDirty();
 		this.fileUploaded = true;
-		if (makeRequest) {
-			this.fileParsed = true;
+		if (!makeRequest) {
+			this.resumeParsed = true;
 		}
 	}
 

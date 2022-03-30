@@ -17,7 +17,7 @@ import { ConfirmResumeUploadComponent } from './confirm-resume-upload/confirm-re
 import { ResumeUploadComponent } from './resume-upload/resume-upload.component';
 
 function createTranslateLoader(http: HttpClient) {
-	return new TranslateHttpLoader(http, './assets/i18n/onboarding/signup/uploadResume', '.json');
+	return new TranslateHttpLoader(http, './assets/i18n/onboarding/signup/uploadResume/', '.json');
 }
 
 @NgModule({
@@ -39,7 +39,7 @@ function createTranslateLoader(http: HttpClient) {
 				component: ResumeUploadComponent,
 			},
 		]),
-		TranslateModule.forRoot({
+		TranslateModule.forChild({
 			loader: {
 				provide: TranslateLoader,
 				useFactory: createTranslateLoader,

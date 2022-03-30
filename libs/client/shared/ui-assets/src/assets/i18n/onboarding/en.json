@@ -48,16 +48,8 @@
 					"endPlaceholder": "End Date",
 					"validStartDateErr": "Please enter a valid start date.",
 					"validEndDateErr": "Please enter a valid end date.",
-					"starteBeforeEndErr": "Please make sure the start date is before the end date.",
+					"startBeforeEndErr": "Please make sure the start date is before the end date.",
 					"present": "Present"
-				},
-				"stepper": {
-					"signup": "Signup",
-					"uploadResume": "Upload Resume",
-					"myInfo": "My Information",
-					"workExperience": "Work Experience",
-					"Education": "Education",
-					"review": "Review"
 				}
 			},
 			"certifications": {
@@ -90,7 +82,7 @@
 			},
 			"workExp": {
 				"title": "Work Experience",
-				"addMoreToolTip": "Add more work experience sections",
+				"addMoreTooltip": "Add more work experience sections",
 				"summary": "Work Experience Summary",
 				"summaryPlaceholder": "Summary",
 				"removeTooltip": "Remove work experience section",
