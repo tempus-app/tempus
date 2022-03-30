@@ -16,5 +16,6 @@ import { ResourceProfileComponent } from './resource-profile/resource-profile.co
 			},
 		]),
 	],
+	declarations: [ResourceProfileComponent],
 })
 export class ClientOnboardingClientBusinessOwnerFeaturesFeatureViewResourceProfileModule {}

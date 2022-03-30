@@ -16,5 +16,6 @@ import { ManageResourcesComponent } from './manage-resources/manage-resources.co
 			},
 		]),
 	],
+	declarations: [ManageResourcesComponent],
 })
 export class OnboardingClientBusinessOwnerFeatureManageResourcesModule {}
