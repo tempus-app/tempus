@@ -1,7 +1,7 @@
 {
 	"onboardingClient": {
 		"signinFeature": {
-			"title": "Signin",
+			"title": "Sign In",
 			"usernamePlaceholder": "Username",
 			"passwordPlaceholder": "Password",
 			"forgotPass": "Forgot your password?",
