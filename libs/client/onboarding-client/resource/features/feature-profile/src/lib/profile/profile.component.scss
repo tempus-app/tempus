@@ -1,1 +1,51 @@
 @use 'abstracts/helper' as abs;
+@use 'components/helper' as cmp;
+
+#page-container {
+	margin: 2% 4%;
+}
+#title-container {
+	@include cmp.info-title(100%, 0);
+	margin-bottom: 1em;
+}
+#button-container {
+	display: flex;
+	flex-direction: row;
+	gap: 0.5em;
+}
+
+#my-profile-container {
+	display: flex;
+	flex-direction: row;
+	gap: 1em;
+}
+
+#error-icon {
+	display: inline-flex;
+	vertical-align: middle;
+	color: abs.$warning;
+	font-size: 1.875em;
+	margin-top: 0.4em;
+	height: 1em;
+}
+
+::ng-deep .tooltip {
+	font-size: 0.75em;
+}
+
+tempus-button {
+	height: 2em;
+}
+
+.page-title {
+	color: abs.$primary-800;
+}
+
+.section-title {
+	font-size: 1.5em !important;
+	color: abs.$primary-800;
+}
+
+.section-container {
+	padding: 1em 0em;
+}
