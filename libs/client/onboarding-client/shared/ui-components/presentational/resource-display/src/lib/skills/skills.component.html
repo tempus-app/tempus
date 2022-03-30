@@ -1,7 +1,7 @@
 <ng-container>
 	<tempus-card>
 		<div *ngIf="skills.length === 0 && skillsSummary === ''">
-			<p class="mat-body-2">You have not entered information for this section.</p>
+			<p class="mat-body-2">{{ 'onboardingClient.presentational.noInfoSection' | translate }}</p>
 		</div>
 		<div fxLayout="column" fxLayoutGap="30px">
 			<div fxFlex class="mat-body-1">{{ skillsSummary }}</div>

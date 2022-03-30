@@ -45,6 +45,10 @@ export class PersonalInformationComponent implements OnInit, OnChanges {
 		city: ['', Validators.required],
 	});
 
+	personalInfoPrefix = 'onboardingClient.input.personalInfo.';
+
+	commonPrefix = 'onboardingClient.input.common.';
+
 	countries: string[] = Country.getAllCountries().map(country => {
 		return country.name;
 	});
