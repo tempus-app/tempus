@@ -5,6 +5,7 @@ import {
 	Get,
 	Param,
 	Post,
+	Query,
 	UseGuards,
 	Request,
 	Patch,
@@ -38,8 +39,9 @@ export class ProfileViewController {
 
 	@UseGuards(JwtAuthGuard)
 	@Post('/approve/:viewId')
-	async approveView(@Param('viewId') viewId: number): Promise<Revision> {
-		throw new NotImplementedException();
+	async approveView(@Param('viewId') viewId: number, @Query('approval') approval: boolean): Promise<Revision> {
+		const approvalResult = await this.viewSerivce.approveOrDenyView(viewId, approval);
+		return approvalResult;
 	}
 
 	@UseGuards(JwtAuthGuard, PermissionGuard)

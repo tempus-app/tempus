@@ -1,5 +1,4 @@
 import { createAction, props } from '@ngrx/store';
-import { RoleType } from '@tempus/shared-domain';
 
 export const login = createAction(
 	'[Onboarding Client Signin Page] Login',

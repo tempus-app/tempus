@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
+import { TranslateService } from '@ngx-translate/core';
 import { AsyncRequestState } from '@tempus/client/onboarding-client/shared/data-access';
 import {
 	loadLinkData,
@@ -39,10 +40,40 @@ export class CredentialsComponent implements OnInit, OnDestroy {
 	@ViewChild('testTemplate')
 	testTemplate!: TemplateRef<unknown>;
 
-	constructor(private route: ActivatedRoute, private store: Store<SignupState>, public modalService: ModalService) {}
+	linkUsedErr = '';
 
-	private static generateErrorMessage(errorMessage: string) {
-		return `${errorMessage}.\nPlease Contact email@email.com for a new link`;
+	linkExpiredErr = '';
+
+	genericLinkErr = '';
+
+	contact = '';
+
+	modalTitle = '';
+
+	modalConfirmText = '';
+
+	constructor(
+		private route: ActivatedRoute,
+		private store: Store<SignupState>,
+		public modalService: ModalService,
+		private translateService: TranslateService,
+	) {
+		const { currentLang } = translateService;
+		// eslint-disable-next-line no-param-reassign
+		translateService.currentLang = '';
+		translateService.use(currentLang);
+		translateService.get('onboardingSignupCredentials.main.linkErrors').subscribe(data => {
+			this.linkUsedErr = data.linkUsedErr;
+			this.linkExpiredErr = data.expiredLinkErr;
+			this.genericLinkErr = data.genericLinkErr;
+			this.contact = data.contact;
+			this.modalTitle = data.modalTitle;
+			this.modalConfirmText = data.modalConfirmText;
+		});
+	}
+
+	private static generateErrorMessage(errorMessage: string, contact: string) {
+		return `${errorMessage}.\n${contact}`;
 	}
 
 	ngOnDestroy(): void {
@@ -53,8 +84,8 @@ export class CredentialsComponent implements OnInit, OnDestroy {
 	openDialog(errorMessage: string): void {
 		this.modalService.open(
 			{
-				title: 'Error Processing Link',
-				confirmText: 'Take Me Back',
+				title: this.modalTitle,
+				confirmText: this.modalConfirmText,
 				message: errorMessage,
 				modalType: ModalType.ERROR,
 				closable: false,
@@ -72,7 +103,9 @@ export class CredentialsComponent implements OnInit, OnDestroy {
 			if (errStatus.status === AsyncRequestState.LOADING) {
 				this.loading = true;
 			} else if (errStatus.status === AsyncRequestState.ERROR) {
-				this.openDialog(CredentialsComponent.generateErrorMessage(errStatus.error?.message || 'Something went wrong'));
+				this.openDialog(
+					CredentialsComponent.generateErrorMessage(errStatus.error?.message || this.genericLinkErr, this.contact),
+				);
 				this.loading = false;
 			} else {
 				this.loading = false;
@@ -87,7 +120,9 @@ export class CredentialsComponent implements OnInit, OnDestroy {
 							this.link = link;
 							this.store.dispatch(setResourceLinkId({ linkId: link.id }));
 						} else if (link?.status === StatusType.COMPLETED) {
-							this.openDialog('Link has already been used');
+							this.openDialog(this.linkUsedErr);
+						} else if (link?.status === StatusType.INACTIVE) {
+							this.openDialog(this.linkExpiredErr);
 						}
 					}
 				}),

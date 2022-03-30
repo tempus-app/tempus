@@ -3,13 +3,13 @@
 		<div fxFlex>
 			<div fxFlex="5"></div>
 			<div class="info-title">
-				<h2 class="mat-h2">Education and Training</h2>
+				<h2 class="mat-h2">{{ educationsPrefix + 'title' | translate }}</h2>
 			</div>
 			<div>
 				<button
 					mat-mini-fab
 					(click)="addEducationSections()"
-					matTooltip="Add more education sections"
+					matTooltip="{{ educationsPrefix + 'addMoreTooltip' | translate }}"
 					class="header-button"
 					color="primary"
 				>
@@ -23,10 +23,10 @@
 			<div fxFlex="5"></div>
 			<tempus-card>
 				<form>
-					<h3 class="mat-h3" color="primary">Education Summary</h3>
+					<h3 class="mat-h3" color="primary">{{ educationsPrefix + 'summary' | translate }}</h3>
 					<tempus-text-area
 						id="education-summary"
-						placeholder="Summary"
+						placeholder="{{ educationsPrefix + 'summaryPlaceholder' | translate }}"
 						[control]="$any(myInfoForm).get('educationSummary')"
 					></tempus-text-area>
 				</form>
@@ -43,14 +43,16 @@
 							<button
 								mat-mini-fab
 								(click)="removeEducationSection(index)"
-								matTooltip="Remove education section"
+								matTooltip="{{ educationsPrefix + 'removeTooltip' | translate }}"
 								color="primary"
 							>
 								<mat-icon>remove</mat-icon>
 							</button>
 						</div>
 						<div>
-							<h3 class="mat-h3" color="primary">Qualification {{ index + 1 }}</h3>
+							<h3 class="mat-h3" color="primary">
+								<span>{{ educationsPrefix + 'qualificationItemLabel' | translate }} </span>{{ index + 1 }}
+							</h3>
 						</div>
 					</div>
 
@@ -66,7 +68,7 @@
 							>
 								<tempus-text-input
 									id="institution-{{ index }}"
-									placeholder="Institution *"
+									placeholder="{{ educationsPrefix + 'institutionPlaceholder' | translate }}"
 									cssClass="secondary"
 									[control]="$any(numEducation).get('institution')"
 								>
@@ -82,7 +84,7 @@
 							>
 								<tempus-text-input
 									id="field-{{ index }}"
-									placeholder="Field *"
+									placeholder="{{ educationsPrefix + 'fieldPlaceholder' | translate }}"
 									cssClass="secondary"
 									[control]="$any(numEducation).get('field')"
 								></tempus-text-input>
@@ -106,7 +108,7 @@
 											($any(numEducation).get('institution').touched || $any(numEducation).get('institution').dirty)
 										"
 									>
-										Please enter an institution name.
+										{{ educationsPrefix + 'institutionErr' | translate }}
 									</mat-error>
 								</div>
 							</div>
@@ -126,7 +128,7 @@
 											($any(numEducation).get('field').touched || $any(numEducation).get('field').dirty)
 										"
 									>
-										Please enter a qualification field.
+										{{ educationsPrefix + 'qualificationErr' | translate }}
 									</mat-error>
 								</div>
 							</div>
@@ -144,7 +146,7 @@
 								<tempus-search-box
 									id="country-{{ index }}"
 									[options]="countries"
-									placeholder="Country"
+									placeholder="{{ commonPrefix + 'location.countryPlaceholder' | translate }}"
 									cssClass="secondary"
 									(optionSelect)="updateStateOptions($event)"
 									[control]="$any(numEducation).get('country')"
@@ -154,7 +156,7 @@
 								<tempus-dropdown
 									id="state-{{ index }}"
 									[options]="states"
-									label="State"
+									label="{{ commonPrefix + 'location.statePlaceholder' | translate }}"
 									cssClass="secondary"
 									[control]="$any(numEducation).get('state')"
 								>
@@ -170,7 +172,7 @@
 							>
 								<tempus-text-input
 									id="city-{{ index }}"
-									placeholder="City"
+									placeholder="{{ commonPrefix + 'location.cityPlaceholder' | translate }}"
 									cssClass="secondary"
 									[control]="$any(numEducation).get('city')"
 								></tempus-text-input>
@@ -189,7 +191,7 @@
 								<tempus-text-input
 									id="start-date-{{ index }}"
 									[inputType]="InputType.DATE"
-									placeholder="Start date"
+									placeholder="{{ commonPrefix + 'dates.startPlaceholder' | translate }}"
 									cssClass="secondary"
 									[control]="$any(numEducation).get('startDate')"
 								></tempus-text-input>
@@ -200,15 +202,26 @@
 								fxLayoutAlign="end center"
 								fxLayoutAlign.lt-md="center center"
 								fxFlexFill
+								fxLayout.lt-md="column"
+								fxLayout="column"
 								class="grid-item"
 							>
 								<tempus-text-input
 									id="end-date-{{ index }}"
 									[inputType]="InputType.DATE"
-									placeholder="End date"
+									placeholder="{{ commonPrefix + 'dates.endPlaceholder' | translate }}"
 									cssClass="secondary"
 									[control]="$any(numEducation).get('endDate')"
 								></tempus-text-input>
+								<div style="display: flex; justify-content: flex-start; width: 100%; margin-left: 3rem">
+									<mat-checkbox
+										class="checkbox"
+										[checked]="$any(numEducation).get('endDate').disabled"
+										(change)="setCheck($event.checked, numEducation)"
+									>
+										<p class="mat-body-2 checkbox-label">{{ commonPrefix + 'dates.present' | translate }}</p>
+									</mat-checkbox>
+								</div>
 							</div>
 						</div>
 
@@ -229,7 +242,7 @@
 											($any(numEducation).get('startDate').touched || $any(numEducation).get('startDate').dirty)
 										"
 									>
-										Please enter a valid start date.
+										{{ commonPrefix + 'dates.validStartDateErr' | translate }}
 									</mat-error>
 								</div>
 							</div>
@@ -249,14 +262,14 @@
 											($any(numEducation).get('endDate').touched || $any(numEducation).get('endDate').dirty)
 										"
 									>
-										Please enter a valid end date.
+										{{ commonPrefix + 'dates.validEndDateErr' | translate }}
 									</mat-error>
 								</div>
 							</div>
 						</div>
 						<div>
 							<mat-error class="mat-body-2" *ngIf="$any(numEducation).errors?.['dateError']">
-								Please make sure the start date is before the end date.
+								{{ commonPrefix + 'dates.startBeforeEndErr' | translate }}
 							</mat-error>
 						</div>
 					</div>

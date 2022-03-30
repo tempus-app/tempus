@@ -3,23 +3,27 @@
 		<mat-grid-tile colspan="2" rowspan="12">
 			<tempus-card>
 				<div class="card-header">
-					<h1 class="mat-h1" color="primary">Sign In</h1>
+					<h1 class="mat-h1" color="primary">{{ signInPrefix + 'title' | translate }}</h1>
 				</div>
 				<tempus-text-input
-					placeholder="Username"
+					placeholder="{{ signInPrefix + 'usernamePlaceholder' | translate }}"
 					cssClass="secondary"
 					[control]="$any(loginForm).get('email')"
 				></tempus-text-input>
 				<tempus-text-input
-					placeholder="Password"
+					placeholder="{{ signInPrefix + 'passwordPlaceholder' | translate }}"
 					cssClass="secondary"
 					[control]="$any(loginForm).get('password')"
 				></tempus-text-input>
 				<div class="login-container">
-					<button mat-raised-button color="accent" class="sign-in-button" (click)="login()">Login</button>
+					<button mat-raised-button color="accent" class="sign-in-button" (click)="login()">
+						{{ signInPrefix + 'loginCTA' | translate }}
+					</button>
 				</div>
 				<p class="mat-body-2 forgot-text">
-					<b><a href="#">Forgot your password?</a></b>
+					<b
+						><a href="#">{{ signInPrefix + 'forgotPass' | translate }}</a></b
+					>
 				</p>
 				<mat-error class="mat-body-2" *ngIf="errorMessage">
 					{{ errorMessage }}
