@@ -1,0 +1,73 @@
+<ng-container>
+    <div fxLayout="column" fxLayoutGap="30px">
+        <div fxFlex></div>
+        <div fxFlex fxLayoutAlign="center start">
+            <div class="info-title">
+                <h2 class="mat-h2 section-header">{{ firstName}} {{lastName }}</h2>
+            </div>
+        </div>
+        <div fxFlex>
+            <div fxFlex="5"></div>
+            <div fxFlex="90" fxLayout="column">
+                <div class="mat-h3 card-title">Projects</div>
+                    <tempus-card></tempus-card>
+            </div>
+            <div fxFlex="5"></div>
+        </div>
+        <div fxFlex>
+            <div fxFlex="5"></div>
+            <div fxFlex="90" fxLayout="column">
+                <div class="mat-h3 card-title">Personal</div>
+                <tempus-resource-display-personal-information [firstName]="firstName" [lastName]="lastName"
+                    [country]="country" [state]="state" [city]="city" [phoneNumber]="phoneNumber" [email]="email"
+                    [resume]="resume" [linkedInLink]="linkedInLink" [githubLink]="githubLink" [otherLink]="otherLink"
+                    [profileSummary]="profileSummary">
+                </tempus-resource-display-personal-information>
+            </div>
+            <div fxFlex="5"></div>
+        </div>
+        <div fxFlex>
+            <div fxFlex="5"></div>
+            <div class="info-title">
+                <div class="mat-h3 card-title">Work Experience</div>
+                <tempus-resource-display-work-experience [experiencesSummary]="experiencesSummary"
+                    [workExperiences]="workExperiences"></tempus-resource-display-work-experience>
+            </div>
+            <div fxFlex="5"></div>
+        </div>
+        <div fxFlex>
+            <div fxFlex="5"></div>
+            <div class="info-title">
+                <div class="mat-h3 card-title">Education and Training</div>
+                <tempus-resource-display-education [educationsSummary]="educationsSummary" [educations]="educations">
+                </tempus-resource-display-education>
+            </div>
+            <div fxFlex="5"></div>
+        </div>
+
+        <div fxFlex>
+            <div fxFlex="5"></div>
+            <div class="info-title">
+                <div class="mat-h3 card-title">Certifications</div>
+                <tempus-resource-display-certifications [certifications]="certifications">
+                </tempus-resource-display-certifications>
+            </div>
+            <div fxFlex="5"></div>
+        </div>
+
+        <div fxFlex>
+            <div fxFlex="5"></div>
+            <div fxFlex="90">
+                <div class="mat-h3 card-title">Skills</div>
+                <tempus-resource-display-skills [skills]="skills" [skillsSummary]="skillsSummary">
+                </tempus-resource-display-skills>
+            </div>
+            <div fxFlex="5"></div>
+        </div>
+        <div fxFlex fxLayoutAlign="end start">
+            <tempus-button label="Reject Changes"></tempus-button>
+            <tempus-button label="Approve Changes"></tempus-button>
+        </div>
+        <div fxFlex></div>
+    </div>
+</ng-container>

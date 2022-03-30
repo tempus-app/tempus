@@ -1,2 +1,8 @@
-<!-- <tempus-sidebar></tempus-sidebar> -->
-<p>resource-profile works!</p>
+<ng-container>
+    <tempus-sidebar [userType]="userType.OWNER" [name]="name" [email]="email">
+        <tempus-user-bar></tempus-user-bar>
+        <tempus-resource-profile-content></tempus-resource-profile-content>
+    </tempus-sidebar>
+</ng-container>
+
+

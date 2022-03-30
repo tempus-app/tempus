@@ -1,0 +1,9 @@
+@use 'abstracts/helper' as abs;
+
+.section-header {
+	border-bottom: 2px solid abs.$primary-300;
+}
+
+tempus-button {
+    padding: 1em;
+}

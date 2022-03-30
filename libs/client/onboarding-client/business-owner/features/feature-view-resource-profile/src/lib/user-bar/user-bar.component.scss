@@ -1,0 +1,19 @@
+@use 'abstracts/helper' as abs;
+
+.user-bar-container{
+    padding-top: 1em;
+    background: abs.$primary-200;
+}
+
+tempus-dropdown {
+	text-align: center;
+	width: 90%;
+}
+
+tempus-button {
+    padding: 1em;
+}
+
+mat-icon{
+    padding: 1em;
+}
