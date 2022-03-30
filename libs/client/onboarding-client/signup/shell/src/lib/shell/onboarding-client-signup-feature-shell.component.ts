@@ -2,11 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router, Event, NavigationEnd, ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TranslateService } from '@ngx-translate/core';
-import {
-	selectAllResumeComponentsCreated,
-	selectResourceData,
-	SignupState,
-} from '@tempus/client/onboarding-client/signup/data-access';
+import { selectAllResumeComponentsCreated, SignupState } from '@tempus/client/onboarding-client/signup/data-access';
 import { Subject, take, takeUntil } from 'rxjs';
 
 @Component({
@@ -46,7 +42,6 @@ export class SignupShellComponent implements OnInit, OnDestroy {
 			.get('stepper')
 			.pipe(take(1))
 			.subscribe(data => {
-				console.log(data);
 				this.steps = this.steps.concat(Object.values(data));
 			});
 		this.router.events.subscribe((event: Event) => {

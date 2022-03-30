@@ -37,7 +37,9 @@
 									{{
 										workExperience.startDate && workExperience.endDate
 											? formatDate(workExperience.startDate, workExperience.endDate)
-											: ''
+											: workExperience.startDate && workExperience.endDate === null
+											? formatDate(workExperience.startDate, workExperience.endDate)
+											: ' '
 									}}
 								</p>
 							</div>

@@ -65,7 +65,7 @@ export const SampleView: View = {
 			description: null,
 			startDate: new Date('2010/10/09'),
 			company: 'string',
-			endDate: new Date('2022/01/04'),
+			endDate: null,
 			location: {
 				id: 1,
 				city: 'Ottawa',
@@ -137,7 +137,7 @@ export const SampleView: View = {
 			institution: 'Ryerson University',
 			degree: 'Masters Degree in Electrical Engineering',
 			startDate: new Date(),
-			endDate: new Date(),
+			endDate: null,
 			location: {
 				id: 5,
 				city: 'Toronto',

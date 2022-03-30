@@ -29,7 +29,11 @@
 							<div fxFill>
 								<p class="mat-body-2">
 									{{
-										education.startDate && education.endDate ? formatDate(education.startDate, education.endDate) : ''
+										education.startDate && education.endDate
+											? formatDate(education.startDate, education.endDate)
+											: education.startDate && education.endDate === null
+											? formatDate(education.startDate, education.endDate)
+											: ' '
 									}}
 								</p>
 							</div>
