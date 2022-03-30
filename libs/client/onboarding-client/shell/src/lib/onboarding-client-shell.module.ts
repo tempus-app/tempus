@@ -49,8 +49,7 @@ const routes: Routes = [
 		CommonModule,
 		OnboardingClientSharedDataAccessModule,
 		RouterModule.forRoot(routes),
-		TranslateModule.forRoot({
-			defaultLanguage: 'en',
+		TranslateModule.forChild({
 			loader: {
 				provide: TranslateLoader,
 				useFactory: createTranslateLoader,

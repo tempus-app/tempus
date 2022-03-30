@@ -20,6 +20,7 @@ import { NxWelcomeComponent } from './nx-welcome.component';
 
 // AoT requires an exported function for factories
 function createTranslateLoader(http: HttpClient) {
+	console.log('hello');
 	return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
 
