@@ -1,7 +1,8 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { View } from '@tempus/shared-domain';
+import { Revision, View } from '@tempus/shared-domain';
 import { OnboaringClientResourceProfileService } from '@tempus/client/onboarding-client/shared/data-access';
 import { ActivatedRoute } from '@angular/router';
+import { ButtonType } from '@tempus/client/shared/ui-components/presentational';
 
 @Component({
 	selector: 'tempus-user-bar',
@@ -17,6 +18,8 @@ export class UserBarComponent implements OnInit {
 
 	id = '';
 
+	revision: Revision[] | undefined;
+
 	constructor(private route: ActivatedRoute, private resourceService: OnboaringClientResourceProfileService) {}
 
 	ngOnInit(): void {
@@ -29,6 +32,7 @@ export class UserBarComponent implements OnInit {
 
 	onClick(optionSelected: string): void {
 		const filteredView = this.profileViews.find(view => view.viewType === optionSelected);
+		this.revision = filteredView?.status;
 		this.dropDownClicked.emit(filteredView);
 	}
 }

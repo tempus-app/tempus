@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component, Input, OnChanges, OnInit } from '@angular/core';
 import {
 	ICreateCertificationDto,
 	ICreateEducationDto,
@@ -8,7 +8,6 @@ import {
 	Skill,
 } from '@tempus/shared-domain';
 import { OnboaringClientResourceProfileService } from '@tempus/client/onboarding-client/shared/data-access';
-import { ActivatedRoute } from '@angular/router';
 import { ComponentChanges } from './ViewSimpleChanges';
 
 @Component({
@@ -17,17 +16,32 @@ import { ComponentChanges } from './ViewSimpleChanges';
 	styleUrls: ['./resource-profile-content.component.scss'],
 	providers: [OnboaringClientResourceProfileService],
 })
-export class ResourceProfileContentComponent implements OnInit {
-	constructor(private route: ActivatedRoute, private resourceService: OnboaringClientResourceProfileService) {}
-
+export class ResourceProfileContentComponent implements OnChanges {
 	id = '';
 
 	@Input()
 	view!: View;
 
+	@Input()
 	firstName = '';
 
+	@Input()
 	lastName = '';
+
+	@Input()
+	email = '';
+
+	@Input()
+	phoneNumber = '';
+
+	@Input()
+	country = '';
+
+	@Input()
+	state = '';
+
+	@Input()
+	city = '';
 
 	experiencesSummary = '';
 
@@ -36,16 +50,6 @@ export class ResourceProfileContentComponent implements OnInit {
 	skillsSummary = '';
 
 	profileSummary = '';
-
-	email = '';
-
-	phoneNumber = '';
-
-	country = '';
-
-	state = '';
-
-	city = '';
 
 	linkedInLink = '';
 
@@ -77,6 +81,7 @@ export class ResourceProfileContentComponent implements OnInit {
 			this.educations = view.educations;
 			this.educationsSummary = view.educationsSummary;
 			this.workExperiences = view.experiences;
+			this.revision = view.status;
 			this.experiencesSummary = view.experiencesSummary;
 			this.profileSummary = view.profileSummary;
 			this.skills = view.skills.map((skill: Skill) => skill.skill.name);
@@ -86,42 +91,10 @@ export class ResourceProfileContentComponent implements OnInit {
 	}
 
 	acceptChanges() {
-		// IMPLEMENT
+		// TODO: IMPLEMENT
 	}
 
 	rejectChanges() {
-		// IMPLEMENT
-	}
-
-	ngOnInit(): void {
-		this.id = this.route.snapshot.paramMap.get('id') || '';
-		// this.resourceService.getResourceProfileViews(this.id).subscribe(profileViews => {
-		// 	this.views = profileViews;
-		// 	console.log(profileViews);
-		// 	const primaryView = profileViews.find(view => view.viewType === 'PRIMARY');
-		// 	if (primaryView) {
-		// 		this.certifications = primaryView.certifications;
-		// 		this.educations = primaryView.educations;
-		// 		this.educationsSummary = primaryView.educationsSummary;
-		// 		this.workExperiences = primaryView.experiences;
-		// 		this.revision = primaryView.status;
-		// 		this.viewID = primaryView.id;
-		// 		this.experiencesSummary = primaryView.experiencesSummary;
-		// 		this.profileSummary = primaryView.profileSummary;
-		// 		this.skills = primaryView.skills.map(skill => skill.skill.name);
-		// 		this.skillsSummary = primaryView.skillsSummary;
-		// 		this.viewType = primaryView.viewType;
-		// 	}
-		// });
-
-		this.resourceService.getResourceInformation(this.id).subscribe(resourceInfo => {
-			this.firstName = resourceInfo.firstName;
-			this.lastName = resourceInfo.lastName;
-			this.city = resourceInfo.location.city;
-			this.state = resourceInfo.location.province;
-			this.country = resourceInfo.location.country;
-			this.phoneNumber = resourceInfo.phoneNumber;
-			this.email = resourceInfo.email;
-		});
+		// TODO: IMPLEMENT
 	}
 }

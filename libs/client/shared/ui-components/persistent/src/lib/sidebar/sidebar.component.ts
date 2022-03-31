@@ -14,12 +14,17 @@ export class SidebarComponent implements OnInit {
 	}
 
 	@Input() userType?: UserType = undefined;
+
 	@Input() tabs: string[] = [];
-	@Input() name: string = 'Placeholder Name';
-	@Input() email: string = 'Placeholder email';
+
+	@Input() name = 'Placeholder Name';
+
+	@Input() email = 'Placeholder email';
+
 	@Output() selectTab = new EventEmitter();
 
 	initials = '';
+
 	isVisible = true;
 
 	setUserTabs() {
@@ -35,7 +40,7 @@ export class SidebarComponent implements OnInit {
 	}
 
 	getInitials(name: string) {
-		let fullName = name.split(' ');
+		const fullName = name.split(' ');
 		this.initials = (fullName[0].charAt(0) + fullName.pop()?.charAt(0)).toUpperCase();
 	}
 

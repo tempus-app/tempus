@@ -1,7 +1,17 @@
 <ng-container>
-    <tempus-sidebar [userType]="userType.OWNER" [name]="name" [email]="email">
+    <tempus-sidebar [userType]="userType.OWNER" [name]="displayName()" [email]="email">
         <tempus-user-bar (dropDownClicked)="childDropDownClicked($event)"></tempus-user-bar>
-        <tempus-resource-profile-content [view]="view"></tempus-resource-profile-content>
+        <tempus-resource-profile-content 
+            [view]="view"
+            [firstName] = "firstName"
+            [lastName] = "lastName"
+            [country] = "country"
+            [state] = "state"
+            [city] = "city"
+            [email] = "email"
+            [phoneNumber] = "phoneNumber"
+        
+        ></tempus-resource-profile-content>
     </tempus-sidebar>
 </ng-container>
 
