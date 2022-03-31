@@ -1,5 +1,6 @@
 <tempus-sidebar [userType]="UserType.RESOURCE" (selectTab)="selectedTab($event)">
-	<ng-container>
+	<tempus-edit-profile></tempus-edit-profile>
+	<!-- <ng-container>
 		<div id="page-container" fxLayout="column" fxFill fxLayoutGap="20px">
 			<div id="title-container">
 				<div id="my-profile-container">
@@ -37,5 +38,5 @@
 				<tempus-resource-display-skills></tempus-resource-display-skills>
 			</div>
 		</div>
-	</ng-container>
+	</ng-container> -->
 </tempus-sidebar>

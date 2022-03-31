@@ -1,0 +1,38 @@
+<ng-container>
+	<div id="page-container" fxLayout="column" fxLayoutGap="20px">
+		<div fxFlex id="user-bar">
+			<tempus-card>
+				<div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="30px">
+					<div fxFlex="50">
+						<tempus-text-input
+							id="view-name"
+							cssClass="disabled"
+							disabled
+							placeholder="Primary View"
+						></tempus-text-input>
+					</div>
+					<div fxLayout="row" fxLayoutGap="10px">
+						<tempus-button label="Cancel" color="accent"></tempus-button>
+						<tempus-button label="Preview" color="accent"></tempus-button>
+						<tempus-button label="Submit" color="accent"></tempus-button>
+					</div>
+				</div>
+			</tempus-card>
+		</div>
+		<div fxFlex>
+			<tempus-resource-info-personal-information></tempus-resource-info-personal-information>
+		</div>
+		<div fxFlex>
+			<tempus-resource-info-education></tempus-resource-info-education>
+		</div>
+		<div fxFlex>
+			<tempus-resource-info-certifications></tempus-resource-info-certifications>
+		</div>
+		<div fxFlex>
+			<tempus-resource-info-work-experience></tempus-resource-info-work-experience>
+		</div>
+		<div fxFlex>
+			<tempus-resource-info-skills></tempus-resource-info-skills>
+		</div>
+	</div>
+</ng-container>
