@@ -1,20 +1,8 @@
-import {
-	Body,
-	Controller,
-	Delete,
-	Get,
-	Param,
-	Post,
-	Query,
-	UseGuards,
-	Request,
-	Patch,
-	NotImplementedException,
-} from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, UseGuards, Patch } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { CreateViewDto } from '@tempus/api/shared/dto';
-import { Revision, RoleType, View } from '@tempus/shared-domain';
-import { JwtAuthGuard, PermissionGuard, Roles, RolesGuard, ViewsGuard } from '@tempus/api/shared/feature-auth';
+import { CreateViewDto, ApproveViewDto } from '@tempus/api/shared/dto';
+import { Revision, View } from '@tempus/shared-domain';
+import { JwtAuthGuard, PermissionGuard, ViewsGuard } from '@tempus/api/shared/feature-auth';
 import { ViewsService } from '../services/view.service';
 
 @ApiTags('Profile Views')
@@ -39,8 +27,8 @@ export class ProfileViewController {
 
 	@UseGuards(JwtAuthGuard)
 	@Post('/approve/:viewId')
-	async approveView(@Param('viewId') viewId: number, @Query('approval') approval: boolean): Promise<Revision> {
-		const approvalResult = await this.viewSerivce.approveOrDenyView(viewId, approval);
+	async approveView(@Param('viewId') viewId: number, @Body() approveViewDto: ApproveViewDto): Promise<Revision> {
+		const approvalResult = await this.viewSerivce.approveOrDenyView(viewId, approveViewDto);
 		return approvalResult;
 	}
 

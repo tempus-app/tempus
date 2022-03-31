@@ -1,9 +1,9 @@
 import { ForbiddenException, forwardRef, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CreateViewDto } from '@tempus/api/shared/dto';
+import { ApproveViewDto, CreateViewDto } from '@tempus/api/shared/dto';
 import { RevisionEntity, ViewEntity } from '@tempus/api/shared/entity';
 import { ResourceService } from '@tempus/onboarding-api/feature-account';
-import { Revision, View, ViewType } from '@tempus/shared-domain';
+import { Revision, RevisionType, View, ViewType } from '@tempus/shared-domain';
 import { Repository } from 'typeorm';
 
 @Injectable()
@@ -21,6 +21,7 @@ export class ViewsService {
 		const resourceEntity = await this.resourceService.getResourceInfo(resourceId);
 
 		const viewEntity = ViewEntity.fromDto(createViewDto);
+		viewEntity.revisionType = RevisionType.OLD;
 		viewEntity.resource = resourceEntity;
 
 		const newView = await this.viewsRepository.save(viewEntity);
@@ -34,18 +35,25 @@ export class ViewsService {
 		const resourceEntity = await this.resourceService.getResourceInfo(resourceId);
 		let newViewEntity = ViewEntity.fromDto(newView);
 		newViewEntity.resource = resourceEntity;
-
+		newViewEntity.revisionType = RevisionType.NEW;
 		newViewEntity = await this.viewsRepository.save(newViewEntity);
 
-		// how to decide approver? is this column even necessary
-		// revisionEntity.approver = ?
-		const revisionEntity = new RevisionEntity(null, null, null, null, null, view as ViewEntity, newViewEntity);
+		if (view.revision) {
+			const revisionEntity = view.revision;
+			const previousRevision = view.revision.newView;
+			await this.viewsRepository.remove(previousRevision);
+			revisionEntity.newView = newViewEntity;
+			const revisionToReturn = await this.revisionRepository.save(revisionEntity);
+			return revisionToReturn;
+		}
+		const revisionEntity = new RevisionEntity(null, null, null, view as ViewEntity, newViewEntity);
 		const revisionToReturn = await this.revisionRepository.save(revisionEntity);
-
 		return revisionToReturn;
 	}
 
-	async approveOrDenyView(viewId: number, approval: boolean): Promise<Revision> {
+	// eslint-disable-next-line consistent-return
+	async approveOrDenyView(viewId: number, approveViewDto: ApproveViewDto): Promise<Revision> {
+		const { approval, comment } = approveViewDto;
 		const revisionEntity = (
 			await this.revisionRepository.find({
 				where: {
@@ -56,21 +64,38 @@ export class ViewsService {
 
 		revisionEntity.approved = approval;
 
-		// if approved, maybe set up a job or something to delete the old entity and the revision? or do we just want to delete right away
-		// if denied, delete revision as well?
-
-		return this.revisionRepository.save(revisionEntity);
+		if (approval === true) {
+			const { newView, view } = revisionEntity;
+			newView.revisionType = RevisionType.OLD;
+			newView.lastUpdateDate = new Date(Date.now());
+			await this.viewsRepository.remove(view);
+			await this.viewsRepository.save(newView);
+			return this.revisionRepository.remove(revisionEntity);
+		}
+		if (approval === false) {
+			revisionEntity.comment = comment;
+			return this.revisionRepository.save(revisionEntity);
+		}
 	}
 
 	async getViewsByResource(resourceId: number): Promise<View[]> {
 		// error check
 		await this.resourceService.getResourceInfo(resourceId);
 		const viewsInResource = await this.viewsRepository.find({
-			relations: ['experiences', 'educations', 'skills', 'certifications'],
+			relations: [
+				'experiences',
+				'educations',
+				'skills',
+				'certifications',
+				'revision',
+				'revision.view',
+				'revision.newView',
+			],
 			where: {
 				resource: {
 					id: resourceId,
 				},
+				revisionType: RevisionType.OLD,
 			},
 		});
 
@@ -78,7 +103,17 @@ export class ViewsService {
 	}
 
 	async getView(viewId: number): Promise<View> {
-		const viewEntity = await this.viewsRepository.findOne(viewId);
+		const viewEntity = await this.viewsRepository.findOne(viewId, {
+			relations: [
+				'experiences',
+				'educations',
+				'skills',
+				'certifications',
+				'revision',
+				'revision.view',
+				'revision.newView',
+			],
+		});
 		if (!viewEntity) {
 			throw new NotFoundException(`Could not find view with id ${viewId}`);
 		}

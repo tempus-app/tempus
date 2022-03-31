@@ -1,23 +1,12 @@
 import { Revision } from '@tempus/shared-domain';
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, OneToOne } from 'typeorm';
-import { UserEntity } from '../account-entities';
 import { ViewEntity } from './view.entity';
 
 @Entity()
 export class RevisionEntity implements Revision {
-	constructor(
-		id?: number,
-		createdAt?: Date,
-		approvedAt?: Date,
-		approver?: UserEntity,
-		approved?: boolean,
-		view?: ViewEntity,
-		newView?: ViewEntity,
-	) {
+	constructor(id?: number, createdAt?: Date, approved?: boolean, view?: ViewEntity, newView?: ViewEntity) {
 		this.id = id;
 		this.createdAt = createdAt;
-		this.approvedAt = approvedAt;
-		this.approver = approver;
 		this.approved = approved;
 		this.view = view;
 		this.newView = newView;
@@ -30,10 +19,7 @@ export class RevisionEntity implements Revision {
 	createdAt: Date;
 
 	@Column({ nullable: true })
-	approvedAt?: Date;
-
-	@OneToOne(() => UserEntity)
-	approver: UserEntity;
+	comment: string;
 
 	@Column({ nullable: true })
 	approved?: boolean;
