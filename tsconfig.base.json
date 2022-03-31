@@ -26,6 +26,9 @@
 			"@tempus/client/onboarding-client/business-owner/features/feature-view-resource-profile": [
 				"libs/client/onboarding-client/business-owner/features/feature-view-resource-profile/src/index.ts"
 			],
+			"@tempus/client/onboarding-client/business-owner/data-access": [
+				"libs/client/onboarding-client/business-owner/data-access/src/index.ts"
+			],
 			"@tempus/client/onboarding-client/resource/data-access": [
 				"libs/client/onboarding-client/resource/data-access/src/index.ts"
 			],

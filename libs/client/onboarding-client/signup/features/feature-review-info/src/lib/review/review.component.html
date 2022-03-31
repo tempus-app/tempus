@@ -3,7 +3,7 @@
 		<div fxFlex>
 			<div fxFlex="5"></div>
 			<div class="info-title">
-				<h2 class="mat-h2 section-header">Review</h2>
+				<h2 class="mat-h2 section-header">{{ reviewPrefix + 'title' | translate }}</h2>
 			</div>
 			<div fxFlex="5"></div>
 		</div>
@@ -34,7 +34,7 @@
 		<div fxFlex>
 			<div fxFlex="5"></div>
 			<div class="info-title">
-				<div class="mat-h2 card-title">Work Experience</div>
+				<div class="mat-h2 card-title">{{ reviewPrefix + 'workExperience.title' | translate }}</div>
 				<tempus-resource-display-work-experience
 					[experiencesSummary]="experiencesSummary"
 					[workExperiences]="workExperiences"
@@ -46,7 +46,7 @@
 		<div fxFlex>
 			<div fxFlex="5"></div>
 			<div class="info-title">
-				<div class="mat-h2 card-title">Education and Training</div>
+				<div class="mat-h2 card-title">{{ reviewPrefix + 'educationAndTraining.title' | translate }}</div>
 				<tempus-resource-display-education
 					[educationsSummary]="educationsSummary"
 					[educations]="educations"
@@ -58,7 +58,7 @@
 		<div fxFlex>
 			<div fxFlex="5"></div>
 			<div class="info-title">
-				<div class="mat-h2 card-title">Certifications</div>
+				<div class="mat-h2 card-title">{{ reviewPrefix + 'certifications.title' | translate }}</div>
 				<tempus-resource-display-certifications
 					[certifications]="certifications"
 				></tempus-resource-display-certifications>
@@ -68,7 +68,7 @@
 
 		<div fxFlex>
 			<div fxFlex="5"></div>
-			<div class="mat-h2 card-title">Skills</div>
+			<div class="mat-h2 card-title">{{ reviewPrefix + 'skills.title' | translate }}</div>
 			<div fxFlex="5"></div>
 		</div>
 		<div fxFlex>

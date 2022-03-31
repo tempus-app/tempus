@@ -3,13 +3,13 @@
 		<div fxFlex>
 			<div fxFlex="5"></div>
 			<div class="info-title">
-				<h2 class="mat-h2">Certifications</h2>
+				<h2 class="mat-h2">{{ certificationsPrefix + 'title' | translate }}</h2>
 			</div>
 			<div>
 				<button
 					mat-mini-fab
 					(click)="addCertificationSections()"
-					matTooltip="Add more certifications sections"
+					matTooltip="{{ certificationsPrefix + 'addMoreTooltip' | translate }}"
 					class="header-button"
 					color="primary"
 				>
@@ -27,14 +27,17 @@
 							<button
 								mat-mini-fab
 								(click)="removeCertificationSection(index)"
-								matTooltip="Remove certification section"
+								matTooltip="{{ certificationsPrefix + 'removeTooltip' | translate }}"
 								color="primary"
 							>
 								<mat-icon>remove</mat-icon>
 							</button>
 						</div>
 						<div>
-							<h3 class="mat-h3">Certfication {{ index + 1 }}</h3>
+							<h3 class="mat-h3">
+								<span>{{ certificationsPrefix + 'certificationItemLabel' | translate }}</span
+								>{{ index + 1 }}
+							</h3>
 						</div>
 					</div>
 					<div fxLayout="column" fxLayoutGap="10px">
@@ -49,7 +52,7 @@
 							>
 								<tempus-text-input
 									id="certifying-authority-{{ index }}"
-									placeholder="Certifying Authority *"
+									placeholder="{{ certificationsPrefix + 'certifyingAuthorityPlaceholder' | translate }}"
 									cssClass="secondary"
 									[control]="$any(numCertification).get('certifyingAuthority')"
 								>
@@ -65,7 +68,7 @@
 							>
 								<tempus-text-input
 									id="title-{{ index }}"
-									placeholder="Title *"
+									placeholder="{{ certificationsPrefix + 'titlePlaceholder' | translate }}"
 									cssClass="secondary"
 									[control]="$any(numCertification).get('title')"
 								></tempus-text-input>
@@ -90,7 +93,7 @@
 												$any(numCertification).get('certifyingAuthority').dirty)
 										"
 									>
-										Please enter a certifying authority.
+										{{ certificationsPrefix + 'certifyingAuthorityErr' | translate }}
 									</mat-error>
 								</div>
 							</div>
@@ -110,7 +113,7 @@
 											($any(numCertification).get('title').touched || $any(numCertification).get('title').dirty)
 										"
 									>
-										Please enter a title.
+										{{ certificationsPrefix + 'titleErr' | translate }}
 									</mat-error>
 								</div>
 							</div>
@@ -119,7 +122,7 @@
 						<div>
 							<tempus-text-area
 								id="summary-{{ index }}"
-								placeholder="Summary"
+								placeholder="{{ certificationsPrefix + 'summaryPlaceholder' | translate }}"
 								[control]="$any(numCertification).get('summary')"
 							></tempus-text-area>
 						</div>

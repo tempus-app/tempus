@@ -12,6 +12,8 @@ export class ConfirmResumeUploadComponent {
 	@Output()
 	confirmDeleteSelected = new EventEmitter();
 
+	confirmUploadPrefix = 'onboardingSignupUploadResume.confirmUpload.';
+
 	onDeleteSelect() {
 		this.confirmDeleteSelected.emit();
 	}

@@ -34,6 +34,8 @@ export class CertificationsComponent implements OnInit {
 		certifications: this.fb.array([]),
 	});
 
+	certificationsPrefix = 'onboardingClient.input.certifications.';
+
 	ngOnInit(): void {
 		this.loadStoreData();
 		this.formGroup.emit(this.myInfoForm);

@@ -1,7 +1,7 @@
 <ng-container>
 	<tempus-card>
 		<div *ngIf="educations.length === 0 && educationsSummary === ''">
-			<p class="mat-body-2">You have not entered information for this section.</p>
+			<p class="mat-body-2">{{ 'onboardingClient.presentational.noInfoSection' | translate }}</p>
 		</div>
 		<div class="mat-body-1">{{ educationsSummary }}</div>
 		<div *ngFor="let education of educations">
@@ -37,7 +37,11 @@
 							<div fxFill>
 								<p class="mat-body-2">
 									{{
-										education.startDate && education.endDate ? formatDate(education.startDate, education.endDate) : ''
+										education.startDate && education.endDate
+											? formatDate(education.startDate, education.endDate)
+											: education.startDate && education.endDate === null
+											? formatDate(education.startDate, education.endDate)
+											: ' '
 									}}
 								</p>
 							</div>

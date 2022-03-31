@@ -9,6 +9,7 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatButtonModule } from '@angular/material/button';
+import { TranslateModule } from '@ngx-translate/core';
 import { CardComponent } from './card/card.component';
 import { ChipComponent } from './chip/chip.component';
 import { TableComponent } from './table/table.component';
@@ -27,6 +28,10 @@ import { ButtonComponent } from './button/button.component';
 		MatTableModule,
 		MatButtonModule,
 		MatSortModule,
+		TranslateModule.forChild({
+			isolate: false,
+			extend: true,
+		}),
 	],
 	declarations: [CardComponent, ChipComponent, ButtonComponent, TableComponent, SpinnerComponent],
 	exports: [CardComponent, ChipComponent, ButtonComponent, TableComponent, SpinnerComponent],

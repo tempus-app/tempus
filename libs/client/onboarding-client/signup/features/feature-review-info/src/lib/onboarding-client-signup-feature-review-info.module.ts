@@ -10,7 +10,14 @@ import { ClientSharedUiComponentsPresentationalModule } from '@tempus/client/sha
 import { ClientSharedInputResourceInformationModule } from '@tempus/client/onboarding-client/shared/ui-components/input/resource-information';
 import { ClientSharedPresentationalResourceDisplayModule } from '@tempus/client/onboarding-client/shared/ui-components/presentational/resource-display';
 
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { HttpClient } from '@angular/common/http';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { ReviewComponent } from './review/review.component';
+
+function createTranslateLoader(http: HttpClient) {
+	return new TranslateHttpLoader(http, './assets/i18n/onboarding/signup/review/', '.json');
+}
 
 @NgModule({
 	imports: [
@@ -30,6 +37,15 @@ import { ReviewComponent } from './review/review.component';
 				component: ReviewComponent,
 			},
 		]),
+		TranslateModule.forChild({
+			loader: {
+				provide: TranslateLoader,
+				useFactory: createTranslateLoader,
+				deps: [HttpClient],
+			},
+			isolate: false,
+			extend: true,
+		}),
 	],
 	declarations: [ReviewComponent],
 })
