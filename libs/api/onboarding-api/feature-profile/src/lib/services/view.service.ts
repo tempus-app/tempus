@@ -38,7 +38,7 @@ export class ViewsService {
 		// error check
 		await this.resourceService.getResourceInfo(resourceId);
 		const viewsInResource = await this.viewsRepository.find({
-			relations: ['experiences', 'educations', 'skills', 'certifications'],
+			relations: ['experiences', 'educations', 'skills', 'certifications', 'skills.skill'],
 			where: {
 				resource: {
 					id: resourceId,

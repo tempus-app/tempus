@@ -2,27 +2,25 @@
     <div fxLayout="column" fxLayoutGap="30px">
         <div fxFlex></div>
         <div fxFlex fxLayoutAlign="center start">
-            <div class="info-title">
-                <h2 class="mat-h2 section-header">{{ firstName}} {{lastName }}</h2>
-            </div>
+            <h2 class="mat-h2 section-header">{{ firstName}} {{lastName }}</h2>
         </div>
         <div fxFlex>
             <div fxFlex="5"></div>
             <div fxFlex="90" fxLayout="column">
                 <div class="mat-h3 card-title">Projects</div>
-                    <tempus-card></tempus-card>
+                <tempus-card></tempus-card>
             </div>
             <div fxFlex="5"></div>
         </div>
         <div fxFlex>
             <div fxFlex="5"></div>
-            <div fxFlex="90" fxLayout="column">
+            <div fxFlex="90" fxLayout="column" fxLayoutGap="30px">
                 <div class="mat-h3 card-title">Personal</div>
                 <tempus-resource-display-personal-information [firstName]="firstName" [lastName]="lastName"
                     [country]="country" [state]="state" [city]="city" [phoneNumber]="phoneNumber" [email]="email"
                     [resume]="resume" [linkedInLink]="linkedInLink" [githubLink]="githubLink" [otherLink]="otherLink"
-                    [profileSummary]="profileSummary">
-                </tempus-resource-display-personal-information>
+                    [profileSummary]="profileSummary"></tempus-resource-display-personal-information>
+
             </div>
             <div fxFlex="5"></div>
         </div>
