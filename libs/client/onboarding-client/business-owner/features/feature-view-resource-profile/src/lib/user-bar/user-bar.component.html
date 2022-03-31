@@ -1,16 +1,9 @@
 <ng-container>
-    <div fxLayout="column" fxLayoutGap="10px" class="user-bar-container">
-        <div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap="10px" class="block-2">
-            <div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="center center" fxFlexFill class="grid-item">
-                <mat-icon>error</mat-icon>
-                <tempus-dropdown [options]="views" label="View: {{currentView}}"></tempus-dropdown>
-
-            </div>
-            <div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="center center" fxFlexFill class="grid-item">
-                <tempus-button label="assign" color="accent"></tempus-button>
-                <tempus-button label="create new view" color="accent"></tempus-button>
-                <tempus-button label="download profile" color="accent"></tempus-button>
-            </div>
-        </div>
+    <div fxLayout="row" fxLayoutAlign="space-between start"  fxLayout.gt-sm="row" fxLayout.lt-md="column" class="user-bar-container">
+        <mat-icon>error</mat-icon>
+        <tempus-dropdown [options]="views" label="View" (optionSelect)="onClick($event)"></tempus-dropdown>
+        <tempus-button label="assign" color="accent"></tempus-button>
+        <tempus-button label="create new view" color="accent"></tempus-button>
+        <tempus-button label="download profile" color="accent"></tempus-button>
     </div>
 </ng-container>

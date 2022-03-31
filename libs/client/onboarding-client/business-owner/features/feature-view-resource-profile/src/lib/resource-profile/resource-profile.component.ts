@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { UserType } from '@tempus/client/shared/ui-components/persistent';
-// import { UserBarComponent } from '../user-bar/user-bar.component';
+import { View } from '@tempus/shared-domain';
 
 @Component({
 	selector: 'tempus-resource-profile',
@@ -13,4 +13,10 @@ export class ResourceProfileComponent {
 	name = 'sample';
 
 	email = 'sample@test.com';
+
+	view!: View;
+
+	childDropDownClicked(view: View) {
+		this.view = view;
+	}
 }
