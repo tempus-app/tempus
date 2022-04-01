@@ -9,11 +9,11 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatChipsModule } from '@angular/material/chips';
 import { ClientSharedUiComponentsInputModule } from '@tempus/client/shared/ui-components/input';
 import { ClientSharedUiComponentsPresentationalModule } from '@tempus/client/shared/ui-components/presentational';
-import { PersonalInformationComponent } from './personal-information/personal-information.component';
-import { WorkExperienceComponent } from './work-experience/work-experience.component';
-import { EducationComponent } from './education/education.component';
-import { CertificationsComponent } from './certifications/certifications.component';
-import { SkillsComponent } from './skills/skills.component';
+import { PersonalInformationComponent } from './components/personal-information/personal-information.component';
+import { WorkExperienceComponent } from './components/work-experience/work-experience.component';
+import { EducationComponent } from './components/education/education.component';
+import { CertificationsComponent } from './components/certifications/certifications.component';
+import { SkillsComponent } from './components/skills/skills.component';
 
 @NgModule({
 	imports: [
