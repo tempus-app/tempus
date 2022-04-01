@@ -12,6 +12,7 @@
 					matTooltip="Add more certifications sections"
 					class="header-button"
 					color="primary"
+					id="add-button"
 				>
 					<mat-icon>add</mat-icon>
 				</button>
@@ -20,7 +21,7 @@
 		</div>
 		<div *ngFor="let numCertification of certifications.controls; let index = index">
 			<div fxFlex="5"></div>
-			<tempus-card>
+			<tempus-card class="certification-input-container">
 				<form>
 					<div class="card-header container">
 						<div class="header-button">
@@ -29,6 +30,7 @@
 								(click)="removeCertificationSection(index)"
 								matTooltip="Remove certification section"
 								color="primary"
+								id="remove-button"
 							>
 								<mat-icon>remove</mat-icon>
 							</button>
@@ -84,6 +86,7 @@
 								<div class="error-container">
 									<mat-error
 										class="mat-body-2"
+										id="certifying-authority-error"
 										*ngIf="
 											$any(numCertification).get('certifyingAuthority').invalid &&
 											($any(numCertification).get('certifyingAuthority').touched ||
@@ -105,6 +108,7 @@
 								<div class="error-container">
 									<mat-error
 										class="mat-body-2"
+										id="title-error"
 										*ngIf="
 											$any(numCertification).get('title').invalid &&
 											($any(numCertification).get('title').touched || $any(numCertification).get('title').dirty)

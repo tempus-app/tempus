@@ -5,26 +5,8 @@
 	@include cmp.info-title(100%, 50px);
 }
 
-.error-container {
-	width: 90%;
-	text-align: left;
-}
-
-.header-button {
-	float: right;
-}
-
-.example-chip-list {
-	width: 100%;
-}
-
 #skillChipInput {
 	text-align: left;
-}
-
-h3 {
-	text-align: left;
-	color: abs.$primary-800;
 }
 
 mat-chip-list {
@@ -42,15 +24,3 @@ tempus-card {
 	text-align: center;
 }
 
-tempus-text-input {
-	text-align: center;
-	width: 90%;
-}
-
-tempus-text-area {
-	width: 95%;
-}
-
-mat-error {
-	padding-bottom: 2em;
-}

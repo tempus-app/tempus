@@ -10,26 +10,15 @@
 	text-align: left;
 }
 
-.section-header {
-	border-bottom: 2px solid abs.$primary-300;
-}
-
-.experience-button {
+.header-button {
 	float: right;
-}
-
-.button-container {
-	display: flex;
-	flex-direction: row;
-	justify-content: space-between;
-	position: relative;
-	bottom: 0;
 }
 
 h3 {
 	text-align: left;
 	color: abs.$primary-800;
 }
+
 
 tempus-card {
 	width: 100%;
@@ -39,17 +28,17 @@ tempus-card {
 
 tempus-text-input {
 	text-align: center;
-	width: 90%;
+	width: 100%;
 }
 
 tempus-search-box {
 	text-align: center;
-	width: 90%;
+	width: 100%;
 }
 
 tempus-dropdown {
 	text-align: center;
-	width: 90%;
+	width: 100%;
 }
 
 tempus-text-area {

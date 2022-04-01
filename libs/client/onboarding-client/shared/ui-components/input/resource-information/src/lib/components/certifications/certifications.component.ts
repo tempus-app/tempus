@@ -1,5 +1,4 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { Country, State } from 'country-state-city';
 import { InputType } from '@tempus/client/shared/ui-components/input';
 import { FormArray, FormBuilder, Validators } from '@angular/forms';
 import { ICreateCertificationDto } from '@tempus/shared-domain';
@@ -13,14 +12,6 @@ export class CertificationsComponent implements OnInit {
 	InputType = InputType;
 
 	numberCertificationSections: number[] = [0];
-
-	countries: string[] = Country.getAllCountries().map(country => {
-		return country.name;
-	});
-
-	states: string[] = State.getAllStates().map(state => {
-		return state.name;
-	});
 
 	@Input() certificationsArray: Array<ICreateCertificationDto> = [];
 
@@ -51,7 +42,6 @@ export class CertificationsComponent implements OnInit {
 	}
 
 	addCertificationSections() {
-		// Prevent duplicate numbers which can cause an error when splicing a work experience section out
 		if (this.numberCertificationSections.length === 0) {
 			this.numberCertificationSections.push(0);
 		} else {
@@ -69,13 +59,5 @@ export class CertificationsComponent implements OnInit {
 	removeCertificationSection(index: number) {
 		this.numberCertificationSections.splice(index, 1);
 		this.certifications.removeAt(index);
-	}
-
-	updateStateOptions(inputtedCountry: string) {
-		const countryCode = Country.getAllCountries().find(country => country.name === inputtedCountry);
-		if (countryCode != null)
-			this.states = State.getStatesOfCountry(countryCode.isoCode).map(state => {
-				return state.name;
-			});
 	}
 }

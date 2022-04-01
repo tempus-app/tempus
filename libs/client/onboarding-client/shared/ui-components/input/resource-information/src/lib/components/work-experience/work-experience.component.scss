@@ -10,38 +10,15 @@
 	text-align: left;
 }
 
-.header-button {
+
+.experience-button {
 	float: right;
 }
 
-.example-chip-list {
-	width: 100%;
-}
-
-.button-container {
-	display: flex;
-	flex-direction: row;
-	justify-content: space-between;
-	position: relative;
-	bottom: 0;
-}
-
-#skillChipInput {
-	text-align: left;
-}
 
 h3 {
 	text-align: left;
 	color: abs.$primary-800;
-}
-
-mat-chip-list {
-	align-items: left;
-	width: 100%;
-}
-
-tempus-chip {
-	margin: 0.25em;
 }
 
 tempus-card {
