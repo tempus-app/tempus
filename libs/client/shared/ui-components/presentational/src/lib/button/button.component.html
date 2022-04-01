@@ -7,7 +7,7 @@
 		[disabled]="disabled"
 	>
 		<div id="button-container">
-			<mat-icon *ngIf="icon !== ''">{{ icon }}</mat-icon>
+			<span *ngIf="icon !== ''" id="cancel" class="material-icons">{{icon}}</span>
 			<div class="label">{{ label }}</div>
 		</div>
 	</button>
