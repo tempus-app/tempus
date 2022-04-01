@@ -1,4 +1,11 @@
-import { ForbiddenException, forwardRef, Inject, Injectable, NotFoundException } from '@nestjs/common';
+import {
+	ForbiddenException,
+	forwardRef,
+	Inject,
+	Injectable,
+	NotFoundException,
+	UnauthorizedException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ApproveViewDto, CreateViewDto } from '@tempus/api/shared/dto';
 import { RevisionEntity, ViewEntity } from '@tempus/api/shared/entity';
@@ -32,6 +39,8 @@ export class ViewsService {
 
 	async reviseView(viewId: number, newView: CreateViewDto): Promise<Revision> {
 		const view = await this.getView(viewId);
+
+		if (view.locked) throw new UnauthorizedException(`Cannot edit locked view`);
 
 		const resourceEntity = await this.resourceService.getResourceInfo(view.resource.id);
 		let newViewEntity = ViewEntity.fromDto(newView);
@@ -83,6 +92,7 @@ export class ViewsService {
 		if (approval === false) {
 			revisionEntity.comment = comment;
 			viewEntity.locked = false;
+			viewEntity.revisionType = RevisionType.REJECTED;
 			await this.viewsRepository.save(viewEntity);
 			return this.revisionRepository.save(revisionEntity);
 		}
