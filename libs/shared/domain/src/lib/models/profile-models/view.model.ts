@@ -20,8 +20,8 @@ export interface View {
 	educations: Education[];
 	certifications: Certification[];
 	resource: Resource;
-	viewType: ViewType;
-	revisionType: RevisionType;
-	createdBy: RoleType;
+	viewType?: ViewType;
+	revisionType?: RevisionType;
+	createdBy?: RoleType;
 	lastUpdateDate?: Date;
 }

@@ -90,7 +90,7 @@ export class ViewEntity implements View {
 		default: RevisionType.OLD,
 		name: 'revision_type',
 	})
-	revisionType: RevisionType;
+	revisionType?: RevisionType;
 
 	@Column({
 		type: 'enum',
@@ -98,7 +98,7 @@ export class ViewEntity implements View {
 		default: RoleType.USER,
 		name: 'created_by',
 	})
-	createdBy: RoleType;
+	createdBy?: RoleType;
 
 	@Column({
 		type: 'enum',
@@ -106,7 +106,7 @@ export class ViewEntity implements View {
 		default: ViewType.SECONDARY,
 		name: 'view_type',
 	})
-	viewType: ViewType;
+	viewType?: ViewType;
 
 	public static fromDto(dto: CreateViewDto): ViewEntity {
 		if (dto == null) return new ViewEntity();
