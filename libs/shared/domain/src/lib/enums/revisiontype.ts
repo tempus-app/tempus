@@ -1,4 +1,4 @@
 export enum RevisionType {
-	OLD = 'OLD',
-	NEW = 'NEW',
+	APPROVED = 'APPROVED',
+	PENDING = 'NEW',
 }

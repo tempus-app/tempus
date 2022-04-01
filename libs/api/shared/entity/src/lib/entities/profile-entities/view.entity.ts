@@ -59,8 +59,8 @@ export class ViewEntity implements View {
 	@Column()
 	type: string;
 
-	@Column({ nullable: true })
-	lastUpdateDate?: Date;
+	@Column()
+	locked: boolean;
 
 	@OneToOne(() => RevisionEntity, revision => revision.view)
 	revision?: RevisionEntity;
@@ -84,10 +84,16 @@ export class ViewEntity implements View {
 	@ManyToOne(() => ResourceEntity, resource => resource.views, { onDelete: 'CASCADE' })
 	resource: ResourceEntity;
 
+	@Column({ nullable: true })
+	lastUpdateDate?: Date;
+
+	@Column({ nullable: true, enum: RoleType, default: RoleType.USER, name: 'updated_by' })
+	updatedBy?: RoleType;
+
 	@Column({
 		type: 'enum',
 		enum: RevisionType,
-		default: RevisionType.OLD,
+		default: RevisionType.PENDING,
 		name: 'revision_type',
 	})
 	revisionType?: RevisionType;
@@ -98,7 +104,7 @@ export class ViewEntity implements View {
 		default: RoleType.USER,
 		name: 'created_by',
 	})
-	createdBy?: RoleType;
+	createdBy: RoleType;
 
 	@Column({
 		type: 'enum',
@@ -106,7 +112,7 @@ export class ViewEntity implements View {
 		default: ViewType.SECONDARY,
 		name: 'view_type',
 	})
-	viewType?: ViewType;
+	viewType: ViewType;
 
 	public static fromDto(dto: CreateViewDto): ViewEntity {
 		if (dto == null) return new ViewEntity();

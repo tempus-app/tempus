@@ -15,13 +15,15 @@ export interface View {
 	experiencesSummary: string;
 	type: string;
 	revision?: Revision;
+	locked: boolean;
 	skills: Skill[];
 	experiences: Experience[];
 	educations: Education[];
 	certifications: Certification[];
 	resource: Resource;
-	viewType?: ViewType;
+	viewType: ViewType;
 	revisionType?: RevisionType;
-	createdBy?: RoleType;
+	createdBy: RoleType;
 	lastUpdateDate?: Date;
+	updatedBy?: RoleType;
 }

@@ -21,22 +21,26 @@ export class ViewsService {
 		const resourceEntity = await this.resourceService.getResourceInfo(resourceId);
 
 		const viewEntity = ViewEntity.fromDto(createViewDto);
-		viewEntity.revisionType = RevisionType.OLD;
+		viewEntity.revisionType = RevisionType.PENDING;
 		viewEntity.resource = resourceEntity;
+		viewEntity.locked = true;
 
 		const newView = await this.viewsRepository.save(viewEntity);
 
 		return newView;
 	}
 
-	async reviseView(resourceId: number, viewId: number, newView: CreateViewDto): Promise<Revision> {
+	async reviseView(viewId: number, newView: CreateViewDto): Promise<Revision> {
 		const view = await this.getView(viewId);
 
-		const resourceEntity = await this.resourceService.getResourceInfo(resourceId);
+		const resourceEntity = await this.resourceService.getResourceInfo(view.resource.id);
 		let newViewEntity = ViewEntity.fromDto(newView);
 		newViewEntity.resource = resourceEntity;
-		newViewEntity.revisionType = RevisionType.NEW;
+		newViewEntity.revisionType = RevisionType.PENDING;
 		newViewEntity = await this.viewsRepository.save(newViewEntity);
+
+		view.locked = true;
+		await this.viewsRepository.save(view);
 
 		if (view.revision) {
 			const revisionEntity = view.revision;
@@ -54,6 +58,9 @@ export class ViewsService {
 	// eslint-disable-next-line consistent-return
 	async approveOrDenyView(viewId: number, approveViewDto: ApproveViewDto): Promise<Revision> {
 		const { approval, comment } = approveViewDto;
+		const viewEntity = await this.viewsRepository.findOne({ where: { id: viewId } });
+		if (!viewEntity) throw new NotFoundException(`Could not find view with id ${viewId}`);
+
 		const revisionEntity = (
 			await this.revisionRepository.find({
 				where: {
@@ -66,14 +73,17 @@ export class ViewsService {
 
 		if (approval === true) {
 			const { newView, view } = revisionEntity;
-			newView.revisionType = RevisionType.OLD;
+			newView.revisionType = RevisionType.APPROVED;
 			newView.lastUpdateDate = new Date(Date.now());
 			await this.viewsRepository.remove(view);
+			newView.locked = false;
 			await this.viewsRepository.save(newView);
 			return this.revisionRepository.remove(revisionEntity);
 		}
 		if (approval === false) {
 			revisionEntity.comment = comment;
+			viewEntity.locked = false;
+			await this.viewsRepository.save(viewEntity);
 			return this.revisionRepository.save(revisionEntity);
 		}
 	}
@@ -95,7 +105,7 @@ export class ViewsService {
 				resource: {
 					id: resourceId,
 				},
-				revisionType: RevisionType.OLD,
+				revisionType: RevisionType.APPROVED,
 			},
 		});
 

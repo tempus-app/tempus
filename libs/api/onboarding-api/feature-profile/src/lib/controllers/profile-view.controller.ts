@@ -1,8 +1,8 @@
 import { Body, Controller, Delete, Get, Param, Post, UseGuards, Patch } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { CreateViewDto, ApproveViewDto } from '@tempus/api/shared/dto';
-import { Revision, View } from '@tempus/shared-domain';
-import { JwtAuthGuard, PermissionGuard, ViewsGuard } from '@tempus/api/shared/feature-auth';
+import { Revision, RoleType, View } from '@tempus/shared-domain';
+import { JwtAuthGuard, PermissionGuard, Roles, RolesGuard, ViewsGuard } from '@tempus/api/shared/feature-auth';
 import { ViewsService } from '../services/view.service';
 
 @ApiTags('Profile Views')
@@ -25,7 +25,8 @@ export class ProfileViewController {
 		return view;
 	}
 
-	@UseGuards(JwtAuthGuard)
+	@UseGuards(JwtAuthGuard, RolesGuard)
+	@Roles(RoleType.BUSINESS_OWNER)
 	@Post('/approve/:viewId')
 	async approveView(@Param('viewId') viewId: number, @Body() approveViewDto: ApproveViewDto): Promise<Revision> {
 		const approvalResult = await this.viewSerivce.approveOrDenyView(viewId, approveViewDto);
@@ -39,14 +40,10 @@ export class ProfileViewController {
 		return newView;
 	}
 
-	@UseGuards(JwtAuthGuard)
-	@Patch('/:resourceId/:viewId')
-	async editView(
-		@Param('resourceId') resourceId: number,
-		@Param('viewId') viewId: number,
-		@Body() createViewDto: CreateViewDto,
-	): Promise<Revision> {
-		const revision = await this.viewSerivce.reviseView(resourceId, viewId, createViewDto);
+	@UseGuards(JwtAuthGuard, ViewsGuard)
+	@Patch('/:viewId')
+	async editView(@Param('viewId') viewId: number, @Body() createViewDto: CreateViewDto): Promise<Revision> {
+		const revision = await this.viewSerivce.reviseView(viewId, createViewDto);
 		return revision;
 	}
 
