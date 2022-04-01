@@ -9,6 +9,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { TranslateModule } from '@ngx-translate/core';
 import { FileUploadComponent } from './file-upload/file-upload.component';
 import { SearchBoxComponent } from './search-box/search-box.component';
 import { TextAreaComponent } from './text-area/text-area.component';
@@ -29,6 +30,10 @@ import { DropdownComponent } from './dropdown/dropdown.component';
 		MatChipsModule,
 		MatCardModule,
 		MatFormFieldModule,
+		TranslateModule.forChild({
+			isolate: false,
+			extend: true,
+		}),
 	],
 	declarations: [DropdownComponent, FileUploadComponent, SearchBoxComponent, TextAreaComponent, TextInputComponent],
 	exports: [DropdownComponent, FileUploadComponent, SearchBoxComponent, TextAreaComponent, TextInputComponent],

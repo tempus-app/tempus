@@ -3,26 +3,43 @@
 		<div fxLayout="column">
 			<div fxLayout.lt-sm="column" fxLayout="row" fxLayoutGap="30px">
 				<div fxFlex>
-					<h3 class="mat-h3 section-header">Personal Information</h3>
-					<p class="mat-body-1"><strong>Name: </strong>{{ formatName(firstName, lastName) }}</p>
-					<p class="mat-body-1"><strong>Address: </strong>{{ formatAddress(country, state, city) }}</p>
-					<p class="mat-body-1"><strong>Phone number: </strong>{{ phoneNumber }}</p>
-					<p class="mat-body-1"><strong>Email: </strong>{{ email }}</p>
+					<h3 class="mat-h3 section-header">
+						{{ personalInfoPrefix + 'userDetails.title' | translate }}
+					</h3>
+					<p class="mat-body-1">
+						<strong>{{ personalInfoPrefix + 'userDetails.name' | translate }}</strong
+						>{{ formatName(firstName, lastName) }}
+					</p>
+					<p class="mat-body-1">
+						<strong>{{ personalInfoPrefix + 'userDetails.address' | translate }}</strong
+						>{{ formatAddress(country, state, city) }}
+					</p>
+					<p class="mat-body-1">
+						<strong>{{ personalInfoPrefix + 'userDetails.phoneNumber' | translate }}</strong
+						>{{ phoneNumber }}
+					</p>
+					<p class="mat-body-1">
+						<strong>{{ personalInfoPrefix + 'userDetails.email' | translate }}</strong
+						>{{ email }}
+					</p>
 				</div>
 				<div fxFlex>
-					<h3 class="mat-h3 section-header">Links</h3>
+					<h3 class="mat-h3 section-header">{{ personalInfoPrefix + 'links.title' | translate }}</h3>
 					<p class="mat-body-1">
-						<strong>Resume: </strong>
+						<strong>{{ personalInfoPrefix + 'links.resume' | translate }}</strong>
 						<a href="javascript:;" (click)="downloadResume()">{{ resume?.name }}</a>
 					</p>
 					<p *ngIf="linkedInLink !== ''" class="mat-body-1">
-						<strong>LinkedIn: </strong><a href="{{ linkedInLink }}">{{ linkedInLink }}</a>
+						<strong>{{ personalInfoPrefix + 'links.linkedIn' | translate }}</strong
+						><a href="{{ linkedInLink }}">{{ linkedInLink }}</a>
 					</p>
 					<p *ngIf="githubLink !== ''" class="mat-body-1">
-						<strong>GitHub: </strong><a href="{{ githubLink }}">{{ githubLink }}</a>
+						<strong>{{ personalInfoPrefix + 'links.github' | translate }}</strong
+						><a href="{{ githubLink }}">{{ githubLink }}</a>
 					</p>
 					<p *ngIf="otherLink !== ''" class="mat-body-1">
-						<strong>Other: </strong><a href="{{ otherLink }}">{{ otherLink }}</a>
+						<strong>{{ personalInfoPrefix + 'links.other' | translate }}</strong
+						><a href="{{ otherLink }}">{{ otherLink }}</a>
 					</p>
 				</div>
 			</div>

@@ -1,7 +1,7 @@
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { Country, State } from 'country-state-city';
 import { InputType } from '@tempus/client/shared/ui-components/input';
-import { FormArray, FormBuilder, Validators } from '@angular/forms';
+import { AbstractControl, FormArray, FormBuilder, Validators } from '@angular/forms';
 import { checkEnteredDates } from '@tempus/client/shared/util';
 import { ICreateEducationDto } from '@tempus/shared-domain';
 
@@ -36,10 +36,23 @@ export class EducationComponent implements OnInit {
 		qualifications: this.fb.array([]),
 	});
 
+	educationsPrefix = 'onboardingClient.input.education.';
+
+	commonPrefix = 'onboardingClient.input.common.';
+
+	static setCheck(checked: boolean, numEdu: AbstractControl) {
+		if (checked) {
+			numEdu.patchValue({ endDate: null });
+			numEdu.get('endDate')?.disable();
+		} else {
+			numEdu.patchValue({ endDate: '' });
+			numEdu.get('endDate')?.enable();
+		}
+	}
+
 	constructor(private fb: FormBuilder) {}
 
 	ngOnInit(): void {
-		this.loadStoreData();
 		this.formGroup.emit(this.myInfoForm);
 	}
 

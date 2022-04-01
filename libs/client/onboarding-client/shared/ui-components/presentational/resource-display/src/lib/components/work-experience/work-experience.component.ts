@@ -14,8 +14,8 @@ export class WorkExperienceComponent {
 	@Input()
 	experiencesSummary = '';
 
-	private static formatDate(startDate: Date, endDate: Date) {
-		return formatDateRange(new Date(startDate), new Date(endDate));
+	static formatDate(startDate: Date, endDate: Date | null) {
+		return formatDateRange(new Date(startDate), endDate ? new Date(endDate) : endDate);
 	}
 
 	private static formatAddress(country: string, state: string, city: string) {

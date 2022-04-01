@@ -25,18 +25,21 @@ export class PersonalInformationComponent implements OnInit, OnChanges {
 		linkedInLink: [
 			'',
 			Validators.pattern(
+				// eslint-disable-next-line no-useless-escape
 				/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/,
 			),
 		],
 		githubLink: [
 			'',
 			Validators.pattern(
+				// eslint-disable-next-line no-useless-escape
 				/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/,
 			),
 		],
 		otherLink: [
 			'',
 			Validators.pattern(
+				// eslint-disable-next-line no-useless-escape
 				/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/,
 			),
 		],
@@ -44,6 +47,10 @@ export class PersonalInformationComponent implements OnInit, OnChanges {
 		state: ['', Validators.required],
 		city: ['', Validators.required],
 	});
+
+	personalInfoPrefix = 'onboardingClient.input.personalInfo.';
+
+	commonPrefix = 'onboardingClient.input.common.';
 
 	countries: string[] = Country.getAllCountries().map(country => {
 		return country.name;

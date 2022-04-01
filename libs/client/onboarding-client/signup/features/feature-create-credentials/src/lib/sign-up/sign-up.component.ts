@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { InputType } from '@tempus/client/shared/ui-components/input';
@@ -17,10 +17,12 @@ import { validatePasswords } from './sign-up.validators';
 	templateUrl: './sign-up.component.html',
 	styleUrls: ['./sign-up.component.scss'],
 })
-export class SignUpComponent implements OnInit {
+export class SignUpComponent implements OnInit, OnChanges {
 	@Input() email = '';
 
 	createdCredentials: boolean | undefined;
+
+	signupPrefix = 'onboardingSignupCredentials.main.';
 
 	formGroup: FormGroup = new FormGroup(
 		{
@@ -54,6 +56,7 @@ export class SignUpComponent implements OnInit {
 					this.createdCredentials = created;
 				}),
 				filter(created => created),
+				// eslint-disable-next-line @typescript-eslint/no-unused-vars
 				switchMap(_ => this.store.select(selectResourceData)),
 				take(1),
 			)

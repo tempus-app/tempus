@@ -1,7 +1,8 @@
 import jwt_decode from 'jwt-decode';
 import { AbstractControl } from '@angular/forms';
 
-export function formatDateRange(startDate: Date, endDate: Date): string {
+// TODO FIGURE OUT THE USE OF 'PRSENT'
+export function formatDateRange(startDate: Date, endDate: Date | null): string {
 	const months = [
 		'January',
 		'February',
@@ -18,9 +19,12 @@ export function formatDateRange(startDate: Date, endDate: Date): string {
 	];
 
 	const startMonth = months[startDate.getMonth()];
-	const endMonth = months[endDate.getMonth()];
+	if (endDate) {
+		const endMonth = months[endDate.getMonth()];
+		return `${startMonth}. ${startDate.getFullYear()} - ${endMonth}. ${endDate.getFullYear()}`;
+	}
 
-	return `${startMonth}. ${startDate.getFullYear()} - ${endMonth}. ${endDate.getFullYear()}`;
+	return `${startMonth}. ${startDate.getFullYear()} - Present`;
 }
 
 export function checkEnteredDates() {

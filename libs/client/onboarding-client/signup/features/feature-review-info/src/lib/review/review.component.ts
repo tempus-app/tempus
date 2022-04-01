@@ -16,6 +16,7 @@ import {
 } from '@tempus/client/onboarding-client/signup/data-access';
 import { Store } from '@ngrx/store';
 import { AsyncRequestState } from '@tempus/client/onboarding-client/shared/data-access';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
 	selector: 'tempus-review',
@@ -65,12 +66,20 @@ export class ReviewComponent implements OnInit, AfterViewInit {
 
 	resume: File | null = null;
 
+	reviewPrefix = 'onboardingClientSignupReview.';
+
 	constructor(
 		private router: Router,
 		private route: ActivatedRoute,
 		private store: Store<SignupState>,
 		private changeDetector: ChangeDetectorRef,
-	) {}
+		private translateService: TranslateService,
+	) {
+		const { currentLang } = translateService;
+		// eslint-disable-next-line no-param-reassign
+		translateService.currentLang = '';
+		translateService.use(currentLang);
+	}
 
 	ngAfterViewInit(): void {
 		this.changeDetector.detectChanges();
@@ -107,14 +116,14 @@ export class ReviewComponent implements OnInit, AfterViewInit {
 			if (reqStatusData.status === AsyncRequestState.LOADING) {
 				this.loading = true;
 			} else if (reqStatusData.status === AsyncRequestState.SUCCESS) {
-				alert('Resource Created Succesfully');
+				// alert('Resource Created Succesfully');
 				this.loading = false;
 				this.store.dispatch(resetLinkState());
 				this.store.dispatch(resetCreateResourceState());
 				this.router.navigate(['../../../signin'], { relativeTo: this.route });
 			} else if (reqStatusData.status === AsyncRequestState.ERROR) {
 				this.loading = false;
-				alert('Error creating resource');
+				// alert('Error creating resource');
 			} else {
 				this.loading = false;
 			}

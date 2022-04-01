@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Column } from '@tempus/client/shared/ui-components/presentational';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
 	selector: 'tempus-root',
@@ -27,14 +28,17 @@ export class AppComponent {
 		{
 			columnDef: 'name',
 			header: 'Name',
-			cell: (element: Record<string, any>) => `${element.name}`,
+			cell: (element: Record<string, unknown>) => `${element.name}`,
 		},
 		{
 			columnDef: 'email',
 			header: 'Email',
-			cell: (element: Record<string, any>) => `${element.email}`,
+			cell: (element: Record<string, unknown>) => `${element.email}`,
 		},
 	];
 
-	constructor(private http: HttpClient) {}
+	constructor(private http: HttpClient, private translateService: TranslateService) {
+		translateService.setDefaultLang('en');
+		translateService.use('en');
+	}
 }

@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { formatDateRange, formatAddress, formatName } from '@tempus/client/shared/util';
+import { formatAddress, formatName } from '@tempus/client/shared/util';
 
 @Component({
 	selector: 'tempus-resource-display-personal-information',
@@ -43,9 +43,7 @@ export class PersonalInformationComponent {
 	@Input()
 	profileSummary = '';
 
-	static formatDate(startDate: Date, endDate: Date) {
-		return formatDateRange(new Date(startDate), new Date(endDate));
-	}
+	personalInfoPrefix = 'onboardingClient.presentational.personalInfo.';
 
 	static formatAddress(country: string, state: string, city: string) {
 		return formatAddress(country, state, city);
