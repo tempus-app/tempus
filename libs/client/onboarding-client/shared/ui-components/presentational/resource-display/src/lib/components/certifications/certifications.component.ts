@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { formatDateRange, formatAddress, formatName } from '@tempus/client/shared/util';
+import { formatDateRange, formatAddress } from '@tempus/client/shared/util';
 import { ICreateCertificationDto } from '@tempus/shared-domain';
 
 @Component({
@@ -11,11 +11,11 @@ export class CertificationsComponent {
 	@Input()
 	certifications: Array<ICreateCertificationDto> = [];
 
-	formatDate(startDate: Date, endDate: Date) {
+	static formatDate(startDate: Date, endDate: Date) {
 		return formatDateRange(new Date(startDate), new Date(endDate));
 	}
 
-	formatAddress(country: string, state: string, city: string) {
+	static formatAddress(country: string, state: string, city: string) {
 		return formatAddress(country, state, city);
 	}
 }

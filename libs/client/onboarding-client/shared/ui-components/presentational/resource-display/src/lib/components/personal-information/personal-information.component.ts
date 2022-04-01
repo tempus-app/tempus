@@ -43,15 +43,15 @@ export class PersonalInformationComponent {
 	@Input()
 	profileSummary = '';
 
-	formatDate(startDate: Date, endDate: Date) {
+	static formatDate(startDate: Date, endDate: Date) {
 		return formatDateRange(new Date(startDate), new Date(endDate));
 	}
 
-	formatAddress(country: string, state: string, city: string) {
+	static formatAddress(country: string, state: string, city: string) {
 		return formatAddress(country, state, city);
 	}
 
-	formatName(first: string, last: string) {
+	static formatName(first: string, last: string) {
 		return formatName(first, last);
 	}
 

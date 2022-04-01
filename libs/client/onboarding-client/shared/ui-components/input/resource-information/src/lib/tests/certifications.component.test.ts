@@ -17,7 +17,6 @@ import { CertificationsComponent } from '../components/certifications/certificat
 describe('CertificationsComponent', () => {
 	let component: CertificationsComponent;
 	let fixture: ComponentFixture<CertificationsComponent>;
-
 	beforeEach(async () => {
 		await TestBed.configureTestingModule({
 			imports: [
