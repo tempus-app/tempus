@@ -1,18 +1,7 @@
-import {
-	Body,
-	Controller,
-	Delete,
-	Get,
-	Param,
-	Post,
-	UseGuards,
-	Request,
-	Patch,
-	NotImplementedException,
-} from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, UseGuards, Patch, Req, Request } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { CreateViewDto } from '@tempus/api/shared/dto';
-import { Revision, RoleType, View } from '@tempus/shared-domain';
+import { CreateViewDto, ApproveViewDto } from '@tempus/api/shared/dto';
+import { Revision, RoleType, User, View } from '@tempus/shared-domain';
 import { JwtAuthGuard, PermissionGuard, Roles, RolesGuard, ViewsGuard } from '@tempus/api/shared/feature-auth';
 import { ViewsService } from '../services/view.service';
 
@@ -36,10 +25,12 @@ export class ProfileViewController {
 		return view;
 	}
 
-	@UseGuards(JwtAuthGuard)
+	@UseGuards(JwtAuthGuard, RolesGuard)
+	@Roles(RoleType.BUSINESS_OWNER)
 	@Post('/approve/:viewId')
-	async approveView(@Param('viewId') viewId: number): Promise<Revision> {
-		throw new NotImplementedException();
+	async approveView(@Param('viewId') viewId: number, @Body() approveViewDto: ApproveViewDto): Promise<Revision> {
+		const approvalResult = await this.viewSerivce.approveOrDenyView(viewId, approveViewDto);
+		return approvalResult;
 	}
 
 	@UseGuards(JwtAuthGuard, PermissionGuard)
@@ -49,14 +40,14 @@ export class ProfileViewController {
 		return newView;
 	}
 
-	@UseGuards(JwtAuthGuard)
-	@Patch('/:resourceId/:viewId')
+	@UseGuards(JwtAuthGuard, ViewsGuard)
+	@Patch('/:viewId')
 	async editView(
-		@Param('resourceId') resourceId: number,
 		@Param('viewId') viewId: number,
+		@Request() req,
 		@Body() createViewDto: CreateViewDto,
 	): Promise<Revision> {
-		const revision = await this.viewSerivce.reviseView(resourceId, viewId, createViewDto);
+		const revision = await this.viewSerivce.reviseView(viewId, req.user, createViewDto);
 		return revision;
 	}
 

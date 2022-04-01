@@ -1,5 +1,5 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToMany, JoinTable, ManyToOne, OneToOne } from 'typeorm';
-import { View, ViewType } from '@tempus/shared-domain';
+import { RevisionType, RoleType, View, ViewType } from '@tempus/shared-domain';
 import { CreateViewDto } from '@tempus/api/shared/dto';
 import { SkillEntity } from './skill.entity';
 import { RevisionEntity } from './revision.entity';
@@ -23,6 +23,7 @@ export class ViewEntity implements View {
 		certifications?: CertificationEntity[],
 		resource?: ResourceEntity,
 		viewType?: ViewType,
+		revisionType?: RevisionType,
 	) {
 		this.id = id;
 		this.profileSummary = profileSummary;
@@ -37,6 +38,7 @@ export class ViewEntity implements View {
 		this.certifications = certifications;
 		this.resource = resource;
 		this.viewType = viewType;
+		this.revisionType = revisionType;
 	}
 
 	@PrimaryGeneratedColumn()
@@ -57,8 +59,11 @@ export class ViewEntity implements View {
 	@Column()
 	type: string;
 
+	@Column()
+	locked: boolean;
+
 	@OneToOne(() => RevisionEntity, revision => revision.view)
-	revision: RevisionEntity;
+	revision?: RevisionEntity;
 
 	@ManyToMany(() => SkillEntity, { cascade: ['insert', 'update'] })
 	@JoinTable()
@@ -79,10 +84,36 @@ export class ViewEntity implements View {
 	@ManyToOne(() => ResourceEntity, resource => resource.views, { onDelete: 'CASCADE' })
 	resource: ResourceEntity;
 
+	@Column({ nullable: true })
+	lastUpdateDate?: Date;
+
+	@Column({ name: 'created_at' })
+	createdAt: Date;
+
+	@Column({ nullable: true, enum: RoleType, default: RoleType.USER, name: 'updated_by' })
+	updatedBy?: RoleType;
+
+	@Column({
+		type: 'enum',
+		enum: RevisionType,
+		default: RevisionType.PENDING,
+		name: 'revision_type',
+	})
+	revisionType?: RevisionType;
+
+	@Column({
+		type: 'enum',
+		enum: RoleType,
+		default: RoleType.USER,
+		name: 'created_by',
+	})
+	createdBy: RoleType;
+
 	@Column({
 		type: 'enum',
 		enum: ViewType,
 		default: ViewType.SECONDARY,
+		name: 'view_type',
 	})
 	viewType: ViewType;
 
