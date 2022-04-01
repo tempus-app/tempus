@@ -1,10 +1,10 @@
 import { ForbiddenException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
-import { Tokens, RoleType, User, JwtPayload, JwtRefreshPayloadWithToken, AuthDto } from '@tempus/shared-domain';
+import { Tokens, User, JwtPayload, JwtRefreshPayloadWithToken, AuthDto } from '@tempus/shared-domain';
 import { JwtService } from '@nestjs/jwt';
 import { compare, genSalt, hash } from 'bcrypt';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ResourceEntity, UserEntity } from '@tempus/api/shared/entity';
+import { UserEntity } from '@tempus/api/shared/entity';
 import { ConfigService } from '@nestjs/config';
 import { CommonService } from '@tempus/api/shared/feature-common';
 
@@ -14,8 +14,6 @@ export class AuthService {
 		private jwtService: JwtService,
 		@InjectRepository(UserEntity)
 		private userRepository: Repository<UserEntity>,
-		@InjectRepository(ResourceEntity)
-		private resourceRepository: Repository<ResourceEntity>,
 		private configService: ConfigService,
 		private commonService: CommonService,
 	) {}
