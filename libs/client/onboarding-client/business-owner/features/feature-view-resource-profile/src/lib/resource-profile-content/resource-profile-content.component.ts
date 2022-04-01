@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
 import {
 	ICreateCertificationDto,
 	ICreateEducationDto,
@@ -8,6 +8,8 @@ import {
 	Skill,
 } from '@tempus/shared-domain';
 import { OnboaringClientResourceProfileService } from '@tempus/client/onboarding-client/shared/data-access';
+import { ModalService, CustomModalType, ModalType } from '@tempus/client/shared/ui-components/modal';
+import { ActivatedRoute } from '@angular/router';
 import { ComponentChanges } from './ViewSimpleChanges';
 
 @Component({
@@ -16,7 +18,13 @@ import { ComponentChanges } from './ViewSimpleChanges';
 	styleUrls: ['./resource-profile-content.component.scss'],
 	providers: [OnboaringClientResourceProfileService],
 })
-export class ResourceProfileContentComponent implements OnChanges {
+export class ResourceProfileContentComponent {
+	constructor(
+		private route: ActivatedRoute,
+		public modalService: ModalService,
+		private resourceService: OnboaringClientResourceProfileService,
+	) {}
+
 	id = '';
 
 	@Input()
@@ -57,6 +65,9 @@ export class ResourceProfileContentComponent implements OnChanges {
 
 	otherLink = '';
 
+	@ViewChild('modalID')
+	template!: TemplateRef<unknown>;
+
 	workExperiences: Array<ICreateExperienceDto> = [];
 
 	educations: Array<ICreateEducationDto> = [];
@@ -69,32 +80,69 @@ export class ResourceProfileContentComponent implements OnChanges {
 
 	viewID = 0;
 
-	revision: Revision[] | undefined;
+	isRevision = false;
 
 	resume: File | null = null;
 
-	ngOnChanges(changes: ComponentChanges<ResourceProfileContentComponent>): void {
-		// eslint-disable-next-line @typescript-eslint/dot-notation
-		const view = changes.view?.currentValue;
-		if (view) {
-			this.certifications = view.certifications;
-			this.educations = view.educations;
-			this.educationsSummary = view.educationsSummary;
-			this.workExperiences = view.experiences;
-			this.revision = view.status;
-			this.experiencesSummary = view.experiencesSummary;
-			this.profileSummary = view.profileSummary;
-			this.skills = view.skills.map((skill: Skill) => skill.skill.name);
-			this.skillsSummary = view.skillsSummary;
-			this.viewType = view.viewType;
-		}
+	@Output() revisionViewLoaded = new EventEmitter<boolean>();
+
+	ngOnInit(): void {
+		const viewID = this.route.snapshot.paramMap.get('viewID') || '';
+		this.resourceService.getView(viewID).subscribe(revisionView => {
+			// if (revisionView.revision) {
+			if (revisionView.status) {
+				// const revisedView = revisionView.revision.newView;
+				const revisedView = revisionView;
+				this.certifications = revisedView.certifications;
+				this.educations = revisedView.educations;
+				this.educationsSummary = revisedView.educationsSummary;
+				this.workExperiences = revisedView.experiences;
+				this.experiencesSummary = revisedView.experiencesSummary;
+				this.profileSummary = revisedView.profileSummary;
+				this.skills = revisedView.skills.map((skill: Skill) => skill.skill.name);
+				this.skillsSummary = revisedView.skillsSummary;
+				this.viewType = revisedView.viewType;
+				this.isRevision = true;
+				this.revisionViewLoaded.emit(true);
+			} else {
+				this.certifications = revisionView.certifications;
+				this.educations = revisionView.educations;
+				this.educationsSummary = revisionView.educationsSummary;
+				this.workExperiences = revisionView.experiences;
+				this.experiencesSummary = revisionView.experiencesSummary;
+				this.profileSummary = revisionView.profileSummary;
+				this.skills = revisionView.skills.map((skill: Skill) => skill.skill.name);
+				this.skillsSummary = revisionView.skillsSummary;
+				this.viewType = revisionView.viewType;
+			}
+		});
 	}
 
-	acceptChanges() {
-		// TODO: IMPLEMENT
+	openRejectionDialog() {
+		this.modalService.open(
+			{ title: 'Enter Comments', closeText: 'CANCEL', confirmText: 'SUBMIT', closable: true, template: this.template },
+			CustomModalType.CONTENT,
+		);
+		this.modalService.confirmEventSubject.subscribe(() => {
+			this.modalService.close();
+			this.modalService.confirmEventSubject.unsubscribe();
+		});
 	}
 
-	rejectChanges() {
-		// TODO: IMPLEMENT
+	openConfirmationDialog() {
+		this.modalService.open(
+			{
+				title: 'Revision Approved!',
+				confirmText: 'CLOSE',
+				message: 'You have approved the revision',
+				modalType: ModalType.INFO,
+				closable: true,
+			},
+			CustomModalType.INFO,
+		);
+		this.modalService.confirmEventSubject.subscribe(() => {
+			this.modalService.close();
+			this.modalService.confirmEventSubject.unsubscribe();
+		});
 	}
 }

@@ -10,11 +10,17 @@ export class OnboaringClientResourceProfileService {
 
 	public getResourceProfileViews(id: string): Observable<Array<View>> {
 		return this.http
-			.get<Array<View>>(`http://localhost:3000/onboarding/profile-view/${id}`)
+			.get<Array<View>>(`http://localhost:3000/onboarding/profile-view/view-names/${id}`)
 			.pipe(catchError(handleError));
 	}
 
 	public getResourceInformation(id: string): Observable<Resource> {
 		return this.http.get<Resource>(`http://localhost:3000/onboarding/user/${id}`).pipe(catchError(handleError));
+	}
+
+	public getView(id: string): Observable<View> {
+		return this.http
+			.get<View>(`http://localhost:3000/onboarding/profile-view/view/${id}`)
+			.pipe(catchError(handleError));
 	}
 }

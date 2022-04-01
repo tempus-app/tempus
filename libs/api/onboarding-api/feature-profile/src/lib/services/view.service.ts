@@ -44,13 +44,30 @@ export class ViewsService {
 					id: resourceId,
 				},
 			},
+			select: ['type'],
+		});
+
+		return viewsInResource;
+	}
+
+	async getViewsNamesByResource(resourceId: number): Promise<View[]> {
+		// error check
+		await this.resourceService.getResourceInfo(resourceId);
+		const viewsInResource = await this.viewsRepository.find({
+			where: {
+				resource: {
+					id: resourceId,
+				},
+			},
 		});
 
 		return viewsInResource;
 	}
 
 	async getView(viewId: number): Promise<View> {
-		const viewEntity = await this.viewsRepository.findOne(viewId);
+		const viewEntity = await this.viewsRepository.findOne(viewId, {
+			relations: ['experiences', 'educations', 'skills', 'certifications', 'skills.skill'],
+		});
 		if (!viewEntity) {
 			throw new NotFoundException(`Could not find view with id ${viewId}`);
 		}

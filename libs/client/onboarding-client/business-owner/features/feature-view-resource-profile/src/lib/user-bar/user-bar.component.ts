@@ -1,8 +1,9 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Revision, View } from '@tempus/shared-domain';
 import { OnboaringClientResourceProfileService } from '@tempus/client/onboarding-client/shared/data-access';
 import { ActivatedRoute } from '@angular/router';
 import { ButtonType } from '@tempus/client/shared/ui-components/presentational';
+import { FormBuilder } from '@angular/forms';
 
 @Component({
 	selector: 'tempus-user-bar',
@@ -12,27 +13,23 @@ import { ButtonType } from '@tempus/client/shared/ui-components/presentational';
 export class UserBarComponent implements OnInit {
 	views: string[] = [];
 
-	@Output() dropDownClicked = new EventEmitter<View>();
+	@Input()
+	isRevision = false;
 
-	profileViews: View[] = [];
+	viewDropDownForm = this.fb.group({
+		viewSelected: [''],
+	});
 
-	id = '';
-
-	revision: Revision[] | undefined;
-
-	constructor(private route: ActivatedRoute, private resourceService: OnboaringClientResourceProfileService) {}
+	constructor(
+		private route: ActivatedRoute,
+		private resourceService: OnboaringClientResourceProfileService,
+		private fb: FormBuilder,
+	) {}
 
 	ngOnInit(): void {
-		this.id = this.route.snapshot.paramMap.get('id') || '';
-		this.resourceService.getResourceProfileViews(this.id).subscribe(profileViews => {
-			this.views = profileViews.map(view => view.viewType);
-			this.profileViews = profileViews;
+		const id = this.route.snapshot.paramMap.get('id') || '';
+		this.resourceService.getResourceProfileViews(id).subscribe(profileViews => {
+			this.views = profileViews.map(view => view.type);
 		});
-	}
-
-	onClick(optionSelected: string): void {
-		const filteredView = this.profileViews.find(view => view.viewType === optionSelected);
-		this.revision = filteredView?.status;
-		this.dropDownClicked.emit(filteredView);
 	}
 }

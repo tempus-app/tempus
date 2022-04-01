@@ -68,10 +68,17 @@
 
 
         <div fxFlex class="button-container" fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap="20px"
-            fxLayoutAlign="end center" *ngIf="revision">
-            <button mat-raised-button color="warn" (click)="rejectChanges()" >Reject Changes</button>
-            <button mat-raised-button color="success">Accept Changes</button>
+            fxLayoutAlign="end center" *ngIf="isRevision">
+            <button mat-raised-button color="warn" (click)="openRejectionDialog()">Reject Changes</button>
+            <button mat-raised-button color="success" (click)="openConfirmationDialog()">Accept Changes</button>
         </div>
         <div fxFlex></div>
     </div>
+
+    <ng-template #modalID>
+        <div>
+            <p>Enter your comments here so the user can improve on their resume and submit a better revision.</p>
+            <tempus-text-area></tempus-text-area>
+        </div>
+    </ng-template>
 </ng-container>

@@ -30,10 +30,10 @@ export class ResourceProfileComponent implements OnInit {
 
 	phoneNumber = '';
 
-	view!: View;
+	isRevision = false;
 
-	childDropDownClicked(view: View) {
-		this.view = view;
+	childRevisionLoaded(isRevision: boolean) {
+		this.isRevision = isRevision;
 	}
 
 	displayName() {

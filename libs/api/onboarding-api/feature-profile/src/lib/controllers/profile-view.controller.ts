@@ -1,8 +1,8 @@
-import { Body, Controller, Delete, Get, Param, Post, UseGuards, Request } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { CreateViewDto } from '@tempus/api/shared/dto';
-import { RoleType, View } from '@tempus/shared-domain';
-import { JwtAuthGuard, PermissionGuard, Roles, RolesGuard, ViewsGuard } from '@tempus/api/shared/feature-auth';
+import { View } from '@tempus/shared-domain';
+import { JwtAuthGuard, PermissionGuard, ViewsGuard } from '@tempus/api/shared/feature-auth';
 import { ViewsService } from '../services/view.service';
 
 @ApiTags('Profile Views')
@@ -15,6 +15,14 @@ export class ProfileViewController {
 	@Get('/:userId')
 	async getViews(@Param('userId') userId: number): Promise<View[]> {
 		const views = await this.viewSerivce.getViewsByResource(userId);
+		return views;
+	}
+
+	// all views of user
+	@UseGuards(JwtAuthGuard, PermissionGuard)
+	@Get('/view-names/:userId')
+	async getViewNames(@Param('userId') userId: number): Promise<View[]> {
+		const views = await this.viewSerivce.getViewsNamesByResource(userId);
 		return views;
 	}
 
