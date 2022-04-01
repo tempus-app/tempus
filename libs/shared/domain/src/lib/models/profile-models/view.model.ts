@@ -1,5 +1,6 @@
 import { Certification } from '.';
 import { ViewType } from '../..';
+import { RevisionType, RoleType } from '../../enums';
 import { Resource } from '../account-models';
 import { Education } from './education.model';
 import { Experience } from './experience.model';
@@ -13,11 +14,17 @@ export interface View {
 	educationsSummary: string;
 	experiencesSummary: string;
 	type: string;
-	status: Revision[];
+	revision?: Revision;
+	locked: boolean;
 	skills: Skill[];
 	experiences: Experience[];
 	educations: Education[];
 	certifications: Certification[];
 	resource: Resource;
 	viewType: ViewType;
+	revisionType?: RevisionType;
+	createdBy: RoleType;
+	lastUpdateDate?: Date;
+	updatedBy?: RoleType;
+	createdAt: Date;
 }

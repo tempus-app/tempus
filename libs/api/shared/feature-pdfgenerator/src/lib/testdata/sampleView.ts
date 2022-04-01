@@ -3,6 +3,9 @@ import { View, ViewType } from '@tempus/shared-domain';
 
 export const SampleView: View = {
 	id: 0,
+	locked: true,
+	createdAt: null,
+	createdBy: null,
 	profileSummary:
 		'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
 	skillsSummary:
@@ -11,7 +14,6 @@ export const SampleView: View = {
 	experiencesSummary:
 		'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
 	type: '',
-	status: [],
 	certifications: [
 		{
 			id: 1,
