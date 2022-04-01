@@ -26,4 +26,5 @@ export interface View {
 	createdBy: RoleType;
 	lastUpdateDate?: Date;
 	updatedBy?: RoleType;
+	createdAt: Date;
 }

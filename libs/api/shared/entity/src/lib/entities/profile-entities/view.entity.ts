@@ -87,6 +87,9 @@ export class ViewEntity implements View {
 	@Column({ nullable: true })
 	lastUpdateDate?: Date;
 
+	@Column({ name: 'created_at' })
+	createdAt: Date;
+
 	@Column({ nullable: true, enum: RoleType, default: RoleType.USER, name: 'updated_by' })
 	updatedBy?: RoleType;
 

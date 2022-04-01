@@ -10,7 +10,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { ApproveViewDto, CreateViewDto } from '@tempus/api/shared/dto';
 import { RevisionEntity, ViewEntity } from '@tempus/api/shared/entity';
 import { ResourceService } from '@tempus/onboarding-api/feature-account';
-import { Revision, RevisionType, View, ViewType } from '@tempus/shared-domain';
+import { Revision, RevisionType, RoleType, User, View, ViewType } from '@tempus/shared-domain';
 import { Repository } from 'typeorm';
 
 @Injectable()
@@ -31,13 +31,14 @@ export class ViewsService {
 		viewEntity.revisionType = RevisionType.PENDING;
 		viewEntity.resource = resourceEntity;
 		viewEntity.locked = true;
+		viewEntity.createdAt = new Date(Date.now());
 
 		const newView = await this.viewsRepository.save(viewEntity);
 
 		return newView;
 	}
 
-	async reviseView(viewId: number, newView: CreateViewDto): Promise<Revision> {
+	async reviseView(viewId: number, user: User, newView: CreateViewDto): Promise<Revision> {
 		const view = await this.getView(viewId);
 
 		if (view.locked) throw new UnauthorizedException(`Cannot edit locked view`);
@@ -45,8 +46,14 @@ export class ViewsService {
 		const resourceEntity = await this.resourceService.getResourceInfo(view.resource.id);
 		let newViewEntity = ViewEntity.fromDto(newView);
 		newViewEntity.resource = resourceEntity;
+		newViewEntity.updatedBy = user.roles.includes(RoleType.BUSINESS_OWNER) ? RoleType.BUSINESS_OWNER : RoleType.USER;
 		newViewEntity.revisionType = RevisionType.PENDING;
 		newViewEntity = await this.viewsRepository.save(newViewEntity);
+
+		if (user.roles.includes(RoleType.BUSINESS_OWNER)) {
+			await this.viewsRepository.remove(view);
+			return null;
+		}
 
 		view.locked = true;
 		await this.viewsRepository.save(view);
@@ -86,6 +93,7 @@ export class ViewsService {
 			newView.lastUpdateDate = new Date(Date.now());
 			await this.viewsRepository.remove(view);
 			newView.locked = false;
+			newView.createdAt = view.createdAt;
 			await this.viewsRepository.save(newView);
 			return this.revisionRepository.remove(revisionEntity);
 		}
