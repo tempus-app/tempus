@@ -1,4 +1,4 @@
-import { Component, Input, Output, OnInit, EventEmitter } from '@angular/core';
+import { Component, Input, Output, OnInit, EventEmitter, SimpleChanges } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { take } from 'rxjs';
 import { UserType } from './sidebar-type-enum';
@@ -55,6 +55,12 @@ export class SidebarComponent implements OnInit {
 
 	selectedTab(tab: string) {
 		this.selectTab.emit(tab);
+	}
+
+	ngOnChanges(changes: SimpleChanges) {
+		if (changes.name.currentValue !== changes.name.previousValue) {
+			this.getInitials(changes.name.currentValue);
+		}
 	}
 
 	getInitials(name: string) {

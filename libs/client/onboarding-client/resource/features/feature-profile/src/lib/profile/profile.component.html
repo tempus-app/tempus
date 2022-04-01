@@ -1,7 +1,9 @@
-<tempus-sidebar [userType]="UserType.RESOURCE" (selectTab)="selectedTab($event)">
-	<tempus-edit-profile></tempus-edit-profile>
-	<!-- <ng-container>
-		<div id="page-container" fxLayout="column" fxFill fxLayoutGap="20px">
+<tempus-sidebar [userType]="UserType.RESOURCE" [name]="fullName" [email]="email" (selectTab)="selectedTab($event)">
+	<div *ngIf="editEnabled">
+		<tempus-edit-profile (openEditView)="openEditView()"></tempus-edit-profile>
+	</div>
+	<ng-container>
+		<div *ngIf="!editEnabled" id="page-container" fxLayout="column" fxFill fxLayoutGap="20px">
 			<div id="title-container">
 				<div id="my-profile-container">
 					<h2 class="mat-h2 page-title">My Profile</h2>
@@ -14,29 +16,48 @@
 					>
 				</div>
 				<div id="button-container">
-					<tempus-button [buttonType]="ButtonType.EDIT" color="accent"></tempus-button>
+					<tempus-button [buttonType]="ButtonType.EDIT" color="accent" (click)="openEditView()"></tempus-button>
 					<tempus-button label="download" color="accent"></tempus-button>
 				</div>
 			</div>
 			<div class="section-container">
-				<tempus-resource-display-personal-information></tempus-resource-display-personal-information>
+				<tempus-resource-display-personal-information
+				[firstName]="firstName"
+				[lastName]="lastName"
+				[country]="country"
+				[state]="state"
+				[city]="city"
+				[phoneNumber]="phoneNumber"
+				[email]="email"
+				[resume]="resume"
+				[linkedInLink]="linkedInLink"
+				[githubLink]="githubLink"
+				[otherLink]="otherLink"
+				[profileSummary]="profileSummary"></tempus-resource-display-personal-information>
 			</div>
 			<div class="section-container">
 				<h2 class="mat-h2 section-title">Education</h2>
-				<tempus-resource-display-education></tempus-resource-display-education>
+				<tempus-resource-display-education
+				[educationsSummary]="educationsSummary"
+				[educations]="educations"></tempus-resource-display-education>
 			</div>
 			<div class="section-container">
 				<div class="mat-h2 section-title">Certifications</div>
-				<tempus-resource-display-certifications></tempus-resource-display-certifications>
+				<tempus-resource-display-certifications
+				[certifications]="certifications"></tempus-resource-display-certifications>
 			</div>
 			<div class="section-container">
 				<h2 class="mat-h2 section-title">Work Experience</h2>
-				<tempus-resource-display-work-experience></tempus-resource-display-work-experience>
+				<tempus-resource-display-work-experience 					
+				[experiencesSummary]="experiencesSummary"
+				[workExperiences]="workExperiences"></tempus-resource-display-work-experience>
 			</div>
 			<div class="section-container">
 				<h2 class="mat-h2 section-title">Skills</h2>
-				<tempus-resource-display-skills></tempus-resource-display-skills>
+				<tempus-resource-display-skills
+				[skills]="skills"
+				[skillsSummary]="skillsSummary"></tempus-resource-display-skills>
 			</div>
 		</div>
-	</ng-container> -->
+	</ng-container>
 </tempus-sidebar>

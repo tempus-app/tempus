@@ -1,4 +1,4 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, Output } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { OnboardingClientState, logout } from '@tempus/client/onboarding-client/shared/data-access';
@@ -17,19 +17,9 @@ export class EditProfileComponent implements OnDestroy {
 	destroyed$ = new Subject<void>();
 
 	ButtonType = ButtonType;
-    UserType = UserType;
 
-    selectedTab(tab: string) {
-        if (tab == 'logout') {
-            console.log('click');
-            this.logout();
-        }
-    }
-
-	logout() {
-		this.store.dispatch(logout());
-		this.router.navigateByUrl('signin');
-	}
+	@Output()
+	openEditView = new EventEmitter();
 
 	ngOnDestroy(): void {
 		this.destroyed$.next();

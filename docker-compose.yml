@@ -42,20 +42,3 @@ services:
     working_dir: /src
     depends_on:
       - postgres
-
-  timesheet:
-    build:
-      context: .
-      dockerfile: Dockerfile.timesheet.dev
-      args:
-        - NODE_ENV=development
-    environment:
-      - DB_HOST=postgres
-      - DB_PORT=5432
-      - DB_USERNAME=postgres
-      - DB_PASSWORD=dbpass
-      - DB_NAME=postgres
-    ports:
-      - 3001:3001
-    depends_on:
-      - postgres
