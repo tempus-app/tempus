@@ -1,9 +1,8 @@
-import { Body, Controller, Delete, Get, Param, Post, UseGuards, Patch, Req } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, UseGuards, Patch, Req, Request } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { CreateViewDto, ApproveViewDto } from '@tempus/api/shared/dto';
-import { Revision, RoleType, View } from '@tempus/shared-domain';
+import { Revision, RoleType, User, View } from '@tempus/shared-domain';
 import { JwtAuthGuard, PermissionGuard, Roles, RolesGuard, ViewsGuard } from '@tempus/api/shared/feature-auth';
-import { request } from 'http';
 import { ViewsService } from '../services/view.service';
 
 @ApiTags('Profile Views')
@@ -45,7 +44,7 @@ export class ProfileViewController {
 	@Patch('/:viewId')
 	async editView(
 		@Param('viewId') viewId: number,
-		@Req() req: Request,
+		@Request() req,
 		@Body() createViewDto: CreateViewDto,
 	): Promise<Revision> {
 		const revision = await this.viewSerivce.reviseView(viewId, req.user, createViewDto);

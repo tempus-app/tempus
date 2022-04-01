@@ -48,12 +48,15 @@ export class ViewsService {
 		newViewEntity.resource = resourceEntity;
 		newViewEntity.updatedBy = user.roles.includes(RoleType.BUSINESS_OWNER) ? RoleType.BUSINESS_OWNER : RoleType.USER;
 		newViewEntity.revisionType = RevisionType.PENDING;
-		newViewEntity = await this.viewsRepository.save(newViewEntity);
 
 		if (user.roles.includes(RoleType.BUSINESS_OWNER)) {
+			newViewEntity.createdAt = view.createdAt;
+			newViewEntity.revisionType = RevisionType.APPROVED;
 			await this.viewsRepository.remove(view);
+			await this.viewsRepository.save(newViewEntity);
 			return null;
 		}
+		newViewEntity = await this.viewsRepository.save(newViewEntity);
 
 		view.locked = true;
 		await this.viewsRepository.save(view);
