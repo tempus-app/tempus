@@ -36,6 +36,10 @@ export class ProjectService {
 		return this.projectRepository.find({ relations: ['client'] });
 	}
 
+	async getAllProjectInfo(): Promise<Project[]> {
+		return this.projectRepository.find();
+	}
+
 	async createProject(createProjectDto: CreateProjectDto): Promise<Project> {
 		const projectEntity = ProjectEntity.fromDto(createProjectDto);
 		const clientEntity = await this.clientService.getClientInfo(createProjectDto.clientId);
@@ -59,5 +63,13 @@ export class ProjectService {
 		else projectEntity.resources.push(resourceEntity);
 
 		return this.projectRepository.save(projectEntity);
+	}
+
+	async deleteProject(projectId: number) {
+		const projectEntity = await this.projectRepository.findOne(projectId);
+		if (!projectEntity) {
+			throw new NotFoundException(`Could not find client with id ${projectId}`);
+		}
+		await this.projectRepository.remove(projectEntity);
 	}
 }

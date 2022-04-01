@@ -24,10 +24,18 @@ export class ClientService {
 		return clientEntity;
 	}
 
+	async getAll(): Promise<Client[]> {
+		return this.clientRepository.find({ relations: ['projects'] });
+	}
+
 	async getClientInfo(clientId: number): Promise<Client> {
 		const clientEntity = await this.clientRepository.findOne(clientId);
 		if (!clientEntity) throw new NotFoundException(`Could not find client with id ${clientEntity.id}`);
 		return clientEntity;
+	}
+
+	async getAllClientInfo(): Promise<Client[]> {
+		return this.clientRepository.find();
 	}
 
 	async createClient(createClientDto: CreateClientDto): Promise<Client> {

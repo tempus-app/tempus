@@ -30,6 +30,7 @@ export class ClientEntity implements Client {
 
 	public static fromDto(dto: CreateClientDto | UpdateClientDto): ClientEntity {
 		if (dto == null) return new ClientEntity();
-		return new ClientEntity(null, dto.name, dto.title, dto.clientName, null);
+		const id = dto instanceof CreateClientDto ? undefined : dto.id;
+		return new ClientEntity(id, dto.name, dto.title, dto.clientName, null);
 	}
 }

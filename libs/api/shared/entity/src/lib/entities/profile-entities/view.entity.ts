@@ -90,7 +90,7 @@ export class ViewEntity implements View {
 	@Column({ name: 'created_at' })
 	createdAt: Date;
 
-	@Column({ nullable: true, enum: RoleType, default: RoleType.USER, name: 'updated_by' })
+	@Column({ type: 'enum', enum: RoleType, default: RoleType.USER, nullable: true, name: 'updated_by' })
 	updatedBy?: RoleType;
 
 	@Column({

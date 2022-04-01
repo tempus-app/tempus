@@ -1,8 +1,8 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { CreateClientDto, UpdateClientDto } from '@tempus/api/shared/dto';
-import { JwtAuthGuard } from '@tempus/api/shared/feature-auth';
-import { Client } from '@tempus/shared-domain';
+import { JwtAuthGuard, Roles, RolesGuard } from '@tempus/api/shared/feature-auth';
+import { Client, RoleType } from '@tempus/shared-domain';
 import { ClientService } from '../services/client.service';
 
 @ApiTags('Client')
@@ -17,20 +17,29 @@ export class ClientController {
 	}
 
 	@UseGuards(JwtAuthGuard)
+	@Get('')
+	async getAll() {
+		return this.clientService.getAllClientInfo();
+	}
+
+	@UseGuards(JwtAuthGuard, RolesGuard)
+	@Roles(RoleType.BUSINESS_OWNER)
 	@Post('/')
 	async createClient(@Body() createClientDto: CreateClientDto): Promise<Client> {
 		return this.clientService.createClient(createClientDto);
 	}
 
-	@UseGuards(JwtAuthGuard)
+	@UseGuards(JwtAuthGuard, RolesGuard)
+	@Roles(RoleType.BUSINESS_OWNER)
 	@Patch('/:clientId')
 	async editClient(@Body() updateClientDto: UpdateClientDto): Promise<Client> {
 		return this.clientService.updateClient(updateClientDto);
 	}
 
-	@UseGuards(JwtAuthGuard)
+	@UseGuards(JwtAuthGuard, RolesGuard)
+	@Roles(RoleType.BUSINESS_OWNER)
 	@Delete('/:clientId')
-	async getLink(@Param('clientId') clientId: number) {
+	async deleteClient(@Param('clientId') clientId: number) {
 		return this.clientService.deleteClient(clientId);
 	}
 }

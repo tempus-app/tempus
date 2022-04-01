@@ -1,8 +1,8 @@
-import { Body, Controller, Get, Param, Patch, Post, Query, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query, UseGuards } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { CreateProjectDto, UpdateProjectDto } from '@tempus/api/shared/dto';
-import { JwtAuthGuard } from '@tempus/api/shared/feature-auth';
-import { Project } from '@tempus/shared-domain';
+import { JwtAuthGuard, Roles, RolesGuard } from '@tempus/api/shared/feature-auth';
+import { Project, RoleType } from '@tempus/shared-domain';
 import { ProjectService } from '../services/project.service';
 
 @ApiTags('Projects')
@@ -19,14 +19,18 @@ export class ProjectController {
 	@UseGuards(JwtAuthGuard)
 	@Get('/')
 	async getAllProjects(): Promise<Project[]> {
-		return this.projectService.getAllProjects();
+		return this.projectService.getAllProjectInfo();
 	}
 
+	@UseGuards(JwtAuthGuard, RolesGuard)
+	@Roles(RoleType.BUSINESS_OWNER)
 	@Post('/')
 	async createProject(@Body() createProjectDto: CreateProjectDto): Promise<Project> {
 		return this.projectService.createProject(createProjectDto);
 	}
 
+	@UseGuards(JwtAuthGuard, RolesGuard)
+	@Roles(RoleType.BUSINESS_OWNER)
 	@Post('/:projectId/assign')
 	async assignResourceToProject(
 		@Param('projectId') projectId: number,
@@ -35,8 +39,17 @@ export class ProjectController {
 		return this.projectService.assignResourceToProject(projectId, resourceId);
 	}
 
+	@UseGuards(JwtAuthGuard, RolesGuard)
+	@Roles(RoleType.BUSINESS_OWNER)
 	@Patch('/:projectId')
 	async editProject(@Body() updateProjectDto: UpdateProjectDto): Promise<Project> {
 		return this.projectService.updateProject(updateProjectDto);
+	}
+
+	@UseGuards(JwtAuthGuard, RolesGuard)
+	@Roles(RoleType.BUSINESS_OWNER)
+	@Delete('/:clientId')
+	async deleteProject(@Param('projectId') projectId: number) {
+		return this.projectService.deleteProject(projectId);
 	}
 }

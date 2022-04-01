@@ -1,7 +1,7 @@
-import { Body, Controller, Delete, Get, Param, Post, UseGuards, Patch, Req, Request } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, UseGuards, Patch, Request } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { CreateViewDto, ApproveViewDto } from '@tempus/api/shared/dto';
-import { Revision, RoleType, User, View } from '@tempus/shared-domain';
+import { Revision, RoleType, View } from '@tempus/shared-domain';
 import { JwtAuthGuard, PermissionGuard, Roles, RolesGuard, ViewsGuard } from '@tempus/api/shared/feature-auth';
 import { ViewsService } from '../services/view.service';
 
