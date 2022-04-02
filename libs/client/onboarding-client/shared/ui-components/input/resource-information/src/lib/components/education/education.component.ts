@@ -40,7 +40,8 @@ export class EducationComponent implements OnInit {
 
 	commonPrefix = 'onboardingClient.input.common.';
 
-	static setCheck(checked: boolean, numEdu: AbstractControl) {
+	// eslint-disable-next-line class-methods-use-this
+	setCheck(checked: boolean, numEdu: AbstractControl) {
 		if (checked) {
 			numEdu.patchValue({ endDate: null });
 			numEdu.get('endDate')?.disable();

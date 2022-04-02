@@ -45,11 +45,13 @@ export class PersonalInformationComponent {
 
 	personalInfoPrefix = 'onboardingClient.presentational.personalInfo.';
 
-	static formatAddress(country: string, state: string, city: string) {
+	// eslint-disable-next-line class-methods-use-this
+	formatAddress(country: string, state: string, city: string) {
 		return formatAddress(country, state, city);
 	}
 
-	static formatName(first: string, last: string) {
+	// eslint-disable-next-line class-methods-use-this
+	formatName(first: string, last: string) {
 		return formatName(first, last);
 	}
 

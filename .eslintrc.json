@@ -20,7 +20,8 @@
 				"arrow-body-style": "off",
 				"prefer-arrow-callback": "off",
 				"import/prefer-default-export": "off",
-				"import/no-cycle": "off", //TODO: look into why this is happening
+				"import/no-cycle": "off", //TODO: look into why this is happening,
+				"import/no-extraneous-dependencies": "off", //TODO: look into this
 				"prettier/prettier": [
 					"error",
 					{

@@ -23,6 +23,12 @@ export class SignupShellComponent implements OnInit, OnDestroy {
 
 	destroyed$ = new Subject<void>();
 
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars, class-methods-use-this
+	navigateToStep(stepIndex: number) {
+		// this.stepperIndex = stepIndex;
+		// this.router.navigate([`../${this.links[this.stepperIndex]}`], { relativeTo: this.route });
+	}
+
 	constructor(
 		private router: Router,
 		private store: Store<SignupState>,

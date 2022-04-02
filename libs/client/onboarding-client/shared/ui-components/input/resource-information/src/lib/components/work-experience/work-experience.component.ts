@@ -42,7 +42,8 @@ export class WorkExperienceComponent implements OnInit {
 
 	commonPrefix = 'onboardingClient.input.common.';
 
-	static setCheck(checked: boolean, numExp: AbstractControl) {
+	// eslint-disable-next-line class-methods-use-this
+	setCheck(checked: boolean, numExp: AbstractControl) {
 		if (checked) {
 			numExp.patchValue({ endDate: null });
 			numExp.get('endDate')?.disable();

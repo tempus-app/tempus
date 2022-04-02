@@ -14,11 +14,13 @@ export class WorkExperienceComponent {
 	@Input()
 	experiencesSummary = '';
 
-	static formatDate(startDate: Date, endDate: Date | null) {
+	// eslint-disable-next-line class-methods-use-this
+	formatDate(startDate: Date, endDate: Date | null) {
 		return formatDateRange(new Date(startDate), endDate ? new Date(endDate) : endDate);
 	}
 
-	private static formatAddress(country: string, state: string, city: string) {
+	// eslint-disable-next-line class-methods-use-this
+	formatAddress(country: string, state: string, city: string) {
 		return formatAddress(country, state, city);
 	}
 }
