@@ -117,7 +117,7 @@ export class ResourceProfileContentComponent implements OnInit, OnChanges {
 		if (changes['viewID'] && changes['viewID'].currentValue !== '') {
 			// eslint-disable-next-line @typescript-eslint/dot-notation
 			this.viewID = changes['viewID'].currentValue;
-			this.loadView([]);
+			this.loadView();
 		}
 	}
 
@@ -130,7 +130,7 @@ export class ResourceProfileContentComponent implements OnInit, OnChanges {
 		});
 	}
 
-	loadView(profileViews: ViewNames[]) {
+	loadView(profileViews?: ViewNames[]) {
 		this.resourceService.getView(this.viewID).subscribe(revisionView => {
 			if (revisionView.revision) {
 				const revisedView = revisionView.revision.newView;
@@ -155,7 +155,7 @@ export class ResourceProfileContentComponent implements OnInit, OnChanges {
 				this.skillsSummary = revisionView.skillsSummary;
 				this.viewName = revisionView.type;
 			}
-			if (profileViews.length > 0) {
+			if (profileViews) {
 				this.revisionViewLoaded.emit({
 					isRevision: this.isRevision,
 					currentViewName: this.viewName,
