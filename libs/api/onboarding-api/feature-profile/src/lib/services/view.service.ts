@@ -38,7 +38,15 @@ export class ViewsService {
 		// error check
 		await this.resourceService.getResourceInfo(resourceId);
 		const viewsInResource = await this.viewsRepository.find({
-			relations: ['experiences', 'educations', 'skills', 'certifications'],
+			relations: [
+				'experiences',
+				'educations',
+				'skills',
+				'experiences.location',
+				'educations.location',
+				'certifications',
+				'skills.skill',
+			],
 			where: {
 				resource: {
 					id: resourceId,
@@ -50,7 +58,20 @@ export class ViewsService {
 	}
 
 	async getView(viewId: number): Promise<View> {
-		const viewEntity = await this.viewsRepository.findOne(viewId);
+		const viewEntity = await this.viewsRepository.findOne({
+			relations: [
+				'experiences',
+				'educations',
+				'skills',
+				'experiences.location',
+				'educations.location',
+				'certifications',
+				'skills.skill',
+			],
+			where: {
+				id: viewId,
+			},
+		});
 		if (!viewEntity) {
 			throw new NotFoundException(`Could not find view with id ${viewId}`);
 		}

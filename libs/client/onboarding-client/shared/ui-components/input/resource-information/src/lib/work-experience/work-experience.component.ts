@@ -49,8 +49,8 @@ export class WorkExperienceComponent implements OnInit {
 
 	loadStoreData() {
 		this.myInfoForm.patchValue({
-			experiencesSummary: this.experiencesSummary,
-			workExperiences: this.workExperiences,
+			workExperienceSummary: this.experiencesSummary,
+			workExperience: this.workExperiences,
 		});
 	}
 

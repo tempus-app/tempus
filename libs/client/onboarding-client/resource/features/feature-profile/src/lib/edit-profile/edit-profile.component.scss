@@ -3,48 +3,24 @@
 
 #page-container {
 	margin: 2% 4%;
+	border: 2px dashed abs.$primary-300;
+	background-color: #fcfeff;
+	border-radius: 10px;
 }
 #title-container {
 	@include cmp.info-title(90%, 0);
-	margin-bottom: 1em;
+	margin: 2% 0em;
 	align-self: center;
 }
 
 #user-bar {
 	margin: 0% 5% 2% 5%;
-	// padding: 2%;
-	// border-radius: 10px;
-	// background-color: abs.$primary-100;
-	// box-shadow: drop-shadow(0px 4px 5px rgba(0, 0, 0, 0.15));
 }
 
 #view-name {
 	height: 1em;
 }
-#button-container {
-	display: flex;
-	flex-direction: row;
-	gap: 0.5em;
-}
 
-#my-profile-container {
-	display: flex;
-	flex-direction: row;
-	gap: 1em;
-}
-
-#error-icon {
-	display: inline-flex;
-	vertical-align: middle;
-	color: abs.$warning;
-	font-size: 1.875em;
-	margin-top: 0.4em;
-	height: 1em;
-}
-
-::ng-deep .tooltip {
-	font-size: 0.75em;
-}
 
 tempus-button {
 	height: 2em;
@@ -54,11 +30,3 @@ tempus-button {
 	color: abs.$primary-800;
 }
 
-.section-title {
-	font-size: 1.5em !important;
-	color: abs.$primary-800;
-}
-
-.section-container {
-	padding: 1em 0em;
-}

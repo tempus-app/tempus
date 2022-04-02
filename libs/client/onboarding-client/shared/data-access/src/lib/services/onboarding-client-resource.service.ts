@@ -25,7 +25,6 @@ export class OnboardingClientResourceService {
 						Authorization: `Bearer ${resData}`,
 					}),
 				};
-				console.log(resData);
 				return this.http
 					.get<Resource>(`http://localhost:3000/onboarding/user/user`, httpOptions)
 					.pipe(catchError(handleError));
@@ -44,6 +43,29 @@ export class OnboardingClientResourceService {
 				};
 				return this.http
 					.get<View>(`http://localhost:3000/profile-view/view/${viewId}`, httpOptions)
+					.pipe(catchError(handleError));
+			}),
+		);
+	}
+
+	public getPrimaryView(resourceId: number): Observable<View> {
+		return this.getResourceProfileViews(resourceId).pipe(
+			take(1),
+			switchMap(views => views.filter(view => view.viewType === 'PRIMARY')),
+		);
+	}
+
+	public getResourceProfileViews(resourceId: number): Observable<Array<View>> {
+		return this.store.select(selectAccessToken).pipe(
+			take(1),
+			switchMap(resData => {
+				const httpOptions = {
+					headers: new HttpHeaders({
+						Authorization: `Bearer ${resData}`,
+					}),
+				};
+				return this.http
+					.get<Array<View>>(`http://localhost:3000/onboarding/profile-view/${resourceId}`, httpOptions)
 					.pipe(catchError(handleError));
 			}),
 		);

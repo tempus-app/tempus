@@ -1,18 +1,15 @@
-import { ChangeDetectorRef, Component, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import {
 	OnboardingClientState,
 	logout,
-	OnboaringClientResourceProfileService,
 	OnboardingClientResourceService,
 } from '@tempus/client/onboarding-client/shared/data-access';
 import { Subject, take } from 'rxjs';
 import { ButtonType } from '@tempus/client/shared/ui-components/presentational';
 import { UserType } from '@tempus/client/shared/ui-components/persistent';
 import { ICreateExperienceDto, ICreateEducationDto, ICreateCertificationDto, View } from '@tempus/shared-domain';
-
-import { selectResourceData, selectUploadedResume } from '@tempus/client/onboarding-client/signup/data-access';
 
 @Component({
 	selector: 'tempus-profile',
@@ -29,9 +26,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
 		private route: ActivatedRoute,
 	) {}
 
-	views: View[] = [];
-
-	viewType = '';
+	userId = 0;
 
 	firstName = '';
 
@@ -93,6 +88,12 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
 	openEditView() {
 		this.editEnabled = true;
+		console.log('opening edit view');
+		console.log(this.firstName);
+	}
+
+	closeEditView() {
+		this.editEnabled = false;
 	}
 
 	logout() {
@@ -102,6 +103,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
 	ngOnInit(): void {
 		this.resourceService.getResourceInformation().subscribe(resData => {
+			this.userId = resData.id;
 			this.firstName = resData.firstName;
 			this.lastName = resData.lastName;
 			this.fullName = `${resData.firstName} ${resData.lastName}`;
@@ -115,19 +117,16 @@ export class ProfileComponent implements OnInit, OnDestroy {
 			this.githubLink = resData.githubLink;
 			this.otherLink = resData.otherLink;
 
-			// this.views = resData.views;
-			// const primaryView = resData.views.find(view => view.viewType === 'PRIMARY');
-			// if (primaryView) {
-			// 	console.log('primary view exists!');
-			// 	this.certifications = primaryView.certifications;
-			// 	this.educations = primaryView.educations;
-			// 	this.educationsSummary = primaryView.educationsSummary;
-			// 	this.workExperiences = primaryView.experiences;
-			// 	this.experiencesSummary = primaryView.experiencesSummary;
-			// 	this.profileSummary = primaryView.profileSummary;
-			// 	this.skills = primaryView.skills.map(skill => skill.skill.name);
-			// 	this.skillsSummary = primaryView.skillsSummary;
-			// }
+			this.resourceService.getPrimaryView(this.userId).subscribe(primaryView => {
+				this.certifications = primaryView.certifications;
+				this.educations = primaryView.educations;
+				this.educationsSummary = primaryView.educationsSummary;
+				this.workExperiences = primaryView.experiences;
+				this.experiencesSummary = primaryView.experiencesSummary;
+				this.profileSummary = primaryView.profileSummary;
+				this.skills = primaryView.skills.map(skill => skill.skill.name);
+				this.skillsSummary = primaryView.skillsSummary;
+			});
 		});
 	}
 
