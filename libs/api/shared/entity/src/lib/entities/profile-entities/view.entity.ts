@@ -1,5 +1,5 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany, ManyToMany, JoinTable, ManyToOne } from 'typeorm';
-import { View, ViewType } from '@tempus/shared-domain';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToMany, JoinTable, ManyToOne, OneToOne } from 'typeorm';
+import { RevisionType, RoleType, View, ViewType } from '@tempus/shared-domain';
 import { CreateViewDto } from '@tempus/api/shared/dto';
 import { SkillEntity } from './skill.entity';
 import { RevisionEntity } from './revision.entity';
@@ -16,13 +16,14 @@ export class ViewEntity implements View {
 		educationsSummary?: string,
 		experiencesSummary?: string,
 		type?: string,
-		status?: RevisionEntity[],
+		revision?: RevisionEntity,
 		skills?: SkillEntity[],
 		experiences?: ExperienceEntity[],
 		educations?: EducationEntity[],
 		certifications?: CertificationEntity[],
 		resource?: ResourceEntity,
 		viewType?: ViewType,
+		revisionType?: RevisionType,
 	) {
 		this.id = id;
 		this.profileSummary = profileSummary;
@@ -30,13 +31,14 @@ export class ViewEntity implements View {
 		this.educationsSummary = educationsSummary;
 		this.experiencesSummary = experiencesSummary;
 		this.type = type;
-		this.status = status;
+		this.revision = revision;
 		this.skills = skills;
 		this.experiences = experiences;
 		this.educations = educations;
 		this.certifications = certifications;
 		this.resource = resource;
 		this.viewType = viewType;
+		this.revisionType = revisionType;
 	}
 
 	@PrimaryGeneratedColumn()
@@ -57,8 +59,11 @@ export class ViewEntity implements View {
 	@Column()
 	type: string;
 
-	@OneToMany(() => RevisionEntity, status => status.view)
-	status: RevisionEntity[];
+	@Column()
+	locked: boolean;
+
+	@OneToOne(() => RevisionEntity, revision => revision.view)
+	revision?: RevisionEntity;
 
 	@ManyToMany(() => SkillEntity, { cascade: ['insert', 'update'] })
 	@JoinTable()
@@ -79,10 +84,36 @@ export class ViewEntity implements View {
 	@ManyToOne(() => ResourceEntity, resource => resource.views, { onDelete: 'CASCADE' })
 	resource: ResourceEntity;
 
+	@Column({ nullable: true })
+	lastUpdateDate?: Date;
+
+	@Column({ name: 'created_at' })
+	createdAt: Date;
+
+	@Column({ type: 'enum', enum: RoleType, default: RoleType.USER, nullable: true, name: 'updated_by' })
+	updatedBy?: RoleType;
+
+	@Column({
+		type: 'enum',
+		enum: RevisionType,
+		default: RevisionType.PENDING,
+		name: 'revision_type',
+	})
+	revisionType?: RevisionType;
+
+	@Column({
+		type: 'enum',
+		enum: RoleType,
+		default: RoleType.USER,
+		name: 'created_by',
+	})
+	createdBy: RoleType;
+
 	@Column({
 		type: 'enum',
 		enum: ViewType,
 		default: ViewType.SECONDARY,
+		name: 'view_type',
 	})
 	viewType: ViewType;
 
