@@ -22,7 +22,7 @@ import { InputType } from '@tempus/client/shared/ui-components/input';
 import { CustomModalType, ModalService, ModalType } from '@tempus/client/shared/ui-components/modal';
 import { ButtonType, Column, ProjectManagmenetTableData } from '@tempus/client/shared/ui-components/presentational';
 import { Client, Project } from '@tempus/shared-domain';
-import { Subject, Subscription, takeUntil } from 'rxjs';
+import { BehaviorSubject, Subject, Subscription, takeUntil } from 'rxjs';
 
 @Component({
 	selector: 'tempus-manage-resources',
@@ -39,6 +39,8 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 	) {}
 
 	$destroyed = new Subject<void>();
+
+	$modalClosedEvent = new BehaviorSubject<boolean>(false);
 
 	ButtonType = ButtonType;
 
@@ -129,8 +131,10 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 	modalServiceConfirmEvent: Subscription | undefined;
 
 	ngOnInit(): void {
-		this.modalServiceConfirmEvent = this.modalService.confirmEventSubject.subscribe(() => {
+		this.modalService.confirmEventSubject.pipe(takeUntil(this.$destroyed)).subscribe(() => {
 			this.modalService.close();
+			this.$modalClosedEvent.next(true);
+			this.$modalClosedEvent.next(false);
 		});
 		this.businessOwnerStore.dispatch(getAllResProjInfo());
 		this.businessOwnerStore.dispatch(getAllClientsBasic());
@@ -199,6 +203,13 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 			},
 			CustomModalType.CONTENT,
 		);
+		this.modalService.confirmDisabled()?.next(false);
+		this.manageResourcesForm
+			.get('invite')
+			?.valueChanges.pipe(takeUntil(this.$modalClosedEvent))
+			.subscribe(data => {
+				console.log(data);
+			});
 	}
 
 	assign() {
@@ -213,6 +224,13 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 			},
 			CustomModalType.CONTENT,
 		);
+		this.modalService.confirmDisabled()?.next(false);
+		this.manageResourcesForm
+			.get('assign')
+			?.valueChanges.pipe(takeUntil(this.$modalClosedEvent))
+			.subscribe(data => {
+				console.log(data);
+			});
 	}
 
 	filter() {

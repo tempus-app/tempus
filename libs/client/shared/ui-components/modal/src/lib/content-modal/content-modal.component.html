@@ -29,6 +29,7 @@
 		<tempus-button
 			class="dialog-button"
 			color="accent"
+			[disabled]="$confirmDisabled | async"
 			(click)="selectConfirm()"
 			[label]="data.confirmText"
 		></tempus-button>

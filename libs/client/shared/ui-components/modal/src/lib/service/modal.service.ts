@@ -4,7 +4,7 @@ import { map, Observable, of, Subject, take } from 'rxjs';
 
 import { ContentModalComponent } from '../content-modal/content-modal.component';
 import { InfoModalComponent } from '../info-modal/info-modal.component';
-import { Modal } from '../modal-parameters.interface';
+import { ContentModal, Modal } from '../modal-parameters.interface';
 import { CustomModalType } from './custom-modal-type.enum';
 
 @Injectable()
@@ -31,14 +31,15 @@ export class ModalService {
 				disableClose: !options.closable,
 			});
 		} else {
+			const contentModalOptions = options as ContentModal;
 			this.dialogRef = this.dialog.open(ContentModalComponent, {
 				data: {
-					title: options.title,
-					confirmText: options.confirmText,
-					closeText: options.closeText,
-					template: options.template,
-					closable: options.closable,
-					subtitle: options.subtitle,
+					title: contentModalOptions.title,
+					confirmText: contentModalOptions.confirmText,
+					closeText: contentModalOptions.closeText,
+					template: contentModalOptions.template,
+					closable: contentModalOptions.closable,
+					subtitle: contentModalOptions.subtitle,
 				},
 				panelClass: 'responsive-modal',
 				autoFocus: false,
@@ -49,6 +50,10 @@ export class ModalService {
 
 	public close() {
 		this.dialogRef?.componentInstance.close(true);
+	}
+
+	public confirmDisabled() {
+		return this.dialogRef?.componentInstance.$confirmDisabled;
 	}
 
 	public triggerConfirmEvent() {

@@ -1,5 +1,6 @@
 import { Component, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { BehaviorSubject } from 'rxjs';
 import { InfoModal } from '../modal-parameters.interface';
 import { ModalService } from '../service/modal.service';
 
@@ -15,6 +16,8 @@ export class InfoModalComponent {
 		private mdDialogRef: MatDialogRef<InfoModalComponent>,
 		private modalService: ModalService,
 	) {}
+
+	public $confirmDisabled = new BehaviorSubject<boolean>(false);
 
 	public close(value: boolean) {
 		this.mdDialogRef.close(value);

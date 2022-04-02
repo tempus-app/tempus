@@ -12,6 +12,7 @@
 			<h3 class="mat-h3 header-text" id="info-header">
 				{{ data.title }}
 			</h3>
+			<p *ngIf="data.subtitle" style="text-align: center" class="mat-body-2">{{ data.subtitle }}</p>
 		</span>
 	</div>
 	<div mat-dialog-content>
@@ -24,7 +25,13 @@
 			[label]="data.closeText"
 			(click)="selectClose()"
 		></tempus-button>
-		<tempus-button class="dialog-button" color="primary" (click)="selectConfirm()" [label]="data.confirmText">
+		<tempus-button
+			class="dialog-button"
+			color="primary"
+			[disabled]="$confirmDisabled | async"
+			(click)="selectConfirm()"
+			[label]="data.confirmText"
+		>
 		</tempus-button>
 	</div>
 </div>
