@@ -4,8 +4,8 @@ import { ForbiddenException, Injectable, InternalServerErrorException, NotFoundE
 import { InjectRepository } from '@nestjs/typeorm';
 import { ConfigService } from '@nestjs/config';
 import { ViewsService } from '@tempus/onboarding-api/feature-profile';
-import { JwtPayload, Resource, RoleType, StatusType, ViewType } from '@tempus/shared-domain';
-import { Repository, Transaction, TransactionRepository } from 'typeorm';
+import { Resource, StatusType, ViewType } from '@tempus/shared-domain';
+import { Repository } from 'typeorm';
 import { genSalt, hash } from 'bcrypt';
 import { ResourceEntity } from '@tempus/api/shared/entity';
 import { CreateResourceDto, UpdateResourceDto } from '@tempus/api/shared/dto';

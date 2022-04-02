@@ -1,3 +1,4 @@
+import { CreateClientDto, UpdateClientDto } from '@tempus/api/shared/dto';
 import { Client } from '@tempus/shared-domain';
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 import { ProjectEntity } from './project.entity';
@@ -26,4 +27,10 @@ export class ClientEntity implements Client {
 
 	@OneToMany(() => ProjectEntity, projects => projects.client)
 	projects: ProjectEntity[];
+
+	public static fromDto(dto: CreateClientDto | UpdateClientDto): ClientEntity {
+		if (dto == null) return new ClientEntity();
+		const id = dto instanceof CreateClientDto ? undefined : dto.id;
+		return new ClientEntity(id, dto.name, dto.title, dto.clientName, null);
+	}
 }
