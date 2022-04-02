@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ApproveViewDto } from '@tempus/api/shared/dto';
-import { Resource, View } from '@tempus/shared-domain';
+import { Resource, View, ViewNames } from '@tempus/shared-domain';
 import { catchError, Observable } from 'rxjs';
 import { handleError } from './errorHandler';
 
@@ -9,9 +9,9 @@ import { handleError } from './errorHandler';
 export class OnboaringClientResourceProfileService {
 	constructor(private http: HttpClient) {}
 
-	public getResourceProfileViews(id: string): Observable<Array<View>> {
+	public getResourceProfileViews(id: string): Observable<Array<ViewNames>> {
 		return this.http
-			.get<Array<View>>(`http://localhost:3000/onboarding/profile-view/view-names/${id}`)
+			.get<Array<ViewNames>>(`http://localhost:3000/onboarding/profile-view/view-names/${id}`)
 			.pipe(catchError(handleError));
 	}
 

@@ -5,3 +5,4 @@ export * from './skill.model';
 export * from './skilltype.model';
 export * from './view.model';
 export * from './certification.model';
+export * from './viewNames.model';

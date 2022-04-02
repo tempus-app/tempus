@@ -6,7 +6,7 @@
             <mat-icon>error</mat-icon>
         </div>
         <div fxFlex="60">
-            <tempus-dropdown [options]="views" label="View" [control]="$any(viewDropDownForm).get('viewSelected')"></tempus-dropdown>
+            <tempus-dropdown [options]="viewNames" label="View" (optionSelect)="onClick($event)" [control]="$any(viewDropDownForm).get('viewSelected')"></tempus-dropdown>
         </div>
         <div>
             <tempus-button label="{{ viewResourceProfilePrefx + 'buttons.assignButton.title' | translate }}" color="accent"></tempus-button>

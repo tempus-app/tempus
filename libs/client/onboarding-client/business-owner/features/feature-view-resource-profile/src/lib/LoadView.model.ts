@@ -1,4 +1,7 @@
+import { ViewNames } from '@tempus/shared-domain';
+
 export interface LoadView {
 	isRevision: boolean;
-	viewName?: string;
+	currentViewName?: string;
+	resourceViews?: ViewNames[];
 }

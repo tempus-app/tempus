@@ -28,10 +28,16 @@ export class ResourceProfileComponent implements OnInit {
 
 	phoneNumber = '';
 
+	viewIndex = '';
+
 	loadedView: LoadView = { isRevision: false };
 
 	childRevisionLoaded(loadedView: LoadView) {
 		this.loadedView = loadedView;
+	}
+
+	newViewClickEvent(viewIndex: string) {
+		this.viewIndex = viewIndex;
 	}
 
 	displayName() {

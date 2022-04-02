@@ -1,9 +1,26 @@
-import { Component, EventEmitter, Input, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
-import { ICreateCertificationDto, ICreateEducationDto, ICreateExperienceDto, View, Skill } from '@tempus/shared-domain';
+import {
+	Component,
+	EventEmitter,
+	Input,
+	OnChanges,
+	OnInit,
+	Output,
+	SimpleChanges,
+	TemplateRef,
+	ViewChild,
+} from '@angular/core';
+import {
+	ICreateCertificationDto,
+	ICreateEducationDto,
+	ICreateExperienceDto,
+	View,
+	Skill,
+	ViewNames,
+} from '@tempus/shared-domain';
 import { OnboaringClientResourceProfileService } from '@tempus/client/onboarding-client/shared/data-access';
 import { ModalService, CustomModalType, ModalType } from '@tempus/client/shared/ui-components/modal';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 import { take } from 'rxjs';
 import { LoadView } from '../LoadView.model';
@@ -14,7 +31,7 @@ import { LoadView } from '../LoadView.model';
 	styleUrls: ['./resource-profile-content.component.scss'],
 	providers: [OnboaringClientResourceProfileService],
 })
-export class ResourceProfileContentComponent implements OnInit {
+export class ResourceProfileContentComponent implements OnInit, OnChanges {
 	constructor(
 		private router: Router,
 		private route: ActivatedRoute,
@@ -53,6 +70,9 @@ export class ResourceProfileContentComponent implements OnInit {
 	@Input()
 	city = '';
 
+	@Input()
+	viewID = '';
+
 	experiencesSummary = '';
 
 	educationsSummary = '';
@@ -67,9 +87,6 @@ export class ResourceProfileContentComponent implements OnInit {
 
 	otherLink = '';
 
-	@ViewChild('modalID')
-	template!: TemplateRef<unknown>;
-
 	workExperiences: Array<ICreateExperienceDto> = [];
 
 	educations: Array<ICreateEducationDto> = [];
@@ -78,9 +95,7 @@ export class ResourceProfileContentComponent implements OnInit {
 
 	skills: Array<string> = [];
 
-	viewType = '';
-
-	viewID = '';
+	viewName = '';
 
 	isRevision = false;
 
@@ -89,13 +104,33 @@ export class ResourceProfileContentComponent implements OnInit {
 	viewResourceProfilePrefx = 'viewResourceProfile.';
 
 	viewResourceProfileForm = this.fb.group({
-		rejectionComments: [''],
+		rejectionComments: ['', Validators.required],
 	});
+
+	@ViewChild('modalID')
+	template!: TemplateRef<unknown>;
 
 	@Output() revisionViewLoaded = new EventEmitter<LoadView>();
 
-	ngOnInit(): void {
-		this.viewID = this.route.snapshot.paramMap.get('viewID') || '';
+	ngOnChanges(changes: SimpleChanges): void {
+		// eslint-disable-next-line @typescript-eslint/dot-notation
+		if (changes['viewID'] && changes['viewID'].currentValue !== '') {
+			// eslint-disable-next-line @typescript-eslint/dot-notation
+			this.viewID = changes['viewID'].currentValue;
+			this.loadView([]);
+		}
+	}
+
+	ngOnInit() {
+		const id = this.route.snapshot.paramMap.get('id') || '';
+		this.resourceService.getResourceProfileViews(id).subscribe(profileViews => {
+			this.viewID = this.route.snapshot.queryParamMap.get('viewID') || String(profileViews[0].id);
+
+			this.loadView(profileViews);
+		});
+	}
+
+	loadView(profileViews: ViewNames[]) {
 		this.resourceService.getView(this.viewID).subscribe(revisionView => {
 			if (revisionView.revision) {
 				const revisedView = revisionView.revision.newView;
@@ -107,7 +142,7 @@ export class ResourceProfileContentComponent implements OnInit {
 				this.profileSummary = revisedView.profileSummary;
 				this.skills = revisedView.skills.map((skill: Skill) => skill.skill.name);
 				this.skillsSummary = revisedView.skillsSummary;
-				this.viewType = revisedView.viewType;
+				this.viewName = revisedView.type;
 				this.isRevision = true;
 			} else {
 				this.certifications = revisionView.certifications;
@@ -118,10 +153,20 @@ export class ResourceProfileContentComponent implements OnInit {
 				this.profileSummary = revisionView.profileSummary;
 				this.skills = revisionView.skills.map((skill: Skill) => skill.skill.name);
 				this.skillsSummary = revisionView.skillsSummary;
-				this.viewType = revisionView.viewType;
+				this.viewName = revisionView.type;
 			}
-			this.isRevision = true;
-			this.revisionViewLoaded.emit({ isRevision: this.isRevision, viewName: revisionView.type });
+			if (profileViews.length > 0) {
+				this.revisionViewLoaded.emit({
+					isRevision: this.isRevision,
+					currentViewName: this.viewName,
+					resourceViews: profileViews,
+				});
+			} else {
+				this.revisionViewLoaded.emit({
+					isRevision: this.isRevision,
+					currentViewName: this.viewName,
+				});
+			}
 		});
 	}
 

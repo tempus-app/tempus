@@ -1,5 +1,5 @@
 import { Revision } from '@tempus/shared-domain';
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, OneToOne } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, OneToOne, JoinColumn } from 'typeorm';
 import { ViewEntity } from './view.entity';
 
 @Entity()
@@ -25,8 +25,10 @@ export class RevisionEntity implements Revision {
 	approved?: boolean;
 
 	@OneToOne(() => ViewEntity, view => view.revision)
+	@JoinColumn()
 	view: ViewEntity;
 
 	@OneToOne(() => ViewEntity, view => view.revision)
+	@JoinColumn()
 	newView: ViewEntity;
 }
