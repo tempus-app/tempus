@@ -7,11 +7,12 @@
 			<div  fxLayout="row" fxLayoutGap="10px">
 				<tempus-button label="Cancel" color="accent" (click)="closeEditView()"></tempus-button>
 				<tempus-button label="Preview" color="accent"></tempus-button>
-				<tempus-button label="Submit" color="accent"></tempus-button>
+				<tempus-button label="Submit" color="accent" (click)="submitChanges()"></tempus-button>
 			</div>
 		</div>
 		<div fxFlex>
-			<tempus-resource-info-personal-information 				
+			<tempus-resource-info-personal-information
+			(formGroup)="loadFormGroup($event)" 				
 			[firstName]="firstName"
 			[lastName]="lastName"
 			[phoneNumber]="phoneNumber"

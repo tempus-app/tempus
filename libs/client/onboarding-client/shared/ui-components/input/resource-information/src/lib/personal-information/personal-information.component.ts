@@ -88,6 +88,7 @@ export class PersonalInformationComponent implements OnInit, OnChanges {
 	ngOnInit(): void {
 		this.loadStoreData();
 		this.formGroup.emit(this.myInfoForm);
+		this.myInfoForm.updateValueAndValidity({ onlySelf: false, emitEvent: true });
 	}
 
 	loadStoreData() {
@@ -115,5 +116,7 @@ export class PersonalInformationComponent implements OnInit, OnChanges {
 
 	ngOnChanges(changes: SimpleChanges) {
 		this.updateStateOptions(changes.country.currentValue);
+		// this.formGroup.emit(this.myInfoForm);
+		// console.log("here, i am emitting changes!");
 	}
 }

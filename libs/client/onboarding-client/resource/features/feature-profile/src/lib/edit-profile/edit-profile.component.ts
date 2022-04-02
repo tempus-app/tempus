@@ -4,7 +4,7 @@ import { Store } from '@ngrx/store';
 import { OnboardingClientState } from '@tempus/client/onboarding-client/shared/data-access';
 import { Subject } from 'rxjs';
 import { ButtonType } from '@tempus/client/shared/ui-components/presentational';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { ICreateCertificationDto, ICreateEducationDto, ICreateExperienceDto } from '@tempus/shared-domain';
 
 @Component({
@@ -21,7 +21,7 @@ export class EditProfileComponent implements AfterViewInit, OnDestroy {
 		private route: ActivatedRoute,
 	) {}
 
-	myInfoForm = this.fb.group({});
+	viewChangesForm = this.fb.group({});
 
 	@Input() firstName = '';
 
@@ -78,64 +78,20 @@ export class EditProfileComponent implements AfterViewInit, OnDestroy {
 
 	ngAfterViewInit(): void {
 		this.changeDetector.detectChanges();
-		console.log(this.certifications);
 	}
 
-	// ngOnInit(): void {
-	// 	// this.loadStoreData();
-	// 	// this.formGroup.emit(this.myInfoForm);
-	// }
+	loadFormGroup(eventData: FormGroup) {
+		this.viewChangesForm = eventData;
+		console.log(this.viewChangesForm);
+	}
 
-	// loadStoreData() {
-	// 	this.myInfoForm.patchValue({
-	// 		firstName: this.firstName,
-	// 		lastName: this.lastName,
-	// 		phoneNumber: this.phoneNumber,
-	// 		linkedInLink: this.linkedInLink,
-	// 		githubLink: this.githubLink,
-	// 		otherLink: this.otherLink,
-	// 		country: this.country,
-	// 		state: this.state,
-	// 		city: this.city,
-	// 		profileSummary: this.profileSummary,
-	// 	});
-	// 	console.log('edit-profile on init has');
-	// 	console.log(this.firstName);
-	// }
 
-	// loadFormGroup(eventData: FormGroup) {
-	// 	this.myInfoForm = eventData;
-	// 	this.store
-	// 		.select(selectUserDetailsCreated)
-	// 		.pipe(
-	// 			take(1),
-	// 			filter(created => created),
-	// 			switchMap(_ => this.store.select(selectResourceData)),
-	// 			take(1),
-	// 		)
-	// 		.subscribe(createResourceDto => {
-	// 			this.firstName = createResourceDto?.firstName;
-	// 			this.lastName = createResourceDto?.lastName;
-	// 			this.phoneNumber = createResourceDto?.phoneNumber;
-	// 			this.country = createResourceDto?.location?.country;
-	// 			this.state = createResourceDto?.location?.province;
-	// 			this.city = createResourceDto?.location?.city;
-	// 			this.linkedInLink = createResourceDto?.linkedInLink;
-	// 			this.githubLink = createResourceDto?.githubLink;
-	// 			this.otherLink = createResourceDto?.otherLink;
-	// 			this.profileSummary = createResourceDto?.profileSummary;
-	// 			this.myInfoForm.setValue({
-	// 				firstName: createResourceDto.firstName,
-	// 				lastName: createResourceDto.lastName,
-	// 				phoneNumber: createResourceDto.phoneNumber,
-	// 				linkedInLink: createResourceDto.linkedInLink,
-	// 				githubLink: createResourceDto.githubLink,
-	// 				otherLink: createResourceDto.otherLink,
-	// 				country: createResourceDto.location.country,
-	// 				state: createResourceDto.location.province,
-	// 				city: createResourceDto.location.city,
-	// 				profileSummary: createResourceDto.profileSummary,
-	// 			});
-	// 		});
-	// }
+	submitChanges() {
+		this.viewChangesForm?.markAllAsTouched();
+		console.log(this.viewChangesForm);
+		if (this.viewChangesForm?.valid) {
+			//create new revision/view
+			this.closeEditView();
+		}
+	}
 }
