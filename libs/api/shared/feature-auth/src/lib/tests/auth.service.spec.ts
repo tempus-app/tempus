@@ -6,8 +6,9 @@ import { Repository } from 'typeorm';
 import { JwtService } from '@nestjs/jwt';
 import { CommonService } from '@tempus/api/shared/feature-common';
 import { ConfigService } from '@nestjs/config';
+import { JwtPayload } from '@tempus/shared-domain';
 import { AuthService } from '../auth.service';
-import { authDto, user } from './auth.mock';
+import { accessTokenPayload, authDto, refreshToken, user } from './auth.mock';
 
 const mockUserRepository = createMock<Repository<UserEntity>>();
 
@@ -16,7 +17,7 @@ const mockJwtService = {
 };
 
 const mockCommonService = {
-	findByEmail: jest.fn().mockResolvedValue(UserEntity),
+	findByEmail: jest.fn().mockResolvedValue(user),
 };
 
 const mockConfigService = {
@@ -78,6 +79,32 @@ describe('AuthService', () => {
 				{ expiresIn: 900, secret: 'secret' },
 			);
 			expect(res).toEqual(authDto);
+		});
+	});
+
+	describe('logout()', () => {
+		it('should successfully logout a user', async () => {
+			await authService.logout(accessTokenPayload);
+			expect(mockCommonService.findByEmail).toBeCalledWith(user.email);
+		});
+
+		it('should return an error since it could not find user', async () => {
+			mockCommonService.findByEmail.mockRejectedValue(new Error('Could not find user with email wrong@email.com'));
+			let error;
+			try {
+				await authService.logout(new JwtPayload('wrong@email.com', null, null, null));
+			} catch (e) {
+				error = e;
+			}
+			expect(error).toBeInstanceOf(Error);
+			expect(error.message).toBe('Could not find user with email wrong@email.com');
+		});
+	});
+
+	describe('refreshToken()', () => {
+		it('should successfully logout a user', async () => {
+			await authService.logout(accessTokenPayload);
+			expect(mockCommonService.findByEmail).toBeCalledWith(user.email);
 		});
 	});
 });
