@@ -1,13 +1,11 @@
 import { Task } from '@tempus/shared-domain';
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
-import { ProjectEntity } from './project.entity';
+import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class TaskEntity implements Task {
-	constructor(id?: number, taskName?: string, project?: ProjectEntity) {
+	constructor(id?: number, taskName?: string) {
 		this.id = id;
 		this.taskName = taskName;
-		this.project = project;
 	}
 
 	@PrimaryGeneratedColumn()
@@ -15,7 +13,4 @@ export class TaskEntity implements Task {
 
 	@Column()
 	taskName: string;
-
-	@ManyToOne(() => ProjectEntity, project => project.tasks)
-	project: ProjectEntity;
 }
