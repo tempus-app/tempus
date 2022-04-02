@@ -8,7 +8,7 @@ import { JwtPayload, Resource, RoleType, StatusType, ViewType } from '@tempus/sh
 import { Repository, Transaction, TransactionRepository } from 'typeorm';
 import { genSalt, hash } from 'bcrypt';
 import { ResourceEntity } from '@tempus/api/shared/entity';
-import { CreateResourceDto, UpdateResourceDto } from '@tempus/api/shared/dto';
+import { CreateResourceDto, UpdateResourceDto, UserProjectClientDto } from '@tempus/api/shared/dto';
 import { LinkService } from './link.service';
 
 @Injectable()
@@ -71,6 +71,23 @@ export class ResourceService {
 		}
 
 		return resourceEntity;
+	}
+
+	async getAllResourceProjectInfo(): Promise<UserProjectClientDto[]> {
+		const resources = await this.resourceRepository.find({
+			relations: ['projects', 'views', 'projects.client'],
+		});
+		const userProjectInfo: Array<UserProjectClientDto> = resources.map(res => {
+			const projClients = res.projects.map(proj => {
+				return {
+					project: proj.name,
+					client: proj.client.clientName,
+				};
+			});
+			const revNeeded = res.views.some(view => view.status.length > 0);
+			return new UserProjectClientDto(res.id, res.firstName, res.lastName, res.email, revNeeded, projClients);
+		});
+		return userProjectInfo;
 	}
 
 	// TODO: filtering

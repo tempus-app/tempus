@@ -2,7 +2,9 @@
 .dialog-button {
 	padding-right: 10px;
 }
-
+.modal-container {
+	margin: 2% 4%;
+}
 .info-title {
-	@include cmp.info-title(60%, 50px);
+	@include cmp.info-title(100%, 50px);
 }

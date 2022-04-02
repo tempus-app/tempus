@@ -38,6 +38,7 @@ export class ModalService {
 					closeText: options.closeText,
 					template: options.template,
 					closable: options.closable,
+					subtitle: options.subtitle,
 				},
 				panelClass: 'responsive-modal',
 				autoFocus: false,

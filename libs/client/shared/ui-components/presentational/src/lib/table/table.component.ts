@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { Column } from './column.model';
+import { TableDataModel } from './table-data.model';
 
 @Component({
 	selector: 'tempus-table',
@@ -13,11 +14,11 @@ export class TableComponent<T> implements OnInit {
 
 	@Input()
 	// T extends giving problems, TODO: look into better way to define table data
-	tableData: Array<T> = [];
+	tableData: Array<TableDataModel> = [];
 
 	displayedColumns: Array<string> = [];
 
-	dataSource: MatTableDataSource<T> = new MatTableDataSource();
+	dataSource: MatTableDataSource<TableDataModel> = new MatTableDataSource();
 
 	// eslint-disable-next-line @typescript-eslint/no-empty-function
 	constructor() {}

@@ -1,5 +1,8 @@
 import { Component, Input, Output, OnInit, EventEmitter } from '@angular/core';
+import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
 import { TranslateService } from '@ngx-translate/core';
+import { logout, OnboardingClientState } from '@tempus/client/onboarding-client/shared/data-access';
 import { take } from 'rxjs';
 import { UserType } from './sidebar-type-enum';
 
@@ -29,9 +32,13 @@ export class SidebarComponent implements OnInit {
 		this.isVisible = true;
 	}
 
-	constructor(private translateService: TranslateService) {
+	constructor(
+		private translateService: TranslateService,
+		private store: Store<OnboardingClientState>,
+		private router: Router,
+	) {
 		translateService
-			.get(['sidenav.namePlaceholder', 'sidenav.emailPlaceholder'])
+			.get(['sidenav.namePlaceholder', 'sidenav.emailPlaceholder', 'sidenav.logout'])
 			.pipe(take(1))
 			.subscribe(data => {
 				if (this.name === '') this.name = data['sidenav.namePlaceholder'];
@@ -54,6 +61,10 @@ export class SidebarComponent implements OnInit {
 	}
 
 	selectedTab(tab: string) {
+		if (tab === 'logout') {
+			this.store.dispatch(logout());
+			this.router.navigateByUrl('signin');
+		}
 		this.selectTab.emit(tab);
 	}
 
