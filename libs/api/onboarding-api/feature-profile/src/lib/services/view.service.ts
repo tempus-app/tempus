@@ -126,16 +126,12 @@ export class ViewsService {
 	}
 
 	async getViewsNamesByResource(resourceId: number): Promise<View[]> {
-		// error check
 		await this.resourceService.getResourceInfo(resourceId);
-		const viewsInResource = await this.viewsRepository.find({
-			where: {
-				resource: {
-					id: resourceId,
-				},
-				revisionType: RevisionType.APPROVED,
-			},
-		});
+		const viewsInResource = await this.viewsRepository
+			.createQueryBuilder('view')
+			.where('view.resource.id = :resourceId', { resourceId })
+			.select(['type'])
+			.execute();
 
 		return viewsInResource;
 	}
@@ -148,9 +144,9 @@ export class ViewsService {
 				'skills',
 				'skills.skill',
 				'certifications',
-				'revision',
-				'revision.view',
-				'revision.newView',
+				// 'revision',
+				// 'revision.view',
+				// 'revision.newView',
 			],
 		});
 		if (!viewEntity) {

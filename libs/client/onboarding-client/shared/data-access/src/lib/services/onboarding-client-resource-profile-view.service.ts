@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { ApproveViewDto } from '@tempus/api/shared/dto';
 import { Resource, View } from '@tempus/shared-domain';
 import { catchError, Observable } from 'rxjs';
 import { handleError } from './errorHandler';
@@ -21,6 +22,12 @@ export class OnboaringClientResourceProfileService {
 	public getView(id: string): Observable<View> {
 		return this.http
 			.get<View>(`http://localhost:3000/onboarding/profile-view/view/${id}`)
+			.pipe(catchError(handleError));
+	}
+
+	public approveOrDenyRevision(id: string, comment: string, approval: boolean): Observable<ApproveViewDto> {
+		return this.http
+			.post<ApproveViewDto>(`http://localhost:3000/onboarding/profile-view/approve/${id}`, { comment, approval })
 			.pipe(catchError(handleError));
 	}
 }

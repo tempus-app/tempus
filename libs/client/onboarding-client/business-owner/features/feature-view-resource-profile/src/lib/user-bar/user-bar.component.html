@@ -2,20 +2,20 @@
     <div fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="center start" fxLayoutAlign.lt-lg="center center"
         fxLayout.gt-sm="row" fxLayout.lt-lg="column" class="user-bar-container">
         <div fxFlex="2"></div>
-        <div *ngIf="isRevision" fxFlex>
+        <div *ngIf="loadedView.isRevision" fxFlex>
             <mat-icon>error</mat-icon>
         </div>
         <div fxFlex="60">
             <tempus-dropdown [options]="views" label="View" [control]="$any(viewDropDownForm).get('viewSelected')"></tempus-dropdown>
         </div>
         <div>
-            <tempus-button label="assign" color="accent"></tempus-button>
+            <tempus-button label="{{ viewResourceProfilePrefx + 'buttons.assignButton.title' | translate }}" color="accent"></tempus-button>
         </div>
         <div>
-            <tempus-button label="create new view" color="accent"></tempus-button>
+            <tempus-button label="{{ viewResourceProfilePrefx + 'buttons.createNewViewButton.title' | translate }}" color="accent"></tempus-button>
         </div>
         <div>
-            <tempus-button label="download profile" color="accent" icon="cloud_download"></tempus-button>
+            <tempus-button label="{{ viewResourceProfilePrefx + 'buttons.downloadProfile.title' | translate }}" color="accent" icon="cloud_download"></tempus-button>
         </div>
         <div fxFlex="2"></div>
 

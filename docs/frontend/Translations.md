@@ -1,6 +1,6 @@
 ## Translations
-
-Ngx-translate is being used to provide a run time translation engine for internationalization purposes. All translation files are defined in a json format under `libs/client/shared/assets/i18n` and are named `[LANG_CODE].json`. All content in the app (in terms of strings) is pulled from here. There are subdirectories for page specific strings. The json file at the root level of each subdirectory holds shared strings.
+ 
+Ngx-translate is being used to provide a run time translation engine for internationalization purposes. All translation files are defined in a json format under `libs/client/shared/ui-assets/../i18n` and are named `[LANG_CODE].json`. All content in the app (in terms of strings) is pulled from here. There are subdirectories for page specific strings. The json file at the root level of each subdirectory holds shared strings.
 
 ### Adding Strings
 
