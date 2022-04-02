@@ -28,7 +28,7 @@ export class ViewsService {
 		const resourceEntity = await this.resourceService.getResourceInfo(resourceId);
 
 		const viewEntity = ViewEntity.fromDto(createViewDto);
-		viewEntity.revisionType = RevisionType.PENDING;
+		viewEntity.revisionType = RevisionType.APPROVED;
 		viewEntity.resource = resourceEntity;
 		viewEntity.locked = true;
 		viewEntity.createdAt = new Date(Date.now());
