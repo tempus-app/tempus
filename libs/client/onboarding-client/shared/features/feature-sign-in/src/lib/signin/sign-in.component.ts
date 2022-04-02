@@ -10,6 +10,7 @@ import {
 	selectAccessToken,
 	selectLoginStatus,
 } from '@tempus/client/onboarding-client/shared/data-access';
+import { InputType } from '@tempus/client/shared/ui-components/input';
 import { decodeJwt } from '@tempus/client/shared/util';
 import { RoleType } from '@tempus/shared-domain';
 import { Subject, takeUntil } from 'rxjs';
@@ -31,6 +32,8 @@ export class SignInComponent implements OnInit, OnDestroy {
 			this.noDefinesRolesErr = data;
 		});
 	}
+
+	InputType = InputType;
 
 	noDefinesRolesErr = '';
 
