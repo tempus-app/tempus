@@ -1,2 +1,2 @@
 export * from './businessOwner.state';
-export * from './projectManagement';
+export * from './resProjClientManagement';

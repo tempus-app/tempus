@@ -1,6 +1,6 @@
 import { createSelector } from '@ngrx/store';
 import { BusinessOwnerState, selectBusinessOwnerState } from '../businessOwner.state';
-import { ProjectManagementState, PROJECT_MANAGE_FEATURE_KEY } from './projManagement.reducers';
+import { ResourceProjectClientManagementState, PROJECT_MANAGE_FEATURE_KEY } from './resProjClientManagement.reducers';
 
 export const selectProjManagementState = createSelector(
 	selectBusinessOwnerState,
@@ -9,19 +9,22 @@ export const selectProjManagementState = createSelector(
 
 export const selectResProjClientData = createSelector(
 	selectProjManagementState,
-	(state: ProjectManagementState) => state.projResClientData,
+	(state: ResourceProjectClientManagementState) => state.projResClientData,
 );
 export const selectClientData = createSelector(
 	selectProjManagementState,
-	(state: ProjectManagementState) => state.clients,
+	(state: ResourceProjectClientManagementState) => state.clients,
 );
 export const selectProjectAssigned = createSelector(
 	selectProjManagementState,
-	(state: ProjectManagementState) => state.projAssigned,
+	(state: ResourceProjectClientManagementState) => state.projAssigned,
 );
-export const selectAsyncStatus = createSelector(selectProjManagementState, (state: ProjectManagementState) => {
-	return {
-		status: state.status,
-		error: state.error,
-	};
-});
+export const selectAsyncStatus = createSelector(
+	selectProjManagementState,
+	(state: ResourceProjectClientManagementState) => {
+		return {
+			status: state.status,
+			error: state.error,
+		};
+	},
+);

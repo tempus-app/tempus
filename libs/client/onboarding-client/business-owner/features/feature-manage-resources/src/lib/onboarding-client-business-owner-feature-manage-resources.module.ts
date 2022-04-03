@@ -9,6 +9,13 @@ import { ClientSharedUiComponentsInputModule } from '@tempus/client/shared/ui-co
 import { MatIconModule } from '@angular/material/icon';
 import { ClientSharedUiComponentsModalModule } from '@tempus/client/shared/ui-components/modal';
 import { ManageResourcesComponent } from './manage-resources/manage-resources.component';
+import { HttpClient } from '@angular/common/http';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+
+function createTranslateLoader(http: HttpClient) {
+	return new TranslateHttpLoader(http, './assets/i18n/onboarding/owner/manage-resources/', '.json');
+}
 
 @NgModule({
 	imports: [
@@ -28,6 +35,15 @@ import { ManageResourcesComponent } from './manage-resources/manage-resources.co
 				component: ManageResourcesComponent,
 			},
 		]),
+		TranslateModule.forChild({
+			loader: {
+				provide: TranslateLoader,
+				useFactory: createTranslateLoader,
+				deps: [HttpClient],
+			},
+			isolate: false,
+			extend: true,
+		}),
 	],
 	declarations: [ManageResourcesComponent],
 })

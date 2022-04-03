@@ -20,7 +20,7 @@
 				>
 					<tempus-search-box
 						fxFlex="50%"
-						placeholder="'Search...'"
+						placeholder="{{ prefix + 'main.searchBox' | translate }}"
 						[options]="allSearchTerms"
 						cssClass="secondary"
 						(optionSelect)="search($event)"
@@ -38,6 +38,13 @@
 			</div>
 			<div id="tableContainer">
 				<tempus-table [tableColumns]="tableColumns" [tableData]="resProjClientTableDataFiltered"></tempus-table>
+				<h2
+					style="text-align: center; margin-top: 2rem"
+					class="mat-h3"
+					*ngIf="resProjClientTableDataFiltered.length === 0"
+				>
+					{{ prefix + 'main.noResourcesToShow' | translate }}
+				</h2>
 			</div>
 		</div>
 	</tempus-sidebar>
@@ -45,7 +52,7 @@
 		<div fxLayout="column">
 			<tempus-card style="margin-top: 1rem">
 				<tempus-dropdown
-					[label]="'Resource*'"
+					[label]="prefix + 'modal.inviteModal.resourceLabel' | translate"
 					(optionSelect)="updateProjects()"
 					[optionsWithId]="resourceOptions"
 					[control]="$any(manageResourcesForm).get('assign').get('resource')"
@@ -58,14 +65,14 @@
 							$any(manageResourcesForm).get('assign').get('resource').dirty)
 					"
 				>
-					Please select a resource
+					{{ prefix + 'modal.inviteModal.resourceErr' | translate }}
 				</mat-error>
 			</tempus-card>
 			<tempus-card style="margin-top: 1rem">
 				<div fxLayout="row" fxLayoutGap="10px">
 					<div fxFlex="50%">
 						<tempus-dropdown
-							[label]="'Client*'"
+							[label]="prefix + 'modal.clientLabel' | translate"
 							[optionsWithId]="clientOptions"
 							(optionSelect)="updateProjects($event)"
 							[control]="$any(manageResourcesForm).get('assign').get('client')"
@@ -77,13 +84,13 @@
 								($any(manageResourcesForm).get('assign').get('client').touched ||
 									$any(manageResourcesForm).get('assign').get('client').dirty)
 							"
-							>
-							Please select a client
+						>
+							{{ prefix + 'modal.clientErr' | translate }}
 						</mat-error>
 					</div>
 					<div fxFlex="50%">
 						<tempus-dropdown
-							[label]="'Project*'"
+							[label]="prefix + 'modal.projectLabel' | translate"
 							[optionsWithId]="currentProjects"
 							[control]="$any(manageResourcesForm).get('assign').get('project')"
 						></tempus-dropdown>
@@ -94,8 +101,8 @@
 								($any(manageResourcesForm).get('assign').get('project').touched ||
 									$any(manageResourcesForm).get('assign').get('project').dirty)
 							"
-							>
-							Please select a project
+						>
+							{{ prefix + 'modal.projectErr' | translate }}
 						</mat-error>
 					</div>
 				</div>
@@ -109,7 +116,7 @@
 					<div fxFlex="50%">
 						<tempus-text-input
 							[inputType]="InputType.TEXT"
-							placeholder="First name*"
+							placeholder="{{ prefix + 'modal.assignModal.firstNameLabel' | translate }}"
 							cssClass="secondary"
 							[control]="$any(manageResourcesForm).get('invite').get('firstName')"
 						>
@@ -122,13 +129,13 @@
 									$any(manageResourcesForm).get('invite').get('firstName').dirty)
 							"
 						>
-							Please enter a first name
+							{{ prefix + 'modal.assignModal.firstNameErr' | translate }}
 						</mat-error>
 					</div>
 					<div fxFlex="50%">
 						<tempus-text-input
 							[inputType]="InputType.TEXT"
-							placeholder="Last name*"
+							placeholder="{{ prefix + 'modal.assignModal.lastNameLabel' | translate }}"
 							cssClass="secondary"
 							[control]="$any(manageResourcesForm).get('invite').get('lastName')"
 						>
@@ -141,7 +148,7 @@
 									$any(manageResourcesForm).get('invite').get('lastName').dirty)
 							"
 						>
-							Please enter a last name
+							{{ prefix + 'modal.assignModal.lastNameErr' | translate }}
 						</mat-error>
 					</div>
 				</div>
@@ -149,47 +156,47 @@
 					<tempus-text-input
 						fxFlex="100%"
 						[inputType]="InputType.EMAIL"
-						placeholder="Email address*"
+						placeholder="{{ prefix + 'modal.assignModal.emailAddressLabel' | translate }}"
 						cssClass="secondary"
 						[control]="$any(manageResourcesForm).get('invite').get('emailAddress')"
 					>
 					</tempus-text-input>
 					<mat-error
-							class="mat-body-2"
-							*ngIf="
-								$any(manageResourcesForm).get('invite').get('emailAddress').invalid &&
-								($any(manageResourcesForm).get('invite').get('emailAddress').touched ||
-									$any(manageResourcesForm).get('invite').get('emailAddress').dirty)
-							"
-						>
-							Please enter a valid email address
+						class="mat-body-2"
+						*ngIf="
+							$any(manageResourcesForm).get('invite').get('emailAddress').invalid &&
+							($any(manageResourcesForm).get('invite').get('emailAddress').touched ||
+								$any(manageResourcesForm).get('invite').get('emailAddress').dirty)
+						"
+					>
+						{{ prefix + 'modal.assignModal.emailAddressErr' | translate }}
 					</mat-error>
 				</div>
 				<div fxLayout="column" fxFlex="100%">
 					<tempus-text-input
 						fxFlex="100%"
 						[inputType]="InputType.TEXT"
-						placeholder="Position*"
+						placeholder="{{ prefix + 'modal.assignModal.positionLabel' | translate }}"
 						cssClass="secondary"
 						[control]="$any(manageResourcesForm).get('invite').get('position')"
 					>
 					</tempus-text-input>
 					<mat-error
-							class="mat-body-2"
-							*ngIf="
-								$any(manageResourcesForm).get('invite').get('position').invalid &&
-								($any(manageResourcesForm).get('invite').get('position').touched ||
-									$any(manageResourcesForm).get('invite').get('position').dirty)
-							"
-						>
-							Please enter a position
+						class="mat-body-2"
+						*ngIf="
+							$any(manageResourcesForm).get('invite').get('position').invalid &&
+							($any(manageResourcesForm).get('invite').get('position').touched ||
+								$any(manageResourcesForm).get('invite').get('position').dirty)
+						"
+					>
+						{{ prefix + 'modal.assignModal.positionErr' | translate }}
 					</mat-error>
 				</div>
 				<div fxLayout="row" fxLayoutGap="10px">
 					<div fxFlex="50%">
 						<tempus-dropdown
 							[control]="$any(manageResourcesForm).get('invite').get('client')"
-							[label]="'Client*'"
+							[label]="prefix + 'modal.clientLabel' | translate"
 							(optionSelect)="updateProjects($event)"
 							[optionsWithId]="clientOptions"
 						></tempus-dropdown>
@@ -201,13 +208,13 @@
 									$any(manageResourcesForm).get('invite').get('client').dirty)
 							"
 						>
-							Please select a client
+							{{ prefix + 'modal.clientErr' | translate }}
 						</mat-error>
 					</div>
 					<div fxFlex="50%">
 						<tempus-dropdown
 							[control]="$any(manageResourcesForm).get('invite').get('project')"
-							[label]="'Project*'"
+							[label]="prefix + 'modal.projectLabel' | translate"
 							[optionsWithId]="currentProjects"
 						></tempus-dropdown>
 						<mat-error
@@ -218,7 +225,7 @@
 									$any(manageResourcesForm).get('invite').get('project').dirty)
 							"
 						>
-							Please select a project
+							{{ prefix + 'modal.projectErr' | translate }}
 						</mat-error>
 					</div>
 				</div>

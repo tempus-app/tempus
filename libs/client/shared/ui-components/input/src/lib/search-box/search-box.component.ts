@@ -8,7 +8,6 @@ import { BehaviorSubject, map, startWith, tap } from 'rxjs';
 	styleUrls: ['./search-box.component.scss'],
 })
 export class SearchBoxComponent implements OnInit, OnChanges {
-	
 	@Input() control = new FormControl();
 
 	search = '';
@@ -24,23 +23,25 @@ export class SearchBoxComponent implements OnInit, OnChanges {
 	@Output() optionSelect = new EventEmitter();
 
 	ngOnInit() {
-		this.control.valueChanges.pipe(
-			startWith(''),
-			map(value => {
-				if (value === '') {
-					this.optionSelect.emit('');
-				}
-				return this._filter(value)
-			}),
-			tap(data => {
-				this.filteredOptions.next(data)
-			})
-		).subscribe()
+		this.control.valueChanges
+			.pipe(
+				startWith(''),
+				map(value => {
+					if (value === '') {
+						this.optionSelect.emit('');
+					}
+					return this._filter(value);
+				}),
+				tap(data => {
+					this.filteredOptions.next(data);
+				}),
+			)
+			.subscribe();
 	}
-	
+
 	ngOnChanges(changes: SimpleChanges): void {
-		if (changes['options'].previousValue !== changes['options'].currentValue) {
-			this.filteredOptions.next(this._filter(this.control.value))
+		if (changes.options?.previousValue !== changes.options?.currentValue) {
+			this.filteredOptions.next(this._filter(this.control.value));
 		}
 	}
 

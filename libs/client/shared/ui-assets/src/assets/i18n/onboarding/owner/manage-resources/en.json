@@ -1,0 +1,44 @@
+{
+	"onboardingOwnerManageResources": {
+		"main": {
+			"noResourcesToShow": "No Resources to Show",
+			"searchBox": "Search...",
+			"tableHeaders": {
+				"resource": "Resource",
+				"assignment": "Assignment",
+				"project": "Project",
+				"client": "Client",
+				"assigned": "Assigned",
+				"unassigned": "Unassigned"
+			},
+			"approvalTooltip": "Awaiting approval"
+		},
+		"modal": {
+			"clientLabel": "Client",
+			"clientErr": "Please select a client",
+			"projectLabel": "Project",
+			"projectErr": "Please select a project",
+			"inviteModal": {
+				"resourceLabel": "Resource",
+				"resourceErr": "Please select a resource",
+				"title": "Invite a resource to Tempus",
+				"subtitle": "A unique invitation link will be sent by email.",
+				"closeText": "Cancel",
+				"confirmText": "Invite"
+			},
+			"assignModal": {
+				"firstNameLabel": "First name*",
+				"firstNameErr": "Please enter a first name",
+				"lastNameLabel": "Last name*",
+				"lastNameErr": "Please enter a last name",
+				"emailAddressLabel": "Email address*",
+				"emailAddressErr": "Please enter a valid email address",
+				"positionLabel": "Position*",
+				"positionErr": "Please enter a position",
+				"title": "Assign resource to a project",
+				"confirmText": "Assign",
+				"closeText": "Cancel"
+			}
+		}
+	}
+}

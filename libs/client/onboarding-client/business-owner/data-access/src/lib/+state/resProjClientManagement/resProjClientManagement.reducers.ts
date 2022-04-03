@@ -1,11 +1,11 @@
 import { createReducer, on } from '@ngrx/store';
 import { AsyncRequestState } from '@tempus/client/onboarding-client/shared/data-access';
-import { Client, IUserProjClientDto, Project } from '@tempus/shared-domain';
-import * as ProjectManagementActions from './projManagement.actions';
+import { Client, IUserProjClientDto } from '@tempus/shared-domain';
+import * as ProjectManagementActions from './resProjClientManagement.actions';
 
-export const PROJECT_MANAGE_FEATURE_KEY = 'projManagement';
+export const PROJECT_MANAGE_FEATURE_KEY = 'resProjClientManagement';
 
-export interface ProjectManagementState {
+export interface ResourceProjectClientManagementState {
 	error: Error | null;
 	status: AsyncRequestState;
 	projResClientData: IUserProjClientDto[];
@@ -13,7 +13,7 @@ export interface ProjectManagementState {
 	clients: Client[];
 }
 
-export const initialState: ProjectManagementState = {
+export const initialState: ResourceProjectClientManagementState = {
 	error: null,
 	status: AsyncRequestState.IDLE,
 	projAssigned: false,
@@ -26,7 +26,11 @@ export const projectManagementReducer = createReducer(
 	on(ProjectManagementActions.getAllClients, state => ({ ...state, status: AsyncRequestState.LOADING })),
 	on(ProjectManagementActions.getAllResProjInfo, state => ({ ...state, status: AsyncRequestState.LOADING })),
 	on(ProjectManagementActions.createLink, state => ({ ...state, status: AsyncRequestState.LOADING })),
-	on(ProjectManagementActions.createResourceProjectAssignment, state => ({ ...state, status: AsyncRequestState.LOADING, projAssigned: false, })),
+	on(ProjectManagementActions.createResourceProjectAssignment, state => ({
+		...state,
+		status: AsyncRequestState.LOADING,
+		projAssigned: false,
+	})),
 	on(ProjectManagementActions.getAllClientsBasicFailure, (state, { error }) => ({
 		...state,
 		error,

@@ -30,8 +30,11 @@ export class TableComponent<T> implements OnInit, OnChanges {
 	}
 
 	ngOnChanges(changes: SimpleChanges) {
-		if (changes['tableData'].currentValue !== changes['tableData'].previousValue) {
+		if (changes['tableData']?.currentValue !== changes['tableData']?.previousValue) {
 			this.dataSource = new MatTableDataSource(this.tableData);
+		}
+		if (changes['tableColumns']?.currentValue !== changes['tableColumns']?.previousValue) {
+			this.displayedColumns = this.tableColumns.map(c => c.columnDef);
 		}
 	}
 }

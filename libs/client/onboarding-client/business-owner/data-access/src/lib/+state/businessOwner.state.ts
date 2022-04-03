@@ -1,14 +1,14 @@
 import { ActionReducerMap, createFeatureSelector } from '@ngrx/store';
 import {
 	projectManagementReducer,
-	ProjectManagementState,
+	ResourceProjectClientManagementState,
 	PROJECT_MANAGE_FEATURE_KEY,
-} from './projectManagement/projManagement.reducers';
+} from './resProjClientManagement/resProjClientManagement.reducers';
 
 export const BUSINESS_OWNER_FEATURE_KEY = 'business_owner';
 
 export interface BusinessOwnerState {
-	[PROJECT_MANAGE_FEATURE_KEY]: ProjectManagementState;
+	[PROJECT_MANAGE_FEATURE_KEY]: ResourceProjectClientManagementState;
 }
 
 export const reducers: ActionReducerMap<BusinessOwnerState> = {

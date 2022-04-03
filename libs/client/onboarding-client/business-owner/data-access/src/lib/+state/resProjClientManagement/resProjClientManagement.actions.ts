@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { Client, ICreateLinkDto, IUserProjClientDto, Link, Project } from '@tempus/shared-domain';
+import { Client, ICreateLinkDto, IUserProjClientDto } from '@tempus/shared-domain';
 
 export const getAllResProjInfo = createAction(
 	'[Onboarding Client Manage Resources Page] Get All Resources Project Info',
@@ -23,20 +23,22 @@ export const getAllClientsBasicFailure = createAction(
 	props<{ error: Error }>(),
 );
 
-export const createLink = createAction('[Onboarding Client Manage Resources Page] Create Link', 
-	props<{ createLinkDto: ICreateLinkDto }>());
-export const createLinkSuccess = createAction(
-	'[Onboarding Client Link API] Create Link Success'
+export const createLink = createAction(
+	'[Onboarding Client Manage Resources Page] Create Link',
+	props<{ createLinkDto: ICreateLinkDto }>(),
 );
+export const createLinkSuccess = createAction('[Onboarding Client Link API] Create Link Success');
 export const createLinkFailure = createAction(
 	'[Onboarding Client Link API] Create Link Failure',
 	props<{ error: Error }>(),
 );
 
-export const createResourceProjectAssignment = createAction('[Onboarding Client Manage Resources Page] Create Resource Project Assignment',
-	props<{ resourceId: number, projectId: number }>());
+export const createResourceProjectAssignment = createAction(
+	'[Onboarding Client Manage Resources Page] Create Resource Project Assignment',
+	props<{ resourceId: number; projectId: number }>(),
+);
 export const createResourceProjectAssignmentSuccess = createAction(
-	'[Onboarding Client Project API] Create Resource Project Assignment Success'
+	'[Onboarding Client Project API] Create Resource Project Assignment Success',
 );
 export const createResourceProjectAssignmentFailure = createAction(
 	'[Onboarding Client Project API] Create Resource Project Assignment Failure',

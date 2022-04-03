@@ -9,16 +9,16 @@ import {
 	OnboardingClientResourceService,
 } from '@tempus/client/onboarding-client/shared/data-access';
 import { BusinessOwnerState } from '../businessOwner.state';
-import * as ProjManagementActions from './projManagement.actions';
+import * as ProjManagementActions from './resProjClientManagement.actions';
 
 @Injectable()
-export class ProjectManagementEffects {
+export class ResourceProjectClientManagementEffects {
 	constructor(
 		private readonly actions$: Actions,
 		private store: Store<BusinessOwnerState>,
 		private resourceService: OnboardingClientResourceService,
 		private projectService: OnboardingClientProjectService,
-		private linkService: OnboardingClientLinkService
+		private linkService: OnboardingClientLinkService,
 	) {}
 
 	getAllResProjInfo$ = createEffect(() =>
@@ -52,9 +52,9 @@ export class ProjectManagementEffects {
 	ceateLink$ = createEffect(() =>
 		this.actions$.pipe(
 			ofType(ProjManagementActions.createLink),
-			switchMap((data) =>
+			switchMap(data =>
 				this.linkService.createLink(data.createLinkDto).pipe(
-					map(data => {
+					map(() => {
 						return ProjManagementActions.createLinkSuccess();
 					}),
 					catchError(error => of(ProjManagementActions.createLinkFailure({ error }))),
@@ -62,13 +62,13 @@ export class ProjectManagementEffects {
 			),
 		),
 	);
-	
+
 	assignResourceToProject$ = createEffect(() =>
 		this.actions$.pipe(
 			ofType(ProjManagementActions.createResourceProjectAssignment),
-			switchMap((data) =>
+			switchMap(data =>
 				this.projectService.assignResourceToProject(data.projectId, data.resourceId).pipe(
-					map(data => {
+					map(() => {
 						return ProjManagementActions.createResourceProjectAssignmentSuccess();
 					}),
 					catchError(error => of(ProjManagementActions.createResourceProjectAssignmentFailure({ error }))),

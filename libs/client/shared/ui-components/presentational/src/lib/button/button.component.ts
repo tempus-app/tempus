@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { take } from 'rxjs';
 import { ButtonType } from './button-type-enum';
@@ -29,58 +29,69 @@ export class ButtonComponent implements OnInit {
 		[ButtonType.CREATE_NEW_VIEW]: '',
 	};
 
-	constructor(private translateService: TranslateService) {
+	constructor(private translateService: TranslateService) {}
+
+	setButtonType() {
+		this.translateService.get('button').subscribe(data => {
+			this.buttonTypeLabels['create new view'] = data.createNewView;
+			this.buttonTypeLabels['download view'] = data.edit;
+			this.buttonTypeLabels.filter = data.filter;
+			this.buttonTypeLabels.invite = data.invite;
+			this.buttonTypeLabels.edit = data.edit;
+
+			this.label = this.buttonType !== undefined ? this.buttonTypeLabels[this.buttonType] : this.label;
+			// eslint-disable-next-line default-case
+			switch (this.buttonType) {
+				case ButtonType.EDIT: {
+					this.icon = 'edit';
+					break;
+				}
+				case ButtonType.FILTER: {
+					this.icon = 'filter_alt';
+					break;
+				}
+				case ButtonType.INVITE: {
+					this.icon = 'mail_outline';
+					break;
+				}
+				case ButtonType.DOWNLOAD_VIEW: {
+					this.icon = 'cloud_download';
+					break;
+				}
+				case ButtonType.CREATE_NEW_VIEW: {
+					this.icon = 'add';
+					break;
+				}
+				default: {
+					this.icon = '';
+					break;
+				}
+			}
+		});
+	}
+
+	setButtonPlaceholderLabel = () => {
 		if (this.label === '') {
-			translateService
+			this.translateService
 				.get('button.placeholder')
 				.pipe(take(1))
 				.subscribe(data => (this.label = data));
 		}
-	}
-
-	setButtonType() {
-		this.label = this.buttonType !== undefined ? this.buttonTypeLabels[this.buttonType] : this.label;
-		// eslint-disable-next-line default-case
-		switch (this.buttonType) {
-			case ButtonType.EDIT: {
-				this.icon = 'edit';
-				break;
-			}
-			case ButtonType.FILTER: {
-				this.icon = 'filter_alt';
-				break;
-			}
-			case ButtonType.INVITE: {
-				this.icon = 'mail_outline';
-				break;
-			}
-			case ButtonType.DOWNLOAD_VIEW: {
-				this.icon = 'cloud_download';
-				break;
-			}
-			case ButtonType.CREATE_NEW_VIEW: {
-				this.icon = 'add';
-				break;
-			}
-			default: {
-				this.icon = '';
-				break;
-			}
-		}
-	}
+	};
 
 	ngOnInit(): void {
 		this.translateService
 			.get('button')
 			.pipe(take(1))
-			.subscribe(data => {
-				this.buttonTypeLabels['create new view'] = data.createNewView;
-				this.buttonTypeLabels['download view'] = data.edit;
-				this.buttonTypeLabels.filter = data.filter;
-				this.buttonTypeLabels.invite = data.invite;
-				this.buttonTypeLabels.edit = data.edit;
+			.subscribe(_ => {
 				this.setButtonType();
 			});
+		if (this.label === '') {
+			this.translateService
+				.get('button.placeholder')
+				.pipe(take(1))
+				.subscribe(() => this.setButtonPlaceholderLabel());
+		}
 	}
 
 	buttonClicked(value: boolean) {
