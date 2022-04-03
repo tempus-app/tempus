@@ -32,6 +32,7 @@ export class ViewsService {
 		viewEntity.resource = resourceEntity;
 		viewEntity.locked = false;
 		viewEntity.createdAt = new Date(Date.now());
+		viewEntity.lastUpdateDate = new Date(Date.now());
 
 		const newView = await this.viewsRepository.save(viewEntity);
 
@@ -47,10 +48,11 @@ export class ViewsService {
 		let newViewEntity = ViewEntity.fromDto(newView);
 		newViewEntity.resource = resourceEntity;
 		newViewEntity.locked = true;
-		newViewEntity.createdAt = view.createdAt;
+		newViewEntity.createdAt = new Date(Date.now());
 		newViewEntity.updatedBy = user.roles.includes(RoleType.BUSINESS_OWNER) ? RoleType.BUSINESS_OWNER : RoleType.USER;
 		newViewEntity.createdBy = view.createdBy;
 		newViewEntity.viewType = view.viewType;
+		newViewEntity.lastUpdateDate = new Date(Date.now());
 		newViewEntity.revisionType = RevisionType.PENDING;
 
 		if (user.roles.includes(RoleType.BUSINESS_OWNER)) {

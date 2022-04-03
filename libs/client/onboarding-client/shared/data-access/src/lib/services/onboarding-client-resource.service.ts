@@ -1,3 +1,4 @@
+import { A } from '@angular/cdk/keycodes';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
@@ -48,11 +49,13 @@ export class OnboardingClientResourceService {
 		);
 	}
 
-	public getPrimaryView(resourceId: number): Observable<View> {
+	//Get latest updated primary view by resource
+	public getLatestPrimaryView(resourceId: number): Observable<View> {
 		return this.getResourceProfileViews(resourceId).pipe(
 			take(1),
-			switchMap(views => views.filter(view => view.viewType === 'PRIMARY')),
-		);
+			switchMap(views => views.filter(view => view.viewType === 'PRIMARY')
+			.sort((a, b) => a.lastUpdateDate && b.lastUpdateDate ? (a.lastUpdateDate.getTime() > b.lastUpdateDate.getTime() ? -1 : 1) :  (a.createdAt.getTime() > b.createdAt.getTime() ? -1 : 1))
+		));
 	}
 
 	public getResourceProfileViews(resourceId: number): Observable<Array<View>> {
@@ -80,9 +83,6 @@ export class OnboardingClientResourceService {
 						Authorization: `Bearer ${resData}`,
 					}),
 				};
-				console.log(resData);
-				console.log(this.http
-					.patch<Revision>(`http://localhost:3000/onboarding/profile-view/${viewId}`, newView, httpOptions))
 				return this.http
 					.patch<Revision>(`http://localhost:3000/onboarding/profile-view/${viewId}`, newView, httpOptions)
 					.pipe(catchError(handleError));

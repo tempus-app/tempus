@@ -119,35 +119,51 @@ export class ProfileComponent implements OnInit, OnDestroy {
 			this.githubLink = resData.githubLink;
 			this.otherLink = resData.otherLink;
 
-			//fetch all Primary views, select PENDING to display if available
-			this.resourceService.getResourceProfileViews(this.userId).subscribe(views => {
-				const primaryViews =  views.filter(view => view.viewType === ViewType.PRIMARY);
-				const pendingView = primaryViews.find(view => view.revisionType === RevisionType.PENDING);
-				const approvedView = primaryViews.find(view => view.revisionType === RevisionType.APPROVED);
-
-				this.approvedPrimaryViewId = approvedView?.id ? approvedView.id : 0;
-
-				if (pendingView) {
-					this.certifications = pendingView.certifications;
-					this.educations = pendingView.educations;
-					this.educationsSummary = pendingView.educationsSummary;
-					this.workExperiences = pendingView.experiences;
-					this.experiencesSummary = pendingView.experiencesSummary;
-					this.profileSummary = pendingView.profileSummary;
-					this.skills = pendingView.skills.map(skill => skill.skill.name);
-					this.skillsSummary = pendingView.skillsSummary;
-					this.isPendingApproval = true;
-				} else if (approvedView) {
-					this.certifications = approvedView.certifications;
-					this.educations = approvedView.educations;
-					this.educationsSummary = approvedView.educationsSummary;
-					this.workExperiences = approvedView.experiences;
-					this.experiencesSummary = approvedView.experiencesSummary;
-					this.profileSummary = approvedView.profileSummary;
-					this.skills = approvedView.skills.map(skill => skill.skill.name);
-					this.skillsSummary = approvedView.skillsSummary;
+			//fetch latest primary view
+			this.resourceService.getLatestPrimaryView(this.userId).subscribe(primaryView => {
+				if (primaryView.revisionType === RevisionType.APPROVED){
+					this.approvedPrimaryViewId = primaryView.id;
 				}
-			})
+					this.certifications = primaryView.certifications;
+					this.educations = primaryView.educations;
+					this.educationsSummary = primaryView.educationsSummary;
+					this.workExperiences = primaryView.experiences;
+					this.experiencesSummary = primaryView.experiencesSummary;
+					this.profileSummary = primaryView.profileSummary;
+					this.skills = primaryView.skills.map(skill => skill.skill.name);
+					this.skillsSummary = primaryView.skillsSummary;
+				}
+			)
+
+			//fetch all Primary views, select PENDING to display if available
+			// this.resourceService.getResourceProfileViews(this.userId).subscribe(views => {
+			// 	const primaryViews =  views.filter(view => view.viewType === ViewType.PRIMARY);
+			// 	const pendingView = primaryViews.find(view => view.revisionType === RevisionType.PENDING);
+			// 	const approvedView = primaryViews.find(view => view.revisionType === RevisionType.APPROVED);
+
+			// 	this.approvedPrimaryViewId = approvedView?.id ? approvedView.id : 0;
+
+			// 	if (pendingView) {
+			// 		this.certifications = pendingView.certifications;
+			// 		this.educations = pendingView.educations;
+			// 		this.educationsSummary = pendingView.educationsSummary;
+			// 		this.workExperiences = pendingView.experiences;
+			// 		this.experiencesSummary = pendingView.experiencesSummary;
+			// 		this.profileSummary = pendingView.profileSummary;
+			// 		this.skills = pendingView.skills.map(skill => skill.skill.name);
+			// 		this.skillsSummary = pendingView.skillsSummary;
+			// 		this.isPendingApproval = true;
+			// 	} else if (approvedView) {
+			// 		this.certifications = approvedView.certifications;
+			// 		this.educations = approvedView.educations;
+			// 		this.educationsSummary = approvedView.educationsSummary;
+			// 		this.workExperiences = approvedView.experiences;
+			// 		this.experiencesSummary = approvedView.experiencesSummary;
+			// 		this.profileSummary = approvedView.profileSummary;
+			// 		this.skills = approvedView.skills.map(skill => skill.skill.name);
+			// 		this.skillsSummary = approvedView.skillsSummary;
+			// 	}
+			// })
 		});
 	}
 
@@ -165,7 +181,9 @@ export class ProfileComponent implements OnInit, OnDestroy {
 		this.isPendingApproval = true;
 
 		//Post view to db, return revision
-		this.resourceService.editResourceView(this.approvedPrimaryViewId, newView);
+		this.resourceService.editResourceView(this.approvedPrimaryViewId, newView).subscribe(newRev => {
+			console.log(newRev);
+		});
 	}
 
 	ngOnDestroy(): void {

@@ -203,9 +203,7 @@ export class EditProfileComponent implements AfterViewInit, OnDestroy {
 		// && this.skillsSummaryForm?.valid;
 
 		if (this.isValid) {
-			const newView = this.generateNewView();
-			console.log(newView);
-			this.submitClicked.emit(newView);
+			this.submitClicked.emit(this.generateNewView());
 			this.closeEditView();
 		}
 	}
