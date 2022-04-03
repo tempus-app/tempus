@@ -5,8 +5,8 @@ export type TableDataModel = {
 		tooltip: string;
 	};
 	url?: string;
-	columnsWithIcon: string[],
-	columnsWithUrl: string[]
+	columnsWithIcon: string[];
+	columnsWithUrl: string[];
 };
 export interface ProjectManagmenetTableData extends TableDataModel {
 	resource: string;
@@ -15,6 +15,6 @@ export interface ProjectManagmenetTableData extends TableDataModel {
 	project: string;
 	client: string;
 	email: string;
-	allProjects: {val: string; id: number}[],
-	allClients: string[]
+	allProjects: { val: string; id: number }[];
+	allClients: string[];
 }

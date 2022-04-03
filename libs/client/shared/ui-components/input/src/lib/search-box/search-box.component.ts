@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/dot-notation */
 import { Component, OnInit, Input, EventEmitter, Output, forwardRef, OnChanges, SimpleChanges } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { BehaviorSubject, map, startWith, tap } from 'rxjs';
@@ -40,7 +41,7 @@ export class SearchBoxComponent implements OnInit, OnChanges {
 	}
 
 	ngOnChanges(changes: SimpleChanges): void {
-		if (changes.options?.previousValue !== changes.options?.currentValue) {
+		if (changes['options']?.previousValue !== changes['options']?.currentValue) {
 			this.filteredOptions.next(this._filter(this.control.value));
 		}
 	}

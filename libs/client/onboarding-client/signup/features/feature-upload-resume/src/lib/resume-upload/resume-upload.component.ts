@@ -87,16 +87,16 @@ export class ResumeUploadComponent implements OnInit {
 	}
 
 	async onUpload(file: File, makeRequest: boolean) {
-		// if (makeRequest) {
-		// 	(await this.parseFile(file)).subscribe((event: any) => {
-		// 		if (typeof event === 'object') {
-		// 			this.createUserDetails(JSON.parse(event.body));
-		// 			this.createWorkDetails(JSON.parse(event.body));
-		// 			this.createTrainingandSkilsDetails(JSON.parse(event.body));
-		// 			this.resumeParsed = true;
-		// 		}
-		// 	});
-		// }
+		if (makeRequest) {
+			(await this.parseFile(file)).subscribe((event: any) => {
+				if (typeof event === 'object') {
+					this.createUserDetails(JSON.parse(event.body));
+					this.createWorkDetails(JSON.parse(event.body));
+					this.createTrainingandSkilsDetails(JSON.parse(event.body));
+					this.resumeParsed = true;
+				}
+			});
+		}
 		this.fileData.patchValue(file);
 		this.fileData.markAsDirty();
 		this.fileUploaded = true;
@@ -210,12 +210,12 @@ export class ResumeUploadComponent implements OnInit {
 
 	nextStep() {
 		this.fileData?.markAllAsTouched();
-		if (this.fileData.valid) {
-			// this.store.dispatch(
-			// 	createResumeUpload({
-			// 		resume: this.fileData.value,
-			// 	}),
-			// );
+		if (this.resumeParsed && this.fileData.valid) {
+			this.store.dispatch(
+				createResumeUpload({
+					resume: this.fileData.value,
+				}),
+			);
 			this.router.navigate(['../myinfoone'], { relativeTo: this.route });
 		}
 	}
