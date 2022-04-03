@@ -4,6 +4,7 @@ import { map, catchError } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 import { Injectable } from '@angular/core';
 import {
+	OnboardingClientLinkService,
 	OnboardingClientProjectService,
 	OnboardingClientResourceService,
 } from '@tempus/client/onboarding-client/shared/data-access';
@@ -17,6 +18,7 @@ export class ProjectManagementEffects {
 		private store: Store<BusinessOwnerState>,
 		private resourceService: OnboardingClientResourceService,
 		private projectService: OnboardingClientProjectService,
+		private linkService: OnboardingClientLinkService
 	) {}
 
 	getAllResProjInfo$ = createEffect(() =>
@@ -33,29 +35,43 @@ export class ProjectManagementEffects {
 		),
 	);
 
-	getAllProjectsBasic$ = createEffect(() =>
+	getAllClients$ = createEffect(() =>
 		this.actions$.pipe(
-			ofType(ProjManagementActions.getAllProjBasic),
+			ofType(ProjManagementActions.getAllClients),
 			switchMap(() =>
-				this.projectService.getProjectsBasic().pipe(
+				this.projectService.getClients().pipe(
 					map(data => {
-						return ProjManagementActions.getAllProjBasicSuccess({ projBasicData: data });
+						return ProjManagementActions.getAllClientsSuccess({ clientData: data });
 					}),
-					catchError(error => of(ProjManagementActions.getAllProjBasicFailure({ error }))),
+					catchError(error => of(ProjManagementActions.getAllClientsBasicFailure({ error }))),
 				),
 			),
 		),
 	);
 
-	getAllClientsBasic$ = createEffect(() =>
+	ceateLink$ = createEffect(() =>
 		this.actions$.pipe(
-			ofType(ProjManagementActions.getAllClientsBasic),
-			switchMap(() =>
-				this.projectService.getClientsBasic().pipe(
+			ofType(ProjManagementActions.createLink),
+			switchMap((data) =>
+				this.linkService.createLink(data.createLinkDto).pipe(
 					map(data => {
-						return ProjManagementActions.getAllClientsBasicSuccess({ clientBasicData: data });
+						return ProjManagementActions.createLinkSuccess();
 					}),
-					catchError(error => of(ProjManagementActions.getAllClientsBasicFailure({ error }))),
+					catchError(error => of(ProjManagementActions.createLinkFailure({ error }))),
+				),
+			),
+		),
+	);
+	
+	assignResourceToProject$ = createEffect(() =>
+		this.actions$.pipe(
+			ofType(ProjManagementActions.createResourceProjectAssignment),
+			switchMap((data) =>
+				this.projectService.assignResourceToProject(data.projectId, data.resourceId).pipe(
+					map(data => {
+						return ProjManagementActions.createResourceProjectAssignmentSuccess();
+					}),
+					catchError(error => of(ProjManagementActions.createResourceProjectAssignmentFailure({ error }))),
 				),
 			),
 		),

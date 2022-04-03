@@ -16,6 +16,7 @@ import { ChipComponent } from './chip/chip.component';
 import { TableComponent } from './table/table.component';
 import { SpinnerComponent } from './spinner/spinner.component';
 import { ButtonComponent } from './button/button.component';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @NgModule({
 	imports: [
@@ -29,6 +30,7 @@ import { ButtonComponent } from './button/button.component';
 		MatTableModule,
 		MatButtonModule,
 		MatSortModule,
+		MatTooltipModule,
 		TranslateModule.forChild({
 			isolate: false,
 			extend: true,

@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from '@tempus/client/onboarding-client/shared/guards';
+import { OnboardingClientBusinessOwnerDataAccessModule } from '@tempus/client/onboarding-client/business-owner/data-access';
 import { BusinessOnwerShellComponent } from './shell/onboarding-client-business-owner-feature-shellcomponent';
 
 const routes: Routes = [
@@ -25,6 +26,6 @@ const routes: Routes = [
 
 @NgModule({
 	declarations: [BusinessOnwerShellComponent],
-	imports: [CommonModule, RouterModule.forChild(routes)],
+	imports: [OnboardingClientBusinessOwnerDataAccessModule, CommonModule, RouterModule.forChild(routes)],
 })
 export class OnboardingBusinessOwnerFeatureShellModule {}

@@ -19,7 +19,7 @@ export class DropdownComponent {
 
 	@Output() optionSelect = new EventEmitter();
 
-	optionSelected(option: string) {
-		this.optionSelect.emit(option);
+	optionSelected(option?: string | number) {
+		this.optionSelect.emit(option ? <string>option : undefined);
 	}
 }

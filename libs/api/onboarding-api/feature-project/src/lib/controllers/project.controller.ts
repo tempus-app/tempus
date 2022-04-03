@@ -31,10 +31,10 @@ export class ProjectController {
 
 	@UseGuards(JwtAuthGuard, RolesGuard)
 	@Roles(RoleType.BUSINESS_OWNER)
-	@Post('/:projectId/assign')
+	@Post('/:projectId/:resourceId/assign')
 	async assignResourceToProject(
 		@Param('projectId') projectId: number,
-		@Query('resourceId') resourceId: number,
+		@Param('resourceId') resourceId: number,
 	): Promise<Project> {
 		return this.projectService.assignResourceToProject(projectId, resourceId);
 	}

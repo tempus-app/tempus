@@ -1,12 +1,31 @@
 @use 'abstracts/helper' as abs;
 @import 'https://fonts.googleapis.com/icon?family=Material+Icons';
 
-table {
+.tempusTable {
 	width: 100%;
+	td:first-child {
+		padding-left: 30px;
+	}
 }
 
 .priorityIcon {
 	border-radius: 50%;
 	color: abs.$failure;
 	margin-right: 1rem;
+}
+.cellContainer{
+	display: flex;
+	align-items: center;
+	mat-icon{
+		margin-right: 0;
+		margin-left: -1.5rem;
+		font-size: 18px;
+		text-align: center;
+	}
+}
+
+::ng-deep .tempusTable .demarginizedCell {
+	p {
+		margin: 0.25rem 0 0 0;
+	}
 }

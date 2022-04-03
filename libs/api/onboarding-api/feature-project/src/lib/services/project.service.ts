@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-restricted-syntax */
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateProjectDto, UpdateProjectDto } from '@tempus/api/shared/dto';
 import { ProjectEntity } from '@tempus/api/shared/entity';
@@ -60,7 +60,12 @@ export class ProjectService {
 		const resourceEntity = await this.resourceService.getResourceInfo(resourceId);
 
 		if (!projectEntity.resources) projectEntity.resources = [resourceEntity];
-		else projectEntity.resources.push(resourceEntity);
+		else if (projectEntity.resources.some(res => res.id == resourceId)) {
+			throw new BadRequestException(`Project with id ${projectId} already assigned to resource with id ${resourceId}`);
+		}
+		else {
+			projectEntity.resources.push(resourceEntity);
+		}
 
 		return this.projectRepository.save(projectEntity);
 	}

@@ -1,4 +1,5 @@
 import { StatusType } from '../../enums';
+import { Project } from '../project-models';
 import { User } from './user.model';
 
 export interface Link {
@@ -11,4 +12,5 @@ export interface Link {
 	token?: string;
 	status?: StatusType;
 	user?: User;
+	project?: Project
 }

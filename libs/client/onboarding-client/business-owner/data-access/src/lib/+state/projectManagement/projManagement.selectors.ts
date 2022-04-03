@@ -11,13 +11,13 @@ export const selectResProjClientData = createSelector(
 	selectProjManagementState,
 	(state: ProjectManagementState) => state.projResClientData,
 );
-export const selectProjBasicData = createSelector(
-	selectProjManagementState,
-	(state: ProjectManagementState) => state.projects,
-);
-export const selectClientBasicData = createSelector(
+export const selectClientData = createSelector(
 	selectProjManagementState,
 	(state: ProjectManagementState) => state.clients,
+);
+export const selectProjectAssigned = createSelector(
+	selectProjManagementState,
+	(state: ProjectManagementState) => state.projAssigned,
 );
 export const selectAsyncStatus = createSelector(selectProjManagementState, (state: ProjectManagementState) => {
 	return {

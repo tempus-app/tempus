@@ -6,13 +6,20 @@ import { ClientEntity } from './client.entity';
 
 @Entity()
 export class ProjectEntity implements Project {
-	constructor(id?: number, name?: string, startDate?: Date, endDate?: Date, client?: ClientEntity) {
+	constructor(
+		id?: number,
+		name?: string,
+		startDate?: Date,
+		endDate?: Date,
+		client?: ClientEntity,
+		resources?: ResourceEntity[],
+	) {
 		this.id = id;
 		this.name = name;
 		this.startDate = startDate;
 		this.endDate = endDate;
 		this.client = client;
-		this.resources = [];
+		this.resources = resources;
 	}
 
 	@PrimaryGeneratedColumn()

@@ -1,5 +1,5 @@
 <div fxLayout="column" fxLayoutAlign="space-around center">
-	<tempus-sidebar [name]="name">
+	<tempus-sidebar [name]="name" [email]="email">
 		<div id="container" fxLayout="column">
 			<div fxLayout="row" fxLayoutGap.lt-md="15px" fxLayout.lt-md="column" id="headerRow">
 				<div fxFlex="min(40%, 20rem)" fxFlex.lt-md="100%" fxLayoutGap="10px" fxLayoutAlign="flex-start center">
@@ -21,7 +21,7 @@
 					<tempus-search-box
 						fxFlex="50%"
 						placeholder="'Search...'"
-						[options]="options"
+						[options]="allSearchTerms"
 						cssClass="secondary"
 						(optionSelect)="search($event)"
 						[control]="$any(manageResourcesForm).get('search')"
@@ -37,91 +37,193 @@
 				</div>
 			</div>
 			<div id="tableContainer">
-				<tempus-table [tableColumns]="tableColumns" [tableData]="resProjClientData"></tempus-table>
+				<tempus-table [tableColumns]="tableColumns" [tableData]="resProjClientTableDataFiltered"></tempus-table>
 			</div>
 		</div>
 	</tempus-sidebar>
-	<ng-template #inviteTemplate>
+	<ng-template #assignTemplate>
 		<div fxLayout="column">
 			<tempus-card style="margin-top: 1rem">
 				<tempus-dropdown
-					[label]="Resource*"
-					[options]="options"
+					[label]="'Resource*'"
+					(optionSelect)="updateProjects()"
+					[optionsWithId]="resourceOptions"
 					[control]="$any(manageResourcesForm).get('assign').get('resource')"
 				></tempus-dropdown>
+				<mat-error
+					class="mat-body-2"
+					*ngIf="
+						$any(manageResourcesForm).get('assign').get('resource').invalid &&
+						($any(manageResourcesForm).get('assign').get('resource').touched ||
+							$any(manageResourcesForm).get('assign').get('resource').dirty)
+					"
+				>
+					Please select a resource
+				</mat-error>
 			</tempus-card>
 			<tempus-card style="margin-top: 1rem">
-				<div fxLayout="row" fxLayoutGap="15px">
-					<tempus-dropdown
-						fxFlex="50%"
-						[label]="Client*"
-						[options]="options"
-						[control]="$any(manageResourcesForm).get('assign').get('client')"
-					></tempus-dropdown>
-					<tempus-dropdown
-						fxFlex="50%"
-						[label]="Project*"
-						[options]="options"
-						[control]="$any(manageResourcesForm).get('assign').get('project')"
-					></tempus-dropdown>
+				<div fxLayout="row" fxLayoutGap="10px">
+					<div fxFlex="50%">
+						<tempus-dropdown
+							[label]="'Client*'"
+							[optionsWithId]="clientOptions"
+							(optionSelect)="updateProjects($event)"
+							[control]="$any(manageResourcesForm).get('assign').get('client')"
+						></tempus-dropdown>
+						<mat-error
+							class="mat-body-2"
+							*ngIf="
+								$any(manageResourcesForm).get('assign').get('client').invalid &&
+								($any(manageResourcesForm).get('assign').get('client').touched ||
+									$any(manageResourcesForm).get('assign').get('client').dirty)
+							"
+							>
+							Please select a client
+						</mat-error>
+					</div>
+					<div fxFlex="50%">
+						<tempus-dropdown
+							[label]="'Project*'"
+							[optionsWithId]="currentProjects"
+							[control]="$any(manageResourcesForm).get('assign').get('project')"
+						></tempus-dropdown>
+						<mat-error
+							class="mat-body-2"
+							*ngIf="
+								$any(manageResourcesForm).get('assign').get('project').invalid &&
+								($any(manageResourcesForm).get('assign').get('project').touched ||
+									$any(manageResourcesForm).get('assign').get('project').dirty)
+							"
+							>
+							Please select a project
+						</mat-error>
+					</div>
 				</div>
 			</tempus-card>
 		</div>
 	</ng-template>
-	<ng-template #assignTemplate>
-		<tempus-card fxLayout="column" style="margin-top: 1rem">
-			<div fxLayout="row" fxLayoutGap="10px">
-				<tempus-text-input
-					fxFlex="50%"
-					[inputType]="InputType.TEXT"
-					placeholder="First name*"
-					cssClass="secondary"
-					[control]="$any(manageResourcesForm).get('invite').get('firstName')"
-				>
-				</tempus-text-input>
-				<tempus-text-input
-					fxFlex="50%"
-					[inputType]="InputType.TEXT"
-					placeholder="Last name*"
-					cssClass="secondary"
-					[control]="$any(manageResourcesForm).get('invite').get('lastName')"
-				>
-				</tempus-text-input>
-			</div>
-			<div>
-				<tempus-text-input
-					fxFlex="100%"
-					[inputType]="InputType.EMAIL"
-					placeholder="Email address*"
-					cssClass="secondary"
-					[control]="$any(manageResourcesForm).get('invite').get('emailAddress')"
-				>
-				</tempus-text-input>
-			</div>
-			<div>
-				<tempus-text-input
-					fxFlex="100%"
-					[inputType]="InputType.TEXT"
-					placeholder="Position*"
-					cssClass="secondary"
-					[control]="$any(manageResourcesForm).get('invite').get('position')"
-				>
-				</tempus-text-input>
-			</div>
-			<div fxLayout="row" fxLayoutGap="10px">
-				<tempus-dropdown
-					fxFlex="50%"
-					[control]="$any(manageResourcesForm).get('invite').get('client')"
-					[label]="Client*"
-					[options]="options"
-				></tempus-dropdown>
-				<tempus-dropdown
-					fxFlex="50%"
-					[control]="$any(manageResourcesForm).get('invite').get('project')"
-					[label]="Project*"
-					[options]="options"
-				></tempus-dropdown>
+	<ng-template #inviteTemplate>
+		<tempus-card style="margin-top: 1rem">
+			<div fxLayout="column">
+				<div fxLayout="row" fxLayoutGap="10px">
+					<div fxFlex="50%">
+						<tempus-text-input
+							[inputType]="InputType.TEXT"
+							placeholder="First name*"
+							cssClass="secondary"
+							[control]="$any(manageResourcesForm).get('invite').get('firstName')"
+						>
+						</tempus-text-input>
+						<mat-error
+							class="mat-body-2"
+							*ngIf="
+								$any(manageResourcesForm).get('invite').get('firstName').invalid &&
+								($any(manageResourcesForm).get('invite').get('firstName').touched ||
+									$any(manageResourcesForm).get('invite').get('firstName').dirty)
+							"
+						>
+							Please enter a first name
+						</mat-error>
+					</div>
+					<div fxFlex="50%">
+						<tempus-text-input
+							[inputType]="InputType.TEXT"
+							placeholder="Last name*"
+							cssClass="secondary"
+							[control]="$any(manageResourcesForm).get('invite').get('lastName')"
+						>
+						</tempus-text-input>
+						<mat-error
+							class="mat-body-2"
+							*ngIf="
+								$any(manageResourcesForm).get('invite').get('lastName').invalid &&
+								($any(manageResourcesForm).get('invite').get('lastName').touched ||
+									$any(manageResourcesForm).get('invite').get('lastName').dirty)
+							"
+						>
+							Please enter a last name
+						</mat-error>
+					</div>
+				</div>
+				<div fxLayout="column" fxFlex="100%">
+					<tempus-text-input
+						fxFlex="100%"
+						[inputType]="InputType.EMAIL"
+						placeholder="Email address*"
+						cssClass="secondary"
+						[control]="$any(manageResourcesForm).get('invite').get('emailAddress')"
+					>
+					</tempus-text-input>
+					<mat-error
+							class="mat-body-2"
+							*ngIf="
+								$any(manageResourcesForm).get('invite').get('emailAddress').invalid &&
+								($any(manageResourcesForm).get('invite').get('emailAddress').touched ||
+									$any(manageResourcesForm).get('invite').get('emailAddress').dirty)
+							"
+						>
+							Please enter a valid email address
+					</mat-error>
+				</div>
+				<div fxLayout="column" fxFlex="100%">
+					<tempus-text-input
+						fxFlex="100%"
+						[inputType]="InputType.TEXT"
+						placeholder="Position*"
+						cssClass="secondary"
+						[control]="$any(manageResourcesForm).get('invite').get('position')"
+					>
+					</tempus-text-input>
+					<mat-error
+							class="mat-body-2"
+							*ngIf="
+								$any(manageResourcesForm).get('invite').get('position').invalid &&
+								($any(manageResourcesForm).get('invite').get('position').touched ||
+									$any(manageResourcesForm).get('invite').get('position').dirty)
+							"
+						>
+							Please enter a position
+					</mat-error>
+				</div>
+				<div fxLayout="row" fxLayoutGap="10px">
+					<div fxFlex="50%">
+						<tempus-dropdown
+							[control]="$any(manageResourcesForm).get('invite').get('client')"
+							[label]="'Client*'"
+							(optionSelect)="updateProjects($event)"
+							[optionsWithId]="clientOptions"
+						></tempus-dropdown>
+						<mat-error
+							class="mat-body-2"
+							*ngIf="
+								$any(manageResourcesForm).get('invite').get('client').invalid &&
+								($any(manageResourcesForm).get('invite').get('client').touched ||
+									$any(manageResourcesForm).get('invite').get('client').dirty)
+							"
+						>
+							Please select a client
+						</mat-error>
+					</div>
+					<div fxFlex="50%">
+						<tempus-dropdown
+							[control]="$any(manageResourcesForm).get('invite').get('project')"
+							[label]="'Project*'"
+							[optionsWithId]="currentProjects"
+						></tempus-dropdown>
+						<mat-error
+							class="mat-body-2"
+							*ngIf="
+								$any(manageResourcesForm).get('invite').get('project').invalid &&
+								($any(manageResourcesForm).get('invite').get('project').touched ||
+									$any(manageResourcesForm).get('invite').get('project').dirty)
+							"
+						>
+							Please select a project
+						</mat-error>
+					</div>
+				</div>
 			</div>
 		</tempus-card>
 	</ng-template>
+	<tempus-spinner [showSpinner]="loading"></tempus-spinner>
 </div>

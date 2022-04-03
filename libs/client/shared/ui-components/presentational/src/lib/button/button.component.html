@@ -4,7 +4,7 @@
 		color="{{ color }}"
 		class="{{ buttonType }}"
 		(click)="buttonClicked(true)"
-		[disabled]="disabled"
+		[disabled]="disabled ? disabled : false"
 	>
 		<div id="button-container">
 			<mat-icon *ngIf="icon !== ''">{{ icon }}</mat-icon>

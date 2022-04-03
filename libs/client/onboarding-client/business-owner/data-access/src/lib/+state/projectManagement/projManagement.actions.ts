@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { Client, IUserProjClientDto, Project } from '@tempus/shared-domain';
+import { Client, ICreateLinkDto, IUserProjClientDto, Link, Project } from '@tempus/shared-domain';
 
 export const getAllResProjInfo = createAction(
 	'[Onboarding Client Manage Resources Page] Get All Resources Project Info',
@@ -13,23 +13,33 @@ export const getAllResProjInfoFailure = createAction(
 	props<{ error: Error }>(),
 );
 
-export const getAllProjBasic = createAction('[Onboarding Client Manage Resources Page] Get All Projects Basic');
-export const getAllProjBasicSuccess = createAction(
-	'[Onboarding Client Project API] Get All Projects Basic Success',
-	props<{ projBasicData: Project[] }>(),
+export const getAllClients = createAction('[Onboarding Client Manage Resources Page] Get All Clients');
+export const getAllClientsSuccess = createAction(
+	'[Onboarding Client Project API] Get All Clients Success',
+	props<{ clientData: Client[] }>(),
 );
-export const getAllProjBasicFailure = createAction(
-	'[Onboarding Client Project API] Get All Projects Basic Failure',
+export const getAllClientsBasicFailure = createAction(
+	'[Onboarding Client Project API] Get All Clients Failure',
 	props<{ error: Error }>(),
 );
 
-export const getAllClientsBasic = createAction('[Onboarding Client Manage Resources Page] Get All Clients Basic');
-export const getAllClientsBasicSuccess = createAction(
-	'[Onboarding Client Project API] Get All Clients Basic Success',
-	props<{ clientBasicData: Client[] }>(),
+export const createLink = createAction('[Onboarding Client Manage Resources Page] Create Link', 
+	props<{ createLinkDto: ICreateLinkDto }>());
+export const createLinkSuccess = createAction(
+	'[Onboarding Client Link API] Create Link Success'
 );
-export const getAllClientsBasicFailure = createAction(
-	'[Onboarding Client Project API] Get All Clients Basic Failure',
+export const createLinkFailure = createAction(
+	'[Onboarding Client Link API] Create Link Failure',
+	props<{ error: Error }>(),
+);
+
+export const createResourceProjectAssignment = createAction('[Onboarding Client Manage Resources Page] Create Resource Project Assignment',
+	props<{ resourceId: number, projectId: number }>());
+export const createResourceProjectAssignmentSuccess = createAction(
+	'[Onboarding Client Project API] Create Resource Project Assignment Success'
+);
+export const createResourceProjectAssignmentFailure = createAction(
+	'[Onboarding Client Project API] Create Resource Project Assignment Failure',
 	props<{ error: Error }>(),
 );
 

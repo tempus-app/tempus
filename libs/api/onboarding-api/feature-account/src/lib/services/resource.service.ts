@@ -22,12 +22,14 @@ export class ResourceService {
 	) {}
 
 	async createResource(resource: CreateResourceDto): Promise<Resource> {
-		const linkStatus = (await this.linkService.findLinkById(resource.linkId)).status;
-		if (linkStatus === StatusType.COMPLETED || linkStatus === StatusType.INACTIVE) {
+		const link = await this.linkService.findLinkById(resource.linkId);
+		if (link.status === StatusType.COMPLETED || link.status === StatusType.INACTIVE) {
 			throw new ForbiddenException('Link is not valid');
 		}
 		const resourceEntity = ResourceEntity.fromDto(resource);
 		resourceEntity.password = await this.hashPassword(resourceEntity.password);
+		
+		resourceEntity.projects = [link.project]
 		let createdResource = await this.resourceRepository.save(resourceEntity);
 
 		const view = await this.viewsService.createView(createdResource.id, {
@@ -75,16 +77,16 @@ export class ResourceService {
 
 	async getAllResourceProjectInfo(): Promise<UserProjectClientDto[]> {
 		const resources = await this.resourceRepository.find({
-			relations: ['projects', 'views', 'projects.client'],
+			relations: ['projects', 'views', 'projects.client', 'views.revision'],
 		});
 		const userProjectInfo: Array<UserProjectClientDto> = resources.map(res => {
 			const projClients = res.projects.map(proj => {
 				return {
-					project: proj.name,
+					project: {val: proj.name, id: proj.id},
 					client: proj.client.clientName,
 				};
 			});
-			const revNeeded = res.views.some(view => view.status.length > 0);
+			const revNeeded = res.views.some(view => view.revision);
 			return new UserProjectClientDto(res.id, res.firstName, res.lastName, res.email, revNeeded, projClients);
 		});
 		return userProjectInfo;

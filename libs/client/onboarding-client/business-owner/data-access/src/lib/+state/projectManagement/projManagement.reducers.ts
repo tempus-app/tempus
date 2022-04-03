@@ -9,29 +9,25 @@ export interface ProjectManagementState {
 	error: Error | null;
 	status: AsyncRequestState;
 	projResClientData: IUserProjClientDto[];
-	projects: Project[];
+	projAssigned: boolean;
 	clients: Client[];
 }
 
 export const initialState: ProjectManagementState = {
 	error: null,
 	status: AsyncRequestState.IDLE,
+	projAssigned: false,
 	projResClientData: [],
-	projects: [],
 	clients: [],
 };
 
 export const projectManagementReducer = createReducer(
 	initialState,
-	on(ProjectManagementActions.getAllClientsBasic, state => ({ ...state, status: AsyncRequestState.LOADING })),
-	on(ProjectManagementActions.getAllProjBasic, state => ({ ...state, status: AsyncRequestState.LOADING })),
+	on(ProjectManagementActions.getAllClients, state => ({ ...state, status: AsyncRequestState.LOADING })),
 	on(ProjectManagementActions.getAllResProjInfo, state => ({ ...state, status: AsyncRequestState.LOADING })),
+	on(ProjectManagementActions.createLink, state => ({ ...state, status: AsyncRequestState.LOADING })),
+	on(ProjectManagementActions.createResourceProjectAssignment, state => ({ ...state, status: AsyncRequestState.LOADING, projAssigned: false, })),
 	on(ProjectManagementActions.getAllClientsBasicFailure, (state, { error }) => ({
-		...state,
-		error,
-		status: AsyncRequestState.ERROR,
-	})),
-	on(ProjectManagementActions.getAllProjBasicFailure, (state, { error }) => ({
 		...state,
 		error,
 		status: AsyncRequestState.ERROR,
@@ -41,22 +37,37 @@ export const projectManagementReducer = createReducer(
 		error,
 		status: AsyncRequestState.ERROR,
 	})),
-	on(ProjectManagementActions.getAllClientsBasicSuccess, (state, { clientBasicData }) => ({
+	on(ProjectManagementActions.createLinkFailure, (state, { error }) => ({
 		...state,
-		clientBasicData,
-		status: AsyncRequestState.SUCCESS,
-		error: null,
-	})),
-	on(ProjectManagementActions.getAllProjBasicSuccess, (state, { projBasicData }) => ({
-		...state,
-		projBasicData,
+		error,
 		status: AsyncRequestState.ERROR,
+	})),
+	on(ProjectManagementActions.createResourceProjectAssignmentFailure, (state, { error }) => ({
+		...state,
+		error,
+		status: AsyncRequestState.ERROR,
+	})),
+	on(ProjectManagementActions.getAllClientsSuccess, (state, { clientData }) => ({
+		...state,
+		clients: clientData,
+		status: AsyncRequestState.SUCCESS,
 		error: null,
 	})),
 	on(ProjectManagementActions.getAllResProjInfoSuccess, (state, { projResClientData }) => ({
 		...state,
 		projResClientData,
-		status: AsyncRequestState.ERROR,
+		status: AsyncRequestState.SUCCESS,
+		error: null,
+	})),
+	on(ProjectManagementActions.createLinkSuccess, state => ({
+		...state,
+		status: AsyncRequestState.SUCCESS,
+		error: null,
+	})),
+	on(ProjectManagementActions.createResourceProjectAssignmentSuccess, state => ({
+		...state,
+		projAssigned: true,
+		status: AsyncRequestState.SUCCESS,
 		error: null,
 	})),
 	on(ProjectManagementActions.resetProjManagementState, () => ({

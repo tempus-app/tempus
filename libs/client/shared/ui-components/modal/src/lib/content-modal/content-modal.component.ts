@@ -29,7 +29,9 @@ export class ContentModalComponent {
 
 	public selectConfirm() {
 		// child can subscribe and make changes after listening
-		this.modalService.triggerConfirmEvent();
+		if (!this.$confirmDisabled.value) {
+			this.modalService.triggerConfirmEvent();
+		}
 	}
 
 	public selectCancel() {

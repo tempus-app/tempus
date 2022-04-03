@@ -6,23 +6,26 @@ import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import {
 	BusinessOwnerState,
-	getAllClientsBasic,
-	getAllProjBasic,
+	createLink,
+	createResourceProjectAssignment,
+	getAllClients,
 	getAllResProjInfo,
 	resetProjManagementState,
-	selectClientBasicData,
-	selectProjBasicData,
+	selectAsyncStatus,
+	selectClientData,
+	selectProjectAssigned,
 	selectResProjClientData,
 } from '@tempus/client/onboarding-client/business-owner/data-access';
 import {
+	AsyncRequestState,
 	OnboardingClientState,
 	selectLoggedInUserNameEmail,
 } from '@tempus/client/onboarding-client/shared/data-access';
 import { InputType } from '@tempus/client/shared/ui-components/input';
 import { CustomModalType, ModalService, ModalType } from '@tempus/client/shared/ui-components/modal';
 import { ButtonType, Column, ProjectManagmenetTableData } from '@tempus/client/shared/ui-components/presentational';
-import { Client, Project } from '@tempus/shared-domain';
-import { BehaviorSubject, Subject, Subscription, takeUntil } from 'rxjs';
+import { Client, ICreateLinkDto, IUserProjClientDto, Project } from '@tempus/shared-domain';
+import { BehaviorSubject, finalize, Subject, Subscription, take, takeUntil } from 'rxjs';
 
 @Component({
 	selector: 'tempus-manage-resources',
@@ -40,22 +43,35 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 
 	$destroyed = new Subject<void>();
 
-	$modalClosedEvent = new BehaviorSubject<boolean>(false);
+	$modalClosedEvent = new Subject<void>();
 
 	ButtonType = ButtonType;
 
 	InputType = InputType;
 
-	projectsBasic: Array<Project> = [];
+	loading = false
 
-	clientsBasic: Array<Client> = [];
+	currentProjects: { val: string; id: number }[] = [];
+
+	clientOptions: { val: string; id: number }[] = [];
+
+	resourceOptions: { val: string; id: number }[] = [];
+
+	clients: Array<Client> = [];
+
+	resProjClientTableData: ProjectManagmenetTableData[] = [];
+
+	resProjClientTableDataFiltered: ProjectManagmenetTableData[] = [];
+
+	// For use in the search box
+	allSearchTerms: string[] = []
 
 	manageResourcesForm = this.fb.group({
 		search: [''],
 		invite: this.fb.group({
 			firstName: ['', Validators.required],
 			lastName: ['', Validators.required],
-			emailAddress: ['', Validators.required],
+			emailAddress: ['', [Validators.required, Validators.email]],
 			position: ['', Validators.required],
 			client: ['', Validators.required],
 			project: ['', Validators.required],
@@ -83,12 +99,12 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 		{
 			columnDef: 'resource',
 			header: 'Resource',
-			cell: (element: Record<string, any>) => `${element['resource']}<br>${element['email']}`,
+			cell: (element: Record<string, any>) => `<div class="demarginizedCell">${element['resource']}<p class="mat-caption">(${element['email']})</p></div>`,
 		},
 		{
 			columnDef: 'assignment',
 			header: 'Assignment',
-			cell: (element: Record<string, any>) => `${element['availability']}`,
+			cell: (element: Record<string, any>) => `${element['assignment']}`,
 		},
 		{
 			columnDef: 'project',
@@ -102,49 +118,65 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 		},
 	];
 
-	resProjClientData: ProjectManagmenetTableData[] = [
-		{
-			resource: 'Gabriel Granata',
-			assignment: 'gabriel.granata@hotmail.com',
-			project: 'Random project',
-			client: 'Random client',
-			icon: {
-				val: 'error',
-				class: 'priorityIcon',
-			},
-			url: 'test',
-		},
-		{
-			resource: 'Gabriel Granata',
-			assignment: 'gabriel.granata@hotmail.com',
-			project: 'Random project',
-			client: 'Random client',
-		},
-		{
-			resource: 'Gabriel Granata',
-			assignment: 'gabriel.granata@hotmail.com',
-			project: 'Random project',
-			client: 'Random client',
-		},
-	];
-
 	modalServiceConfirmEvent: Subscription | undefined;
 
 	ngOnInit(): void {
 		this.modalService.confirmEventSubject.pipe(takeUntil(this.$destroyed)).subscribe(() => {
 			this.modalService.close();
-			this.$modalClosedEvent.next(true);
-			this.$modalClosedEvent.next(false);
+			this.$modalClosedEvent.next()
 		});
+		this.businessOwnerStore.select(selectAsyncStatus).pipe(takeUntil(this.$destroyed)).subscribe(asyncStatus => {
+			this.loading = asyncStatus.status === AsyncRequestState.LOADING ? true : false
+			if (asyncStatus.error) {
+				this.openErrorModal(asyncStatus.error.message)
+			}
+		})
 		this.businessOwnerStore.dispatch(getAllResProjInfo());
-		this.businessOwnerStore.dispatch(getAllClientsBasic());
-		this.businessOwnerStore.dispatch(getAllProjBasic());
+		this.businessOwnerStore.dispatch(getAllClients());
 		this.businessOwnerStore
 			.select(selectResProjClientData)
 			.pipe(takeUntil(this.$destroyed))
 			.subscribe(data => {
-				this.resProjClientData = [];
+
+				// Getting all resources
+				this.resourceOptions = data.map(resProjClient => {
+					return {
+						val: `${resProjClient.firstName} ${resProjClient.lastName} (${resProjClient.email})`,
+						id: resProjClient.id
+					}
+				})
+
+				// Getting all Searchable terms (i.e res name, client, project)
+				const allStrings: string[] = []
+				data.forEach(item => {
+					allStrings.push(`${item.firstName} ${item.lastName}`)
+					item.projectClients.forEach(projClient => {
+						allStrings.push(projClient.client)
+						allStrings.push(projClient.project.val)
+					})
+				})
+				this.allSearchTerms = Array.from(new Set(allStrings))
+
+				this.resProjClientTableData = [];
 				data.forEach(resProjClientData => {
+					const tableItem: ProjectManagmenetTableData = {
+						resource: `${resProjClientData.firstName} ${resProjClientData.lastName}`,
+						resourceId: resProjClientData.id,
+						assignment: 'Unassigned',
+						email: `${resProjClientData.email}`,
+						url: `../view-resources/${resProjClientData.id}`,
+						project: '-',
+						client: '-',
+						allProjects: [],
+						allClients: [],
+						columnsWithIcon: ['resource'],
+						columnsWithUrl: ['resource']
+					};
+					if (resProjClientData.reviewNeeded) {
+						tableItem.icon = { val: 'error', class: 'priorityIcon', tooltip: 'Awaiting approval' };
+					}
+
+					// Resource with atleast one project
 					if (resProjClientData.projectClients.length > 0) {
 						const firstProj = resProjClientData.projectClients[0].project;
 						const firstClient = resProjClientData.projectClients[0].client;
@@ -153,69 +185,134 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 						const moreThanOneProj = Array.from(new Set(allProj)).length > 1;
 						const moreThanOneClient = Array.from(new Set(allClient)).length > 1;
 
-						this.resProjClientData.push({
-							resource: `${resProjClientData.firstName} ${resProjClientData.lastName}`,
-							assignment: 'Assigned',
-							project: `${firstProj}${moreThanOneProj ? '...' : ''}`,
-							client: `${firstClient}${moreThanOneClient ? '...' : ''}`,
-						});
-					} else {
-						this.resProjClientData.push({
-							resource: `${resProjClientData.firstName} ${resProjClientData.lastName}`,
-							assignment: 'Unassigned',
-							project: '',
-							client: '',
-						});
+						tableItem.project = `${firstProj.val}${moreThanOneProj ? '...' : ''}`;
+						tableItem.client = `${firstClient}${moreThanOneClient ? '...' : ''}`;
+						tableItem.assignment = 'Assigned';
+						tableItem.allClients = allClient
+						tableItem.allProjects = allProj
 					}
+					this.resProjClientTableData.push(tableItem);
+				});
+				this.resProjClientTableDataFiltered = this.resProjClientTableData
+			});
+		this.businessOwnerStore
+			.select(selectClientData)
+			.pipe(takeUntil(this.$destroyed))
+			.subscribe(data => {
+				this.clients = data;
+				this.clientOptions = data.map(client => {
+					return {
+						val: client.clientName,
+						id: client.id,
+					};
 				});
 			});
-		this.businessOwnerStore
-			.select(selectProjBasicData)
-			.pipe(takeUntil(this.$destroyed))
-			.subscribe(data => {
-				this.projectsBasic = data;
-			});
-		this.businessOwnerStore
-			.select(selectClientBasicData)
-			.pipe(takeUntil(this.$destroyed))
-			.subscribe(data => {
-				this.clientsBasic = data;
-			});
+		this.businessOwnerStore.select(selectProjectAssigned).pipe(takeUntil(this.$destroyed)).subscribe(assigned => {
+			if (assigned) {
+				this.businessOwnerStore.dispatch(getAllResProjInfo());
+			}
+		})
 		this.sharedStore
 			.select(selectLoggedInUserNameEmail)
-			.pipe(takeUntil(this.$destroyed))
+			.pipe(take(1))
 			.subscribe(data => {
 				this.name = `${data.firstName} ${data.lastName}`;
 				this.email = data.email || '';
 			});
 	}
 
+	openErrorModal = (errorMessage: string) => {
+		this.modalService.open(
+			{
+				title: "Error",
+				confirmText: "Okay",
+				message: errorMessage,
+				modalType: ModalType.ERROR,
+				closable: false,
+			},
+			CustomModalType.INFO,
+		);
+	}
+
+	// Projects should be those that are under the client and not already assigned to the resource
+	updateProjects = (clientId?: string) => {
+		const existingSelectedClient = this.manageResourcesForm.get('assign')?.get('client')?.value
+		const id = parseInt(clientId ? clientId : existingSelectedClient, 10);
+		this.manageResourcesForm.get('assign')?.get('project')?.reset();
+		this.manageResourcesForm.get('invite')?.get('project')?.reset();
+		
+		this.currentProjects =
+			this.clients
+				.find(client => client.id === id)
+				?.projects.map(proj => {
+					return {
+						val: proj.name,
+						id: proj.id,
+					};
+				}) || [];
+		this.filterCurrentProjectsBySelectedResource()
+	};
+
+	// Shouldnt see a projectif the currently selected resource is already assigned to it
+	filterCurrentProjectsBySelectedResource(){
+		const curSelectedRes = this.manageResourcesForm.get('assign')?.get('resource')?.value
+		this.currentProjects = this.currentProjects.filter(curFilteredProj => {
+			if (curSelectedRes) {
+				const curResProjClientTableDatum = this.resProjClientTableData.find(resProjClient => resProjClient.resourceId === curSelectedRes)
+				if (curResProjClientTableDatum && curResProjClientTableDatum?.allProjects.length > 0) {
+					return !curResProjClientTableDatum?.allProjects.some(proj => proj.id === curFilteredProj.id)
+				}
+				return true
+			}
+			return true
+		})
+	}
+
 	invite() {
 		this.modalService.open(
 			{
-				title: 'Assign John Doe to Project',
+				title: 'Invite a resource to Tempus',
 				closable: true,
 				confirmText: 'CONFIRM',
 				modalType: ModalType.INFO,
 				closeText: 'Cancel',
 				template: this.inviteModal,
-				subtitle: 'Testing someting 123',
+				subtitle: 'A unique invitation link will be sent by email.',
 			},
 			CustomModalType.CONTENT,
 		);
-		this.modalService.confirmDisabled()?.next(false);
+		this.modalService.confirmDisabled()?.next(true);
 		this.manageResourcesForm
 			.get('invite')
-			?.valueChanges.pipe(takeUntil(this.$modalClosedEvent))
-			.subscribe(data => {
-				console.log(data);
+			?.valueChanges.pipe(
+				takeUntil(this.$modalClosedEvent),
+				finalize(() => {
+					this.businessOwnerStore.dispatch(createLink({
+						createLinkDto: {
+							firstName: this.manageResourcesForm.get('invite')?.get('firstName')?.value,
+							lastName: this.manageResourcesForm.get('invite')?.get('lastName')?.value,
+							email: this.manageResourcesForm.get('invite')?.get('emailAddress')?.value,
+							projectId: this.manageResourcesForm.get('invite')?.get('project')?.value,
+						} as ICreateLinkDto
+					}))
+				}),
+			)
+			.subscribe((data: {firstName: string; lastName: string; string: string; position: string; client: number; project: number}) => {
+				if(this.manageResourcesForm.get('invite')?.valid) {
+					this.modalService.confirmDisabled()?.next(false);
+				} else {
+					this.modalService.confirmDisabled()?.next(true);
+				}
 			});
+		this.modalService.closed().pipe(take(1)).subscribe(() => {
+			this.resetModalData()
+		})
 	}
 
 	assign() {
 		this.modalService.open(
 			{
-				title: 'Invite a Resource to Tempus',
+				title: 'Assign resource to a project',
 				closable: true,
 				confirmText: 'INVITE',
 				modalType: ModalType.INFO,
@@ -224,21 +321,59 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 			},
 			CustomModalType.CONTENT,
 		);
-		this.modalService.confirmDisabled()?.next(false);
+		this.modalService.confirmDisabled()?.next(true);
 		this.manageResourcesForm
 			.get('assign')
-			?.valueChanges.pipe(takeUntil(this.$modalClosedEvent))
-			.subscribe(data => {
-				console.log(data);
+			?.valueChanges.pipe(
+				takeUntil(this.$modalClosedEvent),
+				finalize(() => {
+					this.businessOwnerStore.dispatch(createResourceProjectAssignment({
+						resourceId: this.manageResourcesForm.get('assign')?.get('resource')?.value,
+						projectId: this.manageResourcesForm.get('assign')?.get('project')?.value
+					}))
+				}),
+			)
+			.subscribe((data: {client: number; project: number, resource: number}) => {
+				if(this.manageResourcesForm.get('assign')?.valid) {
+					this.modalService.confirmDisabled()?.next(false);
+				} else {
+					this.modalService.confirmDisabled()?.next(true);
+				}
 			});
+		this.modalService.closed().pipe(take(1)).subscribe(() => {
+			this.resetModalData()
+		})
 	}
 
+	resetModalData = () => {
+		this.currentProjects = [];
+		this.manageResourcesForm.get('invite')?.reset()
+		this.manageResourcesForm.get('assign')?.reset()
+	}
+
+	
 	filter() {
 		// TODO
 	}
 
 	search(searchTerm: string) {
-		console.log(searchTerm);
+		
+		if (searchTerm === '') {
+			this.resProjClientTableDataFiltered = this.resProjClientTableData
+			return
+		}
+
+		this.resProjClientTableDataFiltered = this.resProjClientTableData.filter(resProjClientTableDatum => {
+			if(resProjClientTableDatum.resource === searchTerm) {
+				return true
+			} else if (resProjClientTableDatum.allClients.includes(searchTerm)) {
+				return true
+			} else if (resProjClientTableDatum.allProjects.map(proj => proj.val).includes(searchTerm)) {
+				return true
+			} else {
+				return false
+			}
+		})
 	}
 
 	ngOnDestroy(): void {

@@ -40,7 +40,6 @@ const config: PostgresConnectionOptions = {
 		CertificationEntity,
 	],
 	synchronize: true,
-	logging: true,
 };
 
 export default config;

@@ -15,22 +15,22 @@ export class OnboardingClientProjectService {
 
 	projectURL = 'http://localhost:3000/onboarding/project';
 
-	public getProjectsBasic(): Observable<Project[]> {
-		return this.authStore.select(selectAccessToken).pipe(
-			take(1),
-			switchMap(token => {
-				const httpAuthHeaders = getAuthHeaders(token || '');
-				return this.http.get<Project[]>(`${this.projectURL}/`, httpAuthHeaders).pipe(catchError(handleError));
-			}),
-		);
-	}
-
-	public getClientsBasic(): Observable<Client[]> {
+	public getClients(): Observable<Client[]> {
 		return this.authStore.select(selectAccessToken).pipe(
 			take(1),
 			switchMap(token => {
 				const httpAuthHeaders = getAuthHeaders(token || '');
 				return this.http.get<Client[]>(`${this.clientURL}/`, httpAuthHeaders).pipe(catchError(handleError));
+			}),
+		);
+	}
+
+	public assignResourceToProject(projectId: number, resourceId: number): Observable<Project> {
+		return this.authStore.select(selectAccessToken).pipe(
+			take(1),
+			switchMap(token => {
+				const httpAuthHeaders = getAuthHeaders(token || '');
+				return this.http.post<Project>(`${this.projectURL}/${projectId}/${resourceId}/assign`, {}, httpAuthHeaders).pipe(catchError(handleError));
 			}),
 		);
 	}

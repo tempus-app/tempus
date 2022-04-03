@@ -11,7 +11,7 @@ import { ButtonType } from './button-type-enum';
 export class ButtonComponent implements OnInit {
 	@Output() buttonClick = new EventEmitter<boolean>();
 
-	@Input() disabled = false;
+	@Input() disabled: boolean | null = false;
 
 	@Input() buttonType?: ButtonType = undefined;
 
