@@ -306,7 +306,6 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 			.get(`${this.prefix}modal.inviteModal`)
 			.pipe(take(1))
 			.subscribe(data => {
-				console.log(data);
 				this.modalService.open(
 					{
 						title: data['title'],
