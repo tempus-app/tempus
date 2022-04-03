@@ -4,8 +4,8 @@ import { Store } from '@ngrx/store';
 import { OnboardingClientState } from '@tempus/client/onboarding-client/shared/data-access';
 import { Subject } from 'rxjs';
 import { ButtonType } from '@tempus/client/shared/ui-components/presentational';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import { ICreateCertificationDto, ICreateEducationDto, ICreateExperienceDto } from '@tempus/shared-domain';
+import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { ICreateCertificationDto, ICreateEducationDto, ICreateExperienceDto, ICreateViewDto, ICreateLocationDto, ViewType, ICreateSkillDto, ICreateSkillTypeDto } from '@tempus/shared-domain';
 
 @Component({
 	selector: 'tempus-edit-profile',
@@ -21,7 +21,14 @@ export class EditProfileComponent implements AfterViewInit, OnDestroy {
 		private route: ActivatedRoute,
 	) {}
 
-	viewChangesForm = this.fb.group({});
+	personalInfoForm = this.fb.group({});
+	experiencesForm = this.fb.group({});
+	educationsForm = this.fb.group({});
+	certificationsForm = this.fb.group({});
+	skillsSummaryForm = this.fb.group({});
+	newSkills: string[] = [];
+
+	isValid = true;
 
 	@Input() firstName = '';
 
@@ -67,6 +74,9 @@ export class EditProfileComponent implements AfterViewInit, OnDestroy {
 	@Output()
 	closeEditViewClicked = new EventEmitter();
 
+	@Output()
+	submitClicked = new EventEmitter();
+
 	ngOnDestroy(): void {
 		this.destroyed$.next();
 		this.destroyed$.complete();
@@ -80,17 +90,122 @@ export class EditProfileComponent implements AfterViewInit, OnDestroy {
 		this.changeDetector.detectChanges();
 	}
 
-	loadFormGroup(eventData: FormGroup) {
-		this.viewChangesForm = eventData;
-		console.log(this.viewChangesForm);
+	loadPersonalInfo(eventData: FormGroup) {
+		this.personalInfoForm = eventData;
+	}
+
+	loadExperiences(eventData: FormGroup) {
+		this.experiencesForm = eventData;
+	}
+
+	loadEducation(eventData: FormGroup) {
+		this.educationsForm = eventData;
+	}
+
+	loadCertifications(eventData: FormGroup) {
+		this.certificationsForm = eventData;
+	}
+
+	loadSkillsSummary(eventData: FormGroup) {
+		this.skillsSummaryForm = eventData;
+	}
+
+	loadSkills(eventData: string[]) {
+		this.skills = eventData;
+	}
+
+	generateNewView() {
+		//get all nested FormGroups -> Dto[]
+		const certificationsArray = this.certificationsForm.controls['certifications'] as FormArray;
+		const experiencesArray = this.experiencesForm.controls['workExperience'] as FormArray;
+		const educationsArray = this.educationsForm.controls['qualifications'] as FormArray;
+		
+		let certificationsDto: ICreateCertificationDto[] = [];
+		for (let i=0; i<certificationsArray?.length; i++ ){
+			const certification: ICreateCertificationDto = {
+				title: (certificationsArray?.at(i) as FormGroup).get('title')?.value,
+				institution: (certificationsArray?.at(i) as FormGroup).get('certifyingAuthority')?.value,
+				summary: (certificationsArray?.at(i) as FormGroup).get('summary')?.value,
+			}
+			certificationsDto.push(certification);
+		}
+
+		let experiencesDto: ICreateExperienceDto[] = [];
+		for (let i=0; i<experiencesArray?.length; i++ ){
+			const experience: ICreateExperienceDto = {
+				title: (experiencesArray?.at(i) as FormGroup).get('title')?.value,
+				summary: (experiencesArray?.at(i) as FormGroup).get('description')?.value,
+				description: [(experiencesArray?.at(i) as FormGroup).get('description')?.value],
+				startDate: (experiencesArray?.at(i) as FormGroup).get('startDate')?.value,
+				endDate: (experiencesArray?.at(i) as FormGroup).get('endDate')?.value,
+				company: (experiencesArray?.at(i) as FormGroup).get('company')?.value,
+				location: {
+					city: (experiencesArray?.at(i) as FormGroup).get('city')?.value,
+					province: (experiencesArray?.at(i) as FormGroup).get('state')?.value,
+					country: (experiencesArray?.at(i) as FormGroup).get('country')?.value,
+				} as ICreateLocationDto,
+			}
+			experiencesDto.push(experience);
+		}
+
+		let educationsDto: ICreateEducationDto[] = [];
+		for (let i=0; i<educationsArray?.length; i++ ){
+			const education: ICreateEducationDto = {
+				degree: (educationsArray?.at(i) as FormGroup).get('field')?.value,
+				institution: (educationsArray?.at(i) as FormGroup).get('institution')?.value,
+				location: {
+					city: (educationsArray?.at(i) as FormGroup).get('city')?.value,
+					province: (educationsArray?.at(i) as FormGroup).get('state')?.value,
+					country: (educationsArray?.at(i) as FormGroup).get('country')?.value,
+				} as ICreateLocationDto,
+				startDate: (educationsArray?.at(i) as FormGroup).get('startDate')?.value,
+				endDate: (educationsArray?.at(i) as FormGroup).get('endDate')?.value,
+			}
+			educationsDto.push(education);
+		}
+
+		//TODO: convert to use skills FormArray
+		let skillsDto: ICreateSkillDto[] = [];
+		for (let i=0; i<this.skills?.length; i++ ){
+			const skill: ICreateSkillDto = {
+				skill: {
+					name: this.skills[i]
+				} as ICreateSkillTypeDto
+			}
+			skillsDto.push(skill);
+		}
+
+		return {
+			skillsSummary: this.skillsSummaryForm.get('skillsSummary')?.value,
+			experiencesSummary: this.experiencesForm.get('workExperienceSummary')?.value,
+			educationsSummary: this.educationsForm.get('educationSummary')?.value,
+			profileSummary: this.personalInfoForm.get('profileSummary')?.value,
+			skills: skillsDto,
+			educations: educationsDto,
+			   experiences: experiencesDto,
+			certifications: certificationsDto,
+			viewType: ViewType.PRIMARY,
+		} as ICreateViewDto;
 	}
 
 
 	submitChanges() {
-		this.viewChangesForm?.markAllAsTouched();
-		console.log(this.viewChangesForm);
-		if (this.viewChangesForm?.valid) {
-			//create new revision/view
+		this.educationsForm?.markAllAsTouched();
+		this.personalInfoForm?.markAllAsTouched();
+		this.experiencesForm?.markAllAsTouched();
+		this.skillsSummaryForm?.markAllAsTouched();
+		this.certificationsForm?.markAllAsTouched();
+
+		//TODO: disable submit button
+		//TODO: disable non view related fields (i.e name, address etc)
+			// should be extracted from personal-info component?
+		// this.isValid = this.personalInfoForm?.valid && this.personalInfoForm?.valid && this.certificationsForm?.valid && this.experiencesForm?.valid
+		// && this.skillsSummaryForm?.valid;
+
+		if (this.isValid) {
+			const newView = this.generateNewView();
+			console.log(newView);
+			this.submitClicked.emit(newView);
 			this.closeEditView();
 		}
 	}

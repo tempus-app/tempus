@@ -3,6 +3,7 @@
 		<tempus-edit-profile 
 		(openEditView)="openEditView()"
 		(closeEditViewClicked)="closeEditView()"
+		(submitClicked)="loadNewView($event)"
 		[firstName]="firstName"
 		[lastName]="lastName"
 		[phoneNumber]="phoneNumber"

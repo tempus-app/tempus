@@ -40,7 +40,6 @@ export class ResourceService {
 			skillsSummary: resource.skillsSummary,
 			skills: createdResource.skills,
 			profileSummary: resource.profileSummary,
-			type: 'PROFILE',
 		});
 
 		if (!createdResource.views) createdResource.views = [];

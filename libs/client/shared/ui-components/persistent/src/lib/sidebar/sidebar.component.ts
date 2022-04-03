@@ -66,8 +66,8 @@ export class SidebarComponent implements OnInit {
 	getInitials(name: string) {
 		const fullName = name.split(' ');
 		const firstInitial = fullName[0].charAt(0);
-		const secondInitial = fullName.pop()?.charAt(0) ? fullName.pop()?.charAt(0) : '';
-		this.initials = (firstInitial + secondInitial).toUpperCase();
+		const secondInitial = fullName.pop()?.charAt(0);
+		this.initials = firstInitial && secondInitial ?  (firstInitial + secondInitial).toUpperCase() : firstInitial;
 	}
 
 	toggleSidebar() {

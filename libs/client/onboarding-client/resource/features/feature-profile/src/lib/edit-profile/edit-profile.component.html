@@ -7,12 +7,12 @@
 			<div  fxLayout="row" fxLayoutGap="10px">
 				<tempus-button label="Cancel" color="accent" (click)="closeEditView()"></tempus-button>
 				<tempus-button label="Preview" color="accent"></tempus-button>
-				<tempus-button label="Submit" color="accent" (click)="submitChanges()"></tempus-button>
+				<tempus-button [disabled]="!isValid" label="Submit" color="accent" (click)="submitChanges()"></tempus-button>
 			</div>
 		</div>
 		<div fxFlex>
 			<tempus-resource-info-personal-information
-			(formGroup)="loadFormGroup($event)" 				
+			(formGroup)="loadPersonalInfo($event)" 				
 			[firstName]="firstName"
 			[lastName]="lastName"
 			[phoneNumber]="phoneNumber"
@@ -26,22 +26,27 @@
 		</div>
 		<div fxFlex>
 			<tempus-resource-info-education
+			(formGroup)="loadEducation($event)" 	
 			[educationSummary]="educationsSummary"
 			[educations]="educations"
 			></tempus-resource-info-education>
 		</div>
 		<div fxFlex>
 			<tempus-resource-info-certifications
+			(formGroup)="loadCertifications($event)" 	
 			[certificationsArray]="certifications"></tempus-resource-info-certifications>
 		</div>
 		<div fxFlex>
 			<tempus-resource-info-work-experience
+			(formGroup)="loadExperiences($event)"
 			[experiencesSummary]="experiencesSummary"
 			[workExperiences]="workExperiences"
 			></tempus-resource-info-work-experience>
 		</div>
 		<div fxFlex>
 			<tempus-resource-info-skills
+			(formGroup)="loadSkillsSummary($event)" 
+			(emitSkills)="loadSkills($event)" 
 			[skillsSummary]="skillsSummary"
 			[skills]="skills"
 			></tempus-resource-info-skills>

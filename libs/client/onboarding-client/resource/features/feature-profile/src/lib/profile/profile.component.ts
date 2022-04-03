@@ -9,7 +9,7 @@ import {
 import { Subject, take } from 'rxjs';
 import { ButtonType } from '@tempus/client/shared/ui-components/presentational';
 import { UserType } from '@tempus/client/shared/ui-components/persistent';
-import { ICreateExperienceDto, ICreateEducationDto, ICreateCertificationDto, View } from '@tempus/shared-domain';
+import { ICreateExperienceDto, ICreateEducationDto, ICreateCertificationDto, ICreateViewDto, View, ViewType } from '@tempus/shared-domain';
 
 @Component({
 	selector: 'tempus-profile',
@@ -27,6 +27,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
 	) {}
 
 	userId = 0;
+
+	primaryViewId = 0;
 
 	firstName = '';
 
@@ -88,8 +90,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
 	openEditView() {
 		this.editEnabled = true;
-		console.log('opening edit view');
-		console.log(this.firstName);
 	}
 
 	closeEditView() {
@@ -117,7 +117,10 @@ export class ProfileComponent implements OnInit, OnDestroy {
 			this.githubLink = resData.githubLink;
 			this.otherLink = resData.otherLink;
 
+			//TODO: fetch all Primary views, select PENDING to display if available
 			this.resourceService.getPrimaryView(this.userId).subscribe(primaryView => {
+				console.log(primaryView);
+				this.primaryViewId = primaryView.id;
 				this.certifications = primaryView.certifications;
 				this.educations = primaryView.educations;
 				this.educationsSummary = primaryView.educationsSummary;
@@ -128,6 +131,28 @@ export class ProfileComponent implements OnInit, OnDestroy {
 				this.skillsSummary = primaryView.skillsSummary;
 			});
 		});
+	}
+
+	loadNewView(newView: ICreateViewDto) {
+		console.log(newView);
+
+		//Update local display
+		this.certifications = newView.certifications;
+		this.educations = newView.educations;
+		this.educationsSummary = newView.educationsSummary;
+		this.workExperiences = newView.experiences;
+		this.experiencesSummary = newView.experiencesSummary;
+		this.profileSummary = newView.profileSummary;
+		this.skills = newView.skills.map(skill => skill.skill.name);
+		this.skillsSummary = newView.skillsSummary;
+
+		//Post view to db, return revision
+		this.resourceService.editResourceView(this.primaryViewId, newView).subscribe(revision => {
+			console.log("revision");
+			console.log(revision);
+		})
+
+		//load all primary views, display latest update? for now, PENDING first
 	}
 
 	ngOnDestroy(): void {

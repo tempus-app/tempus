@@ -14,11 +14,11 @@
 								<p class="mat-body-2">{{ workExperience.title }}</p>
 								<p class="mat-body-2">
 									{{
-										formatAddress(
+										workExperience.location? formatAddress(
 											workExperience.location.country,
 											workExperience.location.province,
 											workExperience.location.city
-										)
+										) : ''
 									}}
 								</p>
 							</div>

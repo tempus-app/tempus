@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { ICreateResourceDto, Resource, View } from '@tempus/shared-domain';
+import { ICreateResourceDto, ICreateViewDto, Resource, Revision, View } from '@tempus/shared-domain';
 import { catchError, Observable, take, switchMap } from 'rxjs';
 import { OnboardingClientState, selectAccessToken } from '../+state';
 import { handleError } from './errorHandler';
@@ -66,6 +66,25 @@ export class OnboardingClientResourceService {
 				};
 				return this.http
 					.get<Array<View>>(`http://localhost:3000/onboarding/profile-view/${resourceId}`, httpOptions)
+					.pipe(catchError(handleError));
+			}),
+		);
+	}
+
+	public editResourceView(viewId: number, newView: ICreateViewDto): Observable<Revision> {
+		return this.store.select(selectAccessToken).pipe(
+			take(1),
+			switchMap(resData => {
+				const httpOptions = {
+					headers: new HttpHeaders({
+						Authorization: `Bearer ${resData}`,
+					}),
+				};
+				console.log(resData);
+				console.log(this.http
+					.patch<Revision>(`http://localhost:3000/onboarding/profile-view/${viewId}`, newView, httpOptions))
+				return this.http
+					.patch<Revision>(`http://localhost:3000/onboarding/profile-view/${viewId}`, newView, httpOptions)
 					.pipe(catchError(handleError));
 			}),
 		);

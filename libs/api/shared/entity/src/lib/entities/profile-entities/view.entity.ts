@@ -15,7 +15,6 @@ export class ViewEntity implements View {
 		skillsSummary?: string,
 		educationsSummary?: string,
 		experiencesSummary?: string,
-		type?: string,
 		revision?: RevisionEntity,
 		skills?: SkillEntity[],
 		experiences?: ExperienceEntity[],
@@ -30,7 +29,6 @@ export class ViewEntity implements View {
 		this.skillsSummary = skillsSummary;
 		this.educationsSummary = educationsSummary;
 		this.experiencesSummary = experiencesSummary;
-		this.type = type;
 		this.revision = revision;
 		this.skills = skills;
 		this.experiences = experiences;
@@ -55,10 +53,7 @@ export class ViewEntity implements View {
 
 	@Column({ nullable: true })
 	experiencesSummary: string;
-
-	@Column()
-	type: string;
-
+	
 	@Column()
 	locked: boolean;
 
@@ -125,12 +120,11 @@ export class ViewEntity implements View {
 			dto.skillsSummary,
 			dto.educationsSummary,
 			dto.experiencesSummary,
-			dto.type,
 			undefined,
-			dto.skills.map(skill => SkillEntity.fromDto(skill)),
-			dto.experiences.map(experience => ExperienceEntity.fromDto(experience)),
-			dto.educations.map(education => EducationEntity.fromDto(education)),
-			dto.certifications.map(certification => CertificationEntity.fromDto(certification)),
+			dto.skills?.map(skill => SkillEntity.fromDto(skill)),
+			dto.experiences?.map(experience => ExperienceEntity.fromDto(experience)),
+			dto.educations?.map(education => EducationEntity.fromDto(education)),
+			dto.certifications?.map(certification => CertificationEntity.fromDto(certification)),
 			undefined,
 			dto.viewType,
 		);

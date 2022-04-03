@@ -13,7 +13,6 @@ export interface View {
 	skillsSummary: string;
 	educationsSummary: string;
 	experiencesSummary: string;
-	type: string;
 	revision?: Revision;
 	locked: boolean;
 	skills: Skill[];
