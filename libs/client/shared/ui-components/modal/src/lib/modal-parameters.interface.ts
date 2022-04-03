@@ -10,6 +10,7 @@ export interface Modal {
 	modalType?: ModalType;
 	closeText?: string;
 	template?: TemplateRef<unknown>;
+	id: string;
 }
 
 export interface InfoModal extends Modal {

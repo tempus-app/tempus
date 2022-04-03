@@ -7,8 +7,18 @@
 
 			<td mat-cell *matCellDef="let element">
 				<span class="cellContainer">
-					<mat-icon matTooltip="{{ element.icon.tooltip }}" class="{{ element.icon.class }}" *ngIf="element.icon && element.columnsWithIcon.includes(disCol.columnDef)">{{ element.icon.val }}</mat-icon>
-					<p class="mat-body-2" *ngIf="!(element.url && element.columnsWithUrl.includes(disCol.columnDef))" [innerHtml]="disCol.cell(element)"></p>
+					<span
+						matTooltipClass="tooltip"
+						matTooltip="{{ element.icon.tooltip }}"
+						class="material-icons {{ element.icon.class }}"
+						*ngIf="element.icon && element.columnsWithIcon.includes(disCol.columnDef)"
+						>{{ element.icon.val }}</span
+					>
+					<p
+						class="mat-body-2"
+						*ngIf="!(element.url && element.columnsWithUrl.includes(disCol.columnDef))"
+						[innerHtml]="disCol.cell(element)"
+					></p>
 					<a
 						class="mat-body-2"
 						[routerLink]="element.url"

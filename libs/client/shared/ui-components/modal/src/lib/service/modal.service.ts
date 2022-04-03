@@ -13,7 +13,7 @@ export class ModalService {
 
 	dialogRef: MatDialogRef<InfoModalComponent | ContentModalComponent> | undefined;
 
-	confirmEventSubject = new Subject();
+	confirmEventSubject = new Subject<string>();
 
 	public open(options: Modal, type: CustomModalType) {
 		if (type === CustomModalType.INFO) {
@@ -25,6 +25,7 @@ export class ModalService {
 					confirmText: options.confirmText,
 					modalType: options.modalType,
 					closable: options.closable,
+					id: options.id,
 				},
 				panelClass: 'responsive-modal',
 				autoFocus: false,
@@ -57,7 +58,7 @@ export class ModalService {
 	}
 
 	public triggerConfirmEvent() {
-		this.confirmEventSubject.next(this.dialogRef);
+		this.confirmEventSubject.next(this.dialogRef?.componentInstance.data.id || '');
 	}
 
 	public closed(): Observable<unknown> {

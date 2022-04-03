@@ -86,7 +86,9 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 
 	$destroyed = new Subject<void>();
 
-	$modalClosedEvent = new Subject<void>();
+	$inviteModalClosedEvent = new Subject<void>();
+
+	$assignModalClosedEvent = new Subject<void>();
 
 	ButtonType = ButtonType;
 
@@ -147,9 +149,13 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 	modalServiceConfirmEvent: Subscription | undefined;
 
 	ngOnInit(): void {
-		this.modalService.confirmEventSubject.pipe(takeUntil(this.$destroyed)).subscribe(() => {
+		this.modalService.confirmEventSubject.pipe(takeUntil(this.$destroyed)).subscribe(modalId => {
 			this.modalService.close();
-			this.$modalClosedEvent.next();
+			if (modalId === 'inviteModal') {
+				this.$inviteModalClosedEvent.next();
+			} else if (modalId === 'assignModal') {
+				this.$assignModalClosedEvent.next();
+			}
 		});
 		this.businessOwnerStore
 			.select(selectAsyncStatus)
@@ -260,6 +266,7 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 				message: errorMessage,
 				modalType: ModalType.ERROR,
 				closable: false,
+				id: 'error',
 			},
 			CustomModalType.INFO,
 		);
@@ -309,6 +316,7 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 				this.modalService.open(
 					{
 						title: data['title'],
+						id: 'inviteModal',
 						closable: true,
 						confirmText: data['confirmText'],
 						modalType: ModalType.INFO,
@@ -323,7 +331,7 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 		this.manageResourcesForm
 			.get('invite')
 			?.valueChanges.pipe(
-				takeUntil(this.$modalClosedEvent),
+				takeUntil(this.$inviteModalClosedEvent),
 				finalize(() => {
 					this.businessOwnerStore.dispatch(
 						createLink({
@@ -360,6 +368,7 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 				this.modalService.open(
 					{
 						title: data['title'],
+						id: 'assignModal',
 						closable: true,
 						confirmText: data['confirmText'],
 						modalType: ModalType.INFO,
@@ -373,7 +382,7 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 		this.manageResourcesForm
 			.get('assign')
 			?.valueChanges.pipe(
-				takeUntil(this.$modalClosedEvent),
+				takeUntil(this.$assignModalClosedEvent),
 				finalize(() => {
 					this.businessOwnerStore.dispatch(
 						createResourceProjectAssignment({
