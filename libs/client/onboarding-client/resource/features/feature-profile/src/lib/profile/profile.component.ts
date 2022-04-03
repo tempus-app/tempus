@@ -9,7 +9,7 @@ import {
 import { Subject, take } from 'rxjs';
 import { ButtonType } from '@tempus/client/shared/ui-components/presentational';
 import { UserType } from '@tempus/client/shared/ui-components/persistent';
-import { ICreateExperienceDto, ICreateEducationDto, ICreateCertificationDto, ICreateViewDto, View, ViewType } from '@tempus/shared-domain';
+import { ICreateExperienceDto, ICreateEducationDto, ICreateCertificationDto, ICreateViewDto, View, ViewType, RevisionType } from '@tempus/shared-domain';
 
 @Component({
 	selector: 'tempus-profile',
@@ -28,7 +28,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
 	userId = 0;
 
-	primaryViewId = 0;
+	approvedPrimaryViewId = 0;
 
 	firstName = '';
 
@@ -80,7 +80,9 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
 	UserType = UserType;
 
-	editEnabled = false;
+	isPendingApproval = false;
+
+	editViewEnabled = false;
 
 	selectedTab(tab: string) {
 		if (tab === 'logout') {
@@ -89,11 +91,11 @@ export class ProfileComponent implements OnInit, OnDestroy {
 	}
 
 	openEditView() {
-		this.editEnabled = true;
+		this.editViewEnabled = true;
 	}
 
 	closeEditView() {
-		this.editEnabled = false;
+		this.editViewEnabled = false;
 	}
 
 	logout() {
@@ -117,25 +119,39 @@ export class ProfileComponent implements OnInit, OnDestroy {
 			this.githubLink = resData.githubLink;
 			this.otherLink = resData.otherLink;
 
-			//TODO: fetch all Primary views, select PENDING to display if available
-			this.resourceService.getPrimaryView(this.userId).subscribe(primaryView => {
-				console.log(primaryView);
-				this.primaryViewId = primaryView.id;
-				this.certifications = primaryView.certifications;
-				this.educations = primaryView.educations;
-				this.educationsSummary = primaryView.educationsSummary;
-				this.workExperiences = primaryView.experiences;
-				this.experiencesSummary = primaryView.experiencesSummary;
-				this.profileSummary = primaryView.profileSummary;
-				this.skills = primaryView.skills.map(skill => skill.skill.name);
-				this.skillsSummary = primaryView.skillsSummary;
-			});
+			//fetch all Primary views, select PENDING to display if available
+			this.resourceService.getResourceProfileViews(this.userId).subscribe(views => {
+				const primaryViews =  views.filter(view => view.viewType === ViewType.PRIMARY);
+				const pendingView = primaryViews.find(view => view.revisionType === RevisionType.PENDING);
+				const approvedView = primaryViews.find(view => view.revisionType === RevisionType.APPROVED);
+
+				this.approvedPrimaryViewId = approvedView?.id ? approvedView.id : 0;
+
+				if (pendingView) {
+					this.certifications = pendingView.certifications;
+					this.educations = pendingView.educations;
+					this.educationsSummary = pendingView.educationsSummary;
+					this.workExperiences = pendingView.experiences;
+					this.experiencesSummary = pendingView.experiencesSummary;
+					this.profileSummary = pendingView.profileSummary;
+					this.skills = pendingView.skills.map(skill => skill.skill.name);
+					this.skillsSummary = pendingView.skillsSummary;
+					this.isPendingApproval = true;
+				} else if (approvedView) {
+					this.certifications = approvedView.certifications;
+					this.educations = approvedView.educations;
+					this.educationsSummary = approvedView.educationsSummary;
+					this.workExperiences = approvedView.experiences;
+					this.experiencesSummary = approvedView.experiencesSummary;
+					this.profileSummary = approvedView.profileSummary;
+					this.skills = approvedView.skills.map(skill => skill.skill.name);
+					this.skillsSummary = approvedView.skillsSummary;
+				}
+			})
 		});
 	}
 
 	loadNewView(newView: ICreateViewDto) {
-		console.log(newView);
-
 		//Update local display
 		this.certifications = newView.certifications;
 		this.educations = newView.educations;
@@ -146,13 +162,10 @@ export class ProfileComponent implements OnInit, OnDestroy {
 		this.skills = newView.skills.map(skill => skill.skill.name);
 		this.skillsSummary = newView.skillsSummary;
 
-		//Post view to db, return revision
-		this.resourceService.editResourceView(this.primaryViewId, newView).subscribe(revision => {
-			console.log("revision");
-			console.log(revision);
-		})
+		this.isPendingApproval = true;
 
-		//load all primary views, display latest update? for now, PENDING first
+		//Post view to db, return revision
+		this.resourceService.editResourceView(this.approvedPrimaryViewId, newView);
 	}
 
 	ngOnDestroy(): void {

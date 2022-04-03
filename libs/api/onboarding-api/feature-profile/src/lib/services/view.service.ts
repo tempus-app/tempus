@@ -62,7 +62,7 @@ export class ViewsService {
 		}
 		newViewEntity = await this.viewsRepository.save(newViewEntity);
 
-		// FIXME: view.locked = true;
+		view.locked = true;
 		await this.viewsRepository.save(view);
 
 		if (view.revision) {
@@ -135,7 +135,7 @@ export class ViewsService {
 				resource: {
 					id: resourceId,
 				},
-				revisionType: RevisionType.APPROVED,
+				// revisionType: RevisionType.APPROVED,
 			},
 		});
 
