@@ -117,12 +117,13 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
 	downloadProfile() {
 		// Taken from https://stackoverflow.com/questions/52154874/angular-6-downloading-file-from-rest-api
-		this.resourceService.downloadProfile(this.currentViewID).subscribe(data => {
+		this.resourceService.downloadProfile(String(this.editablePrimaryViewId)).subscribe(data => {
 			const downloadURL = window.URL.createObjectURL(data);
 			const link = document.createElement('a');
 			link.href = downloadURL;
-			const index = this.viewIDs.indexOf(parseInt(this.currentViewID, 10));
-			link.download = `${this.resourceName}-${this.viewNames[index]}`;
+			// const index = this.viewIDs.indexOf(parseInt(this.currentViewID, 10));
+			// link.download = `${this.resourceName}-${this.viewNames[index]}`;
+			link.download = `${this.fullName}`;
 			link.click();
 		});
 	}
@@ -178,6 +179,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
 					this.isRejected = true;
 					this.rejectionComments = rejectedView.revision?.comment ? rejectedView.revision.comment : '';
 				} else if (pendingView) {
+					this.editablePrimaryViewId = pendingView.id;
 					this.certifications = pendingView.certifications;
 					this.educations = pendingView.educations;
 					this.educationsSummary = pendingView.educationsSummary;

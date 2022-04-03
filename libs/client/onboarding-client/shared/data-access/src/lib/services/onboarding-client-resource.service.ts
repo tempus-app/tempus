@@ -102,8 +102,17 @@ export class OnboardingClientResourceService {
 	}
 
 	public downloadProfile(id: string): Observable<Blob> {
-		return this.http.get<Blob>(`http://localhost:3000/onboarding/profile-view/download-resume/${id}`, {
-			responseType: 'blob' as 'json',
-		});
+		return this.store.select(selectAccessToken).pipe(
+			take(1),
+			switchMap(resData => {
+				const httpOptions = {
+					responseType: 'blob' as 'json',
+					headers: new HttpHeaders({
+						Authorization: `Bearer ${resData}`,
+					}),
+				};
+				return this.http.get<Blob>(`http://localhost:3000/onboarding/profile-view/download-resume/${id}`, httpOptions);
+			}),
+		);
 	}
 }
