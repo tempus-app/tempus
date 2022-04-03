@@ -20,7 +20,7 @@ const routes: Routes = [
 					),
 			},
 			{
-				path: 'view-resources/:id/:viewID',
+				path: 'view-resources/:id',
 				canLoad: [AuthGuard],
 				canActivate: [AuthGuard],
 				loadChildren: () =>
