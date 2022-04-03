@@ -71,7 +71,6 @@ export class ViewsService {
 			revisionEntity.newView = newViewEntity;
 			await this.revisionRepository.save(revisionEntity);
 			await this.viewsRepository.remove(previousRevision);
-			// revisionEntity.newView = newViewEntity;
 			const revisionToReturn = await this.revisionRepository.save(revisionEntity);
 			return revisionToReturn;
 		}

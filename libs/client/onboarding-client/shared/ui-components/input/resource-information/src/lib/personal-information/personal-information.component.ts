@@ -116,7 +116,5 @@ export class PersonalInformationComponent implements OnInit, OnChanges {
 
 	ngOnChanges(changes: SimpleChanges) {
 		this.updateStateOptions(changes.country.currentValue);
-		// this.formGroup.emit(this.myInfoForm);
-		// console.log("here, i am emitting changes!");
 	}
 }
