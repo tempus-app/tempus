@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { OnboaringClientResourceProfileService } from '@tempus/client/onboarding-client/shared/data-access';
 import { UserType } from '@tempus/client/shared/ui-components/persistent';
-import { LoadView } from '../LoadView.model';
+import { LoadView } from '@tempus/shared-domain';
 
 @Component({
 	selector: 'tempus-resource-profile',

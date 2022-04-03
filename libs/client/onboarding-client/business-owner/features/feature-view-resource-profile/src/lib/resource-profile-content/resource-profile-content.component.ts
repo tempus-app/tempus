@@ -15,6 +15,7 @@ import {
 	ICreateExperienceDto,
 	View,
 	Skill,
+	LoadView,
 	ViewNames,
 } from '@tempus/shared-domain';
 import { OnboaringClientResourceProfileService } from '@tempus/client/onboarding-client/shared/data-access';
@@ -23,7 +24,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, Validators } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 import { take } from 'rxjs';
-import { LoadView } from '../LoadView.model';
 
 @Component({
 	selector: 'tempus-resource-profile-content',

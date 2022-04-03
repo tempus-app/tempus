@@ -6,3 +6,4 @@ export * from './skilltype.model';
 export * from './view.model';
 export * from './certification.model';
 export * from './viewNames.model';
+export * from './loadView.model';

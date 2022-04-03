@@ -1,9 +1,8 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
-import { Revision, View, ViewNames } from '@tempus/shared-domain';
+import { LoadView, ViewNames } from '@tempus/shared-domain';
 import { OnboaringClientResourceProfileService } from '@tempus/client/onboarding-client/shared/data-access';
 import { ActivatedRoute } from '@angular/router';
 import { FormBuilder } from '@angular/forms';
-import { LoadView } from '../LoadView.model';
 
 @Component({
 	selector: 'tempus-user-bar',
@@ -37,8 +36,8 @@ export class UserBarComponent implements OnChanges {
 
 	ngOnChanges(): void {
 		if (this.loadedView.resourceViews) {
-			this.viewNames = this.loadedView.resourceViews.map(view => view.type);
-			this.viewIDs = this.loadedView.resourceViews.map(view => view.id);
+			this.viewNames = this.loadedView.resourceViews.map((view: ViewNames) => view.type);
+			this.viewIDs = this.loadedView.resourceViews.map((view: ViewNames) => view.id);
 		}
 		if (this.loadedView.currentViewName) {
 			this.viewDropDownForm.patchValue({

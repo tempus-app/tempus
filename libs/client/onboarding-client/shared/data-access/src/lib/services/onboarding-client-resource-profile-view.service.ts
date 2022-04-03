@@ -30,4 +30,10 @@ export class OnboaringClientResourceProfileService {
 			.post<ApproveViewDto>(`http://localhost:3000/onboarding/profile-view/approve/${id}`, { comment, approval })
 			.pipe(catchError(handleError));
 	}
+
+	public downloadProfile(id: string): Observable<Blob> {
+		return this.http.get<Blob>(`http://localhost:3000/onboarding/profile-view/download-resume/${id}`, {
+			responseType: 'blob' as 'json',
+		});
+	}
 }
