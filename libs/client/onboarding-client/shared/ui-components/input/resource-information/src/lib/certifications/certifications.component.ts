@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Country, State } from 'country-state-city';
 import { InputType } from '@tempus/client/shared/ui-components/input';
-import { FormArray, FormBuilder, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ICreateCertificationDto } from '@tempus/shared-domain';
 
 @Component({
@@ -45,6 +45,21 @@ export class CertificationsComponent implements OnInit {
 		this.myInfoForm.patchValue({
 			certifications: this.certificationsArray,
 		});
+
+		// mock sections, add to FormArray, patch		
+		for (let i=0; i<this.certificationsArray.length; i++){
+			const certification = this.fb.group({
+				certifyingAuthority: ['', Validators.required],
+				title: ['', Validators.required],
+				summary: [''],
+			});
+			this.certifications.push(certification);
+
+			//patch values
+			(this.certifications.at(i) as FormGroup).get('title')?.patchValue(this.certificationsArray[i].title);
+			(this.certifications.at(i) as FormGroup).get('certifyingAuthority')?.patchValue(this.certificationsArray[i].institution);
+			(this.certifications.at(i) as FormGroup).get('summary')?.patchValue(this.certificationsArray[i].summary);
+		}
 	}
 
 	get certifications() {

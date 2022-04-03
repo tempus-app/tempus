@@ -13,6 +13,7 @@
 				<tempus-text-input
 					placeholder="{{ signInPrefix + 'passwordPlaceholder' | translate }}"
 					cssClass="secondary"
+					[inputType]="InputType.PASSWORD"
 					[control]="$any(loginForm).get('password')"
 				></tempus-text-input>
 				<div class="login-container">

@@ -88,6 +88,7 @@ export class PersonalInformationComponent implements OnInit, OnChanges {
 	ngOnInit(): void {
 		this.loadStoreData();
 		this.formGroup.emit(this.myInfoForm);
+		this.myInfoForm.updateValueAndValidity({ onlySelf: false, emitEvent: true });
 	}
 
 	loadStoreData() {

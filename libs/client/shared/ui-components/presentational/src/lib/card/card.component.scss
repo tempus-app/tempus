@@ -9,3 +9,7 @@
 .content {
 	padding: 1.5rem;
 }
+
+::ng-deep .mat-card {
+	color: abs.$primary-800;
+}

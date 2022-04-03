@@ -34,6 +34,7 @@ export class ResourceService {
 
 		const view = await this.viewsService.createView(createdResource.id, {
 			viewType: ViewType.PRIMARY,
+			type: 'PROFILE',
 			educationsSummary: resource.educationsSummary,
 			educations: createdResource.educations,
 			certifications: createdResource.certifications,
@@ -42,7 +43,6 @@ export class ResourceService {
 			skillsSummary: resource.skillsSummary,
 			skills: createdResource.skills,
 			profileSummary: resource.profileSummary,
-			type: 'PROFILE',
 		});
 
 		if (!createdResource.views) createdResource.views = [];

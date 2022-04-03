@@ -1,4 +1,5 @@
-import { Component, Input, Output, OnInit, EventEmitter } from '@angular/core';
+/* eslint-disable @typescript-eslint/dot-notation */
+import { Component, Input, Output, OnInit, EventEmitter, SimpleChanges } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TranslateService } from '@ngx-translate/core';
@@ -68,11 +69,17 @@ export class SidebarComponent implements OnInit {
 		this.selectTab.emit(tab);
 	}
 
+	ngOnChanges(changes: SimpleChanges) {
+		if (changes['name'].currentValue !== changes['name'].previousValue) {
+			this.getInitials(changes['name'].currentValue);
+		}
+	}
+
 	getInitials(name: string) {
 		const fullName = name.split(' ');
 		const firstInitial = fullName[0].charAt(0);
-		const secondInitial = fullName.pop()?.charAt(0) ? fullName.pop()?.charAt(0) : '';
-		this.initials = (firstInitial + secondInitial).toUpperCase();
+		const secondInitial = fullName.pop()?.charAt(0);
+		this.initials = firstInitial && secondInitial ? (firstInitial + secondInitial).toUpperCase() : firstInitial;
 	}
 
 	toggleSidebar() {

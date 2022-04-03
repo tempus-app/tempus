@@ -24,7 +24,7 @@ export class RevisionEntity implements Revision {
 	@Column({ nullable: true })
 	approved?: boolean;
 
-	@OneToOne(() => ViewEntity, view => view.revision, { onDelete: 'CASCADE' })
+	@OneToOne(() => ViewEntity, view => view.revision)
 	@JoinColumn()
 	view: ViewEntity;
 

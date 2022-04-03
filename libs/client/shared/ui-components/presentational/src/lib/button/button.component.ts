@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { take } from 'rxjs';
 import { ButtonType } from './button-type-enum';
@@ -75,7 +75,9 @@ export class ButtonComponent implements OnInit {
 			this.translateService
 				.get('button.placeholder')
 				.pipe(take(1))
-				.subscribe(data => (this.label = data));
+				.subscribe(data => {
+					this.label = data;
+				});
 		}
 	};
 

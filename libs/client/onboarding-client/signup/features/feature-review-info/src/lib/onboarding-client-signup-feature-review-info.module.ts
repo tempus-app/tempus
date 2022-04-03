@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { RouterModule } from '@angular/router';
 import { ClientSharedUiComponentsInputModule } from '@tempus/client/shared/ui-components/input';
@@ -26,6 +27,7 @@ function createTranslateLoader(http: HttpClient) {
 		MatButtonModule,
 		MatGridListModule,
 		MatFormFieldModule,
+		MatIconModule,
 		ClientSharedUiComponentsInputModule,
 		ClientSharedUiComponentsPresentationalModule,
 		ClientSharedInputResourceInformationModule,

@@ -12,8 +12,8 @@
 							<div class="left-card-header">
 								<h3 class="mat-h3">{{ education.institution }}</h3>
 								<p class="mat-body-2">{{ education.degree }}</p>
-								<p *ngIf="education.location.country !== ''" class="mat-body-2">
-									{{ formatAddress(education.location.country, education.location.province, education.location.city) }}
+								<p class="mat-body-2">
+									{{ education.location ? formatAddress(education.location.country, education.location.province, education.location.city) : '' }}
 								</p>
 							</div>
 						</div>

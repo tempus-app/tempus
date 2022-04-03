@@ -36,7 +36,7 @@ export class EducationEntity implements Education {
 	@Column()
 	startDate: Date;
 
-	@Column()
+	@Column({ nullable: true })
 	endDate: Date;
 
 	@OneToOne(() => LocationEntity, location => location.education, {

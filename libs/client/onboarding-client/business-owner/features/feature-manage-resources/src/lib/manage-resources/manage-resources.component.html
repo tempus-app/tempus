@@ -41,7 +41,7 @@
 				<h2
 					style="text-align: center; margin-top: 2rem"
 					class="mat-h3"
-					*ngIf="resProjClientTableDataFiltered.length !== 0"
+					*ngIf="resProjClientTableDataFiltered.length === 0"
 				>
 					{{ prefix + 'main.noResourcesToShow' | translate }}
 				</h2>
