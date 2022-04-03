@@ -115,6 +115,18 @@ export class ProfileComponent implements OnInit, OnDestroy {
 		this.router.navigateByUrl('signin');
 	}
 
+	downloadProfile() {
+		// Taken from https://stackoverflow.com/questions/52154874/angular-6-downloading-file-from-rest-api
+		this.resourceService.downloadProfile(this.currentViewID).subscribe(data => {
+			const downloadURL = window.URL.createObjectURL(data);
+			const link = document.createElement('a');
+			link.href = downloadURL;
+			const index = this.viewIDs.indexOf(parseInt(this.currentViewID, 10));
+			link.download = `${this.resourceName}-${this.viewNames[index]}`;
+			link.click();
+		});
+	}
+
 	ngOnInit(): void {
 		this.resourceService.getResourceInformation().subscribe(resData => {
 			this.userId = resData.id;

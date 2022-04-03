@@ -49,13 +49,24 @@ export class OnboardingClientResourceService {
 		);
 	}
 
-	//Get latest updated primary view by resource
+	// Get latest updated primary view by resource
 	public getLatestPrimaryView(resourceId: number): Observable<View> {
 		return this.getResourceProfileViews(resourceId).pipe(
 			take(1),
-			switchMap(views => views.filter(view => view.viewType === 'PRIMARY')
-			.sort((a, b) => a.lastUpdateDate && b.lastUpdateDate ? (a.lastUpdateDate.getTime() > b.lastUpdateDate.getTime() ? -1 : 1) :  (a.createdAt.getTime() > b.createdAt.getTime() ? -1 : 1))
-		));
+			switchMap(views =>
+				views
+					.filter(view => view.viewType === 'PRIMARY')
+					.sort((a, b) =>
+						a.lastUpdateDate && b.lastUpdateDate
+							? a.lastUpdateDate.getTime() > b.lastUpdateDate.getTime()
+								? -1
+								: 1
+							: a.createdAt.getTime() > b.createdAt.getTime()
+							? -1
+							: 1,
+					),
+			),
+		);
 	}
 
 	public getResourceProfileViews(resourceId: number): Observable<Array<View>> {
@@ -88,5 +99,11 @@ export class OnboardingClientResourceService {
 					.pipe(catchError(handleError));
 			}),
 		);
+	}
+
+	public downloadProfile(id: string): Observable<Blob> {
+		return this.http.get<Blob>(`http://localhost:3000/onboarding/profile-view/download-resume/${id}`, {
+			responseType: 'blob' as 'json',
+		});
 	}
 }
