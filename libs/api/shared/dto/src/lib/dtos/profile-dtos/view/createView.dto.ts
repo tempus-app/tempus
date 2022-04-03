@@ -19,6 +19,9 @@ export class CreateViewDto implements ICreateViewDto {
 	experiencesSummary: string;
 
 	@ApiProperty()
+	type: string;
+
+	@ApiProperty()
 	skills: CreateSkillDto[];
 
 	@ApiProperty()
@@ -39,6 +42,7 @@ export class CreateViewDto implements ICreateViewDto {
 		educations: CreateEducationDto[],
 		certifications: CreateCertificationDto[],
 		viewType: ViewType,
+		type: string,
 		skillsSummary: string,
 		profileSummary: string,
 		educationsSummary: string,
@@ -53,5 +57,6 @@ export class CreateViewDto implements ICreateViewDto {
 		this.educationsSummary = educationsSummary;
 		this.experiencesSummary = experiencesSummary;
 		this.certifications = certifications;
+		this.type = type;
 	}
 }

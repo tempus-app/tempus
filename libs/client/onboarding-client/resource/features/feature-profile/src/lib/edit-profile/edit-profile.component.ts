@@ -1,7 +1,10 @@
 import { AfterViewInit, ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { OnboardingClientState } from '@tempus/client/onboarding-client/shared/data-access';
+import {
+	OnboardingClientResourceService,
+	OnboardingClientState,
+} from '@tempus/client/onboarding-client/shared/data-access';
 import { Subject } from 'rxjs';
 import { ButtonType } from '@tempus/client/shared/ui-components/presentational';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
@@ -24,10 +27,8 @@ import {
 export class EditProfileComponent implements AfterViewInit, OnDestroy {
 	constructor(
 		private fb: FormBuilder,
+		private resourceService: OnboardingClientResourceService,
 		private changeDetector: ChangeDetectorRef,
-		private store: Store<OnboardingClientState>,
-		private router: Router,
-		private route: ActivatedRoute,
 	) {}
 
 	personalInfoForm = this.fb.group({});

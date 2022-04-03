@@ -31,6 +31,7 @@ export class ViewsService {
 		viewEntity.revisionType = RevisionType.APPROVED;
 		viewEntity.resource = resourceEntity;
 		viewEntity.locked = false;
+		viewEntity.type = 'PROFILE';
 		viewEntity.createdAt = new Date(Date.now());
 		viewEntity.lastUpdateDate = new Date(Date.now());
 
@@ -52,6 +53,7 @@ export class ViewsService {
 		newViewEntity.updatedBy = user.roles.includes(RoleType.BUSINESS_OWNER) ? RoleType.BUSINESS_OWNER : RoleType.USER;
 		newViewEntity.createdBy = view.createdBy;
 		newViewEntity.viewType = view.viewType;
+		newViewEntity.type = view.type;
 		newViewEntity.lastUpdateDate = new Date(Date.now());
 		newViewEntity.revisionType = RevisionType.PENDING;
 

@@ -13,6 +13,8 @@ export interface ICreateViewDto {
 
 	experiencesSummary: string;
 
+	type: string;
+
 	skills: ICreateSkillDto[];
 
 	experiences: ICreateExperienceDto[];
