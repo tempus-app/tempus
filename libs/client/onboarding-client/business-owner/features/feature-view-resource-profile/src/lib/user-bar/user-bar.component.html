@@ -15,7 +15,7 @@
             <tempus-button label="{{ viewResourceProfilePrefx + 'buttons.createNewViewButton.title' | translate }}" color="accent"></tempus-button>
         </div>
         <div>
-            <tempus-button label="{{ viewResourceProfilePrefx + 'buttons.downloadProfile.title' | translate }}" color="accent" icon="cloud_download"></tempus-button>
+            <tempus-button (click)="downloadProfile()" label="{{ viewResourceProfilePrefx + 'buttons.downloadProfile.title' | translate }}" color="accent" icon="cloud_download"></tempus-button>
         </div>
         <div fxFlex="2"></div>
 

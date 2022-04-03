@@ -39,7 +39,8 @@
             "title": "Enter Comments",
             "helpText": "Enter your comments here so the user can improve on their resume and submit a better revision.",
             "closeText": "CANCEL",
-            "confirmText": "SUBMIT"
+            "confirmText": "SUBMIT",
+            "errorMessage": "Please enter a comment."
         },
         "confirmationDialog": {
             "title": "Revision Approved!",

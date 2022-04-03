@@ -155,6 +155,7 @@ export class ViewsService {
 				'revision',
 				'revision.view',
 				'revision.newView',
+				'resource',
 			],
 		});
 		if (!viewEntity) {

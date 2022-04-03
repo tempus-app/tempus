@@ -1,14 +1,15 @@
-import { Body, Controller, Delete, Get, Param, Post, UseGuards, Patch, Req, Request } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, UseGuards, Patch, Request, Response, Res } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { CreateViewDto, ApproveViewDto } from '@tempus/api/shared/dto';
-import { Revision, RoleType, User, View } from '@tempus/shared-domain';
+import { CreateViewDto, ApproveViewDto, ResumePdfTemplateDto } from '@tempus/api/shared/dto';
+import { Revision, RoleType, View } from '@tempus/shared-domain';
 import { JwtAuthGuard, PermissionGuard, Roles, RolesGuard, ViewsGuard } from '@tempus/api/shared/feature-auth';
+import { PdfGeneratorService } from '@tempus/api/shared/feature-pdfgenerator';
 import { ViewsService } from '../services/view.service';
 
 @ApiTags('Profile Views')
 @Controller('profile-view')
 export class ProfileViewController {
-	constructor(private viewSerivce: ViewsService) {}
+	constructor(private viewSerivce: ViewsService, private pdfService: PdfGeneratorService) {}
 
 	// all views of user
 	@UseGuards(JwtAuthGuard, PermissionGuard)
@@ -31,6 +32,14 @@ export class ProfileViewController {
 	async getView(@Param('viewId') viewId: number): Promise<View> {
 		const view = await this.viewSerivce.getView(viewId);
 		return view;
+	}
+
+	@UseGuards(JwtAuthGuard, PermissionGuard)
+	@Get('/download-resume/:viewID')
+	async downloadResume(@Res() res: Response, @Param('viewID') viewId: number): Promise<void> {
+		const view = await this.viewSerivce.getView(viewId);
+		const resume = new ResumePdfTemplateDto('testresume', view);
+		await this.pdfService.createPDF(res, resume, undefined, true);
 	}
 
 	@UseGuards(JwtAuthGuard, RolesGuard)

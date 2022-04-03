@@ -11,12 +11,15 @@ import { LoadView } from '../LoadView.model';
 	styleUrls: ['./user-bar.component.scss'],
 })
 export class UserBarComponent implements OnChanges {
+	@Input() loadedView: LoadView = { isRevision: false };
+
+	@Input() resourceName = '';
+
 	viewNames: string[] = [];
 
 	viewIDs: number[] = [];
 
-	@Input()
-	loadedView: LoadView = { isRevision: false };
+	currentViewID = '';
 
 	viewDropDownForm = this.fb.group({
 		viewSelected: [''],
@@ -41,7 +44,21 @@ export class UserBarComponent implements OnChanges {
 			this.viewDropDownForm.patchValue({
 				viewSelected: this.loadedView.currentViewName,
 			});
+			const index = this.viewNames.indexOf(this.loadedView.currentViewName);
+			this.currentViewID = String(this.viewIDs[index]);
 		}
+	}
+
+	downloadProfile() {
+		// Taken from https://stackoverflow.com/questions/52154874/angular-6-downloading-file-from-rest-api
+		this.resourceService.downloadProfile(this.currentViewID).subscribe(data => {
+			const downloadURL = window.URL.createObjectURL(data);
+			const link = document.createElement('a');
+			link.href = downloadURL;
+			const index = this.viewIDs.indexOf(parseInt(this.currentViewID, 10));
+			link.download = `${this.resourceName}-${this.viewNames[index]}`;
+			link.click();
+		});
 	}
 
 	onClick(optionSelected: string): void {
