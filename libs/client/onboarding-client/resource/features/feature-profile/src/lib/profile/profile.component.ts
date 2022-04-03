@@ -9,7 +9,15 @@ import {
 import { Subject, take } from 'rxjs';
 import { ButtonType } from '@tempus/client/shared/ui-components/presentational';
 import { UserType } from '@tempus/client/shared/ui-components/persistent';
-import { ICreateExperienceDto, ICreateEducationDto, ICreateCertificationDto, ICreateViewDto, View, ViewType, RevisionType } from '@tempus/shared-domain';
+import {
+	ICreateExperienceDto,
+	ICreateEducationDto,
+	ICreateCertificationDto,
+	ICreateViewDto,
+	View,
+	ViewType,
+	RevisionType,
+} from '@tempus/shared-domain';
 
 @Component({
 	selector: 'tempus-profile',
@@ -28,7 +36,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
 	userId = 0;
 
-	approvedPrimaryViewId = 0;
+	editablePrimaryViewId = 0;
 
 	firstName = '';
 
@@ -82,6 +90,10 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
 	isPendingApproval = false;
 
+	isRejected = false;
+
+	rejectionComments = '';
+
 	editViewEnabled = false;
 
 	selectedTab(tab: string) {
@@ -119,56 +131,67 @@ export class ProfileComponent implements OnInit, OnDestroy {
 			this.githubLink = resData.githubLink;
 			this.otherLink = resData.otherLink;
 
-			//fetch latest primary view
-			this.resourceService.getLatestPrimaryView(this.userId).subscribe(primaryView => {
-				if (primaryView.revisionType === RevisionType.APPROVED){
-					this.approvedPrimaryViewId = primaryView.id;
-				}
-					this.certifications = primaryView.certifications;
-					this.educations = primaryView.educations;
-					this.educationsSummary = primaryView.educationsSummary;
-					this.workExperiences = primaryView.experiences;
-					this.experiencesSummary = primaryView.experiencesSummary;
-					this.profileSummary = primaryView.profileSummary;
-					this.skills = primaryView.skills.map(skill => skill.skill.name);
-					this.skillsSummary = primaryView.skillsSummary;
-				}
-			)
-
-			//fetch all Primary views, select PENDING to display if available
-			// this.resourceService.getResourceProfileViews(this.userId).subscribe(views => {
-			// 	const primaryViews =  views.filter(view => view.viewType === ViewType.PRIMARY);
-			// 	const pendingView = primaryViews.find(view => view.revisionType === RevisionType.PENDING);
-			// 	const approvedView = primaryViews.find(view => view.revisionType === RevisionType.APPROVED);
-
-			// 	this.approvedPrimaryViewId = approvedView?.id ? approvedView.id : 0;
-
-			// 	if (pendingView) {
-			// 		this.certifications = pendingView.certifications;
-			// 		this.educations = pendingView.educations;
-			// 		this.educationsSummary = pendingView.educationsSummary;
-			// 		this.workExperiences = pendingView.experiences;
-			// 		this.experiencesSummary = pendingView.experiencesSummary;
-			// 		this.profileSummary = pendingView.profileSummary;
-			// 		this.skills = pendingView.skills.map(skill => skill.skill.name);
-			// 		this.skillsSummary = pendingView.skillsSummary;
-			// 		this.isPendingApproval = true;
-			// 	} else if (approvedView) {
-			// 		this.certifications = approvedView.certifications;
-			// 		this.educations = approvedView.educations;
-			// 		this.educationsSummary = approvedView.educationsSummary;
-			// 		this.workExperiences = approvedView.experiences;
-			// 		this.experiencesSummary = approvedView.experiencesSummary;
-			// 		this.profileSummary = approvedView.profileSummary;
-			// 		this.skills = approvedView.skills.map(skill => skill.skill.name);
-			// 		this.skillsSummary = approvedView.skillsSummary;
+			// fetch latest primary view
+			// this.resourceService.getLatestPrimaryView(this.userId).subscribe(primaryView => {
+			// 	if (primaryView.revisionType === RevisionType.APPROVED) {
+			// 		this.approvedPrimaryViewId = primaryView.id;
 			// 	}
-			// })
+			// 	this.certifications = primaryView.certifications;
+			// 	this.educations = primaryView.educations;
+			// 	this.educationsSummary = primaryView.educationsSummary;
+			// 	this.workExperiences = primaryView.experiences;
+			// 	this.experiencesSummary = primaryView.experiencesSummary;
+			// 	this.profileSummary = primaryView.profileSummary;
+			// 	this.skills = primaryView.skills.map(skill => skill.skill.name);
+			// 	this.skillsSummary = primaryView.skillsSummary;
+			// });
+
+			// fetch all Primary views, select display
+			this.resourceService.getResourceProfileViews(this.userId).subscribe(views => {
+				const primaryViews = views.filter(view => view.viewType === ViewType.PRIMARY);
+				const rejectedView = primaryViews.find(view => view.revisionType === RevisionType.REJECTED);
+				const pendingView = primaryViews.find(view => view.revisionType === RevisionType.PENDING);
+				const approvedView = primaryViews.find(view => view.revisionType === RevisionType.APPROVED);
+
+				if (rejectedView) {
+					this.editablePrimaryViewId = rejectedView.id;
+					this.certifications = rejectedView.certifications;
+					this.educations = rejectedView.educations;
+					this.educationsSummary = rejectedView.educationsSummary;
+					this.workExperiences = rejectedView.experiences;
+					this.experiencesSummary = rejectedView.experiencesSummary;
+					this.profileSummary = rejectedView.profileSummary;
+					this.skills = rejectedView.skills.map(skill => skill.skill.name);
+					this.skillsSummary = rejectedView.skillsSummary;
+					this.isRejected = true;
+					this.rejectionComments = rejectedView.revision?.comment ? rejectedView.revision.comment : '';
+				} else if (pendingView) {
+					this.certifications = pendingView.certifications;
+					this.educations = pendingView.educations;
+					this.educationsSummary = pendingView.educationsSummary;
+					this.workExperiences = pendingView.experiences;
+					this.experiencesSummary = pendingView.experiencesSummary;
+					this.profileSummary = pendingView.profileSummary;
+					this.skills = pendingView.skills.map(skill => skill.skill.name);
+					this.skillsSummary = pendingView.skillsSummary;
+					this.isPendingApproval = true;
+				} else if (approvedView) {
+					this.editablePrimaryViewId = approvedView.id;
+					this.certifications = approvedView.certifications;
+					this.educations = approvedView.educations;
+					this.educationsSummary = approvedView.educationsSummary;
+					this.workExperiences = approvedView.experiences;
+					this.experiencesSummary = approvedView.experiencesSummary;
+					this.profileSummary = approvedView.profileSummary;
+					this.skills = approvedView.skills.map(skill => skill.skill.name);
+					this.skillsSummary = approvedView.skillsSummary;
+				}
+			});
 		});
 	}
 
 	loadNewView(newView: ICreateViewDto) {
-		//Update local display
+		// Update local display
 		this.certifications = newView.certifications;
 		this.educations = newView.educations;
 		this.educationsSummary = newView.educationsSummary;
@@ -180,8 +203,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
 		this.isPendingApproval = true;
 
-		//Post view to db, return revision
-		this.resourceService.editResourceView(this.approvedPrimaryViewId, newView).subscribe(newRev => {
+		// Post view to db, return revision
+		this.resourceService.editResourceView(this.editablePrimaryViewId, newView).subscribe(newRev => {
 			console.log(newRev);
 		});
 	}

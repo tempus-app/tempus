@@ -5,7 +5,16 @@ import { OnboardingClientState } from '@tempus/client/onboarding-client/shared/d
 import { Subject } from 'rxjs';
 import { ButtonType } from '@tempus/client/shared/ui-components/presentational';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
-import { ICreateCertificationDto, ICreateEducationDto, ICreateExperienceDto, ICreateViewDto, ICreateLocationDto, ViewType, ICreateSkillDto, ICreateSkillTypeDto } from '@tempus/shared-domain';
+import {
+	ICreateCertificationDto,
+	ICreateEducationDto,
+	ICreateExperienceDto,
+	ICreateViewDto,
+	ICreateLocationDto,
+	ViewType,
+	ICreateSkillDto,
+	ICreateSkillTypeDto,
+} from '@tempus/shared-domain';
 
 @Component({
 	selector: 'tempus-edit-profile',
@@ -22,10 +31,15 @@ export class EditProfileComponent implements AfterViewInit, OnDestroy {
 	) {}
 
 	personalInfoForm = this.fb.group({});
+
 	experiencesForm = this.fb.group({});
+
 	educationsForm = this.fb.group({});
+
 	certificationsForm = this.fb.group({});
+
 	skillsSummaryForm = this.fb.group({});
+
 	newSkills: string[] = [];
 
 	isValid = true;
@@ -115,23 +129,23 @@ export class EditProfileComponent implements AfterViewInit, OnDestroy {
 	}
 
 	generateNewView() {
-		//get all nested FormGroups -> Dto[]
-		const certificationsArray = this.certificationsForm.controls['certifications'] as FormArray;
-		const experiencesArray = this.experiencesForm.controls['workExperience'] as FormArray;
-		const educationsArray = this.educationsForm.controls['qualifications'] as FormArray;
-		
-		let certificationsDto: ICreateCertificationDto[] = [];
-		for (let i=0; i<certificationsArray?.length; i++ ){
+		// get all nested FormGroups -> Dto[]
+		const certificationsArray = this.certificationsForm.controls.certifications as FormArray;
+		const experiencesArray = this.experiencesForm.controls.workExperience as FormArray;
+		const educationsArray = this.educationsForm.controls.qualifications as FormArray;
+
+		const certificationsDto: ICreateCertificationDto[] = [];
+		for (let i = 0; i < certificationsArray?.length; i++) {
 			const certification: ICreateCertificationDto = {
 				title: (certificationsArray?.at(i) as FormGroup).get('title')?.value,
 				institution: (certificationsArray?.at(i) as FormGroup).get('certifyingAuthority')?.value,
 				summary: (certificationsArray?.at(i) as FormGroup).get('summary')?.value,
-			}
+			};
 			certificationsDto.push(certification);
 		}
 
-		let experiencesDto: ICreateExperienceDto[] = [];
-		for (let i=0; i<experiencesArray?.length; i++ ){
+		const experiencesDto: ICreateExperienceDto[] = [];
+		for (let i = 0; i < experiencesArray?.length; i++) {
 			const experience: ICreateExperienceDto = {
 				title: (experiencesArray?.at(i) as FormGroup).get('title')?.value,
 				summary: (experiencesArray?.at(i) as FormGroup).get('description')?.value,
@@ -144,12 +158,12 @@ export class EditProfileComponent implements AfterViewInit, OnDestroy {
 					province: (experiencesArray?.at(i) as FormGroup).get('state')?.value,
 					country: (experiencesArray?.at(i) as FormGroup).get('country')?.value,
 				} as ICreateLocationDto,
-			}
+			};
 			experiencesDto.push(experience);
 		}
 
-		let educationsDto: ICreateEducationDto[] = [];
-		for (let i=0; i<educationsArray?.length; i++ ){
+		const educationsDto: ICreateEducationDto[] = [];
+		for (let i = 0; i < educationsArray?.length; i++) {
 			const education: ICreateEducationDto = {
 				degree: (educationsArray?.at(i) as FormGroup).get('field')?.value,
 				institution: (educationsArray?.at(i) as FormGroup).get('institution')?.value,
@@ -160,18 +174,18 @@ export class EditProfileComponent implements AfterViewInit, OnDestroy {
 				} as ICreateLocationDto,
 				startDate: (educationsArray?.at(i) as FormGroup).get('startDate')?.value,
 				endDate: (educationsArray?.at(i) as FormGroup).get('endDate')?.value,
-			}
+			};
 			educationsDto.push(education);
 		}
 
-		//TODO: convert to use skills FormArray
-		let skillsDto: ICreateSkillDto[] = [];
-		for (let i=0; i<this.skills?.length; i++ ){
+		// TODO: convert to use skills FormArray
+		const skillsDto: ICreateSkillDto[] = [];
+		for (let i = 0; i < this.skills?.length; i++) {
 			const skill: ICreateSkillDto = {
 				skill: {
-					name: this.skills[i]
-				} as ICreateSkillTypeDto
-			}
+					name: this.skills[i],
+				} as ICreateSkillTypeDto,
+			};
 			skillsDto.push(skill);
 		}
 
@@ -182,12 +196,11 @@ export class EditProfileComponent implements AfterViewInit, OnDestroy {
 			profileSummary: this.personalInfoForm.get('profileSummary')?.value,
 			skills: skillsDto,
 			educations: educationsDto,
-			   experiences: experiencesDto,
+			experiences: experiencesDto,
 			certifications: certificationsDto,
 			viewType: ViewType.PRIMARY,
 		} as ICreateViewDto;
 	}
-
 
 	submitChanges() {
 		this.educationsForm?.markAllAsTouched();
@@ -196,9 +209,9 @@ export class EditProfileComponent implements AfterViewInit, OnDestroy {
 		this.skillsSummaryForm?.markAllAsTouched();
 		this.certificationsForm?.markAllAsTouched();
 
-		//TODO: disable submit button
-		//TODO: disable non view related fields (i.e name, address etc)
-			// should be extracted from personal-info component?
+		// TODO: disable submit button
+		// TODO: disable non view related fields (i.e name, address etc)
+		// should be extracted from personal-info component?
 		// this.isValid = this.personalInfoForm?.valid && this.personalInfoForm?.valid && this.certificationsForm?.valid && this.experiencesForm?.valid
 		// && this.skillsSummaryForm?.valid;
 

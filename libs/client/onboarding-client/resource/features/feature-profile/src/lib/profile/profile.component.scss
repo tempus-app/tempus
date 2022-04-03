@@ -29,6 +29,22 @@
 	height: 1em;
 }
 
+#reject-icon {
+	display: inline-flex;
+	vertical-align: middle;
+	color: abs.$failure;
+	font-size: 1.875em;
+	margin-top: 0.4em;
+	height: 1em;
+}
+
+#rejection-dialog {
+	background-color: rgb(250, 240, 240);
+	color: abs.$failure;
+	border-radius: 10px;
+	padding: 2em;
+}
+
 ::ng-deep .tooltip {
 	font-size: 0.75em;
 }
