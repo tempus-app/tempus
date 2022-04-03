@@ -1,0 +1,55 @@
+<ng-container>
+	<div id="page-container" fxLayout="column" fxLayoutGap="20px">
+		<div id="title-container" fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="30px">
+			<div fxFlex="50">
+				<h2 class="mat-h2 page-title">Primary View</h2>
+			</div>
+			<div  fxLayout="row" fxLayoutGap="10px">
+				<tempus-button label="Cancel" color="accent" (click)="closeEditView()"></tempus-button>
+				<tempus-button label="Preview" color="accent"></tempus-button>
+				<tempus-button [disabled]="!isValid" label="Submit" color="accent" (click)="submitChanges()"></tempus-button>
+			</div>
+		</div>
+		<div fxFlex>
+			<tempus-resource-info-personal-information
+			(formGroup)="loadPersonalInfo($event)" 				
+			[firstName]="firstName"
+			[lastName]="lastName"
+			[phoneNumber]="phoneNumber"
+			[country]="country"
+			[state]="state"
+			[city]="city"
+			[linkedInLink]="linkedInLink"
+			[githubLink]="githubLink"
+			[otherLink]="otherLink"
+			[profileSummary]="profileSummary"></tempus-resource-info-personal-information>
+		</div>
+		<div fxFlex>
+			<tempus-resource-info-education
+			(formGroup)="loadEducation($event)" 	
+			[educationSummary]="educationsSummary"
+			[educations]="educations"
+			></tempus-resource-info-education>
+		</div>
+		<div fxFlex>
+			<tempus-resource-info-certifications
+			(formGroup)="loadCertifications($event)" 	
+			[certificationsArray]="certifications"></tempus-resource-info-certifications>
+		</div>
+		<div fxFlex>
+			<tempus-resource-info-work-experience
+			(formGroup)="loadExperiences($event)"
+			[experiencesSummary]="experiencesSummary"
+			[workExperiences]="workExperiences"
+			></tempus-resource-info-work-experience>
+		</div>
+		<div fxFlex>
+			<tempus-resource-info-skills
+			(formGroup)="loadSkillsSummary($event)" 
+			(emitSkills)="loadSkills($event)" 
+			[skillsSummary]="skillsSummary"
+			[skills]="skills"
+			></tempus-resource-info-skills>
+		</div>
+	</div>
+</ng-container>

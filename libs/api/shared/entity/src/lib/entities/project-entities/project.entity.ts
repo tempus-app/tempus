@@ -12,7 +12,7 @@ export class ProjectEntity implements Project {
 		this.startDate = startDate;
 		this.endDate = endDate;
 		this.client = client;
-		this.resources = [];
+		this.resources;
 	}
 
 	@PrimaryGeneratedColumn()

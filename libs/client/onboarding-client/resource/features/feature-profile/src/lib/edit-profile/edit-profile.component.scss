@@ -1,0 +1,32 @@
+@use 'abstracts/helper' as abs;
+@use 'components/helper' as cmp;
+
+#page-container {
+	margin: 2% 4%;
+	border: 2px dashed abs.$primary-300;
+	background-color: #fcfeff;
+	border-radius: 10px;
+}
+#title-container {
+	@include cmp.info-title(90%, 0);
+	margin: 2% 0em;
+	align-self: center;
+}
+
+#user-bar {
+	margin: 0% 5% 2% 5%;
+}
+
+#view-name {
+	height: 1em;
+}
+
+
+tempus-button {
+	height: 2em;
+}
+
+.page-title {
+	color: abs.$primary-800;
+}
+

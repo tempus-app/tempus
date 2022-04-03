@@ -6,6 +6,11 @@ body {
 	margin: 5%;
 }
 
+// font-weight for chrome
+* {
+	-webkit-font-smoothing: antialiased;
+}
+
 .responsive-modal {
 	@media (min-width: abs.$small) {
 		width: 60%;

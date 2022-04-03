@@ -49,6 +49,6 @@ export class LocationEntity implements Location {
 
 	public static fromDto(dto: CreateLocationDto): LocationEntity {
 		if (dto == null) return new LocationEntity();
-		return new LocationEntity(undefined, dto.city, dto.province, dto.city);
+		return new LocationEntity(undefined, dto.city, dto.province, dto.country);
 	}
 }

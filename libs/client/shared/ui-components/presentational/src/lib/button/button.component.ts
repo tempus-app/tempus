@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { take } from 'rxjs';
 import { ButtonType } from './button-type-enum';
@@ -60,10 +60,6 @@ export class ButtonComponent implements OnInit {
 			}
 			case ButtonType.CREATE_NEW_VIEW: {
 				this.icon = 'add';
-				break;
-			}
-			default: {
-				this.icon = '';
 				break;
 			}
 		}
