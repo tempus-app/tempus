@@ -30,7 +30,9 @@ export class OnboardingClientProjectService {
 			take(1),
 			switchMap(token => {
 				const httpAuthHeaders = getAuthHeaders(token || '');
-				return this.http.post<Project>(`${this.projectURL}/${projectId}/${resourceId}/assign`, {}, httpAuthHeaders).pipe(catchError(handleError));
+				return this.http
+					.post<Project>(`${this.projectURL}/${projectId}/${resourceId}/assign`, {}, httpAuthHeaders)
+					.pipe(catchError(handleError));
 			}),
 		);
 	}

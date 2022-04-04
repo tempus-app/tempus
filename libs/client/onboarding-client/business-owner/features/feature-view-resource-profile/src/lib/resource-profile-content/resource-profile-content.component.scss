@@ -1,0 +1,26 @@
+@use "abstracts/helper" as abs;
+
+.section-header {
+	border-bottom: 2px solid abs.$primary-300;
+}
+
+.info-title {
+	width: 100%;
+}
+
+.mat-raised-button.mat-success {
+	color: #f0fff3;
+	background-color: #66b95f;
+}
+.mat-raised-button.mat-warn {
+	color: #f0fff3;
+	background-color: #DF5252;
+}
+
+.button-container{
+	padding: 1em;
+}
+
+tempus-card{
+	width: 100%;
+}

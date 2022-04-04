@@ -21,6 +21,15 @@ const routes: Routes = [
 						m => m.OnboardingClientBusinessOwnerFeatureManageResourcesModule,
 					),
 			},
+			{
+				path: 'view-resources/:id',
+				canLoad: [AuthGuard],
+				canActivate: [AuthGuard],
+				loadChildren: () =>
+					import('@tempus/client/onboarding-client/business-owner/features/feature-view-resource-profile').then(
+						m => m.ClientOnboardingClientBusinessOwnerFeaturesFeatureViewResourceProfileModule,
+					),
+			},
 		],
 	},
 ];

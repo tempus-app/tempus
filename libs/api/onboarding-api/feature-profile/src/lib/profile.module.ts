@@ -19,8 +19,8 @@ import { ViewsService } from './services/view.service';
 		ExperienceService,
 		SkillsService,
 		ViewsService,
-		CertificationService,
 		PdfGeneratorService,
+		CertificationService,
 	],
 	exports: [EducationService, ExperienceService, SkillsService, ViewsService, CertificationService],
 })

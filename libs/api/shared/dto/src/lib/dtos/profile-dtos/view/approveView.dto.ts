@@ -7,4 +7,9 @@ export class ApproveViewDto implements IApproveViewDto {
 
 	@ApiProperty()
 	approval: boolean;
+
+	constructor(comment: string, approval: boolean) {
+		this.comment = comment;
+		this.approval = approval;
+	}
 }

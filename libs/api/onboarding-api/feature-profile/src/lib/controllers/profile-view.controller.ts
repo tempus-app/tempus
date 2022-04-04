@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, UseGuards, Patch, Request, Res } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, UseGuards, Patch, Request, Response, Res } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { CreateViewDto, ApproveViewDto, ResumePdfTemplateDto } from '@tempus/api/shared/dto';
 import { Revision, RoleType, View } from '@tempus/shared-domain';
@@ -16,6 +16,14 @@ export class ProfileViewController {
 	@Get('/:userId')
 	async getViews(@Param('userId') userId: number): Promise<View[]> {
 		const views = await this.viewSerivce.getViewsByResource(userId);
+		return views;
+	}
+
+	// all views of user
+	@UseGuards(JwtAuthGuard, PermissionGuard)
+	@Get('/view-names/:userId')
+	async getViewNames(@Param('userId') userId: number): Promise<View[]> {
+		const views = await this.viewSerivce.getViewsNamesByResource(userId);
 		return views;
 	}
 
@@ -37,7 +45,7 @@ export class ProfileViewController {
 	@UseGuards(JwtAuthGuard, RolesGuard)
 	@Roles(RoleType.BUSINESS_OWNER)
 	@Post('/approve/:viewId')
-	async approveView(@Param('viewId') viewId: number, @Body() approveViewDto: ApproveViewDto): Promise<Revision> {
+	async approveView(@Param('viewId') viewId: number, @Body() approveViewDto: ApproveViewDto): Promise<Revision | View> {
 		const approvalResult = await this.viewSerivce.approveOrDenyView(viewId, approveViewDto);
 		return approvalResult;
 	}

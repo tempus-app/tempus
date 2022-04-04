@@ -1,0 +1,9 @@
+<ng-container>
+    <tempus-sidebar [userType]="userType.OWNER" [name]="displayName()" [email]="email">
+        <tempus-user-bar [loadedView]="loadedView" (newViewSelected)="newViewClickEvent($event)" [resourceName]="firstName + '-' + lastName"></tempus-user-bar>
+        <tempus-resource-profile-content [firstName]="firstName" [lastName]="lastName" [country]="country"
+            [state]="state" [city]="city" [email]="email" [phoneNumber]="phoneNumber" [viewID]="viewIndex"
+            (revisionViewLoaded)="childRevisionLoaded($event)">
+        </tempus-resource-profile-content>
+    </tempus-sidebar>
+</ng-container>

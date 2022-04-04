@@ -1,6 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
+import { ApproveViewDto } from '@tempus/api/shared/dto';
 import {
 	ICreateResourceDto,
 	ICreateViewDto,
@@ -46,13 +47,25 @@ export class OnboardingClientResourceService {
 		);
 	}
 
+	public getResourceInformationById(resourceId: number): Observable<Resource> {
+		return this.authStore.select(selectAccessToken).pipe(
+			take(1),
+			switchMap((token: string | null) => {
+				const httpAuthHeaders = getAuthHeaders(token || '');
+				return this.http
+					.get<Resource>(`http://localhost:3000/onboarding/user/${resourceId}`, httpAuthHeaders)
+					.pipe(catchError(handleError));
+			}),
+		);
+	}
+
 	public getViewById(viewId: number): Observable<View> {
 		return this.authStore.select(selectAccessToken).pipe(
 			take(1),
 			switchMap((token: string | null) => {
 				const httpAuthHeaders = getAuthHeaders(token || '');
 				return this.http
-					.get<View>(`http://localhost:3000/profile-view/view/${viewId}`, httpAuthHeaders)
+					.get<View>(`http://localhost:3000/onboarding/profile-view/view/${viewId}`, httpAuthHeaders)
 					.pipe(catchError(handleError));
 			}),
 		);
@@ -102,7 +115,7 @@ export class OnboardingClientResourceService {
 		);
 	}
 
-	public downloadProfile(id: string): Observable<Blob> {
+	public downloadProfile(id: number): Observable<Blob> {
 		return this.authStore.select(selectAccessToken).pipe(
 			take(1),
 			switchMap(resData => {
@@ -113,6 +126,22 @@ export class OnboardingClientResourceService {
 					}),
 				};
 				return this.http.get<Blob>(`http://localhost:3000/onboarding/profile-view/download-resume/${id}`, httpOptions);
+			}),
+		);
+	}
+
+	public approveOrDenyRevision(id: number, comment: string, approval: boolean): Observable<ApproveViewDto> {
+		return this.authStore.select(selectAccessToken).pipe(
+			take(1),
+			switchMap(token => {
+				const httpAuthHeaders = getAuthHeaders(token || '');
+				return this.http
+					.post<ApproveViewDto>(
+						`http://localhost:3000/onboarding/profile-view/approve/${id}`,
+						{ comment, approval },
+						httpAuthHeaders,
+					)
+					.pipe(catchError(handleError));
 			}),
 		);
 	}

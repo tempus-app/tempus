@@ -84,7 +84,7 @@ export class ViewsService {
 	}
 
 	// eslint-disable-next-line consistent-return
-	async approveOrDenyView(viewId: number, approveViewDto: ApproveViewDto): Promise<Revision> {
+	async approveOrDenyView(viewId: number, approveViewDto: ApproveViewDto): Promise<Revision | View> {
 		const { approval, comment } = approveViewDto;
 		const viewEntity = await this.viewsRepository.findOne({ where: { id: viewId } });
 		if (!viewEntity) throw new NotFoundException(`Could not find view with id ${viewId}`);
@@ -94,6 +94,7 @@ export class ViewsService {
 				where: {
 					view: { id: viewId },
 				},
+				relations: ['view', 'newView'],
 			})
 		)[0];
 
@@ -103,11 +104,11 @@ export class ViewsService {
 			const { newView, view } = revisionEntity;
 			newView.revisionType = RevisionType.APPROVED;
 			newView.lastUpdateDate = new Date(Date.now());
+			await this.revisionRepository.remove(revisionEntity);
 			await this.viewsRepository.remove(view);
 			newView.locked = false;
 			newView.createdAt = view.createdAt;
-			await this.viewsRepository.save(newView);
-			return this.revisionRepository.remove(revisionEntity);
+			return this.viewsRepository.save(newView);
 		}
 		if (approval === false) {
 			revisionEntity.comment = comment;
@@ -145,6 +146,17 @@ export class ViewsService {
 		return viewsInResource;
 	}
 
+	async getViewsNamesByResource(resourceId: number): Promise<View[]> {
+		await this.resourceService.getResourceInfo(resourceId);
+		const viewsInResource = await this.viewsRepository
+			.createQueryBuilder('view')
+			.where('view.resource.id = :resourceId', { resourceId })
+			.select(['type', 'id'])
+			.execute();
+
+		return viewsInResource;
+	}
+
 	async getView(viewId: number): Promise<View> {
 		const viewEntity = await this.viewsRepository.findOne(viewId, {
 			relations: [
@@ -164,6 +176,27 @@ export class ViewsService {
 		if (!viewEntity) {
 			throw new NotFoundException(`Could not find view with id ${viewId}`);
 		}
+
+		if (viewEntity.revision) {
+			const revisionNewView = await this.viewsRepository.findOne(viewEntity.revision.newView.id, {
+				relations: [
+					'experiences',
+					'resource',
+					'educations',
+					'skills',
+					'experiences.location',
+					'educations.location',
+					'certifications',
+					'skills.skill',
+					'revision',
+					'revision.view',
+					'revision.newView',
+				],
+			});
+
+			viewEntity.revision.newView = revisionNewView;
+		}
+
 		return viewEntity;
 	}
 

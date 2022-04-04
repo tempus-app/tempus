@@ -23,6 +23,9 @@
 			"@tempus/api/shared/feature-core": ["libs/api/shared/feature-core/src/index.ts"],
 			"@tempus/api/shared/feature-email": ["libs/api/shared/feature-email/src/index.ts"],
 			"@tempus/api/shared/feature-pdfgenerator": ["libs/api/shared/feature-pdfgenerator/src/index.ts"],
+			"@tempus/client/onboarding-client/business-owner/features/feature-view-resource-profile": [
+				"libs/client/onboarding-client/business-owner/features/feature-view-resource-profile/src/index.ts"
+			],
 			"@tempus/client/onboarding-client/business-owner/data-access": [
 				"libs/client/onboarding-client/business-owner/data-access/src/index.ts"
 			],

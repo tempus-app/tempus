@@ -8,38 +8,32 @@
 			<div class="section-block">
 				<div fxLayout="column">
 					<div fxFlex="30" fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxFlex="33%">
-						<div fxFlex.gt-sm="75%" fxFlex.lt-md="75%" fxLayoutAlign="start start" fxFlexFill class="grid-item">
+						<div fxFlex.gt-sm="75%" fxFlex.lt-md="75%" fxLayoutAlign="start start" fxFlexFill
+							class="grid-item">
 							<div class="left-card-header">
 								<h3 class="mat-h3">{{ workExperience.company }}</h3>
 								<p class="mat-body-2">{{ workExperience.title }}</p>
 								<p class="mat-body-2">
 									{{
-										workExperience.location? formatAddress(
-											workExperience.location.country,
-											workExperience.location.province,
-											workExperience.location.city
-										) : ''
+									workExperience.location
+									? formatAddress(
+									workExperience.location.country,
+									workExperience.location.province,
+									workExperience.location.city
+									)
+									: ''
 									}}
 								</p>
 							</div>
 						</div>
-						<div
-							fxFlex.gt-sm="25%"
-							fxFlex.lt-md="25%"
-							fxLayoutAlign="end end"
-							fxLayoutAlign.lt-md="start start"
-							fxFlexFill
-							fxLayout="column"
-							class="grid-item"
-						>
+						<div fxFlex.gt-sm="25%" fxFlex.lt-md="25%" fxLayoutAlign="end end"
+							fxLayoutAlign.lt-md="start start" fxFlexFill fxLayout="column" class="grid-item">
 							<div fxFill>
 								<p class="mat-body-2">
 									{{
-										workExperience.startDate && workExperience.endDate
-											? formatDate(workExperience.startDate, workExperience.endDate)
-											: workExperience.startDate && workExperience.endDate === null
-											? formatDate(workExperience.startDate, workExperience.endDate)
-											: ' '
+									workExperience.startDate && workExperience.endDate
+									? formatDate(workExperience.startDate, workExperience.endDate)
+									: ''
 									}}
 								</p>
 							</div>

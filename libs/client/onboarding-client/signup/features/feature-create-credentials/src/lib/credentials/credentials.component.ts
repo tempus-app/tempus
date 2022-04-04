@@ -11,12 +11,8 @@ import {
 	SignupState,
 } from '@tempus/client/onboarding-client/signup/data-access';
 import { Link, StatusType } from '@tempus/shared-domain';
-// eslint-disable-next-line @nrwl/nx/enforce-module-boundaries
-import { ModalType } from 'libs/client/shared/ui-components/modal/src/lib/info-modal/modal-type.enum';
-// eslint-disable-next-line @nrwl/nx/enforce-module-boundaries
-import { CustomModalType } from 'libs/client/shared/ui-components/modal/src/lib/service/custom-modal-type.enum';
-// eslint-disable-next-line @nrwl/nx/enforce-module-boundaries
-import { ModalService } from 'libs/client/shared/ui-components/modal/src/lib/service/modal.service';
+
+import { CustomModalType, ModalService, ModalType } from '@tempus/client/shared/ui-components/modal';
 
 import { Subscription } from 'rxjs';
 import { tap, filter } from 'rxjs/operators';

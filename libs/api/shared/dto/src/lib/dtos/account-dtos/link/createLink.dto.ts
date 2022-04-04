@@ -15,13 +15,13 @@ export class CreateLinkDto implements ICreateLinkDto {
 	expiry?: Date;
 
 	@ApiProperty()
-	projectId: number
+	projectId: number;
 
 	constructor(firstName: string, lastName: string, email: string, expiry: Date, projectId: number) {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.email = email;
 		this.expiry = expiry;
-		this.projectId = projectId
+		this.projectId = projectId;
 	}
 }

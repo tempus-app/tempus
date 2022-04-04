@@ -55,6 +55,14 @@ export class UserController {
 		return this.userService.getUser(req.user);
 	}
 
+	// Gets a Resource
+	@UseGuards(JwtAuthGuard)
+	@Get('/:userId')
+	async getUserByID(@Param('userId') userId: number): Promise<Resource> {
+		const user = await this.resourceService.getResource(userId);
+		return user;
+	}
+
 	// creates User
 	@Post()
 	async createUser(@Body() user: CreateUserDto): Promise<User> {
