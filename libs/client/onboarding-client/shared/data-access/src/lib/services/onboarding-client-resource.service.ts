@@ -1,15 +1,22 @@
-import { A } from '@angular/cdk/keycodes';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { ICreateResourceDto, ICreateViewDto, Resource, Revision, View } from '@tempus/shared-domain';
+import {
+	ICreateResourceDto,
+	ICreateViewDto,
+	IUserProjClientDto,
+	Resource,
+	Revision,
+	View,
+} from '@tempus/shared-domain';
 import { catchError, Observable, take, switchMap } from 'rxjs';
 import { OnboardingClientState, selectAccessToken } from '../+state';
 import { handleError } from './errorHandler';
+import { getAuthHeaders } from './service.common';
 
 @Injectable({ providedIn: 'root' })
 export class OnboardingClientResourceService {
-	constructor(private http: HttpClient, private store: Store<OnboardingClientState>) {}
+	constructor(private http: HttpClient, private authStore: Store<OnboardingClientState>) {}
 
 	url = 'http://localhost:3000/onboarding/user';
 
@@ -17,33 +24,35 @@ export class OnboardingClientResourceService {
 		return this.http.post<Resource>(`${this.url}/resource`, createResourceDto);
 	}
 
-	public getResourceInformation(): Observable<Resource> {
-		return this.store.select(selectAccessToken).pipe(
+	public getResProjClientData(): Observable<IUserProjClientDto[]> {
+		return this.authStore.select(selectAccessToken).pipe(
 			take(1),
-			switchMap(resData => {
-				const httpOptions = {
-					headers: new HttpHeaders({
-						Authorization: `Bearer ${resData}`,
-					}),
-				};
+			switchMap((token: string | null) => {
+				const httpAuthHeaders = getAuthHeaders(token || '');
+				return this.http.get<IUserProjClientDto[]>(`${this.url}/basic`, httpAuthHeaders).pipe(catchError(handleError));
+			}),
+		);
+	}
+
+	public getResourceInformation(): Observable<Resource> {
+		return this.authStore.select(selectAccessToken).pipe(
+			take(1),
+			switchMap((token: string | null) => {
+				const httpAuthHeaders = getAuthHeaders(token || '');
 				return this.http
-					.get<Resource>(`http://localhost:3000/onboarding/user/user`, httpOptions)
+					.get<Resource>(`http://localhost:3000/onboarding/user/user`, httpAuthHeaders)
 					.pipe(catchError(handleError));
 			}),
 		);
 	}
 
 	public getViewById(viewId: number): Observable<View> {
-		return this.store.select(selectAccessToken).pipe(
+		return this.authStore.select(selectAccessToken).pipe(
 			take(1),
-			switchMap(resData => {
-				const httpOptions = {
-					headers: new HttpHeaders({
-						Authorization: `Bearer ${resData}`,
-					}),
-				};
+			switchMap((token: string | null) => {
+				const httpAuthHeaders = getAuthHeaders(token || '');
 				return this.http
-					.get<View>(`http://localhost:3000/profile-view/view/${viewId}`, httpOptions)
+					.get<View>(`http://localhost:3000/profile-view/view/${viewId}`, httpAuthHeaders)
 					.pipe(catchError(handleError));
 			}),
 		);
@@ -70,39 +79,31 @@ export class OnboardingClientResourceService {
 	}
 
 	public getResourceProfileViews(resourceId: number): Observable<Array<View>> {
-		return this.store.select(selectAccessToken).pipe(
+		return this.authStore.select(selectAccessToken).pipe(
 			take(1),
-			switchMap(resData => {
-				const httpOptions = {
-					headers: new HttpHeaders({
-						Authorization: `Bearer ${resData}`,
-					}),
-				};
+			switchMap((token: string | null) => {
+				const httpAuthHeaders = getAuthHeaders(token || '');
 				return this.http
-					.get<Array<View>>(`http://localhost:3000/onboarding/profile-view/${resourceId}`, httpOptions)
+					.get<Array<View>>(`http://localhost:3000/onboarding/profile-view/${resourceId}`, httpAuthHeaders)
 					.pipe(catchError(handleError));
 			}),
 		);
 	}
 
 	public editResourceView(viewId: number, newView: ICreateViewDto): Observable<Revision> {
-		return this.store.select(selectAccessToken).pipe(
+		return this.authStore.select(selectAccessToken).pipe(
 			take(1),
-			switchMap(resData => {
-				const httpOptions = {
-					headers: new HttpHeaders({
-						Authorization: `Bearer ${resData}`,
-					}),
-				};
+			switchMap((token: string | null) => {
+				const httpAuthHeaders = getAuthHeaders(token || '');
 				return this.http
-					.patch<Revision>(`http://localhost:3000/onboarding/profile-view/${viewId}`, newView, httpOptions)
+					.patch<Revision>(`http://localhost:3000/onboarding/profile-view/${viewId}`, newView, httpAuthHeaders)
 					.pipe(catchError(handleError));
 			}),
 		);
 	}
 
 	public downloadProfile(id: string): Observable<Blob> {
-		return this.store.select(selectAccessToken).pipe(
+		return this.authStore.select(selectAccessToken).pipe(
 			take(1),
 			switchMap(resData => {
 				const httpOptions = {

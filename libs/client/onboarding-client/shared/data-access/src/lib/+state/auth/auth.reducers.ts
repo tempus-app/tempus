@@ -9,6 +9,9 @@ export interface AuthState {
 	accessToken: string | null;
 	refreshToken: string | null;
 	loggedInUserId: number | null;
+	firstName: string | null;
+	lastName: string | null;
+	email: string | null;
 	error: Error | null;
 	status: AsyncRequestState;
 }
@@ -18,16 +21,22 @@ export const initialState: AuthState = {
 	refreshToken: null,
 	loggedInUserId: null,
 	error: null,
+	firstName: null,
+	lastName: null,
+	email: null,
 	status: AsyncRequestState.IDLE,
 };
 
 export const authReducer = createReducer(
 	initialState,
 	on(AuthActions.login, state => ({ ...state, status: AsyncRequestState.LOADING })),
-	on(AuthActions.loginSuccess, (state, { accessToken, loggedInUserId }) => ({
+	on(AuthActions.loginSuccess, (state, { accessToken, loggedInUserId, firstName, lastName, email }) => ({
 		...state,
 		accessToken,
 		loggedInUserId,
+		firstName,
+		lastName,
+		email,
 		status: AsyncRequestState.SUCCESS,
 		error: null,
 	})),
@@ -36,5 +45,5 @@ export const authReducer = createReducer(
 		status: AsyncRequestState.ERROR,
 		error,
 	})),
-	on(AuthActions.logout, state => ({ ...initialState })),
+	on(AuthActions.logout, () => ({ ...initialState })),
 );

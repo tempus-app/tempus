@@ -31,6 +31,7 @@ services:
       - JWT_ACCESS_SECRET=test
       - JWT_REFRESH_SECRET=test2
       - SALT_SECRET=10
+      - API_URL=http://localhost:4200/
       - EMAIL_HOST=smtp.ethereal.email
       - EMAIL_PORT=587
       - EMAIL_USERNAME=elyse.labadie91@ethereal.email

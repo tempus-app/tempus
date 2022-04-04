@@ -19,7 +19,7 @@ export class ClientController {
 	@UseGuards(JwtAuthGuard)
 	@Get('')
 	async getAll() {
-		return this.clientService.getAllClientInfo();
+		return this.clientService.getAll();
 	}
 
 	@UseGuards(JwtAuthGuard, RolesGuard)

@@ -1,5 +1,6 @@
 import { Component, HostListener, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { BehaviorSubject } from 'rxjs';
 import { ContentModal } from '../modal-parameters.interface';
 import { ModalService } from '../service/modal.service';
 
@@ -20,13 +21,17 @@ export class ContentModalComponent {
 		private modalService: ModalService,
 	) {}
 
+	public $confirmDisabled = new BehaviorSubject<boolean>(false);
+
 	public close(value: boolean) {
 		this.mdDialogRef.close(value);
 	}
 
 	public selectConfirm() {
 		// child can subscribe and make changes after listening
-		this.modalService.triggerConfirmEvent();
+		if (!this.$confirmDisabled.value) {
+			this.modalService.triggerConfirmEvent();
+		}
 	}
 
 	public selectCancel() {

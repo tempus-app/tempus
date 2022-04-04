@@ -15,3 +15,6 @@ export const selectLoginStatus = createSelector(selectAuth, (state: AuthState) =
 		error: state.error,
 	};
 });
+export const selectLoggedInUserNameEmail = createSelector(selectAuth, (state: AuthState) => {
+	return { firstName: state.firstName, lastName: state.lastName, email: state.email };
+});

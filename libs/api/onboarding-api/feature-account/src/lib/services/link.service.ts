@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UpdatelinkDto } from '@tempus/api/shared/dto';
-import { LinkEntity } from '@tempus/api/shared/entity';
+import { LinkEntity, ProjectEntity } from '@tempus/api/shared/entity';
 import { EmailService } from '@tempus/api/shared/feature-email';
 import { Link, StatusType } from '@tempus/shared-domain';
 import { Repository } from 'typeorm';
@@ -13,12 +13,15 @@ export class LinkService {
 		@InjectRepository(LinkEntity)
 		private linkRepository: Repository<LinkEntity>,
 		private emailService: EmailService,
+		@InjectRepository(ProjectEntity)
+		private projectRepository: Repository<ProjectEntity>
 	) {}
 
-	async createLink(link: LinkEntity): Promise<Link> {
+	async createLink(link: LinkEntity, projectId: number): Promise<Link> {
 		const uniqueToken = uuidv4();
 		let expiryDate = new Date(link.expiry);
 		const currentDate = new Date();
+		
 		// if custom expiry not defined, link expires in a week
 		if (!link.expiry) {
 			expiryDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() + 7);
@@ -26,6 +29,12 @@ export class LinkService {
 			throw new BadRequestException('Expiry Date must be in the future');
 		}
 		const fullLink = { ...link, token: uniqueToken, status: StatusType.ACTIVE, expiry: expiryDate };
+
+		// NOT GREAT FOR NOW, BUT WAS GETTING DEP ISSUES TRYING TO IMPORT PROJECT SERVICE
+		const projectEntity = await this.projectRepository.findOne(projectId);
+		if (!projectEntity) throw new NotFoundException(`Could not find project with id ${projectEntity.id}`);
+		fullLink.project = projectEntity
+
 		await this.emailService.sendInvitationEmail(fullLink);
 		return this.linkRepository.save(fullLink);
 	}
@@ -35,7 +44,9 @@ export class LinkService {
 	// }
 
 	async findLinkById(linkId: number): Promise<Link> {
-		const linkEntity = await this.linkRepository.findOne(linkId);
+		const linkEntity = await this.linkRepository.findOne(linkId, {
+			relations: ['project']
+		});
 		if (!linkEntity) {
 			throw new NotFoundException(`Could not find token with id ${linkId}`);
 		}

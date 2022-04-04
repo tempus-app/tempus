@@ -5,5 +5,7 @@ export interface ICreateLinkDto {
 
 	email: string;
 
-	expiry: Date;
+	expiry?: Date;
+
+	projectId: number
 }
