@@ -18,7 +18,7 @@ import {
 	LoadView,
 	ViewNames,
 } from '@tempus/shared-domain';
-import { OnboaringClientResourceProfileService } from '@tempus/client/onboarding-client/shared/data-access';
+import { OnboardingClientResourceService } from '@tempus/client/onboarding-client/shared/data-access';
 import { ModalService, CustomModalType, ModalType } from '@tempus/client/shared/ui-components/modal';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, Validators } from '@angular/forms';
@@ -29,7 +29,7 @@ import { take } from 'rxjs';
 	selector: 'tempus-resource-profile-content',
 	templateUrl: './resource-profile-content.component.html',
 	styleUrls: ['./resource-profile-content.component.scss'],
-	providers: [OnboaringClientResourceProfileService],
+	providers: [OnboardingClientResourceService],
 })
 export class ResourceProfileContentComponent implements OnInit, OnChanges {
 	constructor(
@@ -37,7 +37,7 @@ export class ResourceProfileContentComponent implements OnInit, OnChanges {
 		private route: ActivatedRoute,
 		private fb: FormBuilder,
 		public modalService: ModalService,
-		private resourceService: OnboaringClientResourceProfileService,
+		private resourceService: OnboardingClientResourceService,
 		private translateService: TranslateService,
 	) {
 		const { currentLang } = translateService;
@@ -71,7 +71,7 @@ export class ResourceProfileContentComponent implements OnInit, OnChanges {
 	city = '';
 
 	@Input()
-	viewID = '';
+	viewID = 0;
 
 	experiencesSummary = '';
 
@@ -122,16 +122,16 @@ export class ResourceProfileContentComponent implements OnInit, OnChanges {
 	}
 
 	ngOnInit() {
-		const id = this.route.snapshot.paramMap.get('id') || '';
+		const id = parseInt(this.route.snapshot.paramMap.get('id') || '0', 10);
 		this.resourceService.getResourceProfileViews(id).subscribe(profileViews => {
-			this.viewID = this.route.snapshot.queryParamMap.get('viewID') || String(profileViews[0].id);
+			this.viewID = profileViews[0].id;
 
 			this.loadView(profileViews);
 		});
 	}
 
 	loadView(profileViews?: ViewNames[]) {
-		this.resourceService.getView(this.viewID).subscribe(revisionView => {
+		this.resourceService.getViewById(this.viewID).subscribe(revisionView => {
 			if (revisionView.revision) {
 				const revisedView = revisionView.revision.newView;
 				this.certifications = revisedView.certifications;
@@ -183,6 +183,7 @@ export class ResourceProfileContentComponent implements OnInit, OnChanges {
 						confirmText: rejectionDialogText.confirmText,
 						closable: true,
 						template: this.template,
+						id: 'reject',
 					},
 					CustomModalType.CONTENT,
 				);
@@ -216,6 +217,7 @@ export class ResourceProfileContentComponent implements OnInit, OnChanges {
 						message: confirmationDialogText.message,
 						modalType: ModalType.INFO,
 						closable: true,
+						id: 'confirm',
 					},
 					CustomModalType.INFO,
 				);

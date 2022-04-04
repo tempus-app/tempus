@@ -1,6 +1,6 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
 import { LoadView, ViewNames } from '@tempus/shared-domain';
-import { OnboaringClientResourceProfileService } from '@tempus/client/onboarding-client/shared/data-access';
+import { OnboardingClientResourceService } from '@tempus/client/onboarding-client/shared/data-access';
 import { ActivatedRoute } from '@angular/router';
 import { FormBuilder } from '@angular/forms';
 
@@ -18,7 +18,7 @@ export class UserBarComponent implements OnChanges {
 
 	viewIDs: number[] = [];
 
-	currentViewID = '';
+	currentViewID = 0;
 
 	viewDropDownForm = this.fb.group({
 		viewSelected: [''],
@@ -26,11 +26,11 @@ export class UserBarComponent implements OnChanges {
 
 	viewResourceProfilePrefx = 'viewResourceProfile.';
 
-	@Output() newViewSelected = new EventEmitter<string>();
+	@Output() newViewSelected = new EventEmitter<number>();
 
 	constructor(
 		private route: ActivatedRoute,
-		private resourceService: OnboaringClientResourceProfileService,
+		private resourceService: OnboardingClientResourceService,
 		private fb: FormBuilder,
 	) {}
 
@@ -44,7 +44,7 @@ export class UserBarComponent implements OnChanges {
 				viewSelected: this.loadedView.currentViewName,
 			});
 			const index = this.viewNames.indexOf(this.loadedView.currentViewName);
-			this.currentViewID = String(this.viewIDs[index]);
+			this.currentViewID = this.viewIDs[index];
 		}
 	}
 
@@ -54,7 +54,7 @@ export class UserBarComponent implements OnChanges {
 			const downloadURL = window.URL.createObjectURL(data);
 			const link = document.createElement('a');
 			link.href = downloadURL;
-			const index = this.viewIDs.indexOf(parseInt(this.currentViewID, 10));
+			const index = this.viewIDs.indexOf(this.currentViewID, 10);
 			link.download = `${this.resourceName}-${this.viewNames[index]}`;
 			link.click();
 		});
@@ -62,6 +62,6 @@ export class UserBarComponent implements OnChanges {
 
 	onClick(optionSelected: string): void {
 		const index = this.viewNames.indexOf(optionSelected);
-		this.newViewSelected.emit(String(this.viewIDs[index]));
+		this.newViewSelected.emit(this.viewIDs[index]);
 	}
 }

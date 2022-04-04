@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { OnboaringClientResourceProfileService } from '@tempus/client/onboarding-client/shared/data-access';
+import { OnboardingClientResourceService } from '@tempus/client/onboarding-client/shared/data-access';
 import { UserType } from '@tempus/client/shared/ui-components/persistent';
 import { LoadView } from '@tempus/shared-domain';
 
@@ -10,7 +10,7 @@ import { LoadView } from '@tempus/shared-domain';
 	styleUrls: ['./resource-profile.component.scss'],
 })
 export class ResourceProfileComponent implements OnInit {
-	constructor(private route: ActivatedRoute, private resourceService: OnboaringClientResourceProfileService) {}
+	constructor(private route: ActivatedRoute, private resourceService: OnboardingClientResourceService) {}
 
 	userType = UserType;
 
@@ -28,7 +28,7 @@ export class ResourceProfileComponent implements OnInit {
 
 	phoneNumber = '';
 
-	viewIndex = '';
+	viewIndex = 0;
 
 	loadedView: LoadView = { isRevision: false };
 
@@ -36,7 +36,7 @@ export class ResourceProfileComponent implements OnInit {
 		this.loadedView = loadedView;
 	}
 
-	newViewClickEvent(viewIndex: string) {
+	newViewClickEvent(viewIndex: number) {
 		this.viewIndex = viewIndex;
 	}
 
@@ -45,8 +45,8 @@ export class ResourceProfileComponent implements OnInit {
 	}
 
 	ngOnInit(): void {
-		const id = this.route.snapshot.paramMap.get('id') || '';
-		this.resourceService.getResourceInformation(id).subscribe(resourceInfo => {
+		const id = parseInt(this.route.snapshot.paramMap.get('id') || '0', 10);
+		this.resourceService.getResourceInformationById(id).subscribe(resourceInfo => {
 			this.firstName = resourceInfo.firstName;
 			this.lastName = resourceInfo.lastName;
 			this.city = resourceInfo.location.city;
