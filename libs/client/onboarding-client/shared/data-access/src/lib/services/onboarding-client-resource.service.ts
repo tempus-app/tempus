@@ -65,7 +65,7 @@ export class OnboardingClientResourceService {
 			switchMap((token: string | null) => {
 				const httpAuthHeaders = getAuthHeaders(token || '');
 				return this.http
-					.get<View>(`http://localhost:3000/profile-view/view/${viewId}`, httpAuthHeaders)
+					.get<View>(`http://localhost:3000/onboarding/profile-view/view/${viewId}`, httpAuthHeaders)
 					.pipe(catchError(handleError));
 			}),
 		);

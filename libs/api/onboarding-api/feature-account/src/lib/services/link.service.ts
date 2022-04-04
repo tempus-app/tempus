@@ -14,14 +14,14 @@ export class LinkService {
 		private linkRepository: Repository<LinkEntity>,
 		private emailService: EmailService,
 		@InjectRepository(ProjectEntity)
-		private projectRepository: Repository<ProjectEntity>
+		private projectRepository: Repository<ProjectEntity>,
 	) {}
 
 	async createLink(link: LinkEntity, projectId: number): Promise<Link> {
 		const uniqueToken = uuidv4();
 		let expiryDate = new Date(link.expiry);
 		const currentDate = new Date();
-		
+
 		// if custom expiry not defined, link expires in a week
 		if (!link.expiry) {
 			expiryDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() + 7);
@@ -33,7 +33,7 @@ export class LinkService {
 		// NOT GREAT FOR NOW, BUT WAS GETTING DEP ISSUES TRYING TO IMPORT PROJECT SERVICE
 		const projectEntity = await this.projectRepository.findOne(projectId);
 		if (!projectEntity) throw new NotFoundException(`Could not find project with id ${projectEntity.id}`);
-		fullLink.project = projectEntity
+		fullLink.project = projectEntity;
 
 		await this.emailService.sendInvitationEmail(fullLink);
 		return this.linkRepository.save(fullLink);
@@ -45,7 +45,7 @@ export class LinkService {
 
 	async findLinkById(linkId: number): Promise<Link> {
 		const linkEntity = await this.linkRepository.findOne(linkId, {
-			relations: ['project']
+			relations: ['project'],
 		});
 		if (!linkEntity) {
 			throw new NotFoundException(`Could not find token with id ${linkId}`);
