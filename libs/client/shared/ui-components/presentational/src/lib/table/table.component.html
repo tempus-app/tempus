@@ -1,13 +1,29 @@
 <ng-container>
-	<table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+	<table mat-table [dataSource]="dataSource" class="mat-elevation-z8 tempusTable">
 		<ng-container *ngFor="let disCol of tableColumns; let colIndex = index" matColumnDef="{{ disCol.columnDef }}">
-			<th mat-header-cell *matHeaderCellDef>
+			<th class="mat-body-2" mat-header-cell *matHeaderCellDef>
 				{{ disCol.header }}
 			</th>
 
 			<td mat-cell *matCellDef="let element">
-				<span>
-					{{ disCol.cell(element) }}
+				<span class="cellContainer">
+					<mat-icon
+						matTooltip="{{ element.icon.tooltip }}"
+						class="{{ element.icon.class }}"
+						*ngIf="element.icon && element.columnsWithIcon.includes(disCol.columnDef)"
+						>{{ element.icon.val }}</mat-icon
+					>
+					<p
+						class="mat-body-2"
+						*ngIf="!(element.url && element.columnsWithUrl.includes(disCol.columnDef))"
+						[innerHtml]="disCol.cell(element)"
+					></p>
+					<a
+						class="mat-body-2"
+						[routerLink]="element.url"
+						*ngIf="element.url && element.columnsWithUrl.includes(disCol.columnDef)"
+						[innerHtml]="disCol.cell(element)"
+					></a>
 				</span>
 			</td>
 		</ng-container>

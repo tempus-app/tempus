@@ -11,10 +11,14 @@ export const hydrationMetaReducer = (
 			const accessToken: string | null = sessionStorage.getItem(SessionStorageKey.TEMPUS_ACCESS_TOKEN);
 			const userIdString: string | null = sessionStorage.getItem(SessionStorageKey.TEMPUS_USER_ID);
 			const userId: number | null = userIdString ? parseInt(userIdString, 10) : null;
+			const firstName: string | null = sessionStorage.getItem(SessionStorageKey.TEMPUS_FIRST_NAME);
+			const lastName: string | null = sessionStorage.getItem(SessionStorageKey.TEMPUS_LAST_NAME);
+			const email: string | null = sessionStorage.getItem(SessionStorageKey.TEMPUS_EMAIL);
+
 			if (newState.auth) {
 				newState = {
 					...newState,
-					auth: { ...newState.auth, accessToken, loggedInUserId: userId },
+					auth: { ...newState.auth, accessToken, loggedInUserId: userId, firstName, lastName, email },
 				};
 			}
 			return reducer(newState as OnboardingClientState, action);

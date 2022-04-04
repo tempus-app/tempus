@@ -85,6 +85,7 @@ export class CredentialsComponent implements OnInit, OnDestroy {
 				message: errorMessage,
 				modalType: ModalType.ERROR,
 				closable: false,
+				id: 'errorModal',
 			},
 			CustomModalType.INFO,
 		);

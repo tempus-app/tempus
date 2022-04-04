@@ -61,7 +61,7 @@ export class ResourceEntity extends UserEntity implements Resource {
 	@OneToOne(() => LocationEntity, loc => loc.resource, { cascade: ['insert', 'update'] })
 	location: LocationEntity;
 
-	@ManyToMany(() => ProjectEntity, { cascade: ['insert', 'update'] })
+	@ManyToMany(() => ProjectEntity, projects => projects.resources, { cascade: ['insert', 'update'] })
 	@JoinTable()
 	projects: ProjectEntity[];
 

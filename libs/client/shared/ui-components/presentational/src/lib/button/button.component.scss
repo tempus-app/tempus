@@ -4,7 +4,10 @@
 	gap: 0.25em;
 	justify-content: center;
 	align-items: center;
-	padding: 0 0.5em 0 0.5em;
+}
+
+button {
+	width: 100%;
 }
 
 .label {
@@ -17,7 +20,7 @@
 
 ::ng-deep .mat-raised-button {
 	text-transform: uppercase;
-	border-radius: 10px !important;
+	border-radius: 6px;
 }
 ::ng-deep .mat-icon {
 	width: 0.5em;

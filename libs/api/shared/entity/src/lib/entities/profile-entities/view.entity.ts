@@ -90,7 +90,7 @@ export class ViewEntity implements View {
 	@Column({ name: 'created_at' })
 	createdAt: Date;
 
-	@Column({ type: 'enum', nullable: true, enum: RoleType, default: RoleType.USER, name: 'updated_by' })
+	@Column({ type: 'enum', enum: RoleType, default: RoleType.USER, nullable: true, name: 'updated_by' })
 	updatedBy?: RoleType;
 
 	@Column({
@@ -127,10 +127,10 @@ export class ViewEntity implements View {
 			dto.experiencesSummary,
 			dto.type,
 			undefined,
-			dto.skills.map(skill => SkillEntity.fromDto(skill)),
-			dto.experiences.map(experience => ExperienceEntity.fromDto(experience)),
-			dto.educations.map(education => EducationEntity.fromDto(education)),
-			dto.certifications.map(certification => CertificationEntity.fromDto(certification)),
+			dto.skills?.map(skill => SkillEntity.fromDto(skill)),
+			dto.experiences?.map(experience => ExperienceEntity.fromDto(experience)),
+			dto.educations?.map(education => EducationEntity.fromDto(education)),
+			dto.certifications?.map(certification => CertificationEntity.fromDto(certification)),
 			undefined,
 			dto.viewType,
 		);

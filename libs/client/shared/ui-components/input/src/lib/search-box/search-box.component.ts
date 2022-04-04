@@ -1,13 +1,14 @@
-import { Component, OnInit, Input, EventEmitter, Output, forwardRef } from '@angular/core';
+/* eslint-disable @typescript-eslint/dot-notation */
+import { Component, OnInit, Input, EventEmitter, Output, forwardRef, OnChanges, SimpleChanges } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { map, Observable, of, startWith } from 'rxjs';
+import { BehaviorSubject, map, startWith, tap } from 'rxjs';
 
 @Component({
 	selector: 'tempus-search-box',
 	templateUrl: './search-box.component.html',
 	styleUrls: ['./search-box.component.scss'],
 })
-export class SearchBoxComponent implements OnInit {
+export class SearchBoxComponent implements OnInit, OnChanges {
 	@Input() control = new FormControl();
 
 	search = '';
@@ -18,19 +19,31 @@ export class SearchBoxComponent implements OnInit {
 
 	@Input() options: string[] = [];
 
-	filteredOptions: Observable<string[]>;
+	filteredOptions: BehaviorSubject<string[]> = new BehaviorSubject(this.options);
 
 	@Output() optionSelect = new EventEmitter();
 
-	constructor() {
-		this.filteredOptions = of([]);
+	ngOnInit() {
+		this.control.valueChanges
+			.pipe(
+				startWith(''),
+				map(value => {
+					if (value === '') {
+						this.optionSelect.emit('');
+					}
+					return this._filter(value);
+				}),
+				tap(data => {
+					this.filteredOptions.next(data);
+				}),
+			)
+			.subscribe();
 	}
 
-	ngOnInit() {
-		this.filteredOptions = this.control.valueChanges.pipe(
-			startWith(''),
-			map(value => this._filter(value)),
-		);
+	ngOnChanges(changes: SimpleChanges): void {
+		if (changes['options']?.previousValue !== changes['options']?.currentValue) {
+			this.filteredOptions.next(this._filter(this.control.value));
+		}
 	}
 
 	optionSelected(option: string) {

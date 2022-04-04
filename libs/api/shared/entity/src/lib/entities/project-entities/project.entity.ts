@@ -1,7 +1,8 @@
+import { CreateProjectDto } from '@tempus/api/shared/dto';
 import { Project } from '@tempus/shared-domain';
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany, ManyToOne } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, ManyToMany } from 'typeorm';
+import { ResourceEntity } from '../account-entities';
 import { ClientEntity } from './client.entity';
-import { TaskEntity } from './task.entity';
 
 @Entity()
 export class ProjectEntity implements Project {
@@ -10,17 +11,15 @@ export class ProjectEntity implements Project {
 		name?: string,
 		startDate?: Date,
 		endDate?: Date,
-		hoursPerDay?: number,
 		client?: ClientEntity,
-		tasks?: TaskEntity[],
+		resources?: ResourceEntity[],
 	) {
 		this.id = id;
 		this.name = name;
 		this.startDate = startDate;
 		this.endDate = endDate;
-		this.hoursPerDay = hoursPerDay;
 		this.client = client;
-		this.tasks = tasks;
+		this.resources = resources;
 	}
 
 	@PrimaryGeneratedColumn()
@@ -35,12 +34,14 @@ export class ProjectEntity implements Project {
 	@Column()
 	endDate: Date;
 
-	@Column()
-	hoursPerDay: number;
-
 	@ManyToOne(() => ClientEntity, client => client.projects)
 	client: ClientEntity;
 
-	@OneToMany(() => TaskEntity, tasks => tasks.project)
-	tasks: TaskEntity[];
+	@ManyToMany(() => ResourceEntity, resources => resources.projects)
+	resources: ResourceEntity[];
+
+	public static fromDto(dto: CreateProjectDto): ProjectEntity {
+		if (dto == null) return new ProjectEntity();
+		return new ProjectEntity(null, dto.name, dto.startDate, dto.endDate, null);
+	}
 }

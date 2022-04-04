@@ -28,10 +28,12 @@ export class ViewsService {
 		const resourceEntity = await this.resourceService.getResourceInfo(resourceId);
 
 		const viewEntity = ViewEntity.fromDto(createViewDto);
-		viewEntity.revisionType = RevisionType.PENDING;
+		viewEntity.revisionType = RevisionType.APPROVED;
 		viewEntity.resource = resourceEntity;
-		viewEntity.locked = true;
+		viewEntity.locked = false;
+		viewEntity.type = 'PROFILE';
 		viewEntity.createdAt = new Date(Date.now());
+		viewEntity.lastUpdateDate = new Date(Date.now());
 
 		const newView = await this.viewsRepository.save(viewEntity);
 
@@ -46,7 +48,13 @@ export class ViewsService {
 		const resourceEntity = await this.resourceService.getResourceInfo(view.resource.id);
 		let newViewEntity = ViewEntity.fromDto(newView);
 		newViewEntity.resource = resourceEntity;
+		newViewEntity.locked = true;
+		newViewEntity.createdAt = new Date(Date.now());
 		newViewEntity.updatedBy = user.roles.includes(RoleType.BUSINESS_OWNER) ? RoleType.BUSINESS_OWNER : RoleType.USER;
+		newViewEntity.createdBy = view.createdBy;
+		newViewEntity.viewType = view.viewType;
+		newViewEntity.type = view.type;
+		newViewEntity.lastUpdateDate = new Date(Date.now());
 		newViewEntity.revisionType = RevisionType.PENDING;
 
 		if (user.roles.includes(RoleType.BUSINESS_OWNER)) {
@@ -64,12 +72,13 @@ export class ViewsService {
 		if (view.revision) {
 			const revisionEntity = view.revision;
 			const previousRevision = view.revision.newView;
-			await this.viewsRepository.remove(previousRevision);
 			revisionEntity.newView = newViewEntity;
+			await this.revisionRepository.save(revisionEntity);
+			await this.viewsRepository.remove(previousRevision);
 			const revisionToReturn = await this.revisionRepository.save(revisionEntity);
 			return revisionToReturn;
 		}
-		const revisionEntity = new RevisionEntity(null, null, null, view as ViewEntity, newViewEntity);
+		const revisionEntity = new RevisionEntity(null, newViewEntity.createdAt, null, view as ViewEntity, newViewEntity);
 		const revisionToReturn = await this.revisionRepository.save(revisionEntity);
 		return revisionToReturn;
 	}
@@ -117,6 +126,9 @@ export class ViewsService {
 				'experiences',
 				'educations',
 				'skills',
+				'experiences.location',
+				'educations.location',
+				'skills.skill',
 				'certifications',
 				'revision',
 				'revision.view',
@@ -126,7 +138,7 @@ export class ViewsService {
 				resource: {
 					id: resourceId,
 				},
-				revisionType: RevisionType.APPROVED,
+				// revisionType: RevisionType.APPROVED,
 			},
 		});
 
@@ -148,10 +160,13 @@ export class ViewsService {
 		const viewEntity = await this.viewsRepository.findOne(viewId, {
 			relations: [
 				'experiences',
+				'resource',
 				'educations',
 				'skills',
-				'skills.skill',
+				'experiences.location',
+				'educations.location',
 				'certifications',
+				'skills.skill',
 				'revision',
 				'revision.view',
 				'revision.newView',
@@ -170,7 +185,7 @@ export class ViewsService {
 		if (!viewEntity) {
 			throw new NotFoundException(`Could not find view with id ${viewId}`);
 		}
-		if (viewEntity.type === ViewType.PRIMARY) {
+		if (viewEntity.viewType === ViewType.PRIMARY) {
 			throw new ForbiddenException(`Cannot delete primary view`);
 		}
 		await this.viewsRepository.remove(viewEntity);

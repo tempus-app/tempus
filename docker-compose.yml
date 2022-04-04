@@ -31,6 +31,12 @@ services:
       - JWT_ACCESS_SECRET=test
       - JWT_REFRESH_SECRET=test2
       - SALT_SECRET=10
+      - API_URL=http://localhost:4200/
+      - EMAIL_HOST=smtp.ethereal.email
+      - EMAIL_PORT=587
+      - EMAIL_USERNAME=elyse.labadie91@ethereal.email
+      - EMAIL_PASSWORD=rhumFETENbQSqERnEp
+      - EMAIL_ADDRESS=elyse.labadie91@ethereal.email
 
     ports:
       - 3000:3000
@@ -40,22 +46,5 @@ services:
         target: /src
       - /src/node_modules
     working_dir: /src
-    depends_on:
-      - postgres
-
-  timesheet:
-    build:
-      context: .
-      dockerfile: Dockerfile.timesheet.dev
-      args:
-        - NODE_ENV=development
-    environment:
-      - DB_HOST=postgres
-      - DB_PORT=5432
-      - DB_USERNAME=postgres
-      - DB_PASSWORD=dbpass
-      - DB_NAME=postgres
-    ports:
-      - 3001:3001
     depends_on:
       - postgres

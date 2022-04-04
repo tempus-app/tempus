@@ -1,7 +1,7 @@
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { Country, State } from 'country-state-city';
 import { InputType } from '@tempus/client/shared/ui-components/input';
-import { AbstractControl, FormArray, FormBuilder, Validators } from '@angular/forms';
+import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { checkEnteredDates } from '@tempus/client/shared/util';
 import { ICreateEducationDto } from '@tempus/shared-domain';
 
@@ -43,14 +43,40 @@ export class EducationComponent implements OnInit {
 	constructor(private fb: FormBuilder) {}
 
 	ngOnInit(): void {
+		this.loadStoreData();
 		this.formGroup.emit(this.myInfoForm);
 	}
 
 	loadStoreData() {
 		this.myInfoForm.patchValue({
 			educationSummary: this.educationSummary,
-			qualifications: this.educations,
 		});
+
+		// mock sections, add to FormArray, patch		
+		for (let i=0; i<this.educations.length; i++){
+			const qualification = this.fb.group(
+				{
+					institution: ['!', Validators.required],
+					field: ['', Validators.required],
+					country: [''],
+					state: [''],
+					city: [''],
+					startDate: ['', Validators.required],
+					endDate: ['', Validators.required],
+				},
+				{ validators: checkEnteredDates() },
+			);
+			this.qualifications.push(qualification);
+
+			//patch values
+			(this.qualifications.at(i) as FormGroup).get('institution')?.patchValue(this.educations[i].institution);
+			(this.qualifications.at(i) as FormGroup).get('field')?.patchValue(this.educations[i].degree);
+			(this.qualifications.at(i) as FormGroup).get('country')?.patchValue(this.educations[i].location.country);
+			(this.qualifications.at(i) as FormGroup).get('state')?.patchValue(this.educations[i].location.province);
+			(this.qualifications.at(i) as FormGroup).get('city')?.patchValue(this.educations[i].location.city);
+			(this.qualifications.at(i) as FormGroup).get('startDate')?.patchValue(this.educations[i].startDate);
+			(this.qualifications.at(i) as FormGroup).get('endDate')?.patchValue(this.educations[i].endDate);
+		}
 	}
 
 	get qualifications() {
@@ -101,6 +127,9 @@ export class EducationComponent implements OnInit {
 	}
 
 	updateStateOptions(inputtedCountry: string) {
+		if (inputtedCountry === '') {
+			this.states = []
+		}
 		const countryCode = Country.getAllCountries().find(country => country.name === inputtedCountry);
 		if (countryCode != null)
 			this.states = State.getStatesOfCountry(countryCode.isoCode).map(state => {

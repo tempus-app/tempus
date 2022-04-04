@@ -1,6 +1,6 @@
 import { Certification } from '.';
 import { ViewType } from '../..';
-import { RevisionType, RoleType } from '../../enums';
+import { RoleType, RevisionType } from '../../enums';
 import { Resource } from '../account-models';
 import { Education } from './education.model';
 import { Experience } from './experience.model';

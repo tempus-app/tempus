@@ -4,11 +4,11 @@ import { ForbiddenException, Injectable, InternalServerErrorException, NotFoundE
 import { InjectRepository } from '@nestjs/typeorm';
 import { ConfigService } from '@nestjs/config';
 import { ViewsService } from '@tempus/onboarding-api/feature-profile';
-import { JwtPayload, Resource, RoleType, StatusType, ViewType } from '@tempus/shared-domain';
-import { Repository, Transaction, TransactionRepository } from 'typeorm';
+import { Resource, StatusType, ViewType } from '@tempus/shared-domain';
+import { Repository } from 'typeorm';
 import { genSalt, hash } from 'bcrypt';
 import { ResourceEntity } from '@tempus/api/shared/entity';
-import { CreateResourceDto, UpdateResourceDto } from '@tempus/api/shared/dto';
+import { CreateResourceDto, UpdateResourceDto, UserProjectClientDto } from '@tempus/api/shared/dto';
 import { LinkService } from './link.service';
 
 @Injectable()
@@ -22,16 +22,19 @@ export class ResourceService {
 	) {}
 
 	async createResource(resource: CreateResourceDto): Promise<Resource> {
-		const linkStatus = (await this.linkService.findLinkById(resource.linkId)).status;
-		if (linkStatus === StatusType.COMPLETED || linkStatus === StatusType.INACTIVE) {
+		const link = await this.linkService.findLinkById(resource.linkId);
+		if (link.status === StatusType.COMPLETED || link.status === StatusType.INACTIVE) {
 			throw new ForbiddenException('Link is not valid');
 		}
 		const resourceEntity = ResourceEntity.fromDto(resource);
 		resourceEntity.password = await this.hashPassword(resourceEntity.password);
+		
+		resourceEntity.projects = [link.project]
 		let createdResource = await this.resourceRepository.save(resourceEntity);
 
 		const view = await this.viewsService.createView(createdResource.id, {
 			viewType: ViewType.PRIMARY,
+			type: 'PROFILE',
 			educationsSummary: resource.educationsSummary,
 			educations: createdResource.educations,
 			certifications: createdResource.certifications,
@@ -40,7 +43,6 @@ export class ResourceService {
 			skillsSummary: resource.skillsSummary,
 			skills: createdResource.skills,
 			profileSummary: resource.profileSummary,
-			type: 'PROFILE',
 		});
 
 		if (!createdResource.views) createdResource.views = [];
@@ -71,6 +73,23 @@ export class ResourceService {
 		}
 
 		return resourceEntity;
+	}
+
+	async getAllResourceProjectInfo(): Promise<UserProjectClientDto[]> {
+		const resources = await this.resourceRepository.find({
+			relations: ['projects', 'views', 'projects.client', 'views.revision'],
+		});
+		const userProjectInfo: Array<UserProjectClientDto> = resources.map(res => {
+			const projClients = res.projects.map(proj => {
+				return {
+					project: {val: proj.name, id: proj.id},
+					client: proj.client.clientName,
+				};
+			});
+			const revNeeded = res.views.some(view => view.revision);
+			return new UserProjectClientDto(res.id, res.firstName, res.lastName, res.email, revNeeded, projClients);
+		});
+		return userProjectInfo;
 	}
 
 	// TODO: filtering
