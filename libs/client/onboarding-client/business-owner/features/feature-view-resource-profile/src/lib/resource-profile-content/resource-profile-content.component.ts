@@ -17,6 +17,7 @@ import {
 	Skill,
 	LoadView,
 	ViewNames,
+	RevisionType,
 } from '@tempus/shared-domain';
 import { OnboardingClientResourceService } from '@tempus/client/onboarding-client/shared/data-access';
 import { ModalService, CustomModalType, ModalType } from '@tempus/client/shared/ui-components/modal';
@@ -114,10 +115,14 @@ export class ResourceProfileContentComponent implements OnInit, OnChanges {
 
 	ngOnChanges(changes: SimpleChanges): void {
 		// eslint-disable-next-line @typescript-eslint/dot-notation
-		if (changes['viewID'] && changes['viewID'].currentValue !== '') {
+		if (changes['viewID'] && changes['viewID'].currentValue !== 0) {
+			// eslint-disable-next-line @typescript-eslint/dot-notation
+			console.log(changes['viewID'].currentValue);
 			// eslint-disable-next-line @typescript-eslint/dot-notation
 			this.viewID = changes['viewID'].currentValue;
-			this.loadView();
+			// eslint-disable-next-line @typescript-eslint/dot-notation
+			this.loadView(changes['viewID'].currentValue);
+			// eslint-disable-next-line @typescript-eslint/dot-notation
 		}
 	}
 
@@ -125,35 +130,38 @@ export class ResourceProfileContentComponent implements OnInit, OnChanges {
 		const id = parseInt(this.route.snapshot.paramMap.get('id') || '0', 10);
 		this.resourceService.getResourceProfileViews(id).subscribe(profileViews => {
 			this.viewID = profileViews[0].id;
+			let revisionViewId;
+			for (let i = 0; i < profileViews.length; i++) {
+				if (profileViews[i].revision) {
+					revisionViewId = profileViews[i].revision?.newView.id;
+					// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+					this.viewID = profileViews[i].revision!.view.id;
+				}
+			}
 
-			this.loadView(profileViews);
+			if (!revisionViewId) {
+				revisionViewId = profileViews[0].id;
+			}
+			this.loadView(revisionViewId, profileViews);
 		});
 	}
 
-	loadView(profileViews?: ViewNames[]) {
-		this.resourceService.getViewById(this.viewID).subscribe(revisionView => {
-			if (revisionView.revision) {
-				const revisedView = revisionView.revision.newView;
-				this.certifications = revisedView.certifications;
-				this.educations = revisedView.educations;
-				this.educationsSummary = revisedView.educationsSummary;
-				this.workExperiences = revisedView.experiences;
-				this.experiencesSummary = revisedView.experiencesSummary;
-				this.profileSummary = revisedView.profileSummary;
-				this.skills = revisedView.skills.map((skill: Skill) => skill.skill.name);
-				this.skillsSummary = revisedView.skillsSummary;
-				this.viewName = revisedView.type;
+	loadView(viewID: number, profileViews?: ViewNames[]) {
+		this.resourceService.getViewById(viewID).subscribe(resourceView => {
+			this.certifications = resourceView.certifications;
+			this.educations = resourceView.educations;
+			this.educationsSummary = resourceView.educationsSummary;
+			this.workExperiences = resourceView.experiences;
+			this.experiencesSummary = resourceView.experiencesSummary;
+			this.profileSummary = resourceView.profileSummary;
+			this.skills = resourceView.skills.map((skill: Skill) => skill.skill.name);
+			this.skillsSummary = resourceView.skillsSummary;
+			this.viewName = resourceView.type;
+
+			if (resourceView.revisionType === RevisionType.PENDING) {
 				this.isRevision = true;
 			} else {
-				this.certifications = revisionView.certifications;
-				this.educations = revisionView.educations;
-				this.educationsSummary = revisionView.educationsSummary;
-				this.workExperiences = revisionView.experiences;
-				this.experiencesSummary = revisionView.experiencesSummary;
-				this.profileSummary = revisionView.profileSummary;
-				this.skills = revisionView.skills.map((skill: Skill) => skill.skill.name);
-				this.skillsSummary = revisionView.skillsSummary;
-				this.viewName = revisionView.type;
+				this.isRevision = false;
 			}
 			if (profileViews) {
 				this.revisionViewLoaded.emit({
@@ -200,7 +208,7 @@ export class ResourceProfileContentComponent implements OnInit, OnChanges {
 				)
 				.subscribe();
 			this.modalService.confirmEventSubject.unsubscribe();
-			this.router.navigate(['../../../manage-resources'], { relativeTo: this.route });
+			this.router.navigate(['../../manage-resources'], { relativeTo: this.route });
 		});
 	}
 
@@ -227,7 +235,7 @@ export class ResourceProfileContentComponent implements OnInit, OnChanges {
 			this.modalService.close();
 			this.resourceService.approveOrDenyRevision(this.viewID, '', true).subscribe();
 			this.modalService.confirmEventSubject.unsubscribe();
-			this.router.navigate(['../../../manage-resources'], { relativeTo: this.route });
+			this.router.navigate(['../../manage-resources'], { relativeTo: this.route });
 		});
 	}
 }
