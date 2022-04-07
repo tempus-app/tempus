@@ -2,6 +2,8 @@
 
 ## Link to Issue
 
+## Screenshots (if appropriate)
+
 ## Acceptance Criteria
 
 - [ ] My PR commit name matches feat/chore/bug: (config/frontend/api): <verb> message
