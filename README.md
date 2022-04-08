@@ -10,8 +10,6 @@
 
 
 # Table Of Contents
-- [Tempus](#tempus)
-- [Table Of Contents](#table-of-contents)
 - [🎯  Motivation & Project Description](#--motivation--project-description)
   - [⚙️  Core Features](#️--core-features)
     - [🌗  Phase 1 (Jan-April 2022)](#--phase-1-jan-april-2022)
