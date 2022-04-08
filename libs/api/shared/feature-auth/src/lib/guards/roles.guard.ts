@@ -17,6 +17,7 @@ export class RolesGuard implements CanActivate {
 			return true;
 		}
 
+		// extracting user from `req.user`. In this case,  user is the JWT Access Token Payload, which includes roles.
 		const { user } = context.switchToHttp().getRequest();
 		return requiredRoles.some(role => user.roles?.includes(role));
 	}
