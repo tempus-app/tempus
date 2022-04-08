@@ -2,7 +2,7 @@
 
 This document details how to add and modify the frontend. To understand the file structure and layout of the frontend, refer to this [document](./FileStructure.md).
 
-## Typical flow to contribute
+## Typical flows to Contribute
 
 The flow to contribute will differ depending on the task to be done. Below, steps are described for typical flows that a user may encounter while trying to contribute. The following sections will explain the steps in greater detail.
 
@@ -31,11 +31,11 @@ The flow to contribute will differ depending on the task to be done. Below, step
 |        Adding a translation        |
 |            Adding tests            |
 
-## Adding a view
+## Adding a View
 
 First we must understand a view. A view is a collection of pages that share similar elements/functionality. For example under `libs/client/onboarding-client` we have views such as `business-owner`, `resource`, and `signup`. These are a collection of folders grouped together which require many pages but have similar a domain. The `business-owner` view for example would have pages that are required by the business owner such as managing and viewing resources pages. In general, these views each have a similar structure of `data-access`, `features`, and `shell` folders. `data-access` handles store related activities, `features` contains the pages, and the `shell` handles the routing. For more information regarding the structure refer to the frontend structure [document](./FileStructure.md).
 
-## Adding a library
+## Adding a Library
 
 Adding a library is crucial when adding major elements to the frontends. Typically you will need to do this when making a new shell, for example refer to to the following directory [libs/client/onboarding-client/business-owner/shell](../../libs/client/onboarding-client/business-owner/shell/). Another case occurs when adding features, for example refer to[libs/client/onboarding-client/business-owner/features](../../libs/client/onboarding-client/business-owner/features/). Libraries hold all the relevant code such as the html, css, and typescript needed to display and interact with a page. The following command describes how to generate a library:
 
@@ -49,7 +49,7 @@ It is important that the directory path does not include libs in the beginning a
 npx nx generate @nrwl/angular:library --name=test --directory=client/onboarding-client/business-ownerfeatures/feature-test
 ```
 
-## Adding an angular component
+## Adding an Angular Component
 
 A component can be generated either through nx or angular. To generate a component through angular the component name and project must be specified. The project is typically a folder under the `/libs/client/onboarding-client/` folder. To find a list of projects to ensure you are generating the component in the right location, please refer to the [angular.json](../../angular.json) file found in the root directory of the repository. The command to generate a component through angular is as follows:
 
@@ -69,7 +69,7 @@ The following is an example of generating a component under the create [create-c
 npx nx generate @schematics/angular:component --name=test-component --project=onboarding-client-signup-feature-create-credentials
 ```
 
-## Adding a shell/Creating a route
+## Adding a Shell/Creating a route
 
 A shell component is used for routing and is crucial when setting up routes for a collection of new pages. Currently we have an overall shell that handles routes for all views. Then we have to subshells that handles routing for the signup flow (found under `libs/client/onboarding-client/signup/shell`), the business owner views (found under `libs/client/onboarding-client/business-owner/shell` ), and the resource views (found under `libs/client/onboarding-client/resource/shell`). To add a shell it is identical to creating a library with the name being shell and the directory path differing (as described above). However, there is a bit of configuration to be done within the library. Once the shell is generated, generate an angular component also called shell as described in the above section `Adding an angular component`. In the module file, the routes have to be setup. The module file can be found by browsing under the directory and searching for a file that matches the pattern `<lib-name>-feature-shell.module.ts`. In that file setup, first setup the file as follows.
 
@@ -109,15 +109,15 @@ export class <ViewShellModule> {}
 
 Some elements have stubbed in as it will change depending on how and where you change the component. For example `<ViewNameDataAccess>` is the data access folder typically under a view. This is where details of the store are located. The shell component is that angular component that was mentioned before. This also has the same name as the library shell, however it is where html and typescript can be defined so all components loaded under the routes can have common elements. The routes is an array as there can be multiple routes with a shell which make sense since it is a collection of pages. The path can be specified so when a user is on that route, a module can be loaded through the `loadchildren` section of the array element. The `loadChildren` section takes in a module (which is typically a page), and displays it on that route. One note is that the route typically has prefixes but that is defined in the root level shell component, which controls routing for the entire frontend under `libs/client/onboarding-client/shell`. For an example refer to the following [file](../../libs/client/onboarding-client/business-owner/shell/src/lib/onboarding-client-business-owner-feature-shell.module.ts).
 
-## Using the store
+## Using the Store
 
 The store for a view is configured under the `data-access` folder. To find more information about using the store and what the store is, refer to the following [document](./Store.md).
 
-## Using the Modal
+## Using the Modal Service 
 
 To use a modal when popups are required, use the modal service which is described in this [document](./ModalService.md).
 
-## Adding a translation
+## Adding a Translation
 
 We do not hardcode english into the HTML or Typescript but rather use a translation service. Information on using and implementing the translation service can be found [here](./Translations.md).
 
@@ -141,6 +141,6 @@ To import persistent components such as the side, use the following import:
 import { ClientSharedUiComponentsPersistentModule } from '@tempus/client/shared/ui-components/persistent';
 ```
 
-## Adding a test
+## Adding a Test
 
 Each angular component is generated with a `.spec.ts` file. This is the test file and tests can be added here. Generally for the frontend we test the component display, typescript functions, and DOM interactions.
