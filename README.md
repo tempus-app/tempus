@@ -10,6 +10,8 @@
 
 
 # Table Of Contents
+- [Tempus](#tempus)
+- [Table Of Contents](#table-of-contents)
 - [🎯  Motivation & Project Description](#--motivation--project-description)
   - [⚙️  Core Features](#️--core-features)
     - [🌗  Phase 1 (Jan-April 2022)](#--phase-1-jan-april-2022)
@@ -29,9 +31,9 @@
 
 # 🎯  Motivation & Project Description 
 
-Tempus is a application built for CAL & Associates, an an enterprise resource mangement company, who scouts and hires resources to fuifil their clients (banks etc.) needs. Prior to Tempus, CAL undertook the manual work of reviewing the resources, building standardized resumes, and handling the onboarding proccess and project assignment for their resources, losing time. 
+Tempus is an application built for CAL & Associates, an enterprise resource management company, that scouts and hires resources to fulfil their clients (banks etc.) needs. Before Tempus, CAL undertook the manual work of reviewing the resources, building standardized resumes, and handling the onboarding process and project assignment for their resources, losing time. 
 
-Tempus aims to smoothen this proccess by allowing resources to build profiles within the application, and for CAL to invite, manage, review and and assign resource to CAL's Client projects.
+Tempus aims to smoothen this process by allowing resources to build profiles within the application, and for CAL to invite, manage, review and assign a resource to CAL's Client projects.
 
 
 ## ⚙️  Core Features
@@ -54,7 +56,7 @@ Tempus aims to smoothen this proccess by allowing resources to build profiles wi
 
  # 🌵 Contributors
 
-This project was build by: 
+This project was built by: 
  - Afrah Ali
  - Aman Riat
  - Gabriel Granata
@@ -65,20 +67,18 @@ This project was build by:
 
 # 🧰 Installation + Running
 
-There are two ways to run the <b>backend</b> application, using docker, and building the components of the app locally. Docker does heavily smoothen set up, however, it does take longer to build,load and will consume more of your CPU power. To run the client, you must follow the steps of the [local set up](#local-set-up), ignoring any database centric steps.
+There are two ways to run the <b>backend</b> application, using docker, and building the components of the app locally. Docker does heavily smoothen set up, however, it does take longer to build, load and will consume more of your CPU power. To run the client, you must follow the steps of the [local set up](#local-set-up), ignoring any database-centric steps.
 
 The first steps are general to both docker & non-docker set up.
 
 1. Set up `.env` file in the root directory, following the [env.example file](/.env.example). Any value that is filled in the example file can be copied into the env variable as well for development purposes.
    
-2. To set up the <b>test email server</b>, head over to [ethereal.com](https://ethereal.email), and create an account. After the account is filled, you can fill in the following env variables. To test if the emails have gone through properly, login to etheral and  check the messages tab.
+2. To set up the <b>test email server</b>, head over to [ethereal.com](https://ethereal.email), and create an account. After the account is filled, you can fill in the following env variables. To test if the emails have gone through properly, login to Etheral and  check the messages tab.
     ```
     EMAIL_USERNAME=<username>
     EMAIL_PASSWORD=<password>
     EMAIL_ADDRESS=<username>
     ```
-3. for Authentication, the follow values 
-
 
 ### Docker Set Ump
 
@@ -94,7 +94,7 @@ The first steps are general to both docker & non-docker set up.
     ```
 If you want to support both docker & local development, it is recommended to set these variables directly in the [docker-compose.yml](docker-compose.yml) file.
 
-5. After, docker is successufuly installed, you should be able to use the following commands to run/stop the containers
+5. After docker is successfully installed, you should be able to use the following commands to run/stop the containers
     - `docker-compose up`: starts up docker container for onboarding (our backend app), postgres database (image) and adminer (image)
       - to debug database issues, head over to http://localhost:8080, this should open up adminer which shows the postgres database
     - `docker-compose build`: rebuilds the containers, especially useful if there are new changes (that aren't reflected when running `docker-compose up`)
@@ -102,11 +102,11 @@ If you want to support both docker & local development, it is recommended to set
 
 ### Local Set Up
 
-3. First install node, [here](https://nodejs.org/en/download/). The current version of node run is `v16.14.0`. To avoid unneeded modifications to package lock files, ensure this is the local verssion as well. If you need to modify/update/downgrade versions, using [nvm](https://github.com/nvm-sh/nvm). Node also includes npm and npx, which is needed to run this application. If you have installed node previously, check to make sure both [npm](https://docs.npmjs.com/cli/v6/commands/npm-install/) and [npx](https://www.npmjs.com/package/npx) are installed
+3. First install node, [here](https://nodejs.org/en/download/). The current version of node run is `v16.14.0`. To avoid unneeded modifications to package lock files, ensure this is the local version as well. If you need to modify/update/downgrade versions, using [nvm](https://github.com/nvm-sh/nvm). Node also includes npm and npx, which is needed to run this application. If you have installed node previously, check to make sure both [npm](https://docs.npmjs.com/cli/v6/commands/npm-install/) and [npx](https://www.npmjs.com/package/npx) are installed
    
 
 4. Additionally, a local Postgres Database must be installed to run the application. You can install postgres [here](https://www.postgresql.org/download/), or through [homebrew](https://wiki.postgresql.org/wiki/Homebrew) (if using a Mac).
-5. After downloading and setting up postgres, connect to your local postgres instance (varies depedending on device), and run the following command `CREATE DB <db-name>`. You must then set the env variables as follows to have the local database ready.
+5. After downloading and setting up postgres, connect to your local postgres instance (varies depending on device), and run the following command `CREATE DB <db-name>`. You must then set the env variables as follows to have the local database ready.
     ```
         DB_HOST=localhost
         DB_PORT=5432
