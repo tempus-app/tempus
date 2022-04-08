@@ -1,4 +1,9 @@
+![workflow](.github/workflows/github-action.yml/badge.svg)
+
+
 # Tempus
+
+<img src="./docs/assets/../screenshots/tempus_logo_1.png" width="100" height="100">
 
 # Table Of Contents
 - [Tempus](#tempus)
