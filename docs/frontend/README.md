@@ -10,7 +10,7 @@ This folder contains documents about the Tempus frontend. The frontend is done i
 * How to add changes to the frontend
 ## [ModalService](./ModalService.md)
 * How to use the modal service to create popup dialogs
-## [Theme.md](./Theme.md)
-* How to use the tempus defined style to create a consistent frontend
+## [Theme](./Theme.md)
+* How to use the tempus defined styles to create a consistent looking frontend
 ## [Translations.md](./Translations.md)
-* How to use the translation service to avoid hardcoded strings in the HTML
+* What is the translations service and how to use it to avoid hardcoded strings in the HTML
