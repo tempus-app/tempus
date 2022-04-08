@@ -1,9 +1,13 @@
-![workflow](.github/workflows/github-action.yml/badge.svg)
+![workflow](https://github.com/tempus-app/tempus/actions/workflows/github-action.yml/badge.svg)
+
+<p align="center">
+
+<img src="./docs/assets/../screenshots/tempus_logo_1.png" width="80" height="80" style="{text-align:center}">
+</p>
 
 
-# Tempus
+# Tempus 
 
-<img src="./docs/assets/../screenshots/tempus_logo_1.png" width="100" height="100">
 
 # Table Of Contents
 - [Tempus](#tempus)
