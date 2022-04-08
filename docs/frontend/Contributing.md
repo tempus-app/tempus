@@ -37,7 +37,7 @@ First we must understand a view. A view is a collection of pages that share simi
 
 ## Adding a Library
 
-Adding a library is crucial when adding major elements to the frontends. Typically you will need to do this when making a new shell, for example refer to to the following directory [libs/client/onboarding-client/business-owner/shell](../../libs/client/onboarding-client/business-owner/shell/). Another case occurs when adding features, for example refer to[libs/client/onboarding-client/business-owner/features](../../libs/client/onboarding-client/business-owner/features/). Libraries hold all the relevant code such as the html, css, and typescript needed to display and interact with a page. The following command describes how to generate a library:
+Adding a library is crucial when adding major elements to the frontends. Typically you will need to do this when making a new shell, for example refer to to the following directory [libs/client/onboarding-client/business-owner/shell](../../libs/client/onboarding-client/business-owner/shell/). Another case occurs when adding features, for example refer to [libs/client/onboarding-client/business-owner/features](../../libs/client/onboarding-client/business-owner/features/). Libraries hold all the relevant code such as the html, css, and typescript needed to display and interact with a page. The following command describes how to generate a library:
 
 ```
 npx nx generate @nrwl/angular:library --name=<library-name> --directory=<directory-path>
@@ -63,7 +63,7 @@ Alternatively a component can be generated through nx as follows:
 npx nx generate @schematics/angular:component --name=<component-name>  --project=<project-name>
 ```
 
-The following is an example of generating a component under the create [create-credentials page](../../libs/client/onboarding-client/signup/features/feature-create-credentials/):
+The following is an example of generating a component under the [create-credentials page](../../libs/client/onboarding-client/signup/features/feature-create-credentials/):
 
 ```
 npx nx generate @schematics/angular:component --name=test-component --project=onboarding-client-signup-feature-create-credentials
@@ -71,7 +71,7 @@ npx nx generate @schematics/angular:component --name=test-component --project=on
 
 ## Adding a Shell/Creating a route
 
-A shell component is used for routing and is crucial when setting up routes for a collection of new pages. Currently we have an overall shell that handles routes for all views. Then we have to subshells that handles routing for the signup flow (found under `libs/client/onboarding-client/signup/shell`), the business owner views (found under `libs/client/onboarding-client/business-owner/shell` ), and the resource views (found under `libs/client/onboarding-client/resource/shell`). To add a shell it is identical to creating a library with the name being shell and the directory path differing (as described above). However, there is a bit of configuration to be done within the library. Once the shell is generated, generate an angular component also called shell as described in the above section `Adding an angular component`. In the module file, the routes have to be setup. The module file can be found by browsing under the directory and searching for a file that matches the pattern `<lib-name>-feature-shell.module.ts`. In that file setup, first setup the file as follows.
+A shell component is used for routing and is crucial when setting up routes for a collection of new pages. Currently we have an overall shell that handles routes for all views. Then we have to subshells that handles routing for the signup flow (found under `libs/client/onboarding-client/signup/shell`), the business owner views (found under `libs/client/onboarding-client/business-owner/shell` ), and the resource views (found under `libs/client/onboarding-client/resource/shell`). To add a shell it is identical to creating a library with the name being shell and the directory path differing (as described above). However, there is a bit of configuration to be done within the library. Once the shell is generated, generate an angular component also called shell as described in the above section `Adding an angular component`. In the module file, the routes have to be setup. The module file can be found by browsing under the directory and searching for a file that matches the pattern `<lib-name>-feature-shell.module.ts`. In that file, first setup the file as follows.
 
 ```
 import { NgModule } from '@angular/core';
@@ -107,7 +107,7 @@ const routes: Routes = [
 export class <ViewShellModule> {}
 ```
 
-Some elements have stubbed in as it will change depending on how and where you change the component. For example `<ViewNameDataAccess>` is the data access folder typically under a view. This is where details of the store are located. The shell component is that angular component that was mentioned before. This also has the same name as the library shell, however it is where html and typescript can be defined so all components loaded under the routes can have common elements. The routes is an array as there can be multiple routes with a shell which make sense since it is a collection of pages. The path can be specified so when a user is on that route, a module can be loaded through the `loadchildren` section of the array element. The `loadChildren` section takes in a module (which is typically a page), and displays it on that route. One note is that the route typically has prefixes but that is defined in the root level shell component, which controls routing for the entire frontend under `libs/client/onboarding-client/shell`. For an example refer to the following [file](../../libs/client/onboarding-client/business-owner/shell/src/lib/onboarding-client-business-owner-feature-shell.module.ts).
+Some elements have stubbed in as it will change depending on how and where you change the component. For example `<ViewNameDataAccess>` is the data access folder typically under a view. This is where details of the store are located. The shell component is that angular component that was mentioned before. This also has the same name as the library shell, however it is where html and typescript can be defined so all components loaded under the routes can have common elements. The routes is an array as there can be multiple routes within a shell. The path can be specified so when a user is on that route, a module can be loaded through the `loadChildren` section of the array element. The `loadChildren` section takes in a module (which is typically a page), and displays it on that route. One note is that the route typically has prefixes but that is defined in the root level shell component, which controls routing for the entire frontend under `libs/client/onboarding-client/shell`. For an example refer to the following [file](../../libs/client/onboarding-client/business-owner/shell/src/lib/onboarding-client-business-owner-feature-shell.module.ts).
 
 ## Using the Store
 
@@ -123,7 +123,9 @@ We do not hardcode english into the HTML or Typescript but rather use a translat
 
 ## Using the shared Angular Components
 
-We have developed our own reusable components to be used throughout the application. More information on the components themselves can be found [here](./Components.md). The components themselves can be found under `client/libs/onboarding-client/shared/ui-components`. To import the `input-components` which include elements such as the text input and textarea, we must use the following imports in our module file (typically found under `<view-name>/features/<feature-name>/src/lib/<feature-name>-module.ts`). An example to demonstrate where the components must be imported can be found [here](../../libs/client/onboarding-client/resource/features/feature-profile/src/lib/onboarding-client-resource-feature-profile.module.ts).
+We have developed our own reusable components to be used throughout the application. More information on the components themselves can be found [here](./Components.md). The components themselves can be found under `client/libs/onboarding-client/shared/ui-components`. An example to demonstrate where the components must be imported can be found [here](../../libs/client/onboarding-client/resource/features/feature-profile/src/lib/onboarding-client-resource-feature-profile.module.ts). 
+
+To import the `input-components` which include elements such as the text input and textarea, we must use the following imports in our module file (typically found under `<view-name>/features/<feature-name>/src/lib/<feature-name>-module.ts`). 
 
 ```
 import { ClientSharedUiComponentsInputModule } from '@tempus/client/shared/ui-components/input';
