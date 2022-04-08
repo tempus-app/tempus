@@ -57,7 +57,7 @@ The way tempus apporaches the use of Nx is to keep Apps as empty as possible in 
                 ...                                           
             /shared(dir)                                            // Bounded-Context-level Shared Grouping Folder
                 /utils(lib)
-                /guards()lib
+                /guards(lib)
                 /data-access(lib)
                 /features(dir)
                     /feature-signin(lib)
@@ -95,7 +95,7 @@ The general idea encompassing the formatting of the application is the use of di
  - `Technology Level`: Grouping of files that share the same technology, i.e API and Client
  - `Application Level`: Grouping of files under the same application i.e onboarding-client
  - `Bounded-Content Level`: Grouping of files under the same relative domain (more flexible than the top two) i.e signup and business-owner in the client and feature-profile in the api
- - `Type Level`: Grouping of files sharing the same lib typ (currently only `feature` type exists)
+ - `Type Level`: Grouping of files sharing the same lib type (currently only `feature` type exists)
 
 The use of these semantic grouping levels in the repo provide order and structure as well as predictable locations of files. The repo and the files devising it are made extendable via this approach.
 
@@ -111,17 +111,18 @@ There are a couple of key points worth bringing up and are as follows:
     - This bounded use of shared folders may present a challenge to a developer when having to decide where to put a specific module. The best advice for this is to place the module/component/file etc at the lowest possible shared folder to limit its scope and provide its functionality to only those things that actually need it
  - A great advantage of Nx is the decoupling of apps and libs and the sharing of data, especially that of data interfaces between the frontend and backend. However, one may question how exactly `dtos` and `entities` are to be shared if they are defined under `api/shared` and are bound to that level
     - The answer is in the use of interfaces, i.e, all `dtos` have interfaces defined under `shared/domain/dtos/` and all `entities` have interfaces defined under `shared/domain/models/` as well
+    - These interfaces are then used on the frontend to provide a unification of data types between client and server
 
 
 ### Lib Types
 
 There are 6 main lib types that are used in this tempus workspace and are as follows (most are used in the client only):
 
- - `feature`: This lib on the client represents a page of the application, i.e a signin page or a profile page, etc. On the api, it simply acts a bounded content of sorts grouping together all the services, controllers and tests surrounding that specific domain, i.e feature-account encapsulates those services and controllers relating to resource accoutns
- - `data-access`: Encapsulates the state interaction code either for a specific bounded context or multiple (if in a shared folder). Will contain a `+state/` folder containing all the relevant reducers, actions, selectors, effects, etc relevant to the state. Used only on the frontend.
+ - `feature`: This lib on the client represents a page of the application, i.e a signin page or a profile page, etc. On the api, it simply acts a bounded content of sorts grouping together all the services, controllers and tests surrounding that specific domain, i.e feature-account encapsulates those services and controllers relating to resource accounts
+ - `data-access`: Encapsulates the state interaction code either for a specific bounded context or multiple (if in a shared folder). Will contain a `+state/` folder containing all the relevant reducers, actions, selectors, effects, etc relevant to the state. May also contain services relevant to the use case. Used only on the frontend.
  - `shell`: This is a very important lib (used only on the frontend) that aggregates and controls the routing to different modules. The shell may route to other shells or it may route to specific pages. In the tempus ecosystem for onboarding-client, there is one main `onboarding-client-shell.module.ts` that acts as a global router to the bounded-context specific shells. The routes in this shell look like the following:
-    - As one can see, the routes are lazily loaded and the actual module being lazily loaded are the bounded context specific ones. Within each bounded context module, routes have the following structure:
-    ```
+    - As one can see, the routes are lazily loaded and the actual module being lazily loaded are the bounded context specific ones.
+    ```ts
         const routes: Routes = [
             {
                 path: '',
@@ -155,8 +156,8 @@ There are 6 main lib types that are used in this tempus workspace and are as fol
             },
         ];
     ```
-    - Below, one can see that the routes do not lazily load other shells but rather specific feature modules which then render a specific page.
-    ```
+    - Within each bounded context module, routes have the following structure:
+    ```ts
         const routes: Routes = [
             {
                 path: '',
@@ -184,6 +185,8 @@ There are 6 main lib types that are used in this tempus workspace and are as fol
             },
         ];
     ```
+    Above, one can see that the routes do not lazily load other shells but rather specific feature modules which then render a specific page.
+
  - `util`: Utility libraries containing pure functions for use across other libraries, i.e data formatting, etc (once again, according to the bounded nature of the shared folder, place the utility function you need in the lowest possible shared folder to limit scope)
  - `asset`: Contains any icons, fonts, images, and translation files relevant to the application 
  - `ui`: This includes any libraries that involve the ui in anyway, i.e components, and styles (for theming)
