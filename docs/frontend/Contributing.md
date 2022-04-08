@@ -20,7 +20,7 @@ The flow to contribute will differ depending on the task to be done. Below, step
 | Adding/Updating the shell routing  |
 |           Adding a test            |
 
-|         **Adding a view**          |
+|         **Adding a Bounded Context**          |
 | :--------------------------------: |
 |          Adding a library          |
 |           Adding a shell           |
@@ -31,9 +31,9 @@ The flow to contribute will differ depending on the task to be done. Below, step
 |        Adding a translation        |
 |            Adding tests            |
 
-## Adding a View
+## Adding a Bounded Context
 
-First we must understand a view. A view is a collection of pages that share similar elements/functionality. For example under `libs/client/onboarding-client` we have views such as `business-owner`, `resource`, and `signup`. These are a collection of folders grouped together which require many pages but have similar a domain. The `business-owner` view for example would have pages that are required by the business owner such as managing and viewing resources pages. In general, these views each have a similar structure of `data-access`, `features`, and `shell` folders. `data-access` handles store related activities, `features` contains the pages, and the `shell` handles the routing. For more information regarding the structure refer to the frontend structure [document](./FileStructure.md).
+First we must understand what a bounded context is. A bounded context is a collection of pages that share similar elements/functionality. For example under `libs/client/onboarding-client` we have bounded contexts such as `business-owner`, `resource`, and `signup`. These are a collection of folders grouped together which require many pages but have similar a domain. The `business-owner` bounded context for example would have pages that are required by the business owner such as managing and viewing resources pages. In general, these  bounded contexts each have a similar structure and contains the `data-access`, `features`, and `shell` folders. `data-access` handles store related activities, `features` contains the pages, and the `shell` handles the routing. For more information regarding the structure refer to the frontend structure [document](./FileStructure.md).
 
 ## Adding a Library
 
@@ -71,7 +71,7 @@ npx nx generate @schematics/angular:component --name=test-component --project=on
 
 ## Adding a Shell/Creating a route
 
-A shell component is used for routing and is crucial when setting up routes for a collection of new pages. Currently we have an overall shell that handles routes for all views. Then we have to subshells that handles routing for the signup flow (found under `libs/client/onboarding-client/signup/shell`), the business owner views (found under `libs/client/onboarding-client/business-owner/shell` ), and the resource views (found under `libs/client/onboarding-client/resource/shell`). To add a shell it is identical to creating a library with the name being shell and the directory path differing (as described above). However, there is a bit of configuration to be done within the library. Once the shell is generated, generate an angular component also called shell as described in the above section `Adding an angular component`. In the module file, the routes have to be setup. The module file can be found by browsing under the directory and searching for a file that matches the pattern `<lib-name>-feature-shell.module.ts`. In that file, first setup the file as follows.
+A shell component is used for routing and is crucial when setting up routes for a collection of new pages. Currently we have an overall shell that handles routes for all bounded contexts. Then we have to subshells that handles routing for the signup flow (found under `libs/client/onboarding-client/signup/shell`), the business owner views (found under `libs/client/onboarding-client/business-owner/shell` ), and the resource views (found under `libs/client/onboarding-client/resource/shell`). To add a shell it is identical to creating a library with the name being shell and the directory path differing (as described above). However, there is a bit of configuration to be done within the library. Once the shell is generated, generate an angular component also called shell as described in the above section `Adding an angular component`. In the module file, the routes have to be setup. The module file can be found by browsing under the directory and searching for a file that matches the pattern `<lib-name>-feature-shell.module.ts`. In that file, first setup the file as follows.
 
 ```
 import { NgModule } from '@angular/core';
@@ -111,7 +111,7 @@ Some elements have stubbed in as it will change depending on how and where you c
 
 ## Using the Store
 
-The store for a view is configured under the `data-access` folder. To find more information about using the store and what the store is, refer to the following [document](./Store.md).
+The store for a bounded context is configured under the `data-access` folder. To find more information about using the store and what the store is, refer to the following [document](./Store.md).
 
 ## Using the Modal Service 
 
@@ -125,7 +125,7 @@ We do not hardcode english into the HTML or Typescript but rather use a translat
 
 We have developed our own reusable components to be used throughout the application. More information on the components themselves can be found [here](./Components.md). The components themselves can be found under `client/libs/onboarding-client/shared/ui-components`. An example to demonstrate where the components must be imported can be found [here](../../libs/client/onboarding-client/resource/features/feature-profile/src/lib/onboarding-client-resource-feature-profile.module.ts). 
 
-To import the `input-components` which include elements such as the text input and textarea, we must use the following imports in our module file (typically found under `<view-name>/features/<feature-name>/src/lib/<feature-name>-module.ts`). 
+To import the `input-components` which include elements such as the text input and textarea, we must use the following imports in our module file (typically found under `<bounded-context-name>/features/<feature-name>/src/lib/<feature-name>-module.ts`). 
 
 ```
 import { ClientSharedUiComponentsInputModule } from '@tempus/client/shared/ui-components/input';
