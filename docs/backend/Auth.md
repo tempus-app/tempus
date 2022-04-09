@@ -1,15 +1,32 @@
 # Authentication and Authorization Documentation
 
 ---
-# Table of Contents
-1. [Research](#research)
-2. [General Overview](#overview)
-3. [Resources](#resources)
-4. [Fourth Example](#fourth-examplehttpwwwfourthexamplecom)
+- [Authentication and Authorization Documentation](#authentication-and-authorization-documentation)
+	- [Research](#research)
+		- [Overall Findings](#overall-findings)
+		- [Implementation](#implementation)
+	- [General Overview](#general-overview)
+		- [Guards and Strategies](#guards-and-strategies)
+			- [Local Guard and Strategy](#local-guard-and-strategy)
+				- [Login Flow Example](#login-flow-example)
+			- [JWT Access Token Guard and Strategy](#jwt-access-token-guard-and-strategy)
+			- [JWT Refresh Token Guard and Strategy](#jwt-refresh-token-guard-and-strategy)
+			- [Roles Guard and Decorator](#roles-guard-and-decorator)
+			- [Permission Guard](#permission-guard)
+			- [Views Guard](#views-guard)
+	- [How to add a new Guard](#how-to-add-a-new-guard)
+	- [Resources](#resources)
+		- [Authentication](#authentication)
+		- [Authorization](#authorization)
+		- [Encryption and Hashing](#encryption-and-hashing)
+			- [Example](#example)
+		- [Additional Resources](#additional-resources)
+	- [2FA](#2fa)
 
 ___
 
 ## Research
+
 
 ### Overall Findings
 
@@ -79,7 +96,7 @@ feature-auth
 
 Two key components of the Auth library are `Strategies` and `Guards`. These handle the majority of the logic, such as validating JWTs, checking permissions, ensuring proper credentials, etc. In most cases, `Strategies` and `Guards` are tied together to validate a request.
 
-#### `Local Guard and Strategy`
+#### Local Guard and Strategy
 
 This is compromised of `local-auth.guard.ts` and `local.strategy.ts` and is used on the `Login` endpoint. It assists in handling authentication. A flow is detailed below.
 
@@ -99,16 +116,16 @@ This is compromised of `local-auth.guard.ts` and `local.strategy.ts` and is used
 	return this.authService.login(req.user);
 ```
 
-#### `JWT Access Token Guard and Strategy`
+#### JWT Access Token Guard and Strategy
 
 This is compromised of `jwt-auth.guard.ts` and `jwt.strategy.ts` and is used to handle requests that require a JWT Access Token to ensure authentication of the user. It assists in handling authentication. If an endpoint is protected by `JwtAuthGuard`, it requires that a JWT Access Token is sent in the bearer header alongside the request. Once the endpoint is hit, the `JwtAuthGuard` calls the `JwtStrategy`. The strategy then validates, decodes and de-constructs the token into the [jwtPayload DTO](../../libs/shared/domain/src/lib/dtos/common-dtos/jwtpayload.dto.ts). This returns the email and role(s) of the owner of the JWT Token. The `JwtPayload` can then be accessed in `req.user` in the controller.
 
-#### `JWT Refresh Token Guard and Strategy`
+#### JWT Refresh Token Guard and Strategy
 
 This is compromised of `jwt-refresh.guard.ts` and `jwt-refresh.strategy.ts` and is used to handle requests to receive a new JWT Access Token. It assists in handling authentication. The `JwtRefreshGuard` is used on the `Refresh` endpoint in the `Auth Controller`. When that endpoint is hit, the guard calls the strategy which extracts the JWT Refresh Token from the request header. It then validates, decodes and de-constructs the token into [jwtRefreshPayloadWithToken DTO](../../libs/shared/domain/src/lib/dtos/common-dtos/jwtRefreshPayloadWithToken.dto.ts). This DTO houses the email of the owner of the refresh token, alongside the original encoded token. The `JwtRefreshPayloadWithToken` can then be accessed in `req.user` in the controller.
 
 
-#### `Roles Guard and Decorator`
+#### Roles Guard and Decorator
 
 This is compromised of `roles.guard.ts` and `roles.decorator.ts` and it handles authorization in certain requests. `Roles.decorator.ts` simply defines a custom decorator to use the [RoleType enums](../../libs/shared/domain/src/lib/dtos/enums/roles.ts). The guard below is an example of an endpoint that requires a valid JWT Access Token and that the user making the request is a BUSINESS_OWNER. When this endpoint is hit, the regular JWT Guard and Strategy flow are done. In the `roles.guard.ts`, the JWT Payload is extracted and the roles included in it are checked against the roles indicated in the endpoint guard. This ensures proper authorization.
 
@@ -121,7 +138,7 @@ This is compromised of `roles.guard.ts` and `roles.decorator.ts` and it handles 
 	}
 ```
 
-#### `Permission Guard`
+#### Permission Guard
 
 This is compromised of `permission.guard.ts` and it handles authorization in certain requests, specifically requests that handle retrieving or updating user information. This guard checks that the user making the request is either a BUSINESS_OWNER (admin) or that the information they are requesting belongs to them. In `permission.guard.ts`, the request is extracted. Since this guard can be placed on GET, POST, PUT, or DELETE endpoints, the request might have a body or a parameter. Hence, the user (JWT Access Token), body, and parameters are extracted from the request object. The guard then checks if a parameter exists. If it does, which should always be an ID of a user, it finds the user using the [CommonService](../../libs/api/shared/feature-common/src/lib/common.service.ts). If no parameter exists in the request, it checks the body as in these cases, the body should be an entity that has an ID. The guard then checks if the user making the request is a BUSINESS_OWNER and if not, if the information they requested and/or wish to edit, is theirs. An example endpoint can be seen below.
 
@@ -133,7 +150,7 @@ This is compromised of `permission.guard.ts` and it handles authorization in cer
 	}
 ```
 
-#### `Views Guard`
+#### Views Guard
 
 This is compromised of `views.guard.ts` and it handles authorization in certain requests, specifically requests that handle retrieving or updating view information. This guard is very similar to `Permission Guard` except that it handles requests related to views. In `views.guard.ts`, the request is extracted and from it, the parameters are retrieved. Using the `CommonService`, the owner of the view requested is found. Finally, it checks whether the user making the request is a BUSINESS_OWNER and if not, the user owns the view requested. An example endpoint can be seen below.
 
@@ -165,9 +182,9 @@ Once the guard has been completed, it must be added to the imports in [Auth Modu
 
 The best approach will be using the [`Passport`](https://www.passportjs.org) library. It is easy to use and wildly supported. Additionally, it features a large selection of [strategies](http://www.passportjs.org/packages/) that implement various auth techniques, including local, JWT, etc.
 
-### [Authorization](https://docs.nestjs.com/security/authorization#basic-rbac-implementation) (and [Guards](https://docs.nestjs.com/guards))
+### [Authorization](https://docs.nestjs.com/security/authorization#basic-rbac-implementation)
 
-With `Passport`, we can use `Guards` which determine whether a given request will be handled by the router handler or not. Through `Guards` and `AuthGuards`, we can easily implement role-based access.
+With `Passport`, we can use [Guards](https://docs.nestjs.com/guards) which determine whether a given request will be handled by the router handler or not. Through `Guards` and `AuthGuards`, we can easily implement role-based access.
 
 ### [Encryption and Hashing](https://docs.nestjs.com/security/encryption-and-hashing#hashing)
 
