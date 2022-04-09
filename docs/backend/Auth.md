@@ -15,7 +15,7 @@ ___
 
 As we essentially have one services providers, the Onboarding app, using SSO and JWT's will ensure easier communications and consistency.
 
-To implement the authentication and authorization, best approach is using `Passport` library due to its extensive support and strategies. `Passport` has `Guards` which allow the handling of role-based access.
+To implement the authentication and authorization, the best approach is using `Passport` library due to its extensive support and strategies. `Passport` has `Guards` which allow the handling of role-based access.
 
 For strategies, will need to implement `local` and `JWT` strategies. These strategies are different authentication methods. `local` is username/password (but can be configured to take email instead). `JWT` is for JWTs.
 
@@ -105,12 +105,12 @@ This is compromised of `jwt-auth.guard.ts` and `jwt.strategy.ts` and is used to 
 
 #### `JWT Refresh Token Guard and Strategy`
 
-This is compromised of `jwt-refresh.guard.ts` and `jwt-refresh.strategy.ts` and is used to handle requests to recieve a new JWT Access Token. It assists in handling authentication. The `JwtRefreshGuard` is used on the `Refresh` endpoint in the `Auth Controller`. When that endpoint is hit, the guard calls the strategy which extracts the JWT Refresh Token from the request header. It then validtes, decodes and de-constructs the token into [jwtRefreshPayloadWithToken DTO](../../libs/shared/domain/src/lib/dtos/common-dtos/jwtRefreshPayloadWithToken.dto.ts). This DTO houses the email of the owner of the refresh token, alongside the actual encoded token. The `JwtRefreshPayloadWithToken` can then be accessed in `req.user` in the controller.
+This is compromised of `jwt-refresh.guard.ts` and `jwt-refresh.strategy.ts` and is used to handle requests to receive a new JWT Access Token. It assists in handling authentication. The `JwtRefreshGuard` is used on the `Refresh` endpoint in the `Auth Controller`. When that endpoint is hit, the guard calls the strategy which extracts the JWT Refresh Token from the request header. It then validates, decodes and de-constructs the token into [jwtRefreshPayloadWithToken DTO](../../libs/shared/domain/src/lib/dtos/common-dtos/jwtRefreshPayloadWithToken.dto.ts). This DTO houses the email of the owner of the refresh token, alongside the original encoded token. The `JwtRefreshPayloadWithToken` can then be accessed in `req.user` in the controller.
 
 
 #### `Roles Guard and Decorator`
 
-This is compromised of `roles.guard.ts` and `roles.decorator.ts` and it handles authorization in certain requests. `Roles.decorator.ts` simply defines a custom decorator to use the [RoleType enums](../../libs/shared/domain/src/lib/dtos/enums/roles.ts). The guard below is an example of an endpoint that requires a valid JWT Access Token and that the user making the request is a BUSINESS_OWNER. When this endpoint is hit, the regular JWT Guard and Strategy flow is done. In the `roles.guard.ts`, the JWT Payload is extracted and the roles included in it are checked against the roles indicated in the endpoint guard. This ensures proper authorization.
+This is compromised of `roles.guard.ts` and `roles.decorator.ts` and it handles authorization in certain requests. `Roles.decorator.ts` simply defines a custom decorator to use the [RoleType enums](../../libs/shared/domain/src/lib/dtos/enums/roles.ts). The guard below is an example of an endpoint that requires a valid JWT Access Token and that the user making the request is a BUSINESS_OWNER. When this endpoint is hit, the regular JWT Guard and Strategy flow are done. In the `roles.guard.ts`, the JWT Payload is extracted and the roles included in it are checked against the roles indicated in the endpoint guard. This ensures proper authorization.
 
 ```ts
 @UseGuards(JwtAuthGuard, RolesGuard)
@@ -123,7 +123,7 @@ This is compromised of `roles.guard.ts` and `roles.decorator.ts` and it handles 
 
 #### `Permission Guard`
 
-This is compromised of `permission.guard.ts` and it handles authorization in certain requests, specifically requests that handle retrieving or updating user information. This guard checks that the user making the request is either a BUSINESS_OWNER (admin) or that the information they are requesting belongs to them. In `permission.guard.ts`, the request is extraccted. Since this guard can be placed on GET, POST, PUT, or DELETE endpoints, the request might have a body or a parameter. Hence, the user (JWT Access Token), body, and parameters are extracted from the request object. The guard then checks if a paramter exists. If it does, which should always be an ID of a user, it finds the user using the [CommonService](../../libs/api/shared/feature-common/src/lib/common.service.ts).If no paramter exists in the request, it checks the body as in these cases, the body should be an entity that has an ID. The guard then checks if the user making the request is a BUSINESS_OWNER and if not, if the information they requested and/or wish to edit, is theirs. An example endpoint can be seen below.
+This is compromised of `permission.guard.ts` and it handles authorization in certain requests, specifically requests that handle retrieving or updating user information. This guard checks that the user making the request is either a BUSINESS_OWNER (admin) or that the information they are requesting belongs to them. In `permission.guard.ts`, the request is extracted. Since this guard can be placed on GET, POST, PUT, or DELETE endpoints, the request might have a body or a parameter. Hence, the user (JWT Access Token), body, and parameters are extracted from the request object. The guard then checks if a parameter exists. If it does, which should always be an ID of a user, it finds the user using the [CommonService](../../libs/api/shared/feature-common/src/lib/common.service.ts). If no parameter exists in the request, it checks the body as in these cases, the body should be an entity that has an ID. The guard then checks if the user making the request is a BUSINESS_OWNER and if not, if the information they requested and/or wish to edit, is theirs. An example endpoint can be seen below.
 
 ```ts
 	@UseGuards(JwtAuthGuard, PermissionGuard)
@@ -135,7 +135,7 @@ This is compromised of `permission.guard.ts` and it handles authorization in cer
 
 #### `Views Guard`
 
-This is compromised of `views.guard.ts` and it handles authorization in certain requests, specifically requests that handle retrieving or updating view information. This guard is very similar to `Permission Guard` except that it handles requests related to views. In `views.guard.ts`, the request is extracted and from it, the parameters are retrieved. Using the `CommonService`, the owner of the view requested is found. Finally, it checks whether the user making the request is a BUSINESS_OWNER, and if not, the user owns the view requested. An example endpoint can be seen below.
+This is compromised of `views.guard.ts` and it handles authorization in certain requests, specifically requests that handle retrieving or updating view information. This guard is very similar to `Permission Guard` except that it handles requests related to views. In `views.guard.ts`, the request is extracted and from it, the parameters are retrieved. Using the `CommonService`, the owner of the view requested is found. Finally, it checks whether the user making the request is a BUSINESS_OWNER and if not, the user owns the view requested. An example endpoint can be seen below.
 
 ```ts
 	@UseGuards(JwtAuthGuard, ViewsGuard)
@@ -152,9 +152,9 @@ Depending on the use case, a strategy might also have to be implemented alongsid
 
 To add a guard, simply add the file under the `Guards` folder in the `Auth` Library using the proper extension (xy.guard.ts). If the guard extends `AuthGuard`, similar to `LocalGuard`, `JwtAuthGuard`, and `JwtRefreshGuard`, a strategy might be required. 
 
-If the guard is custom, similar to `PersmissionGuard`, it is recommended to follow the following official NestJS [tutorial](https://docs.nestjs.com/guards). Essentially, custom guards must implement `CanActivate` method.
+If the guard is custom, similar to `PersmissionGuard`, it is recommended to follow the following official NestJS [tutorial](https://docs.nestjs.com/guards). Essentially, custom guards must implement the `CanActivate` method.
 
-Once the guard has been completed, it must be added into the imports in [Auth Module](../../libs/api/shared/feature-auth/src/lib/auth.module.ts). It can now be used on controller endpoints.
+Once the guard has been completed, it must be added to the imports in [Auth Module](../../libs/api/shared/feature-auth/src/lib/auth.module.ts). It can now be used on controller endpoints.
 
 
 ---
@@ -163,11 +163,11 @@ Once the guard has been completed, it must be added into the imports in [Auth Mo
 
 ### [Authentication](https://docs.nestjs.com/security/authentication#implementing-passport-local)
 
-Best approach will be using [`Passport`](https://www.passportjs.org) library. It is easy to use and wildly supported. Additionally, it features a large selection of [strategies](http://www.passportjs.org/packages/) that implement various auth techniques, including local, JWT, etc.
+The best approach will be using the [`Passport`](https://www.passportjs.org) library. It is easy to use and wildly supported. Additionally, it features a large selection of [strategies](http://www.passportjs.org/packages/) that implement various auth techniques, including local, JWT, etc.
 
 ### [Authorization](https://docs.nestjs.com/security/authorization#basic-rbac-implementation) (and [Guards](https://docs.nestjs.com/guards))
 
-With `Passport`, we are able to use `Guards` which deteremine whether a given request will be handled by the router handler or not. Through `Guards` and `AuthGuards`, we are able to easily implement role-based access.
+With `Passport`, we can use `Guards` which determine whether a given request will be handled by the router handler or not. Through `Guards` and `AuthGuards`, we can easily implement role-based access.
 
 ### [Encryption and Hashing](https://docs.nestjs.com/security/encryption-and-hashing#hashing)
 
@@ -183,7 +183,7 @@ const password = 'random_password';
 const hash = await bcrypt.hash(password, saltOrRounds);
 ```
 
-For better security, a unique salt should be used per user to ensure a unique hash for same passwords amongst different users.
+For better security, a unique salt should be used per user to ensure a unique hash for the same passwords amongst different users.
 
 ### Additional Resources
 
