@@ -139,15 +139,15 @@ Information about the tempus database, and datastore can be found [here](/docs/d
 
 ## 🔧 Backend
 
-Information about the tempus backend,its functionalites, architecutre, and how to contribute can be found [here](/docs/backend/).
+Information about the tempus backend,its functionalities, architecutre, and how to contribute can be found [here](/docs/backend/).
 
 ## 🖌️ Frontend
 
-Information about the tempus client,its functionalites, how to contribute, can be found [here](/docs/frontend/).
+Information about the tempus client,its functionalities, how to contribute, can be found [here](/docs/frontend/).
 
 ## ✨ Misc
 
-Misc information about the tempus repo, and contribution cancan be found [here](/docs/misc/).
+Misc information about the tempus repo, and contribution can be found [here](/docs/misc/).
 
 # 🧰 Installation + Running
 
