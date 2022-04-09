@@ -127,7 +127,7 @@ Docker is used to containerize the application so it is easier to run and deploy
 
 ## 📁 File Structure
 
-An in-depth guide to understanding Tempus vile strucutre is located [here](/docs/database/).
+An in-depth guide to understanding Tempus vile strucutre is located [here](/docs/FileStructure.md).
 
 ## 📝 Contributing
 
