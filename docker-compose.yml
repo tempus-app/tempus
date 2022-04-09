@@ -15,7 +15,22 @@ services:
     ports:
       - 8080:8080
 
-  onboarding:
+  onboarding-client:
+    build:
+      context: .
+      dockerfile: Dockerfile.onboarding-client.dev
+      args:
+        - NODE_ENV=development
+    ports:
+      - 4200:4200
+    volumes:
+      - type: bind
+        source: .
+        target: /src
+      - /src/node_modules
+    working_dir: /src
+
+  onboarding-api:
     build:
       context: .
       dockerfile: Dockerfile.onboarding.dev
