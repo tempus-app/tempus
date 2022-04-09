@@ -1,8 +1,8 @@
 ## Short Description 
 
 ## Link to Issue
-
-## Screenshots (if appropriate)
+- Fixes { issue-id }
+## Screenshots (if applicable)
 
 ## Acceptance Criteria
 
