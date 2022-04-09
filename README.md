@@ -11,10 +11,10 @@
 
 - [Tempus](#tempus)
 - [Table Of Contents](#table-of-contents)
-- [🎯 Motivation & Project Description](#--motivation--project-description)
-  - [⚙️ Core Features](#️--core-features)
-    - [🌗 Phase 1 (Jan-April 2022)](#--phase-1-jan-april-2022)
-    - [🌕 Phase 2 (September-April 2022)](#--phase-2-september-april-2022)
+- [🎯 Motivation & Project Description](#-motivation--project-description)
+  - [⚙️ Core Features](#️-core-features)
+    - [🌗 Phase 1 (Jan-April 2022)](#-phase-1-jan-april-2022)
+    - [🌕 Phase 2 (September-April 2022)](#-phase-2-september-april-2022)
 - [❤️ Contributors](#️-contributors)
 - [🛣️ Project Management](#️-project-management)
 - [🎨 UI/UX Design](#-uiux-design)
@@ -31,7 +31,7 @@
   - [🔧 Backend](#-backend)
   - [🖌️ Frontend](#️-frontend)
   - [✨ Misc](#-misc)
-  - [🎬 Testing](#--testing)
+  - [🎬 Testing](#-testing)
 - [🧰 Installation + Running](#-installation--running)
   - [Docker Set Up](#docker-set-up)
   - [Local Set Up](#local-set-up)
@@ -152,7 +152,7 @@ Currently, only backend unit tests are implemented in main. More indepth discuss
 
 - `npx nx run <project-name>:test`: runs test for an nx project (smallest scale)
 
-- `npm run test-unit:api`: runs all backend unit test for the repo (smallest scale)
+- `npm run test:api:unit`: runs all backend unit test for the repo (smallest scale)
 
 - `npm run test-unit:client`: runs all frontend unit tests for the repo (TODO)
 
