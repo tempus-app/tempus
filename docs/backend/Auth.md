@@ -14,7 +14,8 @@
 			- [Roles Guard and Decorator](#roles-guard-and-decorator)
 			- [Permission Guard](#permission-guard)
 			- [Views Guard](#views-guard)
-	- [How to add a new Guard](#how-to-add-a-new-guard)
+	- [Contributing](#contributing)
+		- [How to add a new Guard](#how-to-add-a-new-guard)
 	- [Resources](#resources)
 		- [Authentication](#authentication)
 		- [Authorization](#authorization)
@@ -162,8 +163,11 @@ This is compromised of `views.guard.ts` and it handles authorization in certain 
 	}
 ```
 
---- 
-## How to add a new Guard
+---
+
+## Contributing 
+
+### How to add a new Guard
 
 Depending on the use case, a strategy might also have to be implemented alongside a guard. Strategies for Passport.js can be found [here](http://www.passportjs.org/packages/). 
 
