@@ -1,14 +1,14 @@
 {
 	"projectType": "library",
-	"root": "libs/client/onboarding-client/resource/guards",
-	"sourceRoot": "libs/client/onboarding-client/resource/guards/src",
+	"root": "libs/client/onboarding-client/shared/guards",
+	"sourceRoot": "libs/client/onboarding-client/shared/guards/src",
 	"prefix": "tempus",
 	"targets": {
 		"test": {
 			"executor": "@nrwl/jest:jest",
-			"outputs": ["coverage/libs/client/onboarding-client/resource/guards"],
+			"outputs": ["coverage/libs/client/onboarding-client/shared/guards"],
 			"options": {
-				"jestConfig": "libs/client/onboarding-client/resource/guards/jest.config.js",
+				"jestConfig": "libs/client/onboarding-client/shared/guards/jest.config.js",
 				"passWithNoTests": true
 			}
 		},
@@ -16,8 +16,8 @@
 			"executor": "@nrwl/linter:eslint",
 			"options": {
 				"lintFilePatterns": [
-					"libs/client/onboarding-client/resource/guards/src/**/*.ts",
-					"libs/client/onboarding-client/resource/guards/src/**/*.html"
+					"libs/client/onboarding-client/shared/guards/src/**/*.ts",
+					"libs/client/onboarding-client/shared/guards/src/**/*.html"
 				]
 			}
 		}
