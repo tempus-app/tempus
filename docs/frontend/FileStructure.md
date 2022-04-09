@@ -6,6 +6,8 @@ This document details the file structure of this repo and the common patterns us
 
 A monorepo is defined to be "a single git repository that holds the source code for multiple applications and libraries, along with the tooling for them". It allows for sharing of code between applications (and libraries), changes to multiple components in the same repo, single set of dependencies, etc.
 
+The official Nx docs can be found [here](https://nx.dev/)
+
 ## Generic Repo File Structure
 
 Nx is a monorepo architectural tool that is used in this project and it allows the modularization of applications into libraries. In other words, it allows one to decouple the dependency between applications and the code it uses. With Nx, we have consistent tooling allowing one to make specific encapsulated pieces of code called projects. In Nx, there are two main types of projects: `Apps` and `Libraries`.
@@ -195,6 +197,9 @@ There are 6 main lib types that are used in this tempus workspace and are as fol
 
  `index.ts` file are used quite frequently across the repo and they allow one to export files from within a directory to allow easy imports from outside. If ever a new directory is made, make sure it includes this `index.ts` file and export ONLY those things that are expected to be imported outside in order to limit scope and expose the relevant public api. In addition, make sure to import using the full path if importing a file from within the same subdirectory (do not use the shorter import provided via the `index.ts`) as this can cause circular dependency errors.
 
+### Testing Files
+
+Testing files in the api are located under each feature directory and are siblings to the services and controllers (ex: `libs/api/onboarding-api/feature-account/src/lib/tests/`). The tests should encapsulate the behaviour covered in the relevant feature and may include mocks. In the client side, a similar approach is also taken wherein for each feature, one would find a test subdirectory.
 
 ## Overall Client Architecture Diagram
 
