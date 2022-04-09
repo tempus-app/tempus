@@ -13,7 +13,7 @@ ___
 
 ### Overall Findings
 
-As we essentially have two services providers, the Onboarding app and the Timesheet app, that fall under the same app and share data, using SSO and JWT's will ensure easier communications and consistency.
+As we essentially have one services providers, the Onboarding app, using SSO and JWT's will ensure easier communications and consistency.
 
 To implement the authentication and authorization, best approach is using `Passport` library due to its extensive support and strategies. `Passport` has `Guards` which allow the handling of role-based access.
 
@@ -144,6 +144,18 @@ This is compromised of `views.guard.ts` and it handles authorization in certain 
 		await this.viewSerivce.deleteView(viewId);
 	}
 ```
+
+--- 
+## How to add a new Guard
+
+Depending on the use case, a strategy might also have to be implemented alongside a guard. Strategies for Passport.js can be found [here](http://www.passportjs.org/packages/). 
+
+To add a guard, simply add the file under the `Guards` folder in the `Auth` Library using the proper extension (xy.guard.ts). If the guard extends `AuthGuard`, similar to `LocalGuard`, `JwtAuthGuard`, and `JwtRefreshGuard`, a strategy might be required. 
+
+If the guard is custom, similar to `PersmissionGuard`, it is recommended to follow the following official NestJS [tutorial](https://docs.nestjs.com/guards). Essentially, custom guards must implement `CanActivate` method.
+
+Once the guard has been completed, it must be added into the imports in [Auth Module](../../libs/api/shared/feature-auth/src/lib/auth.module.ts). It can now be used on controller endpoints.
+
 
 ---
 
