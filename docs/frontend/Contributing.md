@@ -166,7 +166,7 @@ We do not hardcode english into the HTML or Typescript but rather use a translat
 
 ## Using the shared Angular Components
 
-We have developed our own reusable material ui components to be used throughout the application. More information on the material ui components themselves can be found [here](./Components.md). The components themselves can be found under `client/libs/client/shared/ui-components`. An example to demonstrate where the components must be imported can be found [here](../../libs/client/onboarding-client/resource/features/feature-profile/src/lib/onboarding-client-resource-feature-profile.module.ts). These components are small reusable components that should be used when either capturing basic user information or presenting data through cards, chips, etc. 
+We have developed our own reusable material ui components to be used throughout the application. More information on the material ui components themselves can be found [here](./Components.md). The components themselves can be found under `libs/client/shared/ui-components`. An example to demonstrate where the components must be imported can be found [here](../../libs/client/onboarding-client/resource/features/feature-profile/src/lib/onboarding-client-resource-feature-profile.module.ts). These components are small reusable components that should be used when either capturing basic user information or presenting data through cards, chips, etc. 
 
 To import the `input-components` which include elements such as the text input and textarea, we must use the following imports in our module file (typically found under `<bounded-context-name>/features/<feature-name>/src/lib/<feature-name>-module.ts`). 
 
