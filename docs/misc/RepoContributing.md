@@ -1,4 +1,4 @@
-# Contribute to the Tempus Repository
+# Contributing to the Tempus Repository
 
 Please follow the steps below to ensure that your contributions are inline with our naming conventions and QA practices before you push to the tempus repository.
 
@@ -8,7 +8,7 @@ Please follow the steps below to ensure that your contributions are inline with 
 
 - Modules within `libs/client/onboarding-client`should be prefixed with `OnboardingClient` like so: `OnboardingClientFeatureSignInModule`
 - Modules within `libs/client/shared` should be prefixed with `ClientShared` like so: `ClientSharedUiComponentsPresentationalModule`
-- Ensure these file names are as brief as possible and reflected in library files as well as `angular.json`
+- Ensure these file names are as brief as possible and reflected in library files as well as `angular.json`. To learn more about contributing to the frontend, see [Frontend Contributing.](../frontend/Contributing.md)
 
 ### General
 
@@ -25,4 +25,4 @@ Run a lint check on the affected files as described in the [Lint doc](../Lint.md
 
 ## 4. PR structure
 
-The PR description uses our [template.](../../.github/pull_request_template.md) Upon creation, ensure that the the contents are populated and the checklist is crossed off where appropriate.
+The PR description uses our [template.](../../.github/pull_request_template.md) Upon creation, ensure that the the contents are populated with details relevant to the issue and that the checklist is crossed off where appropriate.

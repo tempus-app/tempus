@@ -2,7 +2,7 @@
 
 ## Link to Issue
 
-## Screenshots (if appropriate)
+## Screenshots (if applicable)
 
 ## Acceptance Criteria
 

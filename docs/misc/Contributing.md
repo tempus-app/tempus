@@ -1,6 +1,9 @@
 # Contributing - Miscellaneous items
 
-## Shared utilities
+## Assets
+Assets shared by the backend, such as template files, are located in `libs/api/shared/api-assets`. Frontend assets, such as icons and internationalization files, are stored in `libs/client/shared/ui-assets`. To add a new asset, create a directory for the file type if required, such as `api-assets/src/lib/assets/images`, and add the file. 
+
+## Shared client utilities
 Functions that are frequently used across the client such as formatting and validation checks can be added to `libs/client/shared/util/src/lib/shared-util.ts`
 
 Example:
@@ -20,7 +23,3 @@ The GitHub Actions CI pipeline script can be modified to add, remove or update s
 
 ## PR Template
 Our PR template, `tempus/.github/pull_request_template.md`, is a markdown file that auto populates PR descriptions upon creation. The acceptance criteria can be extended as we further development.
-
- PR structures
- Naming conventions
- Linting (lint to linting.md)
