@@ -22,7 +22,7 @@
 		"*.{ts,js}": [
 			"eslint --fix"
 		],
-		"*.{json,scss,css,html}": [
+		"*.{json,scss,css,html,md}": [
 			"prettier --write"
 		]
 	},
