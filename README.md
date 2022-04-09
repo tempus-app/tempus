@@ -184,7 +184,7 @@ If you want to support both docker & local development, it is recommended to set
 
 5. After docker is successfully installed, you should be able to use the following commands to run/stop the containers
     - `docker-compose up`: starts up docker container for onboarding (our backend app), postgres database (image) and adminer (image)
-      - to debug database issues, head over to http://localhost:8080, this should open up adminer which shows the postgres database
+      - to debug database issues, head over to http://localhost:8080, this should open up adminer which shows the postgres database, use the credentials in your env file, and set system to postgreSQL.
     - `docker-compose build`: rebuilds the containers, especially useful if there are new changes (that aren't reflected when running `docker-compose up`)
     - `docker-compose down`: stops and removed any of the running containers 
 
