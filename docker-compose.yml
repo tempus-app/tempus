@@ -7,7 +7,7 @@ services:
     ports:
       - 5432:5432
     environment:
-      POSTGRES_PASSWORD: example
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
 
   adminer:
     image: adminer
@@ -25,18 +25,18 @@ services:
       - DB_HOST=postgres
       - DB_PORT=5432
       - DB_USERNAME=postgres
-      - DB_PASSWORD=example
+      - DB_PASSWORD=${DB_PASSWORD}
       - DB_NAME=postgres
       - CHROMIUM_PATH=/usr/bin/chromium-browser
-      - JWT_ACCESS_SECRET=test
-      - JWT_REFRESH_SECRET=test2
-      - SALT_SECRET=10
-      - API_URL=http://localhost:4200/
-      - EMAIL_HOST=smtp.ethereal.email
-      - EMAIL_PORT=587
-      - EMAIL_USERNAME=elyse.labadie91@ethereal.email
-      - EMAIL_PASSWORD=rhumFETENbQSqERnEp
-      - EMAIL_ADDRESS=elyse.labadie91@ethereal.email
+      - JWT_ACCESS_SECRET=${JWT_ACCESS_SECRET}
+      - JWT_REFRESH_SECRET=${JWT_REFRESH_SECRET}
+      - SALT_SECRET=${SALT_SECRET}
+      - API_URL=${API_URL}
+      - EMAIL_HOST=${EMAIL_PORT}
+      - EMAIL_PORT=${EMAIL_PORT}
+      - EMAIL_USERNAME=${EMAIL_USERNAME}
+      - EMAIL_PASSWORD=${EMAIL_PASSWORD}
+      - EMAIL_ADDRESS=${EMAIL_ADDRESS}
 
     ports:
       - 3000:3000
