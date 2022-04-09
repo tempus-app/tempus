@@ -12,3 +12,4 @@
 - [ ] I have added/updated any relevant documentation related to my code, if exists
 - [ ] I have added relevant tests to the code
 - [ ] I have removed all unused styles from my code, if applicable
+- [ ] I have replaced all hardcoded strings from my code, if applicable

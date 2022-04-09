@@ -24,6 +24,8 @@ As the idea is to test these modules in isolation, so all dependencies must be m
 ### Running Tests
 - tests are constrained to a nestjs project, so they can be run using the command: `npx nx run <project-name>:test`
  - this will generate a coverage report in the console, along with the /coverage directory which can be used to improve tests
+- to run all backend tests run `npm run test-unit:api`
+- to run all tests, run `npm test`
 
 ## End to End Testing Strategy (To be refined)
 

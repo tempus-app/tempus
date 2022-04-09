@@ -32,6 +32,7 @@
   - [🔧 Backend](#-backend)
   - [🖌️ Frontend](#️-frontend)
   - [✨ Misc](#-misc)
+  - [🎬  Testing](#--testing)
 - [🧰 Installation + Running](#-installation--running)
     - [Docker Set Up](#docker-set-up)
     - [Local Set Up](#local-set-up)
@@ -149,6 +150,15 @@ Information about the tempus client,its functionalities, how to contribute, can 
 
 Misc information about the tempus repo, and contribution can be found [here](/docs/misc/).
 
+## 🎬  Testing
+
+Currently, only backend unit tests are implemented in main. More indepth discussion about the testing strategy can be found in the backend, and frontend (TODO) directories. Use the following commands to run tests:
+   - `npx nx run <project-name>:test`: runs test for an nx project (smallest scale)
+
+   - `npm run test-unit:api`: runs all backend unit test for the repo (smallest scale)
+
+   - `npm run test-unit:client`: runs all frontend unit tests for the repo (TODO)
+
 # 🧰 Installation + Running
 
 There are two ways to run the <b>backend</b> application, using docker, and building the components of the app locally. Docker does heavily smoothen set up, however, it does take longer to build, load and will consume more of your CPU power. To run the client, you must follow the steps of the [local set up](#local-set-up), ignoring any database-centric steps.
@@ -207,3 +217,6 @@ If you want to support both docker & local development, it is recommended to set
 7. After the node modules are installed, you should be ready to run the application using the following commands:
    `npm run start:onboarding-api`: starts the backend
     `npm run start:client`: starts the client
+
+
+
