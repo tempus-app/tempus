@@ -2,7 +2,7 @@
 
 <p align="center">
 
-<img src="./docs/assets/../screenshots/tempus_logo_1.png" width="80" height="80" style="{text-align:center}">
+<img src="./docs/assets/../screenshots/assets/tempus_logo_1.png" width="80" height="80" style="{text-align:center}">
 </p>
 
 
@@ -16,16 +16,25 @@
   - [⚙️  Core Features](#️--core-features)
     - [🌗  Phase 1 (Jan-April 2022)](#--phase-1-jan-april-2022)
     - [🌕  Phase 2 (September-April 2022)](#--phase-2-september-april-2022)
-- [🌵 Contributors](#-contributors)
-- [🧰 Installation + Running](#-installation--running)
-    - [Docker Set Ump](#docker-set-ump)
-    - [Local Set Up](#local-set-up)
+- [❤️ Contributors](#️-contributors)
 - [🛣️ Project Management](#️-project-management)
 - [🎨 UI/UX Design](#-uiux-design)
-- [🧠 Technical Knowledge](#-technical-knowledge)
-  - [Database](#database)
-  - [Backend](#backend)
-  - [Frontend](#frontend)
+- [🧠 Technical Details](#-technical-details)
+  - [🔨 Tech Stack Overview](#-tech-stack-overview)
+    - [PostgreSQL](#postgresql)
+    - [NestJs (TypeScript)](#nestjs-typescript)
+    - [Angular](#angular)
+    - [NX](#nx)
+    - [Docker](#docker)
+  - [📁 File Structure](#-file-structure)
+  - [📝 Contributing](#-contributing)
+  - [💼 Database](#-database)
+  - [🔧 Backend](#-backend)
+  - [🖌️ Frontend](#️-frontend)
+  - [✨ Misc](#-misc)
+- [🧰 Installation + Running](#-installation--running)
+    - [Docker Set Up](#docker-set-up)
+    - [Local Set Up](#local-set-up)
 
 
 
@@ -41,6 +50,7 @@ Tempus aims to smoothen this process by allowing resources to build profiles wit
 ### 🌗  Phase 1 (Jan-April 2022)
 - Invite Resource to Application
 - Business Owner + Resource sign up flow
+- Manage Resource View
 - Resource Profile Page - View & Edit Profiles
 - Download Standardized Resumes for Resources
 - Resource Profile Approval Flow
@@ -53,17 +63,91 @@ Tempus aims to smoothen this process by allowing resources to build profiles wit
     - filter to find clients based on needs
 - Support for multiple Profile Versions (Views)
 - Office 365 Integration (connect to CAL accounts)
+- Mass download of profiles
 
- # 🌵 Contributors
+ # ❤️ Contributors
 
 This project was built by: 
- - Afrah Ali
- - Aman Riat
- - Gabriel Granata
- - Georges Chamoun
- - Mustafa Ali
- - Ruwani De Alwis
+ - [Afrah Ali](https://github.com/aali179)
+ - [Aman Riat](https://github.com/AmanRiat1)
+ - [Gabriel Granata](https://github.com/gabrielgranata)
+ - [Georges Chamoun](https://github.com/GCham5)
+ - [Mustafa Ali](https://github.com/MustafaAli789)
+ - [Ruwani De Alwis](https://github.com/ruwanidealwis)
 
+
+# 🛣️ Project Management
+
+The Project Management for this application is documented in the [tempus wiki](https://github.com/tempus-app/wiki/wiki)
+
+Sprint Planning was done through [github projects](https://github.com/orgs/tempus-app/projects/1)
+
+# 🎨 UI/UX Design
+The Design System, along with the mockups built using figma can be viewed on the [wiki](https://github.com/tempus-app/wiki/wiki)
+
+
+# 🧠 Technical Details
+
+## 🔨 Tech Stack Overview
+
+<p float="center" align="center">
+<img src="./docs/screenshots/assets/angular%20logo.png" width="120" height="120" style="{text-align:center}">
+
+<img src="./docs/screenshots/assets/nestjs%20logo.svg" width="120" height="120" style="{text-align:center}">
+
+<img src="./docs/screenshots/assets/postgreSQL%20logo.png" width="120" height="120" style="{text-align:center}">
+
+
+</p>
+<p align="center">
+<img src="./docs/screenshots/assets/nx%20logo.png" width="150"  style="{text-align:center}">
+<img src="./docs/screenshots/assets/docker%20logo.webp" width="150"  style="{text-align:center}">
+
+</p>
+
+### PostgreSQL
+PostgreSQL was used as the database, as the data we were dealing with was structured, and there were many relationships between the entities. Learn more about [PostgreSQL](https://www.postgresql.org). 
+
+
+### NestJs (TypeScript)
+
+NestJs was used to build the backend API, as it provided many MVC capabilites, and had out of the box support for testing, database integration, and allowed consistency with the frontend through the use of TypeScript. Learn more about [NestJs](https://nestjs.com).
+
+### Angular
+
+Angular is used for the frontend application, as it has out of the box support for the features we use such as routing, form control. Learn more about [Angular](https://angular.io).
+
+###  NX
+
+NX was used to build our monorepo project, as it helps generate libraries, components for both the backend and frontend of our application. Learn more about [Nx](https://nx.dev).
+
+### Docker
+
+Docker is used to containerize the application so it is easier to run and deploy. Learn more about [Docker](https://angular.io).
+
+## 📁 File Structure
+
+An in-depth guide to understanding Tempus vile strucutre is located [here](/docs/database/).
+
+## 📝 Contributing
+
+Contributions to the [backend](/docs/backend/Contributing.md) and the [frontend](/docs/frontend/Contributing.md) can be found in their own respective sections with the docs/ directory. Please follow the [following guide](docs/misc/RepoContributing.md).
+
+## 💼 Database
+
+Information about the tempus database, and datastore can be found [here](/docs/database/).
+
+## 🔧 Backend
+
+Information about the tempus backend,its functionalites, architecutre, and how to contribute can be found [here](/docs/backend/).
+
+## 🖌️ Frontend
+
+Information about the tempus client,its functionalites, how to contribute, can be found [here](/docs/frontend/).
+
+## ✨ Misc
+
+Misc information about the tempus repo, and contribution cancan be found [here](/docs/misc/).
 
 # 🧰 Installation + Running
 
@@ -80,7 +164,11 @@ The first steps are general to both docker & non-docker set up.
     EMAIL_ADDRESS=<username>
     ```
 
-### Docker Set Ump
+3. To set up the <b>resume parser</b> (which is currently under refactor):
+    - Clone the resume-parser repo and follow the instructions listed in the README of the repo.
+   - Run the application by entering in python main.py in the pipenv shell
+   - The resume's uploaded will now be parsed through this endpoint
+### Docker Set Up
 
 3. To run using docker, you must first install docker, following the instructions [here](https://docs.docker.com/get-docker/)
    
@@ -119,27 +207,3 @@ If you want to support both docker & local development, it is recommended to set
 7. After the node modules are installed, you should be ready to run the application using the following commands:
    `npm run start:onboarding-api`: starts the backend
     `npm run start:client`: starts the client
-
-# 🛣️ Project Management
-
-The Project Management for this application is documented in the [tempus wiki](https://github.com/tempus-app/wiki/wiki)
-
-Sprint Planning was done through [github projects](https://github.com/orgs/tempus-app/projects/1)
-
-# 🎨 UI/UX Design
-The Design System, along with the mockups built using figma can be viewed on the [wiki](https://github.com/tempus-app/wiki/wiki)
-
-
-# 🧠 Technical Knowledge
-
-## Database
-
-Information about the tempus database, and datastore can be found [here](/docs/database/)
-
-## Backend
-
-Information about the tempus database, and datastore can be found [here](/docs/backend/)
-
-## Frontend
-
-Information about the tempus database, and datastore can be found [here](/docs/frontend/)
