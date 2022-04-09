@@ -1,4 +1,4 @@
-import { LinkEntity } from '@tempus/api/shared/entity';
+import { LinkEntity, ProjectEntity } from '@tempus/api/shared/entity';
 import { Link, StatusType } from '@tempus/shared-domain';
 
 export const linkEntity: Link = {
@@ -39,3 +39,5 @@ export const expiredDBLink = new LinkEntity(
 	'random-string',
 	StatusType.ACTIVE,
 );
+
+export const mockProject = new ProjectEntity(1, 'CIBC Mobile App');
