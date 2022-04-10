@@ -158,7 +158,7 @@ Currently, only backend unit tests are implemented in main. More indepth discuss
 
 # 🧰 Installation + Running
 
-There are two ways to run the <b>backend</b> application, using docker, and building the components of the app locally. Docker does heavily smoothen set up, however, it does take longer to build, load and will consume more of your CPU power. To run the client, you must follow the steps of the [local set up](#local-set-up), ignoring any database-centric steps.
+Docker can be used to install and run the application. While docker does heavily smoothen set up, however, it does take longer to build, load and will consume more of your CPU power.
 
 The first steps are general to both docker & non-docker set up.
 
@@ -184,8 +184,9 @@ The first steps are general to both docker & non-docker set up.
    If you want to support both docker & local development, it is recommended to set these variables directly in the [docker-compose.yml](docker-compose.yml) file.
 
 5. After docker is successfully installed, you should be able to use the following commands to run/stop the containers
-   - `docker-compose up`: starts up docker container for onboarding (our backend app), postgres database (image) and adminer (image)
-     - to debug database issues, head over to http://localhost:8080, this should open up adminer which shows the postgres database, use the credentials in your env file, and set system to postgreSQL.
+   - `docker-compose up`: starts up docker container for the onboarding api (our backend app), onboarding client (our frontend), postgres database (image) and adminer (image)
+     - After the containers come up, visit http://localhost:4200 to see the application running
+     - To debug database issues, head over to http://localhost:8080, this should open up adminer which shows the postgres database, use the credentials in your env file, and set system to postgreSQL.
    - `docker-compose build`: rebuilds the containers, especially useful if there are new changes (that aren't reflected when running `docker-compose up`)
    - `docker-compose down`: stops and removed any of the running containers
 
