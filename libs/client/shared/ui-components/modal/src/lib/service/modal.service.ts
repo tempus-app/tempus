@@ -41,6 +41,7 @@ export class ModalService {
 					template: contentModalOptions.template,
 					closable: contentModalOptions.closable,
 					subtitle: contentModalOptions.subtitle,
+					id: contentModalOptions.id,
 				},
 				panelClass: 'responsive-modal',
 				autoFocus: false,
