@@ -189,6 +189,7 @@ The first steps are general to both docker & non-docker set up.
      - To debug database issues, head over to http://localhost:8080, this should open up adminer which shows the postgres database, use the credentials in your env file, and set system to postgreSQL.
    - `docker-compose build`: rebuilds the containers, especially useful if there are new changes (that aren't reflected when running `docker-compose up`)
    - `docker-compose down`: stops and removed any of the running containers
+   - Alternatively, to save on resources, certain containers can be built through the docker compose rather than all of them. For example, if you wish to run the client and api locally but need the database, you may run it by entering in `docker-compose up postgres`. By specifiying the names of the containers, only those entered will be brought up.
 
 ### Local Set Up
 
