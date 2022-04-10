@@ -34,9 +34,9 @@ export class ProfileViewController {
 		return view;
 	}
 
-	@UseGuards(JwtAuthGuard, PermissionGuard)
-	@Get('/download-resume/:viewID')
-	async downloadResume(@Res() res: Response, @Param('viewID') viewId: number): Promise<void> {
+	@UseGuards(JwtAuthGuard, ViewsGuard)
+	@Get('/download-resume/:viewId')
+	async downloadResume(@Res() res: Response, @Param('viewId') viewId: number): Promise<void> {
 		const view = await this.viewSerivce.getView(viewId);
 		const resume = new ResumePdfTemplateDto('testresume', view);
 		await this.pdfService.createPDF(res, resume, undefined, true);
