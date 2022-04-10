@@ -29,8 +29,6 @@ services:
         target: /src
       - /src/node_modules
     working_dir: /src
-    environment:
-      - API_URL=http://localhost:4200/
 
   onboarding-api:
     build:
