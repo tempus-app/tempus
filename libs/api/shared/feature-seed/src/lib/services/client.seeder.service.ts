@@ -35,7 +35,7 @@ export class ClientSeederService {
 	 * @param count number of entities to create
 	 * @returns array of created clients
 	 */
-	async seed(count = 4): Promise<ClientEntity[]> {
+	async seed(count = 3): Promise<ClientEntity[]> {
 		const createdClients: ClientEntity[] = [];
 
 		// eslint-disable-next-line no-plusplus

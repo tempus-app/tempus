@@ -16,7 +16,7 @@ const seederArgsInterface: commandLineArgs.OptionDefinition[] = [
 	{
 		name: 'resources',
 		type: Number,
-		defaultValue: 20,
+		defaultValue: 10,
 	},
 	{
 		name: 'clear',

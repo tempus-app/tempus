@@ -36,7 +36,7 @@ export class LinkSeederService {
 	 * @param count number of entities to create
 	 * @returns array of created clients
 	 */
-	async seed(projects: ProjectEntity[], count = 4): Promise<Link[]> {
+	async seed(projects: ProjectEntity[], count = 10): Promise<Link[]> {
 		const createdLinks: Link[] = [];
 
 		// eslint-disable-next-line no-plusplus
