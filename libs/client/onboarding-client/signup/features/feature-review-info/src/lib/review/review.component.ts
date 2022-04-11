@@ -1,7 +1,7 @@
-import { AfterViewInit, ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { ICreateExperienceDto, ICreateEducationDto, ICreateCertificationDto } from '@tempus/shared-domain';
 
-import { Subject, take } from 'rxjs';
+import { skip, Subject, take, takeUntil } from 'rxjs';
 
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -23,7 +23,7 @@ import { TranslateService } from '@ngx-translate/core';
 	templateUrl: './review.component.html',
 	styleUrls: ['./review.component.scss'],
 })
-export class ReviewComponent implements OnInit, AfterViewInit {
+export class ReviewComponent implements OnInit, OnDestroy, AfterViewInit {
 	firstName = '';
 
 	lastName = '';
@@ -66,6 +66,8 @@ export class ReviewComponent implements OnInit, AfterViewInit {
 
 	resume: File | null = null;
 
+	$destroyed = new Subject<void>();
+
 	reviewPrefix = 'onboardingClientSignupReview.';
 
 	constructor(
@@ -79,6 +81,11 @@ export class ReviewComponent implements OnInit, AfterViewInit {
 		// eslint-disable-next-line no-param-reassign
 		translateService.currentLang = '';
 		translateService.use(currentLang);
+	}
+
+	ngOnDestroy(): void {
+		this.$destroyed.next();
+		this.$destroyed.complete();
 	}
 
 	ngAfterViewInit(): void {
@@ -109,25 +116,31 @@ export class ReviewComponent implements OnInit, AfterViewInit {
 				this.certifications = resData?.certifications;
 				this.educations = resData?.educations;
 			});
-		this.store.select(selectUploadedResume).subscribe(resumeData => {
-			this.resume = resumeData;
-		});
-		this.store.select(selectResourceStatus).subscribe(reqStatusData => {
-			if (reqStatusData.status === AsyncRequestState.LOADING) {
-				this.loading = true;
-			} else if (reqStatusData.status === AsyncRequestState.SUCCESS) {
-				alert('Resource Created Succesfully');
-				this.loading = false;
-				this.store.dispatch(resetLinkState());
-				this.store.dispatch(resetCreateResourceState());
-				this.router.navigate(['../../../signin'], { relativeTo: this.route });
-			} else if (reqStatusData.status === AsyncRequestState.ERROR) {
-				this.loading = false;
-				alert('Error creating resource');
-			} else {
-				this.loading = false;
-			}
-		});
+		this.store
+			.select(selectUploadedResume)
+			.pipe(skip(1), takeUntil(this.$destroyed))
+			.subscribe(resumeData => {
+				this.resume = resumeData;
+			});
+		this.store
+			.select(selectResourceStatus)
+			.pipe(skip(1), takeUntil(this.$destroyed))
+			.subscribe(reqStatusData => {
+				if (reqStatusData.status === AsyncRequestState.LOADING) {
+					this.loading = true;
+				} else if (reqStatusData.status === AsyncRequestState.SUCCESS) {
+					alert('Resource Created Succesfully');
+					this.loading = false;
+					this.store.dispatch(resetLinkState());
+					this.store.dispatch(resetCreateResourceState());
+					this.router.navigate(['../../../signin'], { relativeTo: this.route });
+				} else if (reqStatusData.status === AsyncRequestState.ERROR) {
+					this.loading = false;
+					alert('Error creating resource');
+				} else {
+					this.loading = false;
+				}
+			});
 	}
 
 	backStep() {
