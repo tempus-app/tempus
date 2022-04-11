@@ -6,6 +6,7 @@ import { Repository } from 'typeorm';
 import { faker } from '@faker-js/faker';
 import { UserService } from '@tempus/onboarding-api/feature-account';
 import { RoleType } from '@tempus/shared-domain';
+import { CreateUserDto } from '@tempus/api/shared/dto';
 
 @Injectable()
 export class UserSeederService {
@@ -26,22 +27,27 @@ export class UserSeederService {
 		this.userRepository.clear();
 	}
 
+	/**
+	 * seeds business owners
+	 * @param count number of business owners to create
+	 * @returns array of created business owners
+	 */
 	async seedBusinessOwner(count = 2) {
 		const createdUsers: UserEntity[] = [];
 		// eslint-disable-next-line no-plusplus
 		for (let i = 0; i < count; i++) {
-			const { name } = faker;
+			const lastName = faker.name.lastName();
+			const firstName = faker.name.firstName();
+
 			const password = faker.internet.password();
-			const user: UserEntity = new UserEntity(
-				null,
-				name.firstName(),
-				name.lastName(),
-				null,
-				await this.userService.hashPassword(password),
+			const user: CreateUserDto = new CreateUserDto(
+				firstName,
+				lastName,
+				faker.internet.email(firstName, lastName),
+				password,
 				[RoleType.BUSINESS_OWNER],
 			);
-			user.email = faker.internet.email(user.firstName, user.lastName);
-			const createdUser = await this.userRepository.save(user);
+			const createdUser = await this.userService.createUser(user);
 			createdUsers.push({ ...createdUser, password });
 		}
 		return createdUsers;

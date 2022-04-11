@@ -5,4 +5,5 @@ export interface CommandLineArgsOptions extends CommandLineOptions {
 	projects: number;
 	businessOwners: number;
 	resources: number;
+	clear: boolean;
 }

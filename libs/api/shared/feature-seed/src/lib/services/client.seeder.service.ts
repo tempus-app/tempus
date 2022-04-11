@@ -15,6 +15,7 @@ export class ClientSeederService {
 	/**
 	 * Seeds the user database with test data
 	 * @param clientRepository user database repository
+	 * @param clientService
 	 */
 	constructor(
 		@InjectRepository(ClientEntity)
@@ -23,7 +24,7 @@ export class ClientSeederService {
 	) {}
 
 	/**
-	 * drops all entities in the user repository
+	 * drops all entities in the client repository
 	 */
 	async clear() {
 		await this.clientRepository.query('DELETE from client_entity CASCADE');

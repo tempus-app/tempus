@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
+import { createObjectCsvWriter as createCsvWriter } from 'csv-writer';
 import { CommandLineArgsOptions } from './commandLineArgs.type';
 import { ClientSeederService } from './services/client.seeder.service';
 import { LinkSeederService } from './services/link.seeder.service';
 import { ProjectSeederService } from './services/project.seeder.service';
 import { ResourceSeederService } from './services/resource.seeder.service';
 import { UserSeederService } from './services/user.seeder.service';
-
 /**
  * provider to seed database
  */
@@ -42,7 +42,7 @@ export class SeederService {
 	 */
 	async seed(args: CommandLineArgsOptions) {
 		// eslint-disable-next-line no-plusplus
-		await this.clear();
+		if (args.clear) await this.clear();
 
 		const clients = await this.clientSeederService.seed(args.clients);
 		const projects = await this.projectSeederService.seedProjects(clients, args.projects);
@@ -50,5 +50,21 @@ export class SeederService {
 		const links = await this.linkSeederService.seed(projects, args.resources);
 		const allResources = await this.resourceSeedService.seedResources(links);
 		await this.projectSeederService.seedAssignedResources(projects, allResources.splice(0, args.resources / 2));
+		const allUsers = users.concat(allResources);
+		await SeederService.writeToCSV(allUsers);
+	}
+
+	private static async writeToCSV(users) {
+		const csvWriter = createCsvWriter({
+			path: './utils/csv/database_dump.csv',
+			header: [
+				{ id: 'firstName', title: 'First Name' },
+				{ id: 'lastName', title: 'Last Name' },
+				{ id: 'email', title: 'email' },
+				{ id: 'password', title: 'password' },
+				{ id: 'roles', title: 'role' },
+			],
+		});
+		await csvWriter.writeRecords(users);
 	}
 }

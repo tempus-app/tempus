@@ -11,7 +11,7 @@ import { CreateProjectDto } from '@tempus/api/shared/dto';
 export class ProjectSeederService {
 	/**
 	 * Seeds the project database table with test data
-	 * @param projectRepository user database repository
+	 * @param projectRepository project database repository
 	 */
 	constructor(
 		@InjectRepository(ProjectEntity)
@@ -20,7 +20,7 @@ export class ProjectSeederService {
 	) {}
 
 	/**
-	 * drops all entities in the user repository
+	 * drops all entities in the project repository
 	 */
 	async clear() {
 		this.projectRepository.query('DELETE from project_entity Cascade');

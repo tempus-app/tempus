@@ -13,7 +13,7 @@ import {
 import { Repository } from 'typeorm';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { faker } from '@faker-js/faker';
-import { ResourceService, UserService } from '@tempus/onboarding-api/feature-account';
+import { ResourceService } from '@tempus/onboarding-api/feature-account';
 import { Link, Resource, RoleType } from '@tempus/shared-domain';
 import {
 	CreateCertificationDto,
@@ -28,11 +28,18 @@ import {
 @Injectable()
 export class ResourceSeederService {
 	/**
-	 * Seeds the user database with test data
-	 * @param resourceRepository user database repository
+	 * seeds resources and resource profiles
+	 * @param resourceRepository
+	 * @param locationRepository
+	 * @param skillRepository
+	 * @param skillTypeRepository
+	 * @param viewRepository
+	 * @param educationRepository
+	 * @param experienceRepository
+	 * @param certificationRepository
+	 * @param resourceService
 	 */
 	constructor(
-		private userService: UserService,
 		@InjectRepository(ResourceEntity)
 		private resourceRepository: Repository<ResourceEntity>,
 		@InjectRepository(LocationEntity)
@@ -69,7 +76,7 @@ export class ResourceSeederService {
 	}
 
 	/**
-	 * creates random location
+	 * creates new locationDto with random values
 	 * @returns locationEntity
 	 */
 	private static createLocation() {
@@ -84,6 +91,10 @@ export class ResourceSeederService {
 		};
 	}
 
+	/**
+	 * creates a new educationDto with random values
+	 * @returns CreateEducationDto
+	 */
 	private static createEducation() {
 		const educations: CreateEducationDto[] = [];
 
@@ -106,6 +117,10 @@ export class ResourceSeederService {
 		return educations;
 	}
 
+	/**
+	 * generates random squence of sentences
+	 * @returns string[]
+	 */
 	private static generateParagraph() {
 		const parapgraph: string[] = [];
 		const setences = Math.floor(Math.random() * 6) + 1;
@@ -116,18 +131,26 @@ export class ResourceSeederService {
 		return parapgraph;
 	}
 
+	/**
+	 * creates new certificationDto with random values
+	 * @returns CreateCertificationDto
+	 */
 	private static createCertifications() {
 		const certifications: CreateCertificationDto[] = [];
 
 		const certificationNum = Math.floor(Math.random() * 4) + 1;
 		for (let i = 0; i < certificationNum; i++) {
 			certifications.push(
-				new CreateCertificationDto(faker.name.jobType(), faker.company.companyName(), faker.lorem.sentences(3)),
+				new CreateCertificationDto(faker.name.jobType(), faker.company.companyName(), faker.lorem.sentences(7)),
 			);
 		}
 		return certifications;
 	}
 
+	/**
+	 * creates new experienceDto with random values
+	 * @returns CreateEducationDto
+	 */
 	private static createExperience() {
 		const date = ResourceSeederService.generateDateRange();
 
@@ -138,7 +161,7 @@ export class ResourceSeederService {
 			experiences.push(
 				new CreateExperienceDto(
 					faker.name.jobTitle(),
-					faker.lorem.sentences(3),
+					faker.lorem.sentences(7),
 					ResourceSeederService.generateParagraph(),
 					faker.company.companyName(),
 					date.startDate,
@@ -150,6 +173,10 @@ export class ResourceSeederService {
 		return experiences;
 	}
 
+	/**
+	 * generates skill Dto with random values
+	 * @returns SkillDto
+	 */
 	private static generateSkills() {
 		const skills: CreateSkillDto[] = [];
 		for (let i = 0; i < 5; i++) {
@@ -158,51 +185,11 @@ export class ResourceSeederService {
 		return skills;
 	}
 
-	/* async seedAvailableResources(count = 5) {
-		const createdResources: ResourceEntity[] = [];
-		for (let i = 0; i < count; i++) {
-			const resource: ResourceEntity = {
-				...ResourceSeederService.createResource(),
-				roles: [RoleType.AVAILABLE_RESOURCE],
-			};
-			const { password } = resource;
-			const modifiedResource = {
-				...resource,
-				password: await this.userService.hashPassword(password),
-				views: [ResourceSeederService.generateView(resource)],
-			};
-			const createdUser = await this.resourceRepository.save(modifiedResource);
-			createdResources.push({ ...createdUser, password });
-		}
-		return createdResources;
-	}
-
-
-	
-	async seedAssignedResources(projects: ProjectEntity[], count = 5) {
-		const createdResources: ResourceEntity[] = [];
-		for (let i = 0; i < count; i++) {
-			const resource = ResourceSeederService.createResource(RoleType.ASSIGNED_RESOURCE);
-			const { password } = resource;
-			// sorts projects
-			projects.sort(() => {
-				return 0.5 - Math.random();
-			});
-
-			const createdView = await this.viewRepository.save(ResourceSeederService.generateView(resource));
-
-			const modifiedResource: ResourceEntity = {
-				...resource,
-				roles: [RoleType.ASSIGNED_RESOURCE],
-				password: await this.userService.hashPassword(password),
-				views: [createdView],
-				projects: projects.slice(Math.floor(Math.random() * projects.length)), // assigns a random number of projects
-			};
-			const createdUser = await this.resourceRepository.save(modifiedResource);
-			createdResources.push({ ...createdUser, password });
-		}
-		return createdResources;
-	} */
+	/**
+	 * creates a new resourceEntity with random values
+	 * @param role roletype of resource
+	 * @returns resourceDto entity
+	 */
 	static createResource(role: RoleType) {
 		const firstName = faker.name.firstName();
 		const lastName = faker.name.lastName();
@@ -224,14 +211,19 @@ export class ResourceSeederService {
 			ResourceSeederService.createEducation(),
 			ResourceSeederService.generateSkills(),
 			ResourceSeederService.createCertifications(),
-			faker.lorem.sentences(3),
-			faker.lorem.sentences(3),
-			faker.lorem.sentences(3),
-			faker.lorem.sentences(3),
+			faker.lorem.sentences(7),
+			faker.lorem.sentences(7),
+			faker.lorem.sentences(7),
+			faker.lorem.sentences(7),
 		);
 		return resource;
 	}
 
+	/**
+	 * seed resources with random values
+	 * @param links links to associate with resource
+	 * @returns returns array of seeded resources
+	 */
 	async seedResources(links: Link[]) {
 		const createdResources: Resource[] = [];
 

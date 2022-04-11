@@ -24,14 +24,15 @@ export class LinkSeederService {
 	) {}
 
 	/**
-	 * drops all entities in the user repository
+	 * drops all entities in the link repository
 	 */
 	async clear() {
 		this.linkRepository.query('DELETE from link_entity Cascade');
 	}
 
 	/**
-	 * creates a specifed number of client entites
+	 * creates a specifed number of link entites
+	 * @param projects projects to associate with new link
 	 * @param count number of entities to create
 	 * @returns array of created clients
 	 */

@@ -18,6 +18,11 @@ const seederArgsInterface: commandLineArgs.OptionDefinition[] = [
 		type: Number,
 		defaultValue: 20,
 	},
+	{
+		name: 'clear',
+		type: Boolean,
+		defaultValue: true,
+	},
 ];
 async function bootstrap() {
 	const appContext = await NestFactory.createApplicationContext(SeedModule);
