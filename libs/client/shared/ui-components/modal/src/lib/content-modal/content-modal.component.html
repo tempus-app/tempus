@@ -23,14 +23,14 @@
 			*ngIf="data.closable"
 			class="dialog-button"
 			color="grey"
-			(click)="selectCancel()"
+			(buttonClick)="selectCancel()"
 			[label]="data.closeText"
 		></tempus-button>
 		<tempus-button
 			class="dialog-button"
 			color="accent"
 			[disabled]="$confirmDisabled | async"
-			(click)="selectConfirm()"
+			(buttonClick)="selectConfirm()"
 			[label]="data.confirmText"
 		></tempus-button>
 	</div>

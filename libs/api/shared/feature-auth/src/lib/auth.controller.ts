@@ -1,4 +1,4 @@
-import { Request, Controller, Post, UseGuards, NotImplementedException, HttpCode, HttpStatus } from '@nestjs/common';
+import { Request, Controller, Post, UseGuards, HttpCode, HttpStatus } from '@nestjs/common';
 import { Tokens, AuthDto } from '@tempus/shared-domain';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { AuthService } from './auth.service';

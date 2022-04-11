@@ -11,7 +11,7 @@ import {
 	selectUploadedResume,
 } from '@tempus/client/onboarding-client/signup/data-access';
 import { Store } from '@ngrx/store';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import {
 	ICreateLocationDto,
 	ICreateExperienceDto,
@@ -78,8 +78,6 @@ export class ResumeUploadComponent implements OnInit {
 	}
 
 	async parseFile(file: File) {
-		const params = new HttpParams();
-
 		const formData = new FormData();
 		formData.append('file', file);
 
@@ -88,6 +86,7 @@ export class ResumeUploadComponent implements OnInit {
 
 	async onUpload(file: File, makeRequest: boolean) {
 		if (makeRequest) {
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 			(await this.parseFile(file)).subscribe((event: any) => {
 				if (typeof event === 'object') {
 					this.createUserDetails(JSON.parse(event.body));
@@ -210,7 +209,8 @@ export class ResumeUploadComponent implements OnInit {
 
 	nextStep() {
 		this.fileData?.markAllAsTouched();
-		if (this.resumeParsed && this.fileData.valid) {
+		// this.resumeParsed &&
+		if (this.fileData.valid) {
 			this.store.dispatch(
 				createResumeUpload({
 					resume: this.fileData.value,

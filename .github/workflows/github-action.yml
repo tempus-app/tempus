@@ -29,4 +29,5 @@ jobs:
       #- run: npm run lint:check
       - run: npm run build:onboarding-api --if-present
       - run: npm run build:client:prod --if-present
-      - run: npm test
+      - run: npm run test:api:unit
+      #- run: npm run test:client:unit

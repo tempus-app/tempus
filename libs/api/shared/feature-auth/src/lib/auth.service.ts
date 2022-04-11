@@ -1,5 +1,5 @@
-import { ForbiddenException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
-import { Tokens, RoleType, User, JwtPayload, JwtRefreshPayloadWithToken, AuthDto } from '@tempus/shared-domain';
+import { ForbiddenException, Injectable, InternalServerErrorException } from '@nestjs/common';
+import { Tokens, User, JwtPayload, JwtRefreshPayloadWithToken, AuthDto } from '@tempus/shared-domain';
 import { JwtService } from '@nestjs/jwt';
 import { compare, genSalt, hash } from 'bcrypt';
 import { Repository } from 'typeorm';

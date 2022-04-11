@@ -30,9 +30,9 @@ export class LinkService {
 		}
 		const fullLink = { ...link, token: uniqueToken, status: StatusType.ACTIVE, expiry: expiryDate };
 
-		// NOT GREAT FOR NOW, BUT WAS GETTING DEP ISSUES TRYING TO IMPORT PROJECT SERVICE
+		// TODO: NOT GREAT FOR NOW, BUT WAS GETTING DEP ISSUES TRYING TO IMPORT PROJECT SERVICE
 		const projectEntity = await this.projectRepository.findOne(projectId);
-		if (!projectEntity) throw new NotFoundException(`Could not find project with id ${projectEntity.id}`);
+		if (!projectEntity) throw new NotFoundException(`Could not find project with id ${projectId}`);
 		fullLink.project = projectEntity;
 
 		if (sendEmail) {
@@ -40,10 +40,6 @@ export class LinkService {
 		}
 		return this.linkRepository.save(fullLink);
 	}
-
-	// associateLinkToUser(linkId: number, userId: number): Promise<Link> {
-	// 	throw new NotImplementedException();
-	// }
 
 	async findLinkById(linkId: number): Promise<Link> {
 		const linkEntity = await this.linkRepository.findOne(linkId, {

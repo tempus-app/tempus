@@ -14,7 +14,7 @@
 			"executor": "@nrwl/jest:jest",
 			"outputs": ["coverage/libs/api/onboarding-api/feature-profile"],
 			"options": {
-				"jestConfig": "libs/resource/jest.config.js",
+				"jestConfig": "libs/api/onboarding-api/feature-profile/jest.config.js",
 				"passWithNoTests": true
 			}
 		}
