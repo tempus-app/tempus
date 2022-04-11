@@ -117,10 +117,6 @@ export class ResourceProfileContentComponent implements OnInit, OnChanges {
 		// eslint-disable-next-line @typescript-eslint/dot-notation
 		if (changes['viewID'] && changes['viewID'].currentValue !== 0) {
 			// eslint-disable-next-line @typescript-eslint/dot-notation
-			console.log(changes['viewID'].currentValue);
-			// eslint-disable-next-line @typescript-eslint/dot-notation
-			this.viewID = changes['viewID'].currentValue;
-			// eslint-disable-next-line @typescript-eslint/dot-notation
 			this.loadView(changes['viewID'].currentValue);
 			// eslint-disable-next-line @typescript-eslint/dot-notation
 		}
@@ -131,11 +127,10 @@ export class ResourceProfileContentComponent implements OnInit, OnChanges {
 		this.resourceService.getResourceProfileViews(id).subscribe(profileViews => {
 			this.viewID = profileViews[0].id;
 			let revisionViewId;
-			for (let i = 0; i < profileViews.length; i++) {
+			for (let i = 0; i < profileViews.length; i += 1) {
+				console.log(profileViews);
 				if (profileViews[i].revision) {
 					revisionViewId = profileViews[i].revision?.newView.id;
-					// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-					this.viewID = profileViews[i].revision!.view.id;
 				}
 			}
 
@@ -147,6 +142,7 @@ export class ResourceProfileContentComponent implements OnInit, OnChanges {
 	}
 
 	loadView(viewID: number, profileViews?: ViewNames[]) {
+		this.viewID = viewID;
 		this.resourceService.getViewById(viewID).subscribe(resourceView => {
 			this.certifications = resourceView.certifications;
 			this.educations = resourceView.educations;
