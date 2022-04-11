@@ -132,7 +132,7 @@ Contributions to the [backend](/docs/backend/Contributing.md) and the [frontend]
 
 ## 💼 Database
 
-Information about the tempus database, and datastore can be found [here](/docs/database/).
+Information about the tempus database, and datastore can be found [here](/docs/backend/database.md).
 
 ## 🔧 Backend
 
