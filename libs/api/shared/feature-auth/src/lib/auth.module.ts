@@ -2,7 +2,6 @@ import { Module } from '@nestjs/common';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule } from '@nestjs/config';
-import { CoreModule } from '@tempus/api/shared/feature-core';
 import { ApiSharedEntityModule } from '@tempus/api/shared/entity';
 import { CommonModule, CommonService } from '@tempus/api/shared/feature-common';
 import { AuthController } from './auth.controller';

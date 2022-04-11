@@ -4,7 +4,7 @@ import { ForbiddenException, Injectable, InternalServerErrorException, NotFoundE
 import { InjectRepository } from '@nestjs/typeorm';
 import { ConfigService } from '@nestjs/config';
 import { ViewsService } from '@tempus/onboarding-api/feature-profile';
-import { Resource, StatusType, ViewType } from '@tempus/shared-domain';
+import { Resource, RoleType, StatusType, ViewType } from '@tempus/shared-domain';
 import { Repository } from 'typeorm';
 import { genSalt, hash } from 'bcrypt';
 import { ResourceEntity } from '@tempus/api/shared/entity';
@@ -28,8 +28,8 @@ export class ResourceService {
 		}
 		const resourceEntity = ResourceEntity.fromDto(resource);
 		resourceEntity.password = await this.hashPassword(resourceEntity.password);
-		
-		resourceEntity.projects = [link.project]
+
+		// resourceEntity.projects = [link.project];
 		let createdResource = await this.resourceRepository.save(resourceEntity);
 
 		const view = await this.viewsService.createView(createdResource.id, {
@@ -49,7 +49,10 @@ export class ResourceService {
 		createdResource.views.push(view);
 		createdResource = await this.resourceRepository.save(createdResource);
 		createdResource.password = null;
+
 		this.linkService.editLinkStatus(resource.linkId, StatusType.COMPLETED);
+		this.linkService.assignLinkToResource(resource.linkId, createdResource);
+
 		return createdResource;
 	}
 
@@ -82,7 +85,7 @@ export class ResourceService {
 		const userProjectInfo: Array<UserProjectClientDto> = resources.map(res => {
 			const projClients = res.projects.map(proj => {
 				return {
-					project: {val: proj.name, id: proj.id},
+					project: { val: proj.name, id: proj.id },
 					client: proj.client.clientName,
 				};
 			});
@@ -130,12 +133,35 @@ export class ResourceService {
 		return updatedResource;
 	}
 
-	private async hashPassword(password: string): Promise<string> {
+	public async hashPassword(password: string): Promise<string> {
 		try {
 			const salt = await genSalt(this.configService.get('saltSecret'));
 			return hash(password, salt);
 		} catch (e) {
 			throw new InternalServerErrorException(e);
 		}
+	}
+
+	public async updateRoleType(resourceId: number, newRole: RoleType) {
+		const existingResourceEntity = await this.resourceRepository.findOne(resourceId);
+		if (!existingResourceEntity) {
+			throw new NotFoundException(`Could not find resource with id ${resourceId}`);
+		}
+		if (!existingResourceEntity.roles.includes(newRole)) {
+			existingResourceEntity.roles.push(newRole);
+		}
+		if (newRole === RoleType.AVAILABLE_RESOURCE) {
+			const index = existingResourceEntity.roles.findIndex(el => el === RoleType.ASSIGNED_RESOURCE);
+			if (index !== -1) {
+				existingResourceEntity.roles.splice(index, 1);
+			}
+		}
+		if (newRole === RoleType.ASSIGNED_RESOURCE) {
+			const index = existingResourceEntity.roles.findIndex(el => el === RoleType.AVAILABLE_RESOURCE);
+			if (index !== -1) {
+				existingResourceEntity.roles.splice(index, 1);
+			}
+		}
+		return this.resourceRepository.save(existingResourceEntity);
 	}
 }
