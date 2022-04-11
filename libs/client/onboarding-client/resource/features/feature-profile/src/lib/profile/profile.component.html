@@ -1,26 +1,26 @@
 <tempus-sidebar [userType]="UserType.RESOURCE" [name]="fullName" [email]="email" (selectTab)="selectedTab($event)">
 	<div *ngIf="editViewEnabled">
-		<tempus-edit-profile 
-		(openEditView)="openEditView()"
-		(closeEditViewClicked)="closeEditView()"
-		(submitClicked)="loadNewView($event)"
-		[firstName]="firstName"
-		[lastName]="lastName"
-		[phoneNumber]="phoneNumber"
-		[country]="country"
-		[state]="state"
-		[city]="city"
-		[linkedInLink]="linkedInLink"
-		[githubLink]="githubLink"
-		[otherLink]="otherLink"
-		[profileSummary]="profileSummary"
-		[educationsSummary]="educationsSummary"
-		[educations]="educations"
-		[certifications]="certifications"
-		[experiencesSummary]="experiencesSummary"
-		[workExperiences]="workExperiences"
-		[skillsSummary]="skillsSummary"
-		[skills]="skills"
+		<tempus-edit-profile
+			(openEditView)="openEditView()"
+			(closeEditViewClicked)="closeEditView()"
+			(submitClicked)="loadNewView($event)"
+			[firstName]="firstName"
+			[lastName]="lastName"
+			[phoneNumber]="phoneNumber"
+			[country]="country"
+			[state]="state"
+			[city]="city"
+			[linkedInLink]="linkedInLink"
+			[githubLink]="githubLink"
+			[otherLink]="otherLink"
+			[profileSummary]="profileSummary"
+			[educationsSummary]="educationsSummary"
+			[educations]="educations"
+			[certifications]="certifications"
+			[experiencesSummary]="experiencesSummary"
+			[workExperiences]="workExperiences"
+			[skillsSummary]="skillsSummary"
+			[skills]="skills"
 		></tempus-edit-profile>
 	</div>
 	<ng-container>
@@ -28,68 +28,84 @@
 			<div id="title-container">
 				<div id="my-profile-container">
 					<h2 class="mat-h2 page-title">My Profile</h2>
-					<span *ngIf="isPendingApproval"
+					<span
+						*ngIf="isPendingApproval"
 						id="error-icon"
 						class="material-icons"
 						matTooltip="This view is awaiting approval"
 						matTooltipClass="tooltip"
 						>error</span
 					>
-					<span *ngIf="isRejected"
-					id="reject-icon"
-					class="material-icons"
-					matTooltip="Changes to this view have been rejected"
-					matTooltipClass="tooltip"
-					>cancel</span
-				>
+					<span
+						*ngIf="isRejected"
+						id="reject-icon"
+						class="material-icons"
+						matTooltip="Changes to this view have been rejected"
+						matTooltipClass="tooltip"
+						>cancel</span
+					>
 				</div>
 				<div id="button-container">
-					<tempus-button [disabled]="isPendingApproval" [buttonType]="ButtonType.EDIT" color="accent" (click)="openEditView()"></tempus-button>
-					<tempus-button (click)="downloadProfile()" label="download" icon="cloud_download" color="accent"></tempus-button>
+					<tempus-button
+						[disabled]="isPendingApproval"
+						[buttonType]="ButtonType.EDIT"
+						color="accent"
+						(buttonClick)="openEditView()"
+					></tempus-button>
+					<tempus-button
+						(buttonClick)="downloadProfile()"
+						label="download"
+						icon="cloud_download"
+						color="accent"
+					></tempus-button>
 				</div>
 			</div>
 			<div *ngIf="isRejected" id="rejection-dialog">
 				<h3 class="mat-h3">Please modify your view with the following changes:</h3>
-				<p class="mat-body-1" *ngIf="rejectionComments!==''">{{ rejectionComments }}</p>
-
+				<p class="mat-body-1" *ngIf="rejectionComments !== ''">{{ rejectionComments }}</p>
 			</div>
 			<div class="section-container">
 				<tempus-resource-display-personal-information
-				[firstName]="firstName"
-				[lastName]="lastName"
-				[country]="country"
-				[state]="state"
-				[city]="city"
-				[phoneNumber]="phoneNumber"
-				[email]="email"
-				[resume]="resume"
-				[linkedInLink]="linkedInLink"
-				[githubLink]="githubLink"
-				[otherLink]="otherLink"
-				[profileSummary]="profileSummary"></tempus-resource-display-personal-information>
+					[firstName]="firstName"
+					[lastName]="lastName"
+					[country]="country"
+					[state]="state"
+					[city]="city"
+					[phoneNumber]="phoneNumber"
+					[email]="email"
+					[resume]="resume"
+					[linkedInLink]="linkedInLink"
+					[githubLink]="githubLink"
+					[otherLink]="otherLink"
+					[profileSummary]="profileSummary"
+				></tempus-resource-display-personal-information>
 			</div>
 			<div class="section-container">
 				<h2 class="mat-h2 section-title">Education</h2>
 				<tempus-resource-display-education
-				[educationsSummary]="educationsSummary"
-				[educations]="educations"></tempus-resource-display-education>
+					[educationsSummary]="educationsSummary"
+					[educations]="educations"
+				></tempus-resource-display-education>
 			</div>
 			<div class="section-container">
 				<div class="mat-h2 section-title">Certifications</div>
 				<tempus-resource-display-certifications
-				[certifications]="certifications"></tempus-resource-display-certifications>
+					[certifications]="certifications"
+				></tempus-resource-display-certifications>
 			</div>
 			<div class="section-container">
 				<h2 class="mat-h2 section-title">Work Experience</h2>
-				<tempus-resource-display-work-experience 					
-				[experiencesSummary]="experiencesSummary"
-				[workExperiences]="workExperiences"></tempus-resource-display-work-experience>
+				<tempus-resource-display-work-experience
+					[experiencesSummary]="experiencesSummary"
+					[workExperiences]="workExperiences"
+				></tempus-resource-display-work-experience>
 			</div>
 			<div class="section-container">
 				<h2 class="mat-h2 section-title">Skills</h2>
 				<tempus-resource-display-skills
-				[skills]="skills"
-				[skillsSummary]="skillsSummary"></tempus-resource-display-skills>
+					[skills]="skills"
+					[skillsSummary]="skillsSummary"
+				></tempus-resource-display-skills>
 			</div>
 		</div>
 	</ng-container>
