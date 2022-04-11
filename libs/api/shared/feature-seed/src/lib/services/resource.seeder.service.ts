@@ -4,9 +4,7 @@ import {
 	CertificationEntity,
 	EducationEntity,
 	ExperienceEntity,
-	LinkEntity,
 	LocationEntity,
-	ProjectEntity,
 	ResourceEntity,
 	SkillEntity,
 	SkillTypeEntity,
@@ -16,7 +14,7 @@ import { Repository } from 'typeorm';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { faker } from '@faker-js/faker';
 import { ResourceService, UserService } from '@tempus/onboarding-api/feature-account';
-import { Link, Resource, RevisionType, RoleType, ViewType } from '@tempus/shared-domain';
+import { Link, Resource, RoleType } from '@tempus/shared-domain';
 import {
 	CreateCertificationDto,
 	CreateEducationDto,
@@ -26,7 +24,6 @@ import {
 	CreateSkillDto,
 	CreateSkillTypeDto,
 } from '@tempus/api/shared/dto';
-import { ProjectService } from '@tempus/onboarding-api/feature-project';
 
 @Injectable()
 export class ResourceSeederService {

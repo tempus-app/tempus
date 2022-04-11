@@ -14,8 +14,8 @@ import { CreateLinkDto } from '@tempus/api/shared/dto';
 @Injectable()
 export class LinkSeederService {
 	/**
-	 * Seeds the user database with test data
-	 * @param clientRepository user database repository
+	 * Seeds the link database with test data
+	 * @param linkRepository link table repository
 	 */
 	constructor(
 		@InjectRepository(LinkEntity)
@@ -42,7 +42,6 @@ export class LinkSeederService {
 		for (let i = 0; i < count; i++) {
 			const firstName = faker.name.firstName();
 			const lastName = faker.name.lastName();
-			console.log(projects[i % projects.length]);
 			const link: CreateLinkDto = new CreateLinkDto(
 				firstName,
 				lastName,
