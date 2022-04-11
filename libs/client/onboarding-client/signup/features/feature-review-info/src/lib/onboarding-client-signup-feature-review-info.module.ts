@@ -14,6 +14,7 @@ import { ClientSharedPresentationalResourceDisplayModule } from '@tempus/client/
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { HttpClient } from '@angular/common/http';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { ClientSharedUiComponentsModalModule } from '@tempus/client/shared/ui-components/modal';
 import { ReviewComponent } from './review/review.component';
 
 function createTranslateLoader(http: HttpClient) {
@@ -32,6 +33,7 @@ function createTranslateLoader(http: HttpClient) {
 		ClientSharedUiComponentsPresentationalModule,
 		ClientSharedInputResourceInformationModule,
 		ClientSharedPresentationalResourceDisplayModule,
+		ClientSharedUiComponentsModalModule,
 		RouterModule.forChild([
 			{
 				path: '',

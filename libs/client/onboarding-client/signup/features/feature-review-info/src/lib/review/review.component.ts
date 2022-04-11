@@ -1,5 +1,6 @@
 import { AfterViewInit, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ICreateExperienceDto, ICreateEducationDto, ICreateCertificationDto } from '@tempus/shared-domain';
+import { CustomModalType, ModalService, ModalType } from '@tempus/client/shared/ui-components/modal';
 
 import { Subject, take } from 'rxjs';
 
@@ -74,6 +75,7 @@ export class ReviewComponent implements OnInit, AfterViewInit {
 		private store: Store<SignupState>,
 		private changeDetector: ChangeDetectorRef,
 		private translateService: TranslateService,
+		private modalService: ModalService,
 	) {
 		const { currentLang } = translateService;
 		// eslint-disable-next-line no-param-reassign
@@ -116,14 +118,38 @@ export class ReviewComponent implements OnInit, AfterViewInit {
 			if (reqStatusData.status === AsyncRequestState.LOADING) {
 				this.loading = true;
 			} else if (reqStatusData.status === AsyncRequestState.SUCCESS) {
-				alert('Resource Created Succesfully');
+				// alert('Resource Created Succesfully');
+				this.modalService.open(
+					{
+						id: '1',
+						title: 'Resource Created Successfully.',
+						closeText: 'Cancel',
+						confirmText: 'Confirm',
+						message: 'Click Confirm to continue.',
+						modalType: ModalType.ERROR,
+						closable: true,
+					},
+					CustomModalType.INFO,
+				);
 				this.loading = false;
 				this.store.dispatch(resetLinkState());
 				this.store.dispatch(resetCreateResourceState());
 				this.router.navigate(['../../../signin'], { relativeTo: this.route });
 			} else if (reqStatusData.status === AsyncRequestState.ERROR) {
 				this.loading = false;
-				alert('Error creating resource');
+				// alert('Error creating resource');
+				this.modalService.open(
+					{
+						id: '1',
+						title: 'Error creating resource.',
+						closeText: 'Cancel',
+						confirmText: 'Confirm',
+						message: 'Please try again.',
+						modalType: ModalType.ERROR,
+						closable: true,
+					},
+					CustomModalType.INFO,
+				);
 			} else {
 				this.loading = false;
 			}
