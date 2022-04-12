@@ -48,15 +48,18 @@ export class SeederService {
 		const projects = await this.projectSeederService.seedProjects(clients, args.projects);
 		const users = await this.userSeederService.seedBusinessOwner(args.businessOwners);
 		const links = await this.linkSeederService.seed(projects, args.resources);
-		const allResources = await this.resourceSeedService.seedResources(links);
-		await this.projectSeederService.seedAssignedResources(projects, allResources.splice(0, args.resources / 2));
-		const allUsers = users.concat(allResources);
+		const availableResources = await this.resourceSeedService.seedResources(links);
+		const assignedResources = await this.projectSeederService.seedAssignedResources(
+			projects,
+			availableResources.splice(0, args.resources / 2),
+		);
+		const allUsers = users.concat(availableResources).concat(assignedResources);
 		await SeederService.writeToCSV(allUsers);
 	}
 
 	private static async writeToCSV(users) {
 		const csvWriter = createCsvWriter({
-			path: './utils/csv/database_dump.csv',
+			path: './utils/csv/user-accounts.csv',
 			header: [
 				{ id: 'firstName', title: 'First Name' },
 				{ id: 'lastName', title: 'Last Name' },

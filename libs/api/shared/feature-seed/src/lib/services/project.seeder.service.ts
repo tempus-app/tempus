@@ -6,6 +6,7 @@ import { Repository } from 'typeorm';
 import { faker } from '@faker-js/faker';
 import { ProjectService } from '@tempus/onboarding-api/feature-project';
 import { CreateProjectDto } from '@tempus/api/shared/dto';
+import { RoleType } from '@tempus/shared-domain';
 
 @Injectable()
 export class ProjectSeederService {
@@ -50,8 +51,11 @@ export class ProjectSeederService {
 	}
 
 	async seedAssignedResources(projects: ProjectEntity[], resources: ResourceEntity[]) {
+		const assignedResources: ResourceEntity[] = [];
 		for (let i = 0; i < resources.length; i++) {
 			await this.projectService.assignResourceToProject(projects[i % projects.length].id, resources[i].id);
+			assignedResources.push({ ...resources[i], roles: [RoleType.ASSIGNED_RESOURCE] });
 		}
+		return assignedResources;
 	}
 }
