@@ -12,6 +12,20 @@
 		},
 		"skills": {
 			"title": "Skills"
+		},
+		"modal": {
+			"successModal": {
+				"title": "Resource Created Successfully.",
+				"closeText": "CANCEL",
+				"confirmText": "CONFIRM",
+				"message": "Click CONFIRM to continue."
+			},
+			"errorModal": {
+				"title": "Error Creating Resource.",
+				"closeText": "CANCEL",
+				"confirmText": "OKAY",
+				"message": "Please try again."
+			}
 		}
 	}
 }
