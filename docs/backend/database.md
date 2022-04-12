@@ -53,3 +53,7 @@ To add a new entity, simply create a `.entity.ts` file under `libs/api/shared/en
 In terms of actually reflecting the entitiy changes in the database, the simplest approach which is being used in development is to set the value of `synchronize` to true in [ormconfig.ts](../../ormconfig.ts). `Synchronize` true will automatically update your local database upon restarting the server with any newly detected entitiy additions or updates.
 
 For production; however, one would need to generate a migration file through TypeORM which will encapsulate the relevant SQL scripts needed to update the database appropriately. The steps to generate the migration files are listed below:
+
+## Seeding
+
+In order to seed the database with test data, a seeding script is used, please refer to [this file](./seed.md) for more details.
