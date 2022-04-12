@@ -68,8 +68,9 @@ describe('LinkService', () => {
 
 			const res = await linkService.createLink(createLinkEntity, 1);
 
-			expect(mockEmailService.sendInvitationEmail).toBeCalledWith({ ...createdLink, id: null });
 			expect(mockLinkRepository.save).toBeCalledWith({ ...createdLink, id: null });
+			expect(mockEmailService.sendInvitationEmail).toBeCalledWith({ ...createdLink, id: 3 });
+
 			expect(mockProjectRepository.findOne).toBeCalledWith(1);
 
 			expect(res).toEqual(createdLink);
@@ -107,8 +108,8 @@ describe('LinkService', () => {
 			expect(mockLinkRepository.save).not.toBeCalled();
 		});
 
-		it('should not save the link if email linking fails', async () => {
-			mockEmailService.sendInvitationEmail.mockRejectedValue(new Error('timeout'));
+		it('should only email the link if saving is successful', async () => {
+			mockLinkRepository.save.mockRejectedValue(new Error('db constraint'));
 
 			let error;
 			try {
@@ -117,8 +118,8 @@ describe('LinkService', () => {
 				error = e;
 			}
 			expect(error).toBeInstanceOf(Error);
-			expect(error.message).toBe('timeout');
-			expect(mockLinkRepository.save).not.toBeCalled();
+			expect(error.message).toBe('db constraint');
+			expect(mockEmailService.sendInvitationEmail).not.toBeCalled();
 		});
 
 		it('should not save the link if project is not found', async () => {
