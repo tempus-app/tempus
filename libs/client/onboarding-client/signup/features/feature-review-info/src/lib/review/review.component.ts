@@ -131,34 +131,34 @@ export class ReviewComponent implements OnInit, OnDestroy, AfterViewInit {
 				if (reqStatusData.status === AsyncRequestState.LOADING) {
 					this.loading = true;
 				} else if (reqStatusData.status === AsyncRequestState.SUCCESS) {
-					this.openSuccessDialog();
+					this.openDialog('successModal');
 					this.loading = false;
 					this.store.dispatch(resetLinkState());
 					this.store.dispatch(resetCreateResourceState());
 					this.router.navigate(['../../../signin'], { relativeTo: this.route });
 				} else if (reqStatusData.status === AsyncRequestState.ERROR) {
 					this.loading = false;
-					this.openErrorDialog();
+					this.openDialog('errorModal');
 				} else {
 					this.loading = false;
 				}
 			});
 	}
 
-	openSuccessDialog() {
+	openDialog = (key: string) => {
 		this.translateService
-			.get(['onboardingClientSignupReview.modal.successModal'])
+			.get([`onboardingClientSignupReview.modal.${key}`])
 			.pipe(take(1))
 			.subscribe(data => {
-				const successDialogText = data['onboardingClientSignupReview.modal.successModal'];
+				const dialogText = data[`onboardingClientSignupReview.modal.${key}`];
 				this.modalService.open(
 					{
-						title: successDialogText.title,
-						confirmText: successDialogText.confirmText,
-						message: successDialogText.message,
-						modalType: ModalType.INFO,
+						title: dialogText.title,
+						confirmText: dialogText.confirmText,
+						message: dialogText.message,
+						modalType: key === 'successModal' ? ModalType.INFO : ModalType.ERROR,
 						closable: true,
-						id: 'success',
+						id: key,
 					},
 					CustomModalType.INFO,
 				);
@@ -168,32 +168,7 @@ export class ReviewComponent implements OnInit, OnDestroy, AfterViewInit {
 			this.modalService.close();
 			this.modalService.confirmEventSubject.unsubscribe();
 		});
-	}
-
-	openErrorDialog() {
-		this.translateService
-			.get(['onboardingClientSignupReview.modal.errorModal'])
-			.pipe(take(1))
-			.subscribe(data => {
-				const errorDialogText = data['onboardingClientSignupReview.modal.errorModal'];
-				this.modalService.open(
-					{
-						title: errorDialogText.title,
-						confirmText: errorDialogText.confirmText,
-						message: errorDialogText.message,
-						modalType: ModalType.ERROR,
-						closable: true,
-						id: 'error',
-					},
-					CustomModalType.INFO,
-				);
-			});
-
-		this.modalService.confirmEventSubject.subscribe(() => {
-			this.modalService.close();
-			this.modalService.confirmEventSubject.unsubscribe();
-		});
-	}
+	};
 
 	backStep() {
 		this.router.navigate(['../myinfothree'], { relativeTo: this.route });
