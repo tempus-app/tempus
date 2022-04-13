@@ -128,7 +128,6 @@ export class ResourceProfileContentComponent implements OnInit, OnChanges {
 			this.viewID = profileViews[0].id;
 			let revisionViewId;
 			for (let i = 0; i < profileViews.length; i += 1) {
-				console.log(profileViews);
 				if (profileViews[i].revision) {
 					revisionViewId = profileViews[i].revision?.newView.id;
 				}
