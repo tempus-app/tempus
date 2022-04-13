@@ -92,7 +92,7 @@ export class ViewsService {
 		const revisionEntity = (
 			await this.revisionRepository.find({
 				where: {
-					view: { id: viewId },
+					newView: { id: viewId },
 				},
 				relations: ['view', 'newView'],
 			})
@@ -112,9 +112,9 @@ export class ViewsService {
 		}
 		if (approval === false) {
 			revisionEntity.comment = comment;
-			viewEntity.locked = false;
-			viewEntity.revisionType = RevisionType.REJECTED;
-			await this.viewsRepository.save(viewEntity);
+			revisionEntity.view.locked = false;
+			revisionEntity.view.revisionType = RevisionType.REJECTED;
+			await this.viewsRepository.save(revisionEntity.view);
 			return this.revisionRepository.save(revisionEntity);
 		}
 	}

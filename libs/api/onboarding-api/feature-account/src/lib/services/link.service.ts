@@ -34,12 +34,16 @@ export class LinkService {
 		const projectEntity = await this.projectRepository.findOne(projectId);
 		if (!projectEntity) throw new NotFoundException(`Could not find project with id ${projectId}`);
 		fullLink.project = projectEntity;
+    
+    const createdLink = await this.linkRepository.save(fullLink);
 
 		if (sendEmail) {
-			await this.emailService.sendInvitationEmail(fullLink);
+			await this.emailService.sendInvitationEmail(createdLink);
 		}
-		return this.linkRepository.save(fullLink);
-	}
+	
+		return createdLink;
+
+  }
 
 	async findLinkById(linkId: number): Promise<Link> {
 		const linkEntity = await this.linkRepository.findOne(linkId, {
