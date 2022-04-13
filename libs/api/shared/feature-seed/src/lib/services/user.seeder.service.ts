@@ -24,7 +24,7 @@ export class UserSeederService {
 	 * drops all entities in the user repository
 	 */
 	async clear() {
-		this.userRepository.clear();
+		await this.userRepository.clear();
 	}
 
 	/**

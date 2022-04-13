@@ -24,7 +24,7 @@ export class ProjectSeederService {
 	 * drops all entities in the project repository
 	 */
 	async clear() {
-		this.projectRepository.query('DELETE from project_entity Cascade');
+		await this.projectRepository.query('DELETE from project_entity Cascade');
 	}
 
 	/**
@@ -35,7 +35,6 @@ export class ProjectSeederService {
 	 */
 	async seedProjects(clients: ClientEntity[], count = 6): Promise<ProjectEntity[]> {
 		const createdProjects: ProjectEntity[] = [];
-		// eslint-disable-next-line no-plusplus
 		for (let i = 0; i < count; i++) {
 			const createProject: CreateProjectDto = new CreateProjectDto(
 				clients[i % clients.length].id,
@@ -50,7 +49,7 @@ export class ProjectSeederService {
 		return createdProjects;
 	}
 
-	async seedAssignedResources(projects: ProjectEntity[], resources: ResourceEntity[]) {
+	async seedAssignedResources(projects: ProjectEntity[], resources: ResourceEntity[]): Promise<ResourceEntity[]> {
 		const assignedResources: ResourceEntity[] = [];
 		for (let i = 0; i < resources.length; i++) {
 			await this.projectService.assignResourceToProject(projects[i % projects.length].id, resources[i].id);

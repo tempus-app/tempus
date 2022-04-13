@@ -3,6 +3,7 @@
 import { ForbiddenException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ConfigService } from '@nestjs/config';
+// eslint-disable-next-line @nrwl/nx/enforce-module-boundaries
 import { ViewsService } from '@tempus/onboarding-api/feature-profile';
 import { Resource, RoleType, StatusType, ViewType } from '@tempus/shared-domain';
 import { Repository } from 'typeorm';
@@ -50,8 +51,8 @@ export class ResourceService {
 		createdResource = await this.resourceRepository.save(createdResource);
 		createdResource.password = null;
 
-		this.linkService.editLinkStatus(resource.linkId, StatusType.COMPLETED);
-		this.linkService.assignLinkToResource(resource.linkId, createdResource);
+		await this.linkService.editLinkStatus(resource.linkId, StatusType.COMPLETED);
+		await this.linkService.assignResourceToLink(resource.linkId, createdResource);
 
 		return createdResource;
 	}
@@ -142,7 +143,7 @@ export class ResourceService {
 		}
 	}
 
-	public async updateRoleType(resourceId: number, newRole: RoleType) {
+	public async updateRoleType(resourceId: number, newRole: RoleType): Promise<Resource> {
 		const existingResourceEntity = await this.resourceRepository.findOne(resourceId);
 		if (!existingResourceEntity) {
 			throw new NotFoundException(`Could not find resource with id ${resourceId}`);

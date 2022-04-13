@@ -27,7 +27,7 @@ export class LinkSeederService {
 	 * drops all entities in the link repository
 	 */
 	async clear() {
-		this.linkRepository.query('DELETE from link_entity Cascade');
+		await this.linkRepository.query('DELETE from link_entity Cascade');
 	}
 
 	/**

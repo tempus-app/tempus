@@ -122,17 +122,17 @@ export class ResourceSeederService {
 	}
 
 	/**
-	 * generates random squence of sentences
+	 * generates random sequence of sentences
 	 * @returns string[]
 	 */
 	private static generateParagraph() {
-		const parapgraph: string[] = [];
+		const paragraph: string[] = [];
 		const setences = Math.floor(Math.random() * 6) + 1;
 
-		for (let i = 0; i < setences; i++) {
-			parapgraph.push(faker.lorem.sentence());
+		for (let i = 0; i < setences * 2; i++) {
+			paragraph.push(faker.lorem.sentence());
 		}
-		return parapgraph;
+		return paragraph;
 	}
 
 	/**
@@ -228,7 +228,7 @@ export class ResourceSeederService {
 	 * @param links links to associate with resource
 	 * @returns returns array of seeded resources
 	 */
-	async seedResources(links: Link[]) {
+	async seedResources(links: Link[]): Promise<Resource[]> {
 		const createdResources: Resource[] = [];
 
 		for (let i = 0; i < links.length; i++) {

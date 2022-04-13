@@ -93,7 +93,7 @@ export class LinkService {
 		return false;
 	}
 
-	async assignLinkToResource(linkId: number, resource: ResourceEntity): Promise<LinkEntity> {
+	async assignResourceToLink(linkId: number, resource: ResourceEntity): Promise<LinkEntity> {
 		const linkEntity = await this.linkRepository.findOne(linkId);
 		if (!linkEntity) {
 			throw new NotFoundException(`Could not find token with id ${linkId}`);
