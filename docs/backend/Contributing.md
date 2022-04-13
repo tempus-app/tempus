@@ -1,10 +1,10 @@
 # Contributing to the Backend
 
-This document details how to add and modify the backend. To understand the file structure and layout of the baclemd, refer to this [document](./FileStructure.md).
+This document details how to add and modify the backend. To understand the file structure and layout of the backend, refer to this [document](./FileStructure.md).
 
 ## Creating the Library
 
-The main component of a new aspect of the backend is creating a library. To understand a library, we can look at the example under `libs/api/onboarding-api`, there are a few libraries found here, including the one named `feature-account`. This `feature-account` library represents all of the backend logic associated with the account feature. This groups all the [controllers]() and [services]() and [tests](./testing.md) under the module.
+The main component of a new aspect of the backend is creating a library. To understand a library, we can look at the example under `libs/api/onboarding-api`, there are a few libraries found here, including the one named `feature-account`. This `feature-account` library represents all of the backend logic associated with the account feature. This groups all the [controllers](#creating-a-controller) and [services](#creating-a-service) and [tests](./testing.md) under the module.
 
 Adding a library is crucial when adding major elements to the backend. Typically, this will be needed when a new feature or area of the application is added. It groups together contexts which are related to each other, such as the api associated with the tempus `accounts`. Libraries hold all of the relevant code such as the html, css, and typescript needed to handle the API calls. The following command describes how to generate a NestJS library.
 
@@ -44,7 +44,7 @@ The `AccountModule` imports other modules from throughout the app. The benefit o
 
 NestJS controllers are disccused in detail on the [NestJS Website](https://docs.nestjs.com/controllers)
 
-Controllers are the core of the backend. NestJS builds controllers on top of ExpressJS endpoints, so it should be familiar to you if you are familiar with express. Controllers are provided in the NestJS module to "control" the flow of the API calls from the client. For example, we can look at the `user.controller.ts` file, found in the `feature-account` module example discussed in the previous section.
+Controllers are the core of the backend. NestJS builds controllers on top of ExpressJS endpoints, so it should be familiar to you if you are familiar with express. Controllers are provided in the NestJS module to "control" the flow of the API calls from the client. For example, we can look at the `user.controller.ts` file, found in the `feature-account` module example discussed in the previous [section](#creating-the-library).
 
 We will dissect the following code snippet:
 
@@ -147,7 +147,7 @@ The core of the backend objects are Models, Entities, and DTOs. TypeORM is used 
 Documentation for NestJS TypeORM can be found [here](https://docs.nestjs.com/techniques/database) and documentation for TypeORM can be found [here](https://typeorm.io/)
 
 ### Models
-At the core of the Objects are `Models` which are created to represent the Entities and their properties. Models are found in the `libs/shared/domain/src/lib/models` directory. These models are shared between the frontend and backend. We can look at the `account-models` directory to continue with our example.
+At the core of the Objects are `Models` which are created to represent the Entities and their properties. Models are found in the `libs/shared/domain/src/lib/models` directory. These models are shared between the frontend and backend. We can look at the `account-models` directory to continue with our [example](#creating-the-library).
 
 The `user.model.ts` file represents the properties that should be associated with a User. The model is the core of the backend and is what method signatures are defined as returning.
 ```
@@ -172,7 +172,7 @@ export interface User {
 
 ### Entities
 After creating a model, we can create a `TypeOrm Entity` which implements the model. This entity will be read by the database to create new tables and necessary relations and join tables. 
-Entities are found in the `libs/api/shared/entity` directory. We will examine the `user.entity.ts` file in the `account-entities` directory.
+Entities are found in the `libs/api/shared/entity` directory. We will examine the `user.entity.ts` file in the `account-entities` directory to continue with our [example](#creating-the-library).
 
 A TypeOrm entity is defined using the `@Entity()` decorator, which lets NestJS know this entity must be created in the database. 
 
@@ -234,7 +234,7 @@ To add columns to the Entity, its as simple as defining a property in the model 
 
 After creating a model and an entity, and defining a new library, controller and service, you will need to create a DTO for required methods. There are two kinds of DTOs in the repository, those found in `libs/api/shared/dtos` and those found in `libs/shared/domain/src/lib/dtos`.
 
-The DTOs found in the shared library are the ones we will look at first, specifically the `account-dtos/user` dtos. If we examine the `IcreateUser.dto.ts` file, we will see that it defines the object that must be used by the frontend and backend to create a new `User`. We can call these `IDto`s.
+The DTOs found in the shared library are the ones we will look at first, specifically the `account-dtos/user` dtos. If we examine the `IcreateUser.dto.ts` file to continue with our [example](#creating-the-library), we will see that it defines the object that must be used by the frontend and backend to create a new `User`. We can call these `IDto`s.
 
 ```
 import { RoleType } from '../../../enums';
