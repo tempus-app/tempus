@@ -1,3 +1,4 @@
+import { Logger } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import commandLineArgs from 'command-line-args';
 import { CommandLineArgsOptions, SeederService, SeedModule } from '../../libs/api/shared/feature-seed/src';
@@ -26,6 +27,7 @@ const seederArgsInterface: commandLineArgs.OptionDefinition[] = [
 ];
 async function bootstrap() {
 	const appContext = await NestFactory.createApplicationContext(SeedModule);
+	const logger = appContext.get(Logger);
 
 	try {
 		const seeder = appContext.get(SeederService);
@@ -33,7 +35,7 @@ async function bootstrap() {
 
 		await seeder.seed(options as CommandLineArgsOptions);
 	} catch (e) {
-		console.error(e);
+		logger.error(e);
 	} finally {
 		appContext.close();
 	}
