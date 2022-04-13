@@ -15,6 +15,11 @@
 						"glob": "**/*",
 						"input": "libs/api/shared/api-assets/src/lib/",
 						"output": "assets"
+					},
+					{
+						"glob": "**/*",
+						"input": "migrations/",
+						"output": "migrations"
 					}
 				]
 			},
@@ -52,6 +57,13 @@
 				"jestConfig": "apps/onboarding-api/jest.config.js",
 				"passWithNoTests": true
 			}
+		},
+		"build-migrations": {
+			"executor": "@nrwl/workspace:run-commands",
+			"options": {
+				"command": "tsc migrations/*.ts"
+			},
+			"outputPath": "migrations"
 		}
 	},
 	"tags": []

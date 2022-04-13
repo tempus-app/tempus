@@ -16,6 +16,7 @@ import {
 	TaskEntity,
 } from '@tempus/api/shared/entity';
 
+console.log(`${__dirname}/dist/apps/onboarding-api/migrations`);
 const config: PostgresConnectionOptions = {
 	type: 'postgres',
 	host: process.env.DB_HOST.toString(),
@@ -39,7 +40,12 @@ const config: PostgresConnectionOptions = {
 		LocationEntity,
 		CertificationEntity,
 	],
-	synchronize: true,
+	synchronize: false,
+	migrations: [`${__dirname}/dist/apps/onboarding-api/migrations/*{.js}`],
+	migrationsRun: true,
+	cli: {
+		migrationsDir: './migrations',
+	},
 };
 
 export default config;
