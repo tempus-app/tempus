@@ -13,7 +13,7 @@ export class EmailService {
 			subject: 'Complete your Profile for CAL & Associates',
 			template: 'invitationLink',
 			context: {
-				url: this.config.get('apiUrl')+'signup/',
+				url: `${this.config.get('apiUrl')}signup/`,
 				code: link.token,
 				name: `${link.firstName} ${link.lastName}`,
 				expiry: new Date(link.expiry).toLocaleDateString(),
