@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UpdatelinkDto } from '@tempus/api/shared/dto';
-import { LinkEntity, ProjectEntity } from '@tempus/api/shared/entity';
+import { LinkEntity, ProjectEntity, ResourceEntity } from '@tempus/api/shared/entity';
 import { EmailService } from '@tempus/api/shared/feature-email';
 import { Link, StatusType } from '@tempus/shared-domain';
 import { Repository } from 'typeorm';
@@ -17,7 +17,7 @@ export class LinkService {
 		private projectRepository: Repository<ProjectEntity>,
 	) {}
 
-	async createLink(link: LinkEntity, projectId: number): Promise<Link> {
+	async createLink(link: LinkEntity, projectId: number, sendEmail = true): Promise<Link> {
 		const uniqueToken = uuidv4();
 		let expiryDate = new Date(link.expiry);
 		const currentDate = new Date();
@@ -34,10 +34,16 @@ export class LinkService {
 		const projectEntity = await this.projectRepository.findOne(projectId);
 		if (!projectEntity) throw new NotFoundException(`Could not find project with id ${projectId}`);
 		fullLink.project = projectEntity;
+    
+    const createdLink = await this.linkRepository.save(fullLink);
 
-		await this.emailService.sendInvitationEmail(fullLink);
-		return this.linkRepository.save(fullLink);
-	}
+		if (sendEmail) {
+			await this.emailService.sendInvitationEmail(createdLink);
+		}
+	
+		return createdLink;
+
+  }
 
 	async findLinkById(linkId: number): Promise<Link> {
 		const linkEntity = await this.linkRepository.findOne(linkId, {
@@ -89,5 +95,15 @@ export class LinkService {
 			return true;
 		}
 		return false;
+	}
+
+	async assignResourceToLink(linkId: number, resource: ResourceEntity): Promise<LinkEntity> {
+		const linkEntity = await this.linkRepository.findOne(linkId);
+		if (!linkEntity) {
+			throw new NotFoundException(`Could not find token with id ${linkId}`);
+		}
+		linkEntity.user = resource;
+
+		return this.linkRepository.save(linkEntity);
 	}
 }
