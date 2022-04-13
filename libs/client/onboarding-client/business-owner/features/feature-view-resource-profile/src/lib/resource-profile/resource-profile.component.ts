@@ -1,8 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { OnboardingClientResourceService } from '@tempus/client/onboarding-client/shared/data-access';
+import { Store } from '@ngrx/store';
+import {
+	OnboardingClientResourceService,
+	OnboardingClientState,
+	selectLoggedInUserNameEmail,
+} from '@tempus/client/onboarding-client/shared/data-access';
 import { UserType } from '@tempus/client/shared/ui-components/persistent';
 import { LoadView } from '@tempus/shared-domain';
+import { take } from 'rxjs';
 
 @Component({
 	selector: 'tempus-resource-profile',
@@ -10,13 +16,21 @@ import { LoadView } from '@tempus/shared-domain';
 	styleUrls: ['./resource-profile.component.scss'],
 })
 export class ResourceProfileComponent implements OnInit {
-	constructor(private route: ActivatedRoute, private resourceService: OnboardingClientResourceService) {}
+	constructor(
+		private route: ActivatedRoute,
+		private resourceService: OnboardingClientResourceService,
+		private sharedStore: Store<OnboardingClientState>,
+	) {}
 
 	userType = UserType;
 
-	firstName = '';
+	resourceFirstName = '';
 
-	lastName = '';
+	resourceLastName = '';
+
+	name = '';
+
+	email = '';
 
 	country = '';
 
@@ -24,7 +38,7 @@ export class ResourceProfileComponent implements OnInit {
 
 	city = '';
 
-	email = '';
+	resourceEmail = '';
 
 	phoneNumber = '';
 
@@ -40,20 +54,23 @@ export class ResourceProfileComponent implements OnInit {
 		this.viewIndex = viewIndex;
 	}
 
-	displayName() {
-		return `${this.firstName} ${this.lastName}`;
-	}
-
 	ngOnInit(): void {
 		const id = parseInt(this.route.snapshot.paramMap.get('id') || '0', 10);
 		this.resourceService.getResourceInformationById(id).subscribe(resourceInfo => {
-			this.firstName = resourceInfo.firstName;
-			this.lastName = resourceInfo.lastName;
+			this.resourceFirstName = resourceInfo.firstName;
+			this.resourceLastName = resourceInfo.lastName;
 			this.city = resourceInfo.location.city;
 			this.state = resourceInfo.location.province;
 			this.country = resourceInfo.location.country;
 			this.phoneNumber = resourceInfo.phoneNumber;
-			this.email = resourceInfo.email;
+			this.resourceEmail = resourceInfo.email;
 		});
+		this.sharedStore
+			.select(selectLoggedInUserNameEmail)
+			.pipe(take(1))
+			.subscribe(data => {
+				this.name = `${data.firstName} ${data.lastName}`;
+				this.email = data.email || '';
+			});
 	}
 }
