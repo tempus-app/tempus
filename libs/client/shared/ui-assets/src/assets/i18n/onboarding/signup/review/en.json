@@ -17,13 +17,13 @@
 			"successModal": {
 				"title": "Resource Created Successfully.",
 				"closeText": "CANCEL",
-				"confirmText": "CONFIRM",
-				"message": "Click CONFIRM to continue."
+				"confirmText": "LOGIN",
+				"message": "Click LOGIN to continue."
 			},
 			"errorModal": {
 				"title": "Error Creating Resource.",
 				"closeText": "CANCEL",
-				"confirmText": "OKAY",
+				"confirmText": "OK",
 				"message": "Please try again."
 			}
 		}
