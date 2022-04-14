@@ -60,7 +60,7 @@ export class LinkEntity implements Link {
 
 	@ManyToOne(() => ProjectEntity)
 	@JoinColumn()
-	project: ProjectEntity
+	project: ProjectEntity;
 
 	public static fromDto(dto: CreateLinkDto): LinkEntity {
 		if (dto == null) return new LinkEntity();

@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Logger, Module } from '@nestjs/common';
 import { ApiSharedEntityModule } from '@tempus/api/shared/entity';
 import { CoreModule } from '@tempus/api/shared/feature-core';
 import { AccountModule } from '@tempus/onboarding-api/feature-account';
@@ -14,7 +14,7 @@ import { UserSeederService } from './services/user.seeder.service';
  *  @module
  */
 @Module({
-	imports: [ApiSharedEntityModule, AccountModule, ProjectModule, CoreModule],
+	imports: [ApiSharedEntityModule, AccountModule, ProjectModule, CoreModule, Logger],
 	providers: [
 		ClientSeederService,
 		ProjectSeederService,

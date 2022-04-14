@@ -1,7 +1,7 @@
 import {MigrationInterface, QueryRunner} from "typeorm";
 
-export class Tempus1649855002713 implements MigrationInterface {
-    name = 'Tempus1649855002713'
+export class Tempus1649978239603 implements MigrationInterface {
+    name = 'Tempus1649978239603'
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query(`CREATE TYPE "public"."user_entity_roles_enum" AS ENUM('ASSIGNED_RESOURCE', 'AVAILABLE_RESOURCE', 'BUSINESS_OWNER', 'SUPERVISOR', 'USER')`);
@@ -20,7 +20,7 @@ export class Tempus1649855002713 implements MigrationInterface {
         await queryRunner.query(`CREATE TABLE "revision_entity" ("id" SERIAL NOT NULL, "createdAt" TIMESTAMP NOT NULL DEFAULT now(), "comment" character varying, "approved" boolean, "viewId" integer, "newViewId" integer, CONSTRAINT "REL_840ccd6b9cc6de8a1b468b57e5" UNIQUE ("viewId"), CONSTRAINT "REL_efc0aa4d3a4c4c318e9873eae8" UNIQUE ("newViewId"), CONSTRAINT "PK_fcbc51824a098242d79fb31e68d" PRIMARY KEY ("id"))`);
         await queryRunner.query(`CREATE TABLE "certification_entity" ("id" SERIAL NOT NULL, "title" character varying NOT NULL, "institution" character varying NOT NULL, "summary" character varying NOT NULL, "resourceId" integer, CONSTRAINT "PK_2629187ea339f87d46ee1539d3a" PRIMARY KEY ("id"))`);
         await queryRunner.query(`CREATE TABLE "project_entity" ("id" SERIAL NOT NULL, "name" character varying NOT NULL, "startDate" TIMESTAMP NOT NULL, "endDate" TIMESTAMP NOT NULL, "clientId" integer, CONSTRAINT "PK_7a75a94e01d0b50bff123db1b87" PRIMARY KEY ("id"))`);
-        await queryRunner.query(`CREATE TABLE "client_entity" ("id" SERIAL NOT NULL, "name" character varying NOT NULL, "title" character varying NOT NULL, "clientName" character varying NOT NULL, CONSTRAINT "PK_b730a3f25cd74d13a5cb68cbc59" PRIMARY KEY ("id"))`);
+        await queryRunner.query(`CREATE TABLE "client_entity" ("id" SERIAL NOT NULL, "clientName" character varying NOT NULL, CONSTRAINT "PK_b730a3f25cd74d13a5cb68cbc59" PRIMARY KEY ("id"))`);
         await queryRunner.query(`CREATE TABLE "task_entity" ("id" SERIAL NOT NULL, "taskName" character varying NOT NULL, CONSTRAINT "PK_0385ca690d1697cdf7ff1ed3c2f" PRIMARY KEY ("id"))`);
         await queryRunner.query(`CREATE TYPE "public"."link_entity_status_enum" AS ENUM('ACTIVE', 'INACTIVE', 'COMPLETED')`);
         await queryRunner.query(`CREATE TABLE "link_entity" ("id" SERIAL NOT NULL, "createdAt" TIMESTAMP NOT NULL DEFAULT now(), "firstName" character varying NOT NULL, "lastName" character varying NOT NULL, "email" character varying NOT NULL, "expiry" TIMESTAMP NOT NULL, "token" character varying NOT NULL, "status" "public"."link_entity_status_enum" NOT NULL DEFAULT 'ACTIVE', "userId" integer, "projectId" integer, CONSTRAINT "UQ_9457468f6bf7dbf40ee7d1e4214" UNIQUE ("email"), CONSTRAINT "UQ_efd2ce800d1e8b705c2de890fe9" UNIQUE ("token"), CONSTRAINT "REL_3fae39782976ac5f7b77e10286" UNIQUE ("userId"), CONSTRAINT "PK_af89bd9225033257aea716f2cc4" PRIMARY KEY ("id"))`);

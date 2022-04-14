@@ -57,13 +57,6 @@
 				"jestConfig": "apps/onboarding-api/jest.config.js",
 				"passWithNoTests": true
 			}
-		},
-		"build-migrations": {
-			"executor": "@nrwl/workspace:run-commands",
-			"options": {
-				"command": "tsc migrations/*.ts"
-			},
-			"outputPath": "migrations"
 		}
 	},
 	"tags": []

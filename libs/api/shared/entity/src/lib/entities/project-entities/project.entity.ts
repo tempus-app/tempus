@@ -1,10 +1,11 @@
 import { CreateProjectDto } from '@tempus/api/shared/dto';
 import { Project } from '@tempus/shared-domain';
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, ManyToMany } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, ManyToMany, Check } from 'typeorm';
 import { ResourceEntity } from '../account-entities';
 import { ClientEntity } from './client.entity';
 
 @Entity()
+@Check('"endDate" >= "startDate"')
 export class ProjectEntity implements Project {
 	constructor(
 		id?: number,
