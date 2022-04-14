@@ -18,7 +18,7 @@
 	<div mat-dialog-content>
 		<p class="mat-body-2">{{ data.message }}</p>
 	</div>
-	<div mat-dialog-actions fxLayout="column" fxLayoutAlign="end end">
+	<div mat-dialog-actions fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="end end">
 		<tempus-button
 			*ngIf="data.closable && data.closeText"
 			color="grey"
