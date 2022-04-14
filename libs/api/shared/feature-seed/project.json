@@ -1,0 +1,47 @@
+{
+	"root": "libs/api/shared/feature-seed",
+	"sourceRoot": "libs/api/shared/feature-seed/src",
+	"projectType": "library",
+	"targets": {
+		"lint": {
+			"executor": "@nrwl/linter:eslint",
+			"outputs": [
+				"{options.outputFile}"
+			],
+			"options": {
+				"lintFilePatterns": [
+					"libs/api/shared/feature-seed/**/*.ts"
+				]
+			}
+		},
+		"test": {
+			"executor": "@nrwl/jest:jest",
+			"outputs": [
+				"coverage/libs/api/shared/feature-seed"
+			],
+			"options": {
+				"jestConfig": "libs/api/shared/feature-seed/jest.config.js",
+				"passWithNoTests": true
+			}
+		},
+		"run": {
+			"executor": "@nrwl/workspace:run-commands",
+			"options": {
+				"commands": [
+					{
+						"command": "npm run ts-node-dev ./utils/database/seed.ts --",
+						"forwardAllArgs": true
+					}
+				]
+			}
+		},
+		"clear": {
+			"executor": "@nrwl/workspace:run-commands",
+			"options": {
+				"command": "npm run ts-node-dev ./utils/database/clear.ts"
+			},
+			"forwardAllArgs": true
+		}
+	},
+	"tags": []
+}

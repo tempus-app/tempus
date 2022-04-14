@@ -9,6 +9,7 @@
 		"api-shared-feature-core": "libs/api/shared/feature-core",
 		"api-shared-feature-email": "libs/api/shared/feature-email",
 		"api-shared-feature-pdfgenerator": "libs/api/shared/feature-pdfgenerator",
+		"api-shared-feature-seed": "libs/api/shared/feature-seed",
 		"client-onboarding-client-business-owner-features-feature-view-resource-profile": "libs/client/onboarding-client/business-owner/features/feature-view-resource-profile",
 		"client-shared-ui-assets": "libs/client/shared/ui-assets",
 		"client-shared-ui-components-input": "libs/client/shared/ui-components/input",

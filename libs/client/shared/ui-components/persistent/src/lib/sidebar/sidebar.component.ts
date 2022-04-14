@@ -28,7 +28,13 @@ export class SidebarComponent implements OnInit {
 	isVisible = true;
 
 	ngOnInit(): void {
-		this.setUserTabs();
+		this.translateService
+			.get(['sidenav'])
+			.pipe(take(1))
+			.subscribe(() => {
+				this.setUserTabs();
+				this.setPlaceholders();
+			});
 		this.getInitials(this.name);
 		this.isVisible = true;
 	}
@@ -37,15 +43,7 @@ export class SidebarComponent implements OnInit {
 		private translateService: TranslateService,
 		private store: Store<OnboardingClientState>,
 		private router: Router,
-	) {
-		translateService
-			.get(['sidenav.namePlaceholder', 'sidenav.emailPlaceholder', 'sidenav.logout'])
-			.pipe(take(1))
-			.subscribe(data => {
-				if (this.name === '') this.name = data['sidenav.namePlaceholder'];
-				if (this.email === '') this.email = data['sidenav.emailPlaceholder'];
-			});
-	}
+	) {}
 
 	setUserTabs() {
 		this.translateService
@@ -58,6 +56,16 @@ export class SidebarComponent implements OnInit {
 				} else if (this.userType === UserType.RESOURCE) {
 					this.tabs = [sidenavtabs.primaryView, sidenavtabs.myViews, sidenavtabs.myProjects];
 				}
+			});
+	}
+
+	setPlaceholders() {
+		this.translateService
+			.get(['sidenav.namePlaceholder', 'sidenav.emailPlaceholder', 'sidenav.logout'])
+			.pipe(take(1))
+			.subscribe(data => {
+				if (this.name === '') this.name = data['sidenav.namePlaceholder'];
+				if (this.email === '') this.email = data['sidenav.emailPlaceholder'];
 			});
 	}
 

@@ -13,6 +13,5 @@ export interface User {
 
 	refreshToken: string;
 
-	// TODO: Authroization
 	roles: RoleType[];
 }
