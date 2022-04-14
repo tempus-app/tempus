@@ -35,8 +35,9 @@ export class LinkService {
 		if (!projectEntity) throw new NotFoundException(`Could not find project with id ${projectId}`);
 		fullLink.project = projectEntity;
 
-		await this.emailService.sendInvitationEmail(fullLink);
-		return this.linkRepository.save(fullLink);
+		const createdEmail = await this.linkRepository.save(fullLink);
+		await this.emailService.sendInvitationEmail(createdEmail);
+		return createdEmail;
 	}
 
 	async findLinkById(linkId: number): Promise<Link> {
