@@ -56,4 +56,8 @@ For production; however, one would need to generate a migration file through Typ
 
 ## Seeding
 
-In order to seed the database with test data, a seeding script is used, please refer to [this file](./seed.md) for more details.
+In order to seed the database with test data, a seeding script is used, please refer to [this file](./database/seed.md) for more details.
+
+## Migrations
+
+To properly version and track the database, migrations are used. To learn more about migrations, refer to [this file](./database/migrations.md).
