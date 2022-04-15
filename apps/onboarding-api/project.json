@@ -57,6 +57,78 @@
 				"jestConfig": "apps/onboarding-api/jest.config.js",
 				"passWithNoTests": true
 			}
+		},
+		"migration-run": {
+			"executor": "@nrwl/workspace:run-commands",
+			"options": {
+				"commands": [
+					{
+						"command": "npx nx run onboarding-api:build --skip-nx-cache",
+						"forwardAllArgs": false
+					},
+					{
+						"command": "npm run typeorm:migration:run",
+						"forwardAllArgs": true
+					}
+				],
+				"parallel": false
+			}
+		},
+		"migration-generate": {
+			"executor": "@nrwl/workspace:run-commands",
+			"options": {
+				"commands": [
+					{
+						"command": "npm run typeorm:migration:generate --",
+						"forwardAllArgs": true
+					}
+				]
+			}
+		},
+		"migration-revert": {
+			"executor": "@nrwl/workspace:run-commands",
+			"options": {
+				"commands": [
+					{
+						"command": "npm run typeorm:migration:revert --",
+						"forwardAllArgs": true
+					}
+				]
+			}
+		},
+		"migration-create": {
+			"executor": "@nrwl/workspace:run-commands",
+			"options": {
+				"commands": [
+					{
+						"command": "npm run typeorm:migration:create --",
+						"forwardAllArgs": true
+					}
+				]
+			}
+		},
+		"seed": {
+			"executor": "@nrwl/workspace:run-commands",
+			"options": {
+				"commands": [
+					{
+						"command": "npx nx run onboarding-api:build --skip-nx-cache",
+						"forwardAllArgs": false
+					},
+					{
+						"command": "npm run ts-node-dev ./utils/database/seed.ts --",
+						"forwardAllArgs": true
+					}
+				],
+				"parallel": false
+			}
+		},
+		"clear-database": {
+			"executor": "@nrwl/workspace:run-commands",
+			"options": {
+				"command": "npm run ts-node-dev ./utils/database/clear.ts"
+			},
+			"forwardAllArgs": true
 		}
 	},
 	"tags": []

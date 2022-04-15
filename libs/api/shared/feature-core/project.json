@@ -17,17 +17,6 @@
 				"jestConfig": "libs/api/shared/feature-core/jest.config.js",
 				"passWithNoTests": true
 			}
-		},
-		"typeorm": {
-			"executor": "@nrwl/workspace:run-commands",
-			"options": {
-				"commands": [
-					{
-						"command": "npm run ts-node-dev ./utils/scripts/generate-ormconfig.ts",
-						"forwardAllArgs": true
-					}
-				]
-			}
 		}
 	},
 	"tags": []
