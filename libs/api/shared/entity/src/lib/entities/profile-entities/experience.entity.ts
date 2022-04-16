@@ -1,10 +1,11 @@
 import { CreateExperienceDto } from '@tempus/api/shared/dto';
 import { Experience } from '@tempus/shared-domain';
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToOne } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToOne, Check } from 'typeorm';
 import { ResourceEntity } from '../account-entities';
 import { LocationEntity } from '../common-entities';
 
 @Entity()
+@Check('"endDate" >= "startDate"')
 export class ExperienceEntity implements Experience {
 	constructor(
 		id?: number,

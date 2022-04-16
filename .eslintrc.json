@@ -1,6 +1,6 @@
 {
 	"root": true,
-	"ignorePatterns": ["!**/*"],
+	"ignorePatterns": ["!**/*", "migrations/*"],
 	"plugins": ["@nrwl/nx", "prettier"],
 	"parserOptions": {
 		"project": ["./tsconfig.*?.json"]

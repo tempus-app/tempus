@@ -6,12 +6,12 @@ The seeding service uses services in order to have better maintainence, as when 
 
 ## Running Seed Scripts
 
-Default: `npx nx run api-shared-feature-seed:run` or `npm run seed`
+Default: `npx nx run onboarding-api:seed` or `npm run seed`
 
 Running the seed script without options, will create 3 clients, 6 projects and 10 resources (half assigned, half unassigned)
 
 However, if you want to specifiy the number of values to create, you can specify the options as here:
-`npx nx run api-shared-feature-seed:run --clients=4 --projects=12 --resources=20`
+`npx nx run onboarding-api:seed --clients=4 --projects=12 --resources=20`
 
 This command will create 4 clients, 12 projects and 20 resources
 

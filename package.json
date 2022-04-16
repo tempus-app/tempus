@@ -18,7 +18,12 @@
 		"lint:check": "npx nx run-many --all --target=lint",
 		"lint:fix": "npx nx run-many --all --target=lint --fix",
 		"ts-node-dev": "TS_NODE_PROJECT=tsconfig.node.json ts-node-dev -r tsconfig-paths/register",
-		"seed": "npx nx run api-shared-feature-seed:run "
+		"typeorm": "npm run ts-node-dev ./node_modules/typeorm/cli.js --",
+		"typeorm:migration:generate": "npm run typeorm -- migration:generate --",
+		"typeorm:migration:run": "npm run typeorm -- migration:run",
+		"typeorm:migration:create": "npm run typeorm -- migration:create --",
+		"typeorm:migration:revert": "npm run typeorm -- migration:revert --",
+		"seed": "npx nx run api-shared-feature-seed:run"
 	},
 	"lint-staged": {
 		"*.{ts,js}": [
@@ -84,6 +89,7 @@
 		"reflect-metadata": "^0.1.13",
 		"rxjs": "~7.4.0",
 		"swagger-ui-express": "^4.3.0",
+		"ts-node-dev": "^1.1.8",
 		"tslib": "^2.0.0",
 		"typeorm": "^0.2.41",
 		"typescript": "~4.5.2",
@@ -141,7 +147,6 @@
 		"prettier": "^2.5.1",
 		"ts-jest": "27.0.5",
 		"ts-node": "^10.7.0",
-		"ts-node-dev": "^1.1.8",
 		"typescript": "~4.5.2"
 	}
 }

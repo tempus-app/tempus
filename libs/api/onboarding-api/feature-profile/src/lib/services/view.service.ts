@@ -9,6 +9,7 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { ApproveViewDto, CreateViewDto } from '@tempus/api/shared/dto';
 import { RevisionEntity, ViewEntity } from '@tempus/api/shared/entity';
+// eslint-disable-next-line @nrwl/nx/enforce-module-boundaries
 import { ResourceService } from '@tempus/onboarding-api/feature-account';
 import { Revision, RevisionType, RoleType, User, View, ViewType } from '@tempus/shared-domain';
 import { Repository } from 'typeorm';
