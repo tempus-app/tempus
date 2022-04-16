@@ -2,22 +2,21 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
-
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { OnboardingClientShellModule } from '@tempus/client/onboarding-client/shell';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { StoreRouterConnectingModule } from '@ngrx/router-store';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { RouterModule } from '@angular/router';
+import { APP_CONFIG } from '@tempus/app-config';
 import { environment } from '../environments/environment';
 import { AppComponent } from './app.component';
 import { NxWelcomeComponent } from './nx-welcome.component';
-import { RouterModule } from '@angular/router';
 
 // AoT requires an exported function for factories
 function createTranslateLoader(http: HttpClient) {
@@ -70,7 +69,7 @@ function createTranslateLoader(http: HttpClient) {
 			},
 		]),
 	],
-	providers: [],
+	providers: [{ provide: APP_CONFIG, useValue: environment }],
 	bootstrap: [AppComponent],
 })
 export class AppModule {}
