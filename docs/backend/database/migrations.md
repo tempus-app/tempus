@@ -1,6 +1,6 @@
 # Migrations
 
-In order to properly version our database, support for migrations has been added, this allows you to track the changes to the database, and revert if need be. Migrations has been supported through TypeORM, the ORM used for development in NestJs.
+In order to properly version our database, support for migrations has been added. This allows you to track the changes to the database, and revert if need be. Migrations has been supported through TypeORM, the ORM used for development in NestJs.
 
 ## Steps to Running Migrations
 
@@ -28,11 +28,11 @@ export class <Migration Name><TimeStamp> implements MigrationInterface {
 
 ```
 
-You must know fill out the up method (when migration is run) and the down method (if migration is reverted) manually.
+You must now fill out the up method (when migration is run) and the down method (if migration is reverted) manually.
 
 ## Running a Migration File
 
-The database configurations have been set to run the migrations on build, so this step would be auto run when the api starts to run. However, if you would like to run the migration file separetly run, `npx nx run onboarding-api:migration-run`. This will build the migrations onto the dist/ folder, and then run the migration and update the database (below is a CLI result of a successful migration run).
+The database configurations have been set to run the migrations on build, so this step would be auto run when the api starts to run. However, if you would like to run the migration file separately run, `npx nx run onboarding-api:migration-run`. This will build the migrations onto the dist/ folder, and then run the migration and update the database (below is a CLI result of a successful migration run).
 
 ```
 query: SELECT * FROM current_schema()
