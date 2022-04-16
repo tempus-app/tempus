@@ -1,7 +1,8 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Client, Project } from '@tempus/shared-domain';
+import { APP_CONFIG } from '@tempus/app-config';
+import { AppConfig, Client, Project } from '@tempus/shared-domain';
 import { catchError, Observable, switchMap, take } from 'rxjs';
 import { OnboardingClientState, selectAccessToken } from '../+state';
 import { handleError } from './errorHandler';
@@ -9,11 +10,15 @@ import { getAuthHeaders } from './service.common';
 
 @Injectable({ providedIn: 'root' })
 export class OnboardingClientProjectService {
-	constructor(private http: HttpClient, private authStore: Store<OnboardingClientState>) {}
+	constructor(
+		private http: HttpClient,
+		private authStore: Store<OnboardingClientState>,
+		@Inject(APP_CONFIG) private appConfig: AppConfig,
+	) {}
 
-	clientURL = 'http://localhost:3000/onboarding/client';
+	clientURL = `${this.appConfig.apiUrl}/onboarding/client`;
 
-	projectURL = 'http://localhost:3000/onboarding/project';
+	projectURL = `${this.appConfig.apiUrl}/onboarding/project`;
 
 	public getClients(): Observable<Client[]> {
 		return this.authStore.select(selectAccessToken).pipe(

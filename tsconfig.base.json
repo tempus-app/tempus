@@ -90,7 +90,8 @@
 				"libs/client/onboarding-client/signup/features/feature-upload-resume/src/index.ts"
 			],
 			"@tempus/onboarding-client/signup/shell": ["libs/client/onboarding-client/signup/shell/src/index.ts"],
-			"@tempus/shared-domain": ["libs/shared/domain/src/index.ts"]
+			"@tempus/shared-domain": ["libs/shared/domain/src/index.ts"],
+			"@tempus/app-config": ["libs/app-config/index.ts"]
 		}
 	},
 	"exclude": ["node_modules", "tmp"]
