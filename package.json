@@ -8,7 +8,7 @@
 		"start:onboarding-api": "nx serve onboarding-api",
 		"start:client": "nx serve onboarding-client",
 		"start:onboarding-api:prod": "node ./dist/apps/onboarding-api/main.js",
-		"build:client:prod": "nx run onboarding-client:build:production",
+		"build:client:prod": "nx run onboarding-client:build:production --outputPath dist/apps/onboarding-api/onboarding-client/",
 		"build:onboarding-api": "nx build onboarding-api --production",
 		"test": "npx nx run-many --all --target=test",
 		"test:api:unit": "npx jest  --testPathPattern='./libs/api' --verbose --collectCoverage",
