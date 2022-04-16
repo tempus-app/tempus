@@ -1,8 +1,10 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { ApproveViewDto } from '@tempus/api/shared/dto';
+import { APP_CONFIG } from '@tempus/app-config';
 import {
+	AppConfig,
 	ICreateResourceDto,
 	ICreateViewDto,
 	IUserProjClientDto,
@@ -17,9 +19,13 @@ import { getAuthHeaders } from './service.common';
 
 @Injectable({ providedIn: 'root' })
 export class OnboardingClientResourceService {
-	constructor(private http: HttpClient, private authStore: Store<OnboardingClientState>) {}
+	constructor(
+		private http: HttpClient,
+		private authStore: Store<OnboardingClientState>,
+		@Inject(APP_CONFIG) private appConfig: AppConfig,
+	) {}
 
-	url = 'http://localhost:3000/onboarding/user';
+	url = `${this.appConfig.apiUrl}/onboarding`;
 
 	public createResource(createResourceDto: ICreateResourceDto): Observable<Resource> {
 		return this.http.post<Resource>(`${this.url}/resource`, createResourceDto);
@@ -30,7 +36,9 @@ export class OnboardingClientResourceService {
 			take(1),
 			switchMap((token: string | null) => {
 				const httpAuthHeaders = getAuthHeaders(token || '');
-				return this.http.get<IUserProjClientDto[]>(`${this.url}/basic`, httpAuthHeaders).pipe(catchError(handleError));
+				return this.http
+					.get<IUserProjClientDto[]>(`${this.url}/user/basic`, httpAuthHeaders)
+					.pipe(catchError(handleError));
 			}),
 		);
 	}
@@ -40,9 +48,7 @@ export class OnboardingClientResourceService {
 			take(1),
 			switchMap((token: string | null) => {
 				const httpAuthHeaders = getAuthHeaders(token || '');
-				return this.http
-					.get<Resource>(`http://localhost:3000/onboarding/user/user`, httpAuthHeaders)
-					.pipe(catchError(handleError));
+				return this.http.get<Resource>(`${this.url}/user/user`, httpAuthHeaders).pipe(catchError(handleError));
 			}),
 		);
 	}
@@ -52,9 +58,7 @@ export class OnboardingClientResourceService {
 			take(1),
 			switchMap((token: string | null) => {
 				const httpAuthHeaders = getAuthHeaders(token || '');
-				return this.http
-					.get<Resource>(`http://localhost:3000/onboarding/user/${resourceId}`, httpAuthHeaders)
-					.pipe(catchError(handleError));
+				return this.http.get<Resource>(`${this.url}/user/${resourceId}`, httpAuthHeaders).pipe(catchError(handleError));
 			}),
 		);
 	}
@@ -65,7 +69,7 @@ export class OnboardingClientResourceService {
 			switchMap((token: string | null) => {
 				const httpAuthHeaders = getAuthHeaders(token || '');
 				return this.http
-					.get<View>(`http://localhost:3000/onboarding/profile-view/view/${viewId}`, httpAuthHeaders)
+					.get<View>(`${this.url}/profile-view/view/${viewId}`, httpAuthHeaders)
 					.pipe(catchError(handleError));
 			}),
 		);
@@ -97,7 +101,7 @@ export class OnboardingClientResourceService {
 			switchMap((token: string | null) => {
 				const httpAuthHeaders = getAuthHeaders(token || '');
 				return this.http
-					.get<Array<View>>(`http://localhost:3000/onboarding/profile-view/${resourceId}`, httpAuthHeaders)
+					.get<Array<View>>(`${this.url}/profile-view/${resourceId}`, httpAuthHeaders)
 					.pipe(catchError(handleError));
 			}),
 		);
@@ -109,7 +113,7 @@ export class OnboardingClientResourceService {
 			switchMap((token: string | null) => {
 				const httpAuthHeaders = getAuthHeaders(token || '');
 				return this.http
-					.patch<Revision>(`http://localhost:3000/onboarding/profile-view/${viewId}`, newView, httpAuthHeaders)
+					.patch<Revision>(`${this.url}/profile-view/${viewId}`, newView, httpAuthHeaders)
 					.pipe(catchError(handleError));
 			}),
 		);
@@ -125,7 +129,7 @@ export class OnboardingClientResourceService {
 						Authorization: `Bearer ${resData}`,
 					}),
 				};
-				return this.http.get<Blob>(`http://localhost:3000/onboarding/profile-view/download-resume/${id}`, httpOptions);
+				return this.http.get<Blob>(`${this.url}/profile-view/download-resume/${id}`, httpOptions);
 			}),
 		);
 	}
@@ -136,11 +140,7 @@ export class OnboardingClientResourceService {
 			switchMap(token => {
 				const httpAuthHeaders = getAuthHeaders(token || '');
 				return this.http
-					.post<ApproveViewDto>(
-						`http://localhost:3000/onboarding/profile-view/approve/${id}`,
-						{ comment, approval },
-						httpAuthHeaders,
-					)
+					.post<ApproveViewDto>(`${this.url}/profile-view/approve/${id}`, { comment, approval }, httpAuthHeaders)
 					.pipe(catchError(handleError));
 			}),
 		);

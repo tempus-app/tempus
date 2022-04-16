@@ -1,16 +1,17 @@
 /* eslint-disable class-methods-use-this */
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { AuthDto } from '@tempus/shared-domain';
+import { Inject, Injectable } from '@angular/core';
+import { AppConfig, AuthDto } from '@tempus/shared-domain';
 import { catchError, Observable, tap } from 'rxjs';
+import { APP_CONFIG } from '@tempus/app-config';
 import { SessionStorageKey } from '../enum';
 import { handleError } from './errorHandler';
 
 @Injectable({ providedIn: 'root' })
 export class OnboardingClientAuthService {
-	constructor(private http: HttpClient) {}
+	constructor(private http: HttpClient, @Inject(APP_CONFIG) private appConfig: AppConfig) {}
 
-	url = 'http://localhost:3000/onboarding/auth';
+	url = `${this.appConfig.apiUrl}/onboarding/auth`;
 
 	public login(password: string, email: string): Observable<AuthDto> {
 		return this.http.post<AuthDto>(`${this.url}/login`, { password, email }).pipe(
