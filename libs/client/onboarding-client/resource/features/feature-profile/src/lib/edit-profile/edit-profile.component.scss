@@ -2,25 +2,35 @@
 @use 'components/helper' as cmp;
 
 #page-container {
-	margin: 2% 4%;
-	border: 2px dashed abs.$primary-300;
+	margin: 2% auto;
+	align-items: center;
+	border: 1px dashed abs.$primary-300;
 	background-color: #fcfeff;
 	border-radius: 10px;
+	width: 90%;
 }
+
 #title-container {
-	@include cmp.info-title(90%, 0);
-	margin: 2% 0em;
-	align-self: center;
+	@include cmp.info-title(95%, 0);
+	margin: 2em 0em;
 }
 
-#user-bar {
-	margin: 0% 5% 2% 5%;
+#my-profile-container {
+	display: flex;
+	flex-direction: row;
+	gap: 1em;
 }
 
-#view-name {
-	height: 1em;
+#button-container {
+	display: flex;
+	flex-direction: row;
+	gap: 0.5em;
+	height: 100% !important;
 }
 
+.section-container {
+	width: 100%;
+}
 
 tempus-button {
 	height: 2em;
@@ -29,4 +39,3 @@ tempus-button {
 .page-title {
 	color: abs.$primary-800;
 }
-

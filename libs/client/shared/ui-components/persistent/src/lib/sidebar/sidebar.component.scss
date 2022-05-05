@@ -20,10 +20,16 @@
 	background-color: white;
 }
 
+.mat-drawer-content {
+	overflow-y: auto;
+	overflow-x: hidden;
+}
+
 mat-sidenav {
 	background: abs.$primary-200;
 	width: 15em;
 	box-shadow: 1px 1px 3px 1px rgba(0, 0, 0, 0.05);
+	overflow: hidden;
 }
 
 mat-button-toggle-group {
