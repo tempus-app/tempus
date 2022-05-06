@@ -1,62 +1,116 @@
 <ng-container>
 	<div id="page-container" fxLayout="column" fxLayoutGap="20px">
-		<div id="title-container">
-			<div id="my-profile-container" fxFlex="50">
+		<div id="title-container" fxLayout="row" fxLayoutGap="0.5em">
+			<div id="my-profile-container" fxFlex>
 				<h2 class="mat-h2 page-title">Primary View</h2>
 			</div>
+			<mat-slide-toggle (change)="togglePreview()">Preview</mat-slide-toggle>
 			<div id="button-container">
-				<tempus-button label="Cancel" color="accent" (buttonClick)="closeEditView()"></tempus-button>
-				<tempus-button label="Preview" color="accent"></tempus-button>
+				<tempus-button 
+					label="Cancel"
+					color="accent"
+					(buttonClick)="closeEditView()"
+					matTooltip="Discard changes"
+					matTooltipClass="tooltip"
+				></tempus-button>
+				
 				<tempus-button
 					[disabled]="!isValid"
 					label="Submit"
 					color="accent"
 					(buttonClick)="submitChanges()"
+					matTooltip="Submit changes for approval"
+					matTooltipClass="tooltip"
 				></tempus-button>
 			</div>
 		</div>
-		<div fxFlex class="section-container">
-			<tempus-resource-info-personal-information
-				(formGroup)="loadPersonalInfo($event)"
-				[firstName]="firstName"
-				[lastName]="lastName"
-				[phoneNumber]="phoneNumber"
-				[country]="country"
-				[state]="state"
-				[city]="city"
-				[linkedInLink]="linkedInLink"
-				[githubLink]="githubLink"
-				[otherLink]="otherLink"
-				[profileSummary]="profileSummary"
-			></tempus-resource-info-personal-information>
+		<div class="view-container" *ngIf="!previewViewEnabled" fxLayout="column" fxLayoutGap="20px">
+			<div fxFlex class="section-container">
+				<tempus-resource-info-personal-information
+					(formGroup)="loadPersonalInfo($event)"
+					[firstName]="firstName"
+					[lastName]="lastName"
+					[phoneNumber]="phoneNumber"
+					[country]="country"
+					[state]="state"
+					[city]="city"
+					[linkedInLink]="linkedInLink"
+					[githubLink]="githubLink"
+					[otherLink]="otherLink"
+					[profileSummary]="profileSummary"
+				></tempus-resource-info-personal-information>
+			</div>
+			<div fxFlex class="section-container">
+				<tempus-resource-info-education
+					(formGroup)="loadEducation($event)"
+					[educationSummary]="educationsSummary"
+					[educations]="educations"
+				></tempus-resource-info-education>
+			</div>
+			<div fxFlex class="section-container">
+				<tempus-resource-info-certifications
+					(formGroup)="loadCertifications($event)"
+					[certificationsArray]="certifications"
+				></tempus-resource-info-certifications>
+			</div>
+			<div fxFlex class="section-container">
+				<tempus-resource-info-work-experience
+					(formGroup)="loadExperiences($event)"
+					[experiencesSummary]="experiencesSummary"
+					[workExperiences]="workExperiences"
+				></tempus-resource-info-work-experience>
+			</div>
+			<div fxFlex class="section-container">
+				<tempus-resource-info-skills
+					(formGroup)="loadSkillsSummary($event)"
+					(emitSkills)="loadSkills($event)"
+					[skillsSummary]="skillsSummary"
+					[skills]="skills"
+				></tempus-resource-info-skills>
+			</div>
 		</div>
-		<div fxFlex class="section-container">
-			<tempus-resource-info-education
-				(formGroup)="loadEducation($event)"
-				[educationSummary]="educationsSummary"
-				[educations]="educations"
-			></tempus-resource-info-education>
-		</div>
-		<div fxFlex class="section-container">
-			<tempus-resource-info-certifications
-				(formGroup)="loadCertifications($event)"
-				[certificationsArray]="certifications"
-			></tempus-resource-info-certifications>
-		</div>
-		<div fxFlex class="section-container">
-			<tempus-resource-info-work-experience
-				(formGroup)="loadExperiences($event)"
-				[experiencesSummary]="experiencesSummary"
-				[workExperiences]="workExperiences"
-			></tempus-resource-info-work-experience>
-		</div>
-		<div fxFlex class="section-container">
-			<tempus-resource-info-skills
-				(formGroup)="loadSkillsSummary($event)"
-				(emitSkills)="loadSkills($event)"
-				[skillsSummary]="skillsSummary"
-				[skills]="skills"
-			></tempus-resource-info-skills>
+		<div class="view-container" *ngIf="previewViewEnabled" fxFlex fxLayout="column" fxLayoutGap="20px">
+			<div class="preview-section-container">
+				<tempus-resource-display-personal-information
+					[firstName]="firstName"
+					[lastName]="lastName"
+					[country]="country"
+					[state]="state"
+					[city]="city"
+					[phoneNumber]="phoneNumber"
+					[linkedInLink]="linkedInLink"
+					[githubLink]="githubLink"
+					[otherLink]="otherLink"
+					[profileSummary]="profileSummary"
+				></tempus-resource-display-personal-information>
+			</div>
+			<div class="preview-section-container">
+				<h2 class="mat-h2 section-title">Education</h2>
+				<tempus-resource-display-education
+					[educationsSummary]="educationsSummary"
+					[educations]="educations"
+				></tempus-resource-display-education>
+			</div>
+			<div class="preview-section-container">
+				<div class="mat-h2 section-title">Certifications</div>
+				<tempus-resource-display-certifications
+					[certifications]="certifications"
+				></tempus-resource-display-certifications>
+			</div>
+			<div class="preview-section-container">
+				<h2 class="mat-h2 section-title">Work Experience</h2>
+				<tempus-resource-display-work-experience
+					[experiencesSummary]="experiencesSummary"
+					[workExperiences]="workExperiences"
+				></tempus-resource-display-work-experience>
+			</div>
+			<div class="preview-section-container">
+				<h2 class="mat-h2 section-title">Skills</h2>
+				<tempus-resource-display-skills
+					[skills]="skills"
+					[skillsSummary]="skillsSummary"
+				></tempus-resource-display-skills>
+			</div>
 		</div>
 	</div>
 </ng-container>

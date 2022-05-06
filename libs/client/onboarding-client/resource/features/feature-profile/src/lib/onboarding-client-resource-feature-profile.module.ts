@@ -5,6 +5,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { ClientSharedUiComponentsPersistentModule } from '@tempus/client/shared/ui-components/persistent';
 import { ClientSharedUiComponentsPresentationalModule } from '@tempus/client/shared/ui-components/presentational';
 import { ClientSharedUiComponentsInputModule } from '@tempus/client/shared/ui-components/input';
@@ -18,6 +19,7 @@ import { ProfileComponent } from './profile/profile.component';
 		CommonModule,
 		MatIconModule,
 		MatTooltipModule,
+		MatSlideToggleModule,
 		FlexLayoutModule,
 		MatFormFieldModule,
 		ClientSharedUiComponentsPersistentModule,

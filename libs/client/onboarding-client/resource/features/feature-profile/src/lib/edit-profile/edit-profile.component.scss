@@ -15,12 +15,6 @@
 	margin: 2em 0em;
 }
 
-#my-profile-container {
-	display: flex;
-	flex-direction: row;
-	gap: 1em;
-}
-
 #button-container {
 	display: flex;
 	flex-direction: row;
@@ -28,8 +22,30 @@
 	height: 100% !important;
 }
 
+::ng-deep {
+	.mat-slide-toggle {
+		transform: scale(1.5);
+		padding: 0% 2% 0% 0%;
+		vertical-align: middle;
+	}
+	.mat-slide-toggle-content {
+		@include abs.h3(16px);
+	}
+}
+
 .section-container {
 	width: 100%;
+}
+
+.view-container {
+	width: 100%;
+	align-items: center;
+	padding-bottom: 2%;
+}
+
+.preview-section-container {
+	width: 95%; 
+	padding: 1em;
 }
 
 tempus-button {

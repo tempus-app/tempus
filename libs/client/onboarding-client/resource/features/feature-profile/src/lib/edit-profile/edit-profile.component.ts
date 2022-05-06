@@ -45,6 +45,8 @@ export class EditProfileComponent implements AfterViewInit, OnDestroy {
 
 	isValid = true;
 
+	previewViewEnabled = false;
+
 	@Input() firstName = '';
 
 	@Input() lastName = '';
@@ -99,6 +101,22 @@ export class EditProfileComponent implements AfterViewInit, OnDestroy {
 
 	closeEditView() {
 		this.closeEditViewClicked.emit('close');
+	}
+
+	togglePreview() {
+		this.previewViewEnabled = !this.previewViewEnabled;
+
+		// display form values
+		const editedForms = this.generateNewView();
+
+		this.profileSummary = editedForms.profileSummary;
+		this.educationsSummary = editedForms.educationsSummary;
+		this.experiencesSummary = editedForms.experiencesSummary;
+		this.workExperiences = editedForms.experiences;
+		this.educations = editedForms.educations;
+		this.certifications = editedForms.certifications;
+		this.skillsSummary = editedForms.skillsSummary;
+		this.skills = editedForms.skills.map(skill => skill.skill.name);
 	}
 
 	ngAfterViewInit(): void {
