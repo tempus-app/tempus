@@ -18,6 +18,7 @@ import {
 	ICreateSkillDto,
 	ICreateSkillTypeDto,
 } from '@tempus/shared-domain';
+import { ModalService, CustomModalType, ModalType } from '@tempus/client/shared/ui-components/modal';
 
 @Component({
 	selector: 'tempus-edit-profile',
@@ -27,6 +28,7 @@ import {
 export class EditProfileComponent implements AfterViewInit, OnDestroy {
 	constructor(
 		private fb: FormBuilder,
+		public modalService: ModalService,
 		private resourceService: OnboardingClientResourceService,
 		private changeDetector: ChangeDetectorRef,
 	) {}
@@ -221,6 +223,30 @@ export class EditProfileComponent implements AfterViewInit, OnDestroy {
 		} as ICreateViewDto;
 	}
 
+	checkFormValidity(eventData: boolean) {
+		this.isValid = eventData;
+	}
+
+	openSubmitConfirmation() {
+		this.modalService.open(
+			{
+				title: 'Submit for review',
+				closeText: 'Cancel',
+				confirmText: 'Submit',
+				message: 'yup',
+				closable: true,
+				id: 'submit',
+				modalType: ModalType.WARNING,
+			},
+			CustomModalType.INFO,
+		);
+
+		this.modalService.confirmEventSubject.subscribe(() => {
+			this.modalService.close();
+			this.modalService.confirmEventSubject.unsubscribe();
+		});
+	}
+
 	submitChanges() {
 		this.educationsForm?.markAllAsTouched();
 		this.personalInfoForm?.markAllAsTouched();
@@ -228,15 +254,28 @@ export class EditProfileComponent implements AfterViewInit, OnDestroy {
 		this.skillsSummaryForm?.markAllAsTouched();
 		this.certificationsForm?.markAllAsTouched();
 
+		this.openSubmitConfirmation();
+
+		// this.isValid = this.experiencesFormIsValid;
+		this.isValid =
+			this.personalInfoForm?.valid &&
+			this.educationsForm?.valid &&
+			this.certificationsForm?.valid &&
+			this.experiencesForm?.valid &&
+			this.skillsSummaryForm?.value;
+
+		console.log(this.experiencesForm?.valid);
+		console.log(this.experiencesForm);
+
 		// TODO: disable submit button
 		// TODO: disable non view related fields (i.e name, address etc)
 		// should be extracted from personal-info component?
 		// this.isValid = this.personalInfoForm?.valid && this.personalInfoForm?.valid && this.certificationsForm?.valid && this.experiencesForm?.valid
 		// && this.skillsSummaryForm?.valid;
 
-		if (this.isValid) {
-			this.submitClicked.emit(this.generateNewView());
-			this.closeEditView();
-		}
+		// if (this.isValid) {
+		// 	this.submitClicked.emit(this.generateNewView());
+		// 	this.closeEditView();
+		// }
 	}
 }
