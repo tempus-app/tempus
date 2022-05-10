@@ -15,7 +15,11 @@
 				></tempus-button>
 				
 				<tempus-button
-					[disabled]="!isValid"
+				    [disabled]="!personalInfoForm.valid || 
+					!experiencesForm.valid ||
+					!educationsForm.valid ||
+					!certificationsForm.valid ||
+					!skillsSummaryForm.valid"
 					label="Submit"
 					color="accent"
 					(buttonClick)="submitChanges()"

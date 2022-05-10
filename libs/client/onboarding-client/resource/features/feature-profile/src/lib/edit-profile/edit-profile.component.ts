@@ -1,10 +1,5 @@
 import { AfterViewInit, ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Store } from '@ngrx/store';
-import {
-	OnboardingClientResourceService,
-	OnboardingClientState,
-} from '@tempus/client/onboarding-client/shared/data-access';
+import { OnboardingClientResourceService } from '@tempus/client/onboarding-client/shared/data-access';
 import { Subject } from 'rxjs';
 import { ButtonType } from '@tempus/client/shared/ui-components/presentational';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
@@ -44,8 +39,6 @@ export class EditProfileComponent implements AfterViewInit, OnDestroy {
 	skillsSummaryForm = this.fb.group({});
 
 	newSkills: string[] = [];
-
-	isValid = true;
 
 	previewViewEnabled = false;
 
@@ -223,17 +216,13 @@ export class EditProfileComponent implements AfterViewInit, OnDestroy {
 		} as ICreateViewDto;
 	}
 
-	checkFormValidity(eventData: boolean) {
-		this.isValid = eventData;
-	}
-
 	openSubmitConfirmation() {
 		this.modalService.open(
 			{
-				title: 'Submit for review',
+				title: 'Submit changes?',
 				closeText: 'Cancel',
 				confirmText: 'Submit',
-				message: 'yup',
+				message: 'Your changes to this view will be sent to CAL for approval.',
 				closable: true,
 				id: 'submit',
 				modalType: ModalType.WARNING,
@@ -242,6 +231,8 @@ export class EditProfileComponent implements AfterViewInit, OnDestroy {
 		);
 
 		this.modalService.confirmEventSubject.subscribe(() => {
+			this.submitClicked.emit(this.generateNewView());
+			this.closeEditView();
 			this.modalService.close();
 			this.modalService.confirmEventSubject.unsubscribe();
 		});
@@ -254,28 +245,15 @@ export class EditProfileComponent implements AfterViewInit, OnDestroy {
 		this.skillsSummaryForm?.markAllAsTouched();
 		this.certificationsForm?.markAllAsTouched();
 
-		this.openSubmitConfirmation();
-
-		// this.isValid = this.experiencesFormIsValid;
-		this.isValid =
+		const isValid =
 			this.personalInfoForm?.valid &&
 			this.educationsForm?.valid &&
 			this.certificationsForm?.valid &&
 			this.experiencesForm?.valid &&
 			this.skillsSummaryForm?.value;
 
-		console.log(this.experiencesForm?.valid);
-		console.log(this.experiencesForm);
-
-		// TODO: disable submit button
-		// TODO: disable non view related fields (i.e name, address etc)
-		// should be extracted from personal-info component?
-		// this.isValid = this.personalInfoForm?.valid && this.personalInfoForm?.valid && this.certificationsForm?.valid && this.experiencesForm?.valid
-		// && this.skillsSummaryForm?.valid;
-
-		// if (this.isValid) {
-		// 	this.submitClicked.emit(this.generateNewView());
-		// 	this.closeEditView();
-		// }
+		if (isValid) {
+			this.openSubmitConfirmation();
+		}
 	}
 }
