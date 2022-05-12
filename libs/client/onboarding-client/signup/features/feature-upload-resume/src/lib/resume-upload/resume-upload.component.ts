@@ -85,17 +85,17 @@ export class ResumeUploadComponent implements OnInit {
 	}
 
 	async onUpload(file: File, makeRequest: boolean) {
-		if (makeRequest) {
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any
-			(await this.parseFile(file)).subscribe((event: any) => {
-				if (typeof event === 'object') {
-					this.createUserDetails(JSON.parse(event.body));
-					this.createWorkDetails(JSON.parse(event.body));
-					this.createTrainingandSkilsDetails(JSON.parse(event.body));
-					this.resumeParsed = true;
-				}
-			});
-		}
+		// if (makeRequest) {
+		// 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		// 	(await this.parseFile(file)).subscribe((event: any) => {
+		// 		if (typeof event === 'object') {
+		// 			this.createUserDetails(JSON.parse(event.body));
+		// 			this.createWorkDetails(JSON.parse(event.body));
+		// 			this.createTrainingandSkilsDetails(JSON.parse(event.body));
+		// 			this.resumeParsed = true;
+		// 		}
+		// 	});
+		// }
 		this.fileData.patchValue(file);
 		this.fileData.markAsDirty();
 		this.fileUploaded = true;

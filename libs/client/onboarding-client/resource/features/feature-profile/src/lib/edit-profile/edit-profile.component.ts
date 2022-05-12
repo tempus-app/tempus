@@ -1,6 +1,6 @@
 import { AfterViewInit, ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
 import { OnboardingClientResourceService } from '@tempus/client/onboarding-client/shared/data-access';
-import { Subject } from 'rxjs';
+import { Subject, take } from 'rxjs';
 import { ButtonType } from '@tempus/client/shared/ui-components/presentational';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import {
@@ -13,6 +13,7 @@ import {
 	ICreateSkillDto,
 	ICreateSkillTypeDto,
 } from '@tempus/shared-domain';
+import { TranslateService } from '@ngx-translate/core';
 import { ModalService, CustomModalType, ModalType } from '@tempus/client/shared/ui-components/modal';
 
 @Component({
@@ -26,7 +27,13 @@ export class EditProfileComponent implements AfterViewInit, OnDestroy {
 		public modalService: ModalService,
 		private resourceService: OnboardingClientResourceService,
 		private changeDetector: ChangeDetectorRef,
-	) {}
+		private translateService: TranslateService,
+	) {
+		const { currentLang } = translateService;
+		// eslint-disable-next-line no-param-reassign
+		translateService.currentLang = '';
+		translateService.use(currentLang);
+	}
 
 	personalInfoForm = this.fb.group({});
 
@@ -39,6 +46,8 @@ export class EditProfileComponent implements AfterViewInit, OnDestroy {
 	skillsSummaryForm = this.fb.group({});
 
 	newSkills: string[] = [];
+
+	email = '';
 
 	previewViewEnabled = false;
 
@@ -89,6 +98,8 @@ export class EditProfileComponent implements AfterViewInit, OnDestroy {
 	@Output()
 	submitClicked = new EventEmitter();
 
+	editProfilePrefix = 'onboardingResourceEditProfile.';
+
 	ngOnDestroy(): void {
 		this.destroyed$.next();
 		this.destroyed$.complete();
@@ -116,6 +127,10 @@ export class EditProfileComponent implements AfterViewInit, OnDestroy {
 
 	ngAfterViewInit(): void {
 		this.changeDetector.detectChanges();
+
+		this.resourceService.getResourceInformation().subscribe(resData => {
+			this.email = resData.email;
+		});
 	}
 
 	loadPersonalInfo(eventData: FormGroup) {
@@ -217,18 +232,24 @@ export class EditProfileComponent implements AfterViewInit, OnDestroy {
 	}
 
 	openSubmitConfirmation() {
-		this.modalService.open(
-			{
-				title: 'Submit changes?',
-				closeText: 'Cancel',
-				confirmText: 'Submit',
-				message: 'Your changes to this view will be sent to CAL for approval.',
-				closable: true,
-				id: 'submit',
-				modalType: ModalType.WARNING,
-			},
-			CustomModalType.INFO,
-		);
+		this.translateService
+			.get([`onboardingClientSignupReview.modal.submitModal`])
+			.pipe(take(1))
+			.subscribe(data => {
+				const dialogText = data[`onboardingClientSignupReview.modal.submitModal`];
+				this.modalService.open(
+					{
+						title: dialogText.title,
+						closeText: dialogText.closeText,
+						confirmText: dialogText.confirmText,
+						message: dialogText.message,
+						closable: true,
+						id: 'submit',
+						modalType: ModalType.WARNING,
+					},
+					CustomModalType.INFO,
+				);
+			});
 
 		this.modalService.confirmEventSubject.subscribe(() => {
 			this.submitClicked.emit(this.generateNewView());

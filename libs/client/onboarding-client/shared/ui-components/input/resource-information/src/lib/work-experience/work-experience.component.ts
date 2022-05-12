@@ -3,7 +3,7 @@ import { Country, State } from 'country-state-city';
 import { InputType } from '@tempus/client/shared/ui-components/input';
 import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ICreateExperienceDto } from '@tempus/shared-domain';
-import { checkEnteredDates } from '@tempus/client/shared/util';
+import { formatDateToISO, checkEnteredDates } from '@tempus/client/shared/util';
 
 @Component({
 	selector: 'tempus-resource-info-work-experience',
@@ -53,8 +53,8 @@ export class WorkExperienceComponent implements OnInit {
 			workExperience: this.workExperiences,
 		});
 
-		// mock sections, add to FormArray, patch		
-		for (let i=0; i<this.workExperiences.length; i++){
+		// mock sections, add to FormArray, patch
+		for (let i = 0; i < this.workExperiences.length; i++) {
 			const workExperience = this.fb.group(
 				{
 					title: ['', Validators.required],
@@ -70,14 +70,20 @@ export class WorkExperienceComponent implements OnInit {
 			);
 			this.totalWorkExperience.push(workExperience);
 
-			//patch values
+			// patch values
 			(this.totalWorkExperience.at(i) as FormGroup).get('title')?.patchValue(this.workExperiences[i].title);
 			(this.totalWorkExperience.at(i) as FormGroup).get('company')?.patchValue(this.workExperiences[i].company);
-			(this.totalWorkExperience.at(i) as FormGroup).get('country')?.patchValue(this.workExperiences[i].location.country);
+			(this.totalWorkExperience.at(i) as FormGroup)
+				.get('country')
+				?.patchValue(this.workExperiences[i].location.country);
 			(this.totalWorkExperience.at(i) as FormGroup).get('state')?.patchValue(this.workExperiences[i].location.province);
 			(this.totalWorkExperience.at(i) as FormGroup).get('city')?.patchValue(this.workExperiences[i].location.city);
-			(this.totalWorkExperience.at(i) as FormGroup).get('startDate')?.patchValue(this.workExperiences[i].startDate);
-			(this.totalWorkExperience.at(i) as FormGroup).get('endDate')?.patchValue(this.workExperiences[i].endDate);
+			(this.totalWorkExperience.at(i) as FormGroup)
+				.get('startDate')
+				?.patchValue(formatDateToISO(this.workExperiences[i].startDate as Date));
+			(this.totalWorkExperience.at(i) as FormGroup)
+				.get('endDate')
+				?.patchValue(formatDateToISO(this.workExperiences[i].endDate as Date));
 			(this.totalWorkExperience.at(i) as FormGroup).get('description')?.patchValue(this.workExperiences[i].description);
 		}
 	}
@@ -129,7 +135,7 @@ export class WorkExperienceComponent implements OnInit {
 
 	updateStateOptions(inputtedCountry: string) {
 		if (inputtedCountry === '') {
-			this.states = []
+			this.states = [];
 		}
 		const countryCode = Country.getAllCountries().find(country => country.name === inputtedCountry);
 		if (countryCode != null)
