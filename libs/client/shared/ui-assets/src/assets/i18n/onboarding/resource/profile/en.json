@@ -1,4 +1,10 @@
 {
+    "onboardingResourceProfile": {
+        "myProfile": "My Profile",
+        "pendingApprovalTooltip": "This view is awaiting approval",
+        "rejectedTooltip": "Changes to this view have been rejected",
+        "rejectedDialogHeading": "Please modify your view with the following changes:"
+    },
 	"onboardingResourceEditProfile": {
         "primaryView": "Primary View",
         "previewToggle": "Preview",

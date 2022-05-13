@@ -1,12 +1,12 @@
-import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import {
 	OnboardingClientState,
 	logout,
 	OnboardingClientResourceService,
 } from '@tempus/client/onboarding-client/shared/data-access';
-import { Subject, take } from 'rxjs';
+import { Subject } from 'rxjs';
 import { ButtonType } from '@tempus/client/shared/ui-components/presentational';
 import { UserType } from '@tempus/client/shared/ui-components/persistent';
 import {
@@ -14,10 +14,10 @@ import {
 	ICreateEducationDto,
 	ICreateCertificationDto,
 	ICreateViewDto,
-	View,
 	ViewType,
 	RevisionType,
 } from '@tempus/shared-domain';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
 	selector: 'tempus-profile',
@@ -30,9 +30,13 @@ export class ProfileComponent implements OnInit, OnDestroy {
 		private resourceService: OnboardingClientResourceService,
 		private store: Store<OnboardingClientState>,
 		private router: Router,
-		private changeDetector: ChangeDetectorRef,
-		private route: ActivatedRoute,
-	) {}
+		private translateService: TranslateService,
+	) {
+		const { currentLang } = translateService;
+		// eslint-disable-next-line no-param-reassign
+		translateService.currentLang = '';
+		translateService.use(currentLang);
+	}
 
 	userId = 0;
 
@@ -82,7 +86,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
 	resume: File | null = null;
 
-	reviewPrefix = 'onboardingClientSignupReview.';
+	profilePrefix = 'onboardingResourceProfile.';
 
 	ButtonType = ButtonType;
 

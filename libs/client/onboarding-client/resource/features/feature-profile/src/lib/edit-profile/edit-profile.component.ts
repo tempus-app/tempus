@@ -233,10 +233,10 @@ export class EditProfileComponent implements AfterViewInit, OnDestroy {
 
 	openSubmitConfirmation() {
 		this.translateService
-			.get([`onboardingClientSignupReview.modal.submitModal`])
+			.get([`onboardingResourceEditProfile.modal.submitModal`])
 			.pipe(take(1))
 			.subscribe(data => {
-				const dialogText = data[`onboardingClientSignupReview.modal.submitModal`];
+				const dialogText = data[`onboardingResourceEditProfile.modal.submitModal`];
 				this.modalService.open(
 					{
 						title: dialogText.title,

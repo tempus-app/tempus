@@ -27,12 +27,12 @@
 		<div *ngIf="!editViewEnabled" id="page-container" fxLayout="column" fxFill fxLayoutGap="20px">
 			<div id="title-container">
 				<div id="my-profile-container">
-					<h2 class="mat-h2 page-title">My Profile</h2>
+					<h2 class="mat-h2 page-title">{{ profilePrefix + 'myProfile' | translate }}</h2>
 					<span
 						*ngIf="isPendingApproval"
 						id="error-icon"
 						class="material-icons"
-						matTooltip="This view is awaiting approval"
+						matTooltip="{{ profilePrefix + 'pendingApprovalTooltip' | translate }}"
 						matTooltipClass="tooltip"
 						>error</span
 					>
@@ -40,7 +40,7 @@
 						*ngIf="isRejected"
 						id="reject-icon"
 						class="material-icons"
-						matTooltip="Changes to this view have been rejected"
+						matTooltip="{{ profilePrefix + 'rejectedTooltip' | translate }}"
 						matTooltipClass="tooltip"
 						>cancel</span
 					>
@@ -61,7 +61,7 @@
 				</div>
 			</div>
 			<div *ngIf="isRejected" id="rejection-dialog">
-				<h3 class="mat-h3">Please modify your view with the following changes:</h3>
+				<h3 class="mat-h3">{{ profilePrefix + 'rejectedDialogHeading' | translate }}</h3>
 				<p class="mat-body-1" *ngIf="rejectionComments !== ''">{{ rejectionComments }}</p>
 			</div>
 			<div class="section-container">
