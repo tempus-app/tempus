@@ -87,10 +87,17 @@ mat-button-toggle {
 	font-weight: 900 !important;
 }
 
-p {
+#email {
+	font-size: 0.85em;
+	margin: 0.5em;
+	word-break: break-all;
+}
+
+p, #email {
 	color: abs.$primary-800;
 	text-align: center;
 }
+
 h3 {
 	color: abs.$primary-800;
 	font-size: 1.25em !important;
@@ -100,10 +107,12 @@ h3 {
 	margin: none !important;
 	justify-content: center;
 }
+
 h2 {
-	font-size: 1.5em !important;
+	font-size: 1.25em !important;
 	color: abs.$primary-800;
-	margin: 0.25em;
+	margin: 0.5em;
+	text-align: center;
 }
 
 #logout-container {

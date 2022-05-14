@@ -221,10 +221,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
 		this.isPendingApproval = true;
 
-		// Post view to db, return revision
-		this.resourceService.editResourceView(this.currentViewId, newView).subscribe(newView => {
-			console.log(newView);
-		});
+		// Post view
+		this.resourceService.editResourceView(this.currentViewId, newView).subscribe();
 	}
 
 	ngOnDestroy(): void {
