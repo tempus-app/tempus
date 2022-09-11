@@ -112,6 +112,10 @@
 			"options": {
 				"commands": [
 					{
+						"command": "npx nx run migration-run",
+						"forwardAllArgs": false
+					},
+					{
 						"command": "npx nx run onboarding-api:build --skip-nx-cache",
 						"forwardAllArgs": false
 					},
