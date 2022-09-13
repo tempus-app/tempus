@@ -27,6 +27,7 @@ export class ResourceEntity extends UserEntity implements Resource {
 		email?: string,
 		password?: string,
 		roles?: RoleType[],
+		resume?: Uint8Array,
 	) {
 		super(id, firstName, lastName, email, password, roles);
 		this.phoneNumber = phoneNumber;
@@ -41,6 +42,7 @@ export class ResourceEntity extends UserEntity implements Resource {
 		this.linkedInLink = linkedInLink;
 		this.githubLink = githubLink;
 		this.otherLink = otherLink;
+		this.resume = resume;
 	}
 
 	@Column({ nullable: true })
@@ -54,6 +56,9 @@ export class ResourceEntity extends UserEntity implements Resource {
 
 	@Column({ nullable: true })
 	otherLink: string;
+
+	@Column({ nullable: true, type: 'bytea' })
+	resume: Uint8Array;
 
 	@Column({ nullable: true })
 	title: string;
