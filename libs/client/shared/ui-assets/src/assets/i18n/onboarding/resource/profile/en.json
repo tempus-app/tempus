@@ -1,27 +1,31 @@
 {
-    "onboardingResourceProfile": {
-        "myProfile": "My Profile",
-        "pendingApprovalTooltip": "This view is awaiting approval",
-        "rejectedTooltip": "Changes to this view have been rejected",
-        "rejectedDialogHeading": "Please modify your view with the following changes:"
-    },
+	"onboardingResourceProfile": {
+		"myProfile": "My Profile",
+		"pendingApprovalTooltip": "This view is awaiting approval",
+		"rejectedTooltip": "Changes to this view have been rejected",
+		"rejectedDialogHeading": "Please modify your view with the following changes:"
+	},
 	"onboardingResourceEditProfile": {
-        "primaryView": "Primary View",
-        "previewToggle": "Preview",
-        "buttons": {
-            "cancel": {
-                "label": "Cancel",
-                "tooltip": "Discard changes"
-            },
-            "submit": {
-                "label": "Submit",
-                "tooltip": "Submit changes for approval"
-            }
-        },
+		"primaryView": "Primary View",
+		"education": "Education",
+		"certifications": "Certifications",
+		"workExperience": "Work Experience",
+		"skills": "Skills",
+		"previewToggle": "Preview",
+		"buttons": {
+			"cancel": {
+				"label": "Cancel",
+				"tooltip": "Discard changes"
+			},
+			"submit": {
+				"label": "Submit",
+				"tooltip": "Submit changes for approval"
+			}
+		},
 		"modal": {
 			"submitModal": {
 				"title": "Submit changes?",
-                "message": "Your changes to this view will be sent to CAL for approval.",
+				"message": "Your changes to this view will be sent to CAL for approval.",
 				"closeText": "Cancel",
 				"confirmText": "Submit"
 			}

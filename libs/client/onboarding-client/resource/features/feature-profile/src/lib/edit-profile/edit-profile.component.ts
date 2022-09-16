@@ -128,9 +128,12 @@ export class EditProfileComponent implements AfterViewInit, OnDestroy {
 	ngAfterViewInit(): void {
 		this.changeDetector.detectChanges();
 
-		this.resourceService.getResourceInformation().subscribe(resData => {
-			this.email = resData.email;
-		});
+		this.resourceService
+			.getResourceInformation()
+			.pipe(take(1))
+			.subscribe(resData => {
+				this.email = resData.email;
+			});
 	}
 
 	loadPersonalInfo(eventData: FormGroup) {

@@ -1,7 +1,7 @@
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { Country, State } from 'country-state-city';
 import { InputType } from '@tempus/client/shared/ui-components/input';
-import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormArray, FormBuilder, Validators } from '@angular/forms';
 import { ICreateExperienceDto } from '@tempus/shared-domain';
 import { formatDateToISO, checkEnteredDates } from '@tempus/client/shared/util';
 
@@ -68,23 +68,22 @@ export class WorkExperienceComponent implements OnInit {
 				},
 				{ validators: checkEnteredDates() },
 			);
-			this.totalWorkExperience.push(workExperience);
 
 			// patch values
-			(this.totalWorkExperience.at(i) as FormGroup).get('title')?.patchValue(this.workExperiences[i].title);
-			(this.totalWorkExperience.at(i) as FormGroup).get('company')?.patchValue(this.workExperiences[i].company);
-			(this.totalWorkExperience.at(i) as FormGroup)
-				.get('country')
-				?.patchValue(this.workExperiences[i].location.country);
-			(this.totalWorkExperience.at(i) as FormGroup).get('state')?.patchValue(this.workExperiences[i].location.province);
-			(this.totalWorkExperience.at(i) as FormGroup).get('city')?.patchValue(this.workExperiences[i].location.city);
-			(this.totalWorkExperience.at(i) as FormGroup)
-				.get('startDate')
-				?.patchValue(formatDateToISO(this.workExperiences[i].startDate as Date));
-			(this.totalWorkExperience.at(i) as FormGroup)
-				.get('endDate')
-				?.patchValue(formatDateToISO(this.workExperiences[i].endDate as Date));
-			(this.totalWorkExperience.at(i) as FormGroup).get('description')?.patchValue(this.workExperiences[i].description);
+			workExperience.get('title')?.patchValue(this.workExperiences[i].title);
+			workExperience.get('company')?.patchValue(this.workExperiences[i].company);
+			workExperience.get('country')?.patchValue(this.workExperiences[i].location.country);
+			workExperience.get('state')?.patchValue(this.workExperiences[i].location.province);
+			workExperience.get('city')?.patchValue(this.workExperiences[i].location.city);
+			workExperience.get('description')?.patchValue(this.workExperiences[i].description);
+			workExperience.get('startDate')?.patchValue(formatDateToISO(this.workExperiences[i].startDate));
+			workExperience.get('endDate')?.patchValue(formatDateToISO(this.workExperiences[i].endDate));
+
+			if (workExperience.get('endDate')?.value === null) {
+				workExperience.get('endDate')?.disable();
+			}
+
+			this.totalWorkExperience.push(workExperience);
 		}
 	}
 

@@ -36,9 +36,8 @@ export function formatDateRange(startDate: Date, endDate: Date | null): string {
  * Format date into ISO 'YYYY-MM-DD'
  * @param  {Date} date
  */
-export function formatDateToISO(date: Date) {
-	const originalDate = new Date(date);
-	return originalDate.toISOString().split('T')[0];
+export function formatDateToISO(date: Date | null | undefined) {
+	return date ? new Date(date).toISOString().split('T')[0] : null;
 }
 
 /**

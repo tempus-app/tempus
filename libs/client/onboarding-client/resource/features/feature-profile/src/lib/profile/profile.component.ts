@@ -6,7 +6,7 @@ import {
 	logout,
 	OnboardingClientResourceService,
 } from '@tempus/client/onboarding-client/shared/data-access';
-import { Subject } from 'rxjs';
+import { Subject, take } from 'rxjs';
 import { ButtonType } from '@tempus/client/shared/ui-components/presentational';
 import { UserType } from '@tempus/client/shared/ui-components/persistent';
 import {
@@ -222,7 +222,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
 		this.isPendingApproval = true;
 
 		// Post view
-		this.resourceService.editResourceView(this.currentViewId, newView).subscribe();
+		this.resourceService.editResourceView(this.currentViewId, newView).pipe(take(1)).subscribe();
 	}
 
 	ngOnDestroy(): void {
