@@ -14,12 +14,24 @@ import { createLinkEntity, dbLink, expiredDBLink, linkEntity, mockProject } from
 const mockLinkRepository = createMock<Repository<LinkEntity>>();
 const mockProjectRepository = createMock<Repository<ProjectEntity>>();
 
+const mockEntityManager = { getRepository: (entity: LinkEntity) =>  mockLinkRepository}
+const transactionMock = jest.fn(async passedFunction => await passedFunction(mockEntityManager));
+
 const mockEmailService = {
 	sendInvitationEmail: jest.fn(),
 };
 
 // mock imports
 jest.mock('uuid', () => ({ v4: () => 'fake-uuid' }));
+jest.mock('typeorm', () => {
+  const originalModule = jest.requireActual('typeorm');
+
+  return {
+    __esModule: true,
+    ...originalModule,
+    getManager: () => ({transaction: transactionMock})
+  }
+})
 
 describe('LinkService', () => {
 	let moduleRef: TestingModule;
@@ -64,6 +76,7 @@ describe('LinkService', () => {
 			};
 
 			mockLinkRepository.save.mockResolvedValue(createdLink);
+      mockLinkRepository.findOne.mockResolvedValue(undefined);
 			mockProjectRepository.save.mockResolvedValue(mockProject);
 
 			const res = await linkService.createLink(createLinkEntity, 1);
@@ -89,6 +102,7 @@ describe('LinkService', () => {
 				project: mockProject, // day a week later
 			};
 			mockLinkRepository.save.mockResolvedValue(createdLink);
+      mockLinkRepository.findOne.mockResolvedValue(undefined);
 
 			const res = await linkService.createLink({ ...createLinkEntity, expiry: undefined }, 1);
 			expect(mockLinkRepository.save).toBeCalledWith(expect.objectContaining({ ...createdLink, id: null }));
@@ -108,8 +122,22 @@ describe('LinkService', () => {
 			expect(mockLinkRepository.save).not.toBeCalled();
 		});
 
+    it('should throw an error if link email already exists', async () => {
+			let error;
+      mockLinkRepository.findOne.mockResolvedValue(createLinkEntity);
+			try {
+				await linkService.createLink(createLinkEntity, 1);
+			} catch (e) {
+				error = e;
+			}
+			expect(error).toBeInstanceOf(BadRequestException);
+			expect(error.message).toBe('Link for email test@email.com already exists');
+			expect(mockLinkRepository.save).not.toBeCalled();
+		});
+
 		it('should only email the link if saving is successful', async () => {
 			mockLinkRepository.save.mockRejectedValue(new Error('db constraint'));
+      mockLinkRepository.findOne.mockResolvedValue(undefined);
 
 			let error;
 			try {

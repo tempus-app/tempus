@@ -19,15 +19,15 @@ export class LinkService {
 
 	async createLinkAndSendEmail(fullLink: LinkEntity, sendEmail: boolean){
 		return await getManager().transaction(async (manager) => {
-			const createdLink = await manager.getRepository(LinkEntity).save(fullLink)
-			if(sendEmail){
+			const createdLink = await manager.getRepository(LinkEntity).save(fullLink);
+			if(sendEmail) {
 				try {
 					await this.emailService.sendInvitationEmail(createdLink);
 				} catch (err){
-					throw new Error('Email unable to be sent.')
+					throw new Error('Email unable to be sent.');
 				}
 			}
-			return createdLink
+			return createdLink;
 		})
 	}
 
@@ -50,7 +50,7 @@ export class LinkService {
 		fullLink.project = projectEntity;
     
 		//Check link email does not already exist
-		const existingLink = await this.linkRepository.findOne({where: {email: link.email}})
+		const existingLink = await this.linkRepository.findOne({where: {email: link.email}});
 		if(existingLink){
 			throw new BadRequestException(`Link for email ${link.email} already exists`);
 		}
