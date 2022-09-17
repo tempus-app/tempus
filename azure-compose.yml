@@ -2,7 +2,7 @@ version: '3.1'
 
 services:
   onboarding-api:
-    image: amanriat/tempus:latest
+    image: tempusottawa/tempus:latest
     build:
       context: .
     environment:
