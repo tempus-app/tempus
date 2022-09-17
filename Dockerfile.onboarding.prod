@@ -1,5 +1,6 @@
 FROM node:16.8.0-alpine as production
 WORKDIR /src
+RUN apk add --update python3 make g++ && rm -rf /var/cache/apk/*
 ENV NODE_ENV=development
 ENV SKIP_BUILD=1
 COPY package*.json ./
