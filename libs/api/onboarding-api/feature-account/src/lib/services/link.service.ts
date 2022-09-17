@@ -55,7 +55,7 @@ export class LinkService {
 			throw new BadRequestException(`Link for email ${link.email} already exists`);
 		}
 
-    	const createdLink = await this.createLinkAndSendEmail(fullLink, sendEmail);
+    const createdLink = await this.createLinkAndSendEmail(fullLink, sendEmail);
 	
 		return createdLink;
   }
