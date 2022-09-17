@@ -58,7 +58,7 @@ export class LinkService {
     	const createdLink = await this.createLinkAndSendEmail(fullLink, sendEmail);
 	
 		return createdLink;
-  	}
+  }
 
 	async findLinkById(linkId: number): Promise<Link> {
 		const linkEntity = await this.linkRepository.findOne(linkId, {
