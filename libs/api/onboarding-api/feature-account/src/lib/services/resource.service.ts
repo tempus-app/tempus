@@ -1,6 +1,12 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-restricted-syntax */
-import { ForbiddenException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
+import {
+	ForbiddenException,
+	Injectable,
+	InternalServerErrorException,
+	NotFoundException,
+	StreamableFile,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ConfigService } from '@nestjs/config';
 // eslint-disable-next-line @nrwl/nx/enforce-module-boundaries
@@ -20,7 +26,7 @@ export class ResourceService {
 		private viewsService: ViewsService,
 		private configService: ConfigService,
 		private linkService: LinkService,
-	) { }
+	) {}
 
 	async createResource(resource: CreateResourceDto): Promise<Resource> {
 		const link = await this.linkService.findLinkById(resource.linkId);
@@ -57,8 +63,7 @@ export class ResourceService {
 		return createdResource;
 	}
 
-
-	async saveResume(resourceId: number, resume: Express.Multer.File) {
+	async saveResume(resourceId: number, resume: Express.Multer.File): Promise<void> {
 		const resourceEntity = await this.resourceRepository.findOne(resourceId);
 		if (!resourceEntity) {
 			throw new NotFoundException(`Could not find resource with id ${resourceId}`);
@@ -66,6 +71,14 @@ export class ResourceService {
 		const buffer = await resume.buffer;
 		resourceEntity.resume = new Uint8Array(buffer);
 		await this.resourceRepository.save(resourceEntity);
+	}
+
+	async getResume(resourceId: number): Promise<StreamableFile> {
+		const resourceEntity = await this.resourceRepository.findOne(resourceId);
+		if (!resourceEntity) {
+			throw new NotFoundException(`Could not find resource with id ${resourceId}`);
+		}
+		return new StreamableFile(resourceEntity.resume);
 	}
 
 	async getResource(resourceId: number): Promise<Resource> {
@@ -77,7 +90,7 @@ export class ResourceService {
 			throw new NotFoundException(`Could not find resource with id ${resourceId}`);
 		}
 
-		return {...resourceEntity};
+		return { ...resourceEntity };
 	}
 
 	// Lightweight method to find resource without the extra linked data

@@ -6,7 +6,7 @@ import {
 	logout,
 	OnboardingClientResourceService,
 } from '@tempus/client/onboarding-client/shared/data-access';
-import { Subject, take } from 'rxjs';
+import { Subject } from 'rxjs';
 import { ButtonType } from '@tempus/client/shared/ui-components/presentational';
 import { UserType } from '@tempus/client/shared/ui-components/persistent';
 import {
@@ -14,7 +14,6 @@ import {
 	ICreateEducationDto,
 	ICreateCertificationDto,
 	ICreateViewDto,
-	View,
 	ViewType,
 	RevisionType,
 } from '@tempus/shared-domain';
@@ -159,6 +158,9 @@ export class ProfileComponent implements OnInit, OnDestroy {
 			// 	this.skillsSummary = primaryView.skillsSummary;
 			// });
 
+			this.resourceService.getResourceOriginalResumeById(this.userId).subscribe(resumeBlob => {
+				this.resume = new File([resumeBlob], 'original-resume.pdf');
+			});
 			// fetch all Primary views, select display
 			this.resourceService.getResourceProfileViews(this.userId).subscribe(views => {
 				const primaryViews = views.filter(view => view.viewType === ViewType.PRIMARY);
@@ -218,8 +220,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
 		this.isPendingApproval = true;
 
 		// Post view to db, return revision
-		this.resourceService.editResourceView(this.currentViewId, newView).subscribe(newView => {
-			console.log(newView);
+		this.resourceService.editResourceView(this.currentViewId, newView).subscribe(createdView => {
+			console.log(createdView);
 		});
 	}
 

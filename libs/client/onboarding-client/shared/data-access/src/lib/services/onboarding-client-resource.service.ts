@@ -71,6 +71,18 @@ export class OnboardingClientResourceService {
 		);
 	}
 
+	public getResourceOriginalResumeById(resourceId: number): Observable<Blob> {
+		return this.authStore.select(selectAccessToken).pipe(
+			take(1),
+			switchMap((token: string | null) => {
+				const httpAuthHeaders = getAuthHeaders(token || '');
+				return this.http
+					.get<Blob>(`${this.url}/user/${resourceId}/resume`, { ...httpAuthHeaders, responseType: 'blob' as 'json' })
+					.pipe(catchError(handleError));
+			}),
+		);
+	}
+
 	public getViewById(viewId: number): Observable<View> {
 		return this.authStore.select(selectAccessToken).pipe(
 			take(1),

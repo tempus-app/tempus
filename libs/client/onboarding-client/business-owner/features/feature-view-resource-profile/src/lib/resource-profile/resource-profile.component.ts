@@ -44,6 +44,8 @@ export class ResourceProfileComponent implements OnInit {
 
 	viewIndex = 0;
 
+	resume: File | null = null;
+
 	loadedView: LoadView = { isRevision: false };
 
 	childRevisionLoaded(loadedView: LoadView) {
@@ -64,6 +66,10 @@ export class ResourceProfileComponent implements OnInit {
 			this.country = resourceInfo.location.country;
 			this.phoneNumber = resourceInfo.phoneNumber;
 			this.resourceEmail = resourceInfo.email;
+		});
+
+		this.resourceService.getResourceOriginalResumeById(id).subscribe(resumeBlob => {
+			this.resume = new File([resumeBlob], 'original-resume.pdf');
 		});
 		this.sharedStore
 			.select(selectLoggedInUserNameEmail)

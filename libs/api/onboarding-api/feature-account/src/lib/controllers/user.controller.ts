@@ -11,6 +11,8 @@ import {
 	Request,
 	UseInterceptors,
 	UploadedFile,
+	StreamableFile,
+	Res,
 } from '@nestjs/common';
 import { Resource, RoleType, User } from '@tempus/shared-domain';
 import { JwtAuthGuard, Roles, RolesGuard, PermissionGuard } from '@tempus/api/shared/feature-auth';
@@ -23,12 +25,11 @@ import {
 	UserProjectClientDto,
 } from '@tempus/api/shared/dto';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { Express, Response } from 'express';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { Multer } from 'multer'; // hack to use mutler
 import { ResourceService } from '../services/resource.service';
 import { UserService } from '../services/user.service';
-import { Express } from 'express'
-// eslint-disable-next-line no-unused-vars
-import { Multer } from 'multer';  //hack to use mutler
-
 
 @ApiTags('User')
 @Controller('user')
@@ -94,8 +95,20 @@ export class UserController {
 
 	@Post('saveResume/:resourceId')
 	@UseInterceptors(FileInterceptor('resume'))
-	async saveResume(@Param('resourceId') resourceId: number, @UploadedFile() resume:Express.Multer.File): Promise<void> {
-		return this.resourceService.saveResume(resourceId,resume);
+	async saveResume(
+		@Param('resourceId') resourceId: number,
+		@UploadedFile() resume: Express.Multer.File,
+	): Promise<void> {
+		return this.resourceService.saveResume(resourceId, resume);
+	}
+
+	@Get(':resourceId/resume')
+	async getResume(
+		@Param('resourceId') resourceId: number,
+		@Res({ passthrough: true }) res: Response,
+	): Promise<StreamableFile> {
+		res.set({ 'Content-Type': 'application/pdf' });
+		return this.resourceService.getResume(resourceId);
 	}
 
 	// updates User information
