@@ -10,6 +10,8 @@ import {
 	createResource,
 	resetCreateResourceState,
 	resetLinkState,
+	saveResume,
+	selectCreatedResourceId,
 	selectResourceData,
 	selectResourceStatus,
 	selectUploadedResume,
@@ -120,7 +122,7 @@ export class ReviewComponent implements OnInit, OnDestroy, AfterViewInit {
 			});
 		this.store
 			.select(selectUploadedResume)
-			.pipe(skip(1), takeUntil(this.$destroyed))
+			.pipe(take(1))
 			.subscribe(resumeData => {
 				this.resume = resumeData;
 			});
@@ -176,5 +178,13 @@ export class ReviewComponent implements OnInit, OnDestroy, AfterViewInit {
 
 	submit() {
 		this.store.dispatch(createResource());
+		this.store
+			.select(selectCreatedResourceId)
+			.pipe(skip(1)) // take the latest value
+			.subscribe(resourceId => {
+				if (resourceId) {
+					this.store.dispatch(saveResume({ resourceId }));
+				}
+			});
 	}
 }

@@ -28,7 +28,15 @@ export class OnboardingClientResourceService {
 	url = `${this.appConfig.apiUrl}/onboarding`;
 
 	public createResource(createResourceDto: ICreateResourceDto): Observable<Resource> {
-		return this.http.post<Resource>(`${this.url}/resource`, createResourceDto);
+		return this.http.post<Resource>(`${this.url}/user/resource`, createResourceDto);
+	}
+
+	public saveResume(resourceId: number, resume: File | null): Observable<FormData> {
+		const formData = new FormData();
+		if (resume) {
+			formData.append('resume', resume);
+		}
+		return this.http.post<FormData>(`${this.url}/user/saveResume/${resourceId}`, formData);
 	}
 
 	public getResProjClientData(): Observable<IUserProjClientDto[]> {
@@ -83,6 +91,7 @@ export class OnboardingClientResourceService {
 				views
 					.filter(view => view.viewType === 'PRIMARY')
 					.sort((a, b) =>
+						// eslint-disable-next-line no-nested-ternary
 						a.lastUpdateDate && b.lastUpdateDate
 							? a.lastUpdateDate.getTime() > b.lastUpdateDate.getTime()
 								? -1

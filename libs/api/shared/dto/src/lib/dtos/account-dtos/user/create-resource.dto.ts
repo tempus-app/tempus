@@ -27,6 +27,9 @@ export class CreateResourceDto extends CreateUserDto implements ICreateResourceD
 	otherLink: string;
 
 	@ApiProperty()
+	resume: File;
+
+	@ApiProperty()
 	title: string;
 
 	@ApiProperty()
@@ -76,6 +79,7 @@ export class CreateResourceDto extends CreateUserDto implements ICreateResourceD
 		profileSummary: string,
 		educationsSummary: string,
 		skillsSummary: string,
+		resume: File,
 	) {
 		super(firstName, lastName, email, password, roles);
 		this.roles = roles;
@@ -93,5 +97,6 @@ export class CreateResourceDto extends CreateUserDto implements ICreateResourceD
 		this.linkedInLink = linkedInLink;
 		this.githubLink = githubLink;
 		this.otherLink = otherLink;
+		this.resume = resume;
 	}
 }
