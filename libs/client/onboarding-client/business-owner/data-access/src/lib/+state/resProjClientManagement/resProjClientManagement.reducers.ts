@@ -81,5 +81,5 @@ export const projectManagementReducer = createReducer(
 		...state,
 		status: AsyncRequestState.IDLE,
 		error: null,
-	}))
+	})),
 );

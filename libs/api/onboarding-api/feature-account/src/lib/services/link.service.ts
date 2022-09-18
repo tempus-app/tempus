@@ -17,18 +17,18 @@ export class LinkService {
 		private projectRepository: Repository<ProjectEntity>,
 	) {}
 
-	async createLinkAndSendEmail(fullLink: LinkEntity, sendEmail: boolean){
-		return await getManager().transaction(async (manager) => {
+	async createLinkAndSendEmail(fullLink: LinkEntity, sendEmail: boolean) {
+		return getManager().transaction(async manager => {
 			const createdLink = await manager.getRepository(LinkEntity).save(fullLink);
-			if(sendEmail) {
+			if (sendEmail) {
 				try {
 					await this.emailService.sendInvitationEmail(createdLink);
-				} catch (err){
+				} catch (err) {
 					throw new Error('Email unable to be sent.');
 				}
 			}
 			return createdLink;
-		})
+		});
 	}
 
 	async createLink(link: LinkEntity, projectId: number, sendEmail = true): Promise<Link> {
@@ -48,17 +48,17 @@ export class LinkService {
 		const projectEntity = await this.projectRepository.findOne(projectId);
 		if (!projectEntity) throw new NotFoundException(`Could not find project with id ${projectId}`);
 		fullLink.project = projectEntity;
-    
-		//Check link email does not already exist
-		const existingLink = await this.linkRepository.findOne({where: {email: link.email}});
-		if(existingLink){
+
+		// Check link email does not already exist
+		const existingLink = await this.linkRepository.findOne({ where: { email: link.email } });
+		if (existingLink) {
 			throw new BadRequestException(`Link for email ${link.email} already exists`);
 		}
 
-    const createdLink = await this.createLinkAndSendEmail(fullLink, sendEmail);
-	
+		const createdLink = await this.createLinkAndSendEmail(fullLink, sendEmail);
+
 		return createdLink;
-  }
+	}
 
 	async findLinkById(linkId: number): Promise<Link> {
 		const linkEntity = await this.linkRepository.findOne(linkId, {
