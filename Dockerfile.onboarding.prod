@@ -1,15 +1,10 @@
-FROM node as build
-WORKDIR /src
-COPY . .
-RUN npm install
-RUN npm run build:onboarding-api
-
 FROM node:16.8.0-alpine as production
+WORKDIR /src
 RUN apk add --update python3 make g++ && rm -rf /var/cache/apk/*
 ENV NODE_ENV=development
-WORKDIR /src
+ENV SKIP_BUILD=1
 COPY package*.json ./
-COPY decorate-angular-cli.js ./
-RUN npm install
-COPY --from=build /src/dist/apps/onboarding-api ./dist/apps/onboarding-api
-CMD npm run start:onboarding-api:prod
+RUN npm install --legacy-peer-deps
+COPY . .
+RUN npm run build:onboarding-api && npm run build:client:prod   
+CMD ["node", "dist/apps/onboarding-api/main.js"]
