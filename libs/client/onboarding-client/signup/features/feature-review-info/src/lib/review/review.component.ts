@@ -124,7 +124,10 @@ export class ReviewComponent implements OnInit, OnDestroy, AfterViewInit {
 			.select(selectUploadedResume)
 			.pipe(take(1))
 			.subscribe(resumeData => {
-				this.resume = resumeData;
+				if (resumeData) {
+					// we don't save file name now so we have to standardize the name
+					this.resume = new File([resumeData], 'original-resume.pdf', { type: resumeData.type });
+				}
 			});
 		this.store
 			.select(selectResourceStatus)

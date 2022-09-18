@@ -93,7 +93,7 @@ export class UserController {
 		return this.resourceService.createResource(user);
 	}
 
-	@Post('saveResume/:resourceId')
+	@Patch(':resourceId/resume')
 	@UseInterceptors(FileInterceptor('resume'))
 	async saveResume(
 		@Param('resourceId') resourceId: number,

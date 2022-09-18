@@ -36,7 +36,7 @@ export class OnboardingClientResourceService {
 		if (resume) {
 			formData.append('resume', resume);
 		}
-		return this.http.post<FormData>(`${this.url}/user/saveResume/${resourceId}`, formData);
+		return this.http.patch<FormData>(`${this.url}/user/${resourceId}/resume`, formData);
 	}
 
 	public getResProjClientData(): Observable<IUserProjClientDto[]> {
