@@ -4,7 +4,6 @@
 	"license": "MIT",
 	"scripts": {
 		"ng": "nx",
-		"postinstall": "node ./decorate-angular-cli.js && ngcc --properties es2015 browser module main",
 		"start:onboarding-api": "nx serve onboarding-api",
 		"start:client": "nx serve onboarding-client",
 		"start:onboarding-api:prod": "node ./dist/apps/onboarding-api/main.js",
@@ -13,7 +12,7 @@
 		"test": "npx nx run-many --all --target=test",
 		"test:api:unit": "npx jest  --testPathPattern='./libs/api' --verbose --collectCoverage",
 		"test:client:unit": "npx jest  --testPathPattern='./libs/client' --verbose --collectCoverage",
-		"prepare": "husky install",
+		"prepare": "node ./scripts/skip.js || husky install",
 		"format:all": "prettier --config .prettierrc ./**/*.{js,ts,html,css,scss,json} --write",
 		"lint:check": "npx nx run-many --all --target=lint",
 		"lint:fix": "npx nx run-many --all --target=lint --fix",
