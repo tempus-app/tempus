@@ -20,7 +20,7 @@ export class ResourceService {
 		private viewsService: ViewsService,
 		private configService: ConfigService,
 		private linkService: LinkService,
-	) {}
+	) { }
 
 	async createResource(resource: CreateResourceDto): Promise<Resource> {
 		const link = await this.linkService.findLinkById(resource.linkId);
@@ -57,6 +57,17 @@ export class ResourceService {
 		return createdResource;
 	}
 
+
+	async saveResume(resourceId: number, resume: Express.Multer.File) {
+		const resourceEntity = await this.resourceRepository.findOne(resourceId);
+		if (!resourceEntity) {
+			throw new NotFoundException(`Could not find resource with id ${resourceId}`);
+		}
+		const buffer = await resume.buffer;
+		resourceEntity.resume = new Uint8Array(buffer);
+		await this.resourceRepository.save(resourceEntity);
+	}
+
 	async getResource(resourceId: number): Promise<Resource> {
 		const resourceEntity = await this.resourceRepository.findOne(resourceId, {
 			relations: ['experiences', 'educations', 'skills', 'certifications', 'location'],
@@ -66,7 +77,7 @@ export class ResourceService {
 			throw new NotFoundException(`Could not find resource with id ${resourceId}`);
 		}
 
-		return resourceEntity;
+		return {...resourceEntity};
 	}
 
 	// Lightweight method to find resource without the extra linked data

@@ -1,5 +1,17 @@
 /* eslint-disable @typescript-eslint/return-await */
-import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards, Request } from '@nestjs/common';
+import {
+	Body,
+	Controller,
+	Delete,
+	Get,
+	Param,
+	Patch,
+	Post,
+	UseGuards,
+	Request,
+	UseInterceptors,
+	UploadedFile,
+} from '@nestjs/common';
 import { Resource, RoleType, User } from '@tempus/shared-domain';
 import { JwtAuthGuard, Roles, RolesGuard, PermissionGuard } from '@tempus/api/shared/feature-auth';
 import { ApiTags } from '@nestjs/swagger';
@@ -10,8 +22,13 @@ import {
 	UpdateResourceDto,
 	UserProjectClientDto,
 } from '@tempus/api/shared/dto';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { ResourceService } from '../services/resource.service';
 import { UserService } from '../services/user.service';
+import { Express } from 'express'
+// eslint-disable-next-line no-unused-vars
+import { Multer } from 'multer';  //hack to use mutler
+
 
 @ApiTags('User')
 @Controller('user')
@@ -72,7 +89,13 @@ export class UserController {
 	// creates Resource
 	@Post('resource')
 	async createResource(@Body() user: CreateResourceDto): Promise<Resource> {
-		return await this.resourceService.createResource(user);
+		return this.resourceService.createResource(user);
+	}
+
+	@Post('saveResume/:resourceId')
+	@UseInterceptors(FileInterceptor('resume'))
+	async saveResume(@Param('resourceId') resourceId: number, @UploadedFile() resume:Express.Multer.File): Promise<void> {
+		return this.resourceService.saveResume(resourceId,resume);
 	}
 
 	// updates User information
