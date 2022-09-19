@@ -1,8 +1,8 @@
-## Themes
+## Theme
 
-Please refer to our [wiki](https://github.com/tempus-app/wiki/wiki/Guide-to-Angular-Material-Theming).
+The tempus client uses Angular Material theming to implement our [design system.](https://github.com/tempus-app/wiki/wiki/Design-System)
 
-## Styles
+## SASS Modules
 - Abstracts: fonts, colors, typography and other variables  
 - Components: styling for particular components (e.g buttons, form fields)
   
