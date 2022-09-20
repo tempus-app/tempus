@@ -55,3 +55,29 @@ export const viewResourceFailure = createAction(
 		error: Error;
 	}>(),
 );
+
+// get resume
+export const getOriginalResume = createAction(
+	'[View Resource Profile] Get Original Resource Resume',
+	props<{ resourceId: number }>(),
+);
+
+// get resume failure
+export const getOriginalResumeFailure = createAction(
+	'[View Resource Profile] Get Original Resource Resume Failure',
+	props<{
+		error: Error;
+	}>(),
+);
+
+// get resume success
+export const getOriginalResumeSuccess = createAction(
+	'[View Resource Profile] Get Original Resource Resume Success',
+	props<{
+		resume: Blob;
+	}>(),
+);
+
+// reset getResume
+
+export const getResumeReset = createAction('[View Resource Profile] Reset Get Original Resource Resume State');
