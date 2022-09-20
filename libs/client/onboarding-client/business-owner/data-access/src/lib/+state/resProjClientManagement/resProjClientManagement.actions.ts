@@ -48,3 +48,5 @@ export const createResourceProjectAssignmentFailure = createAction(
 export const resetProjManagementState = createAction(
 	'[Onboarding Client Manage Resources Page] Reset Proj Management State',
 );
+
+export const resetAsyncStatusState = createAction('[Onboarding Client Manage Resources Page] Reset Async Status State');

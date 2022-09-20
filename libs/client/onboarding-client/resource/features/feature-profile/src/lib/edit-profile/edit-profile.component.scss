@@ -2,25 +2,51 @@
 @use 'components/helper' as cmp;
 
 #page-container {
-	margin: 2% 4%;
-	border: 2px dashed abs.$primary-300;
+	margin: 2% auto;
+	align-items: center;
+	border: 1px dashed abs.$primary-300;
 	background-color: #fcfeff;
 	border-radius: 10px;
+	width: 90%;
 }
+
 #title-container {
-	@include cmp.info-title(90%, 0);
-	margin: 2% 0em;
-	align-self: center;
+	@include cmp.info-title(95%, 0);
+	margin: 2em 0em;
 }
 
-#user-bar {
-	margin: 0% 5% 2% 5%;
+#button-container {
+	display: flex;
+	flex-direction: row;
+	gap: 0.5em;
+	height: 100% !important;
 }
 
-#view-name {
-	height: 1em;
+::ng-deep {
+	.mat-slide-toggle {
+		transform: scale(1.5);
+		padding: 0% 2% 0% 0%;
+		vertical-align: middle;
+	}
+	.mat-slide-toggle-content {
+		@include abs.h3(16px);
+	}
 }
 
+.section-container {
+	width: 100%;
+}
+
+.view-container {
+	width: 100%;
+	align-items: center;
+	padding-bottom: 2%;
+}
+
+.preview-section-container {
+	width: 95%; 
+	padding: 1em;
+}
 
 tempus-button {
 	height: 2em;
@@ -29,4 +55,3 @@ tempus-button {
 .page-title {
 	color: abs.$primary-800;
 }
-

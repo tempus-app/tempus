@@ -11,6 +11,7 @@ import {
 	createResourceProjectAssignment,
 	getAllClients,
 	getAllResProjInfo,
+	resetAsyncStatusState,
 	resetProjManagementState,
 	selectAsyncStatus,
 	selectClientData,
@@ -158,6 +159,8 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 				this.$inviteModalClosedEvent.next();
 			} else if (modalId === 'assignModal') {
 				this.$assignModalClosedEvent.next();
+			} else if (modalId === 'error') {
+				this.businessOwnerStore.dispatch(resetAsyncStatusState());
 			}
 		});
 		this.businessOwnerStore
@@ -165,7 +168,7 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 			.pipe(takeUntil(this.$destroyed))
 			.subscribe(asyncStatus => {
 				this.loading = asyncStatus.status === AsyncRequestState.LOADING;
-				if (asyncStatus.error) {
+				if (asyncStatus.status === AsyncRequestState.ERROR && asyncStatus.error) {
 					this.openErrorModal(asyncStatus.error.message);
 				}
 			});

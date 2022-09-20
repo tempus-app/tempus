@@ -77,4 +77,9 @@ export const projectManagementReducer = createReducer(
 	on(ProjectManagementActions.resetProjManagementState, () => ({
 		...initialState,
 	})),
+	on(ProjectManagementActions.resetAsyncStatusState, state => ({
+		...state,
+		status: AsyncRequestState.IDLE,
+		error: null,
+	})),
 );

@@ -1,11 +1,6 @@
 import { AfterViewInit, ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Store } from '@ngrx/store';
-import {
-	OnboardingClientResourceService,
-	OnboardingClientState,
-} from '@tempus/client/onboarding-client/shared/data-access';
-import { Subject } from 'rxjs';
+import { OnboardingClientResourceService } from '@tempus/client/onboarding-client/shared/data-access';
+import { Subject, take } from 'rxjs';
 import { ButtonType } from '@tempus/client/shared/ui-components/presentational';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import {
@@ -18,6 +13,8 @@ import {
 	ICreateSkillDto,
 	ICreateSkillTypeDto,
 } from '@tempus/shared-domain';
+import { TranslateService } from '@ngx-translate/core';
+import { ModalService, CustomModalType, ModalType } from '@tempus/client/shared/ui-components/modal';
 
 @Component({
 	selector: 'tempus-edit-profile',
@@ -27,9 +24,16 @@ import {
 export class EditProfileComponent implements AfterViewInit, OnDestroy {
 	constructor(
 		private fb: FormBuilder,
+		public modalService: ModalService,
 		private resourceService: OnboardingClientResourceService,
 		private changeDetector: ChangeDetectorRef,
-	) {}
+		private translateService: TranslateService,
+	) {
+		const { currentLang } = translateService;
+		// eslint-disable-next-line no-param-reassign
+		translateService.currentLang = '';
+		translateService.use(currentLang);
+	}
 
 	personalInfoForm = this.fb.group({});
 
@@ -43,7 +47,9 @@ export class EditProfileComponent implements AfterViewInit, OnDestroy {
 
 	newSkills: string[] = [];
 
-	isValid = true;
+	email = '';
+
+	previewViewEnabled = false;
 
 	@Input() firstName = '';
 
@@ -92,6 +98,8 @@ export class EditProfileComponent implements AfterViewInit, OnDestroy {
 	@Output()
 	submitClicked = new EventEmitter();
 
+	editProfilePrefix = 'onboardingResourceEditProfile.';
+
 	ngOnDestroy(): void {
 		this.destroyed$.next();
 		this.destroyed$.complete();
@@ -101,8 +109,31 @@ export class EditProfileComponent implements AfterViewInit, OnDestroy {
 		this.closeEditViewClicked.emit('close');
 	}
 
+	togglePreview() {
+		this.previewViewEnabled = !this.previewViewEnabled;
+
+		// display form values
+		const editedForms = this.generateNewView();
+
+		this.profileSummary = editedForms.profileSummary;
+		this.educationsSummary = editedForms.educationsSummary;
+		this.experiencesSummary = editedForms.experiencesSummary;
+		this.workExperiences = editedForms.experiences;
+		this.educations = editedForms.educations;
+		this.certifications = editedForms.certifications;
+		this.skillsSummary = editedForms.skillsSummary;
+		this.skills = editedForms.skills.map(skill => skill.skill.name);
+	}
+
 	ngAfterViewInit(): void {
 		this.changeDetector.detectChanges();
+
+		this.resourceService
+			.getResourceInformation()
+			.pipe(take(1))
+			.subscribe(resData => {
+				this.email = resData.email;
+			});
 	}
 
 	loadPersonalInfo(eventData: FormGroup) {
@@ -203,6 +234,34 @@ export class EditProfileComponent implements AfterViewInit, OnDestroy {
 		} as ICreateViewDto;
 	}
 
+	openSubmitConfirmation() {
+		this.translateService
+			.get([`onboardingResourceEditProfile.modal.submitModal`])
+			.pipe(take(1))
+			.subscribe(data => {
+				const dialogText = data[`onboardingResourceEditProfile.modal.submitModal`];
+				this.modalService.open(
+					{
+						title: dialogText.title,
+						closeText: dialogText.closeText,
+						confirmText: dialogText.confirmText,
+						message: dialogText.message,
+						closable: true,
+						id: 'submit',
+						modalType: ModalType.WARNING,
+					},
+					CustomModalType.INFO,
+				);
+			});
+
+		this.modalService.confirmEventSubject.subscribe(() => {
+			this.submitClicked.emit(this.generateNewView());
+			this.closeEditView();
+			this.modalService.close();
+			this.modalService.confirmEventSubject.unsubscribe();
+		});
+	}
+
 	submitChanges() {
 		this.educationsForm?.markAllAsTouched();
 		this.personalInfoForm?.markAllAsTouched();
@@ -210,15 +269,15 @@ export class EditProfileComponent implements AfterViewInit, OnDestroy {
 		this.skillsSummaryForm?.markAllAsTouched();
 		this.certificationsForm?.markAllAsTouched();
 
-		// TODO: disable submit button
-		// TODO: disable non view related fields (i.e name, address etc)
-		// should be extracted from personal-info component?
-		// this.isValid = this.personalInfoForm?.valid && this.personalInfoForm?.valid && this.certificationsForm?.valid && this.experiencesForm?.valid
-		// && this.skillsSummaryForm?.valid;
+		const isValid =
+			this.personalInfoForm?.valid &&
+			this.educationsForm?.valid &&
+			this.certificationsForm?.valid &&
+			this.experiencesForm?.valid &&
+			this.skillsSummaryForm?.value;
 
-		if (this.isValid) {
-			this.submitClicked.emit(this.generateNewView());
-			this.closeEditView();
+		if (isValid) {
+			this.openSubmitConfirmation();
 		}
 	}
 }
