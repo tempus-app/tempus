@@ -90,7 +90,7 @@ export class ResourceService {
 			throw new NotFoundException(`Could not find resource with id ${resourceId}`);
 		}
 
-		return { ...resourceEntity };
+		return resourceEntity;
 	}
 
 	// Lightweight method to find resource without the extra linked data
