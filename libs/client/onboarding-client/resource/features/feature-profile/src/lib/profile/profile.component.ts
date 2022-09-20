@@ -158,9 +158,11 @@ export class ProfileComponent implements OnInit, OnDestroy {
 			// 	this.skillsSummary = primaryView.skillsSummary;
 			// });
 
+			// TODO: ADD resource to the store
 			this.resourceService.getResourceOriginalResumeById(this.userId).subscribe(resumeBlob => {
 				this.resume = new File([resumeBlob], 'original-resume.pdf');
 			});
+
 			// fetch all Primary views, select display
 			this.resourceService.getResourceProfileViews(this.userId).subscribe(views => {
 				const primaryViews = views.filter(view => view.viewType === ViewType.PRIMARY);
@@ -220,9 +222,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
 		this.isPendingApproval = true;
 
 		// Post view to db, return revision
-		this.resourceService.editResourceView(this.currentViewId, newView).subscribe(createdView => {
-			console.log(createdView);
-		});
+		this.resourceService.editResourceView(this.currentViewId, newView);
 	}
 
 	ngOnDestroy(): void {
