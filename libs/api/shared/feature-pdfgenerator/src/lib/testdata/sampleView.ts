@@ -3,6 +3,9 @@ import { View, ViewType } from '@tempus/shared-domain';
 
 export const SampleView: View = {
 	id: 0,
+	locked: true,
+	createdAt: null,
+	createdBy: null,
 	profileSummary:
 		'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
 	skillsSummary:
@@ -11,7 +14,6 @@ export const SampleView: View = {
 	experiencesSummary:
 		'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
 	type: '',
-	status: [],
 	certifications: [
 		{
 			id: 1,
@@ -65,7 +67,7 @@ export const SampleView: View = {
 			description: null,
 			startDate: new Date('2010/10/09'),
 			company: 'string',
-			endDate: new Date('2022/01/04'),
+			endDate: null,
 			location: {
 				id: 1,
 				city: 'Ottawa',
@@ -137,7 +139,7 @@ export const SampleView: View = {
 			institution: 'Ryerson University',
 			degree: 'Masters Degree in Electrical Engineering',
 			startDate: new Date(),
-			endDate: new Date(),
+			endDate: null,
 			location: {
 				id: 5,
 				city: 'Toronto',

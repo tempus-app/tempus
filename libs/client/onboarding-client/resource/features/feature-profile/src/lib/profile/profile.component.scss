@@ -1,1 +1,71 @@
 @use 'abstracts/helper' as abs;
+@use 'components/helper' as cmp;
+
+#page-container {
+	margin: 2% 0%;
+	align-items: center;
+}
+
+#title-container {
+	@include cmp.info-title(85%, 0);
+	margin: 2em 0em;
+}
+
+#button-container {
+	display: flex;
+	flex-direction: row;
+	gap: 0.5em;
+}
+
+#my-profile-container {
+	display: flex;
+	flex-direction: row;
+	gap: 1em;
+}
+
+#error-icon {
+	display: inline-flex;
+	vertical-align: middle;
+	color: abs.$warning;
+	font-size: 1.875em;
+	margin-top: 0.4em;
+	height: 1em;
+}
+
+#reject-icon {
+	display: inline-flex;
+	vertical-align: middle;
+	color: abs.$failure;
+	font-size: 1.875em;
+	margin-top: 0.4em;
+	height: 1em;
+}
+
+#rejection-dialog {
+	background-color: rgb(250, 240, 240);
+	color: abs.$failure;
+	border-radius: 10px;
+	padding: 2em;
+}
+
+::ng-deep .tooltip {
+	font-size: 0.75em;
+}
+
+tempus-button {
+	height: 2em;
+}
+
+.page-title {
+	color: abs.$primary-800;
+}
+
+.section-title {
+	font-size: 1.5em !important;
+	color: abs.$primary-800;
+}
+
+.section-container {
+	padding: 1em;
+	width: 85%;
+}

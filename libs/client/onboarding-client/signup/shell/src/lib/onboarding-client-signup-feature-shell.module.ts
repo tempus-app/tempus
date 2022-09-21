@@ -5,6 +5,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { ClientSharedUiComponentsPersistentModule } from '@tempus/client/shared/ui-components/persistent';
 import { ValidLinkGuard } from '@tempus/client/onboarding-client/signup/guards';
 import { OnboardingClientSignupDataAccessModule } from '@tempus/client/onboarding-client/signup/data-access';
+import { TranslateModule } from '@ngx-translate/core';
 import { SignupShellComponent } from './shell/onboarding-client-signup-feature-shell.component';
 
 const routes: Routes = [
@@ -77,6 +78,10 @@ const routes: Routes = [
 		RouterModule.forChild(routes),
 		ClientSharedUiComponentsPersistentModule,
 		MatButtonModule,
+		TranslateModule.forChild({
+			isolate: false,
+			extend: true,
+		}),
 	],
 })
 export class OnboardingClientSignupFeatureShellModule {}

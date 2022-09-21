@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, forwardRef } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { FormControl } from '@angular/forms';
 
 @Component({
@@ -7,7 +7,9 @@ import { FormControl } from '@angular/forms';
 	styleUrls: ['./dropdown.component.scss'],
 })
 export class DropdownComponent {
-	@Input() options: string[] = [];
+	@Input() options: string[] | null = null;
+
+	@Input() optionsWithId: { val: string; id: number }[] | null = null;
 
 	@Input() cssClass = 'secondary';
 
@@ -17,7 +19,7 @@ export class DropdownComponent {
 
 	@Output() optionSelect = new EventEmitter();
 
-	optionSelected(option: string) {
-		this.optionSelect.emit(option);
+	optionSelected(option?: string | number) {
+		this.optionSelect.emit(option ? <string>option : undefined);
 	}
 }

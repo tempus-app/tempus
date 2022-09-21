@@ -12,19 +12,26 @@
 			<h3 class="mat-h3 header-text" id="info-header">
 				{{ data.title }}
 			</h3>
+			<p *ngIf="data.subtitle" style="text-align: center" class="mat-body-2">{{ data.subtitle }}</p>
 		</span>
 	</div>
 	<div mat-dialog-content>
 		<p class="mat-body-2">{{ data.message }}</p>
 	</div>
-	<div mat-dialog-actions fxLayout="column" fxLayoutAlign="end end">
+	<div mat-dialog-actions fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="end end">
 		<tempus-button
 			*ngIf="data.closable && data.closeText"
 			color="grey"
 			[label]="data.closeText"
-			(click)="selectClose()"
+			(buttonClick)="selectClose()"
 		></tempus-button>
-		<tempus-button class="dialog-button" color="primary" (click)="selectConfirm()" [label]="data.confirmText">
+		<tempus-button
+			class="dialog-button"
+			color="primary"
+			[disabled]="$confirmDisabled | async"
+			(buttonClick)="selectConfirm()"
+			[label]="data.confirmText"
+		>
 		</tempus-button>
 	</div>
 </div>

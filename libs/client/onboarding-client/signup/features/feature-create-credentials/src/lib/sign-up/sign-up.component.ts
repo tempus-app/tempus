@@ -22,6 +22,8 @@ export class SignUpComponent implements OnInit {
 
 	createdCredentials: boolean | undefined;
 
+	signupPrefix = 'onboardingSignupCredentials.main.';
+
 	formGroup: FormGroup = new FormGroup(
 		{
 			email: new FormControl({ value: this.email, disabled: true }, Validators.required),

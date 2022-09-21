@@ -8,7 +8,7 @@
 				<div id="initials">{{ initials }}</div>
 			</div>
 			<h2 class="mat-h2">{{ name }}</h2>
-			<p class="mat-body-2">{{ email }}</p>
+			<div class="mat-body-2" id="email">{{ email }}</div>
 		</div>
 		<mat-button-toggle-group name="userBar" vertical>
 			<mat-button-toggle (click)="selectedTab(tab)" *ngFor="let tab of tabs" [value]="tab">
@@ -17,7 +17,7 @@
 			<mat-button-toggle value="logout" (click)="selectedTab('logout')">
 				<div id="logout-container">
 					<mat-icon>settings</mat-icon>
-					<h3 class="mat-body-2">Logout</h3>
+					<h3 class="mat-body-2">{{ 'sidenav.logout' | translate }}</h3>
 				</div>
 			</mat-button-toggle>
 		</mat-button-toggle-group>

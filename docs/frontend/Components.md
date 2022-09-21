@@ -132,6 +132,5 @@ cell: (element: Record<string, any>) => `${element['email']}`
 
 ```
 
-```
-
-```
+All table data must extend off of `TableDataModel` but one can make custom models as needed.
+The table component actually renders the cell value as html so one can put html tags instead of just strings. One can optionally pass an icon to a table data element to display as a mat icon alongside a list of columns to show the icon on. Similarly, one can pass a url to a table data element alongside a list of columns to render as a clickable link.

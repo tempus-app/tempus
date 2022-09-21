@@ -7,7 +7,7 @@ services:
     ports:
       - 5432:5432
     environment:
-      POSTGRES_PASSWORD: example
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
 
   adminer:
     image: adminer
@@ -15,7 +15,22 @@ services:
     ports:
       - 8080:8080
 
-  onboarding:
+  onboarding-client:
+    build:
+      context: .
+      dockerfile: Dockerfile.onboarding-client.dev
+      args:
+        - NODE_ENV=development
+    ports:
+      - 4200:4200
+    volumes:
+      - type: bind
+        source: .
+        target: /src
+      - /src/node_modules
+    working_dir: /src
+
+  onboarding-api:
     build:
       context: .
       dockerfile: Dockerfile.onboarding.dev
@@ -25,12 +40,18 @@ services:
       - DB_HOST=postgres
       - DB_PORT=5432
       - DB_USERNAME=postgres
-      - DB_PASSWORD=example
+      - DB_PASSWORD=${DB_PASSWORD}
       - DB_NAME=postgres
       - CHROMIUM_PATH=/usr/bin/chromium-browser
-      - JWT_ACCESS_SECRET=test
-      - JWT_REFRESH_SECRET=test2
-      - SALT_SECRET=10
+      - JWT_ACCESS_SECRET=${JWT_ACCESS_SECRET}
+      - JWT_REFRESH_SECRET=${JWT_REFRESH_SECRET}
+      - SALT_SECRET=${SALT_SECRET}
+      - API_URL=${API_URL}
+      - EMAIL_HOST=${EMAIL_HOST}
+      - EMAIL_PORT=${EMAIL_PORT}
+      - EMAIL_USERNAME=${EMAIL_USERNAME}
+      - EMAIL_PASSWORD=${EMAIL_PASSWORD}
+      - EMAIL_ADDRESS=${EMAIL_ADDRESS}
 
     ports:
       - 3000:3000
@@ -40,22 +61,5 @@ services:
         target: /src
       - /src/node_modules
     working_dir: /src
-    depends_on:
-      - postgres
-
-  timesheet:
-    build:
-      context: .
-      dockerfile: Dockerfile.timesheet.dev
-      args:
-        - NODE_ENV=development
-    environment:
-      - DB_HOST=postgres
-      - DB_PORT=5432
-      - DB_USERNAME=postgres
-      - DB_PASSWORD=dbpass
-      - DB_NAME=postgres
-    ports:
-      - 3001:3001
     depends_on:
       - postgres

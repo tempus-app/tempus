@@ -14,7 +14,7 @@ export class LinkController {
 	@Post('/')
 	async createLink(@Body() createLinkDto: CreateLinkDto): Promise<Link> {
 		const linkEntity: LinkEntity = LinkEntity.fromDto(createLinkDto);
-		return this.linkService.createLink(linkEntity);
+		return this.linkService.createLink(linkEntity, createLinkDto.projectId);
 	}
 
 	// UPDATES:

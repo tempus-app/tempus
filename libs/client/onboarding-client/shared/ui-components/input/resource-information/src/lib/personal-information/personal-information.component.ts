@@ -45,6 +45,10 @@ export class PersonalInformationComponent implements OnInit, OnChanges {
 		city: ['', Validators.required],
 	});
 
+	personalInfoPrefix = 'onboardingClient.input.personalInfo.';
+
+	commonPrefix = 'onboardingClient.input.common.';
+
 	countries: string[] = Country.getAllCountries().map(country => {
 		return country.name;
 	});
@@ -84,6 +88,7 @@ export class PersonalInformationComponent implements OnInit, OnChanges {
 	ngOnInit(): void {
 		this.loadStoreData();
 		this.formGroup.emit(this.myInfoForm);
+		this.myInfoForm.updateValueAndValidity({ onlySelf: false, emitEvent: true });
 	}
 
 	loadStoreData() {
@@ -102,6 +107,9 @@ export class PersonalInformationComponent implements OnInit, OnChanges {
 	}
 
 	updateStateOptions(inputtedCountry: string) {
+		if (inputtedCountry === '') {
+			this.states = []
+		}
 		const countryCode = Country.getAllCountries().find(country => country.name === inputtedCountry);
 		if (countryCode != null)
 			this.states = State.getStatesOfCountry(countryCode.isoCode).map(state => {

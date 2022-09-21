@@ -4,10 +4,10 @@
 		color="{{ color }}"
 		class="{{ buttonType }}"
 		(click)="buttonClicked(true)"
-		[disabled]="disabled"
+		[disabled]="disabled ? disabled : false"
 	>
 		<div id="button-container">
-			<mat-icon *ngIf="icon !== ''">{{ icon }}</mat-icon>
+			<span *ngIf="icon !== ''" id="{{ icon }}" class="material-icons">{{icon}}</span>
 			<div class="label">{{ label }}</div>
 		</div>
 	</button>

@@ -3,7 +3,9 @@ export interface Column {
 	header: string;
 	// eslint-disable-next-line @typescript-eslint/ban-types
 	cell: Function;
-	// TODO: add link functionality
-	isLink?: boolean;
+	icon?: {
+		val: string;
+		class: string;
+	};
 	url?: string;
 }

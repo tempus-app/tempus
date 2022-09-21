@@ -24,6 +24,9 @@ export class AuthEffects {
 						return loginSuccess({
 							accessToken: data.accessToken,
 							loggedInUserId: data.user.id,
+							firstName: data.user.firstName,
+							lastName: data.user.lastName,
+							email: data.user.email,
 						});
 					}),
 					catchError(error => of(loginFailure({ error }))),

@@ -1,8 +1,8 @@
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { Country, State } from 'country-state-city';
+import { formatDateToISO, checkEnteredDates } from '@tempus/client/shared/util';
 import { InputType } from '@tempus/client/shared/ui-components/input';
-import { FormArray, FormBuilder, Validators } from '@angular/forms';
-import { checkEnteredDates } from '@tempus/client/shared/util';
+import { AbstractControl, FormArray, FormBuilder, Validators } from '@angular/forms';
 import { ICreateEducationDto } from '@tempus/shared-domain';
 
 @Component({
@@ -36,6 +36,10 @@ export class EducationComponent implements OnInit {
 		qualifications: this.fb.array([]),
 	});
 
+	educationsPrefix = 'onboardingClient.input.education.';
+
+	commonPrefix = 'onboardingClient.input.common.';
+
 	constructor(private fb: FormBuilder) {}
 
 	ngOnInit(): void {
@@ -46,13 +50,53 @@ export class EducationComponent implements OnInit {
 	loadStoreData() {
 		this.myInfoForm.patchValue({
 			educationSummary: this.educationSummary,
-			qualifications: this.educations,
 		});
+
+		// mock sections, add to FormArray, patch
+		for (let i = 0; i < this.educations.length; i++) {
+			const qualification = this.fb.group(
+				{
+					institution: ['!', Validators.required],
+					field: ['', Validators.required],
+					country: [''],
+					state: [''],
+					city: [''],
+					startDate: ['', Validators.required],
+					endDate: ['', Validators.required],
+				},
+				{ validators: checkEnteredDates() },
+			);
+
+			// patch values
+			qualification.get('institution')?.patchValue(this.educations[i].institution);
+			qualification.get('field')?.patchValue(this.educations[i].degree);
+			qualification.get('country')?.patchValue(this.educations[i].location.country);
+			qualification.get('state')?.patchValue(this.educations[i].location.province);
+			qualification.get('city')?.patchValue(this.educations[i].location.city);
+			qualification.get('startDate')?.patchValue(formatDateToISO(this.educations[i].startDate));
+			qualification.get('endDate')?.patchValue(formatDateToISO(this.educations[i].endDate));
+
+			if (qualification.get('endDate')?.value === null) {
+				qualification.get('endDate')?.disable();
+			}
+
+			this.qualifications.push(qualification);
+		}
 	}
 
 	get qualifications() {
 		// eslint-disable-next-line @typescript-eslint/dot-notation
 		return this.myInfoForm.controls['qualifications'] as FormArray;
+	}
+
+	setCheck(checked: boolean, numEdu: AbstractControl) {
+		if (checked) {
+			numEdu.patchValue({ endDate: null });
+			numEdu.get('endDate')?.disable();
+		} else {
+			numEdu.patchValue({ endDate: '' });
+			numEdu.get('endDate')?.enable();
+		}
 	}
 
 	addEducationSections() {
@@ -88,6 +132,9 @@ export class EducationComponent implements OnInit {
 	}
 
 	updateStateOptions(inputtedCountry: string) {
+		if (inputtedCountry === '') {
+			this.states = [];
+		}
 		const countryCode = Country.getAllCountries().find(country => country.name === inputtedCountry);
 		if (countryCode != null)
 			this.states = State.getStatesOfCountry(countryCode.isoCode).map(state => {

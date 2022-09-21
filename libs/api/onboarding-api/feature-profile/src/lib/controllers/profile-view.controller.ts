@@ -1,20 +1,29 @@
-import { Body, Controller, Delete, Get, Param, Post, UseGuards, Request } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, UseGuards, Patch, Request, Response, Res } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { CreateViewDto } from '@tempus/api/shared/dto';
-import { RoleType, View } from '@tempus/shared-domain';
+import { CreateViewDto, ApproveViewDto, ResumePdfTemplateDto } from '@tempus/api/shared/dto';
+import { Revision, RoleType, View } from '@tempus/shared-domain';
 import { JwtAuthGuard, PermissionGuard, Roles, RolesGuard, ViewsGuard } from '@tempus/api/shared/feature-auth';
+import { PdfGeneratorService } from '@tempus/api/shared/feature-pdfgenerator';
 import { ViewsService } from '../services/view.service';
 
 @ApiTags('Profile Views')
 @Controller('profile-view')
 export class ProfileViewController {
-	constructor(private viewSerivce: ViewsService) {}
+	constructor(private viewSerivce: ViewsService, private pdfService: PdfGeneratorService) {}
 
 	// all views of user
 	@UseGuards(JwtAuthGuard, PermissionGuard)
 	@Get('/:userId')
 	async getViews(@Param('userId') userId: number): Promise<View[]> {
 		const views = await this.viewSerivce.getViewsByResource(userId);
+		return views;
+	}
+
+	// all views of user
+	@UseGuards(JwtAuthGuard, PermissionGuard)
+	@Get('/view-names/:userId')
+	async getViewNames(@Param('userId') userId: number): Promise<View[]> {
+		const views = await this.viewSerivce.getViewsNamesByResource(userId);
 		return views;
 	}
 
@@ -25,6 +34,22 @@ export class ProfileViewController {
 		return view;
 	}
 
+	@UseGuards(JwtAuthGuard, ViewsGuard)
+	@Get('/download-resume/:viewId')
+	async downloadResume(@Res() res: Response, @Param('viewId') viewId: number): Promise<void> {
+		const view = await this.viewSerivce.getView(viewId);
+		const resume = new ResumePdfTemplateDto('testresume', view);
+		await this.pdfService.createPDF(res, resume, undefined, true);
+	}
+
+	@UseGuards(JwtAuthGuard, RolesGuard)
+	@Roles(RoleType.BUSINESS_OWNER)
+	@Post('/approve/:viewId')
+	async approveView(@Param('viewId') viewId: number, @Body() approveViewDto: ApproveViewDto): Promise<Revision | View> {
+		const approvalResult = await this.viewSerivce.approveOrDenyView(viewId, approveViewDto);
+		return approvalResult;
+	}
+
 	@UseGuards(JwtAuthGuard, PermissionGuard)
 	@Post('/:resourceId')
 	async createView(@Param('resourceId') resourceId: number, @Body() createViewDto: CreateViewDto): Promise<View> {
@@ -32,13 +57,16 @@ export class ProfileViewController {
 		return newView;
 	}
 
-	// will be used whenever someone edits within a view and presses save
-	// this should call the view service which should call individ services and CREATE new things, not edit
-	// ONLY when you edit on the main table page does it actually edit
-	// @Patch()
-	// async editView(@Body() view: any): Promise<View> {
-	// 	throw new NotImplementedException();
-	// }
+	@UseGuards(JwtAuthGuard, ViewsGuard)
+	@Patch('/:viewId')
+	async editView(
+		@Param('viewId') viewId: number,
+		@Request() req,
+		@Body() createViewDto: CreateViewDto,
+	): Promise<Revision> {
+		const revision = await this.viewSerivce.reviseView(viewId, req.user, createViewDto);
+		return revision;
+	}
 
 	@UseGuards(JwtAuthGuard, ViewsGuard)
 	@Delete('/:viewId')

@@ -3,7 +3,13 @@ import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards, Request }
 import { Resource, RoleType, User } from '@tempus/shared-domain';
 import { JwtAuthGuard, Roles, RolesGuard, PermissionGuard } from '@tempus/api/shared/feature-auth';
 import { ApiTags } from '@nestjs/swagger';
-import { CreateUserDto, CreateResourceDto, UpdateUserDto, UpdateResourceDto } from '@tempus/api/shared/dto';
+import {
+	CreateUserDto,
+	CreateResourceDto,
+	UpdateUserDto,
+	UpdateResourceDto,
+	UserProjectClientDto,
+} from '@tempus/api/shared/dto';
 import { ResourceService } from '../services/resource.service';
 import { UserService } from '../services/user.service';
 
@@ -30,6 +36,13 @@ export class UserController {
 
 	@UseGuards(JwtAuthGuard, RolesGuard)
 	@Roles(RoleType.BUSINESS_OWNER)
+	@Get('basic')
+	async getAllResourceProjInfo(): Promise<UserProjectClientDto[]> {
+		return this.resourceService.getAllResourceProjectInfo();
+	}
+
+	@UseGuards(JwtAuthGuard, RolesGuard)
+	@Roles(RoleType.BUSINESS_OWNER)
 	@Get('resources')
 	async getResources(): Promise<Resource[]> {
 		return this.resourceService.getAllResources();
@@ -40,6 +53,14 @@ export class UserController {
 	@Get('user')
 	async getUser(@Request() req): Promise<User | Resource> {
 		return this.userService.getUser(req.user);
+	}
+
+	// Gets a Resource
+	@UseGuards(JwtAuthGuard)
+	@Get('/:userId')
+	async getUserByID(@Param('userId') userId: number): Promise<Resource> {
+		const user = await this.resourceService.getResource(userId);
+		return user;
 	}
 
 	// creates User

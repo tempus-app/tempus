@@ -1,6 +1,7 @@
 import { CreateLinkDto } from '@tempus/api/shared/dto';
 import { Link, StatusType } from '@tempus/shared-domain';
-import { Column, CreateDateColumn, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { ProjectEntity } from '../project-entities';
 import { UserEntity } from './user.entity';
 
 @Entity()
@@ -37,7 +38,7 @@ export class LinkEntity implements Link {
 	@Column()
 	lastName: string;
 
-	@Column()
+	@Column({ unique: true })
 	email: string;
 
 	@Column()
@@ -56,6 +57,10 @@ export class LinkEntity implements Link {
 	@OneToOne(() => UserEntity)
 	@JoinColumn()
 	user?: UserEntity;
+
+	@ManyToOne(() => ProjectEntity)
+	@JoinColumn()
+	project: ProjectEntity;
 
 	public static fromDto(dto: CreateLinkDto): LinkEntity {
 		if (dto == null) return new LinkEntity();

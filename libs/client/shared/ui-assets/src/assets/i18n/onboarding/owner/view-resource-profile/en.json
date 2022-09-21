@@ -1,0 +1,52 @@
+{
+	"viewResourceProfile": {
+        "project": {
+			"title": "Projects"
+		},
+        "personal": {
+			"title": "Personal"
+		},
+		"workExperience": {
+			"title": "Work Experience"
+		},
+		"educationAndTraining": {
+			"title": "Education and Training"
+		},
+		"certifications": {
+			"title": "Certifications"
+		},
+		"skills": {
+			"title": "Skills"
+		},
+        "buttons": {
+            "approveButton": {
+                "title": "ACCEPT CHANGES"
+            },
+            "rejectButton": {
+                "title": "REJECT CHANGES"
+            },
+            "assignButton": {
+                "title": "ASSIGN"
+            },
+            "createNewViewButton": {
+                "title": "CREATE NEW VIEW"
+            },        
+            "downloadProfile": {
+                "title": "DOWNLOAD PROFILE"
+            }
+        },
+        "rejectDialog": {
+            "title": "Enter Comments",
+            "helpText": "Enter your comments here so the user can improve on their resume and submit a better revision.",
+            "closeText": "CANCEL",
+            "confirmText": "SUBMIT",
+            "errorMessage": "Please enter a comment."
+        },
+        "confirmationDialog": {
+            "title": "Revision Approved!",
+            "message": "You have approved the revision",
+            "confirmText": "CLOSE"
+        }
+
+	}
+}

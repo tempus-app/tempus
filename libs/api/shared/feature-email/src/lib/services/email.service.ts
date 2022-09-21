@@ -1,10 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { MailerService } from '@nestjs-modules/mailer';
 import { LinkEntity } from '@tempus/api/shared/entity';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class EmailService {
-	constructor(private readonly mailerService: MailerService) {}
+	constructor(private readonly mailerService: MailerService, private config: ConfigService) {}
 
 	async sendInvitationEmail(link: LinkEntity): Promise<void> {
 		await this.mailerService.sendMail({
@@ -12,6 +13,7 @@ export class EmailService {
 			subject: 'Complete your Profile for CAL & Associates',
 			template: 'invitationLink',
 			context: {
+				url: `${this.config.get('apiUrl')}signup/`,
 				code: link.token,
 				name: `${link.firstName} ${link.lastName}`,
 				expiry: new Date(link.expiry).toLocaleDateString(),

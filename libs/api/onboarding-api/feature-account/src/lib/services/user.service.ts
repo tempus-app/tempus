@@ -1,14 +1,12 @@
-import { Resource, RoleType, User } from '@tempus/shared-domain';
-import { ForbiddenException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
+import { Resource, User } from '@tempus/shared-domain';
+import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ConfigService } from '@nestjs/config';
 import { Repository } from 'typeorm';
 import { genSalt, hash } from 'bcrypt';
 import { UserEntity } from '@tempus/api/shared/entity';
 import { CreateUserDto, JwtPayload, UpdateUserDto } from '@tempus/api/shared/dto';
-import { AuthService } from '@tempus/api/shared/feature-auth';
 import { CommonService } from '@tempus/api/shared/feature-common';
-import { ResourceService } from './resource.service';
 
 @Injectable()
 export class UserService {

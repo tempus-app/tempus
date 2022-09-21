@@ -3,7 +3,7 @@
 		<div fxFlex>
 			<div fxFlex="5"></div>
 			<div class="info-title">
-				<h2 class="mat-h2">Skills</h2>
+				<h2 class="mat-h2">{{ skillsPrefix + 'title' | translate }}</h2>
 			</div>
 			<div fxFlex="5"></div>
 		</div>
@@ -12,7 +12,7 @@
 			<tempus-card>
 				<tempus-text-area
 					id="skill-summary"
-					placeholder="Summary"
+					placeholder="{{ skillsPrefix + 'summary' | translate }}"
 					[control]="$any(myInfoForm).get('skillsSummary')"
 				></tempus-text-area>
 				<form>
@@ -22,7 +22,7 @@
 								<input
 									class="mat-body"
 									id="skillChipInput"
-									placeholder="Add a skill..."
+									placeholder="{{ skillsPrefix + 'addPlaceholder' | translate }}"
 									[matChipInputFor]="chipList"
 									[matChipInputSeparatorKeyCodes]="separatorKeysCodes"
 									[matChipInputAddOnBlur]="addOnBlur"

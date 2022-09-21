@@ -6,6 +6,16 @@ body {
 	margin: 5%;
 }
 
+// font-weight for chrome
+* {
+	-webkit-font-smoothing: antialiased;
+}
+
+// disable sidebar scroll
+.mat-drawer-inner-container::-webkit-scrollbar {
+	display: none;
+}
+
 .responsive-modal {
 	@media (min-width: abs.$small) {
 		width: 60%;

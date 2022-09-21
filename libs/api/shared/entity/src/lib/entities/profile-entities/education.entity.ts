@@ -1,10 +1,11 @@
 import { CreateEducationDto } from '@tempus/api/shared/dto';
 import { Education } from '@tempus/shared-domain';
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToOne } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToOne, Check } from 'typeorm';
 import { ResourceEntity } from '../account-entities';
 import { LocationEntity } from '../common-entities';
 
 @Entity()
+@Check('"endDate" >= "startDate"')
 export class EducationEntity implements Education {
 	constructor(
 		id?: number,
@@ -36,7 +37,7 @@ export class EducationEntity implements Education {
 	@Column()
 	startDate: Date;
 
-	@Column()
+	@Column({ nullable: true })
 	endDate: Date;
 
 	@OneToOne(() => LocationEntity, location => location.education, {

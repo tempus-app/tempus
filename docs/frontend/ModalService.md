@@ -6,6 +6,14 @@ A reusable modal service has been created for both information and content modal
 
 To use modals, first import the ModalService into the appropriate component
 
+
+### Importing
+First import the modal service from the directory by entering:
+`import { ModalService } from '@tempus/client/shared/ui-components/modal';`
+
+Then import the modal service into the module level and include it in the imports array:
+`import { ClientSharedUiComponentsModalModule } from '@tempus/client/shared/ui-components/modal';`
+
 ### Creation -  Info Modals
 
 These modals are less complex, and should be served only to display a specific message on the screen

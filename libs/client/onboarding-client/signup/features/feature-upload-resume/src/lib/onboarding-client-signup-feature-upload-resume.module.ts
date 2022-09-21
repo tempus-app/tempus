@@ -10,8 +10,15 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { ClientSharedUiComponentsInputModule } from '@tempus/client/shared/ui-components/input';
 import { ClientSharedUiComponentsPresentationalModule } from '@tempus/client/shared/ui-components/presentational';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { HttpClient } from '@angular/common/http';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { ConfirmResumeUploadComponent } from './confirm-resume-upload/confirm-resume-upload.component';
 import { ResumeUploadComponent } from './resume-upload/resume-upload.component';
+
+function createTranslateLoader(http: HttpClient) {
+	return new TranslateHttpLoader(http, './assets/i18n/onboarding/signup/uploadResume/', '.json');
+}
 
 @NgModule({
 	imports: [
@@ -32,6 +39,15 @@ import { ResumeUploadComponent } from './resume-upload/resume-upload.component';
 				component: ResumeUploadComponent,
 			},
 		]),
+		TranslateModule.forChild({
+			loader: {
+				provide: TranslateLoader,
+				useFactory: createTranslateLoader,
+				deps: [HttpClient],
+			},
+			isolate: false,
+			extend: true,
+		}),
 	],
 	declarations: [ConfirmResumeUploadComponent, ResumeUploadComponent],
 })

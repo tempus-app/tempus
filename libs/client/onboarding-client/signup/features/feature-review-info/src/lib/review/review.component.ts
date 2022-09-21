@@ -1,7 +1,8 @@
-import { AfterViewInit, ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { ICreateExperienceDto, ICreateEducationDto, ICreateCertificationDto } from '@tempus/shared-domain';
+import { CustomModalType, ModalService, ModalType } from '@tempus/client/shared/ui-components/modal';
 
-import { Subject, take } from 'rxjs';
+import { skip, Subject, take, takeUntil } from 'rxjs';
 
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -16,13 +17,14 @@ import {
 } from '@tempus/client/onboarding-client/signup/data-access';
 import { Store } from '@ngrx/store';
 import { AsyncRequestState } from '@tempus/client/onboarding-client/shared/data-access';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
 	selector: 'tempus-review',
 	templateUrl: './review.component.html',
 	styleUrls: ['./review.component.scss'],
 })
-export class ReviewComponent implements OnInit, AfterViewInit {
+export class ReviewComponent implements OnInit, OnDestroy, AfterViewInit {
 	firstName = '';
 
 	lastName = '';
@@ -65,12 +67,28 @@ export class ReviewComponent implements OnInit, AfterViewInit {
 
 	resume: File | null = null;
 
+	$destroyed = new Subject<void>();
+
+	reviewPrefix = 'onboardingClientSignupReview.';
+
 	constructor(
 		private router: Router,
 		private route: ActivatedRoute,
 		private store: Store<SignupState>,
 		private changeDetector: ChangeDetectorRef,
-	) {}
+		private translateService: TranslateService,
+		private modalService: ModalService,
+	) {
+		const { currentLang } = translateService;
+		// eslint-disable-next-line no-param-reassign
+		translateService.currentLang = '';
+		translateService.use(currentLang);
+	}
+
+	ngOnDestroy(): void {
+		this.$destroyed.next();
+		this.$destroyed.complete();
+	}
 
 	ngAfterViewInit(): void {
 		this.changeDetector.detectChanges();
@@ -100,26 +118,57 @@ export class ReviewComponent implements OnInit, AfterViewInit {
 				this.certifications = resData?.certifications;
 				this.educations = resData?.educations;
 			});
-		this.store.select(selectUploadedResume).subscribe(resumeData => {
-			this.resume = resumeData;
-		});
-		this.store.select(selectResourceStatus).subscribe(reqStatusData => {
-			if (reqStatusData.status === AsyncRequestState.LOADING) {
-				this.loading = true;
-			} else if (reqStatusData.status === AsyncRequestState.SUCCESS) {
-				alert('Resource Created Succesfully');
-				this.loading = false;
-				this.store.dispatch(resetLinkState());
-				this.store.dispatch(resetCreateResourceState());
-				this.router.navigate(['../../../signin'], { relativeTo: this.route });
-			} else if (reqStatusData.status === AsyncRequestState.ERROR) {
-				this.loading = false;
-				alert('Error creating resource');
-			} else {
-				this.loading = false;
-			}
-		});
+		this.store
+			.select(selectUploadedResume)
+			.pipe(skip(1), takeUntil(this.$destroyed))
+			.subscribe(resumeData => {
+				this.resume = resumeData;
+			});
+		this.store
+			.select(selectResourceStatus)
+			.pipe(skip(1), takeUntil(this.$destroyed))
+			.subscribe(reqStatusData => {
+				if (reqStatusData.status === AsyncRequestState.LOADING) {
+					this.loading = true;
+				} else if (reqStatusData.status === AsyncRequestState.SUCCESS) {
+					this.openDialog('successModal');
+					this.loading = false;
+					this.store.dispatch(resetLinkState());
+					this.store.dispatch(resetCreateResourceState());
+					this.router.navigate(['../../../signin'], { relativeTo: this.route });
+				} else if (reqStatusData.status === AsyncRequestState.ERROR) {
+					this.loading = false;
+					this.openDialog('errorModal');
+				} else {
+					this.loading = false;
+				}
+			});
 	}
+
+	openDialog = (key: string) => {
+		this.translateService
+			.get([`onboardingClientSignupReview.modal.${key}`])
+			.pipe(take(1))
+			.subscribe(data => {
+				const dialogText = data[`onboardingClientSignupReview.modal.${key}`];
+				this.modalService.open(
+					{
+						title: dialogText.title,
+						confirmText: dialogText.confirmText,
+						message: dialogText.message,
+						modalType: key === 'successModal' ? ModalType.INFO : ModalType.ERROR,
+						closable: true,
+						id: key,
+					},
+					CustomModalType.INFO,
+				);
+			});
+
+		this.modalService.confirmEventSubject.subscribe(() => {
+			this.modalService.close();
+			this.modalService.confirmEventSubject.unsubscribe();
+		});
+	};
 
 	backStep() {
 		this.router.navigate(['../myinfothree'], { relativeTo: this.route });

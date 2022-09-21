@@ -1,4 +1,4 @@
-import { LinkEntity } from '@tempus/api/shared/entity';
+import { LinkEntity, ProjectEntity } from '@tempus/api/shared/entity';
 import { Link, StatusType } from '@tempus/shared-domain';
 
 export const linkEntity: Link = {
@@ -9,6 +9,7 @@ export const linkEntity: Link = {
 	expiry: new Date('01-03-2024'),
 	id: 3,
 	status: StatusType.ACTIVE,
+	createdAt: new Date('01-01-2022'),
 };
 
 export const createLinkEntity = new LinkEntity(
@@ -29,6 +30,7 @@ export const dbLink = new LinkEntity(
 	'random-string',
 	StatusType.ACTIVE,
 );
+dbLink.createdAt = new Date('01-01-2022');
 
 export const expiredDBLink = new LinkEntity(
 	3,
@@ -39,3 +41,6 @@ export const expiredDBLink = new LinkEntity(
 	'random-string',
 	StatusType.ACTIVE,
 );
+expiredDBLink.createdAt = new Date('01-01-2022');
+
+export const mockProject = new ProjectEntity(1, 'CIBC Mobile App');

@@ -33,7 +33,7 @@ async function bootstrap() {
 	setupSwagger(app);
 	app.setGlobalPrefix(globalPrefix);
 	app.useGlobalFilters(new HttpErrorFilter(config));
-	const port = process.env.PORT || 3333;
+	const port = process.env.PORT || 3000;
 	await app.listen(port);
 	Logger.log(`🚀 Application is running on: http://localhost:${port}/${globalPrefix}`);
 	Logger.log(`Running in ${config.get('environment')} mode`);
