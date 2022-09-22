@@ -10,7 +10,7 @@ export class ChipComponent implements OnInit {
 
 	@Input() removable = true;
 
-	@Input() typography = 'subheading-1';
+	@Input() typography = 'mat-body';
 
 	@Input() content = 'placeholder';
 

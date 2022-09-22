@@ -1,5 +1,5 @@
-import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import {
 	OnboardingClientState,
@@ -14,10 +14,10 @@ import {
 	ICreateEducationDto,
 	ICreateCertificationDto,
 	ICreateViewDto,
-	View,
 	ViewType,
 	RevisionType,
 } from '@tempus/shared-domain';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
 	selector: 'tempus-profile',
@@ -30,9 +30,13 @@ export class ProfileComponent implements OnInit, OnDestroy {
 		private resourceService: OnboardingClientResourceService,
 		private store: Store<OnboardingClientState>,
 		private router: Router,
-		private changeDetector: ChangeDetectorRef,
-		private route: ActivatedRoute,
-	) {}
+		private translateService: TranslateService,
+	) {
+		const { currentLang } = translateService;
+		// eslint-disable-next-line no-param-reassign
+		translateService.currentLang = '';
+		translateService.use(currentLang);
+	}
 
 	userId = 0;
 
@@ -82,7 +86,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
 	resume: File | null = null;
 
-	reviewPrefix = 'onboardingClientSignupReview.';
+	profilePrefix = 'onboardingResourceProfile.';
 
 	ButtonType = ButtonType;
 
@@ -211,10 +215,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
 		this.isPendingApproval = true;
 
-		// Post view to db, return revision
-		this.resourceService.editResourceView(this.currentViewId, newView).subscribe(newView => {
-			console.log(newView);
-		});
+		// Post view
+		this.resourceService.editResourceView(this.currentViewId, newView).pipe(take(1)).subscribe();
 	}
 
 	ngOnDestroy(): void {
