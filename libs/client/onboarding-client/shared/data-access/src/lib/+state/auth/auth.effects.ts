@@ -3,8 +3,9 @@ import { of, switchMap } from 'rxjs';
 import { map, catchError, tap } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { OnboardingClientState } from '../onboardingClient.state';
-import { login, loginFailure, loginSuccess, logout } from './auth.actions';
+import { login, loginFailure, loginSuccess, logout, logoutFailure, logoutSuccess } from './auth.actions';
 import { OnboardingClientAuthService } from '../../services';
 
 @Injectable()
@@ -13,6 +14,7 @@ export class AuthEffects {
 		private readonly actions$: Actions,
 		private store: Store<OnboardingClientState>,
 		private authService: OnboardingClientAuthService,
+		private router: Router,
 	) {}
 
 	login$ = createEffect(() =>
@@ -23,6 +25,7 @@ export class AuthEffects {
 					map(data => {
 						return loginSuccess({
 							accessToken: data.accessToken,
+							refreshToken: data.refreshToken,
 							loggedInUserId: data.user.id,
 							firstName: data.user.firstName,
 							lastName: data.user.lastName,
@@ -35,12 +38,21 @@ export class AuthEffects {
 		),
 	);
 
-	logout$ = createEffect(
-		() =>
-			this.actions$.pipe(
-				ofType(logout),
-				tap(_ => this.authService.logout()),
+	logout$ = createEffect(() =>
+		this.actions$.pipe(
+			ofType(logout),
+			switchMap(_ =>
+				this.authService.logout().pipe(
+					map(_ => {
+						this.authService.resetSessionStorage();
+						this.router.navigateByUrl('/signin');
+						return logoutSuccess();
+					}),
+					catchError(error => {
+						return of(logoutFailure(error));
+					}),
+				),
 			),
-		{ dispatch: false },
+		),
 	);
 }

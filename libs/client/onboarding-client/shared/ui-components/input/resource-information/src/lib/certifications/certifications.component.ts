@@ -46,8 +46,8 @@ export class CertificationsComponent implements OnInit {
 			certifications: this.certificationsArray,
 		});
 
-		// mock sections, add to FormArray, patch		
-		for (let i=0; i<this.certificationsArray.length; i++){
+		// mock sections, add to FormArray, patch
+		for (let i = 0; i < this.certificationsArray.length; i++) {
 			const certification = this.fb.group({
 				certifyingAuthority: ['', Validators.required],
 				title: ['', Validators.required],
@@ -55,9 +55,11 @@ export class CertificationsComponent implements OnInit {
 			});
 			this.certifications.push(certification);
 
-			//patch values
+			// patch values
 			(this.certifications.at(i) as FormGroup).get('title')?.patchValue(this.certificationsArray[i].title);
-			(this.certifications.at(i) as FormGroup).get('certifyingAuthority')?.patchValue(this.certificationsArray[i].institution);
+			(this.certifications.at(i) as FormGroup)
+				.get('certifyingAuthority')
+				?.patchValue(this.certificationsArray[i].institution);
 			(this.certifications.at(i) as FormGroup).get('summary')?.patchValue(this.certificationsArray[i].summary);
 		}
 	}
@@ -90,7 +92,7 @@ export class CertificationsComponent implements OnInit {
 
 	updateStateOptions(inputtedCountry: string) {
 		if (inputtedCountry === '') {
-			this.states = []
+			this.states = [];
 		}
 		const countryCode = Country.getAllCountries().find(country => country.name === inputtedCountry);
 		if (countryCode != null)

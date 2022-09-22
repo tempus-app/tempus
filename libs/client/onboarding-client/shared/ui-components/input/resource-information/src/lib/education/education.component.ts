@@ -52,8 +52,8 @@ export class EducationComponent implements OnInit {
 			educationSummary: this.educationSummary,
 		});
 
-		// mock sections, add to FormArray, patch		
-		for (let i=0; i<this.educations.length; i++){
+		// mock sections, add to FormArray, patch
+		for (let i = 0; i < this.educations.length; i++) {
 			const qualification = this.fb.group(
 				{
 					institution: ['!', Validators.required],
@@ -68,7 +68,7 @@ export class EducationComponent implements OnInit {
 			);
 			this.qualifications.push(qualification);
 
-			//patch values
+			// patch values
 			(this.qualifications.at(i) as FormGroup).get('institution')?.patchValue(this.educations[i].institution);
 			(this.qualifications.at(i) as FormGroup).get('field')?.patchValue(this.educations[i].degree);
 			(this.qualifications.at(i) as FormGroup).get('country')?.patchValue(this.educations[i].location.country);
@@ -128,7 +128,7 @@ export class EducationComponent implements OnInit {
 
 	updateStateOptions(inputtedCountry: string) {
 		if (inputtedCountry === '') {
-			this.states = []
+			this.states = [];
 		}
 		const countryCode = Country.getAllCountries().find(country => country.name === inputtedCountry);
 		if (countryCode != null)

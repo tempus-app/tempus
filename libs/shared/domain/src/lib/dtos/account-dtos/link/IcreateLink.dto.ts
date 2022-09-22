@@ -7,5 +7,5 @@ export interface ICreateLinkDto {
 
 	expiry?: Date;
 
-	projectId: number
+	projectId: number;
 }

@@ -53,8 +53,8 @@ export class WorkExperienceComponent implements OnInit {
 			workExperience: this.workExperiences,
 		});
 
-		// mock sections, add to FormArray, patch		
-		for (let i=0; i<this.workExperiences.length; i++){
+		// mock sections, add to FormArray, patch
+		for (let i = 0; i < this.workExperiences.length; i++) {
 			const workExperience = this.fb.group(
 				{
 					title: ['', Validators.required],
@@ -70,10 +70,12 @@ export class WorkExperienceComponent implements OnInit {
 			);
 			this.totalWorkExperience.push(workExperience);
 
-			//patch values
+			// patch values
 			(this.totalWorkExperience.at(i) as FormGroup).get('title')?.patchValue(this.workExperiences[i].title);
 			(this.totalWorkExperience.at(i) as FormGroup).get('company')?.patchValue(this.workExperiences[i].company);
-			(this.totalWorkExperience.at(i) as FormGroup).get('country')?.patchValue(this.workExperiences[i].location.country);
+			(this.totalWorkExperience.at(i) as FormGroup)
+				.get('country')
+				?.patchValue(this.workExperiences[i].location.country);
 			(this.totalWorkExperience.at(i) as FormGroup).get('state')?.patchValue(this.workExperiences[i].location.province);
 			(this.totalWorkExperience.at(i) as FormGroup).get('city')?.patchValue(this.workExperiences[i].location.city);
 			(this.totalWorkExperience.at(i) as FormGroup).get('startDate')?.patchValue(this.workExperiences[i].startDate);
@@ -129,7 +131,7 @@ export class WorkExperienceComponent implements OnInit {
 
 	updateStateOptions(inputtedCountry: string) {
 		if (inputtedCountry === '') {
-			this.states = []
+			this.states = [];
 		}
 		const countryCode = Country.getAllCountries().find(country => country.name === inputtedCountry);
 		if (countryCode != null)

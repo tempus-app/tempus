@@ -97,7 +97,7 @@ export class CredentialsComponent implements OnInit, OnDestroy {
 	}
 
 	ngOnInit() {
-		this.sharedStore.dispatch(logout())
+		this.sharedStore.dispatch(logout());
 		this.errorStatus$ = this.store.select(selectLinkErrorStatus).subscribe(errStatus => {
 			if (errStatus.status === AsyncRequestState.LOADING) {
 				this.loading = true;

@@ -1,5 +1,5 @@
 import { ForbiddenException, Injectable, InternalServerErrorException } from '@nestjs/common';
-import { Tokens, User, JwtPayload, JwtRefreshPayloadWithToken, AuthDto } from '@tempus/shared-domain';
+import { TokensDto, User, JwtPayload, JwtRefreshPayloadWithToken, AuthDto } from '@tempus/shared-domain';
 import { JwtService } from '@nestjs/jwt';
 import { compare, genSalt, hash } from 'bcrypt';
 import { Repository } from 'typeorm';
@@ -77,7 +77,7 @@ export class AuthService {
 		await this.userRepository.save(tokenOwner);
 	}
 
-	private async createTokens(user: User): Promise<Tokens> {
+	private async createTokens(user: User): Promise<TokensDto> {
 		const accessToken = await this.jwtService.signAsync(
 			{
 				email: user.email,
@@ -94,10 +94,10 @@ export class AuthService {
 			},
 			{
 				secret: this.configService.get('jwtRefreshSecret'),
-				expiresIn: 60 * 15,
+				expiresIn: 60 * 75,
 			},
 		);
-		const tokens = new Tokens(accessToken, refreshToken);
+		const tokens = new TokensDto(accessToken, refreshToken);
 		return tokens;
 	}
 }

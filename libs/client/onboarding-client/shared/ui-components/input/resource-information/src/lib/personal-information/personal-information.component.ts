@@ -108,7 +108,7 @@ export class PersonalInformationComponent implements OnInit, OnChanges {
 
 	updateStateOptions(inputtedCountry: string) {
 		if (inputtedCountry === '') {
-			this.states = []
+			this.states = [];
 		}
 		const countryCode = Country.getAllCountries().find(country => country.name === inputtedCountry);
 		if (countryCode != null)

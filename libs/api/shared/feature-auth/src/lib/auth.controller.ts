@@ -1,5 +1,5 @@
 import { Request, Controller, Post, UseGuards, HttpCode, HttpStatus } from '@nestjs/common';
-import { Tokens, AuthDto } from '@tempus/shared-domain';
+import { TokensDto, AuthDto } from '@tempus/shared-domain';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { AuthService } from './auth.service';
 import { JwtRefreshGuard } from './guards/jwt-refresh.guard';
@@ -26,7 +26,7 @@ export class AuthController {
 	@UseGuards(JwtRefreshGuard)
 	@HttpCode(HttpStatus.OK)
 	@Post('refresh')
-	refresh(@Request() req): Promise<Tokens> {
+	refresh(@Request() req): Promise<TokensDto> {
 		return this.authService.refreshToken(req.user);
 	}
 }

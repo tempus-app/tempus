@@ -12,5 +12,7 @@ export function handleError(error: HttpErrorResponse) {
 	}
 	const errorMessage = error.error?.message ? error.error.message : error.message;
 	// Return an observable with a user-facing error message.
-	return throwError(() => new Error(errorMessage));
+	const err = new Error(errorMessage);
+	err.name = error.name || '';
+	return throwError(() => err);
 }
