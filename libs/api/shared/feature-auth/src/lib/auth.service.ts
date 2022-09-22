@@ -21,7 +21,7 @@ export class AuthService {
 	async login(user: User): Promise<AuthDto> {
 		const tokens = await this.createTokens(user);
 		await this.updateRefreshTokenHash(user, tokens.refreshToken);
-		const partialUser = user;
+		let partialUser: UserEntity = {...user};
 		partialUser.password = null;
 		partialUser.refreshToken = null;
 		const result = new AuthDto(partialUser, tokens.accessToken, tokens.refreshToken);
@@ -63,11 +63,13 @@ export class AuthService {
 	}
 
 	private async updateRefreshTokenHash(user: User, refreshToken: string) {
+		
 		const tokenOwner = user;
 		const salt = await genSalt(this.configService.get('saltSecret'));
 
+		// logging user out by setting their refreshToken to null
 		if (!refreshToken) {
-			tokenOwner.refreshToken = refreshToken;
+			tokenOwner.refreshToken = null;
 		} else {
 			const hashedRefreshToken = await hash(refreshToken, salt);
 			tokenOwner.refreshToken = hashedRefreshToken;
@@ -95,6 +97,7 @@ export class AuthService {
 				expiresIn: 60 * 15,
 			},
 		);
+
 		const tokens = new Tokens(accessToken, refreshToken);
 		return tokens;
 	}
