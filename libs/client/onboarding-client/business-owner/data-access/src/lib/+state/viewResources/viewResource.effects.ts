@@ -1,29 +1,29 @@
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { of, switchMap } from 'rxjs';
-import { map, catchError, withLatestFrom } from 'rxjs/operators';
-import { OnboaringClientResourceProfileService } from '@tempus/client/onboarding-client/shared/data-access';
+import { map, catchError } from 'rxjs/operators';
+import { OnboardingClientResourceService } from '@tempus/client/onboarding-client/shared/data-access';
 import { Store } from '@ngrx/store';
 import { Injectable } from '@angular/core';
-import { viewResource, viewResourceSuccess, viewResourceFailure } from './viewResource.actions';
-import { SignupState } from '../signup.state';
-import { selectResourceData } from './createResource.selectors';
+import { getOriginalResume, getOriginalResumeSuccess, getOriginalResumeFailure } from './viewResource.actions';
+import { ViewState } from './viewResource.reducers';
 
 @Injectable()
-export class ResourceEffects {
+export class ViewResourceEffects {
 	constructor(
 		private readonly actions$: Actions,
-		private store: Store<SignupState>,
-		private resourceService: OnboaringClientResourceProfileService,
+		private store: Store<ViewState>,
+		private resourceService: OnboardingClientResourceService,
 	) {}
 
-	viewResource$ = createEffect(() =>
+	getOriginalResume$ = createEffect(() =>
 		this.actions$.pipe(
-			ofType(viewResource),
-			withLatestFrom(this.store.select(selectResourceData)),
-			switchMap(([action, createResourceData]) =>
-				this.resourceService.getView(createResourceData).pipe(
-					map(() => viewResourceSuccess()),
-					catchError(error => of(viewResourceFailure({ error }))),
+			ofType(getOriginalResume),
+			switchMap(input =>
+				this.resourceService.getResourceOriginalResumeById(input.resourceId).pipe(
+					map(data => {
+						return getOriginalResumeSuccess({ resume: data });
+					}),
+					catchError(error => of(getOriginalResumeFailure({ error }))),
 				),
 			),
 		),

@@ -16,4 +16,5 @@ export interface Resource extends User {
 	linkedInLink: string;
 	githubLink: string;
 	otherLink: string;
+	resume: Uint8Array;
 }

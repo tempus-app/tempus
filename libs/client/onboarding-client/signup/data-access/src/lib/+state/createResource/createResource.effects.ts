@@ -4,9 +4,16 @@ import { map, catchError, withLatestFrom } from 'rxjs/operators';
 import { OnboardingClientResourceService } from '@tempus/client/onboarding-client/shared/data-access';
 import { Store } from '@ngrx/store';
 import { Injectable } from '@angular/core';
-import { createResource, createResourceFailure, createResourceSuccess } from './createResource.actions';
+import {
+	createResource,
+	createResourceFailure,
+	createResourceSuccess,
+	saveResume,
+	saveResumeFailure,
+	saveResumeSuccess,
+} from './createResource.actions';
 import { SignupState } from '../signup.state';
-import { selectResourceData } from './createResource.selectors';
+import { selectResourceData, selectUploadedResume } from './createResource.selectors';
 
 @Injectable()
 export class ResourceEffects {
@@ -20,10 +27,24 @@ export class ResourceEffects {
 		this.actions$.pipe(
 			ofType(createResource),
 			withLatestFrom(this.store.select(selectResourceData)),
-			switchMap(([action, createResourceData]) =>
+			// eslint-disable-next-line @typescript-eslint/no-unused-vars
+			switchMap(([_, createResourceData]) =>
 				this.resourceService.createResource(createResourceData).pipe(
-					map(() => createResourceSuccess()),
+					map(data => createResourceSuccess({ resourceId: data.id })),
 					catchError(error => of(createResourceFailure({ error }))),
+				),
+			),
+		),
+	);
+
+	saveResume$ = createEffect(() =>
+		this.actions$.pipe(
+			ofType(saveResume),
+			withLatestFrom(this.store.select(selectUploadedResume)),
+			switchMap(([action, file]) =>
+				this.resourceService.saveResume(action.resourceId, file).pipe(
+					map(() => saveResumeSuccess()),
+					catchError(error => of(saveResumeFailure({ error }))),
 				),
 			),
 		),

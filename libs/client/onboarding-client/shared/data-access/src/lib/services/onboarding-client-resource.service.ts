@@ -28,7 +28,15 @@ export class OnboardingClientResourceService {
 	url = `${this.appConfig.apiUrl}/onboarding`;
 
 	public createResource(createResourceDto: ICreateResourceDto): Observable<Resource> {
-		return this.http.post<Resource>(`${this.url}/resource`, createResourceDto);
+		return this.http.post<Resource>(`${this.url}/user/resource`, createResourceDto);
+	}
+
+	public saveResume(resourceId: number, resume: File | null): Observable<FormData> {
+		const formData = new FormData();
+		if (resume) {
+			formData.append('resume', resume);
+		}
+		return this.http.patch<FormData>(`${this.url}/user/${resourceId}/resume`, formData);
 	}
 
 	public getResProjClientData(): Observable<IUserProjClientDto[]> {
@@ -63,6 +71,18 @@ export class OnboardingClientResourceService {
 		);
 	}
 
+	public getResourceOriginalResumeById(resourceId: number): Observable<Blob> {
+		return this.authStore.select(selectAccessToken).pipe(
+			take(1),
+			switchMap((token: string | null) => {
+				const httpAuthHeaders = getAuthHeaders(token || '');
+				return this.http
+					.get<Blob>(`${this.url}/user/${resourceId}/resume`, { ...httpAuthHeaders, responseType: 'blob' as 'json' })
+					.pipe(catchError(handleError));
+			}),
+		);
+	}
+
 	public getViewById(viewId: number): Observable<View> {
 		return this.authStore.select(selectAccessToken).pipe(
 			take(1),
@@ -83,6 +103,7 @@ export class OnboardingClientResourceService {
 				views
 					.filter(view => view.viewType === 'PRIMARY')
 					.sort((a, b) =>
+						// eslint-disable-next-line no-nested-ternary
 						a.lastUpdateDate && b.lastUpdateDate
 							? a.lastUpdateDate.getTime() > b.lastUpdateDate.getTime()
 								? -1

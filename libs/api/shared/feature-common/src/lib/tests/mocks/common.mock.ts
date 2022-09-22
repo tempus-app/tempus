@@ -36,6 +36,7 @@ export const resourceEntity: ResourceEntity = {
 	educations: null,
 	certifications: null,
 	skills: null,
+	resume: new Uint8Array(),
 };
 
 export const badUserEntity: ResourceEntity = {
@@ -63,6 +64,7 @@ export const badUserEntity: ResourceEntity = {
 	educations: null,
 	certifications: null,
 	skills: null,
+	resume: new Uint8Array(),
 };
 
 export const viewEntity: ViewEntity = {
