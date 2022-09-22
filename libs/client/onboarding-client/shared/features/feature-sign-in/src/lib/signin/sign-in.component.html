@@ -9,12 +9,14 @@
 					placeholder="{{ signInPrefix + 'usernamePlaceholder' | translate }}"
 					cssClass="secondary"
 					[control]="$any(loginForm).get('email')"
+					id="username"
 				></tempus-text-input>
 				<tempus-text-input
 					placeholder="{{ signInPrefix + 'passwordPlaceholder' | translate }}"
 					cssClass="secondary"
 					[inputType]="InputType.PASSWORD"
 					[control]="$any(loginForm).get('password')"
+					id="password"
 				></tempus-text-input>
 				<div class="login-container">
 					<button mat-raised-button color="accent" class="sign-in-button" (click)="login()">

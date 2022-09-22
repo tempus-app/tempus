@@ -59,7 +59,7 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 						columnDef: 'resource',
 						header: data['resource'],
 						cell: (element: Record<string, any>) =>
-							`<div class="demarginizedCell">${element['resource']}<p class="mat-caption">(${element['email']})</p></div>`,
+							`<div class="demarginizedCell">${element['resource']}<p id="resource" class="mat-caption">(${element['email']})</p></div>`,
 					},
 					{
 						columnDef: 'assignment',
