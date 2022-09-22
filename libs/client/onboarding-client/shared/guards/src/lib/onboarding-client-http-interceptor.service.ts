@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent, HttpErrorResponse } from '@angular/common/http';
-import { Observable, switchMap, take, map, tap, catchError, throwError, BehaviorSubject, filter, EMPTY } from 'rxjs';
+import { Observable, switchMap, take, catchError, throwError, BehaviorSubject, filter } from 'rxjs';
 import {
-	logout,
 	OnboardingClientAuthService,
 	OnboardingClientState,
 	refreshSuccess,
