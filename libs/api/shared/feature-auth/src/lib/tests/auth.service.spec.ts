@@ -8,16 +8,19 @@ import { CommonService } from '@tempus/api/shared/feature-common';
 import { ConfigService } from '@nestjs/config';
 import { JwtPayload } from '@tempus/shared-domain';
 import { AuthService } from '../auth.service';
-import { accessTokenPayload, authDto, refreshToken, user } from './auth.mock';
+import { accessTokenPayload, authDtoEntity, refreshToken, refreshTokenPayloadWithToken, newUser, loggedInUser, tokens } from './auth.mock';
 
 const mockUserRepository = createMock<Repository<UserEntity>>();
+const mockCommonService = createMock<CommonService>();
 
 const mockJwtService = {
-	signAsync: jest.fn().mockResolvedValue('jwtToken'),
-};
+	signAsync: jest
+		.fn()
+		.mockResolvedValueOnce('accessTokenMock') //first set of calls
+		.mockResolvedValueOnce('refreshTokenMock')
+		.mockResolvedValueOnce('accessTokenMock')  //second set of calls
+		.mockResolvedValueOnce('refreshTokenMock')
 
-const mockCommonService = {
-	findByEmail: jest.fn().mockResolvedValue(user),
 };
 
 const mockConfigService = {
@@ -28,6 +31,12 @@ const mockConfigService = {
 		return 'secret';
 	}),
 };
+
+jest.mock('bcrypt', () => ({
+	hash: () => 'fake-hash',
+	genSalt: () => 'fake-salt',
+	compare: () => true
+}))
 
 describe('AuthService', () => {
 	let moduleRef: TestingModule;
@@ -67,25 +76,67 @@ describe('AuthService', () => {
 
 	describe('login()', () => {
 		it('should successfully login a user and return an accessToken, refreshToken, and user entity', async () => {
-			const res = await authService.login(user);
+
+			const res = await authService.login(newUser);
+
+			// createTokens
 			expect(mockJwtService.signAsync).toHaveBeenNthCalledWith(
 				1,
-				{ email: 'johndoe@email.com', roles: null },
-				{ expiresIn: 900, secret: 'secret' },
+				{ email: newUser.email, roles: null },
+				{ expiresIn: 900, secret: mockConfigService.get() },
 			);
 			expect(mockJwtService.signAsync).toHaveBeenNthCalledWith(
 				2,
-				{ email: 'johndoe@email.com' },
-				{ expiresIn: 900, secret: 'secret' },
+				{ email: newUser.email },
+				{ expiresIn: 900, secret: mockConfigService.get() },
 			);
-			expect(res).toEqual(authDto);
+
+			//updateRefreshTokenHash
+			expect(mockUserRepository.save).toBeCalledWith({ ...newUser, refreshToken: "fake-hash" })
+			const authDto = {
+				...authDtoEntity,
+				user: { ...newUser, password: null, refreshToken: null }
+			}
+			expect(res).toEqual(authDto)
+		});
+	});
+
+	describe('refreshToken()', () => {
+		it('should return new tokens for a logged in user', async () => {
+			mockCommonService.findByEmail.mockResolvedValue(loggedInUser)
+
+			const res = await authService.refreshToken(refreshTokenPayloadWithToken)
+
+			expect(mockCommonService.findByEmail).toBeCalledWith(refreshTokenPayloadWithToken.email)
+
+			// createTokens
+			expect(mockJwtService.signAsync).toHaveBeenNthCalledWith(
+				1,
+				{ email: loggedInUser.email, roles: null },
+				{ expiresIn: 900, secret: mockConfigService.get() },
+			);
+			expect(mockJwtService.signAsync).toHaveBeenNthCalledWith(
+				2,
+				{ email: loggedInUser.email },
+				{ expiresIn: 900, secret: mockConfigService.get() },
+			);
+
+			//updateRefreshTokenHash
+			expect(mockUserRepository.save).toBeCalledWith({ ...loggedInUser, refreshToken: "fake-hash" })
+
+			expect(res).toEqual(tokens)
+
 		});
 	});
 
 	describe('logout()', () => {
 		it('should successfully logout a user', async () => {
+
+			mockCommonService.findByEmail.mockResolvedValue(loggedInUser)
+
 			await authService.logout(accessTokenPayload);
-			expect(mockCommonService.findByEmail).toBeCalledWith(user.email);
+			expect(mockCommonService.findByEmail).toBeCalledWith(accessTokenPayload.email);
+			expect(mockUserRepository.save).toBeCalledWith(loggedInUser)
 		});
 
 		it('should return an error since it could not find user', async () => {
@@ -101,10 +152,15 @@ describe('AuthService', () => {
 		});
 	});
 
-	describe('refreshToken()', () => {
-		it('should successfully logout a user', async () => {
-			await authService.logout(accessTokenPayload);
-			expect(mockCommonService.findByEmail).toBeCalledWith(user.email);
-		});
-	});
+	describe('validateUser()', () => {
+		it('should successfully return the user', async () => {
+			mockCommonService.findByEmail.mockResolvedValue(newUser)
+
+			const res = await authService.validateUser(newUser.email, newUser.password)
+
+			expect(mockCommonService.findByEmail).toBeCalledWith(newUser.email)
+
+			expect(res).toEqual(newUser)
+		})
+	})
 });
