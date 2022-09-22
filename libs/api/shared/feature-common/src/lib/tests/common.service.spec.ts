@@ -5,11 +5,11 @@ import { Repository } from 'typeorm';
 import { createMock } from '@golevelup/ts-jest';
 import { NotFoundException } from '@nestjs/common';
 import { CommonService } from '../common.service';
-import { badUserEntity, businessOwnerEntity, resourceEntity } from './mocks/user.mock';
+import { badUserEntity, businessOwnerEntity, resourceEntity, viewEntity } from './mocks/common.mock';
 
 const mockUserRepository = createMock<Repository<UserEntity>>();
 const mockResourceRepository = createMock<Repository<ResourceEntity>>();
-const mockViewRepository = createMock<Repository<ViewEntity>>();
+const mockViewsRepository = createMock<Repository<ViewEntity>>();
 
 describe('CommonService', () => {
 	let moduleRef: TestingModule;
@@ -30,7 +30,7 @@ describe('CommonService', () => {
 				},
 				{
 					provide: getRepositoryToken(ViewEntity),
-					useValue: mockViewRepository,
+					useValue: mockViewsRepository,
 				},
 			],
 		}).compile();
@@ -162,6 +162,49 @@ describe('CommonService', () => {
 
 			expect(error).toBeInstanceOf(NotFoundException);
 			expect(error.message).toBe(`Could not find resource with id ${badUserEntity.id}`);
+		});
+	});
+
+	describe('findUserByViewId()', () => {
+		it('should return the resource', async () => {
+			mockViewsRepository.findOne.mockResolvedValue(viewEntity);
+			mockUserRepository.findOne.mockResolvedValue(resourceEntity);
+			mockResourceRepository.findOne.mockResolvedValue(resourceEntity);
+
+			const res = await commonService.findUserByViewId(viewEntity.id);
+
+			expect(mockViewsRepository.findOne).toBeCalledWith({
+				relations: ['resource', 'experiences', 'educations', 'skills', 'certifications'],
+				where: {
+					id: viewEntity.id,
+				},
+			});
+			expect(res).toEqual(resourceEntity);
+		});
+
+		it('should throw error if view does not exist', async () => {
+			mockViewsRepository.findOne.mockResolvedValue(undefined);
+
+			const badView = { ...viewEntity, id: -4 };
+
+			let error;
+			try {
+				await commonService.findUserByViewId(badView.id);
+			} catch (e) {
+				error = e;
+			}
+
+			expect(mockViewsRepository.findOne).toBeCalledWith({
+				relations: ['resource', 'experiences', 'educations', 'skills', 'certifications'],
+				where: {
+					id: badView.id,
+				},
+			});
+			expect(mockResourceRepository.findOne).not.toBeCalled();
+			expect(mockUserRepository.findOne).not.toBeCalled();
+
+			expect(error).toBeInstanceOf(NotFoundException);
+			expect(error.message).toBe(`Could not find view with id ${badView.id}`);
 		});
 	});
 });
