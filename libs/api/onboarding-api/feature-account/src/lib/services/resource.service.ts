@@ -1,6 +1,12 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-restricted-syntax */
-import { ForbiddenException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
+import {
+	ForbiddenException,
+	Injectable,
+	InternalServerErrorException,
+	NotFoundException,
+	StreamableFile,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ConfigService } from '@nestjs/config';
 // eslint-disable-next-line @nrwl/nx/enforce-module-boundaries
@@ -55,6 +61,24 @@ export class ResourceService {
 		await this.linkService.assignResourceToLink(resource.linkId, createdResource);
 
 		return createdResource;
+	}
+
+	async saveResume(resourceId: number, resume: Express.Multer.File): Promise<void> {
+		const resourceEntity = await this.resourceRepository.findOne(resourceId);
+		if (!resourceEntity) {
+			throw new NotFoundException(`Could not find resource with id ${resourceId}`);
+		}
+		const buffer = await resume.buffer;
+		resourceEntity.resume = new Uint8Array(buffer);
+		await this.resourceRepository.save(resourceEntity);
+	}
+
+	async getResume(resourceId: number): Promise<StreamableFile> {
+		const resourceEntity = await this.resourceRepository.findOne(resourceId);
+		if (!resourceEntity) {
+			throw new NotFoundException(`Could not find resource with id ${resourceId}`);
+		}
+		return new StreamableFile(resourceEntity.resume);
 	}
 
 	async getResource(resourceId: number): Promise<Resource> {

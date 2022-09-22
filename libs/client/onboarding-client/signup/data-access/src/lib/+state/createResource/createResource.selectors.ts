@@ -9,6 +9,11 @@ export const selectResourceData = createSelector(selectResource, (state: Resourc
 
 export const selectUploadedResume = createSelector(selectResource, (state: ResourceState) => state.uploadedResume);
 
+export const selectCreatedResourceId = createSelector(
+	selectResource,
+	(state: ResourceState) => state.createdResourceId,
+);
+
 export const selectResourceStatus = createSelector(selectResource, (state: ResourceState) => {
 	return {
 		status: state.status,

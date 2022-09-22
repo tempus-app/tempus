@@ -8,7 +8,8 @@ import {
 } from '@tempus/client/onboarding-client/shared/data-access';
 import { UserType } from '@tempus/client/shared/ui-components/persistent';
 import { LoadView } from '@tempus/shared-domain';
-import { take } from 'rxjs';
+import { skip, take } from 'rxjs';
+import { getOriginalResume, selectOriginalResume } from '@tempus/client/onboarding-client/business-owner/data-access';
 
 @Component({
 	selector: 'tempus-resource-profile',
@@ -44,6 +45,8 @@ export class ResourceProfileComponent implements OnInit {
 
 	viewIndex = 0;
 
+	resume: File | null = null;
+
 	loadedView: LoadView = { isRevision: false };
 
 	childRevisionLoaded(loadedView: LoadView) {
@@ -65,12 +68,23 @@ export class ResourceProfileComponent implements OnInit {
 			this.phoneNumber = resourceInfo.phoneNumber;
 			this.resourceEmail = resourceInfo.email;
 		});
+		this.sharedStore.dispatch(getOriginalResume({ resourceId: id }));
+
 		this.sharedStore
 			.select(selectLoggedInUserNameEmail)
 			.pipe(take(1))
 			.subscribe(data => {
 				this.name = `${data.firstName} ${data.lastName}`;
 				this.email = data.email || '';
+			});
+
+		this.sharedStore
+			.select(selectOriginalResume)
+			.pipe(skip(1))
+			.subscribe(blob => {
+				if (blob) {
+					this.resume = new File([blob], 'original-resume.pdf');
+				}
 			});
 	}
 }
