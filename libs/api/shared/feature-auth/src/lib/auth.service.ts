@@ -85,7 +85,7 @@ export class AuthService {
 			},
 			{
 				secret: this.configService.get('jwtAccessSecret'),
-				expiresIn: 60 * 0.25,
+				expiresIn: 60 * 15,
 			},
 		);
 		const refreshToken = await this.jwtService.signAsync(
@@ -94,7 +94,7 @@ export class AuthService {
 			},
 			{
 				secret: this.configService.get('jwtRefreshSecret'),
-				expiresIn: 60 * 75,
+				expiresIn: 60 * 120,
 			},
 		);
 		const tokens = new TokensDto(accessToken, refreshToken);
