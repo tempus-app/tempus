@@ -9,7 +9,7 @@
 				}}</mat-option>
 			</ng-container>
 			<ng-container *ngIf="optionsWithId">
-				<mat-option (click)="optionSelected(option.id)" *ngFor="let option of optionsWithId" [value]="option.id">{{
+				<mat-option id="dropdown-option" (click)="optionSelected(option.id)" *ngFor="let option of optionsWithId" [value]="option.id">{{
 					option.val
 				}}</mat-option>
 			</ng-container>

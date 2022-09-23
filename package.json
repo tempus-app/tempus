@@ -22,7 +22,8 @@
 		"typeorm:migration:run": "npm run typeorm -- migration:run",
 		"typeorm:migration:create": "npm run typeorm -- migration:create --",
 		"typeorm:migration:revert": "npm run typeorm -- migration:revert --",
-		"seed": "npx nx run api-shared-feature-seed:run"
+		"seed": "npx nx run api-shared-feature-seed:run",
+		"e2e": "npm run seed && concurrently --kill-others \"npm run start:onboarding-api\" \"npx nx e2e tempus-e2e\""
 	},
 	"lint-staged": {
 		"*.{ts,js}": [
@@ -128,6 +129,7 @@
 		"@types/uuid": "^8.3.4",
 		"@typescript-eslint/eslint-plugin": "^5.12.1",
 		"@typescript-eslint/parser": "^5.12.1",
+		"concurrently": "^7.4.0",
 		"cypress": "^9.1.0",
 		"eslint": "^8.10.0",
 		"eslint-config-airbnb-base": "^15.0.0",
