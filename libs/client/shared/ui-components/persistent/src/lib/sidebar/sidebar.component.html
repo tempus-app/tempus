@@ -14,7 +14,7 @@
 			<mat-button-toggle (click)="selectedTab(tab)" *ngFor="let tab of tabs" [value]="tab">
 				<div class="mat-body-2">{{ tab }}</div>
 			</mat-button-toggle>
-			<mat-button-toggle value="logout" (click)="selectedTab('logout')">
+			<mat-button-toggle id="logout" value="logout" (click)="selectedTab('logout')">
 				<div id="logout-container">
 					<mat-icon>settings</mat-icon>
 					<h3 class="mat-body-2">{{ 'sidenav.logout' | translate }}</h3>

@@ -148,3 +148,7 @@ dist
 .DS_Store
 
 .vscode/
+
+#seed files
+/utils/csv
+/utils/json
