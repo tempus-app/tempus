@@ -41,11 +41,13 @@ export class AuthEffects {
 	logout$ = createEffect(() =>
 		this.actions$.pipe(
 			ofType(logout),
-			switchMap(_ =>
+			switchMap((options) =>
 				this.authService.logout().pipe(
 					map(_ => {
 						this.authService.resetSessionStorage();
-						this.router.navigateByUrl('/signin');
+            if(options.redirect) {
+              this.router.navigateByUrl('/signin');
+            }
 						return logoutSuccess();
 					}),
 					catchError(error => {

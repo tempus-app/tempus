@@ -26,7 +26,7 @@ import {
 import { InputType } from '@tempus/client/shared/ui-components/input';
 import { CustomModalType, ModalService, ModalType } from '@tempus/client/shared/ui-components/modal';
 import { ButtonType, Column, ProjectManagmenetTableData } from '@tempus/client/shared/ui-components/presentational';
-import { Client, ICreateLinkDto } from '@tempus/shared-domain';
+import { Client, ErorType, ICreateLinkDto } from '@tempus/shared-domain';
 import { finalize, Subject, Subscription, take, takeUntil } from 'rxjs';
 import { Router } from '@angular/router';
 
@@ -173,7 +173,7 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 				if (
 					asyncStatus.status === AsyncRequestState.ERROR &&
 					asyncStatus.error &&
-					asyncStatus.error.name != 'intercept'
+					asyncStatus.error.name != ErorType.INTERCEPTOR
 				) {
 					this.openErrorModal(asyncStatus.error.message);
 				}

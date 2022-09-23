@@ -71,7 +71,7 @@ export class SidebarComponent implements OnInit {
 
 	selectedTab(tab: string) {
 		if (tab === 'logout') {
-			this.store.dispatch(logout());
+			this.store.dispatch(logout({redirect: true}));
 		}
 		this.selectTab.emit(tab);
 	}

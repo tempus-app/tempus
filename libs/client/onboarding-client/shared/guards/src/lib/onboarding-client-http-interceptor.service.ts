@@ -9,7 +9,7 @@ import {
 } from '@tempus/client/onboarding-client/shared/data-access';
 import { Store } from '@ngrx/store';
 import { Router } from '@angular/router';
-import { TokensDto } from '@tempus/shared-domain';
+import { ErorType, TokensDto } from '@tempus/shared-domain';
 
 @Injectable({
 	providedIn: 'root',
@@ -42,18 +42,23 @@ export class InterceptorService implements HttpInterceptor {
 		this.authService.resetSessionStorage();
 		this.router.navigateByUrl('/signin');
 		const err = new Error(errMsg);
-		err.name = 'intercept';
+		err.name = ErorType.INTERCEPTOR;
 		alert(errMsg);
 		return throwError(() => err);
 	}
 
 	intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-		const omitEndpoints = ['auth/login', './assets'];
+		const omitEndpoints = ['auth/login', './assets', 'onboarding/link', 'python-api/parse', 'onboarding/user/resource'];
 		omitEndpoints.forEach(endpoint => {
 			if (req.url.includes(endpoint)) {
 				this.skipInterceptor = true;
 			}
 		});
+
+    // Saving resume
+    if(req.method === 'PATCH' && req.url.includes('resume')) {
+      this.skipInterceptor = true;
+    }
 
 		if (!this.skipInterceptor) {
 			return this.sharedStore.select(selectAccessRefreshToken).pipe(
@@ -86,8 +91,11 @@ export class InterceptorService implements HttpInterceptor {
 												return next.handle(this.addHeaderToReq(req, newToken));
 											}),
 										);
-									}
-									return this.logout('Session has expired, please login again');
+									} else if (err.status === 401) { // refresh token error
+                    return this.logout('Session has expired, please login again');
+                  } else { // non authorization related error
+                    return throwError(() => err);
+                  }
 								}
 								return this.logout('Unexpected error has occured');
 							}),

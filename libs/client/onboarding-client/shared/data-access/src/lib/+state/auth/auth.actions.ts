@@ -18,7 +18,7 @@ export const loginSuccess = createAction(
 export const loginFailure = createAction('[Onboarding Client Auth Api] Login Failure', props<{ error: Error }>());
 export const logoutSuccess = createAction('[Onboarding Client Auth Api] Logout Success');
 export const logoutFailure = createAction('[Onboarding Client Auth Api] Logout Failure', props<{ error: Error }>());
-export const logout = createAction('[Onboarding Client Any Page] Logout');
+export const logout = createAction('[Onboarding Client Any Page] Logout', props<{ redirect: boolean }>());
 export const refreshSuccess = createAction(
 	'[Onboarding Client Auth Api] Refresh Success',
 	props<{ accessToken: string; refreshToken: string }>(),

@@ -16,6 +16,7 @@ export interface ResourceState {
 	uploadedResume: File | null;
 	error: Error | null;
 	status: AsyncRequestState;
+	createdResourceId: number | null;
 }
 
 export const initialState: ResourceState = {
@@ -28,6 +29,7 @@ export const initialState: ResourceState = {
 	uploadedResume: null,
 	error: null,
 	status: AsyncRequestState.IDLE,
+	createdResourceId: null,
 };
 
 export const resourceReducer = createReducer(
@@ -89,10 +91,10 @@ export const resourceReducer = createReducer(
 		createResourceData: { ...state.createResourceData, linkId },
 	})),
 	on(ResourceActions.createResource, state => ({ ...state, status: AsyncRequestState.LOADING })),
-	on(ResourceActions.createResourceSuccess, state => ({
+	on(ResourceActions.createResourceSuccess, (state, { resourceId }) => ({
 		...state,
-		status: AsyncRequestState.SUCCESS,
 		error: null,
+		createdResourceId: resourceId,
 	})),
 	on(ResourceActions.createResourceFailure, (state, { error }) => ({
 		...state,
@@ -100,4 +102,15 @@ export const resourceReducer = createReducer(
 		error,
 	})),
 	on(ResourceActions.resetCreateResourceState, () => initialState),
+
+	on(ResourceActions.saveResumeSuccess, state => ({
+		...state,
+		status: AsyncRequestState.SUCCESS,
+		error: null,
+	})),
+	on(ResourceActions.saveResumeFailure, (state, { error }) => ({
+		...state,
+		status: AsyncRequestState.ERROR,
+		error,
+	})),
 );

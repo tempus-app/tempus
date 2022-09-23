@@ -123,83 +123,85 @@ export class ProfileComponent implements OnInit, OnDestroy {
 	}
 
 	ngOnInit(): void {
-		this.resourceService
-			.getResourceInformation()
-			.pipe(take(1))
-			.subscribe(resData => {
-				this.userId = resData.id;
-				this.firstName = resData.firstName;
-				this.lastName = resData.lastName;
-				this.fullName = `${resData.firstName} ${resData.lastName}`;
-				this.city = resData.location.city;
-				this.state = resData.location.province;
-				this.country = resData.location.country;
-				this.phoneNumber = resData.phoneNumber;
-				this.email = resData.email;
-				this.phoneNumber = resData.phoneNumber;
-				this.linkedInLink = resData.linkedInLink;
-				this.githubLink = resData.githubLink;
-				this.otherLink = resData.otherLink;
+		this.resourceService.getResourceInformation().subscribe(resData => {
+			this.userId = resData.id;
+			this.firstName = resData.firstName;
+			this.lastName = resData.lastName;
+			this.fullName = `${resData.firstName} ${resData.lastName}`;
+			this.city = resData.location.city;
+			this.state = resData.location.province;
+			this.country = resData.location.country;
+			this.phoneNumber = resData.phoneNumber;
+			this.email = resData.email;
+			this.phoneNumber = resData.phoneNumber;
+			this.linkedInLink = resData.linkedInLink;
+			this.githubLink = resData.githubLink;
+			this.otherLink = resData.otherLink;
 
-				// TODO:
-				// fetch latest primary view
-				// this.resourceService.getLatestPrimaryView(this.userId).subscribe(primaryView => {
-				// 	if (primaryView.revisionType === RevisionType.APPROVED) {
-				// 		this.approvedPrimaryViewId = primaryView.id;
-				// 	}
-				// 	this.certifications = primaryView.certifications;
-				// 	this.educations = primaryView.educations;
-				// 	this.educationsSummary = primaryView.educationsSummary;
-				// 	this.workExperiences = primaryView.experiences;
-				// 	this.experiencesSummary = primaryView.experiencesSummary;
-				// 	this.profileSummary = primaryView.profileSummary;
-				// 	this.skills = primaryView.skills.map(skill => skill.skill.name);
-				// 	this.skillsSummary = primaryView.skillsSummary;
-				// });
+			// TODO:
+			// fetch latest primary view
+			// this.resourceService.getLatestPrimaryView(this.userId).subscribe(primaryView => {
+			// 	if (primaryView.revisionType === RevisionType.APPROVED) {
+			// 		this.approvedPrimaryViewId = primaryView.id;
+			// 	}
+			// 	this.certifications = primaryView.certifications;
+			// 	this.educations = primaryView.educations;
+			// 	this.educationsSummary = primaryView.educationsSummary;
+			// 	this.workExperiences = primaryView.experiences;
+			// 	this.experiencesSummary = primaryView.experiencesSummary;
+			// 	this.profileSummary = primaryView.profileSummary;
+			// 	this.skills = primaryView.skills.map(skill => skill.skill.name);
+			// 	this.skillsSummary = primaryView.skillsSummary;
+			// });
 
-				// fetch all Primary views, select display
-				this.resourceService.getResourceProfileViews(this.userId).subscribe(views => {
-					const primaryViews = views.filter(view => view.viewType === ViewType.PRIMARY);
-					const rejectedView = primaryViews.find(view => view.revisionType === RevisionType.REJECTED);
-					const pendingView = primaryViews.find(view => view.revisionType === RevisionType.PENDING);
-					const approvedView = primaryViews.find(view => view.revisionType === RevisionType.APPROVED);
-
-					if (rejectedView) {
-						this.currentViewId = rejectedView.id;
-						this.certifications = rejectedView.certifications;
-						this.educations = rejectedView.educations;
-						this.educationsSummary = rejectedView.educationsSummary;
-						this.workExperiences = rejectedView.experiences;
-						this.experiencesSummary = rejectedView.experiencesSummary;
-						this.profileSummary = rejectedView.profileSummary;
-						this.skills = rejectedView.skills.map(skill => skill.skill.name);
-						this.skillsSummary = rejectedView.skillsSummary;
-						this.isRejected = true;
-						this.rejectionComments = rejectedView.revision?.comment ? rejectedView.revision.comment : '';
-					} else if (pendingView) {
-						this.currentViewId = pendingView.id;
-						this.certifications = pendingView.certifications;
-						this.educations = pendingView.educations;
-						this.educationsSummary = pendingView.educationsSummary;
-						this.workExperiences = pendingView.experiences;
-						this.experiencesSummary = pendingView.experiencesSummary;
-						this.profileSummary = pendingView.profileSummary;
-						this.skills = pendingView.skills.map(skill => skill.skill.name);
-						this.skillsSummary = pendingView.skillsSummary;
-						this.isPendingApproval = true;
-					} else if (approvedView) {
-						this.currentViewId = approvedView.id;
-						this.certifications = approvedView.certifications;
-						this.educations = approvedView.educations;
-						this.educationsSummary = approvedView.educationsSummary;
-						this.workExperiences = approvedView.experiences;
-						this.experiencesSummary = approvedView.experiencesSummary;
-						this.profileSummary = approvedView.profileSummary;
-						this.skills = approvedView.skills.map(skill => skill.skill.name);
-						this.skillsSummary = approvedView.skillsSummary;
-					}
-				});
+			// TODO: ADD resource to the store
+			this.resourceService.getResourceOriginalResumeById(this.userId).subscribe(resumeBlob => {
+				this.resume = new File([resumeBlob], 'original-resume.pdf');
 			});
+
+			// fetch all Primary views, select display
+			this.resourceService.getResourceProfileViews(this.userId).subscribe(views => {
+				const primaryViews = views.filter(view => view.viewType === ViewType.PRIMARY);
+				const rejectedView = primaryViews.find(view => view.revisionType === RevisionType.REJECTED);
+				const pendingView = primaryViews.find(view => view.revisionType === RevisionType.PENDING);
+				const approvedView = primaryViews.find(view => view.revisionType === RevisionType.APPROVED);
+
+				if (rejectedView) {
+					this.currentViewId = rejectedView.id;
+					this.certifications = rejectedView.certifications;
+					this.educations = rejectedView.educations;
+					this.educationsSummary = rejectedView.educationsSummary;
+					this.workExperiences = rejectedView.experiences;
+					this.experiencesSummary = rejectedView.experiencesSummary;
+					this.profileSummary = rejectedView.profileSummary;
+					this.skills = rejectedView.skills.map(skill => skill.skill.name);
+					this.skillsSummary = rejectedView.skillsSummary;
+					this.isRejected = true;
+					this.rejectionComments = rejectedView.revision?.comment ? rejectedView.revision.comment : '';
+				} else if (pendingView) {
+					this.currentViewId = pendingView.id;
+					this.certifications = pendingView.certifications;
+					this.educations = pendingView.educations;
+					this.educationsSummary = pendingView.educationsSummary;
+					this.workExperiences = pendingView.experiences;
+					this.experiencesSummary = pendingView.experiencesSummary;
+					this.profileSummary = pendingView.profileSummary;
+					this.skills = pendingView.skills.map(skill => skill.skill.name);
+					this.skillsSummary = pendingView.skillsSummary;
+					this.isPendingApproval = true;
+				} else if (approvedView) {
+					this.currentViewId = approvedView.id;
+					this.certifications = approvedView.certifications;
+					this.educations = approvedView.educations;
+					this.educationsSummary = approvedView.educationsSummary;
+					this.workExperiences = approvedView.experiences;
+					this.experiencesSummary = approvedView.experiencesSummary;
+					this.profileSummary = approvedView.profileSummary;
+					this.skills = approvedView.skills.map(skill => skill.skill.name);
+					this.skillsSummary = approvedView.skillsSummary;
+				}
+			});
+    });
 	}
 
 	loadNewView(newView: ICreateViewDto) {

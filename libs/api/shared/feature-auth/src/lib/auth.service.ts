@@ -85,7 +85,7 @@ export class AuthService {
 			},
 			{
 				secret: this.configService.get('jwtAccessSecret'),
-				expiresIn: 60 * 15,
+				expiresIn: 60 * 0.25,
 			},
 		);
 		const refreshToken = await this.jwtService.signAsync(

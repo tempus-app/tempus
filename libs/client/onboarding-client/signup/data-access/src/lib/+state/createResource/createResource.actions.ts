@@ -50,13 +50,34 @@ export const setResourceLinkId = createAction(
 );
 
 export const createResource = createAction('[Signup Review Page] Create Resource');
+export const saveResume = createAction(
+	'[Signup Review Page] Save Resume',
+	props<{
+		resourceId: number;
+	}>(),
+);
 
 export const resetCreateResourceState = createAction('[Signup Review Page] Reset Create Resource State');
+export const resetSaveResumeState = createAction('[Signup Review Page] Reset Save Resume State');
 
-export const createResourceSuccess = createAction('[Onboarding Client User API] Create Resource Success');
+export const createResourceSuccess = createAction(
+	'[Onboarding Client User API] Create Resource Success',
+	props<{
+		resourceId: number;
+	}>(),
+);
+
+export const saveResumeSuccess = createAction('[Signup Review Page] Save Resume Success');
 
 export const createResourceFailure = createAction(
 	'[Onboarding Client User API] Create Resource Failure',
+	props<{
+		error: Error;
+	}>(),
+);
+
+export const saveResumeFailure = createAction(
+	'[Onboarding Client User API] Save Resume Failure',
 	props<{
 		error: Error;
 	}>(),
