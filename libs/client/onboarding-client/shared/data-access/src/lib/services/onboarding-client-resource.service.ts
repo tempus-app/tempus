@@ -37,7 +37,6 @@ export class OnboardingClientResourceService {
 	}
 
 	public getResourceInformation(): Observable<Resource> {
-		console.log('getResourceInformation');
 		return this.http.get<Resource>(`${this.url}/user/user`).pipe(catchError(handleError));
 	}
 
