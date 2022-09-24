@@ -77,7 +77,6 @@ describe('LinkService', () => {
 
 			mockLinkRepository.save.mockResolvedValue(createdLink);
 			mockLinkRepository.findOne.mockResolvedValue(undefined);
-			mockProjectRepository.save.mockResolvedValue(mockProject);
 
 			const res = await linkService.createLink(createLinkEntity, 1);
 
@@ -105,9 +104,9 @@ describe('LinkService', () => {
 			mockLinkRepository.findOne.mockResolvedValue(undefined);
 
 			const res = await linkService.createLink({ ...createLinkEntity, expiry: undefined }, 1);
-			expect(mockLinkRepository.save).toBeCalledWith(expect.objectContaining({ ...createdLink, id: null }));
+			expect(mockLinkRepository.save).toBeCalledWith({ ...createdLink, id: null });
 
-			expect(res).toEqual(expect.objectContaining(createdLink));
+			expect(res).toEqual(createdLink);
 		});
 
 		it('should throw an error if the link is in the past or today', async () => {

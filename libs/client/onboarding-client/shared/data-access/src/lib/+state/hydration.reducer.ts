@@ -9,6 +9,7 @@ export const hydrationMetaReducer = (
 		let newState = { ...state };
 		if (action.type === INIT || action.type === UPDATE || action.type === '@ngrx/router-store/navigated') {
 			const accessToken: string | null = sessionStorage.getItem(SessionStorageKey.TEMPUS_ACCESS_TOKEN);
+			const refreshToken: string | null = sessionStorage.getItem(SessionStorageKey.TEMPUS_REFRESH_TOKEN);
 			const userIdString: string | null = sessionStorage.getItem(SessionStorageKey.TEMPUS_USER_ID);
 			const userId: number | null = userIdString ? parseInt(userIdString, 10) : null;
 			const firstName: string | null = sessionStorage.getItem(SessionStorageKey.TEMPUS_FIRST_NAME);
@@ -18,7 +19,7 @@ export const hydrationMetaReducer = (
 			if (newState.auth) {
 				newState = {
 					...newState,
-					auth: { ...newState.auth, accessToken, loggedInUserId: userId, firstName, lastName, email },
+					auth: { ...newState.auth, accessToken, refreshToken, loggedInUserId: userId, firstName, lastName, email },
 				};
 			}
 			return reducer(newState as OnboardingClientState, action);
