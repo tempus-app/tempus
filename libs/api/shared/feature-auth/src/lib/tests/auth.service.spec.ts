@@ -14,8 +14,8 @@ import {
 	accessTokenPayload,
 	authDtoEntity,
 	refreshTokenPayloadWithToken,
-	newUser,
-	loggedInUser,
+	newUserEntity,
+	loggedInUserEntity,
 	tokens,
 	invalidRefreshTokenPayloadWithToken,
 } from './auth.mock';
@@ -85,25 +85,25 @@ describe('AuthService', () => {
 
 	describe('login()', () => {
 		it('should successfully login a user and return an accessToken, refreshToken, and user entity', async () => {
-			const res = await authService.login(newUser);
+			const res = await authService.login(newUserEntity);
 
 			// createTokens
 			expect(mockJwtService.signAsync).toHaveBeenNthCalledWith(
 				1,
-				{ email: newUser.email, roles: null },
+				{ email: newUserEntity.email, roles: null },
 				{ expiresIn: 900, secret: mockConfigService.get() },
 			);
 			expect(mockJwtService.signAsync).toHaveBeenNthCalledWith(
 				2,
-				{ email: newUser.email },
+				{ email: newUserEntity.email },
 				{ expiresIn: 900, secret: mockConfigService.get() },
 			);
 
 			// updateRefreshTokenHash
-			expect(mockUserRepository.save).toBeCalledWith({ ...newUser, refreshToken: 'fake-hash' });
+			expect(mockUserRepository.save).toBeCalledWith({ ...newUserEntity, refreshToken: 'fake-hash' });
 			const authDto = {
 				...authDtoEntity,
-				user: { ...newUser, password: null, refreshToken: null },
+				user: { ...newUserEntity, password: null, refreshToken: null },
 			};
 			expect(res).toEqual(authDto);
 		});
@@ -113,7 +113,7 @@ describe('AuthService', () => {
 		it('should return new tokens for a logged in user', async () => {
 			compare.mockImplementation(() => true);
 
-			mockCommonService.findByEmail.mockResolvedValue(loggedInUser);
+			mockCommonService.findByEmail.mockResolvedValue(loggedInUserEntity);
 
 			const res = await authService.refreshToken(refreshTokenPayloadWithToken);
 
@@ -122,25 +122,25 @@ describe('AuthService', () => {
 			// createTokens
 			expect(mockJwtService.signAsync).toHaveBeenNthCalledWith(
 				1,
-				{ email: loggedInUser.email, roles: null },
+				{ email: loggedInUserEntity.email, roles: null },
 				{ expiresIn: 900, secret: mockConfigService.get() },
 			);
 			expect(mockJwtService.signAsync).toHaveBeenNthCalledWith(
 				2,
-				{ email: loggedInUser.email },
+				{ email: loggedInUserEntity.email },
 				{ expiresIn: 900, secret: mockConfigService.get() },
 			);
 
 			// updateRefreshTokenHash
-			expect(mockUserRepository.save).toBeCalledWith({ ...loggedInUser, refreshToken: 'fake-hash' });
+			expect(mockUserRepository.save).toBeCalledWith({ ...loggedInUserEntity, refreshToken: 'fake-hash' });
 
 			expect(res).toEqual(tokens);
 		});
 
 		it('should throw an error as user is not logged in', async () => {
 			// need to reset mock data since jest.clearAllMocks not working...
-			newUser.refreshToken = null;
-			mockCommonService.findByEmail.mockResolvedValue(newUser);
+			newUserEntity.refreshToken = null;
+			mockCommonService.findByEmail.mockResolvedValue(newUserEntity);
 
 			let error;
 			try {
@@ -156,7 +156,7 @@ describe('AuthService', () => {
 		it('should throw an error as refreshTokens do not match', async () => {
 			compare.mockImplementation(() => false);
 
-			mockCommonService.findByEmail.mockResolvedValue(loggedInUser);
+			mockCommonService.findByEmail.mockResolvedValue(loggedInUserEntity);
 
 			let error;
 			try {
@@ -172,11 +172,11 @@ describe('AuthService', () => {
 
 	describe('logout()', () => {
 		it('should successfully logout a user', async () => {
-			mockCommonService.findByEmail.mockResolvedValue(loggedInUser);
+			mockCommonService.findByEmail.mockResolvedValue(loggedInUserEntity);
 
 			await authService.logout(accessTokenPayload);
 			expect(mockCommonService.findByEmail).toBeCalledWith(accessTokenPayload.email);
-			expect(mockUserRepository.save).toBeCalledWith(loggedInUser);
+			expect(mockUserRepository.save).toBeCalledWith(loggedInUserEntity);
 		});
 
 		it('should return an error since it could not find user', async () => {
@@ -196,22 +196,22 @@ describe('AuthService', () => {
 		it('should successfully return the user', async () => {
 			compare.mockImplementation(() => true);
 
-			mockCommonService.findByEmail.mockResolvedValue(newUser);
+			mockCommonService.findByEmail.mockResolvedValue(newUserEntity);
 
-			const res = await authService.validateUser(newUser.email, newUser.password);
+			const res = await authService.validateUser(newUserEntity.email, newUserEntity.password);
 
-			expect(mockCommonService.findByEmail).toBeCalledWith(newUser.email);
+			expect(mockCommonService.findByEmail).toBeCalledWith(newUserEntity.email);
 
-			expect(res).toEqual(newUser);
+			expect(res).toEqual(newUserEntity);
 		});
 
 		it('should return null since passwords do not match', async () => {
 			compare.mockImplementation(() => false);
-			mockCommonService.findByEmail.mockResolvedValue(newUser);
+			mockCommonService.findByEmail.mockResolvedValue(newUserEntity);
 
-			const res = await authService.validateUser(newUser.email, newUser.password);
+			const res = await authService.validateUser(newUserEntity.email, newUserEntity.password);
 
-			expect(mockCommonService.findByEmail).toBeCalledWith(newUser.email);
+			expect(mockCommonService.findByEmail).toBeCalledWith(newUserEntity.email);
 			expect(res).toEqual(null);
 		});
 	});
