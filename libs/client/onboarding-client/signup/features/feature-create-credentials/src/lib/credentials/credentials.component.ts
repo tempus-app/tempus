@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/c
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TranslateService } from '@ngx-translate/core';
-import { AsyncRequestState, logout, OnboardingClientState } from '@tempus/client/onboarding-client/shared/data-access';
+import { AsyncRequestState, logout, OnboardingClientState, selectAccessToken } from '@tempus/client/onboarding-client/shared/data-access';
 import {
 	loadLinkData,
 	selectLinkData,
@@ -15,7 +15,7 @@ import { Link, StatusType } from '@tempus/shared-domain';
 import { CustomModalType, ModalService, ModalType } from '@tempus/client/shared/ui-components/modal';
 
 import { Subscription } from 'rxjs';
-import { tap, filter } from 'rxjs/operators';
+import { tap, filter, take } from 'rxjs/operators';
 
 @Component({
 	selector: 'tempus-credentials',
@@ -97,7 +97,11 @@ export class CredentialsComponent implements OnInit, OnDestroy {
 	}
 
 	ngOnInit() {
-		this.sharedStore.dispatch(logout())
+    this.sharedStore.select(selectAccessToken).pipe(take(1)).subscribe(token => {
+      if(token) {
+        this.sharedStore.dispatch(logout({ redirect: false }));
+      }
+    });
 		this.errorStatus$ = this.store.select(selectLinkErrorStatus).subscribe(errStatus => {
 			if (errStatus.status === AsyncRequestState.LOADING) {
 				this.loading = true;

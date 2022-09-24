@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -14,6 +13,8 @@ import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { RouterModule } from '@angular/router';
 import { APP_CONFIG } from '@tempus/app-config';
+import { InterceptorService } from '@tempus/client/onboarding-client/shared/guards';
+import { HttpClient, HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { environment } from '../environments/environment';
 import { AppComponent } from './app.component';
 import { NxWelcomeComponent } from './nx-welcome.component';
@@ -27,8 +28,8 @@ function createTranslateLoader(http: HttpClient) {
 	declarations: [AppComponent, NxWelcomeComponent],
 	imports: [
 		BrowserModule,
-		HttpClientModule,
 		MatInputModule,
+		HttpClientModule,
 		MatButtonModule,
 		MatTooltipModule,
 		MatPaginatorModule,
@@ -69,7 +70,14 @@ function createTranslateLoader(http: HttpClient) {
 			},
 		]),
 	],
-	providers: [{ provide: APP_CONFIG, useValue: environment }],
+	providers: [
+		{ provide: APP_CONFIG, useValue: environment },
+		{
+			provide: HTTP_INTERCEPTORS,
+			useClass: InterceptorService,
+			multi: true,
+		},
+	],
 	bootstrap: [AppComponent],
 })
 export class AppModule {}
