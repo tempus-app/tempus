@@ -1,11 +1,11 @@
 import { UserEntity } from '@tempus/api/shared/entity';
-import { AuthDto, JwtPayload, JwtRefreshPayloadWithToken, Tokens } from '@tempus/shared-domain';
+import { AuthDto, JwtPayload, JwtRefreshPayloadWithToken, TokensDto } from '@tempus/shared-domain';
 
 export const accessToken = 'accessTokenMock';
 
 export const refreshToken = 'refreshTokenMock';
 
-export const tokens = new Tokens(accessToken, refreshToken);
+export const tokens = new TokensDto(accessToken, refreshToken);
 
 export const newUserEntity = new UserEntity(null, 'John', 'Doe', 'johndoe@email.com', 'password', null);
 

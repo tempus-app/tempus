@@ -96,7 +96,7 @@ describe('AuthService', () => {
 			expect(mockJwtService.signAsync).toHaveBeenNthCalledWith(
 				2,
 				{ email: newUserEntity.email },
-				{ expiresIn: 900, secret: mockConfigService.get() },
+				{ expiresIn: 7200, secret: mockConfigService.get() },
 			);
 
 			// updateRefreshTokenHash
@@ -128,7 +128,7 @@ describe('AuthService', () => {
 			expect(mockJwtService.signAsync).toHaveBeenNthCalledWith(
 				2,
 				{ email: loggedInUserEntity.email },
-				{ expiresIn: 900, secret: mockConfigService.get() },
+				{ expiresIn: 7200, secret: mockConfigService.get() },
 			);
 
 			// updateRefreshTokenHash
