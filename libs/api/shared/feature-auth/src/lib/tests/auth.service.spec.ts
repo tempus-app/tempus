@@ -7,10 +7,18 @@ import { JwtService } from '@nestjs/jwt';
 import { CommonService } from '@tempus/api/shared/feature-common';
 import { ConfigService } from '@nestjs/config';
 import { JwtPayload } from '@tempus/shared-domain';
-import { AuthService } from '../auth.service';
-import { accessTokenPayload, authDtoEntity, refreshTokenPayloadWithToken, newUser, loggedInUser, tokens, invalidRefreshTokenPayloadWithToken } from './auth.mock';
 import { ForbiddenException } from '@nestjs/common';
-import { compare } from 'bcrypt'
+import { compare } from 'bcrypt';
+import { AuthService } from '../auth.service';
+import {
+	accessTokenPayload,
+	authDtoEntity,
+	refreshTokenPayloadWithToken,
+	newUser,
+	loggedInUser,
+	tokens,
+	invalidRefreshTokenPayloadWithToken,
+} from './auth.mock';
 
 const mockUserRepository = createMock<Repository<UserEntity>>();
 const mockCommonService = createMock<CommonService>();
@@ -18,11 +26,10 @@ const mockCommonService = createMock<CommonService>();
 const mockJwtService = {
 	signAsync: jest
 		.fn()
-		.mockResolvedValueOnce('accessTokenMock') //first set of calls
+		.mockResolvedValueOnce('accessTokenMock') // first set of calls
 		.mockResolvedValueOnce('refreshTokenMock')
-		.mockResolvedValueOnce('accessTokenMock')  //second set of calls
-		.mockResolvedValueOnce('refreshTokenMock')
-
+		.mockResolvedValueOnce('accessTokenMock') // second set of calls
+		.mockResolvedValueOnce('refreshTokenMock'),
 };
 
 const mockConfigService = {
@@ -37,7 +44,7 @@ const mockConfigService = {
 jest.mock('bcrypt', () => ({
 	hash: () => 'fake-hash',
 	genSalt: () => 'fake-salt',
-	compare: jest.fn()
+	compare: jest.fn(),
 }));
 
 describe('AuthService', () => {
@@ -78,7 +85,6 @@ describe('AuthService', () => {
 
 	describe('login()', () => {
 		it('should successfully login a user and return an accessToken, refreshToken, and user entity', async () => {
-
 			const res = await authService.login(newUser);
 
 			// createTokens
@@ -93,26 +99,25 @@ describe('AuthService', () => {
 				{ expiresIn: 900, secret: mockConfigService.get() },
 			);
 
-			//updateRefreshTokenHash
-			expect(mockUserRepository.save).toBeCalledWith({ ...newUser, refreshToken: "fake-hash" })
+			// updateRefreshTokenHash
+			expect(mockUserRepository.save).toBeCalledWith({ ...newUser, refreshToken: 'fake-hash' });
 			const authDto = {
 				...authDtoEntity,
-				user: { ...newUser, password: null, refreshToken: null }
-			}
-			expect(res).toEqual(authDto)
+				user: { ...newUser, password: null, refreshToken: null },
+			};
+			expect(res).toEqual(authDto);
 		});
 	});
 
 	describe('refreshToken()', () => {
 		it('should return new tokens for a logged in user', async () => {
+			compare.mockImplementation(() => true);
 
-			compare.mockImplementation(() => true)
+			mockCommonService.findByEmail.mockResolvedValue(loggedInUser);
 
-			mockCommonService.findByEmail.mockResolvedValue(loggedInUser)
+			const res = await authService.refreshToken(refreshTokenPayloadWithToken);
 
-			const res = await authService.refreshToken(refreshTokenPayloadWithToken)
-
-			expect(mockCommonService.findByEmail).toBeCalledWith(refreshTokenPayloadWithToken.email)
+			expect(mockCommonService.findByEmail).toBeCalledWith(refreshTokenPayloadWithToken.email);
 
 			// createTokens
 			expect(mockJwtService.signAsync).toHaveBeenNthCalledWith(
@@ -126,22 +131,21 @@ describe('AuthService', () => {
 				{ expiresIn: 900, secret: mockConfigService.get() },
 			);
 
-			//updateRefreshTokenHash
-			expect(mockUserRepository.save).toBeCalledWith({ ...loggedInUser, refreshToken: "fake-hash" })
+			// updateRefreshTokenHash
+			expect(mockUserRepository.save).toBeCalledWith({ ...loggedInUser, refreshToken: 'fake-hash' });
 
-			expect(res).toEqual(tokens)
-
+			expect(res).toEqual(tokens);
 		});
 
 		it('should throw an error as user is not logged in', async () => {
 			// need to reset mock data since jest.clearAllMocks not working...
 			newUser.refreshToken = null;
-			mockCommonService.findByEmail.mockResolvedValue(newUser)
+			mockCommonService.findByEmail.mockResolvedValue(newUser);
 
 			let error;
 			try {
 				await authService.refreshToken(invalidRefreshTokenPayloadWithToken);
-				expect(mockCommonService.findByEmail).toBeCalledWith(invalidRefreshTokenPayloadWithToken.email)
+				expect(mockCommonService.findByEmail).toBeCalledWith(invalidRefreshTokenPayloadWithToken.email);
 			} catch (e) {
 				error = e;
 			}
@@ -149,34 +153,30 @@ describe('AuthService', () => {
 			expect(error.message).toBe('User not logged in');
 		});
 
-
 		it('should throw an error as refreshTokens do not match', async () => {
+			compare.mockImplementation(() => false);
 
-			compare.mockImplementation(() => false)
-
-			mockCommonService.findByEmail.mockResolvedValue(loggedInUser)
+			mockCommonService.findByEmail.mockResolvedValue(loggedInUser);
 
 			let error;
 			try {
 				await authService.refreshToken(refreshTokenPayloadWithToken);
-				expect(mockCommonService.findByEmail).toBeCalledWith(refreshTokenPayloadWithToken.email)
+				expect(mockCommonService.findByEmail).toBeCalledWith(refreshTokenPayloadWithToken.email);
 			} catch (e) {
 				error = e;
 			}
 			expect(error).toBeInstanceOf(ForbiddenException);
 			expect(error.message).toBe('Access Denied');
-			
-		})
+		});
 	});
 
 	describe('logout()', () => {
 		it('should successfully logout a user', async () => {
-
-			mockCommonService.findByEmail.mockResolvedValue(loggedInUser)
+			mockCommonService.findByEmail.mockResolvedValue(loggedInUser);
 
 			await authService.logout(accessTokenPayload);
 			expect(mockCommonService.findByEmail).toBeCalledWith(accessTokenPayload.email);
-			expect(mockUserRepository.save).toBeCalledWith(loggedInUser)
+			expect(mockUserRepository.save).toBeCalledWith(loggedInUser);
 		});
 
 		it('should return an error since it could not find user', async () => {
@@ -194,28 +194,25 @@ describe('AuthService', () => {
 
 	describe('validateUser()', () => {
 		it('should successfully return the user', async () => {
+			compare.mockImplementation(() => true);
 
-			compare.mockImplementation(() => true)
+			mockCommonService.findByEmail.mockResolvedValue(newUser);
 
-			mockCommonService.findByEmail.mockResolvedValue(newUser)
+			const res = await authService.validateUser(newUser.email, newUser.password);
 
-			const res = await authService.validateUser(newUser.email, newUser.password)
+			expect(mockCommonService.findByEmail).toBeCalledWith(newUser.email);
 
-			expect(mockCommonService.findByEmail).toBeCalledWith(newUser.email)
-
-			expect(res).toEqual(newUser)
+			expect(res).toEqual(newUser);
 		});
 
 		it('should return null since passwords do not match', async () => {
+			compare.mockImplementation(() => false);
+			mockCommonService.findByEmail.mockResolvedValue(newUser);
 
-			compare.mockImplementation(() => false)
-			mockCommonService.findByEmail.mockResolvedValue(newUser)
+			const res = await authService.validateUser(newUser.email, newUser.password);
 
-			const res = await authService.validateUser(newUser.email, newUser.password)
-
-			expect(mockCommonService.findByEmail).toBeCalledWith(newUser.email)
-			
-			expect(res).toEqual(null)
-		})
-	})
+			expect(mockCommonService.findByEmail).toBeCalledWith(newUser.email);
+			expect(res).toEqual(null);
+		});
+	});
 });
