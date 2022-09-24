@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { createObjectCsvWriter as createCsvWriter } from 'csv-writer';
+import { writeFile } from 'fs/promises';
 import { CommandLineArgsOptions } from './commandLineArgs.type';
 import { ClientSeederService } from './services/client.seeder.service';
 import { LinkSeederService } from './services/link.seeder.service';
@@ -54,6 +55,7 @@ export class SeederService {
 			availableResources.splice(0, args.resources / 2),
 		);
 		const allUsers = users.concat(availableResources).concat(assignedResources);
+		SeederService.writeToJson(allUsers);
 		await SeederService.writeToCSV(allUsers);
 	}
 
@@ -69,5 +71,10 @@ export class SeederService {
 			],
 		});
 		await csvWriter.writeRecords(users);
+	}
+
+	private static writeToJson(users) {
+		const json = JSON.stringify(users, ['firstName', 'lastName', 'email', 'password', 'roles']);
+		writeFile('./utils/json/user-accounts.json', json, 'utf8');
 	}
 }

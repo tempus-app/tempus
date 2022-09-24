@@ -4,6 +4,7 @@
 			<div fxLayout="row" fxLayoutGap.lt-md="15px" fxLayout.lt-md="column" id="headerRow">
 				<div fxFlex="min(40%, 20rem)" fxFlex.lt-md="100%" fxLayoutGap="10px" fxLayoutAlign="flex-start center">
 					<tempus-button
+						id="invite-button"
 						fxFlex="50%"
 						(buttonClick)="invite()"
 						[buttonType]="ButtonType.INVITE"
@@ -115,6 +116,7 @@
 				<div fxLayout="row" fxLayoutGap="10px">
 					<div fxFlex="50%">
 						<tempus-text-input
+							id="first-name-invite"
 							[inputType]="InputType.TEXT"
 							placeholder="{{ prefix + 'modal.assignModal.firstNameLabel' | translate }}"
 							cssClass="secondary"
@@ -134,6 +136,7 @@
 					</div>
 					<div fxFlex="50%">
 						<tempus-text-input
+							id="last-name-invite"
 							[inputType]="InputType.TEXT"
 							placeholder="{{ prefix + 'modal.assignModal.lastNameLabel' | translate }}"
 							cssClass="secondary"
@@ -154,6 +157,7 @@
 				</div>
 				<div fxLayout="column" fxFlex="100%">
 					<tempus-text-input
+						id="email-address-invite"
 						fxFlex="100%"
 						[inputType]="InputType.EMAIL"
 						placeholder="{{ prefix + 'modal.assignModal.emailAddressLabel' | translate }}"
@@ -174,6 +178,7 @@
 				</div>
 				<div fxLayout="column" fxFlex="100%">
 					<tempus-text-input
+						id="position-invite"
 						fxFlex="100%"
 						[inputType]="InputType.TEXT"
 						placeholder="{{ prefix + 'modal.assignModal.positionLabel' | translate }}"
@@ -195,6 +200,7 @@
 				<div fxLayout="row" fxLayoutGap="10px">
 					<div fxFlex="50%">
 						<tempus-dropdown
+							id="client-invite"
 							[control]="$any(manageResourcesForm).get('invite').get('client')"
 							[label]="prefix + 'modal.clientLabel' | translate"
 							(optionSelect)="updateProjects($event)"
@@ -213,6 +219,7 @@
 					</div>
 					<div fxFlex="50%">
 						<tempus-dropdown
+							id="project-invite"
 							[control]="$any(manageResourcesForm).get('invite').get('project')"
 							[label]="prefix + 'modal.projectLabel' | translate"
 							[optionsWithId]="currentProjects"

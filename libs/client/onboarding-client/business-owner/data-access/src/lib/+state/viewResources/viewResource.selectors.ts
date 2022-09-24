@@ -1,40 +1,15 @@
 import { createSelector } from '@ngrx/store';
+import { BusinessOwnerState, selectBusinessOwnerState } from '../businessOwner.state';
+import { PROJECT_MANAGE_FEATURE_KEY } from '../resProjClientManagement/resProjClientManagement.reducers';
+import { RESOURCE_VIEW_FEATURE_KEY, ViewState } from './viewResource.reducers';
 
-import { selectSignupState, SignupState } from '../signup.state';
-import { ResourceState, RESOURCE_FEATURE_KEY } from './createResource.reducers';
-
-export const selectResource = createSelector(selectSignupState, (state: SignupState) => state[RESOURCE_FEATURE_KEY]);
-
-export const selectResourceData = createSelector(selectResource, (state: ResourceState) => state.createResourceData);
-
-export const selectUploadedResume = createSelector(selectResource, (state: ResourceState) => state.uploadedResume);
-
-export const selectResourceStatus = createSelector(selectResource, (state: ResourceState) => {
-	return {
-		status: state.status,
-		error: state.error,
-	};
-});
-export const selectCredentialsCreated = createSelector(
-	selectResource,
-	(state: ResourceState) => state.credentialsCreated,
+export const selectViewResource2 = createSelector(
+	selectBusinessOwnerState,
+	(state: BusinessOwnerState) => state[PROJECT_MANAGE_FEATURE_KEY],
 );
-export const selectWorkExperienceDetailsCreated = createSelector(
-	selectResource,
-	(state: ResourceState) => state.workExperienceDetailsCreated,
+export const selectViewResource = createSelector(
+	selectBusinessOwnerState,
+	(state: BusinessOwnerState) => state[RESOURCE_VIEW_FEATURE_KEY],
 );
-export const selectUserDetailsCreated = createSelector(
-	selectResource,
-	(state: ResourceState) => state.userDetailsCreated,
-);
-export const selectTrainingAndSkillsCreated = createSelector(
-	selectResource,
-	(state: ResourceState) => state.trainingAndSkillDetailsCreated,
-);
-export const selectAllResumeComponentsCreated = createSelector(selectResource, (state: ResourceState) => ({
-	userDetailsCreated: state.userDetailsCreated,
-	resumeUploadCreated: state.resumeUploadCreated,
-	credentialsCreated: state.credentialsCreated,
-	trainingAndSkillsCreated: state.trainingAndSkillDetailsCreated,
-	experienceCreated: state.workExperienceDetailsCreated,
-}));
+
+export const selectOriginalResume = createSelector(selectViewResource, (state: ViewState) => state.resume);

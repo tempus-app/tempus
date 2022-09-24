@@ -74,6 +74,9 @@ export class ResourceProfileContentComponent implements OnInit, OnChanges {
 	@Input()
 	viewID = 0;
 
+	@Input()
+	resume: File | null = null;
+
 	experiencesSummary = '';
 
 	educationsSummary = '';
@@ -99,8 +102,6 @@ export class ResourceProfileContentComponent implements OnInit, OnChanges {
 	viewName = '';
 
 	isRevision = false;
-
-	resume: File | null = null;
 
 	viewResourceProfilePrefx = 'viewResourceProfile.';
 
