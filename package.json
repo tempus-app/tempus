@@ -22,8 +22,7 @@
 		"typeorm:migration:run": "npm run typeorm -- migration:run",
 		"typeorm:migration:create": "npm run typeorm -- migration:create --",
 		"typeorm:migration:revert": "npm run typeorm -- migration:revert --",
-		"seed": "npx nx run api-shared-feature-seed:run",
-		"e2e": "npm run seed && concurrently --kill-others \"npm run start:onboarding-api\" \"npx nx e2e tempus-e2e\""
+		"seed": "npx nx run api-shared-feature-seed:run"
 	},
 	"lint-staged": {
 		"*.{ts,js}": [
@@ -56,7 +55,7 @@
 		"@nestjs/platform-express": "^8.0.0",
 		"@nestjs/serve-static": "^2.2.2",
 		"@nestjs/swagger": "^5.2.0",
-		"@nestjs/typeorm": "^8.0.3",
+		"@nestjs/typeorm": "~8.0.3",
 		"@ngrx/effects": "^13.0.2",
 		"@ngrx/router-store": "^13.0.2",
 		"@ngrx/store": "^13.0.2",
@@ -93,7 +92,7 @@
 		"swagger-ui-express": "^4.3.0",
 		"ts-node-dev": "^1.1.8",
 		"tslib": "^2.0.0",
-		"typeorm": "^0.2.41",
+		"typeorm": "~0.2.41",
 		"typescript": "~4.5.2",
 		"uuid": "^8.3.2",
 		"zone.js": "~0.11.4"
@@ -129,7 +128,6 @@
 		"@types/uuid": "^8.3.4",
 		"@typescript-eslint/eslint-plugin": "^5.12.1",
 		"@typescript-eslint/parser": "^5.12.1",
-		"concurrently": "^7.4.0",
 		"cypress": "^9.1.0",
 		"eslint": "^8.10.0",
 		"eslint-config-airbnb-base": "^15.0.0",
