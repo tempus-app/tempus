@@ -8,7 +8,9 @@ import { CommonService } from '@tempus/api/shared/feature-common';
 import { ConfigService } from '@nestjs/config';
 import { JwtPayload } from '@tempus/shared-domain';
 import { AuthService } from '../auth.service';
-import { accessTokenPayload, authDtoEntity, refreshToken, refreshTokenPayloadWithToken, newUser, loggedInUser, tokens } from './auth.mock';
+import { accessTokenPayload, authDtoEntity, refreshTokenPayloadWithToken, newUser, loggedInUser, tokens, invalidRefreshTokenPayloadWithToken } from './auth.mock';
+import { ForbiddenException } from '@nestjs/common';
+import { compare } from 'bcrypt'
 
 const mockUserRepository = createMock<Repository<UserEntity>>();
 const mockCommonService = createMock<CommonService>();
@@ -35,8 +37,8 @@ const mockConfigService = {
 jest.mock('bcrypt', () => ({
 	hash: () => 'fake-hash',
 	genSalt: () => 'fake-salt',
-	compare: () => true
-}))
+	compare: jest.fn()
+}));
 
 describe('AuthService', () => {
 	let moduleRef: TestingModule;
@@ -103,6 +105,9 @@ describe('AuthService', () => {
 
 	describe('refreshToken()', () => {
 		it('should return new tokens for a logged in user', async () => {
+
+			compare.mockImplementation(() => true)
+
 			mockCommonService.findByEmail.mockResolvedValue(loggedInUser)
 
 			const res = await authService.refreshToken(refreshTokenPayloadWithToken)
@@ -127,6 +132,41 @@ describe('AuthService', () => {
 			expect(res).toEqual(tokens)
 
 		});
+
+		it('should throw an error as user is not logged in', async () => {
+			// need to reset mock data since jest.clearAllMocks not working...
+			newUser.refreshToken = null;
+			mockCommonService.findByEmail.mockResolvedValue(newUser)
+
+			let error;
+			try {
+				await authService.refreshToken(invalidRefreshTokenPayloadWithToken);
+				expect(mockCommonService.findByEmail).toBeCalledWith(invalidRefreshTokenPayloadWithToken.email)
+			} catch (e) {
+				error = e;
+			}
+			expect(error).toBeInstanceOf(ForbiddenException);
+			expect(error.message).toBe('User not logged in');
+		});
+
+
+		it('should throw an error as refreshTokens do not match', async () => {
+
+			compare.mockImplementation(() => false)
+
+			mockCommonService.findByEmail.mockResolvedValue(loggedInUser)
+
+			let error;
+			try {
+				await authService.refreshToken(refreshTokenPayloadWithToken);
+				expect(mockCommonService.findByEmail).toBeCalledWith(refreshTokenPayloadWithToken.email)
+			} catch (e) {
+				error = e;
+			}
+			expect(error).toBeInstanceOf(ForbiddenException);
+			expect(error.message).toBe('Access Denied');
+			
+		})
 	});
 
 	describe('logout()', () => {
@@ -154,6 +194,9 @@ describe('AuthService', () => {
 
 	describe('validateUser()', () => {
 		it('should successfully return the user', async () => {
+
+			compare.mockImplementation(() => true)
+
 			mockCommonService.findByEmail.mockResolvedValue(newUser)
 
 			const res = await authService.validateUser(newUser.email, newUser.password)
@@ -161,6 +204,18 @@ describe('AuthService', () => {
 			expect(mockCommonService.findByEmail).toBeCalledWith(newUser.email)
 
 			expect(res).toEqual(newUser)
+		});
+
+		it('should return null since passwords do not match', async () => {
+
+			compare.mockImplementation(() => false)
+			mockCommonService.findByEmail.mockResolvedValue(newUser)
+
+			const res = await authService.validateUser(newUser.email, newUser.password)
+
+			expect(mockCommonService.findByEmail).toBeCalledWith(newUser.email)
+			
+			expect(res).toEqual(null)
 		})
 	})
 });

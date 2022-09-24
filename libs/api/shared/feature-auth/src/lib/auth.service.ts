@@ -38,7 +38,7 @@ export class AuthService {
 		if (!user.refreshToken) {
 			throw new ForbiddenException('User not logged in');
 		}
-		if (await AuthService.compareData(payload.refreshToken, user.refreshToken)) {
+		if (AuthService.compareData(payload.refreshToken, user.refreshToken)) {
 			const tokens = await this.createTokens(user);
 			await this.updateRefreshTokenHash(user, tokens.refreshToken);
 			return tokens;

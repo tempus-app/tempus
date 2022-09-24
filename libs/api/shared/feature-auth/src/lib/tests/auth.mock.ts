@@ -22,3 +22,11 @@ export const refreshTokenPayloadWithToken = new JwtRefreshPayloadWithToken(
 	null,
 	refreshToken,
 );
+
+// used for non-logged in user
+export const invalidRefreshTokenPayloadWithToken = new JwtRefreshPayloadWithToken(
+	newUser.email, 
+	null, 
+	null, 
+	null
+);
