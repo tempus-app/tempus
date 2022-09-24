@@ -8,10 +8,10 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { ClientSharedUiComponentsInputModule } from '@tempus/client/shared/ui-components/input';
 import { MatIconModule } from '@angular/material/icon';
 import { ClientSharedUiComponentsModalModule } from '@tempus/client/shared/ui-components/modal';
-import { ManageResourcesComponent } from './manage-resources/manage-resources.component';
 import { HttpClient } from '@angular/common/http';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { ManageResourcesComponent } from './manage-resources/manage-resources.component';
 
 function createTranslateLoader(http: HttpClient) {
 	return new TranslateHttpLoader(http, './assets/i18n/onboarding/owner/manage-resources/', '.json');

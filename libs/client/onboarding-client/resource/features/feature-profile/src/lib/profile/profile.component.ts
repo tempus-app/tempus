@@ -100,11 +100,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
 	editViewEnabled = false;
 
-	selectedTab(tab: string) {
-		if (tab === 'logout') {
-			this.logout();
-		}
-	}
+	selectedTab(tab: string) {}
 
 	openEditView() {
 		this.editViewEnabled = true;
@@ -112,11 +108,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
 	closeEditView() {
 		this.editViewEnabled = false;
-	}
-
-	logout() {
-		this.store.dispatch(logout());
-		this.router.navigateByUrl('signin');
 	}
 
 	downloadProfile() {
@@ -210,7 +201,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
 					this.skillsSummary = approvedView.skillsSummary;
 				}
 			});
-		});
+    });
 	}
 
 	loadNewView(newView: ICreateViewDto) {

@@ -26,8 +26,9 @@ import {
 import { InputType } from '@tempus/client/shared/ui-components/input';
 import { CustomModalType, ModalService, ModalType } from '@tempus/client/shared/ui-components/modal';
 import { ButtonType, Column, ProjectManagmenetTableData } from '@tempus/client/shared/ui-components/presentational';
-import { Client, ICreateLinkDto } from '@tempus/shared-domain';
+import { Client, ErorType, ICreateLinkDto } from '@tempus/shared-domain';
 import { finalize, Subject, Subscription, take, takeUntil } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
 	selector: 'tempus-manage-resources',
@@ -43,6 +44,7 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 		private sharedStore: Store<OnboardingClientState>,
 		private fb: FormBuilder,
 		private translateService: TranslateService,
+		private router: Router,
 	) {
 		const { currentLang } = translateService;
 		// eslint-disable-next-line no-param-reassign
@@ -168,7 +170,11 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 			.pipe(takeUntil(this.$destroyed))
 			.subscribe(asyncStatus => {
 				this.loading = asyncStatus.status === AsyncRequestState.LOADING;
-				if (asyncStatus.status === AsyncRequestState.ERROR && asyncStatus.error) {
+				if (
+					asyncStatus.status === AsyncRequestState.ERROR &&
+					asyncStatus.error &&
+					asyncStatus.error.name != ErorType.INTERCEPTOR
+				) {
 					this.openErrorModal(asyncStatus.error.message);
 				}
 			});

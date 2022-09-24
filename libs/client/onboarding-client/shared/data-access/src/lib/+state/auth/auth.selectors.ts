@@ -8,6 +8,10 @@ export const selectAuth = createSelector(
 );
 
 export const selectAccessToken = createSelector(selectAuth, (state: AuthState) => state.accessToken);
+export const selectAccessRefreshToken = createSelector(selectAuth, (state: AuthState) => ({
+	accessToken: state.accessToken,
+	refreshToken: state.refreshToken,
+}));
 export const selectLoggedInUserId = createSelector(selectAuth, (state: AuthState) => state.loggedInUserId);
 export const selectLoginStatus = createSelector(selectAuth, (state: AuthState) => {
 	return {
