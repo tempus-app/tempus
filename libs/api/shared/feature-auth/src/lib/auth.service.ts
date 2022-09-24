@@ -4,7 +4,7 @@ import { JwtService } from '@nestjs/jwt';
 import { compare, genSalt, hash } from 'bcrypt';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ResourceEntity, UserEntity } from '@tempus/api/shared/entity';
+import { UserEntity } from '@tempus/api/shared/entity';
 import { ConfigService } from '@nestjs/config';
 import { CommonService } from '@tempus/api/shared/feature-common';
 
@@ -14,8 +14,6 @@ export class AuthService {
 		private jwtService: JwtService,
 		@InjectRepository(UserEntity)
 		private userRepository: Repository<UserEntity>,
-		@InjectRepository(ResourceEntity)
-		private resourceRepository: Repository<ResourceEntity>,
 		private configService: ConfigService,
 		private commonService: CommonService,
 	) {}
@@ -23,7 +21,7 @@ export class AuthService {
 	async login(user: User): Promise<AuthDto> {
 		const tokens = await this.createTokens(user);
 		await this.updateRefreshTokenHash(user, tokens.refreshToken);
-		const partialUser = user;
+		const partialUser: UserEntity = { ...user };
 		partialUser.password = null;
 		partialUser.refreshToken = null;
 		const result = new AuthDto(partialUser, tokens.accessToken, tokens.refreshToken);
@@ -40,7 +38,7 @@ export class AuthService {
 		if (!user.refreshToken) {
 			throw new ForbiddenException('User not logged in');
 		}
-		if (await AuthService.compareData(payload.refreshToken, user.refreshToken)) {
+		if (AuthService.compareData(payload.refreshToken, user.refreshToken)) {
 			const tokens = await this.createTokens(user);
 			await this.updateRefreshTokenHash(user, tokens.refreshToken);
 			return tokens;
@@ -68,8 +66,9 @@ export class AuthService {
 		const tokenOwner = user;
 		const salt = await genSalt(this.configService.get('saltSecret'));
 
+		// logging user out by setting their refreshToken to null
 		if (!refreshToken) {
-			tokenOwner.refreshToken = refreshToken;
+			tokenOwner.refreshToken = null;
 		} else {
 			const hashedRefreshToken = await hash(refreshToken, salt);
 			tokenOwner.refreshToken = hashedRefreshToken;

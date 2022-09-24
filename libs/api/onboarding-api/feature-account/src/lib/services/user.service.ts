@@ -46,6 +46,8 @@ export class UserService {
 
 	async getUser(token: JwtPayload): Promise<User | Resource> {
 		const userEntity = await this.commonService.findByEmail(token.email);
+		userEntity.password = null;
+		userEntity.refreshToken = null;
 		return userEntity;
 	}
 
