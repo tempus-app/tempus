@@ -3,7 +3,6 @@ import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import {
 	OnboardingClientState,
-	logout,
 	OnboardingClientResourceService,
 } from '@tempus/client/onboarding-client/shared/data-access';
 import { Subject, take } from 'rxjs';
@@ -99,8 +98,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
 	rejectionComments = '';
 
 	editViewEnabled = false;
-
-	selectedTab(tab: string) {}
 
 	openEditView() {
 		this.editViewEnabled = true;
@@ -201,7 +198,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
 					this.skillsSummary = approvedView.skillsSummary;
 				}
 			});
-    });
+		});
 	}
 
 	loadNewView(newView: ICreateViewDto) {
