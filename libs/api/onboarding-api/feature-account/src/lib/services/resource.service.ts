@@ -11,7 +11,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { ConfigService } from '@nestjs/config';
 // eslint-disable-next-line @nrwl/nx/enforce-module-boundaries
 import { ViewsService } from '@tempus/onboarding-api/feature-profile';
-import { Resource, RoleType, StatusType, ViewType } from '@tempus/shared-domain';
+import { Resource, RevisionType, RoleType, StatusType, ViewType } from '@tempus/shared-domain';
 import { Repository } from 'typeorm';
 import { genSalt, hash } from 'bcrypt';
 import { ResourceEntity } from '@tempus/api/shared/entity';
@@ -114,7 +114,7 @@ export class ResourceService {
 					client: proj.client.clientName,
 				};
 			});
-			const revNeeded = res.views.some(view => view.revision);
+			const revNeeded = res.views.some(view => view.revision && view.revisionType === RevisionType.PENDING);
 			return new UserProjectClientDto(res.id, res.firstName, res.lastName, res.email, revNeeded, projClients);
 		});
 		return userProjectInfo;

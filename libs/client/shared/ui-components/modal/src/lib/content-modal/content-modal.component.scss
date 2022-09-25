@@ -1,4 +1,5 @@
 @use 'components/helper' as cmp;
+@use 'abstracts/helper' as abs;
 .dialog-button {
 	padding-right: 10px;
 }
@@ -8,6 +9,7 @@
 .info-title {
 	@include cmp.info-title(100%, 50px);
 }
-.mat-dialog-content{
+.mat-dialog-content {
+	@include abs.body-1();
 	overflow: initial;
 }
