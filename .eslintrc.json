@@ -18,8 +18,8 @@
 			],
 			"rules": {
 				"arrow-body-style": "off",
-				"no-await-in-loop":"off",
-				"no-plusplus":"off",
+				"no-await-in-loop": "off",
+				"no-plusplus": "off",
 				"prefer-arrow-callback": "off",
 				"import/prefer-default-export": "off",
 				"import/no-cycle": "off", //TODO: look into why this is happening
@@ -31,6 +31,7 @@
 				],
 				"object-curly-newline": "off", //prettier conflict
 				"@typescript-eslint/indent": "off", //handled by prettier
+				"@typescript-eslint/space-before-blocks": "off",
 				"@typescript-eslint/no-unused-vars": "error",
 				"@typescript-eslint/no-explicit-any": "error",
 				"@nrwl/nx/enforce-module-boundaries": [
