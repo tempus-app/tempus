@@ -4,7 +4,6 @@ export interface Revision {
 	id: number;
 	createdAt: Date;
 	approved?: boolean;
-	view: View;
-	newView: View;
+	views: View[];
 	comment: string;
 }

@@ -142,7 +142,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
 			// fetch all Primary views, select display
 			this.resourceService.getResourceProfileViews(this.userId).subscribe(views => {
-				views
+				const filteredAndSortedViews = views
 					.filter(view => view.viewType === ViewType.PRIMARY)
 					.sort((a, b) =>
 						// eslint-disable-next-line no-nested-ternary
@@ -155,8 +155,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
 							: 1,
 					);
 
-				const latestView = views[0];
-				const latestApprovedView = views.find(view => view.revisionType === RevisionType.APPROVED);
+				const latestView = filteredAndSortedViews[0];
+				const latestApprovedView = filteredAndSortedViews.find(view => view.revisionType === RevisionType.APPROVED);
 
 				this.currentViewId = latestView.id;
 				this.certifications = latestView.certifications;
