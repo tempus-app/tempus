@@ -114,7 +114,7 @@ export class ResourceService {
 					client: proj.client.clientName,
 				};
 			});
-			const revNeeded = res.views.some(view => view.revision && view.revisionType === RevisionType.PENDING);
+			const revNeeded = res.views.some(view => view.revisionType === RevisionType.PENDING);
 			return new UserProjectClientDto(res.id, res.firstName, res.lastName, res.email, revNeeded, projClients);
 		});
 		return userProjectInfo;
