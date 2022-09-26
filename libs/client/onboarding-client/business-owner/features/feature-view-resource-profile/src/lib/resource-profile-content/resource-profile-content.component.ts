@@ -127,8 +127,7 @@ export class ResourceProfileContentComponent implements OnInit, OnChanges {
 		const id = parseInt(this.route.snapshot.paramMap.get('id') || '0', 10);
 		this.resourceService.getResourceProfileViews(id).subscribe(profileViews => {
 			this.viewID = profileViews[0].id;
-			let revisionViewId;
-			profileViews.sort((a, b) =>
+			const sortAndFilterViews = profileViews.sort((a, b) =>
 				// eslint-disable-next-line no-nested-ternary
 				a.lastUpdateDate && b.lastUpdateDate
 					? new Date(a.lastUpdateDate).getTime() > new Date(b.lastUpdateDate).getTime()
@@ -139,11 +138,7 @@ export class ResourceProfileContentComponent implements OnInit, OnChanges {
 					: 1,
 			);
 
-			revisionViewId = profileViews[0].id;
-
-			if (!revisionViewId) {
-				revisionViewId = profileViews[0].id;
-			}
+			const revisionViewId = sortAndFilterViews[0].id;
 			this.loadView(revisionViewId, profileViews);
 		});
 	}
