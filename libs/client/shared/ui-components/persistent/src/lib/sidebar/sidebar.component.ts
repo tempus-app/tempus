@@ -27,7 +27,7 @@ export class SidebarComponent implements OnInit {
 
 	isVisible = true;
 
-	bugReportingURL = 'https://forms.office.com/r/artFajKmCd';
+	bugReportingURL = 'https://forms.gle/KCoBXHmK49AdgJdV9';
 
 	ngOnInit(): void {
 		this.translateService
