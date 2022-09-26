@@ -9,6 +9,7 @@
 		"logout": "Logout",
 		"namePlaceholder": "Placeholder Name",
 		"emailPlaceholder": "Placeholder Email",
+		"reportBugs": "Report Bugs",
 		"tabs": {
 			"manageResources": "Manage Resources",
 			"pendingApprovals": "Pending Approvals",
