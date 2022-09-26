@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToMany, JoinTable, ManyToOne, OneToOne } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToMany, JoinTable, ManyToOne } from 'typeorm';
 import { RevisionType, RoleType, View, ViewType } from '@tempus/shared-domain';
 import { CreateViewDto } from '@tempus/api/shared/dto';
 import { SkillEntity } from './skill.entity';
@@ -62,7 +62,7 @@ export class ViewEntity implements View {
 	@Column()
 	locked: boolean;
 
-	@OneToOne(() => RevisionEntity, revision => revision.view)
+	@ManyToOne(() => RevisionEntity, revision => revision.views)
 	revision?: RevisionEntity;
 
 	@ManyToMany(() => SkillEntity, { cascade: ['insert', 'update'] })
