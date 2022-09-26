@@ -128,11 +128,18 @@ export class ResourceProfileContentComponent implements OnInit, OnChanges {
 		this.resourceService.getResourceProfileViews(id).subscribe(profileViews => {
 			this.viewID = profileViews[0].id;
 			let revisionViewId;
-			for (let i = 0; i < profileViews.length; i += 1) {
-				if (profileViews[i].revision) {
-					revisionViewId = profileViews[i].revision?.newView.id;
-				}
-			}
+			profileViews.sort((a, b) =>
+				// eslint-disable-next-line no-nested-ternary
+				a.lastUpdateDate && b.lastUpdateDate
+					? new Date(a.lastUpdateDate).getTime() > new Date(b.lastUpdateDate).getTime()
+						? -1
+						: 1
+					: a.createdAt.getTime() > b.createdAt.getTime()
+					? -1
+					: 1,
+			);
+
+			revisionViewId = profileViews[0].id;
 
 			if (!revisionViewId) {
 				revisionViewId = profileViews[0].id;

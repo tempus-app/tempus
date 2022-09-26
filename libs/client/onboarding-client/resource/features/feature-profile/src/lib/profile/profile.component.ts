@@ -135,9 +135,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
 			this.githubLink = resData.githubLink;
 			this.otherLink = resData.otherLink;
 
-			// TODO:
-			// fetch latest primary view
-
 			// TODO: ADD resource to the store
 			this.resourceService.getResourceOriginalResumeById(this.userId).subscribe(resumeBlob => {
 				this.resume = new File([resumeBlob], 'original-resume.pdf');
@@ -145,45 +142,34 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
 			// fetch all Primary views, select display
 			this.resourceService.getResourceProfileViews(this.userId).subscribe(views => {
-				const primaryViews = views.filter(view => view.viewType === ViewType.PRIMARY);
-				const rejectedView = primaryViews.find(view => view.revisionType === RevisionType.REJECTED);
-				const pendingView = primaryViews.find(view => view.revisionType === RevisionType.PENDING);
-				const approvedView = primaryViews.find(view => view.revisionType === RevisionType.APPROVED);
+				views
+					.filter(view => view.viewType === ViewType.PRIMARY)
+					.sort((a, b) =>
+						// eslint-disable-next-line no-nested-ternary
+						a.lastUpdateDate && b.lastUpdateDate
+							? new Date(a.lastUpdateDate).getTime() > new Date(b.lastUpdateDate).getTime()
+								? -1
+								: 1
+							: a.createdAt.getTime() > b.createdAt.getTime()
+							? -1
+							: 1,
+					);
 
-				if (rejectedView) {
-					this.currentViewId = rejectedView.id;
-					this.certifications = rejectedView.certifications;
-					this.educations = rejectedView.educations;
-					this.educationsSummary = rejectedView.educationsSummary;
-					this.workExperiences = rejectedView.experiences;
-					this.experiencesSummary = rejectedView.experiencesSummary;
-					this.profileSummary = rejectedView.profileSummary;
-					this.skills = rejectedView.skills.map(skill => skill.skill.name);
-					this.skillsSummary = rejectedView.skillsSummary;
-					this.isRejected = true;
-					this.rejectionComments = approvedView?.revision?.comment ? approvedView.revision.comment : '';
-				} else if (pendingView) {
-					this.currentViewId = pendingView.id;
-					this.certifications = pendingView.certifications;
-					this.educations = pendingView.educations;
-					this.educationsSummary = pendingView.educationsSummary;
-					this.workExperiences = pendingView.experiences;
-					this.experiencesSummary = pendingView.experiencesSummary;
-					this.profileSummary = pendingView.profileSummary;
-					this.skills = pendingView.skills.map(skill => skill.skill.name);
-					this.skillsSummary = pendingView.skillsSummary;
-					this.isPendingApproval = true;
-				} else if (approvedView) {
-					this.currentViewId = approvedView.id;
-					this.certifications = approvedView.certifications;
-					this.educations = approvedView.educations;
-					this.educationsSummary = approvedView.educationsSummary;
-					this.workExperiences = approvedView.experiences;
-					this.experiencesSummary = approvedView.experiencesSummary;
-					this.profileSummary = approvedView.profileSummary;
-					this.skills = approvedView.skills.map(skill => skill.skill.name);
-					this.skillsSummary = approvedView.skillsSummary;
-				}
+				const latestView = views[0];
+				const latestApprovedView = views.find(view => view.revisionType === RevisionType.APPROVED);
+
+				this.currentViewId = latestView.id;
+				this.certifications = latestView.certifications;
+				this.educations = latestView.educations;
+				this.educationsSummary = latestView.educationsSummary;
+				this.workExperiences = latestView.experiences;
+				this.experiencesSummary = latestView.experiencesSummary;
+				this.profileSummary = latestView.profileSummary;
+				this.skills = latestView.skills.map(skill => skill.skill.name);
+				this.skillsSummary = latestView.skillsSummary;
+				this.isRejected = latestView.revisionType === RevisionType.REJECTED;
+				this.isPendingApproval = latestView.revisionType === RevisionType.PENDING;
+				this.rejectionComments = latestApprovedView?.revision?.comment ? latestApprovedView.revision.comment : '';
 			});
 		});
 	}
