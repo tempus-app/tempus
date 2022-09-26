@@ -137,19 +137,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
 			// TODO:
 			// fetch latest primary view
-			// this.resourceService.getLatestPrimaryView(this.userId).subscribe(primaryView => {
-			// 	if (primaryView.revisionType === RevisionType.APPROVED) {
-			// 		this.approvedPrimaryViewId = primaryView.id;
-			// 	}
-			// 	this.certifications = primaryView.certifications;
-			// 	this.educations = primaryView.educations;
-			// 	this.educationsSummary = primaryView.educationsSummary;
-			// 	this.workExperiences = primaryView.experiences;
-			// 	this.experiencesSummary = primaryView.experiencesSummary;
-			// 	this.profileSummary = primaryView.profileSummary;
-			// 	this.skills = primaryView.skills.map(skill => skill.skill.name);
-			// 	this.skillsSummary = primaryView.skillsSummary;
-			// });
 
 			// TODO: ADD resource to the store
 			this.resourceService.getResourceOriginalResumeById(this.userId).subscribe(resumeBlob => {
@@ -174,7 +161,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
 					this.skills = rejectedView.skills.map(skill => skill.skill.name);
 					this.skillsSummary = rejectedView.skillsSummary;
 					this.isRejected = true;
-					this.rejectionComments = rejectedView.revision?.comment ? rejectedView.revision.comment : '';
+					this.rejectionComments = approvedView?.revision?.comment ? approvedView.revision.comment : '';
 				} else if (pendingView) {
 					this.currentViewId = pendingView.id;
 					this.certifications = pendingView.certifications;

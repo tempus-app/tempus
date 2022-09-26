@@ -113,9 +113,9 @@ export class ViewsService {
 		}
 		if (approval === false) {
 			revisionEntity.comment = comment;
-			revisionEntity.view.locked = false;
-			revisionEntity.view.revisionType = RevisionType.REJECTED;
-			await this.viewsRepository.save(revisionEntity.view);
+			revisionEntity.newView.locked = false;
+			revisionEntity.newView.revisionType = RevisionType.REJECTED;
+			await this.viewsRepository.save(revisionEntity.newView);
 			return this.revisionRepository.save(revisionEntity);
 		}
 	}
