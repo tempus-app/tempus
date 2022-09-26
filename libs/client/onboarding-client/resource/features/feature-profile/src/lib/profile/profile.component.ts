@@ -166,7 +166,19 @@ export class ProfileComponent implements OnInit, OnDestroy {
 				const pendingView = primaryViews.find(view => view.revisionType === RevisionType.PENDING);
 				const approvedView = primaryViews.find(view => view.revisionType === RevisionType.APPROVED);
 
-				if (rejectedView) {
+				if (pendingView) {
+					this.currentViewId = pendingView.id;
+					this.certifications = pendingView.certifications;
+					this.educations = pendingView.educations;
+					this.educationsSummary = pendingView.educationsSummary;
+					this.workExperiences = pendingView.experiences;
+					this.experiencesSummary = pendingView.experiencesSummary;
+					this.profileSummary = pendingView.profileSummary;
+					this.skills = pendingView.skills.map(skill => skill.skill.name);
+					this.skillsSummary = pendingView.skillsSummary;
+					this.isPendingApproval = true;
+        }
+        else if (rejectedView) {
 					this.currentViewId = rejectedView.id;
 					this.certifications = rejectedView.certifications;
 					this.educations = rejectedView.educations;
@@ -178,17 +190,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
 					this.skillsSummary = rejectedView.skillsSummary;
 					this.isRejected = true;
 					this.rejectionComments = rejectedView.revision?.comment ? rejectedView.revision.comment : '';
-				} else if (pendingView) {
-					this.currentViewId = pendingView.id;
-					this.certifications = pendingView.certifications;
-					this.educations = pendingView.educations;
-					this.educationsSummary = pendingView.educationsSummary;
-					this.workExperiences = pendingView.experiences;
-					this.experiencesSummary = pendingView.experiencesSummary;
-					this.profileSummary = pendingView.profileSummary;
-					this.skills = pendingView.skills.map(skill => skill.skill.name);
-					this.skillsSummary = pendingView.skillsSummary;
-					this.isPendingApproval = true;
 				} else if (approvedView) {
 					this.currentViewId = approvedView.id;
 					this.certifications = approvedView.certifications;

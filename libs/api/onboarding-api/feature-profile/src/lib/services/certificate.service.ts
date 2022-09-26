@@ -49,8 +49,9 @@ export class CertificationService {
 		const existingCertificationEntity = await this.certificationRepository.findOne(updatedCertification.id, {
 			relations: ['resource'],
 		});
+    console.log('YOOO is this working', existingCertificationEntity)
 		if (!existingCertificationEntity) {
-			throw new NotFoundException(`Could not find certification with id ${existingCertificationEntity.id}`);
+			throw new NotFoundException(`Could not find certification with id ${updatedCertification.id}`);
 		}
 
 		// Safe guards to prevent data from being overwritten as null
@@ -68,7 +69,7 @@ export class CertificationService {
 	async deleteCertification(certificationId: number) {
 		const certificationEntity = await this.certificationRepository.findOne(certificationId);
 		if (!certificationEntity) {
-			throw new NotFoundException(`Could not find education with id ${certificationId}`);
+			throw new NotFoundException(`Could not find certification with id ${certificationId}`);
 		}
 		this.certificationRepository.remove(certificationEntity);
 	}

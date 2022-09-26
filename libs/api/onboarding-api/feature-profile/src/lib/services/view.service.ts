@@ -43,7 +43,6 @@ export class ViewsService {
 
 	async reviseView(viewId: number, user: User, newView: CreateViewDto): Promise<Revision> {
 		const view = await this.getView(viewId);
-
 		if (view.locked) throw new UnauthorizedException(`Cannot edit locked view`);
 
 		const resourceEntity = await this.resourceService.getResourceInfo(view.resource.id);
@@ -70,6 +69,7 @@ export class ViewsService {
 		view.locked = true;
 		await this.viewsRepository.save(view);
 
+    // why is createdAt not being updated for the revision?
 		if (view.revision) {
 			const revisionEntity = view.revision;
 			const previousRevision = view.revision.newView;

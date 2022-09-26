@@ -22,7 +22,7 @@ export class EducationService {
 		newEducationEntity.resource = resourceEntity;
 		newEducationEntity = await this.educationRepository.save(newEducationEntity);
 
-		return educationEntity;
+		return newEducationEntity;
 	}
 
 	// return all educations by resource
@@ -55,6 +55,7 @@ export class EducationService {
 			relations: ['location', 'resource'],
 		});
 		if (!existingEducationEntity) {
+      console.log('HELLLOO', updateEducationData)
 			throw new NotFoundException(`Could not find education with id ${updateEducationData.id}`);
 		}
 
