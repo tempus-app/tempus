@@ -27,6 +27,8 @@ export class SidebarComponent implements OnInit {
 
 	isVisible = true;
 
+	bugReportingURL = 'https://forms.office.com/r/artFajKmCd';
+
 	ngOnInit(): void {
 		this.translateService
 			.get(['sidenav'])
@@ -71,7 +73,7 @@ export class SidebarComponent implements OnInit {
 
 	selectedTab(tab: string) {
 		if (tab === 'logout') {
-			this.store.dispatch(logout({redirect: true}));
+			this.store.dispatch(logout({ redirect: true }));
 		}
 		this.selectTab.emit(tab);
 	}
@@ -87,6 +89,10 @@ export class SidebarComponent implements OnInit {
 		const firstInitial = fullName[0].charAt(0);
 		const secondInitial = fullName.pop()?.charAt(0);
 		this.initials = firstInitial && secondInitial ? (firstInitial + secondInitial).toUpperCase() : firstInitial;
+	}
+
+	openReportBugForm() {
+		window.open(this.bugReportingURL, '_blank');
 	}
 
 	toggleSidebar() {
