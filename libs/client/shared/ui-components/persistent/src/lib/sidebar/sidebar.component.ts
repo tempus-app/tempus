@@ -30,6 +30,8 @@ export class SidebarComponent implements OnInit, OnChanges {
 
 	isVisible = true;
 
+	bugReportingURL = 'https://forms.gle/KCoBXHmK49AdgJdV9';
+
 	ngOnInit(): void {
 		this.translateService
 			.get(['sidenav'])
@@ -96,5 +98,9 @@ export class SidebarComponent implements OnInit, OnChanges {
 
 	toggleSidebar() {
 		this.isVisible = !this.isVisible;
+	}
+
+	openReportBugForm() {
+		window.open(this.bugReportingURL, '_blank');
 	}
 }

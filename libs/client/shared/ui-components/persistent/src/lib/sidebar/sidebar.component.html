@@ -19,6 +19,9 @@
 			>
 				<div class="mat-body-2">{{ 'sidenav.tabs.' + tab | translate }}</div>
 			</mat-button-toggle>
+			<mat-button-toggle id="report-button" (click)="openReportBugForm()">
+				<div class="mat-body-2">{{ 'sidenav.reportBugs' | translate }}</div>
+			</mat-button-toggle>
 			<mat-button-toggle
 				id="logout"
 				value="{{ SidebarTab.LOGOUT }}"
