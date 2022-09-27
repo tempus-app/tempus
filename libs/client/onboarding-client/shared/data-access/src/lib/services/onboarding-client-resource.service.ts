@@ -45,9 +45,9 @@ export class OnboardingClientResourceService {
 	}
 
 	public getResourceOriginalResumeById(resourceId: number): Observable<Blob> {
-    return this.http
-      .get<Blob>(`${this.url}/user/${resourceId}/resume`, {responseType: 'blob' as 'json' })
-      .pipe(catchError(handleError));
+		return this.http
+			.get<Blob>(`${this.url}/user/${resourceId}/resume`, { responseType: 'blob' as 'json' })
+			.pipe(catchError(handleError));
 	}
 
 	public getViewById(viewId: number): Observable<View> {

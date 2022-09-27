@@ -140,7 +140,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
 				this.resume = new File([resumeBlob], 'original-resume.pdf');
 			});
 
-			// fetch all Primary views, select display
+			// display latest primary view
 			this.resourceService.getResourceProfileViews(this.userId).subscribe(views => {
 				const filteredAndSortedViews = views
 					.filter(view => view.viewType === ViewType.PRIMARY)
@@ -156,7 +156,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
 					);
 
 				const latestView = filteredAndSortedViews[0];
-				const latestApprovedView = filteredAndSortedViews.find(view => view.revisionType === RevisionType.APPROVED);
 
 				this.currentViewId = latestView.id;
 				this.certifications = latestView.certifications;
@@ -169,7 +168,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
 				this.skillsSummary = latestView.skillsSummary;
 				this.isRejected = latestView.revisionType === RevisionType.REJECTED;
 				this.isPendingApproval = latestView.revisionType === RevisionType.PENDING;
-				this.rejectionComments = latestApprovedView?.revision?.comment ? latestApprovedView.revision.comment : '';
+				this.rejectionComments = latestView.revision?.comment ? latestView.revision.comment : '';
 			});
 		});
 	}
@@ -184,7 +183,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
 		this.profileSummary = newView.profileSummary;
 		this.skills = newView.skills.map(skill => skill.skill.name);
 		this.skillsSummary = newView.skillsSummary;
-
+		this.isRejected = false;
 		this.isPendingApproval = true;
 
 		// Post view

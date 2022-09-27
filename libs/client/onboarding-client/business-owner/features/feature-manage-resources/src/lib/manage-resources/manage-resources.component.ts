@@ -173,7 +173,7 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 				if (
 					asyncStatus.status === AsyncRequestState.ERROR &&
 					asyncStatus.error &&
-					asyncStatus.error.name != ErorType.INTERCEPTOR
+					asyncStatus.error.name !== ErorType.INTERCEPTOR
 				) {
 					this.openErrorModal(asyncStatus.error.message);
 				}

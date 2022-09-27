@@ -138,8 +138,15 @@ export class ResourceProfileContentComponent implements OnInit, OnChanges {
 					: 1,
 			);
 
-			const revisionViewId = sortAndFilterViews[0].id;
-			this.loadView(revisionViewId, profileViews);
+			let latestView = sortAndFilterViews[0];
+
+			// if the view has been rejected, display latest approved version
+			if (latestView.revisionType === RevisionType.REJECTED) {
+				const approvedViews = sortAndFilterViews.filter(view => view.revisionType === RevisionType.APPROVED);
+				const [view] = approvedViews;
+				latestView = view;
+			}
+			this.loadView(latestView.id, profileViews);
 		});
 	}
 
@@ -206,7 +213,9 @@ export class ResourceProfileContentComponent implements OnInit, OnChanges {
 				)
 				.subscribe();
 			this.modalService.confirmEventSubject.unsubscribe();
-			this.router.navigate(['../../manage-resources'], { relativeTo: this.route });
+			this.router.navigate(['../../manage-resources'], { relativeTo: this.route }).then(() => {
+				window.location.reload();
+			});
 		});
 	}
 
@@ -233,7 +242,9 @@ export class ResourceProfileContentComponent implements OnInit, OnChanges {
 			this.modalService.close();
 			this.resourceService.approveOrDenyRevision(this.viewID, '', true).subscribe();
 			this.modalService.confirmEventSubject.unsubscribe();
-			this.router.navigate(['../../manage-resources'], { relativeTo: this.route });
+			this.router.navigate(['../../manage-resources'], { relativeTo: this.route }).then(() => {
+				window.location.reload();
+			});
 		});
 	}
 }
