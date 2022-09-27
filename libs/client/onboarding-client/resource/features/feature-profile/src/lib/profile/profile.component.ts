@@ -17,6 +17,7 @@ import {
 	RevisionType,
 } from '@tempus/shared-domain';
 import { TranslateService } from '@ngx-translate/core';
+import { sortViewsByLatestUpdated } from '@tempus/client/shared/util';
 
 @Component({
 	selector: 'tempus-profile',
@@ -142,18 +143,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
 			// display latest primary view
 			this.resourceService.getResourceProfileViews(this.userId).subscribe(views => {
-				const filteredAndSortedViews = views
-					.filter(view => view.viewType === ViewType.PRIMARY)
-					.sort((a, b) =>
-						// eslint-disable-next-line no-nested-ternary
-						a.lastUpdateDate && b.lastUpdateDate
-							? new Date(a.lastUpdateDate).getTime() > new Date(b.lastUpdateDate).getTime()
-								? -1
-								: 1
-							: a.createdAt.getTime() > b.createdAt.getTime()
-							? -1
-							: 1,
-					);
+				let filteredAndSortedViews = views.filter(view => view.viewType === ViewType.PRIMARY);
+				filteredAndSortedViews = sortViewsByLatestUpdated(filteredAndSortedViews);
 
 				const latestView = filteredAndSortedViews[0];
 

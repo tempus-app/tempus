@@ -25,6 +25,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, Validators } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 import { take } from 'rxjs';
+import { sortViewsByLatestUpdated } from '@tempus/client/shared/util';
 
 @Component({
 	selector: 'tempus-resource-profile-content',
@@ -127,22 +128,13 @@ export class ResourceProfileContentComponent implements OnInit, OnChanges {
 		const id = parseInt(this.route.snapshot.paramMap.get('id') || '0', 10);
 		this.resourceService.getResourceProfileViews(id).subscribe(profileViews => {
 			this.viewID = profileViews[0].id;
-			const sortAndFilterViews = profileViews.sort((a, b) =>
-				// eslint-disable-next-line no-nested-ternary
-				a.lastUpdateDate && b.lastUpdateDate
-					? new Date(a.lastUpdateDate).getTime() > new Date(b.lastUpdateDate).getTime()
-						? -1
-						: 1
-					: a.createdAt.getTime() > b.createdAt.getTime()
-					? -1
-					: 1,
-			);
 
-			let latestView = sortAndFilterViews[0];
+			const sortedViews = sortViewsByLatestUpdated(profileViews);
+			let latestView = sortedViews[0];
 
 			// if the view has been rejected, display latest approved version
 			if (latestView.revisionType === RevisionType.REJECTED) {
-				const approvedViews = sortAndFilterViews.filter(view => view.revisionType === RevisionType.APPROVED);
+				const approvedViews = sortedViews.filter(view => view.revisionType === RevisionType.APPROVED);
 				const [view] = approvedViews;
 				latestView = view;
 			}
