@@ -106,6 +106,7 @@ export class EditProfileComponent implements AfterViewInit, OnDestroy {
 	}
 
 	closeEditView() {
+		window.location.reload();
 		this.closeEditViewClicked.emit('close');
 	}
 
