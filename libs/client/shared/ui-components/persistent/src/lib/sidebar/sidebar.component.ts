@@ -76,6 +76,9 @@ export class SidebarComponent implements OnInit, OnChanges {
 			case SidebarTab.LOGOUT:
 				this.store.dispatch(logout({ redirect: true }));
 				break;
+			case SidebarTab.REPORT_BUGS:
+				this.openReportBugForm();
+				break;
 			case SidebarTab.MANAGE_RESOURCES:
 				this.router.navigateByUrl('/owner/manage-resources');
 				break;

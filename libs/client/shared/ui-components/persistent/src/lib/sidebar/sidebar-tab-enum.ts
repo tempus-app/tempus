@@ -1,5 +1,6 @@
 export enum SidebarTab {
 	LOGOUT = 'logout',
+	REPORT_BUGS = 'reportBugs',
 	MANAGE_RESOURCES = 'manageResources',
 	PENDING_APPROVALS = 'pendingApprovals',
 	PRIMARY_VIEW = 'primaryView',

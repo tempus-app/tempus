@@ -19,7 +19,12 @@
 			>
 				<div class="mat-body-2">{{ 'sidenav.tabs.' + tab | translate }}</div>
 			</mat-button-toggle>
-			<mat-button-toggle id="report-button" (click)="openReportBugForm()">
+			<mat-button-toggle
+				id="report-button"
+				value="{{ SidebarTab.REPORT_BUGS }}"
+				(click)="navigate(SidebarTab.REPORT_BUGS)"
+				[ngClass]="{ selected: SidebarTab.REPORT_BUGS === selectedTab }"
+			>
 				<div class="mat-body-2">{{ 'sidenav.reportBugs' | translate }}</div>
 			</mat-button-toggle>
 			<mat-button-toggle
