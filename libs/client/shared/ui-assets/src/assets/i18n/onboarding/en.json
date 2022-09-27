@@ -79,7 +79,8 @@
 				"title": "Skills",
 				"summary": "Summary",
 				"addPlaceholder": "Add a Skill...",
-				"duplicateSkillErrorMessage": "Error duplicate skill entered: "
+				"duplicateSkillErrorMessagePrefix": "You have already entered ",
+				"duplicateSkillErrorMessageSuffix": " as a skill."
 			},
 			"workExp": {
 				"title": "Work Experience",
