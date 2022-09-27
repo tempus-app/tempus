@@ -16,7 +16,7 @@
 					<div fxLayout="column" fxLayoutGap="30px">
 						<div fxLayoutAlign="left center">
 							<div>
-								<input class="mat-body" id="skillChipInput"
+								<input class="mat-body" id="skillChipInput" maxlength="50"
 									placeholder="{{ skillsPrefix + 'addPlaceholder' | translate }}"
 									[matChipInputFor]="chipList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
 									[matChipInputAddOnBlur]="addOnBlur" (matChipInputTokenEnd)="addSkill($event)" />
