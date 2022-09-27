@@ -78,7 +78,8 @@
 			"skills": {
 				"title": "Skills",
 				"summary": "Summary",
-				"addPlaceholder": "Add a Skill..."
+				"addPlaceholder": "Add a Skill...",
+				"duplicateSkillErrorMessage": "Error duplicate skill entered: "
 			},
 			"workExp": {
 				"title": "Work Experience",
