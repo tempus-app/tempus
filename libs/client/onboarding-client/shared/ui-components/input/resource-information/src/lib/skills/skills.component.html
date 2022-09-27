@@ -10,38 +10,33 @@
 		<div fxFlex>
 			<div fxFlex="5"></div>
 			<tempus-card>
-				<tempus-text-area
-					id="skill-summary"
-					placeholder="{{ skillsPrefix + 'summary' | translate }}"
-					[control]="$any(myInfoForm).get('skillsSummary')"
-				></tempus-text-area>
+				<tempus-text-area id="skill-summary" placeholder="{{ skillsPrefix + 'summary' | translate }}"
+					[control]="$any(myInfoForm).get('skillsSummary')"></tempus-text-area>
 				<form>
 					<div fxLayout="column" fxLayoutGap="30px">
 						<div fxLayoutAlign="left center">
 							<div>
-								<input
-									class="mat-body"
-									id="skillChipInput"
+								<input class="mat-body" id="skillChipInput" maxlength="50"
 									placeholder="{{ skillsPrefix + 'addPlaceholder' | translate }}"
-									[matChipInputFor]="chipList"
-									[matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-									[matChipInputAddOnBlur]="addOnBlur"
-									(matChipInputTokenEnd)="addSkill($event)"
-								/>
+									[matChipInputFor]="chipList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+									[matChipInputAddOnBlur]="addOnBlur" (matChipInputTokenEnd)="addSkill($event)" />
 							</div>
 						</div>
 						<div fxLayoutAlign="center center">
 							<mat-chip-list #chipList aria-label="Skill tags">
-								<tempus-chip
-									*ngFor="let skill of skills"
-									[removable]="true"
-									id="skill-dark"
-									typography="mat-body"
-									content="{{ skill }}"
-									(onRemove)="removeSkill(skill)"
-								>
+								<tempus-chip *ngFor="let skill of skills" [removable]="true" id="skill-dark"
+									typography="mat-body" content="{{ skill }}" (onRemove)="removeSkill(skill)">
 								</tempus-chip>
 							</mat-chip-list>
+						</div>
+						<div fxLayoutAlign="left center">
+							<div class="error-container">
+								<mat-error class="mat-body-2" *ngIf="$any(myInfoForm).get('skills').errors">
+									{{ skillsPrefix + 'duplicateSkillErrorMessagePrefix' | translate }}
+									{{$any(myInfoForm).get('skills').errors.incorrectValue}}
+									{{ skillsPrefix + 'duplicateSkillErrorMessageSuffix' | translate }}
+								</mat-error>
+							</div>
 						</div>
 					</div>
 				</form>
