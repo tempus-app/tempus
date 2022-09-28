@@ -4,22 +4,26 @@
 			<div id="my-profile-container" fxFlex>
 				<h2 class="mat-h2 page-title">{{ editProfilePrefix + 'primaryView' | translate }}</h2>
 			</div>
-			<mat-slide-toggle (change)="togglePreview()">{{ editProfilePrefix + 'previewToggle' | translate }}</mat-slide-toggle>
+			<mat-slide-toggle (change)="togglePreview()">{{
+				editProfilePrefix + 'previewToggle' | translate
+			}}</mat-slide-toggle>
 			<div id="button-container">
-				<tempus-button 
+				<tempus-button
 					label="{{ editProfilePrefix + 'buttons.cancel.label' | translate }}"
 					color="accent"
 					(buttonClick)="closeEditView()"
 					matTooltip="{{ editProfilePrefix + 'buttons.cancel.tooltip' | translate }}"
 					matTooltipClass="tooltip"
 				></tempus-button>
-				
+
 				<tempus-button
-				    [disabled]="!personalInfoForm.valid || 
-					!experiencesForm.valid ||
-					!educationsForm.valid ||
-					!certificationsForm.valid ||
-					!skillsSummaryForm.valid"
+					[disabled]="
+						!personalInfoForm.valid ||
+						!experiencesForm.valid ||
+						!educationsForm.valid ||
+						!certificationsForm.valid ||
+						!skillsSummaryForm.valid
+					"
 					label="{{ editProfilePrefix + 'buttons.submit.label' | translate }}"
 					color="accent"
 					(buttonClick)="submitChanges()"

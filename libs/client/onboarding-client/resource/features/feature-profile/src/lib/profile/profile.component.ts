@@ -80,6 +80,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
 	skills: Array<string> = [];
 
+	editedSkills: Array<string> = [];
+
 	destroyed$ = new Subject<void>();
 
 	loading = false;
@@ -106,6 +108,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
 	closeEditView() {
 		this.editViewEnabled = false;
+		this.editedSkills = this.skills;
 	}
 
 	downloadProfile() {
@@ -156,6 +159,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
 				this.experiencesSummary = latestView.experiencesSummary;
 				this.profileSummary = latestView.profileSummary;
 				this.skills = latestView.skills.map(skill => skill.skill.name);
+				this.editedSkills = latestView.skills.map(skill => skill.skill.name);
 				this.skillsSummary = latestView.skillsSummary;
 				this.isRejected = latestView.revisionType === RevisionType.REJECTED;
 				this.isPendingApproval = latestView.revisionType === RevisionType.PENDING;
