@@ -46,7 +46,8 @@
 							}
 						]
 					}
-				]
+				],
+				"import/no-extraneous-dependencies": ["error", { "devDependencies": ["**/test-setup.ts"] }]
 			}
 		}
 	]

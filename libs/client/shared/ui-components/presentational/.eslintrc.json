@@ -21,6 +21,12 @@
 						"prefix": "tempus",
 						"style": "kebab-case"
 					}
+				],
+				"import/no-extraneous-dependencies": [
+					"error",
+					{
+						"packageDir": "./"
+					}
 				]
 			}
 		},

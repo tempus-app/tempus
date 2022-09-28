@@ -1,5 +1,6 @@
 import jwt_decode from 'jwt-decode';
 import { AbstractControl } from '@angular/forms';
+import { View } from '@tempus/shared-domain';
 
 // TODO FIGURE OUT THE USE OF 'PRSENT'
 /**
@@ -42,7 +43,7 @@ export function formatDateToISO(date: Date | null | undefined) {
 
 /**
  * Validate date range
- * @param  {AbstractControl} {return(controls
+ * @param  {AbstractControl} controls
  * @returns true
  */
 export function checkEnteredDates() {
@@ -81,4 +82,24 @@ export function formatName(first: string, last: string) {
 export function decodeJwt(token: string) {
 	const decodedToken: { email: string; roles: string[]; iat: number; exp: number } = jwt_decode(token || '');
 	return decodedToken;
+}
+
+/**
+ * Returns views sorted by last update date
+ * @param {View[]} views 
+ * @returns sorted views
+ */
+export function sortViewsByLatestUpdated(views: View[]) {
+	const sortedViews = views.sort((a, b) =>
+		// eslint-disable-next-line no-nested-ternary
+		a.lastUpdateDate && b.lastUpdateDate
+			? new Date(a.lastUpdateDate).getTime() > new Date(b.lastUpdateDate).getTime()
+				? -1
+				: 1
+			: a.createdAt.getTime() > b.createdAt.getTime()
+				? -1
+				: 1,
+	);
+
+	return sortedViews;
 }

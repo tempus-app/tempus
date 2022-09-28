@@ -1,4 +1,4 @@
-<tempus-sidebar [userType]="UserType.RESOURCE" [name]="fullName" [email]="email" (selectTab)="selectedTab($event)">
+<tempus-sidebar [userType]="UserType.RESOURCE" [name]="fullName" [email]="email">
 	<div *ngIf="editViewEnabled">
 		<tempus-edit-profile
 			(openEditView)="openEditView()"

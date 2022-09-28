@@ -11,7 +11,7 @@ import {
 	Revision,
 	View,
 } from '@tempus/shared-domain';
-import { catchError, Observable, take, switchMap } from 'rxjs';
+import { catchError, Observable } from 'rxjs';
 import { handleError } from './errorHandler';
 
 @Injectable({ providedIn: 'root' })
@@ -45,34 +45,13 @@ export class OnboardingClientResourceService {
 	}
 
 	public getResourceOriginalResumeById(resourceId: number): Observable<Blob> {
-    return this.http
-      .get<Blob>(`${this.url}/user/${resourceId}/resume`, {responseType: 'blob' as 'json' })
-      .pipe(catchError(handleError));
+		return this.http
+			.get<Blob>(`${this.url}/user/${resourceId}/resume`, { responseType: 'blob' as 'json' })
+			.pipe(catchError(handleError));
 	}
 
 	public getViewById(viewId: number): Observable<View> {
 		return this.http.get<View>(`${this.url}/profile-view/view/${viewId}`).pipe(catchError(handleError));
-	}
-
-	// Get latest updated primary view by resource
-	public getLatestPrimaryView(resourceId: number): Observable<View> {
-		return this.getResourceProfileViews(resourceId).pipe(
-			take(1),
-			switchMap(views =>
-				views
-					.filter(view => view.viewType === 'PRIMARY')
-					.sort((a, b) =>
-						// eslint-disable-next-line no-nested-ternary
-						a.lastUpdateDate && b.lastUpdateDate
-							? a.lastUpdateDate.getTime() > b.lastUpdateDate.getTime()
-								? -1
-								: 1
-							: a.createdAt.getTime() > b.createdAt.getTime()
-							? -1
-							: 1,
-					),
-			),
-		);
 	}
 
 	public getResourceProfileViews(resourceId: number): Observable<Array<View>> {

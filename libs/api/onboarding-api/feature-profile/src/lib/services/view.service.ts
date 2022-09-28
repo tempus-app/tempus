@@ -72,50 +72,49 @@ export class ViewsService {
 
 		if (view.revision) {
 			const revisionEntity = view.revision;
-			const previousRevision = view.revision.newView;
-			revisionEntity.newView = newViewEntity;
-			await this.revisionRepository.save(revisionEntity);
-			await this.viewsRepository.remove(previousRevision);
+			const previousNewRevision = view.revision.views[1];
+			await this.viewsRepository.remove(previousNewRevision);
+			revisionEntity.views[1] = newViewEntity;
 			const revisionToReturn = await this.revisionRepository.save(revisionEntity);
 			return revisionToReturn;
 		}
-		const revisionEntity = new RevisionEntity(null, newViewEntity.createdAt, null, view as ViewEntity, newViewEntity);
+		const revisionEntity = new RevisionEntity(null, newViewEntity.createdAt, null, [view, newViewEntity]);
 		const revisionToReturn = await this.revisionRepository.save(revisionEntity);
+
 		return revisionToReturn;
 	}
 
 	// eslint-disable-next-line consistent-return
 	async approveOrDenyView(viewId: number, approveViewDto: ApproveViewDto): Promise<Revision | View> {
 		const { approval, comment } = approveViewDto;
-		const viewEntity = await this.viewsRepository.findOne({ where: { id: viewId } });
+		const viewEntity = await this.viewsRepository.findOne({
+			where: { id: viewId },
+			relations: ['revision', 'revision.views'],
+		});
 		if (!viewEntity) throw new NotFoundException(`Could not find view with id ${viewId}`);
 
-		const revisionEntity = (
-			await this.revisionRepository.find({
-				where: {
-					newView: { id: viewId },
-				},
-				relations: ['view', 'newView'],
-			})
-		)[0];
+		const revisionEntity = viewEntity.revision;
 
 		revisionEntity.approved = approval;
 
 		if (approval === true) {
-			const { newView, view } = revisionEntity;
+			const view = revisionEntity.views[0];
+			const newView = revisionEntity.views[1];
 			newView.revisionType = RevisionType.APPROVED;
 			newView.lastUpdateDate = new Date(Date.now());
-			await this.revisionRepository.remove(revisionEntity);
 			await this.viewsRepository.remove(view);
+			newView.revision = null;
 			newView.locked = false;
 			newView.createdAt = view.createdAt;
-			return this.viewsRepository.save(newView);
+			const toReturn = await this.viewsRepository.save(newView);
+			await this.revisionRepository.remove(revisionEntity);
+			return toReturn;
 		}
 		if (approval === false) {
 			revisionEntity.comment = comment;
-			revisionEntity.view.locked = false;
-			revisionEntity.view.revisionType = RevisionType.REJECTED;
-			await this.viewsRepository.save(revisionEntity.view);
+			revisionEntity.views[1].locked = false;
+			revisionEntity.views[1].revisionType = RevisionType.REJECTED;
+			await this.viewsRepository.save(revisionEntity.views[1]);
 			return this.revisionRepository.save(revisionEntity);
 		}
 	}
@@ -133,8 +132,7 @@ export class ViewsService {
 				'skills.skill',
 				'certifications',
 				'revision',
-				'revision.view',
-				'revision.newView',
+				'revision.views',
 			],
 			where: {
 				resource: {
@@ -170,8 +168,7 @@ export class ViewsService {
 				'certifications',
 				'skills.skill',
 				'revision',
-				'revision.view',
-				'revision.newView',
+				'revision.views',
 			],
 		});
 		if (!viewEntity) {
@@ -179,7 +176,7 @@ export class ViewsService {
 		}
 
 		if (viewEntity.revision) {
-			const revisionNewView = await this.viewsRepository.findOne(viewEntity.revision.newView.id, {
+			const revisionNewView = await this.viewsRepository.findOne(viewEntity.revision.views[1].id, {
 				relations: [
 					'experiences',
 					'resource',
@@ -190,12 +187,11 @@ export class ViewsService {
 					'certifications',
 					'skills.skill',
 					'revision',
-					'revision.view',
-					'revision.newView',
+					'revision.views',
 				],
 			});
 
-			viewEntity.revision.newView = revisionNewView;
+			viewEntity.revision.views[1] = revisionNewView;
 		}
 
 		return viewEntity;
