@@ -82,6 +82,12 @@ export class SidebarComponent implements OnInit, OnChanges {
 			case SidebarTab.MANAGE_RESOURCES:
 				this.router.navigateByUrl('/owner/manage-resources');
 				break;
+			case SidebarTab.PRIMARY_VIEW:
+				this.router.navigateByUrl('/resource');
+				break;
+			case SidebarTab.MY_VIEWS:
+				this.router.navigateByUrl('/resource/my-views');
+				break;
 			default:
 		}
 	}

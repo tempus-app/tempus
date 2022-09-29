@@ -1,0 +1,17 @@
+<tempus-sidebar [userType]="UserType.RESOURCE" [name]="fullName" [email]="email">
+	<ng-container>
+		<div>
+			<tempus-button
+				(buttonClick)="openEditView()"
+				[buttonType]="ButtonType.CREATE_NEW_VIEW"
+				color="accent"
+			></tempus-button>
+		</div>
+		<div *ngIf="editViewEnabled">
+			<tempus-secondary-view-form
+				(openEditView)="openEditView()"
+				(closeEditViewClicked)="closeEditView()"
+			></tempus-secondary-view-form>
+		</div>
+	</ng-container>
+</tempus-sidebar>
