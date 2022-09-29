@@ -13,6 +13,7 @@ import {
 	ViewEntity,
 	ClientEntity,
 	ProjectEntity,
+	ClientRepresentativeEntity,
 } from '@tempus/api/shared/entity';
 
 const config: PostgresConnectionOptions = {
@@ -36,6 +37,7 @@ const config: PostgresConnectionOptions = {
 		ProjectEntity,
 		LocationEntity,
 		CertificationEntity,
+		ClientRepresentativeEntity,
 	],
 	synchronize: false,
 	migrations: [`${__dirname}/dist/apps/onboarding-api/migrations/**/*.ts`],
