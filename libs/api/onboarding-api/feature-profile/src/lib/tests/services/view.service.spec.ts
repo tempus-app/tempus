@@ -63,9 +63,8 @@ describe('ViewService', () => {
 				'educations.location',
 				'certifications',
 				'skills.skill',
-				'revision',
-				'revision.view',
-				'revision.newView',
+        'revision',
+				'revision.views'
 			], });
       expect(mockViewRepository.findOne).toHaveBeenCalledTimes(1)
       expect(res).toEqual(viewEntity)
@@ -74,8 +73,7 @@ describe('ViewService', () => {
       const existingViewWithRevision: ViewEntity = {
         ...viewEntity,
         revision: {
-          view: viewEntity,
-          newView: {id: 4}
+          views: [viewEntity, viewEntity2],
         } as RevisionEntity
       }
       mockViewRepository.findOne.mockResolvedValueOnce(existingViewWithRevision)
@@ -90,9 +88,8 @@ describe('ViewService', () => {
 				'educations.location',
 				'certifications',
 				'skills.skill',
-				'revision',
-				'revision.view',
-				'revision.newView',
+        'revision',
+				'revision.views',
 			], });
       expect(mockViewRepository.findOne).toBeCalledWith(4, { relations: [
 				'experiences',
@@ -103,12 +100,11 @@ describe('ViewService', () => {
 				'educations.location',
 				'certifications',
 				'skills.skill',
-				'revision',
-				'revision.view',
-				'revision.newView',
+        'revision',
+				'revision.views',
 			], });
       expect(mockViewRepository.findOne).toHaveBeenCalledTimes(2)
-      expect(res).toEqual({...existingViewWithRevision, revision: {...existingViewWithRevision.revision, newView: viewEntity2}})
+      expect(res).toEqual(existingViewWithRevision)
     })
     it('should throw an error if id not found', async () => {
 			mockViewRepository.findOne.mockResolvedValue(undefined);
@@ -138,8 +134,7 @@ describe('ViewService', () => {
           'skills.skill',
           'certifications',
           'revision',
-          'revision.view',
-          'revision.newView',
+          'revision.views'
         ],
         where: {
           resource: {
@@ -155,24 +150,26 @@ describe('ViewService', () => {
   describe('ReviseView()', () => {
     it('should revise view given resource has edited and non existing revision', async () => {
 
+      // Original view is locked, new view created, revision created linking the two views, new created view and revision saved
+
       const createdViewEntity: ViewEntity = {
         ...createdViewEntityPostRevision,
         updatedBy: RoleType.USER
       }
 
       // Making a copy b/c service updates properties (dont want these updates to affect other tests)
-      const viewEntityCopy: ViewEntity = {
+      const existingViewEntity: ViewEntity = {
         ...viewEntity
       }
 
-      const createdRevisionEntity: RevisionEntity = new RevisionEntity(null, createdViewEntity.createdAt, null, viewEntityCopy, createdViewEntity)
+      const createdRevisionEntity: RevisionEntity = new RevisionEntity(null, createdViewEntity.createdAt, null, [existingViewEntity, createdViewEntity])
       const getViewSpy = jest.spyOn(viewService, 'getView')
 
-      mockViewRepository.findOne.mockResolvedValue(viewEntityCopy)
+      mockViewRepository.findOne.mockResolvedValue(existingViewEntity)
       mockResourceService.getResourceInfo.mockResolvedValue(resourceEntity)
 
       mockViewRepository.save.mockResolvedValueOnce(createdViewEntity)
-      mockViewRepository.save.mockResolvedValueOnce({...viewEntity, locked: true})
+      mockViewRepository.save.mockResolvedValueOnce({...existingViewEntity, locked: true})
 
       mockRevisionRepository.save.mockResolvedValue({...createdRevisionEntity, id: 3})
 
@@ -181,11 +178,13 @@ describe('ViewService', () => {
       expect(getViewSpy).toHaveBeenCalledWith(3)
       expect(mockResourceService.getResourceInfo).toHaveBeenCalledWith(viewEntity.resource.id)
       expect(mockViewRepository.save).toHaveBeenNthCalledWith(1, {...createdViewEntity, id: undefined})
-      expect(mockViewRepository.save).toHaveBeenNthCalledWith(2, {...viewEntity, locked: true})
+      expect(mockViewRepository.save).toHaveBeenNthCalledWith(2, {...existingViewEntity, locked: true})
       expect(mockRevisionRepository.save).toHaveBeenCalledWith(createdRevisionEntity)
       expect(res).toEqual({...createdRevisionEntity, id: 3})
     })
     it('should revise view given business owner has edited and non existing revision', async () => {
+
+      // Whenever a business owner edits a view, its auto approved and no revision entity needs to be made
 
       const createdViewEntity: ViewEntity = {
         ...createdViewEntityPostRevision,
@@ -209,41 +208,46 @@ describe('ViewService', () => {
     })
     it('should revise view given resource has edited and existing revision', async () => {
 
+      // Original view locked, original revisions new view is updated to a new created view, revision and new created view saved
+
       const createdViewEntity: ViewEntity = {
         ...createdViewEntityPostRevision,
         updatedBy: RoleType.USER
       }
 
-      const oldRevisionEntity: RevisionEntity = new RevisionEntity(null, new Date(1,2,3), null, viewEntity, viewEntity2)
+      const oldRevisionEntity: RevisionEntity = new RevisionEntity(null, new Date(1,2,3), null, [viewEntity3, viewEntity2])
 
-      const viewEntityWithRevision: ViewEntity = {
+      const existingViewEntityWithRevision: ViewEntity = {
         ...viewEntity3,
         revision: oldRevisionEntity,
       }
 
-      const createdRevisionEntity: RevisionEntity = new RevisionEntity(null, new Date(1,2,3), null, viewEntity, createdViewEntity)
+      const newRevisionEntity: RevisionEntity = new RevisionEntity(null, new Date(1,2,3), null, [viewEntity3,createdViewEntity])
+
       const getViewSpy = jest.spyOn(viewService, 'getView')
 
-      mockViewRepository.findOne.mockResolvedValueOnce(viewEntityWithRevision)
-      mockViewRepository.findOne.mockResolvedValueOnce(viewEntity2)
+      mockViewRepository.findOne.mockResolvedValueOnce(existingViewEntityWithRevision)
+      mockViewRepository.findOne.mockResolvedValueOnce(viewEntity2) // this  comes from getView call
       mockResourceService.getResourceInfo.mockResolvedValue(resourceEntity)
 
       mockViewRepository.save.mockResolvedValueOnce(createdViewEntity)
-      mockViewRepository.save.mockResolvedValueOnce({...viewEntity3, locked: true, revision: oldRevisionEntity})
+      mockViewRepository.save.mockResolvedValueOnce({...existingViewEntityWithRevision, locked: true})
 
-      mockRevisionRepository.save.mockResolvedValue({...createdRevisionEntity, id: 3})
+      mockRevisionRepository.save.mockResolvedValue({...newRevisionEntity, id: 3})
 
       const res = await viewService.reviseView(3, resourceUserEntity, newViewDto)
 
       expect(getViewSpy).toHaveBeenCalledWith(3)
       expect(mockResourceService.getResourceInfo).toHaveBeenCalledWith(viewEntity.resource.id)
       expect(mockViewRepository.save).toHaveBeenNthCalledWith(1, {...createdViewEntity, id: undefined})
-      expect(mockViewRepository.save).toHaveBeenNthCalledWith(2, {...viewEntityWithRevision, locked: true})
-      expect(mockRevisionRepository.save).toHaveBeenNthCalledWith(1, createdRevisionEntity)
+      expect(mockViewRepository.save).toHaveBeenNthCalledWith(2, {...existingViewEntityWithRevision, locked: true})
+      expect(mockRevisionRepository.save).toHaveBeenNthCalledWith(1, newRevisionEntity)
       expect(mockViewRepository.remove).toHaveBeenCalledWith(viewEntity2)
-      expect(res).toEqual({...createdRevisionEntity, id: 3})
+      expect(res).toEqual({...newRevisionEntity, id: 3})
     })
     it('should revise view given business owner has edited and existing revision', async () => {
+
+      // Whenever a business owner edits a view, its auto approved and no revision entity needs to be made
 
       const createdViewEntity: ViewEntity = {
         ...createdViewEntityPostRevision,
@@ -252,7 +256,7 @@ describe('ViewService', () => {
         updatedBy: RoleType.BUSINESS_OWNER
       }
 
-      const oldRevisionEntity: RevisionEntity = new RevisionEntity(null, new Date(1,2,3), null, viewEntity, viewEntity2)
+      const oldRevisionEntity: RevisionEntity = new RevisionEntity(null, new Date(1,2,3), null, [viewEntity3, viewEntity2])
 
       const viewEntityWithRevision: ViewEntity = {
         ...viewEntity3,
@@ -262,7 +266,7 @@ describe('ViewService', () => {
       const getViewSpy = jest.spyOn(viewService, 'getView')
 
       mockViewRepository.findOne.mockResolvedValueOnce(viewEntityWithRevision)
-      mockViewRepository.findOne.mockResolvedValueOnce(viewEntity2)
+      mockViewRepository.findOne.mockResolvedValueOnce(viewEntity2) // this  comes from getView call
       mockResourceService.getResourceInfo.mockResolvedValue(resourceEntity)
 
       const res = await viewService.reviseView(3, businessOwnerUserEntity, newViewDto)
