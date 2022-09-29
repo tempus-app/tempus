@@ -47,8 +47,11 @@ export class SkillsComponent implements OnInit {
 
 	addSkill(event: MatChipInputEvent): void {
 		const value = (event.value || '').trim().substring(0, 50);
-
 		if (value) {
+			if (this.skills.includes(value)) {
+				// eslint-disable-next-line @typescript-eslint/dot-notation
+				this.myInfoForm.controls['skills'].setErrors({ incorrectValue: value });
+			}
 			this.skills.push(value);
 		}
 		if (event.chipInput !== undefined) {
@@ -61,6 +64,12 @@ export class SkillsComponent implements OnInit {
 
 		if (index >= 0) {
 			this.skills.splice(index, 1);
+		}
+
+		const hasNoDuplicates = new Set(this.skills).size === this.skills.length;
+		if (hasNoDuplicates) {
+			// eslint-disable-next-line @typescript-eslint/dot-notation
+			this.myInfoForm.controls['skills'].setErrors(null);
 		}
 	}
 }

@@ -25,6 +25,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, Validators } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 import { take } from 'rxjs';
+import { sortViewsByLatestUpdated } from '@tempus/client/shared/util';
 
 @Component({
 	selector: 'tempus-resource-profile-content',
@@ -127,17 +128,17 @@ export class ResourceProfileContentComponent implements OnInit, OnChanges {
 		const id = parseInt(this.route.snapshot.paramMap.get('id') || '0', 10);
 		this.resourceService.getResourceProfileViews(id).subscribe(profileViews => {
 			this.viewID = profileViews[0].id;
-			let revisionViewId;
-			for (let i = 0; i < profileViews.length; i += 1) {
-				if (profileViews[i].revision) {
-					revisionViewId = profileViews[i].revision?.newView.id;
-				}
-			}
 
-			if (!revisionViewId) {
-				revisionViewId = profileViews[0].id;
+			const sortedViews = sortViewsByLatestUpdated(profileViews);
+			let latestView = sortedViews[0];
+
+			// if the view has been rejected, display latest approved version
+			if (latestView.revisionType === RevisionType.REJECTED) {
+				const approvedViews = sortedViews.filter(view => view.revisionType === RevisionType.APPROVED);
+				const [view] = approvedViews;
+				latestView = view;
 			}
-			this.loadView(revisionViewId, profileViews);
+			this.loadView(latestView.id, profileViews);
 		});
 	}
 
@@ -204,7 +205,9 @@ export class ResourceProfileContentComponent implements OnInit, OnChanges {
 				)
 				.subscribe();
 			this.modalService.confirmEventSubject.unsubscribe();
-			this.router.navigate(['../../manage-resources'], { relativeTo: this.route });
+			this.router.navigate(['../../manage-resources'], { relativeTo: this.route }).then(() => {
+				window.location.reload();
+			});
 		});
 	}
 
@@ -231,7 +234,9 @@ export class ResourceProfileContentComponent implements OnInit, OnChanges {
 			this.modalService.close();
 			this.resourceService.approveOrDenyRevision(this.viewID, '', true).subscribe();
 			this.modalService.confirmEventSubject.unsubscribe();
-			this.router.navigate(['../../manage-resources'], { relativeTo: this.route });
+			this.router.navigate(['../../manage-resources'], { relativeTo: this.route }).then(() => {
+				window.location.reload();
+			});
 		});
 	}
 }

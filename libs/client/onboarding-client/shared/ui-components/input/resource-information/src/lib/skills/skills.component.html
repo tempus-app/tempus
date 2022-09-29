@@ -22,6 +22,7 @@
 								<input
 									class="mat-body"
 									id="skillChipInput"
+									maxlength="50"
 									placeholder="{{ skillsPrefix + 'addPlaceholder' | translate }}"
 									[matChipInputFor]="chipList"
 									[matChipInputSeparatorKeyCodes]="separatorKeysCodes"
@@ -42,6 +43,15 @@
 								>
 								</tempus-chip>
 							</mat-chip-list>
+						</div>
+						<div fxLayoutAlign="left center">
+							<div class="error-container">
+								<mat-error class="mat-body-2" *ngIf="$any(myInfoForm).get('skills').errors">
+									{{ skillsPrefix + 'duplicateSkillErrorMessagePrefix' | translate }}
+									{{ $any(myInfoForm).get('skills').errors.incorrectValue }}
+									{{ skillsPrefix + 'duplicateSkillErrorMessageSuffix' | translate }}
+								</mat-error>
+							</div>
 						</div>
 					</div>
 				</form>

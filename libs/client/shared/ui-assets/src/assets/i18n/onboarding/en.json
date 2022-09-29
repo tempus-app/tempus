@@ -78,7 +78,9 @@
 			"skills": {
 				"title": "Skills",
 				"summary": "Summary",
-				"addPlaceholder": "Add a Skill..."
+				"addPlaceholder": "Add a Skill...",
+				"duplicateSkillErrorMessagePrefix": "You have already entered ",
+				"duplicateSkillErrorMessageSuffix": " as a skill."
 			},
 			"workExp": {
 				"title": "Work Experience",

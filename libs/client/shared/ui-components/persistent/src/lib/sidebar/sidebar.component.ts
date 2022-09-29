@@ -1,31 +1,36 @@
 /* eslint-disable @typescript-eslint/dot-notation */
-import { Component, Input, Output, OnInit, EventEmitter, SimpleChanges } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TranslateService } from '@ngx-translate/core';
 import { logout, OnboardingClientState } from '@tempus/client/onboarding-client/shared/data-access';
 import { take } from 'rxjs';
 import { UserType } from './sidebar-type-enum';
+import { SidebarTab } from './sidebar-tab-enum';
 
 @Component({
 	selector: 'tempus-sidebar',
 	templateUrl: './sidebar.component.html',
 	styleUrls: ['./sidebar.component.scss'],
 })
-export class SidebarComponent implements OnInit {
+export class SidebarComponent implements OnInit, OnChanges {
 	@Input() userType?: UserType = undefined;
 
-	@Input() tabs: string[] = [];
+	@Input() tabs: SidebarTab[] = [];
 
 	@Input() name = '';
 
 	@Input() email = '';
 
-	@Output() selectTab = new EventEmitter();
+	SidebarTab = SidebarTab;
+
+	selectedTab?: SidebarTab = undefined;
 
 	initials = '';
 
 	isVisible = true;
+
+	bugReportingURL = 'https://forms.gle/KCoBXHmK49AdgJdV9';
 
 	ngOnInit(): void {
 		this.translateService
@@ -46,17 +51,13 @@ export class SidebarComponent implements OnInit {
 	) {}
 
 	setUserTabs() {
-		this.translateService
-			.get(['sidenav.tabs'])
-			.pipe(take(1))
-			.subscribe(data => {
-				const sidenavtabs = data['sidenav.tabs'];
-				if (this.userType === UserType.OWNER) {
-					this.tabs = [sidenavtabs.manageResources, sidenavtabs.pendingApprovals];
-				} else if (this.userType === UserType.RESOURCE) {
-					this.tabs = [sidenavtabs.primaryView, sidenavtabs.myViews, sidenavtabs.myProjects];
-				}
-			});
+		if (this.userType === UserType.OWNER) {
+			this.tabs = [SidebarTab.MANAGE_RESOURCES, SidebarTab.PENDING_APPROVALS];
+			this.selectedTab = SidebarTab.MANAGE_RESOURCES;
+		} else if (this.userType === UserType.RESOURCE) {
+			this.tabs = [SidebarTab.PRIMARY_VIEW, SidebarTab.MY_VIEWS, SidebarTab.MY_PROJECTS];
+			this.selectedTab = SidebarTab.PRIMARY_VIEW;
+		}
 	}
 
 	setPlaceholders() {
@@ -69,11 +70,20 @@ export class SidebarComponent implements OnInit {
 			});
 	}
 
-	selectedTab(tab: string) {
-		if (tab === 'logout') {
-			this.store.dispatch(logout({redirect: true}));
+	navigate(tab: SidebarTab) {
+		this.selectedTab = tab;
+		switch (tab) {
+			case SidebarTab.LOGOUT:
+				this.store.dispatch(logout({ redirect: true }));
+				break;
+			case SidebarTab.REPORT_BUGS:
+				this.openReportBugForm();
+				break;
+			case SidebarTab.MANAGE_RESOURCES:
+				this.router.navigateByUrl('/owner/manage-resources');
+				break;
+			default:
 		}
-		this.selectTab.emit(tab);
 	}
 
 	ngOnChanges(changes: SimpleChanges) {
@@ -91,5 +101,9 @@ export class SidebarComponent implements OnInit {
 
 	toggleSidebar() {
 		this.isVisible = !this.isVisible;
+	}
+
+	openReportBugForm() {
+		window.open(this.bugReportingURL, '_blank');
 	}
 }
