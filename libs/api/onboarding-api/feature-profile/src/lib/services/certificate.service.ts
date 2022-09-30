@@ -49,7 +49,7 @@ export class CertificationService {
 		const existingCertificationEntity = await this.certificationRepository.findOne(updatedCertification.id, {
 			relations: ['resource'],
 		});
-    console.log('YOOO is this working', existingCertificationEntity)
+		console.log('YOOO is this working', existingCertificationEntity);
 		if (!existingCertificationEntity) {
 			throw new NotFoundException(`Could not find certification with id ${updatedCertification.id}`);
 		}

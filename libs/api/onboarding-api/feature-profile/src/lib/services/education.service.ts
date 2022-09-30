@@ -55,7 +55,7 @@ export class EducationService {
 			relations: ['location', 'resource'],
 		});
 		if (!existingEducationEntity) {
-      console.log('HELLLOO', updateEducationData)
+			console.log('HELLLOO', updateEducationData);
 			throw new NotFoundException(`Could not find education with id ${updateEducationData.id}`);
 		}
 

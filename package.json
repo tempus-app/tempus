@@ -10,7 +10,7 @@
 		"build:client:prod": "nx run onboarding-client:build:production --outputPath dist/apps/onboarding-api/onboarding-client/",
 		"build:onboarding-api": "nx build onboarding-api --production",
 		"test": "npx nx run-many --all --target=test",
-		"test:api:unit": "npx jest  --testPathPattern='./libs/api/onboarding-api/feature-profile/src/lib/tests/services/view.service.spec.ts' --verbose --collectCoverage",
+		"test:api:unit": "npx jest  --testPathPattern='./libs/api' --verbose --collectCoverage",
 		"test:client:unit": "npx jest  --testPathPattern='./libs/client' --verbose --collectCoverage",
 		"prepare": "node ./scripts/skip.js || husky install",
 		"format:all": "prettier --config .prettierrc ./**/*.{js,ts,html,css,scss,json} --write",

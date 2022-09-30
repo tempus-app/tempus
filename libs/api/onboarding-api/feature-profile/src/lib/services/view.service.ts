@@ -60,7 +60,11 @@ export class ViewsService {
 		if (user.roles.includes(RoleType.BUSINESS_OWNER)) {
 			newViewEntity.createdAt = view.createdAt;
 			newViewEntity.revisionType = RevisionType.APPROVED;
+			const existingRevision = view.revision;
 			await this.viewsRepository.remove(view);
+			if (existingRevision) {
+				await this.revisionRepository.remove(existingRevision);
+			}
 			await this.viewsRepository.save(newViewEntity);
 			return null;
 		}
@@ -69,7 +73,6 @@ export class ViewsService {
 		view.locked = true;
 		await this.viewsRepository.save(view);
 
-    // why is createdAt not being updated for the revision?
 		if (view.revision) {
 			const revisionEntity = view.revision;
 			const previousNewRevision = view.revision.views[1];
