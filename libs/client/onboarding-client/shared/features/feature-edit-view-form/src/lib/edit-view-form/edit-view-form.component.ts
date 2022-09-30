@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import {
@@ -20,15 +20,15 @@ import {
 } from '@tempus/shared-domain';
 import { TranslateService } from '@ngx-translate/core';
 import { sortViewsByLatestUpdated } from '@tempus/client/shared/util';
-import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({
-	selector: 'tempus-secondary-view-form',
-	templateUrl: './secondary-view-form.component.html',
-	styleUrls: ['./secondary-view-form.component.scss'],
+	selector: 'tempus-edit-view-form',
+	templateUrl: './edit-view-form.component.html',
+	styleUrls: ['./edit-view-form.component.scss'],
 	providers: [OnboardingClientResourceService],
 })
-export class SecondaryViewFormComponent implements OnInit, OnDestroy {
+export class EditViewFormComponent implements OnInit, OnDestroy {
 	constructor(
 		private fb: FormBuilder,
 		private resourceService: OnboardingClientResourceService,
@@ -42,11 +42,21 @@ export class SecondaryViewFormComponent implements OnInit, OnDestroy {
 		translateService.use(currentLang);
 	}
 
-	shown = false;
+	@Input() isPrimaryView = true;
+
+	@Output()
+	closeEditViewClicked = new EventEmitter();
+
+	@Output()
+	submitClicked = new EventEmitter();
+
+	dataLoaded = false;
 
 	userId = 0;
 
 	currentViewId = 0;
+
+	viewName = new FormControl('View Name', Validators.required);
 
 	firstName = '';
 
@@ -100,8 +110,6 @@ export class SecondaryViewFormComponent implements OnInit, OnDestroy {
 
 	skillsSummaryForm = this.fb.group({});
 
-	loading = false;
-
 	resume: File | null = null;
 
 	ButtonType = ButtonType;
@@ -111,6 +119,47 @@ export class SecondaryViewFormComponent implements OnInit, OnDestroy {
 	editProfilePrefix = 'onboardingResourceEditProfile.';
 
 	previewViewEnabled = false;
+
+	ngOnInit(): void {
+		this.resourceService.getResourceInformation().subscribe(resData => {
+			this.userId = resData.id;
+			this.firstName = resData.firstName;
+			this.lastName = resData.lastName;
+			this.fullName = `${resData.firstName} ${resData.lastName}`;
+			this.city = resData.location.city;
+			this.state = resData.location.province;
+			this.country = resData.location.country;
+			this.phoneNumber = resData.phoneNumber;
+			this.email = resData.email;
+			this.phoneNumber = resData.phoneNumber;
+			this.linkedInLink = resData.linkedInLink;
+			this.githubLink = resData.githubLink;
+			this.otherLink = resData.otherLink;
+
+			// TODO: ADD resource to the store
+			this.resourceService.getResourceOriginalResumeById(this.userId).subscribe(resumeBlob => {
+				this.resume = new File([resumeBlob], 'original-resume.pdf');
+			});
+
+			// display view
+			this.resourceService.getResourceProfileViews(this.userId).subscribe(views => {
+				let filteredAndSortedViews = views.filter(view => view.viewType === ViewType.PRIMARY);
+				filteredAndSortedViews = sortViewsByLatestUpdated(filteredAndSortedViews);
+				const latestView = filteredAndSortedViews[0];
+				this.currentViewId = latestView.id;
+				this.certifications = latestView.certifications;
+				this.educations = latestView.educations;
+				this.educationsSummary = latestView.educationsSummary;
+				this.workExperiences = latestView.experiences;
+				this.experiencesSummary = latestView.experiencesSummary;
+				this.profileSummary = latestView.profileSummary;
+				this.skills = latestView.skills.map(skill => skill.skill.name);
+				this.skillsSummary = latestView.skillsSummary;
+
+				this.dataLoaded = true;
+			});
+		});
+	}
 
 	loadPersonalInfo(eventData: FormGroup) {
 		this.personalInfoForm = eventData;
@@ -152,6 +201,9 @@ export class SecondaryViewFormComponent implements OnInit, OnDestroy {
 		this.skills = editedForms.skills.map(skill => skill.skill.name);
 	}
 
+	/** *
+	 * returns a ICreateViewDto of the edited view
+	 */
 	generateNewView() {
 		// get all nested FormGroups -> Dto[]
 		const certificationsArray = this.certificationsForm.controls.certifications as FormArray;
@@ -226,60 +278,34 @@ export class SecondaryViewFormComponent implements OnInit, OnDestroy {
 		} as ICreateViewDto;
 	}
 
-	downloadProfile() {
-		// Taken from https://stackoverflow.com/questions/52154874/angular-6-downloading-file-from-rest-api
-		this.resourceService.downloadProfile(this.currentViewId).subscribe(data => {
-			const downloadURL = window.URL.createObjectURL(data);
-			const link = document.createElement('a');
-			link.href = downloadURL;
-			// const index = this.viewIDs.indexOf(parseInt(this.currentViewID, 10));
-			link.download = `${this.fullName}-Primary`;
-			link.click();
-		});
+	isValid() {
+		return (
+			this.personalInfoForm?.valid &&
+			this.educationsForm?.valid &&
+			this.certificationsForm?.valid &&
+			this.experiencesForm?.valid &&
+			this.skillsSummaryForm?.valid &&
+			this.viewName.valid
+		);
 	}
 
-	// loadPersonalInfo(eventData: FormGroup) {
-	// 	this.personalInfoForm = eventData;
-	// }
+	validateForm() {
+		this.educationsForm?.markAllAsTouched();
+		this.personalInfoForm?.markAllAsTouched();
+		this.experiencesForm?.markAllAsTouched();
+		this.skillsSummaryForm?.markAllAsTouched();
+		this.certificationsForm?.markAllAsTouched();
+		this.viewName.markAllAsTouched();
 
-	ngOnInit(): void {
-		this.resourceService.getResourceInformation().subscribe(resData => {
-			this.userId = resData.id;
-			this.firstName = resData.firstName;
-			this.lastName = resData.lastName;
-			this.fullName = `${resData.firstName} ${resData.lastName}`;
-			this.city = resData.location.city;
-			this.state = resData.location.province;
-			this.country = resData.location.country;
-			this.phoneNumber = resData.phoneNumber;
-			this.email = resData.email;
-			this.phoneNumber = resData.phoneNumber;
-			this.linkedInLink = resData.linkedInLink;
-			this.githubLink = resData.githubLink;
-			this.otherLink = resData.otherLink;
+		return this.isValid();
+	}
 
-			// TODO: ADD resource to the store
-			this.resourceService.getResourceOriginalResumeById(this.userId).subscribe(resumeBlob => {
-				this.resume = new File([resumeBlob], 'original-resume.pdf');
-			});
-			// display latest primary view
-			this.resourceService.getResourceProfileViews(this.userId).subscribe(views => {
-				let filteredAndSortedViews = views.filter(view => view.viewType === ViewType.PRIMARY);
-				filteredAndSortedViews = sortViewsByLatestUpdated(filteredAndSortedViews);
-				const latestView = filteredAndSortedViews[0];
-				this.currentViewId = latestView.id;
-				this.certifications = latestView.certifications;
-				this.educations = latestView.educations;
-				this.educationsSummary = latestView.educationsSummary;
-				this.workExperiences = latestView.experiences;
-				this.experiencesSummary = latestView.experiencesSummary;
-				this.profileSummary = latestView.profileSummary;
-				this.skills = latestView.skills.map(skill => skill.skill.name);
-				this.skillsSummary = latestView.skillsSummary;
+	closeEditView() {
+		this.closeEditViewClicked.emit();
+	}
 
-				this.shown = true;
-			});
-		});
+	submitChanges() {
+		this.submitClicked.emit();
 	}
 
 	ngOnDestroy(): void {

@@ -22,7 +22,7 @@ export class MyViewsComponent implements OnInit {
 
 	email = '';
 
-	editViewEnabled = false;
+	createViewEnabled = false;
 
 	UserType = UserType;
 
@@ -38,11 +38,11 @@ export class MyViewsComponent implements OnInit {
 		});
 	}
 
-	openEditView() {
-		this.editViewEnabled = true;
+	openNewViewForm() {
+		this.createViewEnabled = true;
 	}
 
-	closeEditView() {
-		this.editViewEnabled = false;
+	closeNewViewForm() {
+		this.createViewEnabled = false;
 	}
 }

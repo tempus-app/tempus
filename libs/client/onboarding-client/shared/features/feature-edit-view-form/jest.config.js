@@ -1,5 +1,5 @@
 module.exports = {
-	displayName: 'onboarding-client-shared-feature-secondary-view-form',
+	displayName: 'onboarding-client-shared-feature-edit-view-form',
 	preset: '../../../../../../jest.preset.js',
 	setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
 	globals: {
@@ -8,8 +8,7 @@ module.exports = {
 			stringifyContentPathRegex: '\\.(html|svg)$',
 		},
 	},
-	coverageDirectory:
-		'../../../../../../coverage/libs/client/onboarding-client/shared/features/feature-secondary-view-form',
+	coverageDirectory: '../../../../../../coverage/libs/client/onboarding-client/shared/features/feature-edit-view-form',
 	transform: {
 		'^.+\\.(ts|mjs|js|html)$': 'jest-preset-angular',
 	},

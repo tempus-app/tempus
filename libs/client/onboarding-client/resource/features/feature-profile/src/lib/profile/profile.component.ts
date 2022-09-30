@@ -5,14 +5,13 @@ import {
 	OnboardingClientState,
 	OnboardingClientResourceService,
 } from '@tempus/client/onboarding-client/shared/data-access';
-import { Subject, take } from 'rxjs';
+import { Subject } from 'rxjs';
 import { ButtonType } from '@tempus/client/shared/ui-components/presentational';
 import { UserType } from '@tempus/client/shared/ui-components/persistent';
 import {
 	ICreateExperienceDto,
 	ICreateEducationDto,
 	ICreateCertificationDto,
-	ICreateViewDto,
 	ViewType,
 	RevisionType,
 } from '@tempus/shared-domain';
@@ -81,8 +80,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
 	skills: Array<string> = [];
 
 	destroyed$ = new Subject<void>();
-
-	loading = false;
 
 	resume: File | null = null;
 
@@ -162,23 +159,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
 				this.rejectionComments = latestView.revision?.comment ? latestView.revision.comment : '';
 			});
 		});
-	}
-
-	loadNewView(newView: ICreateViewDto) {
-		// Update local display
-		this.certifications = newView.certifications;
-		this.educations = newView.educations;
-		this.educationsSummary = newView.educationsSummary;
-		this.workExperiences = newView.experiences;
-		this.experiencesSummary = newView.experiencesSummary;
-		this.profileSummary = newView.profileSummary;
-		this.skills = newView.skills.map(skill => skill.skill.name);
-		this.skillsSummary = newView.skillsSummary;
-		this.isRejected = false;
-		this.isPendingApproval = true;
-
-		// Post view
-		this.resourceService.editResourceView(this.currentViewId, newView).pipe(take(1)).subscribe();
 	}
 
 	ngOnDestroy(): void {

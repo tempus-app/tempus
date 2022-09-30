@@ -14,7 +14,7 @@ import { ClientSharedPresentationalResourceDisplayModule } from '@tempus/client/
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { HttpClient } from '@angular/common/http';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-import { SecondaryViewFormComponent } from './secondary-view-form/secondary-view-form.component';
+import { EditViewFormComponent } from './edit-view-form/edit-view-form.component';
 
 function createTranslateLoader(http: HttpClient) {
 	return new TranslateHttpLoader(http, './assets/i18n/onboarding/resource/profile/', '.json');
@@ -44,7 +44,7 @@ function createTranslateLoader(http: HttpClient) {
 			extend: true,
 		}),
 	],
-	declarations: [SecondaryViewFormComponent],
-	exports: [SecondaryViewFormComponent],
+	declarations: [EditViewFormComponent],
+	exports: [EditViewFormComponent],
 })
-export class OnboardingClientSharedFeatureSecondaryViewFormModule {}
+export class OnboardingClientSharedFeatureEditViewFormModule {}

@@ -37,8 +37,8 @@
 			"@tempus/client/onboarding-client/shared/data-access": [
 				"libs/client/onboarding-client/shared/data-access/src/index.ts"
 			],
-			"@tempus/onboarding-client/shared/feature-secondary-view-form": [
-				"libs/client/onboarding-client/shared/features/feature-secondary-view-form/src/index.ts"
+			"@tempus/onboarding-client/shared/feature-edit-view-form": [
+				"libs/client/onboarding-client/shared/features/feature-edit-view-form/src/index.ts"
 			],
 			"@tempus/client/onboarding-client/shared/guards": ["libs/client/onboarding-client/shared/guards/src/index.ts"],
 			"@tempus/client/onboarding-client/shared/ui-components/input/resource-information": [
