@@ -37,12 +37,8 @@ export class CreateNewViewComponent {
 	}
 
 	createNewView() {
-		try {
-			// const newView = this.newViewForm.generateNewView();
-			// this.resourceService.editResourceView(this.newViewForm.currentViewId, newView).pipe(take(1)).subscribe();
-		} catch (e) {
-			console.log(e);
-		}
+		const newView = this.newViewForm.generateNewView();
+		this.resourceService.createSecondaryView(this.newViewForm.userId, newView).pipe(take(1)).subscribe();
 	}
 
 	openSubmitConfirmation() {

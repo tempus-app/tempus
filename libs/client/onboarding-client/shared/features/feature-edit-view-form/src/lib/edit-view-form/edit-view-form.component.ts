@@ -206,6 +206,7 @@ export class EditViewFormComponent implements OnInit, OnDestroy {
 	 */
 	generateNewView() {
 		// get all nested FormGroups -> Dto[]
+		const viewName = this.viewName.value;
 		const certificationsArray = this.certificationsForm.controls.certifications as FormArray;
 		const experiencesArray = this.experiencesForm.controls.workExperience as FormArray;
 		const educationsArray = this.educationsForm.controls.qualifications as FormArray;
@@ -274,7 +275,8 @@ export class EditViewFormComponent implements OnInit, OnDestroy {
 			educations: educationsDto,
 			experiences: experiencesDto,
 			certifications: certificationsDto,
-			viewType: ViewType.PRIMARY,
+			viewType: this.isPrimaryView ? ViewType.PRIMARY : ViewType.SECONDARY,
+			type: this.isPrimaryView ? 'PROFILE' : viewName,
 		} as ICreateViewDto;
 	}
 
