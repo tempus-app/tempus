@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { OnboardingClientResourceService } from '@tempus/client/onboarding-client/shared/data-access';
 import { UserType } from '@tempus/client/shared/ui-components/persistent';
 import { ButtonType } from '@tempus/client/shared/ui-components/presentational';
@@ -10,7 +11,11 @@ import { ButtonType } from '@tempus/client/shared/ui-components/presentational';
 	providers: [OnboardingClientResourceService],
 })
 export class MyViewsComponent implements OnInit {
-	constructor(private resourceService: OnboardingClientResourceService) {}
+	constructor(
+		private router: Router,
+		private route: ActivatedRoute,
+		private resourceService: OnboardingClientResourceService,
+	) {}
 
 	userId = 0;
 
@@ -21,8 +26,6 @@ export class MyViewsComponent implements OnInit {
 	fullName = '';
 
 	email = '';
-
-	createViewEnabled = false;
 
 	UserType = UserType;
 
@@ -38,11 +41,7 @@ export class MyViewsComponent implements OnInit {
 		});
 	}
 
-	openNewViewForm() {
-		this.createViewEnabled = true;
-	}
-
-	closeNewViewForm() {
-		this.createViewEnabled = false;
+	navigateToCreateNewView() {
+		this.router.navigate(['./new'], { relativeTo: this.route });
 	}
 }

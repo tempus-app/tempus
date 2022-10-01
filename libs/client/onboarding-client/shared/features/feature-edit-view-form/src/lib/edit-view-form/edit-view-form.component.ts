@@ -17,6 +17,7 @@ import {
 	ICreateSkillDto,
 	ICreateLocationDto,
 	ICreateSkillTypeDto,
+	RevisionType,
 } from '@tempus/shared-domain';
 import { TranslateService } from '@ngx-translate/core';
 import { sortViewsByLatestUpdated } from '@tempus/client/shared/util';
@@ -141,9 +142,11 @@ export class EditViewFormComponent implements OnInit, OnDestroy {
 				this.resume = new File([resumeBlob], 'original-resume.pdf');
 			});
 
-			// display view
+			// TODO: to edit secondary views, get latest version of that view through its revision
 			this.resourceService.getResourceProfileViews(this.userId).subscribe(views => {
-				let filteredAndSortedViews = views.filter(view => view.viewType === ViewType.PRIMARY);
+				let filteredAndSortedViews = this.isPrimaryView
+					? views.filter(view => view.viewType === ViewType.PRIMARY)
+					: views.filter(view => view.viewType === ViewType.PRIMARY && view.revisionType === RevisionType.APPROVED);
 				filteredAndSortedViews = sortViewsByLatestUpdated(filteredAndSortedViews);
 				const latestView = filteredAndSortedViews[0];
 				this.currentViewId = latestView.id;

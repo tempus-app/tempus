@@ -1,4 +1,5 @@
-import { Component, EventEmitter, Output, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { OnboardingClientResourceService } from '@tempus/client/onboarding-client/shared/data-access';
 import { CustomModalType, ModalService, ModalType } from '@tempus/client/shared/ui-components/modal';
@@ -11,8 +12,10 @@ import { Subject, take } from 'rxjs';
 	styleUrls: ['./create-new-view.component.scss'],
 	providers: [OnboardingClientResourceService],
 })
-export class CreateNewViewComponent {
+export class CreateNewViewComponent implements OnInit, OnDestroy {
 	constructor(
+		private router: Router,
+		private route: ActivatedRoute,
 		public modalService: ModalService,
 		private resourceService: OnboardingClientResourceService,
 		private translateService: TranslateService,
@@ -25,10 +28,15 @@ export class CreateNewViewComponent {
 
 	@ViewChild(EditViewFormComponent) newViewForm!: EditViewFormComponent;
 
-	@Output()
-	closeFormClicked = new EventEmitter();
+	userId = 0;
 
 	destroyed$ = new Subject<void>();
+
+	ngOnInit(): void {
+		this.resourceService.getResourceInformation().subscribe(resData => {
+			this.userId = resData.id;
+		});
+	}
 
 	submitChanges() {
 		if (this.newViewForm.validateForm()) {
@@ -38,7 +46,7 @@ export class CreateNewViewComponent {
 
 	createNewView() {
 		const newView = this.newViewForm.generateNewView();
-		this.resourceService.createSecondaryView(this.newViewForm.userId, newView).pipe(take(1)).subscribe();
+		this.resourceService.createSecondaryView(this.userId, newView).subscribe();
 	}
 
 	openSubmitConfirmation() {
@@ -70,7 +78,8 @@ export class CreateNewViewComponent {
 	}
 
 	closeForm() {
-		this.closeFormClicked.emit();
+		// TODO: navigate to new view
+		this.router.navigate(['../'], { relativeTo: this.route });
 	}
 
 	ngOnDestroy(): void {

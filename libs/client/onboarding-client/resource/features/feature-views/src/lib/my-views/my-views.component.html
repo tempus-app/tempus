@@ -2,13 +2,10 @@
   <ng-container>
     <div>
       <tempus-button
-        (buttonClick)="openNewViewForm()"
+        (buttonClick)="navigateToCreateNewView()"
         [buttonType]="ButtonType.CREATE_NEW_VIEW"
         color="accent"
       ></tempus-button>
-    </div>
-    <div *ngIf="createViewEnabled">
-      <tempus-create-new-view (closeFormClicked)="closeNewViewForm()"></tempus-create-new-view>
     </div>
   </ng-container>
 </tempus-sidebar>

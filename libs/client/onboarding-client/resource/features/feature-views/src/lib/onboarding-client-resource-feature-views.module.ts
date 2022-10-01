@@ -19,6 +19,11 @@ import { CreateNewViewComponent } from './create-new-view/create-new-view.compon
 				pathMatch: 'full',
 				component: MyViewsComponent,
 			},
+			{
+				path: 'new',
+				pathMatch: 'full',
+				component: CreateNewViewComponent,
+			},
 		]),
 	],
 	declarations: [MyViewsComponent, CreateNewViewComponent],
