@@ -1,3 +1,6 @@
-<tempus-sidebar [userType]="UserType.OWNER">
-  <router-outlet></router-outlet>
+<tempus-sidebar [userType]="UserType.OWNER" class="resource-shell">
+  <div class="container">
+    <router-outlet></router-outlet>
+    <tempus-footer></tempus-footer>
+  </div>
 </tempus-sidebar>

@@ -1,0 +1,12 @@
+{
+	"onboardingResourceCreateNewView": {
+		"modal": {
+			"submitModal": {
+				"title": "Create view?",
+				"message": "Your new view will be sent to CAL for approval.",
+				"closeText": "Cancel",
+				"confirmText": "Submit"
+			}
+		}
+	}
+}

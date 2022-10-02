@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { OnboardingClientResourceService } from '@tempus/client/onboarding-client/shared/data-access';
 import { CustomModalType, ModalService, ModalType } from '@tempus/client/shared/ui-components/modal';
-import { EditViewFormComponent } from 'libs/client/onboarding-client/shared/features/feature-edit-view-form/src/lib/edit-view-form/edit-view-form.component';
+import { EditViewFormComponent } from '@tempus/onboarding-client/shared/feature-edit-view-form';
 import { Subject, take } from 'rxjs';
 
 @Component({
@@ -51,10 +51,10 @@ export class CreateNewViewComponent implements OnInit, OnDestroy {
 
 	openSubmitConfirmation() {
 		this.translateService
-			.get([`onboardingResourceEditProfile.modal.submitModal`])
+			.get([`onboardingResourceCreateNewView.modal.submitModal`])
 			.pipe(take(1))
 			.subscribe(data => {
-				const dialogText = data[`onboardingResourceEditProfile.modal.submitModal`];
+				const dialogText = data[`onboardingResourceCreateNewView.modal.submitModal`];
 				this.modalService.open(
 					{
 						title: dialogText.title,

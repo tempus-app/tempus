@@ -3,7 +3,7 @@ import { OnboardingClientResourceService } from '@tempus/client/onboarding-clien
 import { Subject, take } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
 import { ModalService, CustomModalType, ModalType } from '@tempus/client/shared/ui-components/modal';
-import { EditViewFormComponent } from 'libs/client/onboarding-client/shared/features/feature-edit-view-form/src/lib/edit-view-form/edit-view-form.component';
+import { EditViewFormComponent } from '@tempus/onboarding-client/shared/feature-edit-view-form';
 
 @Component({
 	selector: 'tempus-edit-profile',
