@@ -2,7 +2,6 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { OnboardingClientResourceService } from '@tempus/client/onboarding-client/shared/data-access';
 import { Subject } from 'rxjs';
 import { ButtonType } from '@tempus/client/shared/ui-components/presentational';
-import { UserType } from '@tempus/client/shared/ui-components/persistent';
 import {
 	ICreateExperienceDto,
 	ICreateEducationDto,
@@ -76,8 +75,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
 	profilePrefix = 'onboardingResourceProfile.';
 
 	ButtonType = ButtonType;
-
-	UserType = UserType;
 
 	isPendingApproval = false;
 

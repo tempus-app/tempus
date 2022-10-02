@@ -3,7 +3,11 @@ import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/cor
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TranslateService } from '@ngx-translate/core';
-import { logout, OnboardingClientState } from '@tempus/client/onboarding-client/shared/data-access';
+import {
+	logout,
+	OnboardingClientState,
+	selectLoggedInUserNameEmail,
+} from '@tempus/client/onboarding-client/shared/data-access';
 import { take } from 'rxjs';
 import { UserType } from './sidebar-type-enum';
 import { SidebarTab } from './sidebar-tab-enum';
@@ -14,13 +18,19 @@ import { SidebarTab } from './sidebar-tab-enum';
 	styleUrls: ['./sidebar.component.scss'],
 })
 export class SidebarComponent implements OnInit, OnChanges {
+	constructor(
+		private store: Store<OnboardingClientState>,
+		private translateService: TranslateService,
+		private router: Router,
+	) {}
+
 	@Input() userType?: UserType = undefined;
 
 	@Input() tabs: SidebarTab[] = [];
 
-	@Input() name = '';
+	name = '';
 
-	@Input() email = '';
+	email = '';
 
 	SidebarTab = SidebarTab;
 
@@ -40,15 +50,18 @@ export class SidebarComponent implements OnInit, OnChanges {
 				this.setUserTabs();
 				this.setPlaceholders();
 			});
+
+		this.store
+			.select(selectLoggedInUserNameEmail)
+			.pipe(take(1))
+			.subscribe(user => {
+				this.name = `${user.firstName} ${user.lastName}`;
+				this.email = user.email || '';
+			});
+
 		this.getInitials(this.name);
 		this.isVisible = true;
 	}
-
-	constructor(
-		private translateService: TranslateService,
-		private store: Store<OnboardingClientState>,
-		private router: Router,
-	) {}
 
 	setUserTabs() {
 		if (this.userType === UserType.OWNER) {

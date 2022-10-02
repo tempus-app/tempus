@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { OnboardingClientResourceService } from '@tempus/client/onboarding-client/shared/data-access';
-import { UserType } from '@tempus/client/shared/ui-components/persistent';
 import { ButtonType } from '@tempus/client/shared/ui-components/presentational';
 
 @Component({
@@ -26,8 +25,6 @@ export class MyViewsComponent implements OnInit {
 	fullName = '';
 
 	email = '';
-
-	UserType = UserType;
 
 	ButtonType = ButtonType;
 

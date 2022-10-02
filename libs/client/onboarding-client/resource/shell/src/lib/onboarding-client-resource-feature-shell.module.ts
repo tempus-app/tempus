@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
+import { ClientSharedUiComponentsPersistentModule } from '@tempus/client/shared/ui-components/persistent';
 import { OnboardingClientResourceDataAccessModule } from '@tempus/client/onboarding-client/resource/data-access';
 import { AuthGuard } from '@tempus/client/onboarding-client/shared/guards';
 import { ResourceShellComponent } from './shell/onboarding-client-resource-feature-shell.component';
@@ -35,6 +36,11 @@ const routes: Routes = [
 
 @NgModule({
 	declarations: [ResourceShellComponent],
-	imports: [CommonModule, RouterModule.forChild(routes), OnboardingClientResourceDataAccessModule],
+	imports: [
+		CommonModule,
+		RouterModule.forChild(routes),
+		OnboardingClientResourceDataAccessModule,
+		ClientSharedUiComponentsPersistentModule,
+	],
 })
 export class OnboardingClientResourceFeatureShellModule {}
