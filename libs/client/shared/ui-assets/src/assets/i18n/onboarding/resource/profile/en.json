@@ -6,6 +6,8 @@
 		"rejectedDialogHeading": "Please modify your view with the following changes:"
 	},
 	"onboardingResourceEditProfile": {
+		"viewNamePlaceholder": "*View name",
+		"viewNameError": "Please enter a name for your view.",
 		"primaryView": "Primary View",
 		"education": "Education",
 		"certifications": "Certifications",

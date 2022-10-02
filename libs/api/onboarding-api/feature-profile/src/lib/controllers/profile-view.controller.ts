@@ -58,13 +58,13 @@ export class ProfileViewController {
 	}
 
 	@UseGuards(JwtAuthGuard, PermissionGuard)
-	@Post('/:resourceId/new-view')
+	@Post('/:userId/new-view')
 	async createSecondaryView(
-		@Param('resourceId') resourceId: number,
+		@Param('userId') userId: number,
 		@Request() req,
 		@Body() createViewDto: CreateViewDto,
 	): Promise<View> {
-		const newView = await this.viewSerivce.createSecondaryView(resourceId, req.user, createViewDto);
+		const newView = await this.viewSerivce.createSecondaryView(userId, req.user, createViewDto);
 		return newView;
 	}
 

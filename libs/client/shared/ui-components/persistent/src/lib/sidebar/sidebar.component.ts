@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/dot-notation */
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TranslateService } from '@ngx-translate/core';
@@ -17,7 +17,7 @@ import { SidebarTab } from './sidebar-tab-enum';
 	templateUrl: './sidebar.component.html',
 	styleUrls: ['./sidebar.component.scss'],
 })
-export class SidebarComponent implements OnInit, OnChanges {
+export class SidebarComponent implements OnInit {
 	constructor(
 		private store: Store<OnboardingClientState>,
 		private translateService: TranslateService,
@@ -102,12 +102,6 @@ export class SidebarComponent implements OnInit, OnChanges {
 				this.router.navigateByUrl('/resource/my-views');
 				break;
 			default:
-		}
-	}
-
-	ngOnChanges(changes: SimpleChanges) {
-		if (changes['name'].currentValue !== changes['name'].previousValue) {
-			this.getInitials(changes['name'].currentValue);
 		}
 	}
 

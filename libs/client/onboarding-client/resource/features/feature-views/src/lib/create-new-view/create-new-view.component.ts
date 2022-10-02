@@ -75,11 +75,17 @@ export class CreateNewViewComponent implements OnInit, OnDestroy {
 			this.closeForm();
 			this.modalService.confirmEventSubject.unsubscribe();
 		});
+
+		this.modalService.closed().subscribe(() => {
+			this.modalService.confirmEventSubject.unsubscribe();
+		});
 	}
 
 	closeForm() {
 		// TODO: navigate to new view
-		this.router.navigate(['../'], { relativeTo: this.route });
+		this.router.navigate(['../'], { relativeTo: this.route }).then(() => {
+			window.location.reload();
+		});
 	}
 
 	ngOnDestroy(): void {

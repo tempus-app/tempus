@@ -41,28 +41,28 @@ export class ViewsService {
 		return newView;
 	}
 
-	async createSecondaryView(resourceId: number, user: User, createViewDto: CreateViewDto): Promise<View> {
-		const resourceEntity = await this.resourceService.getResourceInfo(resourceId);
+	async createSecondaryView(userId: number, user: User, createViewDto: CreateViewDto): Promise<View> {
+		const resourceEntity = await this.resourceService.getResourceInfo(userId);
 
 		const viewEntity = ViewEntity.fromDto(createViewDto);
 		viewEntity.resource = resourceEntity;
 		viewEntity.createdAt = new Date(Date.now());
 		viewEntity.lastUpdateDate = new Date(Date.now());
 
-		// if (user.roles.includes(RoleType.BUSINESS_OWNER)) {
-		// 	viewEntity.revisionType = RevisionType.APPROVED;
-		// 	viewEntity.locked = false;
-		// 	viewEntity.updatedBy = RoleType.BUSINESS_OWNER;
-		// } else if (user.roles.includes(RoleType.USER)) {
-		viewEntity.revisionType = RevisionType.PENDING;
-		viewEntity.locked = true;
-		viewEntity.updatedBy = RoleType.USER;
+		if (user.roles.includes(RoleType.BUSINESS_OWNER)) {
+			viewEntity.revisionType = RevisionType.APPROVED;
+			viewEntity.locked = false;
+			viewEntity.updatedBy = RoleType.BUSINESS_OWNER;
+		} else {
+			viewEntity.revisionType = RevisionType.PENDING;
+			viewEntity.locked = true;
+			viewEntity.updatedBy = RoleType.USER;
 
-		const revisionEntity = new RevisionEntity(null, viewEntity.createdAt, null, []);
-		const revision = await this.revisionRepository.save(revisionEntity);
+			const revisionEntity = new RevisionEntity(null, viewEntity.createdAt, null, []);
+			const revision = await this.revisionRepository.save(revisionEntity);
 
-		viewEntity.revision = revision;
-		// }
+			viewEntity.revision = revision;
+		}
 		const newView = await this.viewsRepository.save(viewEntity);
 
 		return newView;
