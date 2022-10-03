@@ -13,6 +13,7 @@ export class ProjectController {
 	@UseGuards(JwtAuthGuard)
 	@Get('/:projectId')
 	async getProject(@Param('projectId') projectId: number): Promise<Project> {
+		console.log(projectId);
 		return this.projectService.getProject(projectId);
 	}
 
@@ -31,12 +32,23 @@ export class ProjectController {
 
 	@UseGuards(JwtAuthGuard, RolesGuard)
 	@Roles(RoleType.BUSINESS_OWNER)
-	@Post('/:projectId/:resourceId/assign')
+	@Patch('/:projectId/:resourceId/assign')
 	async assignResourceToProject(
+		@Param('projectId') projectId: string,
+		@Param('resourceId') resourceId: string,
+		@Query('title') title: string,
+	): Promise<void> {
+		await this.projectService.assignResourceToProject(parseInt(projectId, 10), parseInt(resourceId, 10), title);
+	}
+
+	@UseGuards(JwtAuthGuard, RolesGuard)
+	@Roles(RoleType.BUSINESS_OWNER)
+	@Patch('/:projectId/:resourceId/unassign')
+	async unassignResourceToProject(
 		@Param('projectId') projectId: number,
 		@Param('resourceId') resourceId: number,
-	): Promise<Project> {
-		return this.projectService.assignResourceToProject(projectId, resourceId);
+	): Promise<void> {
+		return this.projectService.unassignResourceFromProject(projectId, resourceId);
 	}
 
 	@UseGuards(JwtAuthGuard, RolesGuard)
@@ -44,6 +56,13 @@ export class ProjectController {
 	@Patch('/:projectId')
 	async editProject(@Body() updateProjectDto: UpdateProjectDto): Promise<Project> {
 		return this.projectService.updateProject(updateProjectDto);
+	}
+
+	@UseGuards(JwtAuthGuard, RolesGuard)
+	@Roles(RoleType.BUSINESS_OWNER)
+	@Patch('/:projectId/complete')
+	async completeProject(@Param('projectId') projectId: number): Promise<Project> {
+		return this.projectService.completeProject(projectId);
 	}
 
 	@UseGuards(JwtAuthGuard, RolesGuard)

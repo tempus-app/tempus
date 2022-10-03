@@ -5,5 +5,11 @@ export interface ICreateProjectDto {
 
 	startDate: Date;
 
-	endDate: Date;
+	clientRepresentativeId?: number;
+
+	clientRepresentativeFirstName?: string;
+
+	clientRepresentativeLastName?: string;
+
+	clientRepresentativeEmail?: string;
 }
