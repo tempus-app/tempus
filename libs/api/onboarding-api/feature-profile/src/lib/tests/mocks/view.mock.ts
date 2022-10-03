@@ -75,6 +75,15 @@ export const businessOwnerUserEntity: UserEntity = {
 	refreshToken: 'token',
 	roles: [RoleType.BUSINESS_OWNER],
 };
+export const supervisorUserEntity: UserEntity = {
+	id: 5,
+	firstName: 'supervisor',
+	lastName: 'supervisor',
+	email: 'supervisor@gmail.com',
+	password: 'password',
+	refreshToken: 'token',
+	roles: [RoleType.SUPERVISOR],
+};
 
 export const newViewDto: CreateViewDto = {
 	skillsSummary: 'newSkillsSummary',
