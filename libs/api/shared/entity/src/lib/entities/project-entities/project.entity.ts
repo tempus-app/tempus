@@ -1,7 +1,6 @@
 import { CreateProjectDto } from '@tempus/api/shared/dto';
 import { Project, ProjectStatus } from '@tempus/shared-domain';
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToMany } from 'typeorm';
-import { ResourceEntity } from '../account-entities';
 import { ClientEntity } from './client.entity';
 import { ClientRepresentativeEntity } from './clientRepresentative.entity';
 import { ProjectResourceEntity } from './projectResource.entity';
@@ -13,7 +12,6 @@ export class ProjectEntity implements Project {
 		name?: string,
 		startDate?: Date,
 		client?: ClientEntity,
-		projectManager?: ResourceEntity,
 		projectResources?: ProjectResourceEntity[],
 		clientRepresentative?: ClientRepresentativeEntity,
 		status?: ProjectStatus,
@@ -23,7 +21,6 @@ export class ProjectEntity implements Project {
 		this.startDate = startDate;
 		this.client = client;
 		this.projectResource = projectResources;
-		this.projectManager = projectManager;
 		this.clientRepresentative = clientRepresentative;
 		this.status = status;
 	}
@@ -43,16 +40,12 @@ export class ProjectEntity implements Project {
 	@OneToMany(() => ProjectResourceEntity, projectResources => projectResources.project)
 	projectResource: ProjectResourceEntity[];
 
-	@ManyToOne(() => ResourceEntity, resouce => resouce)
-	projectManager: ResourceEntity;
-
 	@ManyToOne(() => ClientRepresentativeEntity, clientRepresentative => clientRepresentative.projects)
 	clientRepresentative: ClientRepresentativeEntity;
 
 	@Column({
 		type: 'enum',
 		enum: ProjectStatus,
-		array: true,
 		default: [ProjectStatus.NOT_STARTED],
 	})
 	status: ProjectStatus;

@@ -7,4 +7,5 @@ export interface ProjectResource {
 	endDate: Date;
 	resource: Resource;
 	project: Project;
+	title: string;
 }

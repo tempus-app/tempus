@@ -5,12 +5,20 @@ import { ProjectEntity } from './project.entity';
 
 @Entity()
 export class ProjectResourceEntity implements ProjectResource {
-	constructor(id?: number, startDate?: Date, endDate?: Date, resource?: ResourceEntity, project?: ProjectEntity) {
+	constructor(
+		id?: number,
+		startDate?: Date,
+		endDate?: Date,
+		resource?: ResourceEntity,
+		project?: ProjectEntity,
+		title?: string,
+	) {
 		this.id = id;
 		this.startDate = startDate;
 		this.endDate = endDate;
 		this.resource = resource;
 		this.project = project;
+		this.title = title;
 	}
 
 	@PrimaryGeneratedColumn()
@@ -19,8 +27,11 @@ export class ProjectResourceEntity implements ProjectResource {
 	@Column()
 	startDate: Date;
 
-	@Column()
+	@Column({ nullable: true })
 	endDate: Date;
+
+	@Column({ nullable: true })
+	title: string;
 
 	@ManyToOne(() => ResourceEntity, resource => resource, { primary: true })
 	resource: ResourceEntity;
