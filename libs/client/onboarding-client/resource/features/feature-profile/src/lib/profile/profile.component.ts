@@ -26,6 +26,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
 		translateService.use(currentLang);
 	}
 
+	dataLoaded = false;
+
 	userId = 0;
 
 	currentViewId = 0;
@@ -124,6 +126,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
 				this.isRejected = latestView.revisionType === RevisionType.REJECTED;
 				this.isPendingApproval = latestView.revisionType === RevisionType.PENDING;
 				this.rejectionComments = latestView.revision?.comment ? latestView.revision.comment : '';
+
+				this.dataLoaded = true;
 			});
 		});
 	}

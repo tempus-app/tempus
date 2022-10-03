@@ -34,13 +34,28 @@ export class SidebarComponent implements OnInit {
 
 	SidebarTab = SidebarTab;
 
-	selectedTab?: SidebarTab = undefined;
-
 	initials = '';
 
 	isVisible = true;
 
 	bugReportingURL = 'https://forms.gle/KCoBXHmK49AdgJdV9';
+
+	currentRoute = this.router.url;
+
+	paths = [
+		{
+			tab: SidebarTab.PRIMARY_VIEW,
+			route: '/resource',
+		},
+		{
+			tab: SidebarTab.MY_VIEWS,
+			route: '/resource/my-views',
+		},
+		{
+			tab: SidebarTab.MANAGE_RESOURCES,
+			route: '/owner/manage-resources',
+		},
+	];
 
 	ngOnInit(): void {
 		this.translateService
@@ -66,10 +81,8 @@ export class SidebarComponent implements OnInit {
 	setUserTabs() {
 		if (this.userType === UserType.OWNER) {
 			this.tabs = [SidebarTab.MANAGE_RESOURCES, SidebarTab.PENDING_APPROVALS];
-			this.selectedTab = SidebarTab.MANAGE_RESOURCES;
-		} else if (this.userType === UserType.RESOURCE) {
+		} else {
 			this.tabs = [SidebarTab.PRIMARY_VIEW, SidebarTab.MY_VIEWS, SidebarTab.MY_PROJECTS];
-			this.selectedTab = SidebarTab.PRIMARY_VIEW;
 		}
 	}
 
@@ -83,8 +96,12 @@ export class SidebarComponent implements OnInit {
 			});
 	}
 
+	getRoute(tab: SidebarTab) {
+		this.currentRoute = this.router.url;
+		return this.paths.filter(x => x.tab === tab).map(y => y.route)[0];
+	}
+
 	navigate(tab: SidebarTab) {
-		this.selectedTab = tab;
 		switch (tab) {
 			case SidebarTab.LOGOUT:
 				this.store.dispatch(logout({ redirect: true }));
@@ -92,16 +109,8 @@ export class SidebarComponent implements OnInit {
 			case SidebarTab.REPORT_BUGS:
 				this.openReportBugForm();
 				break;
-			case SidebarTab.MANAGE_RESOURCES:
-				this.router.navigateByUrl('/owner/manage-resources');
-				break;
-			case SidebarTab.PRIMARY_VIEW:
-				this.router.navigateByUrl('/resource');
-				break;
-			case SidebarTab.MY_VIEWS:
-				this.router.navigateByUrl('/resource/my-views');
-				break;
 			default:
+				this.router.navigateByUrl(this.getRoute(tab));
 		}
 	}
 

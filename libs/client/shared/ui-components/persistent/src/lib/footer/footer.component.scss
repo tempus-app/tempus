@@ -4,7 +4,7 @@
 	height: fit-content;
 	background-color: abs.$accent-300;
 	&__content {
-		@include abs.h3();
+		@include abs.body-2();
 		color: white;
 		text-align: center;
 		align-content: center;
