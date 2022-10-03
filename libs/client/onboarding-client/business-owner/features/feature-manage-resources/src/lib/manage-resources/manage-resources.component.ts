@@ -154,19 +154,19 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 			position: [
 				'',
 				this.requiredIfValidator(
-					() => this.manageResourcesForm.get('invite')?.get('inviteType')?.value == RoleType.AVAILABLE_RESOURCE,
+					() => this.manageResourcesForm.get('invite')?.get('inviteType')?.value == this.roleTypeEnumToString(RoleType.AVAILABLE_RESOURCE),
 				),
 			],
 			client: [
 				'',
 				this.requiredIfValidator(
-					() => this.manageResourcesForm.get('invite')?.get('inviteType')?.value == RoleType.AVAILABLE_RESOURCE,
+					() => this.manageResourcesForm.get('invite')?.get('inviteType')?.value == this.roleTypeEnumToString(RoleType.AVAILABLE_RESOURCE),
 				),
 			],
 			project: [
 				'',
 				this.requiredIfValidator(
-					() => this.manageResourcesForm.get('invite')?.get('inviteType')?.value == RoleType.AVAILABLE_RESOURCE,
+					() => this.manageResourcesForm.get('invite')?.get('inviteType')?.value == this.roleTypeEnumToString(RoleType.AVAILABLE_RESOURCE),
 				),
 			],
 		}),
