@@ -46,19 +46,26 @@ export class ViewsService {
 
 		if (view.locked) throw new UnauthorizedException(`Cannot edit locked view`);
 
+		let userRole = RoleType.USER;
+		if (user.roles.includes(RoleType.BUSINESS_OWNER)) {
+			userRole = RoleType.BUSINESS_OWNER;
+		} else if (user.roles.includes(RoleType.SUPERVISOR)) {
+			userRole = RoleType.SUPERVISOR;
+		}
+
 		const resourceEntity = await this.resourceService.getResourceInfo(view.resource.id);
 		let newViewEntity = ViewEntity.fromDto(newView);
 		newViewEntity.resource = resourceEntity;
 		newViewEntity.locked = true;
 		newViewEntity.createdAt = new Date(Date.now());
-		newViewEntity.updatedBy = user.roles.includes(RoleType.BUSINESS_OWNER) ? RoleType.BUSINESS_OWNER : RoleType.USER;
+		newViewEntity.updatedBy = userRole;
 		newViewEntity.createdBy = view.createdBy;
 		newViewEntity.viewType = view.viewType;
 		newViewEntity.type = view.type;
 		newViewEntity.lastUpdateDate = new Date(Date.now());
 		newViewEntity.revisionType = RevisionType.PENDING;
 
-		if (user.roles.includes(RoleType.BUSINESS_OWNER)) {
+		if (user.roles.includes(RoleType.BUSINESS_OWNER) || user.roles.includes(RoleType.SUPERVISOR)) {
 			newViewEntity.createdAt = view.createdAt;
 			newViewEntity.revisionType = RevisionType.APPROVED;
 			await this.viewsRepository.remove(view);

@@ -17,6 +17,7 @@ export interface ResourceState {
 	error: Error | null;
 	status: AsyncRequestState;
 	createdResourceId: number | null;
+	savedResume: boolean;
 }
 
 export const initialState: ResourceState = {
@@ -30,6 +31,7 @@ export const initialState: ResourceState = {
 	error: null,
 	status: AsyncRequestState.IDLE,
 	createdResourceId: null,
+	savedResume: false,
 };
 
 export const resourceReducer = createReducer(
@@ -94,6 +96,7 @@ export const resourceReducer = createReducer(
 	on(ResourceActions.createResourceSuccess, (state, { resourceId }) => ({
 		...state,
 		error: null,
+		status: AsyncRequestState.SUCCESS,
 		createdResourceId: resourceId,
 	})),
 	on(ResourceActions.createResourceFailure, (state, { error }) => ({
@@ -102,11 +105,12 @@ export const resourceReducer = createReducer(
 		error,
 	})),
 	on(ResourceActions.resetCreateResourceState, () => initialState),
-
+	on(ResourceActions.saveResume, state => ({ ...state, status: AsyncRequestState.LOADING })),
 	on(ResourceActions.saveResumeSuccess, state => ({
 		...state,
 		status: AsyncRequestState.SUCCESS,
 		error: null,
+		savedResume: true,
 	})),
 	on(ResourceActions.saveResumeFailure, (state, { error }) => ({
 		...state,

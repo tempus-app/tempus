@@ -1,3 +1,5 @@
+import { RoleType } from '../../../enums';
+
 export interface ICreateLinkDto {
 	firstName: string;
 
@@ -7,5 +9,7 @@ export interface ICreateLinkDto {
 
 	expiry?: Date;
 
-	projectId: number;
+	projectId?: number;
+
+	userType: RoleType;
 }

@@ -36,10 +36,12 @@ export class AuthGuard implements CanLoad, CanActivate {
 
 				if (curRoute) {
 					if (
-						(curRoute[0] === 'resource' &&
+						(curRoute[1] === 'resource' &&
 							!roles.includes(RoleType.AVAILABLE_RESOURCE) &&
 							!roles.includes(RoleType.ASSIGNED_RESOURCE)) ||
-						(curRoute[0] === 'owner' && !roles.includes(RoleType.BUSINESS_OWNER))
+						(curRoute[1] === 'owner' &&
+							!roles.includes(RoleType.BUSINESS_OWNER) &&
+							!roles.includes(RoleType.SUPERVISOR))
 					) {
 						return this.backToSigin();
 					}

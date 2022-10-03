@@ -40,7 +40,7 @@ export class UserController {
 	) {}
 
 	@UseGuards(JwtAuthGuard, RolesGuard)
-	@Roles(RoleType.BUSINESS_OWNER)
+	@Roles(RoleType.BUSINESS_OWNER, RoleType.SUPERVISOR)
 	@Get()
 	// TODO: filtering
 	async getUsers(): Promise<User[]> {
@@ -53,14 +53,14 @@ export class UserController {
 	}
 
 	@UseGuards(JwtAuthGuard, RolesGuard)
-	@Roles(RoleType.BUSINESS_OWNER)
+	@Roles(RoleType.BUSINESS_OWNER, RoleType.SUPERVISOR)
 	@Get('basic')
 	async getAllResourceProjInfo(): Promise<UserProjectClientDto[]> {
 		return this.resourceService.getAllResourceProjectInfo();
 	}
 
 	@UseGuards(JwtAuthGuard, RolesGuard)
-	@Roles(RoleType.BUSINESS_OWNER)
+	@Roles(RoleType.BUSINESS_OWNER, RoleType.SUPERVISOR)
 	@Get('resources')
 	async getResources(): Promise<Resource[]> {
 		return this.resourceService.getAllResources();

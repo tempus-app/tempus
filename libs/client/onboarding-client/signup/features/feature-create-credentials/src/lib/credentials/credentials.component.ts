@@ -1,12 +1,20 @@
 import { Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TranslateService } from '@ngx-translate/core';
-import { AsyncRequestState, logout, OnboardingClientState, selectAccessToken } from '@tempus/client/onboarding-client/shared/data-access';
+import {
+	AsyncRequestState,
+	logout,
+	OnboardingClientState,
+	selectAccessToken,
+} from '@tempus/client/onboarding-client/shared/data-access';
 import {
 	loadLinkData,
+	resetCreateResourceState,
+	resetLinkState,
 	selectLinkData,
 	selectLinkErrorStatus,
+	selectResourceStatus,
 	setResourceLinkId,
 	SignupState,
 } from '@tempus/client/onboarding-client/signup/data-access';
@@ -14,8 +22,8 @@ import { Link, StatusType } from '@tempus/shared-domain';
 
 import { CustomModalType, ModalService, ModalType } from '@tempus/client/shared/ui-components/modal';
 
-import { Subscription } from 'rxjs';
-import { tap, filter, take } from 'rxjs/operators';
+import { Subject, Subscription } from 'rxjs';
+import { tap, filter, take, takeUntil } from 'rxjs/operators';
 
 @Component({
 	selector: 'tempus-credentials',
@@ -29,26 +37,59 @@ export class CredentialsComponent implements OnInit, OnDestroy {
 
 	loading = false;
 
+	$destroyed = new Subject<void>();
+
 	errorStatus$?: Subscription;
 
 	linkData$?: Subscription;
 
+	resourceStatus$?: Subscription;
+
 	@ViewChild('testTemplate')
 	testTemplate!: TemplateRef<unknown>;
 
-	linkUsedErr = '';
+	linkErrors: {
+		linkUsedErr: string;
+		expiredLinkErr: string;
+		genericLinkErr: string;
+		contact: string;
+		modalTitle: string;
+		modalConfirmText: string;
+	} = {
+		linkUsedErr: '',
+		expiredLinkErr: '',
+		genericLinkErr: '',
+		contact: '',
+		modalTitle: '',
+		modalConfirmText: '',
+	};
 
-	linkExpiredErr = '';
-
-	genericLinkErr = '';
-
-	contact = '';
-
-	modalTitle = '';
-
-	modalConfirmText = '';
+	supervisorCreationModal: {
+		successModal: {
+			title: string;
+			confirmText: string;
+			message: string;
+		};
+		errorModal: {
+			title: string;
+			confirmText: string;
+			message: string;
+		};
+	} = {
+		successModal: {
+			title: '',
+			confirmText: '',
+			message: '',
+		},
+		errorModal: {
+			title: '',
+			confirmText: '',
+			message: '',
+		},
+	};
 
 	constructor(
+		private router: Router,
 		private route: ActivatedRoute,
 		private store: Store<SignupState>,
 		private sharedStore: Store<OnboardingClientState>,
@@ -60,12 +101,10 @@ export class CredentialsComponent implements OnInit, OnDestroy {
 		translateService.currentLang = '';
 		translateService.use(currentLang);
 		translateService.get('onboardingSignupCredentials.main.linkErrors').subscribe(data => {
-			this.linkUsedErr = data.linkUsedErr;
-			this.linkExpiredErr = data.expiredLinkErr;
-			this.genericLinkErr = data.genericLinkErr;
-			this.contact = data.contact;
-			this.modalTitle = data.modalTitle;
-			this.modalConfirmText = data.modalConfirmText;
+			this.linkErrors = data;
+		});
+		translateService.get('onboardingSignupCredentials.main.supervisorCreationModal').subscribe(data => {
+			this.supervisorCreationModal = data;
 		});
 	}
 
@@ -74,58 +113,105 @@ export class CredentialsComponent implements OnInit, OnDestroy {
 	}
 
 	ngOnDestroy(): void {
-		this.errorStatus$?.unsubscribe();
-		this.linkData$?.unsubscribe();
+		this.$destroyed.next();
+		this.$destroyed.complete();
 	}
 
-	openDialog(errorMessage: string): void {
+	openDialog(data: { title: string; confirmText: string; message: string }, key: string): void {
 		this.modalService.open(
 			{
-				title: this.modalTitle,
-				confirmText: this.modalConfirmText,
-				message: errorMessage,
-				modalType: ModalType.ERROR,
+				title: data.title,
+				confirmText: data.confirmText,
+				message: data.message,
+				modalType: key === 'successModal' ? ModalType.INFO : ModalType.ERROR,
 				closable: false,
-				id: 'errorModal',
+				id: key,
 			},
 			CustomModalType.INFO,
 		);
 		this.modalService.confirmEventSubject.subscribe(() => {
-			// TODO:  redirect
+			this.router.navigate(['../../../signin'], { relativeTo: this.route });
+			this.modalService.close();
 			this.modalService.confirmEventSubject.unsubscribe();
 		});
 	}
 
 	ngOnInit() {
-    this.sharedStore.select(selectAccessToken).pipe(take(1)).subscribe(token => {
-      if(token) {
-        this.sharedStore.dispatch(logout({ redirect: false }));
-      }
-    });
-		this.errorStatus$ = this.store.select(selectLinkErrorStatus).subscribe(errStatus => {
-			if (errStatus.status === AsyncRequestState.LOADING) {
-				this.loading = true;
-			} else if (errStatus.status === AsyncRequestState.ERROR) {
-				this.openDialog(
-					CredentialsComponent.generateErrorMessage(errStatus.error?.message || this.genericLinkErr, this.contact),
-				);
-				this.loading = false;
-			} else {
-				this.loading = false;
-			}
-		});
-		this.linkData$ = this.store
+		this.sharedStore
+			.select(selectAccessToken)
+			.pipe(take(1))
+			.subscribe(token => {
+				if (token) {
+					this.sharedStore.dispatch(logout({ redirect: false }));
+				}
+			});
+		this.store
+			.select(selectResourceStatus)
+			.pipe(takeUntil(this.$destroyed))
+			.subscribe(reqStatusData => {
+				if (reqStatusData.status === AsyncRequestState.LOADING) {
+					this.loading = true;
+				} else if (reqStatusData.status === AsyncRequestState.SUCCESS) {
+					this.openDialog(this.supervisorCreationModal.successModal, 'successModal');
+					this.loading = false;
+					this.$destroyed.next();
+					this.$destroyed.complete();
+					this.store.dispatch(resetLinkState());
+					this.store.dispatch(resetCreateResourceState());
+				} else if (reqStatusData.status === AsyncRequestState.ERROR) {
+					this.loading = false;
+					this.openDialog(this.supervisorCreationModal.errorModal, 'errorModal');
+				} else {
+					this.loading = false;
+				}
+			});
+		this.store
+			.select(selectLinkErrorStatus)
+			.pipe(takeUntil(this.$destroyed))
+			.subscribe(errStatus => {
+				if (errStatus.status === AsyncRequestState.LOADING) {
+					this.loading = true;
+				} else if (errStatus.status === AsyncRequestState.ERROR) {
+					const errMsg = CredentialsComponent.generateErrorMessage(
+						errStatus.error?.message || this.linkErrors.genericLinkErr,
+						this.linkErrors.contact,
+					);
+					this.openDialog(
+						{ title: this.linkErrors.modalTitle, confirmText: this.linkErrors.modalConfirmText, message: errMsg },
+						'errorModal',
+					);
+					this.loading = false;
+				} else {
+					this.loading = false;
+				}
+			});
+		this.store
 			.select(selectLinkData)
 			.pipe(
+				takeUntil(this.$destroyed),
 				tap(link => {
 					if (link?.id) {
 						if (link?.status === StatusType.ACTIVE) {
 							this.link = link;
 							this.store.dispatch(setResourceLinkId({ linkId: link.id }));
 						} else if (link?.status === StatusType.COMPLETED) {
-							this.openDialog(this.linkUsedErr);
+							this.openDialog(
+								{
+									title: this.linkErrors.modalTitle,
+									confirmText: this.linkErrors.modalConfirmText,
+									message: this.linkErrors.linkUsedErr,
+								},
+								'errorModal',
+							);
 						} else if (link?.status === StatusType.INACTIVE) {
-							this.openDialog(this.linkExpiredErr);
+							this.openDialog(
+								{
+									title: this.linkErrors.modalTitle,
+									confirmText: this.linkErrors.modalConfirmText,
+									message: this.linkErrors.expiredLinkErr,
+								},
+								'errorModal',
+							);
 						}
 					}
 				}),

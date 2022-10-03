@@ -113,129 +113,141 @@
 	<ng-template #inviteTemplate>
 		<tempus-card style="margin-top: 1rem">
 			<div fxLayout="column">
-				<div fxLayout="row" fxLayoutGap="10px">
-					<div fxFlex="50%">
-						<tempus-text-input
-							id="first-name-invite"
-							[inputType]="InputType.TEXT"
-							placeholder="{{ prefix + 'modal.assignModal.firstNameLabel' | translate }}"
-							cssClass="secondary"
-							[control]="$any(manageResourcesForm).get('invite').get('firstName')"
-						>
-						</tempus-text-input>
-						<mat-error
-							class="mat-body-2"
-							*ngIf="
-								$any(manageResourcesForm).get('invite').get('firstName').invalid &&
-								($any(manageResourcesForm).get('invite').get('firstName').touched ||
-									$any(manageResourcesForm).get('invite').get('firstName').dirty)
-							"
-						>
-							{{ prefix + 'modal.assignModal.firstNameErr' | translate }}
-						</mat-error>
-					</div>
-					<div fxFlex="50%">
-						<tempus-text-input
-							id="last-name-invite"
-							[inputType]="InputType.TEXT"
-							placeholder="{{ prefix + 'modal.assignModal.lastNameLabel' | translate }}"
-							cssClass="secondary"
-							[control]="$any(manageResourcesForm).get('invite').get('lastName')"
-						>
-						</tempus-text-input>
-						<mat-error
-							class="mat-body-2"
-							*ngIf="
-								$any(manageResourcesForm).get('invite').get('lastName').invalid &&
-								($any(manageResourcesForm).get('invite').get('lastName').touched ||
-									$any(manageResourcesForm).get('invite').get('lastName').dirty)
-							"
-						>
-							{{ prefix + 'modal.assignModal.lastNameErr' | translate }}
-						</mat-error>
-					</div>
-				</div>
-				<div fxLayout="column" fxFlex="100%">
-					<tempus-text-input
-						id="email-address-invite"
-						fxFlex="100%"
-						[inputType]="InputType.EMAIL"
-						placeholder="{{ prefix + 'modal.assignModal.emailAddressLabel' | translate }}"
-						cssClass="secondary"
-						[control]="$any(manageResourcesForm).get('invite').get('emailAddress')"
-					>
-					</tempus-text-input>
-					<mat-error
-						class="mat-body-2"
-						*ngIf="
-							$any(manageResourcesForm).get('invite').get('emailAddress').invalid &&
-							($any(manageResourcesForm).get('invite').get('emailAddress').touched ||
-								$any(manageResourcesForm).get('invite').get('emailAddress').dirty)
-						"
-					>
-						{{ prefix + 'modal.assignModal.emailAddressErr' | translate }}
-					</mat-error>
-				</div>
-				<div fxLayout="column" fxFlex="100%">
-					<tempus-text-input
-						id="position-invite"
-						fxFlex="100%"
-						[inputType]="InputType.TEXT"
-						placeholder="{{ prefix + 'modal.assignModal.positionLabel' | translate }}"
-						cssClass="secondary"
-						[control]="$any(manageResourcesForm).get('invite').get('position')"
-					>
-					</tempus-text-input>
-					<mat-error
-						class="mat-body-2"
-						*ngIf="
-							$any(manageResourcesForm).get('invite').get('position').invalid &&
-							($any(manageResourcesForm).get('invite').get('position').touched ||
-								$any(manageResourcesForm).get('invite').get('position').dirty)
-						"
-					>
-						{{ prefix + 'modal.assignModal.positionErr' | translate }}
-					</mat-error>
-				</div>
-				<div fxLayout="row" fxLayoutGap="10px">
-					<div fxFlex="50%">
-						<tempus-dropdown
-							id="client-invite"
-							[control]="$any(manageResourcesForm).get('invite').get('client')"
-							[label]="prefix + 'modal.clientLabel' | translate"
-							(optionSelect)="updateProjects($event)"
-							[optionsWithId]="clientOptions"
-						></tempus-dropdown>
-						<mat-error
-							class="mat-body-2"
-							*ngIf="
-								$any(manageResourcesForm).get('invite').get('client').invalid &&
-								($any(manageResourcesForm).get('invite').get('client').touched ||
-									$any(manageResourcesForm).get('invite').get('client').dirty)
-							"
-						>
-							{{ prefix + 'modal.clientErr' | translate }}
-						</mat-error>
-					</div>
-					<div fxFlex="50%">
-						<tempus-dropdown
-							id="project-invite"
-							[control]="$any(manageResourcesForm).get('invite').get('project')"
-							[label]="prefix + 'modal.projectLabel' | translate"
-							[optionsWithId]="currentProjects"
-						></tempus-dropdown>
-						<mat-error
-							class="mat-body-2"
-							*ngIf="
-								$any(manageResourcesForm).get('invite').get('project').invalid &&
-								($any(manageResourcesForm).get('invite').get('project').touched ||
-									$any(manageResourcesForm).get('invite').get('project').dirty)
-							"
-						>
-							{{ prefix + 'modal.projectErr' | translate }}
-						</mat-error>
-					</div>
-				</div>
+        <div fxLayout="column" fxFlex="100%">
+            <tempus-dropdown
+              id="invite-type"
+              [control]="$any(manageResourcesForm).get('invite').get('inviteType')"
+              [label]="prefix + 'modal.inviteModal.typeOfUser' | translate"
+              [options]="inviteTypeOptions"
+            ></tempus-dropdown>
+        </div>
+        <div fxLayout="column" fxFlex="100%" *ngIf="inviteType == roleTypeEnumToString(roleType.AVAILABLE_RESOURCE) || inviteType == roleTypeEnumToString(roleType.SUPERVISOR)">
+          <div fxLayout="row" fxLayoutGap="10px">
+            <div fxFlex="50%">
+              <tempus-text-input
+                id="first-name-invite"
+                [inputType]="InputType.TEXT"
+                placeholder="{{ prefix + 'modal.assignModal.firstNameLabel' | translate }}"
+                cssClass="secondary"
+                [control]="$any(manageResourcesForm).get('invite').get('firstName')"
+              >
+              </tempus-text-input>
+              <mat-error
+                class="mat-body-2"
+                *ngIf="
+                  $any(manageResourcesForm).get('invite').get('firstName').invalid &&
+                  ($any(manageResourcesForm).get('invite').get('firstName').touched ||
+                    $any(manageResourcesForm).get('invite').get('firstName').dirty)
+                "
+              >
+                {{ prefix + 'modal.assignModal.firstNameErr' | translate }}
+              </mat-error>
+            </div>
+            <div fxFlex="50%">
+              <tempus-text-input
+                id="last-name-invite"
+                [inputType]="InputType.TEXT"
+                placeholder="{{ prefix + 'modal.assignModal.lastNameLabel' | translate }}"
+                cssClass="secondary"
+                [control]="$any(manageResourcesForm).get('invite').get('lastName')"
+              >
+              </tempus-text-input>
+              <mat-error
+                class="mat-body-2"
+                *ngIf="
+                  $any(manageResourcesForm).get('invite').get('lastName').invalid &&
+                  ($any(manageResourcesForm).get('invite').get('lastName').touched ||
+                    $any(manageResourcesForm).get('invite').get('lastName').dirty)
+                "
+              >
+                {{ prefix + 'modal.assignModal.lastNameErr' | translate }}
+              </mat-error>
+            </div>
+          </div>
+          <div fxLayout="column" fxFlex="100%">
+            <tempus-text-input
+              id="email-address-invite"
+              fxFlex="100%"
+              [inputType]="InputType.EMAIL"
+              placeholder="{{ prefix + 'modal.assignModal.emailAddressLabel' | translate }}"
+              cssClass="secondary"
+              [control]="$any(manageResourcesForm).get('invite').get('emailAddress')"
+            >
+            </tempus-text-input>
+            <mat-error
+              class="mat-body-2"
+              *ngIf="
+                $any(manageResourcesForm).get('invite').get('emailAddress').invalid &&
+                ($any(manageResourcesForm).get('invite').get('emailAddress').touched ||
+                  $any(manageResourcesForm).get('invite').get('emailAddress').dirty)
+              "
+            >
+              {{ prefix + 'modal.assignModal.emailAddressErr' | translate }}
+            </mat-error>
+          </div>
+        </div>
+        <div fxLayout="column" fxFlex="100%" *ngIf="inviteType == roleTypeEnumToString(roleType.AVAILABLE_RESOURCE)">
+          <div fxLayout="column" fxFlex="100%">
+            <tempus-text-input
+              id="position-invite"
+              fxFlex="100%"
+              [inputType]="InputType.TEXT"
+              placeholder="{{ prefix + 'modal.assignModal.positionLabel' | translate }}"
+              cssClass="secondary"
+              [control]="$any(manageResourcesForm).get('invite').get('position')"
+            >
+            </tempus-text-input>
+            <mat-error
+              class="mat-body-2"
+              *ngIf="
+                $any(manageResourcesForm).get('invite').get('position').invalid &&
+                ($any(manageResourcesForm).get('invite').get('position').touched ||
+                  $any(manageResourcesForm).get('invite').get('position').dirty)
+              "
+            >
+              {{ prefix + 'modal.assignModal.positionErr' | translate }}
+            </mat-error>
+          </div>
+          <div fxLayout="row" fxLayoutGap="10px">
+            <div fxFlex="50%">
+              <tempus-dropdown
+                id="client-invite"
+                [control]="$any(manageResourcesForm).get('invite').get('client')"
+                [label]="prefix + 'modal.clientLabel' | translate"
+                (optionSelect)="updateProjects($event)"
+                [optionsWithId]="clientOptions"
+              ></tempus-dropdown>
+              <mat-error
+                class="mat-body-2"
+                *ngIf="
+                  $any(manageResourcesForm).get('invite').get('client').invalid &&
+                  ($any(manageResourcesForm).get('invite').get('client').touched ||
+                    $any(manageResourcesForm).get('invite').get('client').dirty)
+                "
+              >
+                {{ prefix + 'modal.clientErr' | translate }}
+              </mat-error>
+            </div>
+            <div fxFlex="50%">
+              <tempus-dropdown
+                id="project-invite"
+                [control]="$any(manageResourcesForm).get('invite').get('project')"
+                [label]="prefix + 'modal.projectLabel' | translate"
+                [optionsWithId]="currentProjects"
+              ></tempus-dropdown>
+              <mat-error
+                class="mat-body-2"
+                *ngIf="
+                  $any(manageResourcesForm).get('invite').get('project').invalid &&
+                  ($any(manageResourcesForm).get('invite').get('project').touched ||
+                    $any(manageResourcesForm).get('invite').get('project').dirty)
+                "
+              >
+                {{ prefix + 'modal.projectErr' | translate }}
+              </mat-error>
+            </div>
+          </div>
+        </div>
 			</div>
 		</tempus-card>
 	</ng-template>
