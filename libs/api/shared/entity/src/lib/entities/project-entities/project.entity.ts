@@ -15,6 +15,7 @@ export class ProjectEntity implements Project {
 		projectResources?: ProjectResourceEntity[],
 		clientRepresentative?: ClientRepresentativeEntity,
 		status?: ProjectStatus,
+		endDate?: Date,
 	) {
 		this.id = id;
 		this.name = name;
@@ -23,6 +24,7 @@ export class ProjectEntity implements Project {
 		this.projectResources = projectResources;
 		this.clientRepresentative = clientRepresentative;
 		this.status = status;
+		this.endDate = endDate;
 	}
 
 	@PrimaryGeneratedColumn()
@@ -33,6 +35,9 @@ export class ProjectEntity implements Project {
 
 	@Column()
 	startDate: Date;
+
+	@Column({ nullable: true })
+	endDate: Date;
 
 	@ManyToOne(() => ClientEntity, client => client.projects)
 	client: ClientEntity;

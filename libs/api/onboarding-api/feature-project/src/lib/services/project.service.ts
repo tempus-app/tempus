@@ -153,6 +153,7 @@ export class ProjectService {
 			throw new NotFoundException(`Could not find project with id ${projectId}`);
 		}
 		projectEntity.status = ProjectStatus.COMPLETED;
+		projectEntity.endDate = new Date();
 
 		const { projectResources } = projectEntity;
 		await this.projectRepository.save(projectEntity);

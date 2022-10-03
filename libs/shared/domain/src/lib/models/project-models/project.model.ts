@@ -11,4 +11,5 @@ export interface Project {
 	projectResources: ProjectResource[];
 	clientRepresentative: ClientRepresentative;
 	status: ProjectStatus;
+	endDate: Date;
 }
