@@ -2,7 +2,12 @@ import { Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/c
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TranslateService } from '@ngx-translate/core';
-import { AsyncRequestState, logout, OnboardingClientState, selectAccessToken } from '@tempus/client/onboarding-client/shared/data-access';
+import {
+	AsyncRequestState,
+	logout,
+	OnboardingClientState,
+	selectAccessToken,
+} from '@tempus/client/onboarding-client/shared/data-access';
 import {
 	loadLinkData,
 	selectLinkData,
@@ -97,11 +102,14 @@ export class CredentialsComponent implements OnInit, OnDestroy {
 	}
 
 	ngOnInit() {
-    this.sharedStore.select(selectAccessToken).pipe(take(1)).subscribe(token => {
-      if(token) {
-        this.sharedStore.dispatch(logout({ redirect: false }));
-      }
-    });
+		this.sharedStore
+			.select(selectAccessToken)
+			.pipe(take(1))
+			.subscribe(token => {
+				if (token) {
+					this.sharedStore.dispatch(logout({ redirect: false }));
+				}
+			});
 		this.errorStatus$ = this.store.select(selectLinkErrorStatus).subscribe(errStatus => {
 			if (errStatus.status === AsyncRequestState.LOADING) {
 				this.loading = true;
