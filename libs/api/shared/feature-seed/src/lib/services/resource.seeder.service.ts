@@ -69,7 +69,6 @@ export class ResourceSeederService {
 	async clear() {
 		await this.skillRepository.query('DELETE FROM skill_entity CASCADE');
 		await this.skillTypeRepository.query('DELETE FROM skill_type_entity CASCADE');
-		await this.revisionRepository.query('DELETE FROM revision_entity CASCADE');
 
 		await this.resourceRepository.query('DELETE FROM user_entity CASCADE');
 		await this.educationRepository.query('DELETE FROM education_entity CASCADE');
@@ -77,6 +76,7 @@ export class ResourceSeederService {
 		await this.certificationRepository.query('DELETE FROM certification_entity CASCADE');
 		await this.locationRepository.query('DELETE FROM location_entity CASCADE');
 		await this.viewRepository.query('DELETE FROM view_entity CASCADE');
+		await this.revisionRepository.query('DELETE FROM revision_entity CASCADE');
 	}
 
 	/**

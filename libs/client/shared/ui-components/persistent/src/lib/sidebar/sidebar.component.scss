@@ -36,7 +36,7 @@ mat-button-toggle-group {
 	width: 15em;
 	+ .mat-button-toggle-checked,
 	.cdk-focused,
-	.cdk-mouse-focused {
+	.selected {
 		background-color: abs.$accent-300;
 		font-weight: 900 !important;
 		color: abs.$primary-800;
@@ -93,7 +93,8 @@ mat-button-toggle {
 	word-break: break-all;
 }
 
-p, #email {
+p,
+#email {
 	color: abs.$primary-800;
 	text-align: center;
 }
