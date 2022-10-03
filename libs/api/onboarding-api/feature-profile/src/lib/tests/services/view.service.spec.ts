@@ -5,7 +5,7 @@ import { createMock } from '@golevelup/ts-jest';
 import { ResourceService } from '@tempus/onboarding-api/feature-account';
 import { RevisionEntity, ViewEntity } from '@tempus/api/shared/entity';
 import { ForbiddenException, NotFoundException, UnauthorizedException } from '@nestjs/common';
-import { RevisionType, RoleType, ViewType } from '@tempus/shared-domain';
+import { RevisionType, RoleType } from '@tempus/shared-domain';
 import { ViewsService } from '../../services';
 import {
 	viewEntity,
@@ -13,11 +13,14 @@ import {
 	createdViewEntityPostRevision,
 	resourceUserEntity,
 	newViewDto,
+	newSecondaryViewDto,
 	businessOwnerUserEntity,
 	viewEntity3,
 	rejectViewDto,
 	approveViewDto,
 	createdViewEntity,
+	businessOwnerCreatedSecondaryViewEntity,
+	resourceCreatedSecondaryViewEntity,
 } from '../mocks/view.mock';
 import { resourceEntity } from '../mocks/resource.mock';
 
@@ -60,7 +63,7 @@ describe('ViewService', () => {
 	});
 
 	describe('CreateView()', () => {
-		it('should create new view', async () => {
+		it('should create new primary view', async () => {
 			const createdView: ViewEntity = {
 				...createdViewEntity,
 				createdAt: new Date(CUR_DATE_CONSTANT),
@@ -74,6 +77,49 @@ describe('ViewService', () => {
 
 			expect(mockResourceService.getResourceInfo).toHaveBeenCalledWith(0);
 			expect(mockViewRepository.save).toHaveBeenCalledWith({ ...createdView, id: undefined });
+			expect(res).toEqual(createdView);
+		});
+	});
+
+	describe('CreateSecondaryView()', () => {
+		it('should create a new approved view given created by business owner', async () => {
+			const createdView: ViewEntity = {
+				...businessOwnerCreatedSecondaryViewEntity,
+				createdAt: new Date(CUR_DATE_CONSTANT),
+				lastUpdateDate: new Date(CUR_DATE_CONSTANT),
+				updatedBy: RoleType.BUSINESS_OWNER,
+				resource: resourceEntity,
+			};
+			mockResourceService.getResourceInfo.mockResolvedValue(resourceEntity);
+			mockViewRepository.save.mockResolvedValue(createdView);
+
+			const res = await viewService.createSecondaryView(0, businessOwnerUserEntity, newSecondaryViewDto);
+
+			expect(mockResourceService.getResourceInfo).toHaveBeenCalledWith(0);
+			expect(mockViewRepository.save).toHaveBeenCalledWith({ ...createdView, id: undefined });
+			expect(res).toEqual(createdView);
+		});
+
+		it('should create a new pending view given created by resource', async () => {
+			const createdRevisionEntity: RevisionEntity = new RevisionEntity(null, new Date(CUR_DATE_CONSTANT), null, []);
+			mockRevisionRepository.save.mockResolvedValue(createdRevisionEntity);
+
+			const createdView: ViewEntity = {
+				...resourceCreatedSecondaryViewEntity,
+				createdAt: new Date(CUR_DATE_CONSTANT),
+				lastUpdateDate: new Date(CUR_DATE_CONSTANT),
+				updatedBy: RoleType.USER,
+				resource: resourceEntity,
+				revision: createdRevisionEntity,
+			};
+			mockResourceService.getResourceInfo.mockResolvedValue(resourceEntity);
+			mockViewRepository.save.mockResolvedValue(createdView);
+
+			const res = await viewService.createSecondaryView(0, resourceEntity, newSecondaryViewDto);
+
+			expect(mockResourceService.getResourceInfo).toHaveBeenCalledWith(0);
+			expect(mockViewRepository.save).toHaveBeenCalledWith({ ...createdView, id: undefined });
+			expect(mockRevisionRepository.save).toHaveBeenCalledWith(createdRevisionEntity);
 			expect(res).toEqual(createdView);
 		});
 	});

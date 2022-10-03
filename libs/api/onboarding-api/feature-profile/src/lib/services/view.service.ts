@@ -52,10 +52,12 @@ export class ViewsService {
 		if (user.roles.includes(RoleType.BUSINESS_OWNER)) {
 			viewEntity.revisionType = RevisionType.APPROVED;
 			viewEntity.locked = false;
+			viewEntity.createdBy = RoleType.BUSINESS_OWNER;
 			viewEntity.updatedBy = RoleType.BUSINESS_OWNER;
 		} else {
 			viewEntity.revisionType = RevisionType.PENDING;
 			viewEntity.locked = true;
+			viewEntity.createdBy = RoleType.USER;
 			viewEntity.updatedBy = RoleType.USER;
 
 			const revisionEntity = new RevisionEntity(null, viewEntity.createdAt, null, []);
