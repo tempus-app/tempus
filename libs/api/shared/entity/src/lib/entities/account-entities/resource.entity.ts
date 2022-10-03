@@ -1,9 +1,9 @@
 import { CreateResourceDto } from '@tempus/api/shared/dto';
 import { Resource, RoleType } from '@tempus/shared-domain';
-import { ChildEntity, Column, JoinTable, ManyToMany, OneToMany, OneToOne } from 'typeorm';
+import { ChildEntity, Column, OneToMany, OneToOne } from 'typeorm';
 import { LocationEntity } from '../common-entities';
 import { CertificationEntity, EducationEntity, ExperienceEntity, SkillEntity, ViewEntity } from '../profile-entities';
-import { ProjectEntity } from '../project-entities';
+import { ProjectResourceEntity } from '../project-entities';
 import { UserEntity } from './user.entity';
 
 @ChildEntity()
@@ -16,7 +16,7 @@ export class ResourceEntity extends UserEntity implements Resource {
 		githubLink?: string,
 		otherLink?: string,
 		location?: LocationEntity,
-		projects?: ProjectEntity[],
+		projectResources?: ProjectResourceEntity[],
 		views?: ViewEntity[],
 		experiences?: ExperienceEntity[],
 		educations?: EducationEntity[],
@@ -33,7 +33,7 @@ export class ResourceEntity extends UserEntity implements Resource {
 		this.phoneNumber = phoneNumber;
 		this.title = title;
 		this.location = location;
-		this.projects = projects;
+		this.projectResources = projectResources;
 		this.views = views;
 		this.experiences = experiences;
 		this.educations = educations;
@@ -66,9 +66,8 @@ export class ResourceEntity extends UserEntity implements Resource {
 	@OneToOne(() => LocationEntity, loc => loc.resource, { cascade: ['insert', 'update'] })
 	location: LocationEntity;
 
-	@ManyToMany(() => ProjectEntity, projects => projects.resources, { cascade: ['insert', 'update'] })
-	@JoinTable()
-	projects: ProjectEntity[];
+	@OneToMany(() => ProjectResourceEntity, projectResources => projectResources.resource)
+	projectResources: ProjectResourceEntity[];
 
 	@OneToMany(() => ViewEntity, views => views.resource, { cascade: ['insert', 'update'] })
 	views: ViewEntity[];
