@@ -2,7 +2,7 @@
 /* eslint-disable no-restricted-syntax */
 import { BadGatewayException, BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CreateProjectDto, UpdateProjectDto } from '@tempus/api/shared/dto';
+import { AssignProjectDto, CreateProjectDto, UpdateProjectDto } from '@tempus/api/shared/dto';
 import { ClientRepresentativeEntity, ProjectEntity, ProjectResourceEntity } from '@tempus/api/shared/entity';
 import { ResourceService } from '@tempus/onboarding-api/feature-account';
 import { Project, ProjectStatus, RoleType } from '@tempus/shared-domain';
@@ -23,7 +23,7 @@ export class ProjectService {
 
 	async getProject(projectId: number): Promise<Project> {
 		const projectEntity = await this.projectRepository.findOne(projectId, {
-			relations: ['client', 'clientRepresentative', 'projectResource', 'projectResource.resource'],
+			relations: ['client', 'clientRepresentative', 'projectResources', 'projectResources.resource'],
 		});
 		if (!projectEntity) throw new NotFoundException(`Could not find project with id ${projectId}`);
 		return projectEntity;
@@ -80,7 +80,7 @@ export class ProjectService {
 		return this.projectRepository.save(projectEntity);
 	}
 
-	async assignResourceToProject(projectId: number, resourceId: number, title: string): Promise<void> {
+	async assignResourceToProject(projectId: number, resourceId: number, assignDetails: AssignProjectDto): Promise<void> {
 		const projectEntity = await this.getProject(projectId);
 		if (!projectEntity) {
 			throw new NotFoundException(`Could not find project with id ${projectId}`);
@@ -92,18 +92,18 @@ export class ProjectService {
 		}
 		const projectResourceEntity = new ProjectResourceEntity(
 			null,
-			new Date(),
+			assignDetails.startDate || new Date(),
 			null,
 			resourceEntity,
 			projectEntity,
-			title,
+			assignDetails.title,
 		);
 
-		if (!projectEntity.projectResource) projectEntity.projectResource = [projectResourceEntity];
-		else if (projectEntity.projectResource.some(projectResource => projectResource.resource.id === resourceId)) {
+		if (!projectEntity.projectResources) projectEntity.projectResources = [projectResourceEntity];
+		else if (projectEntity.projectResources.some(projectResource => projectResource.resource.id === resourceId)) {
 			throw new BadRequestException(`Project with id ${projectId} already assigned to resource with id ${resourceId}`);
 		} else {
-			projectEntity.projectResource.push(projectResourceEntity);
+			projectEntity.projectResources.push(projectResourceEntity);
 		}
 		await this.resourceService.updateRoleType(resourceEntity.id, RoleType.ASSIGNED_RESOURCE);
 		await this.projectResourceRepository.save(projectResourceEntity);
@@ -147,14 +147,14 @@ export class ProjectService {
 
 	async completeProject(projectId: number): Promise<ProjectEntity> {
 		const projectEntity = await this.projectRepository.findOne(projectId, {
-			relations: ['projectResource', 'projectResource.resource', 'projectResource.project'],
+			relations: ['projectResources', 'projectResources.resource', 'projectResources.project'],
 		});
 		if (!projectEntity) {
 			throw new NotFoundException(`Could not find project with id ${projectId}`);
 		}
 		projectEntity.status = ProjectStatus.COMPLETED;
-		const projectResources = projectEntity.projectResource;
-		console.log(projectEntity);
+
+		const { projectResources } = projectEntity;
 		await this.projectRepository.save(projectEntity);
 
 		// end the project for all resources
@@ -163,7 +163,6 @@ export class ProjectService {
 				await this.unassignResourceFromProject(projectId, relation.resource.id);
 			}
 		});
-		console.log('here4');
 		return projectEntity;
 	}
 

@@ -36,6 +36,6 @@ export class ProjectResourceEntity implements ProjectResource {
 	@ManyToOne(() => ResourceEntity, resource => resource, { primary: true })
 	resource: ResourceEntity;
 
-	@ManyToOne(() => ProjectEntity, project => project.projectResource, { primary: true })
+	@ManyToOne(() => ProjectEntity, project => project.projectResources, { primary: true })
 	project: ProjectEntity;
 }

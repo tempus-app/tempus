@@ -8,7 +8,7 @@ export interface Project {
 	name: string;
 	startDate: Date;
 	client: Client;
-	projectResource: ProjectResource[];
+	projectResources: ProjectResource[];
 	clientRepresentative: ClientRepresentative;
 	status: ProjectStatus;
 }

@@ -20,7 +20,7 @@ export class ProjectEntity implements Project {
 		this.name = name;
 		this.startDate = startDate;
 		this.client = client;
-		this.projectResource = projectResources;
+		this.projectResources = projectResources;
 		this.clientRepresentative = clientRepresentative;
 		this.status = status;
 	}
@@ -38,7 +38,7 @@ export class ProjectEntity implements Project {
 	client: ClientEntity;
 
 	@OneToMany(() => ProjectResourceEntity, projectResources => projectResources.project)
-	projectResource: ProjectResourceEntity[];
+	projectResources: ProjectResourceEntity[];
 
 	@ManyToOne(() => ClientRepresentativeEntity, clientRepresentative => clientRepresentative.projects)
 	clientRepresentative: ClientRepresentativeEntity;
