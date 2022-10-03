@@ -22,7 +22,7 @@ export class EducationService {
 		newEducationEntity.resource = resourceEntity;
 		newEducationEntity = await this.educationRepository.save(newEducationEntity);
 
-		return educationEntity;
+		return newEducationEntity;
 	}
 
 	// return all educations by resource
