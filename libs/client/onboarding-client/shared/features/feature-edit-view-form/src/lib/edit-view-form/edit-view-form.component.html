@@ -43,9 +43,10 @@
 		</div>
 		<div class="view-container" *ngIf="!previewViewEnabled" fxLayout="column" fxLayoutGap="20px">
 			<div fxFlex class="section-container">
+				<!-- TODO: enable personalInfo fields once changes can be saved -->
 				<tempus-resource-info-personal-information
 					(formGroup)="loadPersonalInfo($event)"
-					[disablePersonalInfo]="!isPrimaryView"
+					[disablePersonalInfo]="true"
 					[firstName]="firstName"
 					[lastName]="lastName"
 					[phoneNumber]="phoneNumber"
