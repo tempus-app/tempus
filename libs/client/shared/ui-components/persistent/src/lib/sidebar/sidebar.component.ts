@@ -42,18 +42,27 @@ export class SidebarComponent implements OnInit {
 
 	currentRoute = this.router.url;
 
+	// All routes the sidebar tabs are highlighted for
+	// Base route is navigated to onclick
 	paths = [
 		{
 			tab: SidebarTab.PRIMARY_VIEW,
 			route: '/resource',
+			base: true,
 		},
 		{
 			tab: SidebarTab.MY_VIEWS,
 			route: '/resource/my-views',
+			base: true,
 		},
 		{
 			tab: SidebarTab.MANAGE_RESOURCES,
 			route: '/owner/manage-resources',
+			base: true,
+		},
+		{
+			tab: SidebarTab.MANAGE_RESOURCES,
+			route: '/owner/view-resources',
 		},
 	];
 
@@ -96,12 +105,28 @@ export class SidebarComponent implements OnInit {
 			});
 	}
 
-	getRoute(tab: SidebarTab) {
+	isTabSelected(tab: SidebarTab) {
 		this.currentRoute = this.router.url;
-		return this.paths.filter(x => x.tab === tab).map(y => y.route)[0];
+		const routes = this.paths.filter(x => x.tab === tab).map(y => y.route);
+		const baseRoute = this.paths.filter(x => x.tab === tab && x.base).map(y => y.route)[0];
+
+		switch (tab) {
+			// must match absolute route
+			case SidebarTab.PRIMARY_VIEW:
+				return this.currentRoute === baseRoute;
+			default:
+				for (let i = 0; i < routes.length; i++) {
+					if (this.currentRoute.includes(routes[i])) {
+						return true;
+					}
+				}
+				return false;
+		}
 	}
 
 	navigate(tab: SidebarTab) {
+		const baseRoute = this.paths.filter(x => x.tab === tab && x.base).map(y => y.route)[0];
+
 		switch (tab) {
 			case SidebarTab.LOGOUT:
 				this.store.dispatch(logout({ redirect: true }));
@@ -110,7 +135,7 @@ export class SidebarComponent implements OnInit {
 				this.openReportBugForm();
 				break;
 			default:
-				this.router.navigateByUrl(this.getRoute(tab));
+				this.router.navigateByUrl(baseRoute);
 		}
 	}
 

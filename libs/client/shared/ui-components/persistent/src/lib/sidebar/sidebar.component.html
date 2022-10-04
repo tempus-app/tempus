@@ -15,7 +15,7 @@
 				(click)="navigate(tab)"
 				*ngFor="let tab of tabs"
 				[value]="tab"
-				[ngClass]="{ selected: currentRoute === getRoute(tab) }"
+				[ngClass]="{ selected: isTabSelected(tab) }"
 			>
 				<div class="mat-body-2">{{ 'sidenav.tabs.' + tab | translate }}</div>
 			</mat-button-toggle>

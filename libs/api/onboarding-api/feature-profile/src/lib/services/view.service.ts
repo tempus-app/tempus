@@ -59,11 +59,6 @@ export class ViewsService {
 			viewEntity.locked = true;
 			viewEntity.createdBy = RoleType.USER;
 			viewEntity.updatedBy = RoleType.USER;
-
-			const revisionEntity = new RevisionEntity(null, viewEntity.createdAt, null, []);
-			const revision = await this.revisionRepository.save(revisionEntity);
-
-			viewEntity.revision = revision;
 		}
 		const newView = await this.viewsRepository.save(viewEntity);
 

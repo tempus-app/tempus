@@ -101,16 +101,12 @@ describe('ViewService', () => {
 		});
 
 		it('should create a new pending view given created by resource', async () => {
-			const createdRevisionEntity: RevisionEntity = new RevisionEntity(null, new Date(CUR_DATE_CONSTANT), null, []);
-			mockRevisionRepository.save.mockResolvedValue(createdRevisionEntity);
-
 			const createdView: ViewEntity = {
 				...resourceCreatedSecondaryViewEntity,
 				createdAt: new Date(CUR_DATE_CONSTANT),
 				lastUpdateDate: new Date(CUR_DATE_CONSTANT),
 				updatedBy: RoleType.USER,
 				resource: resourceEntity,
-				revision: createdRevisionEntity,
 			};
 			mockResourceService.getResourceInfo.mockResolvedValue(resourceEntity);
 			mockViewRepository.save.mockResolvedValue(createdView);
@@ -119,7 +115,6 @@ describe('ViewService', () => {
 
 			expect(mockResourceService.getResourceInfo).toHaveBeenCalledWith(0);
 			expect(mockViewRepository.save).toHaveBeenCalledWith({ ...createdView, id: undefined });
-			expect(mockRevisionRepository.save).toHaveBeenCalledWith(createdRevisionEntity);
 			expect(res).toEqual(createdView);
 		});
 	});

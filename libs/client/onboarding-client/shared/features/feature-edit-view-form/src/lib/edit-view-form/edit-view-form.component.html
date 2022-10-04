@@ -7,36 +7,36 @@
 						*ngIf="!isPrimaryView && !previewViewEnabled"
 						cssClass="secondary"
 						class="view-name-input"
-						placeholder="{{ editProfilePrefix + 'viewNamePlaceholder' | translate }}"
+						placeholder="{{ editViewFormPrefix + 'viewNamePlaceholder' | translate }}"
 						[control]="viewName"
 					></tempus-text-input>
 					<h2 *ngIf="!isPrimaryView && previewViewEnabled" class="mat-h2 page-title">
 						{{ viewName.value }}
 					</h2>
-					<h2 *ngIf="isPrimaryView" class="mat-h2 page-title">{{ editProfilePrefix + 'primaryView' | translate }}</h2>
+					<h2 *ngIf="isPrimaryView" class="mat-h2 page-title">{{ editViewFormPrefix + 'primaryView' | translate }}</h2>
 				</div>
 				<div *ngIf="viewName.invalid" class="error-container" fxFlex>
-					<mat-error class="mat-body-2">{{ editProfilePrefix + 'viewNameError' | translate }}</mat-error>
+					<mat-error class="mat-body-2">{{ editViewFormPrefix + 'viewNameError' | translate }}</mat-error>
 				</div>
 			</div>
 			<mat-slide-toggle (change)="togglePreview()">{{
-				editProfilePrefix + 'previewToggle' | translate
+				editViewFormPrefix + 'previewToggle' | translate
 			}}</mat-slide-toggle>
 			<div id="button-container">
 				<tempus-button
-					label="{{ editProfilePrefix + 'buttons.cancel.label' | translate }}"
+					label="{{ editViewFormPrefix + 'buttons.cancel.label' | translate }}"
 					color="accent"
 					(buttonClick)="closeEditView()"
-					matTooltip="{{ editProfilePrefix + 'buttons.cancel.tooltip' | translate }}"
+					matTooltip="{{ editViewFormPrefix + 'buttons.cancel.tooltip' | translate }}"
 					matTooltipClass="tooltip"
 				></tempus-button>
 
 				<tempus-button
 					[disabled]="!isValid()"
-					label="{{ editProfilePrefix + 'buttons.submit.label' | translate }}"
+					label="{{ editViewFormPrefix + 'buttons.submit.label' | translate }}"
 					color="accent"
 					(buttonClick)="submitChanges()"
-					matTooltip="{{ editProfilePrefix + 'buttons.submit.tooltip' | translate }}"
+					matTooltip="{{ editViewFormPrefix + 'buttons.submit.tooltip' | translate }}"
 					matTooltipClass="tooltip"
 				></tempus-button>
 			</div>
@@ -104,27 +104,27 @@
 				></tempus-resource-display-personal-information>
 			</div>
 			<div class="preview-section-container">
-				<h2 class="mat-h2 section-title">{{ editProfilePrefix + 'education' | translate }}</h2>
+				<h2 class="mat-h2 section-title">{{ editViewFormPrefix + 'education' | translate }}</h2>
 				<tempus-resource-display-education
 					[educationsSummary]="educationsSummary"
 					[educations]="educations"
 				></tempus-resource-display-education>
 			</div>
 			<div class="preview-section-container">
-				<div class="mat-h2 section-title">{{ editProfilePrefix + 'certifications' | translate }}</div>
+				<div class="mat-h2 section-title">{{ editViewFormPrefix + 'certifications' | translate }}</div>
 				<tempus-resource-display-certifications
 					[certifications]="certifications"
 				></tempus-resource-display-certifications>
 			</div>
 			<div class="preview-section-container">
-				<h2 class="mat-h2 section-title">{{ editProfilePrefix + 'workExperience' | translate }}</h2>
+				<h2 class="mat-h2 section-title">{{ editViewFormPrefix + 'workExperience' | translate }}</h2>
 				<tempus-resource-display-work-experience
 					[experiencesSummary]="experiencesSummary"
 					[workExperiences]="workExperiences"
 				></tempus-resource-display-work-experience>
 			</div>
 			<div class="preview-section-container">
-				<h2 class="mat-h2 section-title">{{ editProfilePrefix + 'skills' | translate }}</h2>
+				<h2 class="mat-h2 section-title">{{ editViewFormPrefix + 'skills' | translate }}</h2>
 				<tempus-resource-display-skills
 					[skills]="skills"
 					[skillsSummary]="skillsSummary"

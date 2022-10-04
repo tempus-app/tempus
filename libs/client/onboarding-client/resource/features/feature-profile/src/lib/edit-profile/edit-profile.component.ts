@@ -1,6 +1,6 @@
 import { Component, EventEmitter, OnDestroy, Output, ViewChild } from '@angular/core';
 import { OnboardingClientResourceService } from '@tempus/client/onboarding-client/shared/data-access';
-import { Subject, take } from 'rxjs';
+import { Subject, take, takeUntil } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
 import { ModalService, CustomModalType, ModalType } from '@tempus/client/shared/ui-components/modal';
 import { EditViewFormComponent } from '@tempus/onboarding-client/shared/feature-edit-view-form';
@@ -60,12 +60,11 @@ export class EditProfileComponent implements OnDestroy {
 				);
 			});
 
-		this.modalService.confirmEventSubject.subscribe(() => {
+		this.modalService.confirmEventSubject.pipe(takeUntil(this.destroyed$)).subscribe(() => {
 			this.updateView();
 			this.modalService.close();
 			this.closeEditView();
 			window.location.reload();
-			this.modalService.confirmEventSubject.unsubscribe();
 		});
 	}
 

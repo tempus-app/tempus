@@ -117,7 +117,7 @@ export class EditViewFormComponent implements OnInit, OnDestroy {
 
 	UserType = UserType;
 
-	editProfilePrefix = 'onboardingResourceEditProfile.';
+	editViewFormPrefix = 'onboardingClient.editViewForm.';
 
 	previewViewEnabled = false;
 

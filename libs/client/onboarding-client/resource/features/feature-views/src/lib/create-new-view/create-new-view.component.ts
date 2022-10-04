@@ -4,7 +4,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { OnboardingClientResourceService } from '@tempus/client/onboarding-client/shared/data-access';
 import { CustomModalType, ModalService, ModalType } from '@tempus/client/shared/ui-components/modal';
 import { EditViewFormComponent } from '@tempus/onboarding-client/shared/feature-edit-view-form';
-import { Subject, take } from 'rxjs';
+import { Subject, take, takeUntil } from 'rxjs';
 
 @Component({
 	selector: 'tempus-create-new-view',
@@ -51,10 +51,10 @@ export class CreateNewViewComponent implements OnInit, OnDestroy {
 
 	openSubmitConfirmation() {
 		this.translateService
-			.get([`onboardingResourceCreateNewView.modal.submitModal`])
+			.get([`onboardingResourceCreateNewView.submitModal`])
 			.pipe(take(1))
 			.subscribe(data => {
-				const dialogText = data[`onboardingResourceCreateNewView.modal.submitModal`];
+				const dialogText = data[`onboardingResourceCreateNewView.submitModal`];
 				this.modalService.open(
 					{
 						title: dialogText.title,
@@ -69,15 +69,10 @@ export class CreateNewViewComponent implements OnInit, OnDestroy {
 				);
 			});
 
-		this.modalService.confirmEventSubject.subscribe(() => {
+		this.modalService.confirmEventSubject.pipe(takeUntil(this.destroyed$)).subscribe(() => {
 			this.createNewView();
 			this.modalService.close();
 			this.closeForm();
-			this.modalService.confirmEventSubject.unsubscribe();
-		});
-
-		this.modalService.closed().subscribe(() => {
-			this.modalService.confirmEventSubject.unsubscribe();
 		});
 	}
 
