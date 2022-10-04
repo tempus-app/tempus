@@ -33,9 +33,9 @@ export class ProjectResourceEntity implements ProjectResource {
 	@Column({ nullable: true })
 	title: string;
 
-	@ManyToOne(() => ResourceEntity, resource => resource, { primary: true })
+	@ManyToOne(() => ResourceEntity, resource => resource, { primary: true, onDelete: 'CASCADE' })
 	resource: ResourceEntity;
 
-	@ManyToOne(() => ProjectEntity, project => project.projectResources, { primary: true })
+	@ManyToOne(() => ProjectEntity, project => project.projectResources, { primary: true, onDelete: 'CASCADE' })
 	project: ProjectEntity;
 }

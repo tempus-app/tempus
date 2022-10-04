@@ -5,7 +5,7 @@ import { Repository } from 'typeorm';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { faker } from '@faker-js/faker';
 import { ProjectService } from '@tempus/onboarding-api/feature-project';
-import { CreateProjectDto } from '@tempus/api/shared/dto';
+import { AssignProjectDto, CreateProjectDto } from '@tempus/api/shared/dto';
 import { RoleType } from '@tempus/shared-domain';
 
 @Injectable()
@@ -36,11 +36,16 @@ export class ProjectSeederService {
 	async seedProjects(clients: ClientEntity[], count = 6): Promise<ProjectEntity[]> {
 		const createdProjects: ProjectEntity[] = [];
 		for (let i = 0; i < count; i++) {
+			const clientRepFirstName = faker.name.firstName();
+			const clientRepLastName = faker.name.lastName();
 			const createProject: CreateProjectDto = new CreateProjectDto(
 				clients[i % clients.length].id,
 				faker.random.word(),
 				faker.date.soon(3), // 3 days from today
-				faker.date.future(2),
+				null,
+				clientRepFirstName,
+				clientRepLastName,
+				faker.internet.email(clientRepFirstName, clientRepLastName),
 			);
 
 			const project = await this.projectService.createProject(createProject);
@@ -52,7 +57,12 @@ export class ProjectSeederService {
 	async seedAssignedResources(projects: ProjectEntity[], resources: ResourceEntity[]): Promise<ResourceEntity[]> {
 		const assignedResources: ResourceEntity[] = [];
 		for (let i = 0; i < resources.length; i++) {
-			await this.projectService.assignResourceToProject(projects[i % projects.length].id, resources[i].id);
+			const assignResourceDto = new AssignProjectDto(faker.name.jobTitle(), faker.date.soon(3));
+			await this.projectService.assignResourceToProject(
+				projects[i % projects.length].id,
+				resources[i].id,
+				assignResourceDto,
+			);
 			assignedResources.push({ ...resources[i], roles: [RoleType.ASSIGNED_RESOURCE] });
 		}
 		return assignedResources;

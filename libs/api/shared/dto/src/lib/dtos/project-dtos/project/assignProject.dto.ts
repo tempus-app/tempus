@@ -8,7 +8,7 @@ export class AssignProjectDto implements IAssignProjectDto {
 	title: string;
 
 	@ApiProperty()
-	startDate: Date;
+	startDate?: Date;
 
 	constructor(title: string, startDate?: Date) {
 		this.title = title;

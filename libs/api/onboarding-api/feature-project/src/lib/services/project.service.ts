@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-restricted-syntax */
-import { BadGatewayException, BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AssignProjectDto, CreateProjectDto, UpdateProjectDto } from '@tempus/api/shared/dto';
 import { ClientRepresentativeEntity, ProjectEntity, ProjectResourceEntity } from '@tempus/api/shared/entity';
@@ -64,7 +64,7 @@ export class ProjectService {
 				clientEntity,
 			);
 		} else {
-			throw new BadGatewayException('Please specifiy client representative details');
+			throw new BadRequestException('Please specifiy client representative details');
 		}
 
 		projectEntity.client = clientEntity;
