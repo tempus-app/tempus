@@ -6,6 +6,15 @@ export const clientRepresentativeMock: ClientRepresentative = {
 	lastName: 'Day',
 	email: 'jessica.day@hotmail.com',
 	client: clientEntityMock,
-	id: 0,
+	id: 3,
+	projects: [],
+};
+
+export const clientRepresentativeTwoMock: ClientRepresentative = {
+	firstName: 'Nick',
+	lastName: 'Miller',
+	email: 'nick.miller@hotmail.com',
+	client: clientEntityMock,
+	id: 10,
 	projects: [],
 };

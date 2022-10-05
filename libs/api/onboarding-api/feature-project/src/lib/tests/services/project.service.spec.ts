@@ -103,7 +103,7 @@ describe('ProjectService', () => {
 				createProjectMockClientRepresentativeDetails.clientRepresentativeFirstName,
 				createProjectMockClientRepresentativeDetails.clientRepresentativeLastName,
 				createProjectMockClientRepresentativeDetails.clientRepresentativeEmail,
-				clientEntityMock,
+				clientEntityMock.id,
 			);
 
 			expect(mockProjectRepository.save).toBeCalledWith({ ...projectEntityMock, id: null });

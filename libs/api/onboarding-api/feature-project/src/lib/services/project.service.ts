@@ -68,7 +68,7 @@ export class ProjectService {
 				createProjectDto.clientRepresentativeFirstName,
 				createProjectDto.clientRepresentativeLastName,
 				createProjectDto.clientRepresentativeEmail,
-				clientEntity,
+				clientEntity.id,
 			);
 		} else {
 			throw new BadRequestException('Please specifiy client representative details');
