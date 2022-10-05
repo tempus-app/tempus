@@ -6,6 +6,7 @@ import { MatStepperModule } from '@angular/material/stepper';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { TranslateModule } from '@ngx-translate/core';
+import { RouterModule } from '@angular/router';
 import { FooterComponent } from './footer/footer.component';
 import { StepperComponent } from './stepper/stepper.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
@@ -18,6 +19,7 @@ import { SidebarComponent } from './sidebar/sidebar.component';
 		MatStepperModule,
 		MatSidenavModule,
 		MatButtonToggleModule,
+		RouterModule,
 		TranslateModule.forChild({
 			isolate: false,
 			extend: true,

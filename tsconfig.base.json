@@ -24,6 +24,7 @@
 			"@tempus/api/shared/feature-email": ["libs/api/shared/feature-email/src/index.ts"],
 			"@tempus/api/shared/feature-pdfgenerator": ["libs/api/shared/feature-pdfgenerator/src/index.ts"],
 			"@tempus/api/shared/feature-seed": ["libs/api/shared/feature-seed/src/index.ts"],
+			"@tempus/app-config": ["libs/app-config/index.ts"],
 			"@tempus/client/onboarding-client/business-owner/data-access": [
 				"libs/client/onboarding-client/business-owner/data-access/src/index.ts"
 			],
@@ -35,6 +36,9 @@
 			],
 			"@tempus/client/onboarding-client/shared/data-access": [
 				"libs/client/onboarding-client/shared/data-access/src/index.ts"
+			],
+			"@tempus/onboarding-client/shared/feature-edit-view-form": [
+				"libs/client/onboarding-client/shared/features/feature-edit-view-form/src/index.ts"
 			],
 			"@tempus/client/onboarding-client/shared/guards": ["libs/client/onboarding-client/shared/guards/src/index.ts"],
 			"@tempus/client/onboarding-client/shared/ui-components/input/resource-information": [
@@ -67,6 +71,9 @@
 			"@tempus/onboarding-client/resource/feature-profile": [
 				"libs/client/onboarding-client/resource/features/feature-profile/src/index.ts"
 			],
+			"@tempus/onboarding-client/resource/feature-views": [
+				"libs/client/onboarding-client/resource/features/feature-views/src/index.ts"
+			],
 			"@tempus/onboarding-client/resource/shell": ["libs/client/onboarding-client/resource/shell/src/index.ts"],
 			"@tempus/onboarding-client/shared/feature-sign-in": [
 				"libs/client/onboarding-client/shared/features/feature-sign-in/src/index.ts"
@@ -90,8 +97,7 @@
 				"libs/client/onboarding-client/signup/features/feature-upload-resume/src/index.ts"
 			],
 			"@tempus/onboarding-client/signup/shell": ["libs/client/onboarding-client/signup/shell/src/index.ts"],
-			"@tempus/shared-domain": ["libs/shared/domain/src/index.ts"],
-			"@tempus/app-config": ["libs/app-config/index.ts"]
+			"@tempus/shared-domain": ["libs/shared/domain/src/index.ts"]
 		}
 	},
 	"exclude": ["node_modules", "tmp"]

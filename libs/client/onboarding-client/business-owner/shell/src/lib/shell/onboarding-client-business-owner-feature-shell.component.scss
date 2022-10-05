@@ -1,0 +1,5 @@
+@use 'components/helper' as cmp;
+
+.resource-shell {
+	@include cmp.footer();
+}

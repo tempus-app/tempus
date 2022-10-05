@@ -1,8 +1,7 @@
 /* eslint-disable @typescript-eslint/dot-notation */
 /* eslint-disable class-methods-use-this */
 import { Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { AbstractFormGroupDirective, FormBuilder, FormControl, Validators } from '@angular/forms';
-import { UserType } from '@tempus/client/shared/ui-components/persistent';
+import { FormBuilder, Validators, FormControl } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { TranslateService } from '@ngx-translate/core';
 import {
@@ -36,10 +35,6 @@ import { Router } from '@angular/router';
 	styleUrls: ['./manage-resources.component.scss'],
 })
 export class ManageResourcesComponent implements OnInit, OnDestroy {
-	userType = UserType;
-
-	roleType = RoleType;
-
 	constructor(
 		private modalService: ModalService,
 		private businessOwnerStore: Store<BusinessOwnerState>,
@@ -91,6 +86,8 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 	}
 
 	prefix = 'onboardingOwnerManageResources.';
+
+  roleType = RoleType;
 
 	$destroyed = new Subject<void>();
 

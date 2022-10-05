@@ -1,0 +1,26 @@
+{
+	"projectType": "library",
+	"root": "libs/client/onboarding-client/resource/features/feature-views",
+	"sourceRoot": "libs/client/onboarding-client/resource/features/feature-views/src",
+	"prefix": "tempus",
+	"targets": {
+		"test": {
+			"executor": "@nrwl/jest:jest",
+			"outputs": ["coverage/libs/client/onboarding-client/resource/features/feature-views"],
+			"options": {
+				"jestConfig": "libs/client/onboarding-client/resource/features/feature-views/jest.config.js",
+				"passWithNoTests": true
+			}
+		},
+		"lint": {
+			"executor": "@nrwl/linter:eslint",
+			"options": {
+				"lintFilePatterns": [
+					"libs/client/onboarding-client/resource/features/feature-views/src/**/*.ts",
+					"libs/client/onboarding-client/resource/features/feature-views/src/**/*.html"
+				]
+			}
+		}
+	},
+	"tags": []
+}

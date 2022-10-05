@@ -15,6 +15,7 @@ import { ClientSharedPresentationalResourceDisplayModule } from '@tempus/client/
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { HttpClient } from '@angular/common/http';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { OnboardingClientSharedFeatureEditViewFormModule } from '@tempus/onboarding-client/shared/feature-edit-view-form';
 import { EditProfileComponent } from './edit-profile/edit-profile.component';
 import { ProfileComponent } from './profile/profile.component';
 
@@ -36,6 +37,7 @@ function createTranslateLoader(http: HttpClient) {
 		ClientSharedUiComponentsPresentationalModule,
 		ClientSharedInputResourceInformationModule,
 		ClientSharedPresentationalResourceDisplayModule,
+		OnboardingClientSharedFeatureEditViewFormModule,
 		RouterModule.forChild([
 			{
 				path: '',

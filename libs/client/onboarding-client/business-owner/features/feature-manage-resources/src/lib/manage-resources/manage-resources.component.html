@@ -1,116 +1,114 @@
 <div fxLayout="column" fxLayoutAlign="space-around center">
-	<tempus-sidebar [name]="name" [email]="email" [userType]="userType.OWNER">
-		<div id="container" fxLayout="column">
-			<div fxLayout="row" fxLayoutGap.lt-md="15px" fxLayout.lt-md="column" id="headerRow">
-				<div fxFlex="min(40%, 20rem)" fxFlex.lt-md="100%" fxLayoutGap="10px" fxLayoutAlign="flex-start center">
-					<tempus-button
-						id="invite-button"
-						fxFlex="50%"
-						(buttonClick)="invite()"
-						[buttonType]="ButtonType.INVITE"
-						[color]="'accent'"
-					></tempus-button>
-					<tempus-button fxFlex="50%" (buttonClick)="assign()" [label]="'Assign'" [color]="'accent'"></tempus-button>
-				</div>
-				<div
-					fxFlex="min(60%, 40rem)"
-					fxLayoutGap="10px"
-					fxLayoutAlign="center center"
-					fxFlex.lt-md="100%"
-					fxLayoutAlign.lt-md="flex-start center"
-				>
-					<tempus-search-box
-						fxFlex="50%"
-						placeholder="{{ prefix + 'main.searchBox' | translate }}"
-						[options]="allSearchTerms"
-						cssClass="secondary"
-						(optionSelect)="search($event)"
-						[control]="$any(manageResourcesForm).get('search')"
-					>
-					</tempus-search-box>
-					<tempus-button
-						fxFlex="min(50%, 10rem)"
-						fxFlex.lt-md="50%"
-						(buttonClick)="filter()"
-						[buttonType]="ButtonType.FILTER"
-						[color]="'accent'"
-					></tempus-button>
-				</div>
-			</div>
-			<div id="tableContainer">
-				<tempus-table [tableColumns]="tableColumns" [tableData]="resProjClientTableDataFiltered"></tempus-table>
-				<h2
-					style="text-align: center; margin-top: 2rem"
-					class="mat-h3"
-					*ngIf="resProjClientTableDataFiltered.length === 0"
-				>
-					{{ prefix + 'main.noResourcesToShow' | translate }}
-				</h2>
-			</div>
-		</div>
-	</tempus-sidebar>
-	<ng-template #assignTemplate>
-		<div fxLayout="column">
-			<tempus-card style="margin-top: 1rem">
-				<tempus-dropdown
-					[label]="prefix + 'modal.inviteModal.resourceLabel' | translate"
-					(optionSelect)="updateProjects()"
-					[optionsWithId]="resourceOptions"
-					[control]="$any(manageResourcesForm).get('assign').get('resource')"
-				></tempus-dropdown>
-				<mat-error
-					class="mat-body-2"
-					*ngIf="
-						$any(manageResourcesForm).get('assign').get('resource').invalid &&
-						($any(manageResourcesForm).get('assign').get('resource').touched ||
-							$any(manageResourcesForm).get('assign').get('resource').dirty)
-					"
-				>
-					{{ prefix + 'modal.inviteModal.resourceErr' | translate }}
-				</mat-error>
-			</tempus-card>
-			<tempus-card style="margin-top: 1rem">
-				<div fxLayout="row" fxLayoutGap="10px">
-					<div fxFlex="50%">
-						<tempus-dropdown
-							[label]="prefix + 'modal.clientLabel' | translate"
-							[optionsWithId]="clientOptions"
-							(optionSelect)="updateProjects($event)"
-							[control]="$any(manageResourcesForm).get('assign').get('client')"
-						></tempus-dropdown>
-						<mat-error
-							class="mat-body-2"
-							*ngIf="
-								$any(manageResourcesForm).get('assign').get('client').invalid &&
-								($any(manageResourcesForm).get('assign').get('client').touched ||
-									$any(manageResourcesForm).get('assign').get('client').dirty)
-							"
-						>
-							{{ prefix + 'modal.clientErr' | translate }}
-						</mat-error>
-					</div>
-					<div fxFlex="50%">
-						<tempus-dropdown
-							[label]="prefix + 'modal.projectLabel' | translate"
-							[optionsWithId]="currentProjects"
-							[control]="$any(manageResourcesForm).get('assign').get('project')"
-						></tempus-dropdown>
-						<mat-error
-							class="mat-body-2"
-							*ngIf="
-								$any(manageResourcesForm).get('assign').get('project').invalid &&
-								($any(manageResourcesForm).get('assign').get('project').touched ||
-									$any(manageResourcesForm).get('assign').get('project').dirty)
-							"
-						>
-							{{ prefix + 'modal.projectErr' | translate }}
-						</mat-error>
-					</div>
-				</div>
-			</tempus-card>
-		</div>
-	</ng-template>
-	<ng-template #inviteTemplate>
+  <div id="container" fxLayout="column">
+    <div fxLayout="row" fxLayoutGap.lt-md="15px" fxLayout.lt-md="column" id="headerRow">
+      <div fxFlex="min(40%, 20rem)" fxFlex.lt-md="100%" fxLayoutGap="10px" fxLayoutAlign="flex-start center">
+        <tempus-button
+          id="invite-button"
+          fxFlex="50%"
+          (buttonClick)="invite()"
+          [buttonType]="ButtonType.INVITE"
+          [color]="'accent'"
+        ></tempus-button>
+        <tempus-button fxFlex="50%" (buttonClick)="assign()" [label]="'Assign'" [color]="'accent'"></tempus-button>
+      </div>
+      <div
+        fxFlex="min(60%, 40rem)"
+        fxLayoutGap="10px"
+        fxLayoutAlign="center center"
+        fxFlex.lt-md="100%"
+        fxLayoutAlign.lt-md="flex-start center"
+      >
+        <tempus-search-box
+          fxFlex="50%"
+          placeholder="{{ prefix + 'main.searchBox' | translate }}"
+          [options]="allSearchTerms"
+          cssClass="secondary"
+          (optionSelect)="search($event)"
+          [control]="$any(manageResourcesForm).get('search')"
+        >
+        </tempus-search-box>
+        <tempus-button
+          fxFlex="min(50%, 10rem)"
+          fxFlex.lt-md="50%"
+          (buttonClick)="filter()"
+          [buttonType]="ButtonType.FILTER"
+          [color]="'accent'"
+        ></tempus-button>
+      </div>
+    </div>
+    <div id="tableContainer">
+      <tempus-table [tableColumns]="tableColumns" [tableData]="resProjClientTableDataFiltered"></tempus-table>
+      <h2
+        style="text-align: center; margin-top: 2rem"
+        class="mat-h3"
+        *ngIf="resProjClientTableDataFiltered.length === 0"
+      >
+        {{ prefix + 'main.noResourcesToShow' | translate }}
+      </h2>
+    </div>
+  </div>
+  <ng-template #assignTemplate>
+    <div fxLayout="column">
+      <tempus-card style="margin-top: 1rem">
+        <tempus-dropdown
+          [label]="prefix + 'modal.inviteModal.resourceLabel' | translate"
+          (optionSelect)="updateProjects()"
+          [optionsWithId]="resourceOptions"
+          [control]="$any(manageResourcesForm).get('assign').get('resource')"
+        ></tempus-dropdown>
+        <mat-error
+          class="mat-body-2"
+          *ngIf="
+            $any(manageResourcesForm).get('assign').get('resource').invalid &&
+            ($any(manageResourcesForm).get('assign').get('resource').touched ||
+              $any(manageResourcesForm).get('assign').get('resource').dirty)
+          "
+        >
+          {{ prefix + 'modal.inviteModal.resourceErr' | translate }}
+        </mat-error>
+      </tempus-card>
+      <tempus-card style="margin-top: 1rem">
+        <div fxLayout="row" fxLayoutGap="10px">
+          <div fxFlex="50%">
+            <tempus-dropdown
+              [label]="prefix + 'modal.clientLabel' | translate"
+              [optionsWithId]="clientOptions"
+              (optionSelect)="updateProjects($event)"
+              [control]="$any(manageResourcesForm).get('assign').get('client')"
+            ></tempus-dropdown>
+            <mat-error
+              class="mat-body-2"
+              *ngIf="
+                $any(manageResourcesForm).get('assign').get('client').invalid &&
+                ($any(manageResourcesForm).get('assign').get('client').touched ||
+                  $any(manageResourcesForm).get('assign').get('client').dirty)
+              "
+            >
+              {{ prefix + 'modal.clientErr' | translate }}
+            </mat-error>
+          </div>
+          <div fxFlex="50%">
+            <tempus-dropdown
+              [label]="prefix + 'modal.projectLabel' | translate"
+              [optionsWithId]="currentProjects"
+              [control]="$any(manageResourcesForm).get('assign').get('project')"
+            ></tempus-dropdown>
+            <mat-error
+              class="mat-body-2"
+              *ngIf="
+                $any(manageResourcesForm).get('assign').get('project').invalid &&
+                ($any(manageResourcesForm).get('assign').get('project').touched ||
+                  $any(manageResourcesForm).get('assign').get('project').dirty)
+              "
+            >
+              {{ prefix + 'modal.projectErr' | translate }}
+            </mat-error>
+          </div>
+        </div>
+      </tempus-card>
+    </div>
+  </ng-template>
+  <ng-template #inviteTemplate>
 		<tempus-card style="margin-top: 1rem">
 			<div fxLayout="column">
         <div fxLayout="column" fxFlex="100%">
@@ -251,5 +249,5 @@
 			</div>
 		</tempus-card>
 	</ng-template>
-	<tempus-spinner [showSpinner]="loading"></tempus-spinner>
+  <tempus-spinner [showSpinner]="loading"></tempus-spinner>
 </div>
