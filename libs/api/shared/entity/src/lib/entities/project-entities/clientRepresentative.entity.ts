@@ -30,7 +30,7 @@ export class ClientRepresentativeEntity implements ClientRepresentative {
 	@Column()
 	lastName: string;
 
-	@Column()
+	@Column({ unique: true })
 	email: string;
 
 	@ManyToOne(() => ClientEntity, clients => clients, { onDelete: 'CASCADE' })
