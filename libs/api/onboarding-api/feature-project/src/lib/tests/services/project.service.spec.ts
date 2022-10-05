@@ -162,14 +162,19 @@ describe('ProjectService', () => {
 			expect(mockResourceService.getResourceInfo).toBeCalledWith(6);
 			expect(mockResourceService.updateRoleType).toBeCalledWith(6, RoleType.ASSIGNED_RESOURCE);
 			expect(mockProjectRepository.findOne).toBeCalledWith(3, {
-				relations: ['client', 'clientRepresentative', 'projectResources', 'projectResources.resource'],
+				relations: [
+					'client',
+					'clientRepresentative',
+					'projectResources',
+					'projectResources.resource',
+					'projectResources.project',
+				],
 			});
 			expect(mockProjectResourceRepository.save).toBeCalledWith({ ...projectResourceEntityMock, id: null });
 		});
 
 		it('should set date to today if it is not provided', async () => {
 			mockProjectRepository.findOne.mockResolvedValue(projectEntityMock);
-			console.log(projectEntityMock);
 			mockResourceService.getResourceInfo.mockResolvedValue(resourceEntityMock);
 			const assignProjectDetailsMockWithoutDate = { ...assignProjectDetailsMock, startDate: null };
 
@@ -178,7 +183,13 @@ describe('ProjectService', () => {
 			expect(mockResourceService.getResourceInfo).toBeCalledWith(6);
 			expect(mockResourceService.updateRoleType).toBeCalledWith(6, RoleType.ASSIGNED_RESOURCE);
 			expect(mockProjectRepository.findOne).toBeCalledWith(3, {
-				relations: ['client', 'clientRepresentative', 'projectResources', 'projectResources.resource'],
+				relations: [
+					'client',
+					'clientRepresentative',
+					'projectResources',
+					'projectResources.resource',
+					'projectResources.project',
+				],
 			});
 
 			expect(mockProjectResourceRepository.save).toBeCalledWith({
@@ -188,7 +199,7 @@ describe('ProjectService', () => {
 			});
 		});
 
-		it('should not assign resource if they are assigned', async () => {
+		it('should not assign resource if they are currently assigned and in progress', async () => {
 			const projectEntityMockWithResources = { ...projectEntityMock };
 
 			mockProjectRepository.findOne.mockResolvedValue(projectEntityMockWithResources);
@@ -211,6 +222,41 @@ describe('ProjectService', () => {
 			expect(mockProjectResourceRepository.save).not.toBeCalled();
 		});
 
+		it('should stil assign if they worked on the project in the past', async () => {
+			const projectEntityMockWithResources = { ...projectEntityMock };
+
+			mockProjectRepository.findOne.mockResolvedValue(projectEntityMockWithResources);
+			mockResourceService.getResourceInfo.mockResolvedValue(resourceEntityMock);
+
+			projectEntityMockWithResources.projectResources = [];
+
+			// resource worked and completed the project in the past (and now returning)
+			projectEntityMockWithResources.projectResources.push({
+				...projectResourceEntityMock,
+				endDate: new Date('2020-02-4'),
+			});
+
+			await projectService.assignResourceToProject(3, 6, assignProjectDetailsMock);
+
+			expect(mockResourceService.getResourceInfo).toBeCalledWith(6);
+			expect(mockResourceService.updateRoleType).toBeCalledWith(6, RoleType.ASSIGNED_RESOURCE);
+			expect(mockProjectRepository.findOne).toBeCalledWith(3, {
+				relations: [
+					'client',
+					'clientRepresentative',
+					'projectResources',
+					'projectResources.resource',
+					'projectResources.project',
+				],
+			});
+
+			expect(mockProjectResourceRepository.save).toBeCalledWith({
+				...projectResourceEntityMock,
+				id: null,
+				project: projectEntityMockWithResources,
+			});
+		});
+
 		it('should throw error if project does not exist', async () => {
 			mockProjectRepository.findOne.mockRejectedValue(new NotFoundException('foo'));
 
@@ -221,7 +267,13 @@ describe('ProjectService', () => {
 				error = e;
 			}
 			expect(mockProjectRepository.findOne).toBeCalledWith(3, {
-				relations: ['client', 'clientRepresentative', 'projectResources', 'projectResources.resource'],
+				relations: [
+					'client',
+					'clientRepresentative',
+					'projectResources',
+					'projectResources.resource',
+					'projectResources.project',
+				],
 			});
 			expect(error).toBeInstanceOf(NotFoundException);
 			expect(error.message).toEqual('foo');
@@ -253,7 +305,7 @@ describe('ProjectService', () => {
 			await projectService.unassignResourceFromProject(3, 6);
 
 			expect(mockProjectResourceRepository.find).toBeCalledWith({
-				where: { project: projectEntityMock, resource: resourceEntityMock },
+				where: { project: projectEntityMock, resource: resourceEntityMock, endDate: null },
 				relations: ['project', 'resource'],
 			});
 			expect(mockResourceService.updateRoleType).toBeCalledWith(6, RoleType.AVAILABLE_RESOURCE);
@@ -269,16 +321,16 @@ describe('ProjectService', () => {
 			await projectService.unassignResourceFromProject(3, 6);
 
 			expect(mockProjectResourceRepository.find).toBeCalledWith({
-				where: { project: projectEntityMock, resource: resourceEntityMock },
+				where: { project: projectEntityMock, resource: resourceEntityMock, endDate: null },
 				relations: ['project', 'resource'],
 			});
 			expect(mockResourceService.updateRoleType).not.toBeCalled();
 			expect(mockProjectResourceRepository.save).toBeCalledWith({ ...projectResourceEntityMock, endDate: dateToday });
 		});
 
-		it('should throw an error if the assignment does not exist', async () => {
+		it('should throw an error if the assignment does not exist or already unassigned', async () => {
 			mockResourceService.getResourceInfo.mockResolvedValue(resourceEntityMock);
-			mockProjectResourceRepository.find.mockResolvedValue([]);
+			mockProjectResourceRepository.find.mockResolvedValue([]); // only return active assignments
 			mockProjectRepository.findOne.mockResolvedValue(projectEntityMock);
 
 			let error;
@@ -288,30 +340,12 @@ describe('ProjectService', () => {
 				error = e;
 			}
 			expect(mockProjectResourceRepository.find).toBeCalledWith({
-				where: { project: projectEntityMock, resource: resourceEntityMock },
+				where: { project: projectEntityMock, resource: resourceEntityMock, endDate: null },
 				relations: ['project', 'resource'],
 			});
 			expect(error).toBeInstanceOf(NotFoundException);
 			expect(error.message).toEqual(
-				`Could not find project with id ${projectEntityMock.id} assigned to resource with id ${resourceEntityMock.id}`,
-			);
-
-			expect(mockProjectResourceRepository.save).not.toBeCalled();
-		});
-
-		it('should throw an error if resource was already unassigned', async () => {
-			mockResourceService.getResourceInfo.mockResolvedValue(resourceEntityMock);
-			mockProjectResourceRepository.find.mockResolvedValue([{ ...projectResourceEntityMock, endDate: new Date() }]);
-
-			let error;
-			try {
-				await projectService.unassignResourceFromProject(3, 6);
-			} catch (e) {
-				error = e;
-			}
-			expect(error).toBeInstanceOf(BadRequestException);
-			expect(error.message).toEqual(
-				`Resource with id ${resourceEntityMock.id} was already unassigned from project with id ${projectEntityMock.id}`,
+				`Could not find project with id ${projectEntityMock.id} assignment with resource with id ${resourceEntityMock.id}, or they were already unassigned`,
 			);
 
 			expect(mockProjectResourceRepository.save).not.toBeCalled();
@@ -383,7 +417,13 @@ describe('ProjectService', () => {
 			await projectService.completeProject(projectEntityMock.id);
 
 			expect(mockProjectRepository.findOne).toBeCalledWith(projectEntityMock.id, {
-				relations: ['client', 'clientRepresentative', 'projectResources', 'projectResources.resource'],
+				relations: [
+					'client',
+					'clientRepresentative',
+					'projectResources',
+					'projectResources.resource',
+					'projectResources.project',
+				],
 			});
 
 			expect(mockProjectRepository.save).toBeCalledWith({
@@ -422,7 +462,13 @@ describe('ProjectService', () => {
 			await projectService.completeProject(projectEntityMock.id);
 
 			expect(mockProjectRepository.findOne).toBeCalledWith(projectEntityMock.id, {
-				relations: ['client', 'clientRepresentative', 'projectResources', 'projectResources.resource'],
+				relations: [
+					'client',
+					'clientRepresentative',
+					'projectResources',
+					'projectResources.resource',
+					'projectResources.project',
+				],
 			});
 
 			expect(mockProjectRepository.save).toBeCalledWith({
@@ -444,11 +490,5 @@ describe('ProjectService', () => {
 				endDate: dateToday,
 			});
 		});
-	});
-
-	describe('Delete Project', () => {
-		it('delete project fromr repository', () => {});
-
-		it('should throw error if project does not exist', () => {});
 	});
 });

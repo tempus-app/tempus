@@ -102,8 +102,16 @@ export class ProjectService {
 			assignDetails.title,
 		);
 
-		if (projectEntity.projectResources?.some(projectResource => projectResource.resource.id === resourceId)) {
-			throw new BadRequestException(`Project with id ${projectId} already assigned to resource with id ${resourceId}`);
+		// existing project
+		if (projectEntity.projectResources) {
+			for (const relation of projectEntity.projectResources) {
+				// if there is an active assignment in the project throw an error but not if they are rejoining a project the left
+				if (relation.resource.id === resourceId && !relation.endDate) {
+					throw new BadRequestException(
+						`Project with id ${projectId} already assigned to resource with id ${resourceId}`,
+					);
+				}
+			}
 		}
 
 		await this.resourceService.updateRoleType(resourceEntity.id, RoleType.ASSIGNED_RESOURCE);
@@ -116,22 +124,19 @@ export class ProjectService {
 
 		const resourceEntity = await this.resourceService.getResourceInfo(resourceId);
 
+		// only get active assignments
 		const projectResources = await this.projectResourceRepository.find({
-			where: { project: projectEntity, resource: resourceEntity },
+			where: { project: projectEntity, resource: resourceEntity, endDate: null },
 			relations: ['project', 'resource'],
 		});
 
-		const projectResourceEntity = projectResources[0];
-		if (!projectResourceEntity) {
+		if (projectResources.length === 0) {
 			throw new NotFoundException(
-				`Could not find project with id ${projectId} assigned to resource with id ${resourceId}`,
+				`Could not find project with id ${projectId} assignment with resource with id ${resourceId}, or they were already unassigned`,
 			);
 		}
-		if (projectResourceEntity.endDate) {
-			throw new BadRequestException(
-				`Resource with id ${resourceId} was already unassigned from project with id ${projectId}`,
-			);
-		}
+		const projectResourceEntity = projectResources[0];
+
 		const dateToday = new Date();
 		dateToday.setHours(0, 0, 0, 0); // we don't care about time
 		projectResourceEntity.endDate = dateToday;
@@ -152,7 +157,6 @@ export class ProjectService {
 
 		const { projectResources } = projectEntity;
 		await this.projectRepository.save(projectEntity);
-		console.log('hi');
 
 		// end the project for all resources
 		for (const relation of projectResources) {
