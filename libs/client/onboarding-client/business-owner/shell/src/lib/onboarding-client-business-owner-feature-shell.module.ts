@@ -4,6 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from '@tempus/client/onboarding-client/shared/guards';
 import { OnboardingClientBusinessOwnerDataAccessModule } from '@tempus/client/onboarding-client/business-owner/data-access';
 import { TranslateModule } from '@ngx-translate/core';
+import { ClientSharedUiComponentsPersistentModule } from '@tempus/client/shared/ui-components/persistent';
 import { BusinessOnwerShellComponent } from './shell/onboarding-client-business-owner-feature-shellcomponent';
 
 const routes: Routes = [
@@ -37,6 +38,7 @@ const routes: Routes = [
 @NgModule({
 	declarations: [BusinessOnwerShellComponent],
 	imports: [
+		ClientSharedUiComponentsPersistentModule,
 		OnboardingClientBusinessOwnerDataAccessModule,
 		CommonModule,
 		RouterModule.forChild(routes),

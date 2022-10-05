@@ -1,13 +1,13 @@
 @use 'abstracts/helper' as abs;
 
 .footer {
-	position: fixed;
-	left: 0;
-	padding: 10px 0px 0px 0px;
-	bottom: 0;
-	width: 100%;
+	height: fit-content;
 	background-color: abs.$accent-300;
-	color: white;
-	text-align: center;
-	font-size: 18px;
+	&__content {
+		@include abs.body-2();
+		color: white;
+		text-align: center;
+		align-content: center;
+		padding: 0.5em;
+	}
 }

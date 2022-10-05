@@ -41,6 +41,30 @@ export class ViewsService {
 		return newView;
 	}
 
+	async createSecondaryView(userId: number, user: User, createViewDto: CreateViewDto): Promise<View> {
+		const resourceEntity = await this.resourceService.getResourceInfo(userId);
+
+		const viewEntity = ViewEntity.fromDto(createViewDto);
+		viewEntity.resource = resourceEntity;
+		viewEntity.createdAt = new Date(Date.now());
+		viewEntity.lastUpdateDate = new Date(Date.now());
+
+		if (user.roles.includes(RoleType.BUSINESS_OWNER)) {
+			viewEntity.revisionType = RevisionType.APPROVED;
+			viewEntity.locked = false;
+			viewEntity.createdBy = RoleType.BUSINESS_OWNER;
+			viewEntity.updatedBy = RoleType.BUSINESS_OWNER;
+		} else {
+			viewEntity.revisionType = RevisionType.PENDING;
+			viewEntity.locked = true;
+			viewEntity.createdBy = RoleType.USER;
+			viewEntity.updatedBy = RoleType.USER;
+		}
+		const newView = await this.viewsRepository.save(viewEntity);
+
+		return newView;
+	}
+
 	async reviseView(viewId: number, user: User, newView: CreateViewDto): Promise<Revision> {
 		const view = await this.getView(viewId);
 		if (view.locked) throw new UnauthorizedException(`Cannot edit locked view`);

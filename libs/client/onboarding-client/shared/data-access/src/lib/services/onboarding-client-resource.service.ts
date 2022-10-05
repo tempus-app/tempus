@@ -58,6 +58,12 @@ export class OnboardingClientResourceService {
 		return this.http.get<Array<View>>(`${this.url}/profile-view/${resourceId}`).pipe(catchError(handleError));
 	}
 
+	public createSecondaryView(resourceId: number, newView: ICreateViewDto): Observable<View> {
+		return this.http
+			.post<View>(`${this.url}/profile-view/${resourceId}/new-view`, newView)
+			.pipe(catchError(handleError));
+	}
+
 	public editResourceView(viewId: number, newView: ICreateViewDto): Observable<Revision> {
 		return this.http.patch<Revision>(`${this.url}/profile-view/${viewId}`, newView).pipe(catchError(handleError));
 	}
