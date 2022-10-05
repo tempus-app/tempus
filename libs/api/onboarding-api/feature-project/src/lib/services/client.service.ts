@@ -19,7 +19,7 @@ export class ClientService {
 			relations: ['projects'],
 		});
 		if (!clientEntity) {
-			throw new NotFoundException(`Could not find client with id ${clientEntity.id}`);
+			throw new NotFoundException(`Could not find client with id ${clientId}`);
 		}
 		return clientEntity;
 	}
@@ -32,10 +32,6 @@ export class ClientService {
 		const clientEntity = await this.clientRepository.findOne(clientId);
 		if (!clientEntity) throw new NotFoundException(`Could not find client with id ${clientId}`);
 		return clientEntity;
-	}
-
-	async getAllClientInfo(): Promise<Client[]> {
-		return this.clientRepository.find();
 	}
 
 	async createClient(createClientDto: CreateClientDto): Promise<Client> {
