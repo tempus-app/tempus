@@ -1,5 +1,5 @@
 import { CreateLinkDto } from '@tempus/api/shared/dto';
-import { Link, StatusType } from '@tempus/shared-domain';
+import { Link, RoleType, StatusType } from '@tempus/shared-domain';
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { ProjectEntity } from '../project-entities';
 import { UserEntity } from './user.entity';
@@ -15,6 +15,7 @@ export class LinkEntity implements Link {
 		token?: string,
 		status?: StatusType,
 		user?: UserEntity,
+		userType?: RoleType,
 	) {
 		this.id = id;
 		this.firstName = firstName;
@@ -24,6 +25,7 @@ export class LinkEntity implements Link {
 		this.token = token;
 		this.status = status;
 		this.user = user;
+		this.userType = userType;
 	}
 
 	@PrimaryGeneratedColumn()
@@ -54,6 +56,13 @@ export class LinkEntity implements Link {
 	})
 	status: StatusType;
 
+	@Column({
+		type: 'enum',
+		enum: RoleType,
+		default: [RoleType.AVAILABLE_RESOURCE],
+	})
+	userType: RoleType;
+
 	@OneToOne(() => UserEntity)
 	@JoinColumn()
 	user?: UserEntity;
@@ -64,6 +73,16 @@ export class LinkEntity implements Link {
 
 	public static fromDto(dto: CreateLinkDto): LinkEntity {
 		if (dto == null) return new LinkEntity();
-		return new LinkEntity(undefined, dto.firstName, dto.lastName, dto.email, dto.expiry, undefined, undefined);
+		return new LinkEntity(
+			undefined,
+			dto.firstName,
+			dto.lastName,
+			dto.email,
+			dto.expiry,
+			undefined,
+			undefined,
+			undefined,
+			dto.userType,
+		);
 	}
 }

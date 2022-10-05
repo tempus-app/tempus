@@ -9,7 +9,7 @@ import {
 import { ICreateUserDto } from './IcreateUser.dto';
 
 export interface ICreateResourceDto extends ICreateUserDto {
-	tokenId?: number;
+	linkId: number;
 
 	roles: RoleType[];
 

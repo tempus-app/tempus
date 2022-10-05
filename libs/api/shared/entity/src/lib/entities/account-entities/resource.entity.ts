@@ -63,7 +63,7 @@ export class ResourceEntity extends UserEntity implements Resource {
 	@Column({ nullable: true })
 	title: string;
 
-	@OneToOne(() => LocationEntity, loc => loc.resource, { cascade: ['insert', 'update'] })
+	@OneToOne(() => LocationEntity, loc => loc.resource, { cascade: ['insert', 'update'], nullable: true })
 	location: LocationEntity;
 
 	@ManyToMany(() => ProjectEntity, projects => projects.resources, { cascade: ['insert', 'update'] })
@@ -94,13 +94,13 @@ export class ResourceEntity extends UserEntity implements Resource {
 			dto.linkedInLink,
 			dto.githubLink,
 			dto.otherLink,
-			LocationEntity.fromDto(dto.location),
+			dto.location ? LocationEntity.fromDto(dto.location) : null,
 			undefined,
 			undefined,
-			dto.experiences.map(experience => ExperienceEntity.fromDto(experience)),
-			dto.educations.map(education => EducationEntity.fromDto(education)),
-			dto.skills.map(skill => SkillEntity.fromDto(skill)),
-			dto.certifications.map(certification => CertificationEntity.fromDto(certification)),
+			dto.experiences?.map(experience => ExperienceEntity.fromDto(experience)),
+			dto.educations?.map(education => EducationEntity.fromDto(education)),
+			dto.skills?.map(skill => SkillEntity.fromDto(skill)),
+			dto.certifications?.map(certification => CertificationEntity.fromDto(certification)),
 			dto.firstName,
 			dto.lastName,
 			dto.email,

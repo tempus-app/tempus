@@ -23,21 +23,21 @@ export class ClientController {
 	}
 
 	@UseGuards(JwtAuthGuard, RolesGuard)
-	@Roles(RoleType.BUSINESS_OWNER)
+	@Roles(RoleType.BUSINESS_OWNER, RoleType.SUPERVISOR)
 	@Post('/')
 	async createClient(@Body() createClientDto: CreateClientDto): Promise<Client> {
 		return this.clientService.createClient(createClientDto);
 	}
 
 	@UseGuards(JwtAuthGuard, RolesGuard)
-	@Roles(RoleType.BUSINESS_OWNER)
+	@Roles(RoleType.BUSINESS_OWNER, RoleType.SUPERVISOR)
 	@Patch('/:clientId')
 	async editClient(@Body() updateClientDto: UpdateClientDto): Promise<Client> {
 		return this.clientService.updateClient(updateClientDto);
 	}
 
 	@UseGuards(JwtAuthGuard, RolesGuard)
-	@Roles(RoleType.BUSINESS_OWNER)
+	@Roles(RoleType.BUSINESS_OWNER, RoleType.SUPERVISOR)
 	@Delete('/:clientId')
 	async deleteClient(@Param('clientId') clientId: number) {
 		return this.clientService.deleteClient(clientId);

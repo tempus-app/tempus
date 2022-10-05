@@ -21,10 +21,11 @@
 			"inviteModal": {
 				"resourceLabel": "Resource",
 				"resourceErr": "Please select a resource",
-				"title": "Invite a resource to Tempus",
+				"title": "Invite a user to Tempus",
 				"subtitle": "A unique invitation link will be sent by email.",
 				"closeText": "Cancel",
-				"confirmText": "Invite"
+				"confirmText": "Invite",
+        "typeOfUser": "Please select the type of user to invite"
 			},
 			"assignModal": {
 				"firstNameLabel": "First name*",

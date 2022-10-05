@@ -4,6 +4,7 @@ import {
 	ICreateEducationDto,
 	ICreateExperienceDto,
 	ICreateLocationDto,
+	ICreateResourceDto,
 	ICreateSkillDto,
 } from '@tempus/shared-domain';
 
@@ -49,7 +50,12 @@ export const setResourceLinkId = createAction(
 	}>(),
 );
 
-export const createResource = createAction('[Signup Review Page] Create Resource');
+export const createResource = createAction(
+	'[Signup Review Page] Create Resource',
+	props<{
+		createResourceDto?: ICreateResourceDto;
+	}>(),
+);
 export const saveResume = createAction(
 	'[Signup Review Page] Save Resume',
 	props<{

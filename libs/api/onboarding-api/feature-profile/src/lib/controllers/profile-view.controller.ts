@@ -43,7 +43,7 @@ export class ProfileViewController {
 	}
 
 	@UseGuards(JwtAuthGuard, RolesGuard)
-	@Roles(RoleType.BUSINESS_OWNER)
+	@Roles(RoleType.BUSINESS_OWNER, RoleType.SUPERVISOR)
 	@Post('/approve/:viewId')
 	async approveView(@Param('viewId') viewId: number, @Body() approveViewDto: ApproveViewDto): Promise<Revision | View> {
 		const approvalResult = await this.viewSerivce.approveOrDenyView(viewId, approveViewDto);

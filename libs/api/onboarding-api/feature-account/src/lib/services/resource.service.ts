@@ -39,24 +39,25 @@ export class ResourceService {
 		// resourceEntity.projects = [link.project];
 		let createdResource = await this.resourceRepository.save(resourceEntity);
 
-		const view = await this.viewsService.createView(createdResource.id, {
-			viewType: ViewType.PRIMARY,
-			type: 'PROFILE',
-			educationsSummary: resource.educationsSummary,
-			educations: createdResource.educations,
-			certifications: createdResource.certifications,
-			experiencesSummary: resource.experiencesSummary,
-			experiences: createdResource.experiences,
-			skillsSummary: resource.skillsSummary,
-			skills: createdResource.skills,
-			profileSummary: resource.profileSummary,
-		});
+		if (createdResource.roles.includes(RoleType.AVAILABLE_RESOURCE)) {
+			const view = await this.viewsService.createView(createdResource.id, {
+				viewType: ViewType.PRIMARY,
+				type: 'PROFILE',
+				educationsSummary: resource.educationsSummary,
+				educations: createdResource.educations,
+				certifications: createdResource.certifications,
+				experiencesSummary: resource.experiencesSummary,
+				experiences: createdResource.experiences,
+				skillsSummary: resource.skillsSummary,
+				skills: createdResource.skills,
+				profileSummary: resource.profileSummary,
+			});
 
-		if (!createdResource.views) createdResource.views = [];
-		createdResource.views.push(view);
-		createdResource = await this.resourceRepository.save(createdResource);
-		createdResource.password = null;
-
+			if (!createdResource.views) createdResource.views = [];
+			createdResource.views.push(view);
+			createdResource = await this.resourceRepository.save(createdResource);
+			createdResource.password = null;
+		}
 		await this.linkService.editLinkStatus(resource.linkId, StatusType.COMPLETED);
 		await this.linkService.assignResourceToLink(resource.linkId, createdResource);
 
