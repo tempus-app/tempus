@@ -4,7 +4,7 @@ export const resourceEntity: ResourceEntity = {
 	phoneNumber: '',
 	location: undefined,
 	title: '',
-	projects: [],
+	projectResources: [],
 	views: [],
 	experiences: [],
 	educations: [],
