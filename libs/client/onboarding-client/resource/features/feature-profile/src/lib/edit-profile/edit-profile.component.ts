@@ -35,7 +35,7 @@ export class EditProfileComponent implements AfterViewInit, OnDestroy {
 		translateService.use(currentLang);
 	}
 
-	personalInfoForm = this.fb.group({});
+	personalInfoForm = this.fb.group({ profileSummary: '' });
 
 	experiencesForm = this.fb.group({});
 
@@ -99,6 +99,12 @@ export class EditProfileComponent implements AfterViewInit, OnDestroy {
 	submitClicked = new EventEmitter();
 
 	editProfilePrefix = 'onboardingResourceEditProfile.';
+
+	ngOnInit(): void {
+		this.personalInfoForm.patchValue({
+			profileSummary: this.profileSummary,
+		});
+	}
 
 	ngOnDestroy(): void {
 		this.destroyed$.next();

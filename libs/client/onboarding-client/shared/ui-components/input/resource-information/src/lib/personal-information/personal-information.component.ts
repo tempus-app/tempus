@@ -79,6 +79,8 @@ export class PersonalInformationComponent implements OnInit, OnChanges {
 
 	@Input() profileSummary = '';
 
+	@Input() showPersonalSummary = true;
+
 	@Output() formGroup = new EventEmitter();
 
 	@Output() formIsValid = new EventEmitter<boolean>();

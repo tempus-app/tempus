@@ -20,6 +20,15 @@ const routes: Routes = [
 						m => m.OnboardingClientResourceFeatureProfileModule,
 					),
 			},
+			{
+				path: 'personal-information',
+				canLoad: [AuthGuard],
+				canActivate: [AuthGuard],
+				loadChildren: () =>
+					import('@tempus/onboarding-client/resource/feature-personal-information').then(
+						m => m.OnboardingClientResourceFeaturePersonalInformationModule,
+					),
+			},
 		],
 	},
 ];

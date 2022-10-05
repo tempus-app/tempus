@@ -55,7 +55,12 @@ export class SidebarComponent implements OnInit, OnChanges {
 			this.tabs = [SidebarTab.MANAGE_RESOURCES, SidebarTab.PENDING_APPROVALS];
 			this.selectedTab = SidebarTab.MANAGE_RESOURCES;
 		} else if (this.userType === UserType.RESOURCE) {
-			this.tabs = [SidebarTab.PRIMARY_VIEW, SidebarTab.MY_VIEWS, SidebarTab.MY_PROJECTS];
+			this.tabs = [
+				SidebarTab.PRIMARY_VIEW,
+				SidebarTab.MY_VIEWS,
+				SidebarTab.MY_PROJECTS,
+				SidebarTab.PERSONAL_INFORMATION,
+			];
 			this.selectedTab = SidebarTab.PRIMARY_VIEW;
 		}
 	}
@@ -81,6 +86,9 @@ export class SidebarComponent implements OnInit, OnChanges {
 				break;
 			case SidebarTab.MANAGE_RESOURCES:
 				this.router.navigateByUrl('/owner/manage-resources');
+				break;
+			case SidebarTab.PERSONAL_INFORMATION:
+				this.router.navigateByUrl('/resource/personal-information');
 				break;
 			default:
 		}

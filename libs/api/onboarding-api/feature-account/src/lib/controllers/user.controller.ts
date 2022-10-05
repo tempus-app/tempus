@@ -119,7 +119,6 @@ export class UserController {
 	}
 
 	// update Resource information
-	@UseGuards(JwtAuthGuard, PermissionGuard)
 	@Patch('resource')
 	async updateResource(@Body() updateResourceData: UpdateResourceDto): Promise<Resource> {
 		return await this.resourceService.editResource(updateResourceData);
