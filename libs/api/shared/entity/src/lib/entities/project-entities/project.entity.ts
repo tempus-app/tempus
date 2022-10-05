@@ -57,6 +57,6 @@ export class ProjectEntity implements Project {
 
 	public static fromDto(dto: CreateProjectDto): ProjectEntity {
 		if (dto == null) return new ProjectEntity();
-		return new ProjectEntity(null, dto.name, dto.startDate, null);
+		return new ProjectEntity(null, dto.name, dto.startDate, null, null, null, dto.status);
 	}
 }

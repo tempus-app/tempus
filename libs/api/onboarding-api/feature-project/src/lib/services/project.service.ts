@@ -7,7 +7,8 @@ import { ClientRepresentativeEntity, ProjectEntity, ProjectResourceEntity } from
 import { ResourceService } from '@tempus/onboarding-api/feature-account';
 import { Project, ProjectStatus, RoleType } from '@tempus/shared-domain';
 import { Repository } from 'typeorm';
-import { ClientRepresentativeService, ClientService } from '.';
+import { ClientService } from './client.service';
+import { ClientRepresentativeService } from './clientRepresentative.service';
 
 @Injectable()
 export class ProjectService {
@@ -23,7 +24,13 @@ export class ProjectService {
 
 	async getProject(projectId: number): Promise<Project> {
 		const projectEntity = await this.projectRepository.findOne(projectId, {
-			relations: ['client', 'clientRepresentative', 'projectResources', 'projectResources.resource'],
+			relations: [
+				'client',
+				'clientRepresentative',
+				'projectResources',
+				'projectResources.resource',
+				'projectResources.project',
+			],
 		});
 		if (!projectEntity) throw new NotFoundException(`Could not find project with id ${projectId}`);
 		return projectEntity;
@@ -82,43 +89,32 @@ export class ProjectService {
 
 	async assignResourceToProject(projectId: number, resourceId: number, assignDetails: AssignProjectDto): Promise<void> {
 		const projectEntity = await this.getProject(projectId);
-		if (!projectEntity) {
-			throw new NotFoundException(`Could not find project with id ${projectId}`);
-		}
 		const resourceEntity = await this.resourceService.getResourceInfo(resourceId);
 
-		if (!resourceEntity) {
-			throw new NotFoundException(`Could not find resource with id ${resourceId}`);
-		}
+		const dateToday = new Date();
+		dateToday.setHours(0, 0, 0, 0); // we don't care about time
 		const projectResourceEntity = new ProjectResourceEntity(
 			null,
-			assignDetails.startDate || new Date(),
+			assignDetails.startDate || dateToday,
 			null,
 			resourceEntity,
 			projectEntity,
 			assignDetails.title,
 		);
 
-		if (!projectEntity.projectResources) projectEntity.projectResources = [projectResourceEntity];
-		else if (projectEntity.projectResources.some(projectResource => projectResource.resource.id === resourceId)) {
+		if (projectEntity.projectResources?.some(projectResource => projectResource.resource.id === resourceId)) {
 			throw new BadRequestException(`Project with id ${projectId} already assigned to resource with id ${resourceId}`);
-		} else {
-			projectEntity.projectResources.push(projectResourceEntity);
 		}
+
 		await this.resourceService.updateRoleType(resourceEntity.id, RoleType.ASSIGNED_RESOURCE);
+
 		await this.projectResourceRepository.save(projectResourceEntity);
 	}
 
 	async unassignResourceFromProject(projectId: number, resourceId: number): Promise<void> {
 		const projectEntity = await this.getProject(projectId);
-		if (!projectEntity) {
-			throw new NotFoundException(`Could not find project with id ${projectId}`);
-		}
-		const resourceEntity = await this.resourceService.getResourceInfo(resourceId);
 
-		if (!resourceEntity) {
-			throw new NotFoundException(`Could not find resource with id ${resourceId}`);
-		}
+		const resourceEntity = await this.resourceService.getResourceInfo(resourceId);
 
 		const projectResources = await this.projectResourceRepository.find({
 			where: { project: projectEntity, resource: resourceEntity },
@@ -131,13 +127,14 @@ export class ProjectService {
 				`Could not find project with id ${projectId} assigned to resource with id ${resourceId}`,
 			);
 		}
-
 		if (projectResourceEntity.endDate) {
 			throw new BadRequestException(
 				`Resource with id ${resourceId} was already unassigned from project with id ${projectId}`,
 			);
 		}
-		projectResourceEntity.endDate = new Date();
+		const dateToday = new Date();
+		dateToday.setHours(0, 0, 0, 0); // we don't care about time
+		projectResourceEntity.endDate = dateToday;
 		await this.projectResourceRepository.save(projectResourceEntity);
 
 		if (await this.resourceService.isNowAvailable(resourceEntity.id)) {
@@ -146,32 +143,29 @@ export class ProjectService {
 	}
 
 	async completeProject(projectId: number): Promise<ProjectEntity> {
-		const projectEntity = await this.projectRepository.findOne(projectId, {
-			relations: ['projectResources', 'projectResources.resource', 'projectResources.project'],
-		});
-		if (!projectEntity) {
-			throw new NotFoundException(`Could not find project with id ${projectId}`);
-		}
+		const projectEntity = await this.getProject(projectId);
+
 		projectEntity.status = ProjectStatus.COMPLETED;
-		projectEntity.endDate = new Date();
+		const dateToday = new Date();
+		dateToday.setHours(0, 0, 0, 0);
+		projectEntity.endDate = dateToday;
 
 		const { projectResources } = projectEntity;
 		await this.projectRepository.save(projectEntity);
+		console.log('hi');
 
 		// end the project for all resources
-		await projectResources.forEach(async relation => {
+		for (const relation of projectResources) {
 			if (!relation.endDate) {
 				await this.unassignResourceFromProject(projectId, relation.resource.id);
 			}
-		});
+		}
+
 		return projectEntity;
 	}
 
 	async deleteProject(projectId: number) {
-		const projectEntity = await this.projectRepository.findOne(projectId);
-		if (!projectEntity) {
-			throw new NotFoundException(`Could not find project with id ${projectId}`);
-		}
+		const projectEntity = await this.getProject(projectId);
 		await this.projectRepository.remove(projectEntity);
 	}
 }

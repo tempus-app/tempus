@@ -30,7 +30,7 @@ export class ClientService {
 
 	async getClientInfo(clientId: number): Promise<Client> {
 		const clientEntity = await this.clientRepository.findOne(clientId);
-		if (!clientEntity) throw new NotFoundException(`Could not find client with id ${clientEntity.id}`);
+		if (!clientEntity) throw new NotFoundException(`Could not find client with id ${clientId}`);
 		return clientEntity;
 	}
 
@@ -44,10 +44,7 @@ export class ClientService {
 	}
 
 	async updateClient(updateClientDto: UpdateClientDto): Promise<Client> {
-		const clientEntity = await this.clientRepository.findOne(updateClientDto.id);
-		if (!clientEntity) {
-			throw new NotFoundException(`Could not find client with id ${clientEntity.id}`);
-		}
+		const clientEntity = await this.getClientInfo(updateClientDto.id);
 
 		for (const [key, val] of Object.entries(updateClientDto)) if (!val) delete updateClientDto[key];
 		Object.assign(clientEntity, updateClientDto);
@@ -55,10 +52,7 @@ export class ClientService {
 	}
 
 	async deleteClient(clientId: number) {
-		const clientEntity = await this.clientRepository.findOne(clientId);
-		if (!clientEntity) {
-			throw new NotFoundException(`Could not find client with id ${clientId}`);
-		}
+		const clientEntity = await this.getClientInfo(clientId);
 		await this.clientRepository.remove(clientEntity);
 	}
 }
