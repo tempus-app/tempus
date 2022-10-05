@@ -49,13 +49,14 @@ export class SeederService {
 		const clients = await this.clientSeederService.seed(args.clients);
 		const projects = await this.projectSeederService.seedProjects(clients, args.projects);
 		const users = await this.userSeederService.seedBusinessOwner(args.businessOwners);
+		const supervisors = await this.userSeederService.seedSupervisor(args.supervisors);
 		const links = await this.linkSeederService.seed(projects, args.resources);
 		const availableResources = await this.resourceSeedService.seedResources(links);
 		const assignedResources = await this.projectSeederService.seedAssignedResources(
 			projects,
 			availableResources.splice(0, args.resources / 2),
 		);
-		const allUsers = users.concat(availableResources).concat(assignedResources);
+		const allUsers = users.concat(availableResources).concat(assignedResources).concat(supervisors);
 		SeederService.writeToJson(allUsers);
 		await SeederService.writeToCSV(allUsers);
 	}

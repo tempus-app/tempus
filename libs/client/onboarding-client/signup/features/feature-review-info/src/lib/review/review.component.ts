@@ -135,12 +135,11 @@ export class ReviewComponent implements OnInit, OnDestroy, AfterViewInit {
 			.subscribe(reqStatusData => {
 				if (reqStatusData.status === AsyncRequestState.LOADING) {
 					this.loading = true;
-				} else if (reqStatusData.status === AsyncRequestState.SUCCESS) {
+				} else if (reqStatusData.status === AsyncRequestState.SUCCESS && reqStatusData.resumeSaved) {
 					this.openDialog('successModal');
 					this.loading = false;
 					this.store.dispatch(resetLinkState());
 					this.store.dispatch(resetCreateResourceState());
-					this.router.navigate(['../../../signin'], { relativeTo: this.route });
 				} else if (reqStatusData.status === AsyncRequestState.ERROR) {
 					this.loading = false;
 					this.openDialog('errorModal');
@@ -170,6 +169,7 @@ export class ReviewComponent implements OnInit, OnDestroy, AfterViewInit {
 			});
 
 		this.modalService.confirmEventSubject.subscribe(() => {
+			this.router.navigate(['../../../signin'], { relativeTo: this.route });
 			this.modalService.close();
 			this.modalService.confirmEventSubject.unsubscribe();
 		});
@@ -180,7 +180,7 @@ export class ReviewComponent implements OnInit, OnDestroy, AfterViewInit {
 	}
 
 	submit() {
-		this.store.dispatch(createResource());
+		this.store.dispatch(createResource({ createResourceDto: undefined }));
 		this.store
 			.select(selectCreatedResourceId)
 			.pipe(skip(1)) // take the latest value

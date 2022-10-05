@@ -23,7 +23,8 @@
 		"typeorm:migration:create": "npm run typeorm -- migration:create --",
 		"typeorm:migration:revert": "npm run typeorm -- migration:revert --",
 		"seed": "npx nx run api-shared-feature-seed:run",
-		"e2e": "npm run seed && concurrently --kill-others \"npm run start:onboarding-api\" \"npx nx e2e tempus-e2e\""
+		"e2e": "npm run seed && concurrently --kill-others \"npm run start:onboarding-api\" \"npx nx e2e tempus-e2e\"",
+		"postinstall": "ngcc --properties es2015 browser module main"
 	},
 	"lint-staged": {
 		"*.{ts,js}": [

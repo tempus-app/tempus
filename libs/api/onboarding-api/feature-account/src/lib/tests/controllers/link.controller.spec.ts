@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { BadRequestException, NotFoundException } from '@nestjs/common';
-import { StatusType } from '@tempus/shared-domain';
+import { RoleType, StatusType } from '@tempus/shared-domain';
 import { CreateLinkDto, UpdatelinkDto } from '@tempus/api/shared/dto';
 
 import { LinkService } from '../../services/link.service';
@@ -101,10 +101,10 @@ describe('LinkController', () => {
 
 	describe('CREATE', () => {
 		it('should successfully create a link', async () => {
-			const createLinkDto = new CreateLinkDto('john', 'doe', 'test@email.com', new Date('01-03-2024'), 1);
+			const createLinkDto = new CreateLinkDto('john', 'doe', 'test@email.com', new Date('01-03-2024'), 1, RoleType.AVAILABLE_RESOURCE);
 			const res = await linkController.createLink(createLinkDto);
 			expect(mockLinkService.createLink).toBeCalledWith(
-				{ ...createLinkEntity, id: undefined, token: undefined, status: undefined },
+				{ ...createLinkEntity, id: undefined, token: undefined, status: undefined, userType: RoleType.AVAILABLE_RESOURCE },
 				1,
 			);
 			expect(res).toEqual({
@@ -119,7 +119,7 @@ describe('LinkController', () => {
 
 		it('should bubble up Create error', async () => {
 			mockLinkService.createLink.mockRejectedValue(new BadRequestException('could not create link'));
-			const createLinkDto = new CreateLinkDto('john', 'doe', 'test@email.com', new Date('01-03-2022'), 1);
+			const createLinkDto = new CreateLinkDto('john', 'doe', 'test@email.com', new Date('01-03-2022'), 1, RoleType.AVAILABLE_RESOURCE);
 			let error;
 			try {
 				await linkController.createLink(createLinkDto);

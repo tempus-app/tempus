@@ -9,7 +9,7 @@ import { CreateUserDto } from './create-user.dto';
 
 export class CreateResourceDto extends CreateUserDto implements ICreateResourceDto {
 	@ApiProperty()
-	linkId?: number;
+	linkId: number;
 
 	@ApiProperty({ enum: ['ASSIGNED_RESOURCE', 'AVAILABLE_RESOURCE', 'SUPERVISOR'] })
 	override roles: RoleType[];
@@ -76,6 +76,7 @@ export class CreateResourceDto extends CreateUserDto implements ICreateResourceD
 		profileSummary: string,
 		educationsSummary: string,
 		skillsSummary: string,
+		linkId: number,
 	) {
 		super(firstName, lastName, email, password, roles);
 		this.roles = roles;
@@ -93,5 +94,6 @@ export class CreateResourceDto extends CreateUserDto implements ICreateResourceD
 		this.linkedInLink = linkedInLink;
 		this.githubLink = githubLink;
 		this.otherLink = otherLink;
+		this.linkId = linkId;
 	}
 }

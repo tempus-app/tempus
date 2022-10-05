@@ -75,6 +75,15 @@ export const businessOwnerUserEntity: UserEntity = {
 	refreshToken: 'token',
 	roles: [RoleType.BUSINESS_OWNER],
 };
+export const supervisorUserEntity: UserEntity = {
+	id: 5,
+	firstName: 'supervisor',
+	lastName: 'supervisor',
+	email: 'supervisor@gmail.com',
+	password: 'password',
+	refreshToken: 'token',
+	roles: [RoleType.SUPERVISOR],
+};
 
 export const newViewDto: CreateViewDto = {
 	skillsSummary: 'newSkillsSummary',
@@ -138,5 +147,60 @@ export const createdViewEntity: ViewEntity = {
 	revision: undefined,
 	createdBy: undefined,
 	viewType: ViewType.PRIMARY,
+	revisionType: RevisionType.APPROVED,
+};
+
+export const newSecondaryViewDto: CreateViewDto = {
+	skillsSummary: 'newSkillsSummary',
+	profileSummary: 'newProfileSummary',
+	educationsSummary: 'newEducationsSummary',
+	experiencesSummary: 'newExperiencesSummary',
+	type: 'NEW VIEW',
+	skills: [],
+	experiences: [],
+	educations: [],
+	certifications: [],
+	viewType: ViewType.SECONDARY,
+};
+
+export const resourceCreatedSecondaryViewEntity: ViewEntity = {
+	id: 8,
+	profileSummary: 'newProfileSummary',
+	skillsSummary: 'newSkillsSummary',
+	educationsSummary: 'newEducationsSummary',
+	experiencesSummary: 'newExperiencesSummary',
+	type: 'NEW VIEW',
+	locked: true,
+	skills: [],
+	experiences: [],
+	educations: [],
+	certifications: [],
+	resource: undefined,
+	createdAt: null,
+	lastUpdateDate: null,
+	revision: undefined,
+	createdBy: RoleType.USER,
+	viewType: ViewType.SECONDARY,
+	revisionType: RevisionType.PENDING,
+};
+
+export const businessOwnerCreatedSecondaryViewEntity: ViewEntity = {
+	id: 9,
+	profileSummary: 'newProfileSummary',
+	skillsSummary: 'newSkillsSummary',
+	educationsSummary: 'newEducationsSummary',
+	experiencesSummary: 'newExperiencesSummary',
+	type: 'NEW VIEW',
+	locked: false,
+	skills: [],
+	experiences: [],
+	educations: [],
+	certifications: [],
+	resource: undefined,
+	createdAt: null,
+	lastUpdateDate: null,
+	revision: undefined,
+	createdBy: RoleType.BUSINESS_OWNER,
+	viewType: ViewType.SECONDARY,
 	revisionType: RevisionType.APPROVED,
 };

@@ -28,11 +28,13 @@ export class ResourceEffects {
 			ofType(createResource),
 			withLatestFrom(this.store.select(selectResourceData)),
 			// eslint-disable-next-line @typescript-eslint/no-unused-vars
-			switchMap(([_, createResourceData]) =>
-				this.resourceService.createResource(createResourceData).pipe(
-					map(data => createResourceSuccess({ resourceId: data.id })),
-					catchError(error => of(createResourceFailure({ error }))),
-				),
+			switchMap(([action, createResourceData]) =>
+				this.resourceService
+					.createResource(action.createResourceDto ? action.createResourceDto : createResourceData)
+					.pipe(
+						map(data => createResourceSuccess({ resourceId: data.id })),
+						catchError(error => of(createResourceFailure({ error }))),
+					),
 			),
 		),
 	);

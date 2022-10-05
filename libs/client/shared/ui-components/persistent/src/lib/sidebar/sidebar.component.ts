@@ -1,9 +1,13 @@
 /* eslint-disable @typescript-eslint/dot-notation */
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TranslateService } from '@ngx-translate/core';
-import { logout, OnboardingClientState } from '@tempus/client/onboarding-client/shared/data-access';
+import {
+	logout,
+	OnboardingClientState,
+	selectLoggedInUserNameEmail,
+} from '@tempus/client/onboarding-client/shared/data-access';
 import { take } from 'rxjs';
 import { UserType } from './sidebar-type-enum';
 import { SidebarTab } from './sidebar-tab-enum';
@@ -13,24 +17,54 @@ import { SidebarTab } from './sidebar-tab-enum';
 	templateUrl: './sidebar.component.html',
 	styleUrls: ['./sidebar.component.scss'],
 })
-export class SidebarComponent implements OnInit, OnChanges {
+export class SidebarComponent implements OnInit {
+	constructor(
+		private store: Store<OnboardingClientState>,
+		private translateService: TranslateService,
+		private router: Router,
+	) {}
+
 	@Input() userType?: UserType = undefined;
 
 	@Input() tabs: SidebarTab[] = [];
 
-	@Input() name = '';
+	name = '';
 
-	@Input() email = '';
+	email = '';
 
 	SidebarTab = SidebarTab;
-
-	selectedTab?: SidebarTab = undefined;
 
 	initials = '';
 
 	isVisible = true;
 
 	bugReportingURL = 'https://forms.gle/KCoBXHmK49AdgJdV9';
+
+	currentRoute = this.router.url;
+
+	// All routes the sidebar tabs are highlighted for
+	// Base route is navigated to onclick
+	paths = [
+		{
+			tab: SidebarTab.PRIMARY_VIEW,
+			route: '/resource',
+			base: true,
+		},
+		{
+			tab: SidebarTab.MY_VIEWS,
+			route: '/resource/my-views',
+			base: true,
+		},
+		{
+			tab: SidebarTab.MANAGE_RESOURCES,
+			route: '/owner/manage-resources',
+			base: true,
+		},
+		{
+			tab: SidebarTab.MANAGE_RESOURCES,
+			route: '/owner/view-resources',
+		},
+	];
 
 	ngOnInit(): void {
 		this.translateService
@@ -40,23 +74,24 @@ export class SidebarComponent implements OnInit, OnChanges {
 				this.setUserTabs();
 				this.setPlaceholders();
 			});
+
+		this.store
+			.select(selectLoggedInUserNameEmail)
+			.pipe(take(1))
+			.subscribe(user => {
+				this.name = `${user.firstName} ${user.lastName}`;
+				this.email = user.email || '';
+			});
+
 		this.getInitials(this.name);
 		this.isVisible = true;
 	}
 
-	constructor(
-		private translateService: TranslateService,
-		private store: Store<OnboardingClientState>,
-		private router: Router,
-	) {}
-
 	setUserTabs() {
 		if (this.userType === UserType.OWNER) {
 			this.tabs = [SidebarTab.MANAGE_RESOURCES, SidebarTab.PENDING_APPROVALS];
-			this.selectedTab = SidebarTab.MANAGE_RESOURCES;
-		} else if (this.userType === UserType.RESOURCE) {
+		} else {
 			this.tabs = [SidebarTab.PRIMARY_VIEW, SidebarTab.MY_VIEWS, SidebarTab.MY_PROJECTS];
-			this.selectedTab = SidebarTab.PRIMARY_VIEW;
 		}
 	}
 
@@ -70,8 +105,28 @@ export class SidebarComponent implements OnInit, OnChanges {
 			});
 	}
 
+	isTabSelected(tab: SidebarTab) {
+		this.currentRoute = this.router.url;
+		const routes = this.paths.filter(x => x.tab === tab).map(y => y.route);
+		const baseRoute = this.paths.filter(x => x.tab === tab && x.base).map(y => y.route)[0];
+
+		switch (tab) {
+			// must match absolute route
+			case SidebarTab.PRIMARY_VIEW:
+				return this.currentRoute === baseRoute;
+			default:
+				for (let i = 0; i < routes.length; i++) {
+					if (this.currentRoute.includes(routes[i])) {
+						return true;
+					}
+				}
+				return false;
+		}
+	}
+
 	navigate(tab: SidebarTab) {
-		this.selectedTab = tab;
+		const baseRoute = this.paths.filter(x => x.tab === tab && x.base).map(y => y.route)[0];
+
 		switch (tab) {
 			case SidebarTab.LOGOUT:
 				this.store.dispatch(logout({ redirect: true }));
@@ -79,16 +134,8 @@ export class SidebarComponent implements OnInit, OnChanges {
 			case SidebarTab.REPORT_BUGS:
 				this.openReportBugForm();
 				break;
-			case SidebarTab.MANAGE_RESOURCES:
-				this.router.navigateByUrl('/owner/manage-resources');
-				break;
 			default:
-		}
-	}
-
-	ngOnChanges(changes: SimpleChanges) {
-		if (changes['name'].currentValue !== changes['name'].previousValue) {
-			this.getInitials(changes['name'].currentValue);
+				this.router.navigateByUrl(baseRoute);
 		}
 	}
 

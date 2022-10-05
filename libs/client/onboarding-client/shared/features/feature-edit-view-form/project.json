@@ -1,0 +1,26 @@
+{
+	"projectType": "library",
+	"root": "libs/client/onboarding-client/shared/features/feature-edit-view-form",
+	"sourceRoot": "libs/client/onboarding-client/shared/features/feature-edit-view-form/src",
+	"prefix": "tempus",
+	"targets": {
+		"test": {
+			"executor": "@nrwl/jest:jest",
+			"outputs": ["coverage/libs/client/onboarding-client/shared/features/feature-edit-view-form"],
+			"options": {
+				"jestConfig": "libs/client/onboarding-client/shared/features/feature-edit-view-form/jest.config.js",
+				"passWithNoTests": true
+			}
+		},
+		"lint": {
+			"executor": "@nrwl/linter:eslint",
+			"options": {
+				"lintFilePatterns": [
+					"libs/client/onboarding-client/shared/features/feature-edit-view-form/src/**/*.ts",
+					"libs/client/onboarding-client/shared/features/feature-edit-view-form/src/**/*.html"
+				]
+			}
+		}
+	},
+	"tags": []
+}

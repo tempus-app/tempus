@@ -22,7 +22,7 @@ export class PermissionGuard implements CanActivate {
 			return false;
 		}
 
-		if (!user.roles.includes(RoleType.BUSINESS_OWNER)) {
+		if (!user.roles.includes(RoleType.BUSINESS_OWNER) && !user.roles.includes(RoleType.SUPERVISOR)) {
 			if (user.email !== entity.email) {
 				throw new ForbiddenException('Forbidden.');
 			}

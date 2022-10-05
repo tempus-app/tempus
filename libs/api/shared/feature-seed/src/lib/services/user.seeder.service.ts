@@ -52,4 +52,30 @@ export class UserSeederService {
 		}
 		return createdUsers;
 	}
+
+	/**
+	 * seeds supervisors
+	 * @param count number of supervisors to create
+	 * @returns array of created supervisors
+	 */
+	async seedSupervisor(count = 2) {
+		const createdUsers: UserEntity[] = [];
+		// eslint-disable-next-line no-plusplus
+		for (let i = 0; i < count; i++) {
+			const lastName = faker.name.lastName();
+			const firstName = faker.name.firstName();
+
+			const password = faker.internet.password();
+			const user: CreateUserDto = new CreateUserDto(
+				firstName,
+				lastName,
+				faker.internet.email(firstName, lastName),
+				password,
+				[RoleType.SUPERVISOR],
+			);
+			const createdUser = await this.userService.createUser(user);
+			createdUsers.push({ ...createdUser, password });
+		}
+		return createdUsers;
+	}
 }

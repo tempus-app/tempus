@@ -23,14 +23,14 @@ export class ProjectController {
 	}
 
 	@UseGuards(JwtAuthGuard, RolesGuard)
-	@Roles(RoleType.BUSINESS_OWNER)
+	@Roles(RoleType.BUSINESS_OWNER, RoleType.SUPERVISOR)
 	@Post('/')
 	async createProject(@Body() createProjectDto: CreateProjectDto): Promise<Project> {
 		return this.projectService.createProject(createProjectDto);
 	}
 
 	@UseGuards(JwtAuthGuard, RolesGuard)
-	@Roles(RoleType.BUSINESS_OWNER)
+	@Roles(RoleType.BUSINESS_OWNER, RoleType.SUPERVISOR)
 	@Patch('/:projectId/:resourceId/assign')
 	async assignResourceToProject(
 		@Param('projectId') projectId: string,
@@ -55,21 +55,21 @@ export class ProjectController {
 	}
 
 	@UseGuards(JwtAuthGuard, RolesGuard)
-	@Roles(RoleType.BUSINESS_OWNER)
+	@Roles(RoleType.BUSINESS_OWNER, RoleType.SUPERVISOR)
 	@Patch('/:projectId')
 	async editProject(@Body() updateProjectDto: UpdateProjectDto): Promise<Project> {
 		return this.projectService.updateProject(updateProjectDto);
 	}
 
 	@UseGuards(JwtAuthGuard, RolesGuard)
-	@Roles(RoleType.BUSINESS_OWNER)
+	@Roles(RoleType.BUSINESS_OWNER, RoleType.SUPERVISOR)
 	@Patch('/:projectId/complete')
 	async completeProject(@Param('projectId') projectId: number): Promise<Project> {
 		return this.projectService.completeProject(projectId);
 	}
 
 	@UseGuards(JwtAuthGuard, RolesGuard)
-	@Roles(RoleType.BUSINESS_OWNER)
+	@Roles(RoleType.BUSINESS_OWNER, RoleType.SUPERVISOR)
 	@Delete('/:clientId')
 	async deleteProject(@Param('projectId') projectId: number) {
 		return this.projectService.deleteProject(projectId);
