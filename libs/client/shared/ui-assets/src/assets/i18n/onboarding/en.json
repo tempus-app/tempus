@@ -8,6 +8,30 @@
 			"loginCTA": "Login",
 			"noRoles": "No defined roles"
 		},
+		"editViewForm": {
+			"viewNamePlaceholder": "*View name",
+			"viewNameError": "Please enter a name for your view.",
+			"primaryView": "Primary View",
+			"education": "Education",
+			"certifications": "Certifications",
+			"workExperience": "Work Experience",
+			"skills": "Skills",
+			"previewToggle": "Preview",
+			"profileSummary": {
+				"title": "Profile Summary",
+				"textAreaPlaceHolder": "Enter profile summary."
+			},
+			"buttons": {
+				"cancel": {
+					"label": "Cancel",
+					"tooltip": "Discard changes"
+				},
+				"submit": {
+					"label": "Submit",
+					"tooltip": "Submit changes for approval"
+				}
+			}
+		},
 		"presentational": {
 			"noInfoSection": "You have not entered information for this section",
 			"personalInfo": {

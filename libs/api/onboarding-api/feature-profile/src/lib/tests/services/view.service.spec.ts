@@ -3,9 +3,9 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { createMock } from '@golevelup/ts-jest';
 import { ResourceService } from '@tempus/onboarding-api/feature-account';
-import { RevisionEntity, ViewEntity } from '@tempus/api/shared/entity';
+import { ResourceEntity, RevisionEntity, UserEntity, ViewEntity } from '@tempus/api/shared/entity';
 import { ForbiddenException, NotFoundException, UnauthorizedException } from '@nestjs/common';
-import { RevisionType, RoleType, ViewType } from '@tempus/shared-domain';
+import { RevisionType, RoleType } from '@tempus/shared-domain';
 import { ViewsService } from '../../services';
 import {
 	viewEntity,
@@ -13,11 +13,15 @@ import {
 	createdViewEntityPostRevision,
 	resourceUserEntity,
 	newViewDto,
+	newSecondaryViewDto,
 	businessOwnerUserEntity,
 	viewEntity3,
 	rejectViewDto,
 	approveViewDto,
 	createdViewEntity,
+  supervisorUserEntity,
+	businessOwnerCreatedSecondaryViewEntity,
+	resourceCreatedSecondaryViewEntity,
 } from '../mocks/view.mock';
 import { resourceEntity } from '../mocks/resource.mock';
 
@@ -60,7 +64,7 @@ describe('ViewService', () => {
 	});
 
 	describe('CreateView()', () => {
-		it('should create new view', async () => {
+		it('should create new primary view', async () => {
 			const createdView: ViewEntity = {
 				...createdViewEntity,
 				createdAt: new Date(CUR_DATE_CONSTANT),
@@ -71,6 +75,44 @@ describe('ViewService', () => {
 			mockViewRepository.save.mockResolvedValue(createdView);
 
 			const res = await viewService.createView(0, newViewDto);
+
+			expect(mockResourceService.getResourceInfo).toHaveBeenCalledWith(0);
+			expect(mockViewRepository.save).toHaveBeenCalledWith({ ...createdView, id: undefined });
+			expect(res).toEqual(createdView);
+		});
+	});
+
+	describe('CreateSecondaryView()', () => {
+		it('should create a new approved view given created by business owner', async () => {
+			const createdView: ViewEntity = {
+				...businessOwnerCreatedSecondaryViewEntity,
+				createdAt: new Date(CUR_DATE_CONSTANT),
+				lastUpdateDate: new Date(CUR_DATE_CONSTANT),
+				updatedBy: RoleType.BUSINESS_OWNER,
+				resource: resourceEntity,
+			};
+			mockResourceService.getResourceInfo.mockResolvedValue(resourceEntity);
+			mockViewRepository.save.mockResolvedValue(createdView);
+
+			const res = await viewService.createSecondaryView(0, businessOwnerUserEntity, newSecondaryViewDto);
+
+			expect(mockResourceService.getResourceInfo).toHaveBeenCalledWith(0);
+			expect(mockViewRepository.save).toHaveBeenCalledWith({ ...createdView, id: undefined });
+			expect(res).toEqual(createdView);
+		});
+
+		it('should create a new pending view given created by resource', async () => {
+			const createdView: ViewEntity = {
+				...resourceCreatedSecondaryViewEntity,
+				createdAt: new Date(CUR_DATE_CONSTANT),
+				lastUpdateDate: new Date(CUR_DATE_CONSTANT),
+				updatedBy: RoleType.USER,
+				resource: resourceEntity,
+			};
+			mockResourceService.getResourceInfo.mockResolvedValue(resourceEntity);
+			mockViewRepository.save.mockResolvedValue(createdView);
+
+			const res = await viewService.createSecondaryView(0, resourceEntity, newSecondaryViewDto);
 
 			expect(mockResourceService.getResourceInfo).toHaveBeenCalledWith(0);
 			expect(mockViewRepository.save).toHaveBeenCalledWith({ ...createdView, id: undefined });
@@ -223,26 +265,12 @@ describe('ViewService', () => {
 		it('should revise view given business owner has edited and non existing revision', async () => {
 			// Whenever a business owner edits a view, its auto approved and no revision entity needs to be made
 
-			const createdViewEntity: ViewEntity = {
-				...createdViewEntityPostRevision,
-				createdAt: viewEntity.createdAt,
-				lastUpdateDate: new Date(CUR_DATE_CONSTANT),
-				revisionType: RevisionType.APPROVED,
-				updatedBy: RoleType.BUSINESS_OWNER,
-			};
+			adminReviseViewNonExistingRevision(businessOwnerUserEntity);
+		});
+    it('should revise view given supervisor has edited and non existing revision', async () => {
+			// Whenever a supervisor edits a view, its auto approved and no revision entity needs to be made
 
-			const getViewSpy = jest.spyOn(viewService, 'getView');
-
-			mockViewRepository.findOne.mockResolvedValue(viewEntity);
-			mockResourceService.getResourceInfo.mockResolvedValue(resourceEntity);
-
-			const res = await viewService.reviseView(3, businessOwnerUserEntity, newViewDto);
-
-			expect(getViewSpy).toHaveBeenCalledWith(3);
-			expect(mockResourceService.getResourceInfo).toHaveBeenCalledWith(viewEntity.resource.id);
-			expect(mockViewRepository.remove).toHaveBeenCalledWith(viewEntity);
-			expect(mockViewRepository.save).toHaveBeenCalledWith({ ...createdViewEntity, id: undefined });
-			expect(res).toEqual(null);
+			adminReviseViewNonExistingRevision(supervisorUserEntity);
 		});
 		it('should revise view given resource has edited and existing revision', async () => {
 			// Original view locked, original revisions new view is updated to a new created view that is locked and pending (deletion of old revised view occurs), revision and new created view saved
@@ -309,12 +337,60 @@ describe('ViewService', () => {
 			// Whenever a business owner edits a view, its auto approved and any existing revisons need to be removed
 			// This case can only occur given a previous rejection of a revision (else the rev entity wouldnt exist if there was a previous positive approval)
 
-			const createdViewEntity: ViewEntity = {
+			adminReviseViewExistingRevision(businessOwnerUserEntity);
+		});
+    it('should revise view given supervisor has edited and existing revision', async () => {
+			// Whenever a supervisor edits a view, its auto approved and any existing revisons need to be removed
+			// This case can only occur given a previous rejection of a revision (else the rev entity wouldnt exist if there was a previous positive approval)
+
+			adminReviseViewExistingRevision(supervisorUserEntity);
+		});
+		it('should throw error if editing locked view', async () => {
+			const lockedView: ViewEntity = {
+				...viewEntity,
+				locked: true,
+			};
+			mockViewRepository.findOne.mockResolvedValue(lockedView);
+			let error;
+			try {
+				await viewService.reviseView(3, resourceUserEntity, lockedView);
+			} catch (e) {
+				error = e;
+			}
+			expect(error).toBeInstanceOf(UnauthorizedException);
+			expect(error.message).toEqual('Cannot edit locked view');
+		});
+
+    const adminReviseViewNonExistingRevision = async (user: UserEntity) => {
+      const createdViewEntity: ViewEntity = {
+				...createdViewEntityPostRevision,
+				createdAt: viewEntity.createdAt,
+				lastUpdateDate: new Date(CUR_DATE_CONSTANT),
+				revisionType: RevisionType.APPROVED,
+				updatedBy: user.roles[0],
+			};
+
+			const getViewSpy = jest.spyOn(viewService, 'getView');
+
+			mockViewRepository.findOne.mockResolvedValue(viewEntity);
+			mockResourceService.getResourceInfo.mockResolvedValue(resourceEntity);
+
+			const res = await viewService.reviseView(3, user, newViewDto);
+
+			expect(getViewSpy).toHaveBeenCalledWith(3);
+			expect(mockResourceService.getResourceInfo).toHaveBeenCalledWith(viewEntity.resource.id);
+			expect(mockViewRepository.remove).toHaveBeenCalledWith(viewEntity);
+			expect(mockViewRepository.save).toHaveBeenCalledWith({ ...createdViewEntity, id: undefined });
+			expect(res).toEqual(null);
+    }
+    
+    const adminReviseViewExistingRevision = async (user: UserEntity) => {
+      const createdViewEntity: ViewEntity = {
 				...createdViewEntityPostRevision,
 				createdAt: viewEntity3.createdAt,
 				lastUpdateDate: new Date(CUR_DATE_CONSTANT),
 				revisionType: RevisionType.APPROVED,
-				updatedBy: RoleType.BUSINESS_OWNER,
+				updatedBy: user.roles[0],
 			};
 
 			const oldRevisionEntity: RevisionEntity = new RevisionEntity(null, new Date(1, 2, 3), null, [
@@ -333,7 +409,7 @@ describe('ViewService', () => {
 			mockViewRepository.findOne.mockResolvedValueOnce(viewEntity2); // this  comes from getView call
 			mockResourceService.getResourceInfo.mockResolvedValue(resourceEntity);
 
-			const res = await viewService.reviseView(3, businessOwnerUserEntity, newViewDto);
+			const res = await viewService.reviseView(3, user, newViewDto);
 
 			expect(getViewSpy).toHaveBeenCalledWith(3);
 			expect(mockResourceService.getResourceInfo).toHaveBeenCalledWith(viewEntity.resource.id);
@@ -341,22 +417,7 @@ describe('ViewService', () => {
 			expect(mockRevisionRepository.remove).toHaveBeenCalledWith(oldRevisionEntity);
 			expect(mockViewRepository.save).toHaveBeenCalledWith({ ...createdViewEntity, id: undefined });
 			expect(res).toEqual(null);
-		});
-		it('should throw error if editing locked view', async () => {
-			const lockedView: ViewEntity = {
-				...viewEntity,
-				locked: true,
-			};
-			mockViewRepository.findOne.mockResolvedValue(lockedView);
-			let error;
-			try {
-				await viewService.reviseView(3, resourceUserEntity, lockedView);
-			} catch (e) {
-				error = e;
-			}
-			expect(error).toBeInstanceOf(UnauthorizedException);
-			expect(error.message).toEqual('Cannot edit locked view');
-		});
+    }
 	});
 
 	describe('DeleteView()', () => {

@@ -1,5 +1,5 @@
 import { LinkEntity, ProjectEntity } from '@tempus/api/shared/entity';
-import { Link, StatusType } from '@tempus/shared-domain';
+import { Link, RoleType, StatusType } from '@tempus/shared-domain';
 
 export const linkEntity: Link = {
 	firstName: 'john',
@@ -10,6 +10,7 @@ export const linkEntity: Link = {
 	id: 3,
 	status: StatusType.ACTIVE,
 	createdAt: new Date('01-01-2022'),
+  userType: RoleType.AVAILABLE_RESOURCE
 };
 
 export const createLinkEntity = new LinkEntity(
@@ -29,6 +30,8 @@ export const dbLink = new LinkEntity(
 	new Date('01-03-2024'),
 	'random-string',
 	StatusType.ACTIVE,
+  undefined,
+  RoleType.AVAILABLE_RESOURCE
 );
 dbLink.createdAt = new Date('01-01-2022');
 
@@ -40,6 +43,8 @@ export const expiredDBLink = new LinkEntity(
 	new Date('01-01-2000'),
 	'random-string',
 	StatusType.ACTIVE,
+  undefined,
+  RoleType.AVAILABLE_RESOURCE
 );
 expiredDBLink.createdAt = new Date('01-01-2022');
 

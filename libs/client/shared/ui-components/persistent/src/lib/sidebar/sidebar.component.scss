@@ -35,8 +35,8 @@ mat-sidenav {
 mat-button-toggle-group {
 	width: 15em;
 	+ .mat-button-toggle-checked,
-	.cdk-focused,
-	.selected {
+	.selected,
+	mat-button-toggle:active {
 		background-color: abs.$accent-300;
 		font-weight: 900 !important;
 		color: abs.$primary-800;

@@ -6,22 +6,6 @@
 		"rejectedDialogHeading": "Please modify your view with the following changes:"
 	},
 	"onboardingResourceEditProfile": {
-		"primaryView": "Primary View",
-		"education": "Education",
-		"certifications": "Certifications",
-		"workExperience": "Work Experience",
-		"skills": "Skills",
-		"previewToggle": "Preview",
-		"buttons": {
-			"cancel": {
-				"label": "Cancel",
-				"tooltip": "Discard changes"
-			},
-			"submit": {
-				"label": "Submit",
-				"tooltip": "Submit changes for approval"
-			}
-		},
 		"modal": {
 			"submitModal": {
 				"title": "Submit changes?",
@@ -34,5 +18,9 @@
 			"title": "Profile Summary",
 			"textAreaPlaceHolder": "Enter profile summary."
 		}
+	},
+	"onboardingResourceEditPersonalInformation": {
+		"cancel": "Cancel",
+		"submit": "Submit"
 	}
 }

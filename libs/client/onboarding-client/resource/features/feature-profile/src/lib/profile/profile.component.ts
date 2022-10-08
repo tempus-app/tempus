@@ -1,18 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { Store } from '@ngrx/store';
-import {
-	OnboardingClientState,
-	OnboardingClientResourceService,
-} from '@tempus/client/onboarding-client/shared/data-access';
-import { Subject, take } from 'rxjs';
+import { OnboardingClientResourceService } from '@tempus/client/onboarding-client/shared/data-access';
+import { Subject } from 'rxjs';
 import { ButtonType } from '@tempus/client/shared/ui-components/presentational';
-import { UserType } from '@tempus/client/shared/ui-components/persistent';
 import {
 	ICreateExperienceDto,
 	ICreateEducationDto,
 	ICreateCertificationDto,
-	ICreateViewDto,
 	ViewType,
 	RevisionType,
 } from '@tempus/shared-domain';
@@ -26,17 +19,14 @@ import { sortViewsByLatestUpdated } from '@tempus/client/shared/util';
 	providers: [OnboardingClientResourceService],
 })
 export class ProfileComponent implements OnInit, OnDestroy {
-	constructor(
-		private resourceService: OnboardingClientResourceService,
-		private store: Store<OnboardingClientState>,
-		private router: Router,
-		private translateService: TranslateService,
-	) {
+	constructor(private resourceService: OnboardingClientResourceService, private translateService: TranslateService) {
 		const { currentLang } = translateService;
 		// eslint-disable-next-line no-param-reassign
 		translateService.currentLang = '';
 		translateService.use(currentLang);
 	}
+
+	dataLoaded = false;
 
 	userId = 0;
 
@@ -56,22 +46,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
 	profileSummary = '';
 
-	email = '';
-
-	phoneNumber = '';
-
-	country = '';
-
-	state = '';
-
-	city = '';
-
-	linkedInLink = '';
-
-	githubLink = '';
-
-	otherLink = '';
-
 	workExperiences: Array<ICreateExperienceDto> = [];
 
 	educations: Array<ICreateEducationDto> = [];
@@ -82,15 +56,11 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
 	destroyed$ = new Subject<void>();
 
-	loading = false;
-
 	resume: File | null = null;
 
 	profilePrefix = 'onboardingResourceProfile.';
 
 	ButtonType = ButtonType;
-
-	UserType = UserType;
 
 	isPendingApproval = false;
 
@@ -100,41 +70,12 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
 	editViewEnabled = false;
 
-	openEditView() {
-		this.editViewEnabled = true;
-	}
-
-	closeEditView() {
-		this.editViewEnabled = false;
-	}
-
-	downloadProfile() {
-		// Taken from https://stackoverflow.com/questions/52154874/angular-6-downloading-file-from-rest-api
-		this.resourceService.downloadProfile(this.currentViewId).subscribe(data => {
-			const downloadURL = window.URL.createObjectURL(data);
-			const link = document.createElement('a');
-			link.href = downloadURL;
-			// const index = this.viewIDs.indexOf(parseInt(this.currentViewID, 10));
-			link.download = `${this.fullName}-Primary`;
-			link.click();
-		});
-	}
-
 	ngOnInit(): void {
 		this.resourceService.getResourceInformation().subscribe(resData => {
 			this.userId = resData.id;
 			this.firstName = resData.firstName;
 			this.lastName = resData.lastName;
 			this.fullName = `${resData.firstName} ${resData.lastName}`;
-			this.city = resData.location.city;
-			this.state = resData.location.province;
-			this.country = resData.location.country;
-			this.phoneNumber = resData.phoneNumber;
-			this.email = resData.email;
-			this.phoneNumber = resData.phoneNumber;
-			this.linkedInLink = resData.linkedInLink;
-			this.githubLink = resData.githubLink;
-			this.otherLink = resData.otherLink;
 
 			// TODO: ADD resource to the store
 			this.resourceService.getResourceOriginalResumeById(this.userId).subscribe(resumeBlob => {
@@ -160,25 +101,30 @@ export class ProfileComponent implements OnInit, OnDestroy {
 				this.isRejected = latestView.revisionType === RevisionType.REJECTED;
 				this.isPendingApproval = latestView.revisionType === RevisionType.PENDING;
 				this.rejectionComments = latestView.revision?.comment ? latestView.revision.comment : '';
+
+				this.dataLoaded = true;
 			});
 		});
 	}
 
-	loadNewView(newView: ICreateViewDto) {
-		// Update local display
-		this.certifications = newView.certifications;
-		this.educations = newView.educations;
-		this.educationsSummary = newView.educationsSummary;
-		this.workExperiences = newView.experiences;
-		this.experiencesSummary = newView.experiencesSummary;
-		this.profileSummary = newView.profileSummary;
-		this.skills = newView.skills.map(skill => skill.skill.name);
-		this.skillsSummary = newView.skillsSummary;
-		this.isRejected = false;
-		this.isPendingApproval = true;
+	openEditView() {
+		this.editViewEnabled = true;
+	}
 
-		// Post view
-		this.resourceService.editResourceView(this.currentViewId, newView).pipe(take(1)).subscribe();
+	closeEditView() {
+		this.editViewEnabled = false;
+	}
+
+	downloadProfile() {
+		// Taken from https://stackoverflow.com/questions/52154874/angular-6-downloading-file-from-rest-api
+		this.resourceService.downloadProfile(this.currentViewId).subscribe(data => {
+			const downloadURL = window.URL.createObjectURL(data);
+			const link = document.createElement('a');
+			link.href = downloadURL;
+			// const index = this.viewIDs.indexOf(parseInt(this.currentViewID, 10));
+			link.download = `${this.fullName}-Primary`;
+			link.click();
+		});
 	}
 
 	ngOnDestroy(): void {

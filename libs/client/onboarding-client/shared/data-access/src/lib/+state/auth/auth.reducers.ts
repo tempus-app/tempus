@@ -29,6 +29,12 @@ export const initialState: AuthState = {
 
 export const authReducer = createReducer(
 	initialState,
+	on(AuthActions.updateUserInfoSuccess, (state, { firstName, lastName, email }) => ({
+		...state,
+		firstName,
+		lastName,
+		email,
+	})),
 	on(AuthActions.login, state => ({ ...state, status: AsyncRequestState.LOADING })),
 	on(AuthActions.loginSuccess, (state, { accessToken, refreshToken, loggedInUserId, firstName, lastName, email }) => ({
 		...state,

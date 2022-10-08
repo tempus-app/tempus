@@ -4,9 +4,9 @@ import { TranslateService } from '@ngx-translate/core';
 import {
 	OnboardingClientResourceService,
 	OnboardingClientState,
+	updateUserInfo,
 } from '@tempus/client/onboarding-client/shared/data-access';
 import { UserType } from '@tempus/client/shared/ui-components/persistent';
-import { take } from 'rxjs';
 import { ButtonType } from '@tempus/client/shared/ui-components/presentational';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ICreateLocationDto, IUpdateResourceDto } from '@tempus/shared-domain';
@@ -47,7 +47,7 @@ export class PersonalInformationDisplayComponent implements OnInit {
 
 	editViewEnabled = false;
 
-	profilePrefix = 'onboardingResourceEditProfile.';
+	profilePrefix = 'onboardingResourceEditPersonalInformation.';
 
 	personalInfoForm = this.fb.group({});
 
@@ -55,6 +55,7 @@ export class PersonalInformationDisplayComponent implements OnInit {
 		private resourceService: OnboardingClientResourceService,
 		private translateService: TranslateService,
 		private fb: FormBuilder,
+		private store: Store<OnboardingClientState>,
 	) {
 		const { currentLang } = translateService;
 		// eslint-disable-next-line no-param-reassign
@@ -114,8 +115,12 @@ export class PersonalInformationDisplayComponent implements OnInit {
 
 	submitChanges() {
 		const updatedPersonalInformation = this.updatePersonalInformation();
-		this.resourceService.editResourcePersonalInformation(updatedPersonalInformation).pipe(take(1)).subscribe();
 		this.editViewEnabled = false;
+		this.store.dispatch(
+			updateUserInfo({
+				updatedPersonalInformation,
+			}),
+		);
 		window.location.reload();
 	}
 }

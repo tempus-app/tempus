@@ -43,7 +43,7 @@ export class ProfileViewController {
 	}
 
 	@UseGuards(JwtAuthGuard, RolesGuard)
-	@Roles(RoleType.BUSINESS_OWNER)
+	@Roles(RoleType.BUSINESS_OWNER, RoleType.SUPERVISOR)
 	@Post('/approve/:viewId')
 	async approveView(@Param('viewId') viewId: number, @Body() approveViewDto: ApproveViewDto): Promise<Revision | View> {
 		const approvalResult = await this.viewSerivce.approveOrDenyView(viewId, approveViewDto);
@@ -54,6 +54,17 @@ export class ProfileViewController {
 	@Post('/:resourceId')
 	async createView(@Param('resourceId') resourceId: number, @Body() createViewDto: CreateViewDto): Promise<View> {
 		const newView = await this.viewSerivce.createView(resourceId, createViewDto);
+		return newView;
+	}
+
+	@UseGuards(JwtAuthGuard, PermissionGuard)
+	@Post('/:userId/new-view')
+	async createSecondaryView(
+		@Param('userId') userId: number,
+		@Request() req,
+		@Body() createViewDto: CreateViewDto,
+	): Promise<View> {
+		const newView = await this.viewSerivce.createSecondaryView(userId, req.user, createViewDto);
 		return newView;
 	}
 

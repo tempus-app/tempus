@@ -1,8 +1,7 @@
 /* eslint-disable @typescript-eslint/dot-notation */
 /* eslint-disable class-methods-use-this */
 import { Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
-import { UserType } from '@tempus/client/shared/ui-components/persistent';
+import { FormBuilder, Validators, FormControl } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { TranslateService } from '@ngx-translate/core';
 import {
@@ -26,8 +25,8 @@ import {
 import { InputType } from '@tempus/client/shared/ui-components/input';
 import { CustomModalType, ModalService, ModalType } from '@tempus/client/shared/ui-components/modal';
 import { ButtonType, Column, ProjectManagmenetTableData } from '@tempus/client/shared/ui-components/presentational';
-import { Client, ErorType, ICreateLinkDto } from '@tempus/shared-domain';
-import { finalize, Subject, Subscription, take, takeUntil } from 'rxjs';
+import { Client, ErorType, ICreateLinkDto, RoleType } from '@tempus/shared-domain';
+import { distinctUntilChanged, finalize, Subject, Subscription, take, takeUntil } from 'rxjs';
 import { Router } from '@angular/router';
 
 @Component({
@@ -36,8 +35,6 @@ import { Router } from '@angular/router';
 	styleUrls: ['./manage-resources.component.scss'],
 })
 export class ManageResourcesComponent implements OnInit, OnDestroy {
-	userType = UserType;
-
 	constructor(
 		private modalService: ModalService,
 		private businessOwnerStore: Store<BusinessOwnerState>,
@@ -90,6 +87,8 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 
 	prefix = 'onboardingOwnerManageResources.';
 
+  roleType = RoleType;
+
 	$destroyed = new Subject<void>();
 
 	$inviteModalClosedEvent = new Subject<void>();
@@ -117,15 +116,56 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 	// For use in the search box
 	allSearchTerms: string[] = [];
 
+	roleTypeEnumToString = (roleType: RoleType): string => {
+		if (roleType == RoleType.AVAILABLE_RESOURCE) {
+			return 'Resource';
+		}
+		if (roleType == RoleType.SUPERVISOR) {
+			return 'Supervisor';
+		}
+		return '';
+	};
+
+	roleTypeStringToEnum = (roleType: string): RoleType => {
+		if (roleType == 'Resource') {
+			return RoleType.AVAILABLE_RESOURCE;
+		}
+		if (roleType == 'Supervisor') {
+			return RoleType.SUPERVISOR;
+		}
+		return RoleType.USER;
+	};
+
+	inviteTypeOptions: string[] = [
+		this.roleTypeEnumToString(RoleType.AVAILABLE_RESOURCE),
+		this.roleTypeEnumToString(RoleType.SUPERVISOR),
+	];
+
 	manageResourcesForm = this.fb.group({
 		search: [''],
 		invite: this.fb.group({
+			inviteType: [this.roleTypeEnumToString(RoleType.AVAILABLE_RESOURCE), Validators.required],
 			firstName: ['', Validators.required],
 			lastName: ['', Validators.required],
 			emailAddress: ['', [Validators.required, Validators.email]],
-			position: ['', Validators.required],
-			client: ['', Validators.required],
-			project: ['', Validators.required],
+			position: [
+				'',
+				this.requiredIfValidator(
+					() => this.manageResourcesForm.get('invite')?.get('inviteType')?.value == this.roleTypeEnumToString(RoleType.AVAILABLE_RESOURCE),
+				),
+			],
+			client: [
+				'',
+				this.requiredIfValidator(
+					() => this.manageResourcesForm.get('invite')?.get('inviteType')?.value == this.roleTypeEnumToString(RoleType.AVAILABLE_RESOURCE),
+				),
+			],
+			project: [
+				'',
+				this.requiredIfValidator(
+					() => this.manageResourcesForm.get('invite')?.get('inviteType')?.value == this.roleTypeEnumToString(RoleType.AVAILABLE_RESOURCE),
+				),
+			],
 		}),
 		assign: this.fb.group({
 			resource: ['', Validators.required],
@@ -284,6 +324,10 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 		);
 	};
 
+	get inviteType() {
+		return this.manageResourcesForm.get('invite')?.get('inviteType')?.value;
+	}
+
 	// Projects should be those that are under the client and not already assigned to the resource
 	updateProjects = (clientId?: string) => {
 		const existingSelectedClient = this.manageResourcesForm.get('assign')?.get('client')?.value;
@@ -342,17 +386,35 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 		this.modalService.confirmDisabled()?.next(true);
 		this.manageResourcesForm
 			.get('invite')
+			?.get('inviteType')
+			?.valueChanges.pipe(distinctUntilChanged())
+			.subscribe(() => {
+				this.manageResourcesForm.get('invite')?.get('project')?.reset();
+				this.manageResourcesForm.get('invite')?.get('position')?.reset();
+				this.manageResourcesForm.get('invite')?.get('client')?.reset();
+			});
+		this.manageResourcesForm
+			.get('invite')
 			?.valueChanges.pipe(
 				takeUntil(this.$inviteModalClosedEvent),
 				finalize(() => {
+					const createLinkDto = {
+						firstName: this.manageResourcesForm.get('invite')?.get('firstName')?.value,
+						lastName: this.manageResourcesForm.get('invite')?.get('lastName')?.value,
+						email: this.manageResourcesForm.get('invite')?.get('emailAddress')?.value,
+					} as ICreateLinkDto;
+
+					const inviteType = this.roleTypeStringToEnum(this.inviteType);
+
+					if (inviteType == RoleType.AVAILABLE_RESOURCE) {
+						(createLinkDto.projectId = this.manageResourcesForm.get('invite')?.get('project')?.value),
+							(createLinkDto.userType = RoleType.AVAILABLE_RESOURCE);
+					} else {
+						createLinkDto.userType = RoleType.SUPERVISOR;
+					}
 					this.businessOwnerStore.dispatch(
 						createLink({
-							createLinkDto: {
-								firstName: this.manageResourcesForm.get('invite')?.get('firstName')?.value,
-								lastName: this.manageResourcesForm.get('invite')?.get('lastName')?.value,
-								email: this.manageResourcesForm.get('invite')?.get('emailAddress')?.value,
-								projectId: this.manageResourcesForm.get('invite')?.get('project')?.value,
-							} as ICreateLinkDto,
+							createLinkDto,
 						}),
 					);
 				}),
@@ -370,6 +432,18 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 			.subscribe(() => {
 				this.resetModalData();
 			});
+	}
+
+	requiredIfValidator(predicate: Function) {
+		return (formControl: FormControl) => {
+			if (!formControl.parent) {
+				return null;
+			}
+			if (predicate()) {
+				return Validators.required(formControl);
+			}
+			return null;
+		};
 	}
 
 	assign() {

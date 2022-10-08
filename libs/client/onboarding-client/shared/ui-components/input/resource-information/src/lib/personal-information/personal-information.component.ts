@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-escape */
 import { Component, Output, EventEmitter, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { InputType } from '@tempus/client/shared/ui-components/input';
@@ -37,6 +38,7 @@ export class PersonalInformationComponent implements OnInit, OnChanges {
 		otherLink: [
 			'',
 			Validators.pattern(
+				// eslint-disable-next-line no-useless-escape
 				/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/,
 			),
 		],
@@ -81,6 +83,8 @@ export class PersonalInformationComponent implements OnInit, OnChanges {
 
 	@Input() showPersonalSummary = true;
 
+	@Input() disablePersonalInfo = false;
+
 	@Output() formGroup = new EventEmitter();
 
 	@Output() formIsValid = new EventEmitter<boolean>();
@@ -91,6 +95,18 @@ export class PersonalInformationComponent implements OnInit, OnChanges {
 		this.loadStoreData();
 		this.formGroup.emit(this.myInfoForm);
 		this.myInfoForm.updateValueAndValidity({ onlySelf: false, emitEvent: true });
+
+		if (this.disablePersonalInfo) {
+			this.myInfoForm.controls.firstName.disable();
+			this.myInfoForm.controls.lastName.disable();
+			this.myInfoForm.controls.phoneNumber.disable();
+			this.myInfoForm.controls.githubLink.disable();
+			this.myInfoForm.controls.linkedInLink.disable();
+			this.myInfoForm.controls.otherLink.disable();
+			this.myInfoForm.controls.country.disable();
+			this.myInfoForm.controls.city.disable();
+			this.myInfoForm.controls.state.disable();
+		}
 	}
 
 	loadStoreData() {

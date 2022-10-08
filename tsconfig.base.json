@@ -40,6 +40,9 @@
 			"@tempus/client/onboarding-client/shared/data-access": [
 				"libs/client/onboarding-client/shared/data-access/src/index.ts"
 			],
+			"@tempus/onboarding-client/shared/feature-edit-view-form": [
+				"libs/client/onboarding-client/shared/features/feature-edit-view-form/src/index.ts"
+			],
 			"@tempus/client/onboarding-client/shared/guards": ["libs/client/onboarding-client/shared/guards/src/index.ts"],
 			"@tempus/client/onboarding-client/shared/ui-components/input/resource-information": [
 				"libs/client/onboarding-client/shared/ui-components/input/resource-information/src/index.ts"
@@ -70,6 +73,9 @@
 			],
 			"@tempus/onboarding-client/resource/feature-profile": [
 				"libs/client/onboarding-client/resource/features/feature-profile/src/index.ts"
+			],
+			"@tempus/onboarding-client/resource/feature-views": [
+				"libs/client/onboarding-client/resource/features/feature-views/src/index.ts"
 			],
 			"@tempus/onboarding-client/resource/shell": ["libs/client/onboarding-client/resource/shell/src/index.ts"],
 			"@tempus/onboarding-client/shared/feature-sign-in": [

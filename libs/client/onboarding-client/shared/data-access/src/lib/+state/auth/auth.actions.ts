@@ -1,4 +1,5 @@
 import { createAction, props } from '@ngrx/store';
+import { IUpdateResourceDto } from '@tempus/shared-domain';
 
 export const login = createAction(
 	'[Onboarding Client Signin Page] Login',
@@ -15,7 +16,26 @@ export const loginSuccess = createAction(
 		email: string;
 	}>(),
 );
+export const updateUserInfo = createAction(
+	'[Onboarding Client Api] Update Info',
+	props<{
+		updatedPersonalInformation: IUpdateResourceDto;
+	}>(),
+);
+
+export const updateUserInfoSuccess = createAction(
+	'[Onboarding Client Api] Update Info Success',
+	props<{
+		firstName: string;
+		lastName: string;
+		email: string;
+	}>(),
+);
 export const loginFailure = createAction('[Onboarding Client Auth Api] Login Failure', props<{ error: Error }>());
+export const updateInfoFailure = createAction(
+	'[Onboarding Client Auth Api] Update Info Failure',
+	props<{ error: Error }>(),
+);
 export const logoutSuccess = createAction('[Onboarding Client Auth Api] Logout Success');
 export const logoutFailure = createAction('[Onboarding Client Auth Api] Logout Failure', props<{ error: Error }>());
 export const logout = createAction('[Onboarding Client Any Page] Logout', props<{ redirect: boolean }>());

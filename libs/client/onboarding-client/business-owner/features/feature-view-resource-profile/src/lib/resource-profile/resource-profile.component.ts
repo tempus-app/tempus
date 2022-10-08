@@ -6,7 +6,6 @@ import {
 	OnboardingClientState,
 	selectLoggedInUserNameEmail,
 } from '@tempus/client/onboarding-client/shared/data-access';
-import { UserType } from '@tempus/client/shared/ui-components/persistent';
 import { LoadView } from '@tempus/shared-domain';
 import { skip, take } from 'rxjs';
 import { getOriginalResume, selectOriginalResume } from '@tempus/client/onboarding-client/business-owner/data-access';
@@ -22,8 +21,6 @@ export class ResourceProfileComponent implements OnInit {
 		private resourceService: OnboardingClientResourceService,
 		private sharedStore: Store<OnboardingClientState>,
 	) {}
-
-	userType = UserType;
 
 	resourceFirstName = '';
 

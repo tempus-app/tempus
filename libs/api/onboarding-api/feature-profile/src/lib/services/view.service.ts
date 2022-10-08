@@ -41,23 +41,54 @@ export class ViewsService {
 		return newView;
 	}
 
+	async createSecondaryView(userId: number, user: User, createViewDto: CreateViewDto): Promise<View> {
+		const resourceEntity = await this.resourceService.getResourceInfo(userId);
+
+		const viewEntity = ViewEntity.fromDto(createViewDto);
+		viewEntity.resource = resourceEntity;
+		viewEntity.createdAt = new Date(Date.now());
+		viewEntity.lastUpdateDate = new Date(Date.now());
+
+		if (user.roles.includes(RoleType.BUSINESS_OWNER)) {
+			viewEntity.revisionType = RevisionType.APPROVED;
+			viewEntity.locked = false;
+			viewEntity.createdBy = RoleType.BUSINESS_OWNER;
+			viewEntity.updatedBy = RoleType.BUSINESS_OWNER;
+		} else {
+			viewEntity.revisionType = RevisionType.PENDING;
+			viewEntity.locked = true;
+			viewEntity.createdBy = RoleType.USER;
+			viewEntity.updatedBy = RoleType.USER;
+		}
+		const newView = await this.viewsRepository.save(viewEntity);
+
+		return newView;
+	}
+
 	async reviseView(viewId: number, user: User, newView: CreateViewDto): Promise<Revision> {
 		const view = await this.getView(viewId);
 		if (view.locked) throw new UnauthorizedException(`Cannot edit locked view`);
+
+		let userRole = RoleType.USER;
+		if (user.roles.includes(RoleType.BUSINESS_OWNER)) {
+			userRole = RoleType.BUSINESS_OWNER;
+		} else if (user.roles.includes(RoleType.SUPERVISOR)) {
+			userRole = RoleType.SUPERVISOR;
+		}
 
 		const resourceEntity = await this.resourceService.getResourceInfo(view.resource.id);
 		let newViewEntity = ViewEntity.fromDto(newView);
 		newViewEntity.resource = resourceEntity;
 		newViewEntity.locked = true;
 		newViewEntity.createdAt = new Date(Date.now());
-		newViewEntity.updatedBy = user.roles.includes(RoleType.BUSINESS_OWNER) ? RoleType.BUSINESS_OWNER : RoleType.USER;
+		newViewEntity.updatedBy = userRole;
 		newViewEntity.createdBy = view.createdBy;
 		newViewEntity.viewType = view.viewType;
 		newViewEntity.type = view.type;
 		newViewEntity.lastUpdateDate = new Date(Date.now());
 		newViewEntity.revisionType = RevisionType.PENDING;
 
-		if (user.roles.includes(RoleType.BUSINESS_OWNER)) {
+		if (user.roles.includes(RoleType.BUSINESS_OWNER) || user.roles.includes(RoleType.SUPERVISOR)) {
 			newViewEntity.createdAt = view.createdAt;
 			newViewEntity.revisionType = RevisionType.APPROVED;
 			const existingRevision = view.revision;

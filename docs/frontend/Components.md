@@ -56,14 +56,19 @@ Custom styling:
 
 ### Sidebar: tempus-sidebar
 
-- side navbar based off of material UI sidenav
+- side navbar based off of material UI sidenav. This is a persistent component that loads user name and email and handles navigation.
   - `userType`: UserType [RESOURCE, OWNER]
-  - `[tabs]`: array of tab labels (excluding logout)
-  - `name`: user name
-  - `email`: user email
 
 ```
 <tempus-sidebar [userType]="UserType.OWNER">
+```
+
+- tempus-sidebar is added to the router level to load components by route like so:
+
+```
+<tempus-sidebar [userType]="UserType.RESOURCE">
+  <router-outlet></router-outlet>
+</tempus-sidebar>
 ```
 
 ### Stepper: tempus-stepper

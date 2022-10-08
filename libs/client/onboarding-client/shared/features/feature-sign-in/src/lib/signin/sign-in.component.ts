@@ -71,7 +71,7 @@ export class SignInComponent implements OnInit, OnDestroy {
 				if (accessToken) {
 					const { roles } = decodeJwt(accessToken || '');
 
-					if (roles.includes(RoleType.BUSINESS_OWNER)) {
+					if (roles.includes(RoleType.BUSINESS_OWNER) || roles.includes(RoleType.SUPERVISOR)) {
 						this.router.navigate(['../owner'], { relativeTo: this.route });
 					} else if (roles.includes(RoleType.AVAILABLE_RESOURCE) || roles.includes(RoleType.ASSIGNED_RESOURCE)) {
 						this.router.navigate(['../resource'], { relativeTo: this.route });

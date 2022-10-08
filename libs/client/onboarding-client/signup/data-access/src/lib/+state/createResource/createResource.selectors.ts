@@ -18,6 +18,7 @@ export const selectResourceStatus = createSelector(selectResource, (state: Resou
 	return {
 		status: state.status,
 		error: state.error,
+		resumeSaved: state.savedResume,
 	};
 });
 export const selectCredentialsCreated = createSelector(

@@ -5,11 +5,14 @@ import { InputType } from '@tempus/client/shared/ui-components/input';
 import { Store } from '@ngrx/store';
 import {
 	createCredentials,
+	createResource,
 	selectCredentialsCreated,
+	selectLinkData,
 	selectResourceData,
 	SignupState,
 } from '@tempus/client/onboarding-client/signup/data-access';
 import { take, filter, switchMap, tap } from 'rxjs/operators';
+import { ICreateResourceDto, Link, RoleType } from '@tempus/shared-domain';
 import { validatePasswords } from './sign-up.validators';
 
 @Component({
@@ -23,6 +26,8 @@ export class SignUpComponent implements OnInit {
 	createdCredentials: boolean | undefined;
 
 	signupPrefix = 'onboardingSignupCredentials.main.';
+
+	linkData: Link = {} as Link;
 
 	formGroup: FormGroup = new FormGroup(
 		{
@@ -48,6 +53,9 @@ export class SignUpComponent implements OnInit {
 	}
 
 	ngOnInit(): void {
+		this.store.select(selectLinkData).subscribe(data => {
+			this.linkData = data || this.linkData;
+		});
 		this.store
 			.select(selectCredentialsCreated)
 			.pipe(
@@ -72,13 +80,29 @@ export class SignUpComponent implements OnInit {
 	signUp() {
 		this.formGroup?.markAllAsTouched();
 		if (this.formGroup?.valid) {
-			this.store.dispatch(
-				createCredentials({
+			if (this.linkData.userType == RoleType.AVAILABLE_RESOURCE) {
+				this.store.dispatch(
+					createCredentials({
+						password: this.formGroup.get('password')?.value,
+						email: this.formGroup.get('email')?.value,
+					}),
+				);
+				this.router.navigate(['../uploadresume'], { relativeTo: this.route });
+			} else {
+				const newSupervisor = {
+					firstName: this.linkData.firstName,
+					lastName: this.linkData.lastName,
+					email: this.linkData.email,
 					password: this.formGroup.get('password')?.value,
-					email: this.formGroup.get('email')?.value,
-				}),
-			);
-			this.router.navigate(['../uploadresume'], { relativeTo: this.route });
+					roles: [RoleType.SUPERVISOR],
+					linkId: this.linkData.id,
+				} as ICreateResourceDto;
+				this.store.dispatch(
+					createResource({
+						createResourceDto: newSupervisor,
+					}),
+				);
+			}
 		}
 	}
 }
