@@ -15,6 +15,8 @@ import {
 	ViewEntity,
 	ClientEntity,
 	ProjectEntity,
+	ClientRepresentativeEntity,
+	ProjectResourceEntity,
 } from './entities';
 
 @Module({
@@ -33,6 +35,8 @@ import {
 			ViewEntity,
 			ClientEntity,
 			ProjectEntity,
+			ClientRepresentativeEntity,
+			ProjectResourceEntity,
 		]),
 	],
 	controllers: [],

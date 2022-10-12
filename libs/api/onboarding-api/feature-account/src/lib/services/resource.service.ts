@@ -106,13 +106,24 @@ export class ResourceService {
 
 	async getAllResourceProjectInfo(): Promise<UserProjectClientDto[]> {
 		const resources = await this.resourceRepository.find({
-			relations: ['projects', 'views', 'projects.client', 'views.revision'],
+			relations: [
+				'projectResources',
+				'projectResources.project',
+				'views',
+				'projectResources.project.client',
+				'views.revision',
+			],
 		});
 		const userProjectInfo: Array<UserProjectClientDto> = resources.map(res => {
-			const projClients = res.projects.map(proj => {
+			const projClients = res.projectResources.map(relation => {
 				return {
-					project: { val: proj.name, id: proj.id },
-					client: proj.client.clientName,
+					project: {
+						val: relation.project.name,
+						id: relation.project.id,
+						title: relation.title,
+						isCurrent: relation.endDate == null,
+					},
+					client: relation.project.client.clientName,
 				};
 			});
 			const revNeeded = res.views.some(view => view.revisionType === RevisionType.PENDING);
@@ -166,6 +177,16 @@ export class ResourceService {
 		} catch (e) {
 			throw new InternalServerErrorException(e);
 		}
+	}
+
+	public async isNowAvailable(resourceId: number) {
+		const existingResourceEntity = await this.resourceRepository.findOne(resourceId, {
+			relations: ['projectResources'],
+		});
+		// if there is a project with no end date, then there is one active project
+		return !existingResourceEntity.projectResources.find(projectResource => {
+			return projectResource.endDate === null;
+		});
 	}
 
 	public async updateRoleType(resourceId: number, newRole: RoleType): Promise<Resource> {

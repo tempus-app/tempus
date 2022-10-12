@@ -31,6 +31,7 @@ export class SeederService {
 	 */
 	async clear() {
 		await this.linkSeederService.clear();
+		await this.resourceSeedService.clear();
 
 		await this.resourceSeedService.clear();
 		await this.projectSeederService.clear();

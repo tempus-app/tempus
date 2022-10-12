@@ -1,6 +1,6 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Query, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { CreateProjectDto, UpdateProjectDto } from '@tempus/api/shared/dto';
+import { AssignProjectDto, CreateProjectDto, UpdateProjectDto } from '@tempus/api/shared/dto';
 import { JwtAuthGuard, Roles, RolesGuard } from '@tempus/api/shared/feature-auth';
 import { Project, RoleType } from '@tempus/shared-domain';
 import { ProjectService } from '../services/project.service';
@@ -31,12 +31,27 @@ export class ProjectController {
 
 	@UseGuards(JwtAuthGuard, RolesGuard)
 	@Roles(RoleType.BUSINESS_OWNER, RoleType.SUPERVISOR)
-	@Post('/:projectId/:resourceId/assign')
+	@Patch('/:projectId/:resourceId/assign')
 	async assignResourceToProject(
+		@Param('projectId') projectId: string,
+		@Param('resourceId') resourceId: string,
+		@Body() assignProjectDto: AssignProjectDto,
+	): Promise<void> {
+		await this.projectService.assignResourceToProject(
+			parseInt(projectId, 10),
+			parseInt(resourceId, 10),
+			assignProjectDto,
+		);
+	}
+
+	@UseGuards(JwtAuthGuard, RolesGuard)
+	@Roles(RoleType.BUSINESS_OWNER)
+	@Patch('/:projectId/:resourceId/unassign')
+	async unassignResourceToProject(
 		@Param('projectId') projectId: number,
 		@Param('resourceId') resourceId: number,
-	): Promise<Project> {
-		return this.projectService.assignResourceToProject(projectId, resourceId);
+	): Promise<void> {
+		return this.projectService.unassignResourceFromProject(projectId, resourceId);
 	}
 
 	@UseGuards(JwtAuthGuard, RolesGuard)
@@ -44,6 +59,13 @@ export class ProjectController {
 	@Patch('/:projectId')
 	async editProject(@Body() updateProjectDto: UpdateProjectDto): Promise<Project> {
 		return this.projectService.updateProject(updateProjectDto);
+	}
+
+	@UseGuards(JwtAuthGuard, RolesGuard)
+	@Roles(RoleType.BUSINESS_OWNER, RoleType.SUPERVISOR)
+	@Patch('/:projectId/complete')
+	async completeProject(@Param('projectId') projectId: number): Promise<Project> {
+		return this.projectService.completeProject(projectId);
 	}
 
 	@UseGuards(JwtAuthGuard, RolesGuard)
