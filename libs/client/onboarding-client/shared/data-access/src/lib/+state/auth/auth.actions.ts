@@ -1,5 +1,4 @@
 import { createAction, props } from '@ngrx/store';
-import { IUpdateResourceDto } from '@tempus/shared-domain';
 
 export const login = createAction(
 	'[Onboarding Client Signin Page] Login',
@@ -11,21 +10,6 @@ export const loginSuccess = createAction(
 		accessToken: string;
 		refreshToken: string;
 		loggedInUserId: number;
-		firstName: string;
-		lastName: string;
-		email: string;
-	}>(),
-);
-export const updateUserInfo = createAction(
-	'[Onboarding Client Api] Update Info',
-	props<{
-		updatedPersonalInformation: IUpdateResourceDto;
-	}>(),
-);
-
-export const updateUserInfoSuccess = createAction(
-	'[Onboarding Client Api] Update Info Success',
-	props<{
 		firstName: string;
 		lastName: string;
 		email: string;

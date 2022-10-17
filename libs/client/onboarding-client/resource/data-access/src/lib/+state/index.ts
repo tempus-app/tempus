@@ -1,2 +1,2 @@
-export * from './test';
+export * from './resource';
 export * from './resource.state';

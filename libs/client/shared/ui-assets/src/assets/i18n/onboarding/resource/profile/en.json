@@ -21,6 +21,7 @@
 	},
 	"onboardingResourceEditPersonalInformation": {
 		"cancel": "Cancel",
-		"submit": "Submit"
+		"submit": "Submit",
+		"title": "My Personal Information"
 	}
 }

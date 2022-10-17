@@ -1,15 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { TranslateService } from '@ngx-translate/core';
-import {
-	OnboardingClientResourceService,
-	OnboardingClientState,
-	updateUserInfo,
-} from '@tempus/client/onboarding-client/shared/data-access';
 import { UserType } from '@tempus/client/shared/ui-components/persistent';
 import { ButtonType } from '@tempus/client/shared/ui-components/presentational';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ICreateLocationDto, IUpdateResourceDto } from '@tempus/shared-domain';
+import { TempusResourceState, updateUserInfo } from 'libs/client/onboarding-client/resource/data-access/src/lib/+state';
+import { OnboardingClientResourceService } from '@tempus/client/onboarding-client/shared/data-access';
 
 @Component({
 	selector: 'tempus-personal-information-display',
@@ -55,7 +52,7 @@ export class PersonalInformationDisplayComponent implements OnInit {
 		private resourceService: OnboardingClientResourceService,
 		private translateService: TranslateService,
 		private fb: FormBuilder,
-		private store: Store<OnboardingClientState>,
+		private store: Store<TempusResourceState>,
 	) {
 		const { currentLang } = translateService;
 		// eslint-disable-next-line no-param-reassign
@@ -108,9 +105,13 @@ export class PersonalInformationDisplayComponent implements OnInit {
 			location: locationsDto,
 			phoneNumber: this.personalInfoForm.get('phoneNumber')?.value,
 			linkedInLink: this.personalInfoForm.get('linkedInLink')?.value,
-			githubLink: this.personalInfoForm.get('otherLink')?.value,
+			githubLink: this.personalInfoForm.get('githubLink')?.value,
 			otherLink: this.personalInfoForm.get('otherLink')?.value,
 		} as IUpdateResourceDto;
+	}
+
+	isValid() {
+		return this.personalInfoForm?.valid;
 	}
 
 	submitChanges() {

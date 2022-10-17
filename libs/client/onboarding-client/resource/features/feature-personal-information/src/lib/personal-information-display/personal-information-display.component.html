@@ -2,7 +2,7 @@
         <div id="page-container" fxLayout="column" fxFill fxLayoutGap="20px">
             <div id="title-container">
                 <div id="my-profile-container">
-                    <h2 class="mat-h2 page-title">My Personal Information</h2>
+                    <h2 class="mat-h2 page-title"> {{profilePrefix + 'title' | translate}}</h2>
                 </div>
                 <div id="button-container" class="page-title">
                     <tempus-button *ngIf="!editViewEnabled" [buttonType]="ButtonType.EDIT" color="accent"
@@ -13,6 +13,7 @@
                         matTooltipClass="tooltip"></tempus-button>
 
                     <tempus-button *ngIf="editViewEnabled"
+                    [disabled]="!isValid()"
                         label="{{ profilePrefix + 'submit' | translate }}" color="accent"
                         (buttonClick)="submitChanges()"
                         matTooltipClass="tooltip"></tempus-button>
