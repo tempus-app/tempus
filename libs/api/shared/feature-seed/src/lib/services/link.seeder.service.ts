@@ -5,7 +5,7 @@ import { Repository } from 'typeorm';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { faker } from '@faker-js/faker';
 import { LinkService } from '@tempus/onboarding-api/feature-account';
-import { Link } from '@tempus/shared-domain';
+import { Link, RoleType } from '@tempus/shared-domain';
 import { CreateLinkDto } from '@tempus/api/shared/dto';
 
 /**
@@ -49,6 +49,7 @@ export class LinkSeederService {
 				faker.internet.email(firstName, lastName),
 				faker.date.soon(7),
 				projects[i % projects.length].id,
+				RoleType.USER,
 			);
 			const linkEntity = LinkEntity.fromDto(link);
 			const createdLink = await this.linkService.createLink(linkEntity, link.projectId, false);

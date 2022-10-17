@@ -26,7 +26,24 @@ export class HttpErrorFilter implements ExceptionFilter {
 			statusCode,
 			message,
 		};
-		Logger.log(`request method: ${request.method} request url${request.url}`, JSON.stringify(devErrorResponse));
+
+		if (statusCode >= 500) {
+			Logger.error(
+				`Host: ${request.hostname} Request method: ${request.method} Request url: ${request.url}`,
+				JSON.stringify(devErrorResponse),
+			);
+		} else if (statusCode >= 400) {
+			Logger.warn(
+				`Host: ${request.hostname} Request method: ${request.method} Request url: ${request.url}`,
+				JSON.stringify(devErrorResponse),
+			);
+		} else {
+			Logger.log(
+				`Host: ${request.hostname} Request method: ${request.method} Request url: ${request.url}`,
+				JSON.stringify(devErrorResponse),
+			);
+		}
+
 		response
 			.status(statusCode)
 			.json(this.config.get('environment') === 'development' ? devErrorResponse : prodErrorResponse);
