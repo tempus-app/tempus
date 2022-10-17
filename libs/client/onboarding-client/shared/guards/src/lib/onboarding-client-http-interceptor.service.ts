@@ -52,12 +52,15 @@ export class InterceptorService implements HttpInterceptor {
 
 	intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
 		// Any endpoints which are not expected to involve access tokens should be added to omitted endpoints
-		const omitEndpoints = ['auth/login', './assets', 'onboarding/link', 'python-api/parse', 'onboarding/user/resource'];
+		const omitEndpoints = ['auth/login', './assets', 'onboarding/link', 'python-api/parse'];
 		omitEndpoints.forEach(endpoint => {
 			if (req.url.includes(endpoint)) {
 				this.skipInterceptor = true;
 			}
 		});
+		if (req.method === 'POST' && req.url.includes('onboarding/user/resource')) {
+			this.skipInterceptor = true;
+		}
 
 		// Saving resume does not need access token
 		if (req.method === 'PATCH' && req.url.includes('resume')) {

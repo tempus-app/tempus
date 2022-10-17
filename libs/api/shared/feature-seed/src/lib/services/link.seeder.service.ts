@@ -49,7 +49,7 @@ export class LinkSeederService {
 				faker.internet.email(firstName, lastName),
 				faker.date.soon(7),
 				projects[i % projects.length].id,
-				RoleType.USER,
+				RoleType.AVAILABLE_RESOURCE,
 			);
 			const linkEntity = LinkEntity.fromDto(link);
 			const createdLink = await this.linkService.createLink(linkEntity, link.projectId, false);

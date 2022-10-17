@@ -46,22 +46,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
 	profileSummary = '';
 
-	email = '';
-
-	phoneNumber = '';
-
-	country = '';
-
-	state = '';
-
-	city = '';
-
-	linkedInLink = '';
-
-	githubLink = '';
-
-	otherLink = '';
-
 	workExperiences: Array<ICreateExperienceDto> = [];
 
 	educations: Array<ICreateEducationDto> = [];
@@ -92,15 +76,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
 			this.firstName = resData.firstName;
 			this.lastName = resData.lastName;
 			this.fullName = `${resData.firstName} ${resData.lastName}`;
-			this.city = resData.location.city;
-			this.state = resData.location.province;
-			this.country = resData.location.country;
-			this.phoneNumber = resData.phoneNumber;
-			this.email = resData.email;
-			this.phoneNumber = resData.phoneNumber;
-			this.linkedInLink = resData.linkedInLink;
-			this.githubLink = resData.githubLink;
-			this.otherLink = resData.otherLink;
 
 			// TODO: ADD resource to the store
 			this.resourceService.getResourceOriginalResumeById(this.userId).subscribe(resumeBlob => {
