@@ -6,7 +6,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { OnboardingClientState } from '../onboardingClient.state';
 import { login, loginFailure, loginSuccess, logout, logoutFailure, logoutSuccess } from './auth.actions';
-import { OnboardingClientAuthService, OnboardingClientResourceService } from '../../services';
+import { OnboardingClientAuthService } from '../../services';
 
 @Injectable()
 export class AuthEffects {
@@ -15,7 +15,6 @@ export class AuthEffects {
 		private store: Store<OnboardingClientState>,
 		private authService: OnboardingClientAuthService,
 		private router: Router,
-		private resourceService: OnboardingClientResourceService,
 	) {}
 
 	login$ = createEffect(() =>

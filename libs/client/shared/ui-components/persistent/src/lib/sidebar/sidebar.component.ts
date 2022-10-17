@@ -64,11 +64,6 @@ export class SidebarComponent implements OnInit {
 			tab: SidebarTab.MANAGE_RESOURCES,
 			route: '/owner/view-resources',
 		},
-		{
-			tab: SidebarTab.PERSONAL_INFORMATION,
-			route: '/resource/personal-information',
-			base: true,
-		},
 	];
 
 	ngOnInit(): void {
@@ -96,12 +91,7 @@ export class SidebarComponent implements OnInit {
 		if (this.userType === UserType.OWNER) {
 			this.tabs = [SidebarTab.MANAGE_RESOURCES, SidebarTab.PENDING_APPROVALS];
 		} else {
-			this.tabs = [
-				SidebarTab.PRIMARY_VIEW,
-				SidebarTab.MY_VIEWS,
-				SidebarTab.MY_PROJECTS,
-				SidebarTab.PERSONAL_INFORMATION,
-			];
+			this.tabs = [SidebarTab.PRIMARY_VIEW, SidebarTab.MY_VIEWS, SidebarTab.MY_PROJECTS];
 		}
 	}
 

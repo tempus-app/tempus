@@ -59,6 +59,12 @@ export class EditViewFormComponent implements OnInit, OnDestroy {
 
 	viewName = new FormControl('View Name', Validators.required);
 
+	firstName = '';
+
+	lastName = '';
+
+	fullName = '';
+
 	experiencesSummary = '';
 
 	educationsSummary = '';
@@ -66,6 +72,22 @@ export class EditViewFormComponent implements OnInit, OnDestroy {
 	skillsSummary = '';
 
 	profileSummary = '';
+
+	email = '';
+
+	phoneNumber = '';
+
+	country = '';
+
+	state = '';
+
+	city = '';
+
+	linkedInLink = '';
+
+	githubLink = '';
+
+	otherLink = '';
 
 	testLinked = '';
 
@@ -79,7 +101,7 @@ export class EditViewFormComponent implements OnInit, OnDestroy {
 
 	destroyed$ = new Subject<void>();
 
-	personalInfoForm = this.fb.group({ profileSummary: '' });
+	personalInfoForm = this.fb.group({});
 
 	educationsForm = this.fb.group({});
 
@@ -102,6 +124,18 @@ export class EditViewFormComponent implements OnInit, OnDestroy {
 	ngOnInit(): void {
 		this.resourceService.getResourceInformation().subscribe(resData => {
 			this.userId = resData.id;
+			this.firstName = resData.firstName;
+			this.lastName = resData.lastName;
+			this.fullName = `${resData.firstName} ${resData.lastName}`;
+			this.city = resData.location.city;
+			this.state = resData.location.province;
+			this.country = resData.location.country;
+			this.phoneNumber = resData.phoneNumber;
+			this.email = resData.email;
+			this.phoneNumber = resData.phoneNumber;
+			this.linkedInLink = resData.linkedInLink;
+			this.githubLink = resData.githubLink;
+			this.otherLink = resData.otherLink;
 
 			// TODO: ADD resource to the store
 			this.resourceService.getResourceOriginalResumeById(this.userId).subscribe(resumeBlob => {
@@ -125,13 +159,13 @@ export class EditViewFormComponent implements OnInit, OnDestroy {
 				this.skills = latestView.skills.map(skill => skill.skill.name);
 				this.skillsSummary = latestView.skillsSummary;
 
-				this.personalInfoForm.patchValue({
-					profileSummary: this.profileSummary,
-				});
-
 				this.dataLoaded = true;
 			});
 		});
+	}
+
+	loadPersonalInfo(eventData: FormGroup) {
+		this.personalInfoForm = eventData;
 	}
 
 	loadExperiences(eventData: FormGroup) {

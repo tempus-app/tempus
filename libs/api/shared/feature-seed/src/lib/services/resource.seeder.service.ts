@@ -194,7 +194,7 @@ export class ResourceSeederService {
 	 * @param role roletype of resource
 	 * @returns resourceDto entity
 	 */
-	static createResource(role: RoleType, linkId: number) {
+	static createResource(role: RoleType) {
 		const firstName = faker.name.firstName();
 		const lastName = faker.name.lastName();
 		const password = faker.internet.password();
@@ -219,7 +219,6 @@ export class ResourceSeederService {
 			faker.lorem.sentences(7),
 			faker.lorem.sentences(7),
 			faker.lorem.sentences(7),
-			linkId,
 		);
 		return resource;
 	}
@@ -233,7 +232,7 @@ export class ResourceSeederService {
 		const createdResources: Resource[] = [];
 
 		for (let i = 0; i < links.length; i++) {
-			const resource = ResourceSeederService.createResource(RoleType.AVAILABLE_RESOURCE, links[i].id);
+			const resource = ResourceSeederService.createResource(RoleType.AVAILABLE_RESOURCE);
 			const { password } = resource;
 			resource.linkId = links[i].id;
 

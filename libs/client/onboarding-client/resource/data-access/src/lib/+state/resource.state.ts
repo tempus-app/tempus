@@ -1,14 +1,14 @@
 import { ActionReducerMap, createFeatureSelector } from '@ngrx/store';
-import { ResourceState, testReducer } from './resource/resource.reducers';
+import { testReducer, TestState, TEST_FEATURE_KEY } from './test/test.reducers';
 
 export const RESOURCE_FEATURE_KEY = 'resource';
 
-export interface TempusResourceState {
-	[RESOURCE_FEATURE_KEY]: ResourceState;
+export interface ResourceState {
+	[TEST_FEATURE_KEY]: TestState;
 }
 
-export const reducers: ActionReducerMap<TempusResourceState> = {
-	[RESOURCE_FEATURE_KEY]: testReducer,
+export const reducers: ActionReducerMap<ResourceState> = {
+	[TEST_FEATURE_KEY]: testReducer,
 };
 
-export const selectResourceState = createFeatureSelector<TempusResourceState>(RESOURCE_FEATURE_KEY);
+export const selectResourceState = createFeatureSelector<ResourceState>(RESOURCE_FEATURE_KEY);

@@ -13,15 +13,6 @@
 				"closeText": "Cancel",
 				"confirmText": "Submit"
 			}
-		},
-		"profileSummary": {
-			"title": "Profile Summary",
-			"textAreaPlaceHolder": "Enter profile summary."
 		}
-	},
-	"onboardingResourceEditPersonalInformation": {
-		"cancel": "Cancel",
-		"submit": "Submit",
-		"title": "My Personal Information"
 	}
 }

@@ -22,15 +22,6 @@ const routes: Routes = [
 					),
 			},
 			{
-				path: 'personal-information',
-				canLoad: [AuthGuard],
-				canActivate: [AuthGuard],
-				loadChildren: () =>
-					import('@tempus/onboarding-client/resource/feature-personal-information').then(
-						m => m.OnboardingClientResourceFeaturePersonalInformationModule,
-					),
-			},
-			{
 				path: 'my-views',
 				canLoad: [AuthGuard],
 				canActivate: [AuthGuard],

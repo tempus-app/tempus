@@ -11,7 +11,6 @@
 		"api-shared-feature-pdfgenerator": "libs/api/shared/feature-pdfgenerator",
 		"api-shared-feature-seed": "libs/api/shared/feature-seed",
 		"client-onboarding-client-business-owner-features-feature-view-resource-profile": "libs/client/onboarding-client/business-owner/features/feature-view-resource-profile",
-		"onboarding-client-resource-feature-personal-information": "libs/client/onboarding-client/resource/features/feature-personal-information",
 		"onboarding-client-resource-feature-views": "libs/client/onboarding-client/resource/features/feature-views",
 		"onboarding-client-shared-feature-edit-view-form": "libs/client/onboarding-client/shared/features/feature-edit-view-form",
 		"client-shared-ui-assets": "libs/client/shared/ui-assets",
