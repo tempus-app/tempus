@@ -17,6 +17,10 @@
 			"workExperience": "Work Experience",
 			"skills": "Skills",
 			"previewToggle": "Preview",
+			"profileSummary": {
+				"title": "Profile Summary",
+				"textAreaPlaceHolder": "Enter profile summary."
+			},
 			"buttons": {
 				"cancel": {
 					"label": "Cancel",

@@ -43,21 +43,36 @@
 		</div>
 		<div class="view-container" *ngIf="!previewViewEnabled" fxLayout="column" fxLayoutGap="20px">
 			<div fxFlex class="section-container">
-				<!-- TODO: enable personalInfo fields once changes can be saved -->
-				<tempus-resource-info-personal-information
-					(formGroup)="loadPersonalInfo($event)"
-					[disablePersonalInfo]="true"
-					[firstName]="firstName"
-					[lastName]="lastName"
-					[phoneNumber]="phoneNumber"
-					[country]="country"
-					[state]="state"
-					[city]="city"
-					[linkedInLink]="linkedInLink"
-					[githubLink]="githubLink"
-					[otherLink]="otherLink"
-					[profileSummary]="profileSummary"
-				></tempus-resource-info-personal-information>
+				<ng-container>
+					<div fxLayout="column">
+						<div fxFlex>
+							<div fxFlex="5"></div>
+							<div class="info-title">
+								<h2 class="mat-h2">{{ editViewFormPrefix + 'profileSummary.title' | translate }}</h2>
+							</div>
+							<div fxFlex="5"></div>
+						</div>
+						<div>
+							<div fxFlex="5"></div>
+							<tempus-card>
+								<form>
+									<div fxLayout="column">
+										<div fxLayout="row" fxLayoutAlign="center start" fxFlex="33%" class="block-2">
+											<div fxFlex="95" class="grid-item">
+												<tempus-text-area
+													id="profile-summary"
+													placeholder="{{ editViewFormPrefix + 'profileSummary.textAreaPlaceHolder' | translate }}"
+													[control]="$any(personalInfoForm).get('profileSummary')"
+												></tempus-text-area>
+											</div>
+										</div>
+									</div>
+								</form>
+							</tempus-card>
+							<div fxFlex="5"></div>
+						</div>
+					</div>
+				</ng-container>				
 			</div>
 			<div fxFlex class="section-container">
 				<tempus-resource-info-education
@@ -90,19 +105,10 @@
 		</div>
 		<div class="view-container" *ngIf="previewViewEnabled" fxFlex fxLayout="column" fxLayoutGap="20px">
 			<div class="preview-section-container">
-				<tempus-resource-display-personal-information
-					[firstName]="firstName"
-					[lastName]="lastName"
-					[email]="email"
-					[country]="country"
-					[state]="state"
-					[city]="city"
-					[phoneNumber]="phoneNumber"
-					[linkedInLink]="linkedInLink"
-					[githubLink]="githubLink"
-					[otherLink]="otherLink"
-					[profileSummary]="profileSummary"
-				></tempus-resource-display-personal-information>
+				<h2 class="mat-h2 section-title">{{ editViewFormPrefix + 'profileSummary.title' | translate }}</h2>
+				<tempus-card>
+					{{profileSummary}}
+				</tempus-card>
 			</div>
 			<div class="preview-section-container">
 				<h2 class="mat-h2 section-title">{{ editViewFormPrefix + 'education' | translate }}</h2>

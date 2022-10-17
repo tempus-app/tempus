@@ -43,20 +43,10 @@
 			<p class="mat-body-1" *ngIf="rejectionComments !== ''">{{ rejectionComments }}</p>
 		</div>
 		<div class="section-container">
-			<tempus-resource-display-personal-information
-				[firstName]="firstName"
-				[lastName]="lastName"
-				[country]="country"
-				[state]="state"
-				[city]="city"
-				[phoneNumber]="phoneNumber"
-				[email]="email"
-				[resume]="resume"
-				[linkedInLink]="linkedInLink"
-				[githubLink]="githubLink"
-				[otherLink]="otherLink"
-				[profileSummary]="profileSummary"
-			></tempus-resource-display-personal-information>
+			<h2 class="mat-h2 section-title">Profile Summary</h2>
+			<tempus-card>
+				{{profileSummary}}
+			</tempus-card>
 		</div>
 		<div class="section-container">
 			<h2 class="mat-h2 section-title">Education</h2>
