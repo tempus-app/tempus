@@ -1,6 +1,7 @@
 import { createAction, props } from '@ngrx/store';
 import {
 	Client,
+	IAssignProjectDto,
 	ICreateClientDto,
 	ICreateLinkDto,
 	ICreateProjectDto,
@@ -68,7 +69,7 @@ export const createProjectFailure = createAction(
 
 export const createResourceProjectAssignment = createAction(
 	'[Onboarding Client Manage Resources Page] Create Resource Project Assignment',
-	props<{ resourceId: number; projectId: number }>(),
+	props<{ resourceId: number; projectId: number; assignProjectDto: IAssignProjectDto }>(),
 );
 export const createResourceProjectAssignmentSuccess = createAction(
 	'[Onboarding Client Project API] Create Resource Project Assignment Success',

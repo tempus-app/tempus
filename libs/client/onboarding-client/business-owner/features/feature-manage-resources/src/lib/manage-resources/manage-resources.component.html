@@ -72,6 +72,44 @@
 				>
 					{{ prefix + 'modal.inviteModal.resourceErr' | translate }}
 				</mat-error>
+				<div fxLayout="row" fxLayoutGap="4%">
+					<div fxFlex="48%">
+						<tempus-text-input
+							[inputType]="InputType.DATE"
+							placeholder="{{ commonPrefix + 'dates.startPlaceholder' | translate }}"
+							[control]="$any(manageResourcesForm).get('assign').get('startDate')"
+						>
+						</tempus-text-input>
+						<mat-error
+							class="mat-body-2"
+							*ngIf="
+								$any(manageResourcesForm).get('assign').get('startDate').invalid &&
+								($any(manageResourcesForm).get('assign').get('startDate').touched ||
+									$any(manageResourcesForm).get('assign').get('startDate').dirty)
+							"
+						>
+							{{ prefix + 'modal.assignModal.startDateErr' | translate }}
+						</mat-error>
+					</div>
+					<div fxFlex="48%">
+						<tempus-text-input
+							[inputType]="InputType.TEXT"
+							placeholder="{{ prefix + 'modal.assignModal.titleLabel' | translate }}"
+							[control]="$any(manageResourcesForm).get('assign').get('title')"
+						>
+						</tempus-text-input>
+						<mat-error
+							class="mat-body-2"
+							*ngIf="
+								$any(manageResourcesForm).get('assign').get('title').invalid &&
+								($any(manageResourcesForm).get('assign').get('title').touched ||
+									$any(manageResourcesForm).get('assign').get('title').dirty)
+							"
+						>
+							{{ prefix + 'modal.assignModal.titleErr' | translate }}
+						</mat-error>
+					</div>
+				</div>
 			</tempus-card>
 			<tempus-card style="margin-top: 1rem">
 				<div fxLayout="row" fxLayoutGap="10px">
@@ -266,6 +304,7 @@
 		<tempus-create-project-modal
 			[form]="$any(manageResourcesForm).get('createProject')"
 			[clientOptions]="clientOptions"
+			[resourceOptions]="resourceOptions"
 			[clients]="clients"
 			style="margin-top: 1rem"
 		></tempus-create-project-modal>

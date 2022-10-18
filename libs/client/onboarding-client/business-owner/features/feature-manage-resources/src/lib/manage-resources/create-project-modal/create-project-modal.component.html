@@ -165,6 +165,24 @@
 				</div>
 			</div>
 		</tempus-card>
+
+		<tempus-dropdown
+			fxFlex="100%"
+			id="create-project-project-manager"
+			[label]="prefix + 'projectManagerLabel' | translate"
+			[optionsWithId]="resourceOptions"
+			[control]="$any(form).get('projectManager')"
+		></tempus-dropdown>
+		<mat-error
+			class="mat-body-2"
+			*ngIf="
+				$any(form).get('projectManager').invalid &&
+				($any(form).get('projectManager').touched || $any(form).get('projectManager').dirty)
+			"
+		>
+			{{ prefix + 'projectManagerErr' | translate }}
+		</mat-error>
+
 		<tempus-text-input
 			id="create-project-startDate"
 			fxFlex="100%"

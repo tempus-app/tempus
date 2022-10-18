@@ -40,6 +40,9 @@ export class CreateProjectModalComponent implements OnInit {
 	@Input()
 	form: FormGroup = this.fb.group({});
 
+	@Input()
+	resourceOptions: { val: string; id: number }[] = [];
+
 	currentClientReps: { val: string; id: number }[] = [];
 
 	changeCreateClient = () => {

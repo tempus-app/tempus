@@ -95,7 +95,7 @@ export class ResourceProjectClientManagementEffects {
 		this.actions$.pipe(
 			ofType(ProjManagementActions.createResourceProjectAssignment),
 			switchMap(data =>
-				this.projectService.assignResourceToProject(data.projectId, data.resourceId).pipe(
+				this.projectService.assignResourceToProject(data.projectId, data.resourceId, data.assignProjectDto).pipe(
 					map(() => {
 						return ProjManagementActions.createResourceProjectAssignmentSuccess();
 					}),

@@ -29,7 +29,7 @@ import {
 import { InputType } from '@tempus/client/shared/ui-components/input';
 import { CustomModalType, ModalService, ModalType } from '@tempus/client/shared/ui-components/modal';
 import { ButtonType, Column, ProjectManagmenetTableData } from '@tempus/client/shared/ui-components/presentational';
-import { Client, ErorType, ICreateLinkDto, RoleType } from '@tempus/shared-domain';
+import { Client, ErorType, IAssignProjectDto, ICreateLinkDto, RoleType } from '@tempus/shared-domain';
 import { distinctUntilChanged, finalize, skip, Subject, Subscription, take, takeUntil } from 'rxjs';
 import { Router } from '@angular/router';
 import { I } from '@angular/cdk/keycodes';
@@ -91,6 +91,8 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 	}
 
 	prefix = 'onboardingOwnerManageResources.';
+
+	commonPrefix = 'onboardingClient.input.common.';
 
 	roleType = RoleType;
 
@@ -213,6 +215,8 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 			resource: ['', Validators.required],
 			client: ['', Validators.required],
 			project: ['', Validators.required],
+			startDate: ['', Validators.required],
+			title: ['', Validators.required],
 		}),
 		createProject: this.fb.group({
 			client: ['', Validators.required],
@@ -224,21 +228,18 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 			startDate: ['', Validators.required],
 			status: ['', Validators.required],
 			name: ['', Validators.required],
+			projectManager: ['', Validators.required],
 		}),
 	});
 
 	ngOnInit(): void {
 		this.modalService.confirmEventSubject.pipe(takeUntil(this.$destroyed)).subscribe(modalId => {
 			this.modalService.close();
-			console.log(modalId);
 			if (modalId === 'inviteModal') {
 				this.$inviteModalClosedEvent.next();
 			} else if (modalId === 'assignModal') {
-				console.log('hi');
-
 				this.$assignModalClosedEvent.next();
 			} else if (modalId === 'newProjectModal') {
-				console.log('hi');
 				this.$createProjectModalClosedEvent.next();
 			} else if (modalId === 'error') {
 				this.businessOwnerStore.dispatch(resetAsyncStatusState());
@@ -441,12 +442,14 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 						const createClientDto = {
 							clientName,
 						};
+						// create client
 						this.businessOwnerStore.dispatch(
 							createClient({
 								createClientDto,
 							}),
 						);
 
+						// call with createdclient
 						this.businessOwnerStore
 							.select(selectCreatedClientData)
 							.pipe(takeUntil(this.$destroyed))
@@ -464,7 +467,6 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 			)
 			.subscribe(() => {
 				if (this.manageResourcesForm.get('createProject')?.valid) {
-					console.log(this.manageResourcesForm.get('createProject')?.value);
 					this.modalService.confirmDisabled()?.next(false);
 				} else {
 					this.modalService.confirmDisabled()?.next(true);
@@ -579,10 +581,15 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 			?.valueChanges.pipe(
 				takeUntil(this.$assignModalClosedEvent),
 				finalize(() => {
+					const assignDto: IAssignProjectDto = {
+						title: this.manageResourcesForm.get('assign')?.get('title')?.value,
+						startDate: this.manageResourcesForm.get('assign')?.get('startDate')?.value,
+					};
 					this.businessOwnerStore.dispatch(
 						createResourceProjectAssignment({
 							resourceId: this.manageResourcesForm.get('assign')?.get('resource')?.value,
 							projectId: this.manageResourcesForm.get('assign')?.get('project')?.value,
+							assignProjectDto: assignDto,
 						}),
 					);
 				}),

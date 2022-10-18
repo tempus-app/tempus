@@ -27,7 +27,6 @@
 				"clientNameLabel": "Client Name*",
 				"addNewClientButton": "Add New Client",
 				"useExistingClientButton": "Use Existing Client",
-				"clientRepLabel": "Client Representative",
 				"clientRepFirstName": "First Name*",
 				"clientRepLastName": "Last Name*",
 				"clientRepEmail": "Email*",
@@ -43,7 +42,9 @@
 				"clientRepEmailErr": "Please enter a valid email address",
 				"nameErr": "Please enter a project name",
 				"startDateErr": "Please enter a start date",
-				"statusErr": "Please enter a status"
+				"statusErr": "Please enter a status",
+				"projectManagerLabel": "Project Manager",
+				"projectManagerErr": "Please select a Project Manager"
 			},
 			"inviteModal": {
 				"resourceLabel": "Resource",
@@ -61,6 +62,9 @@
 				"lastNameErr": "Please enter a last name",
 				"emailAddressLabel": "Email address*",
 				"emailAddressErr": "Please enter a valid email address",
+				"startDateErr": "Please enter a start date",
+				"titleLabel": "Role",
+				"titleErr": "Please enter a role for resource",
 				"positionLabel": "Position*",
 				"positionErr": "Please enter a position",
 				"title": "Assign resource to a project",
