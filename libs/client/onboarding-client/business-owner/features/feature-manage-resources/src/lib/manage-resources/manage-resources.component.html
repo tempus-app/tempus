@@ -21,8 +21,9 @@
         <tempus-search-box
           fxFlex="50%"
           placeholder="{{ prefix + 'main.searchBox' | translate }}"
+          [showLabel]="false"
           [options]="allSearchTerms"
-          cssClass="secondary"
+          cssClass="primary"
           (optionSelect)="search($event)"
           [control]="$any(manageResourcesForm).get('search')"
         >
@@ -109,17 +110,24 @@
     </div>
   </ng-template>
   <ng-template #inviteTemplate>
-		<tempus-card style="margin-top: 1rem">
-			<div fxLayout="column">
+    <tempus-card style="margin-top: 1rem">
+      <div fxLayout="column">
         <div fxLayout="column" fxFlex="100%">
-            <tempus-dropdown
-              id="invite-type"
-              [control]="$any(manageResourcesForm).get('invite').get('inviteType')"
-              [label]="prefix + 'modal.inviteModal.typeOfUser' | translate"
-              [options]="inviteTypeOptions"
-            ></tempus-dropdown>
+          <tempus-dropdown
+            id="invite-type"
+            [control]="$any(manageResourcesForm).get('invite').get('inviteType')"
+            [label]="prefix + 'modal.inviteModal.typeOfUser' | translate"
+            [options]="inviteTypeOptions"
+          ></tempus-dropdown>
         </div>
-        <div fxLayout="column" fxFlex="100%" *ngIf="inviteType == roleTypeEnumToString(roleType.AVAILABLE_RESOURCE) || inviteType == roleTypeEnumToString(roleType.SUPERVISOR)">
+        <div
+          fxLayout="column"
+          fxFlex="100%"
+          *ngIf="
+            inviteType == roleTypeEnumToString(roleType.AVAILABLE_RESOURCE) ||
+            inviteType == roleTypeEnumToString(roleType.SUPERVISOR)
+          "
+        >
           <div fxLayout="row" fxLayoutGap="10px">
             <div fxFlex="50%">
               <tempus-text-input
@@ -246,8 +254,8 @@
             </div>
           </div>
         </div>
-			</div>
-		</tempus-card>
-	</ng-template>
+      </div>
+    </tempus-card>
+  </ng-template>
   <tempus-spinner [showSpinner]="loading"></tempus-spinner>
 </div>

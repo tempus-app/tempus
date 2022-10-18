@@ -9,7 +9,7 @@
 			"noRoles": "No defined roles"
 		},
 		"editViewForm": {
-			"viewNamePlaceholder": "*View name",
+			"viewNamePlaceholder": "View name",
 			"viewNameError": "Please enter a name for your view.",
 			"primaryView": "Primary View",
 			"education": "Education",
@@ -81,8 +81,8 @@
 				"addMoreTooltip": "Add more certification sections",
 				"removeTooltip": "Remove certification section",
 				"certificationItemLabel": "Certification ",
-				"certifyingAuthorityPlaceholder": "Certifying Authority *",
-				"titlePlaceholder": "Title *",
+				"certifyingAuthorityPlaceholder": "Certifying Authority",
+				"titlePlaceholder": "Title",
 				"certifyingAuthorityErr": "Please enter a certifying authority.",
 				"titleErr": "Please enter a title",
 				"summaryPlaceholder": "Summary"
@@ -94,8 +94,8 @@
 				"summaryPlaceholder": "Summary",
 				"removeTooltip": "Remove education section",
 				"qualificationItemLabel": "Qualification ",
-				"institutionPlaceholder": "Institution *",
-				"fieldPlaceholder": "Field *",
+				"institutionPlaceholder": "Institution",
+				"fieldPlaceholder": "Field",
 				"institutionErr": "Please enter an institution name.",
 				"qualificationErr": "Please enter a qualification field."
 			},
@@ -113,20 +113,21 @@
 				"summaryPlaceholder": "Summary",
 				"removeTooltip": "Remove work experience section",
 				"itemLabel": "Work Experience ",
-				"expTitlePlaceholder": "Title *",
-				"companyPlaceholder": "Company *",
+				"expTitlePlaceholder": "Title",
+				"companyPlaceholder": "Company",
 				"posErr": "Please enter a position title",
 				"companyErr": "Please enter a company name",
-				"descriptionErr": "Please enter a description."
+				"descriptionErr": "Please enter a description.",
+				"descriptionPlaceholder": "Description"
 			},
 			"personalInfo": {
 				"title": "Personal Information",
 				"info": {
-					"firstNamePlaceholder": "First Name *",
-					"lastNamePlaceholder": "Last Name *",
+					"firstNamePlaceholder": "First Name",
+					"lastNamePlaceholder": "Last Name",
 					"firstNameErr": "Please enter a first name.",
 					"lastNameErr": "Please enter a last name.",
-					"phNumPlaceholder": "Phone Number *",
+					"phNumPlaceholder": "Phone Number",
 					"phNumError": "Please enter a valid phone number.",
 					"personalSummaryPlaceholder": "Personal Summary"
 				},
