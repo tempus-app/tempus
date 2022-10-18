@@ -8,45 +8,132 @@ describe('tempus e2e tests', () => {
 		// TODO: Investigate how to run seeding within cypress
 	});
 
-	describe('login and logout', () => {
-		it('should login', () => {
-			const account = getUserCredentials(RoleType.ASSIGNED_RESOURCE);
-			const { email, password } = account;
+	// describe('login and logout', () => {
+	// 	it('should login', () => {
+	// 		const account = getUserCredentials(RoleType.ASSIGNED_RESOURCE);
+	// 		const { email, password } = account;
 
-			cy.get('input[id=username]').type(email);
-			cy.get('input[id=password]').type(`${password}{enter}`);
-			cy.get('.mat-button-wrapper').click();
-			cy.url().should('include', 'resource');
-		});
+	// 		cy.login(email, password);
+	// 		cy.url().should('include', 'resource');
+	// 	});
 
-		it('should logout', () => {
-			cy.get('[id=logout-button]').click();
-			cy.url().should('include', 'signin');
-		});
-	});
+	// 	it('should logout', () => {
+	// 		cy.get('[id=logout-button]').click();
+	// 		cy.url().should('include', 'signin');
+	// 	});
+	// });
 
-	describe('login as business owner', () => {
-		it('should login and show resource data', () => {
-			const account = getUserCredentials(RoleType.BUSINESS_OWNER);
-			const { email, password } = account;
+  describe('revision', () => {
+    it('should create revision and approve it', () => {
+      const resAccount = getUserCredentials(RoleType.AVAILABLE_RESOURCE);
+			const resEmail = resAccount.email
+      const resPassword = resAccount.password
 
-			cy.get('input[id=username]').type(email);
-			cy.get('input[id=password]').type(`${password}{enter}`);
-			cy.get('.mat-button-wrapper').click();
-			cy.get('.demarginizedCell').first().click();
-			cy.url().should('include', 'view-resource');
-		});
+			cy.login(resEmail, resPassword);
 
-		it('should invite user', () => {
-			cy.get('[id=invite-button]').click();
-			cy.get('input[id=first-name-invite]').type(testData.mockString);
-			cy.get('input[id=last-name-invite]').type(testData.mockString);
-			cy.get('input[id=email-address-invite]').type(testData.email);
-			cy.get('input[id=position-invite]').type(testData.mockString);
-			cy.get('[id=client-invite]').click().get('[id=dropdown-option]').first().click();
-			cy.get('[id=project-invite]').click().get('[id=dropdown-option]').first().click();
-			cy.get('tempus-button[color=accent]').click();
-			cy.url().should('include', 'manage-resources');
-		});
-	});
+      cy.wait(5000);
+
+      cy.get('[id=edit-profile-button]').wait(2000).click();
+
+      cy.wait(2000);
+
+      // Verify personal information fields are disabled
+      cy.get('#first-name-input mat-form-field').should('have.class', 'mat-form-field-disabled')
+      cy.get('#last-name-input mat-form-field').should('have.class', 'mat-form-field-disabled')
+      cy.get('#phNum-input mat-form-field').should('have.class', 'mat-form-field-disabled')
+      cy.get('#linkedin-link-input mat-form-field').should('have.class', 'mat-form-field-disabled')
+      cy.get('#github-link-input mat-form-field').should('have.class', 'mat-form-field-disabled')
+      cy.get('#other-link-input mat-form-field').should('have.class', 'mat-form-field-disabled')
+
+      // Verify form is unsubmittable until valid
+      cy.get('#institution-input input').first().scrollIntoView().clear()
+      cy.get('#institution-error').should('be.visible')
+      cy.get('#submit-profile-button button').should('be.disabled')
+
+      // Update profile summary and institution name
+      cy.get('#institution-input input').first().type('New institution name')
+      cy.get('#institution-error').should('not.exist')
+      cy.get('#profile-summary').scrollIntoView().clear()
+      cy.get('#profile-summary').type('New profile summary')
+
+      // Submit for approval
+      cy.get('#submit-profile-button button').click()
+      cy.get('tempus-info-modal tempus-button:nth-child(2)').click()
+
+      // Verify View locked post sending for approbal
+      cy.get('#error-icon').should('be.visible')
+      cy.get('#edit-profile-button button').should('be.disabled')
+
+
+      cy.get('[id=logout-button]').click();
+
+      // Login as business owner
+      const busOwnerAccount = getUserCredentials(RoleType.BUSINESS_OWNER);
+			const busOwnerEmail = busOwnerAccount.email
+      const busOwnerPassword = busOwnerAccount.password
+
+			cy.login(busOwnerEmail, busOwnerPassword);
+
+      cy.wait(5000);
+
+      // Verify the error icon shows for the resource who requested approval
+      const resRow = cy.contains('tr', `(${resEmail})`)
+      resRow.get('mat-icon').should('be.visible');
+
+      cy.contains('p', `(${resEmail})`).click();
+      cy.wait(2000)
+
+      cy.get('[id=revision-icon]').should('be.visible')
+
+      // Verify correct data changed by resource shows up here
+      cy.get('[id=profile-summary-text]').should('have.text', 'New profile summary')
+      cy.get('[id=institution-name-text]').first().should('have.text', 'New institution name')
+
+      // Approve changes
+      cy.get('[id=approve-view-button]').click()
+      cy.get('tempus-info-modal tempus-button').click()
+
+      cy.wait(2000)
+
+      // Verify the error icon does not show for the resource who requested approval
+      cy.get('#table-row-icon').should('not.exist');
+
+      cy.get('[id=logout-button]').click();
+      cy.login(resEmail, resPassword);
+
+      cy.wait(5000);
+
+      // Verify view not locked
+      cy.get('#error-icon').should('not.exist')
+      cy.get('#edit-profile-button button').should('not.be.disabled')
+
+      // Verify correct data changed by resource shows up here
+      cy.get('[id=profile-summary-text]').should('have.text', 'New profile summary')
+      cy.get('[id=institution-name-text]').should('have.text', 'New institution name')
+
+    })
+  })
+
+	// describe('login as business owner', () => {
+	// 	it('should login and show resource data', () => {
+	// 		const account = getUserCredentials(RoleType.BUSINESS_OWNER);
+	// 		const { email, password } = account;
+
+	// 		cy.login(email, password);
+	// 		cy.get('.demarginizedCell').first().click();
+	// 		cy.url().should('include', 'view-resource');
+	// 	});
+
+	// 	it('should invite user', () => {
+	// 		cy.get('[id=invite-button]').click();
+	// 		cy.get('input[id=first-name-invite]').type(testData.mockString);
+	// 		cy.get('input[id=last-name-invite]').type(testData.mockString);
+	// 		cy.get('input[id=email-address-invite]').type(testData.email);
+	// 		cy.get('input[id=position-invite]').type(testData.mockString);
+	// 		cy.get('[id=client-invite]').click().get('[id=dropdown-option]').first().click();
+	// 		cy.get('[id=project-invite]').click().get('[id=dropdown-option]').first().click();
+	// 		cy.get('tempus-button[color=accent]').click();
+	// 		cy.url().should('include', 'manage-resources');
+	// 	});
+	// });
 });

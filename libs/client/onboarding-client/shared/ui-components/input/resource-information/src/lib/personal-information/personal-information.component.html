@@ -18,6 +18,7 @@
 									[inputType]="InputType.TEXT"
 									placeholder="{{ personalInfoPrefix + 'info.firstNamePlaceholder' | translate }}"
 									cssClass="secondary"
+                  id="first-name-input"
 									[control]="$any(myInfoForm).get('firstName')"
 								>
 								</tempus-text-input>
@@ -27,6 +28,7 @@
 									[inputType]="InputType.TEXT"
 									placeholder="{{ personalInfoPrefix + 'info.lastNamePlaceholder' | translate }}"
 									cssClass="secondary"
+                  id="last-name-input"
 									[control]="$any(myInfoForm).get('lastName')"
 								>
 								</tempus-text-input>
@@ -66,6 +68,7 @@
 									placeholder="{{ personalInfoPrefix + 'info.phNumPlaceholder' | translate }}"
 									cssClass="secondary"
 									[control]="$any(myInfoForm).get('phoneNumber')"
+                  id="phNum-input"
 								></tempus-text-input>
 							</div>
 						</div>
@@ -117,6 +120,7 @@
 										[options]="countries"
 										placeholder="{{ commonPrefix + 'location.countryPlaceholder' | translate }}"
 										cssClass="secondary"
+                    id="country-searchbox"
 										(optionSelect)="updateStateOptions($event)"
 										[control]="$any(myInfoForm).get('country')"
 									>
@@ -127,6 +131,7 @@
 										[options]="states"
 										label="{{ commonPrefix + 'location.statePlaceholder' | translate }}"
 										cssClass="secondary"
+                    id="states-dropdown"
 										[control]="$any(myInfoForm).get('state')"
 									></tempus-dropdown>
 								</div>
@@ -165,6 +170,7 @@
 										placeholder="{{ commonPrefix + 'location.cityPlaceholder' | translate }}"
 										cssClass="secondary"
 										[control]="$any(myInfoForm).get('city')"
+                    id="city-input"
 									>
 									</tempus-text-input>
 								</div>
@@ -208,6 +214,7 @@
 									[inputType]="InputType.TEXT"
 									placeholder="{{ personalInfoPrefix + 'links.linkedinLinkPlaceholder' | translate }} "
 									cssClass="secondary"
+                  id="linkedin-link-input"
 									[control]="$any(myInfoForm).get('linkedInLink')"
 								>
 								</tempus-text-input>
@@ -217,6 +224,7 @@
 									[inputType]="InputType.TEXT"
 									placeholder="{{ personalInfoPrefix + 'links.githubLinkPlaceholder' | translate }}"
 									cssClass="secondary"
+                  id="github-link-input"
 									[control]="$any(myInfoForm).get('githubLink')"
 								>
 								</tempus-text-input>
@@ -255,6 +263,7 @@
 								<tempus-text-input
 									placeholder="{{ personalInfoPrefix + 'links.otherLinkPlaceholder' | translate }}"
 									cssClass="secondary"
+                  id="other-link-input"
 									[control]="$any(myInfoForm).get('otherLink')"
 								></tempus-text-input>
 							</div>

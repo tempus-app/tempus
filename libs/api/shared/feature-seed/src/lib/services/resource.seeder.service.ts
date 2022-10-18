@@ -219,6 +219,7 @@ export class ResourceSeederService {
 			faker.lorem.sentences(7),
 			faker.lorem.sentences(7),
 			faker.lorem.sentences(7),
+      null
 		);
 		return resource;
 	}

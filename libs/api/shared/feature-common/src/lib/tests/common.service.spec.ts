@@ -67,7 +67,7 @@ describe('CommonService', () => {
 
 			expect(mockResourceRepository.find).toBeCalledWith({
 				where: { email: resourceEntity.email },
-				relations: ['location', 'projects', 'views', 'experiences', 'educations', 'skills', 'certifications'],
+				relations: ['location', 'projectResources', 'views', 'experiences', 'educations', 'skills', 'certifications'],
 			});
 			expect(res).toEqual(resourceEntity);
 		});
@@ -104,7 +104,7 @@ describe('CommonService', () => {
 			});
 			expect(mockResourceRepository.find).toBeCalledWith({
 				where: { email: badUserEntity.email },
-				relations: ['location', 'projects', 'views', 'experiences', 'educations', 'skills', 'certifications'],
+				relations: ['location', 'projectResources', 'views', 'experiences', 'educations', 'skills', 'certifications'],
 			});
 
 			expect(error).toBeInstanceOf(NotFoundException);

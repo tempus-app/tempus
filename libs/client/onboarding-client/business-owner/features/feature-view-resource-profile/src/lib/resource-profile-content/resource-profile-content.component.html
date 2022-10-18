@@ -72,9 +72,9 @@
 
         <div fxFlex class="button-container" fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap="20px"
             fxLayoutAlign="end center" *ngIf="isRevision">
-            <button mat-raised-button color="warn" (click)="openRejectionDialog()">{{ viewResourceProfilePrefx +
+            <button id="reject-view-button" mat-raised-button color="warn" (click)="openRejectionDialog()">{{ viewResourceProfilePrefx +
                 'buttons.rejectButton.title' | translate }}</button>
-            <button mat-raised-button color="success" (click)="openConfirmationDialog()">{{ viewResourceProfilePrefx +
+            <button id="approve-view-button" mat-raised-button color="success" (click)="openConfirmationDialog()">{{ viewResourceProfilePrefx +
                 'buttons.approveButton.title' | translate }}</button>
         </div>
         <div fxFlex></div>
