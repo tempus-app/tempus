@@ -19,7 +19,7 @@ export class CreateProjectModalComponent implements OnInit {
 		translateService.use(currentLang);
 	}
 
-	createProjectUseExisitingClientRep = true;
+	createProjectUseExisitingClientRep = false;
 
 	createProjectUseExisitingClient = true;
 
@@ -60,6 +60,7 @@ export class CreateProjectModalComponent implements OnInit {
 
 			this.resetExistingClientDetails();
 		}
+		this.form.enable(); // retrigger validation
 	};
 
 	changeCreateClientRep = () => {
@@ -79,10 +80,11 @@ export class CreateProjectModalComponent implements OnInit {
 			// now required
 			this.form.get('clientRepFirstName')?.addValidators(Validators.required);
 			this.form.get('clientRepLastName')?.addValidators(Validators.required);
-			this.form.get('clientRepEmail')?.addValidators(Validators.required);
+			this.form.get('clientRepEmail')?.addValidators([Validators.required, Validators.email]);
 
 			this.resetExistingClientRepDetails();
 		}
+		this.form.enable(); // retrigger validation
 	};
 
 	updateClientRepresentatives = (clientId?: string) => {
@@ -98,6 +100,12 @@ export class CreateProjectModalComponent implements OnInit {
 						id: rep.id,
 					};
 				}) || [];
+
+		if (this.currentClientReps.length <= 0) {
+			if (this.createProjectUseExisitingClientRep) {
+				this.changeCreateClientRep();
+			}
+		}
 		this.resetNewClientDetails();
 	};
 
@@ -113,7 +121,7 @@ export class CreateProjectModalComponent implements OnInit {
 	resetNewClientRepDetails = () => {
 		this.form.get('clientRepFirstName')?.reset();
 		this.form.get('clientRepLastName')?.reset();
-		this.form.get('clientRepLastEmail')?.reset();
+		this.form.get('clientRepEmail')?.reset();
 	};
 
 	resetExistingClientRepDetails = () => {

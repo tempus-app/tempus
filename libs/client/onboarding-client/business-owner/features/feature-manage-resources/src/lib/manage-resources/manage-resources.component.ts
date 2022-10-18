@@ -211,43 +211,12 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 			project: ['', Validators.required],
 		}),
 		createProject: this.fb.group({
-			client: [
-				'',
-				this.requiredIfValidator(() => this.manageResourcesForm.get('createProject')?.get('clientName')?.value === ''),
-			],
-			clientName: [
-				'',
-				this.requiredIfValidator(
-					() => this.manageResourcesForm.get('createProject')?.get('client')?.value === undefined,
-				),
-			],
-			clientRepresentative: [
-				'',
-				this.requiredIfValidator(
-					() =>
-						!this.manageResourcesForm.get('createProject')?.get('clientRepFirstName')?.value &&
-						!this.manageResourcesForm.get('createProject')?.get('clientRepLastName')?.value &&
-						!this.manageResourcesForm.get('createProject')?.get('clientRepEmail')?.value,
-				),
-			],
-			clientRepFirstName: [
-				'',
-				this.requiredIfValidator(
-					() => !this.manageResourcesForm.get('createProject')?.get('clientRepresentative')?.value,
-				),
-			],
-			clientRepLastName: [
-				'',
-				this.requiredIfValidator(
-					() => this.manageResourcesForm.get('createProject')?.get('clientRepresentative')?.value == null,
-				),
-			],
-			clientRepEmail: [
-				'',
-				this.requiredIfValidator(
-					() => this.manageResourcesForm.get('createProject')?.get('clientRepresentative')?.value == null,
-				),
-			],
+			client: ['', Validators.required],
+			clientName: [''],
+			clientRepresentative: ['', Validators.required],
+			clientRepFirstName: ['', Validators.required],
+			clientRepLastName: ['', Validators.required],
+			clientRepEmail: ['', [Validators.email, Validators.required]],
 			startDate: ['', Validators.required],
 			status: ['', Validators.required],
 			name: ['', Validators.required],
