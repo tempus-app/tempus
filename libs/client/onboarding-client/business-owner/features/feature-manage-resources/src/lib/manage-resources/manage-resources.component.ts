@@ -7,7 +7,9 @@ import { Store } from '@ngrx/store';
 import { TranslateService } from '@ngx-translate/core';
 import {
 	BusinessOwnerState,
+	createClient,
 	createLink,
+	createProject,
 	createResourceProjectAssignment,
 	getAllClients,
 	getAllResProjInfo,
@@ -15,6 +17,7 @@ import {
 	resetProjManagementState,
 	selectAsyncStatus,
 	selectClientData,
+	selectCreatedClientData,
 	selectProjectAssigned,
 	selectResProjClientData,
 } from '@tempus/client/onboarding-client/business-owner/data-access';
@@ -27,8 +30,9 @@ import { InputType } from '@tempus/client/shared/ui-components/input';
 import { CustomModalType, ModalService, ModalType } from '@tempus/client/shared/ui-components/modal';
 import { ButtonType, Column, ProjectManagmenetTableData } from '@tempus/client/shared/ui-components/presentational';
 import { Client, ErorType, ICreateLinkDto, RoleType } from '@tempus/shared-domain';
-import { distinctUntilChanged, finalize, Subject, Subscription, take, takeUntil } from 'rxjs';
+import { distinctUntilChanged, finalize, skip, Subject, Subscription, take, takeUntil } from 'rxjs';
 import { Router } from '@angular/router';
+import { I } from '@angular/cdk/keycodes';
 
 @Component({
 	selector: 'tempus-manage-resources',
@@ -136,7 +140,7 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 	@ViewChild('assignTemplate')
 	assignModal!: TemplateRef<unknown>;
 
-	@ViewChild('newProject')
+	@ViewChild('newProjectTemplate')
 	newProjectModal!: TemplateRef<unknown>;
 
 	tableColumns: Array<Column> = [];
@@ -213,7 +217,7 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 		createProject: this.fb.group({
 			client: ['', Validators.required],
 			clientName: [''],
-			clientRepresentative: ['', Validators.required],
+			clientRepresentative: [''],
 			clientRepFirstName: ['', Validators.required],
 			clientRepLastName: ['', Validators.required],
 			clientRepEmail: ['', [Validators.email, Validators.required]],
@@ -226,11 +230,15 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 	ngOnInit(): void {
 		this.modalService.confirmEventSubject.pipe(takeUntil(this.$destroyed)).subscribe(modalId => {
 			this.modalService.close();
+			console.log(modalId);
 			if (modalId === 'inviteModal') {
 				this.$inviteModalClosedEvent.next();
 			} else if (modalId === 'assignModal') {
+				console.log('hi');
+
 				this.$assignModalClosedEvent.next();
-			} else if (modalId === 'newProject') {
+			} else if (modalId === 'newProjectModal') {
+				console.log('hi');
 				this.$createProjectModalClosedEvent.next();
 			} else if (modalId === 'error') {
 				this.businessOwnerStore.dispatch(resetAsyncStatusState());
@@ -395,7 +403,7 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 		});
 	}
 
-	createProject() {
+	createProjectModal() {
 		this.translateService
 			.get(`${this.prefix}modal.newProjectModal`)
 			.pipe(take(1))
@@ -418,7 +426,41 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 			.get('createProject')
 			?.valueChanges.pipe(
 				takeUntil(this.$createProjectModalClosedEvent),
-				finalize(() => {}),
+				finalize(() => {
+					const createProjectForm = this.manageResourcesForm.get('createProject');
+					const clientName = createProjectForm?.get('clientName')?.value;
+					const projectData = {
+						name: createProjectForm?.get('name')?.value,
+						startDate: createProjectForm?.get('startDate')?.value,
+						clientRepresentativeFirstName: createProjectForm?.get('clientRepFirstName')?.value,
+						clientRepresentativeLastName: createProjectForm?.get('clientRepLastName')?.value,
+						clientRepresentativeEmail: createProjectForm?.get('clientRepEmail')?.value,
+						clientRepresentativeId: createProjectForm?.get('clientRepresentative')?.value,
+					};
+					if (clientName) {
+						const createClientDto = {
+							clientName,
+						};
+						this.businessOwnerStore.dispatch(
+							createClient({
+								createClientDto,
+							}),
+						);
+
+						this.businessOwnerStore
+							.select(selectCreatedClientData)
+							.pipe(takeUntil(this.$destroyed))
+							.subscribe(data => {
+								if (data) {
+									const createProjectDto = { ...projectData, clientId: data?.id };
+									this.businessOwnerStore.dispatch(createProject({ createProjectDto }));
+								}
+							});
+					} else {
+						const createProjectDto = { ...projectData, clientId: createProjectForm?.get('client')?.value };
+						this.businessOwnerStore.dispatch(createProject({ createProjectDto }));
+					}
+				}),
 			)
 			.subscribe(() => {
 				if (this.manageResourcesForm.get('createProject')?.valid) {
@@ -455,7 +497,6 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 			?.get('inviteType')
 			?.valueChanges.pipe(distinctUntilChanged())
 			.subscribe(() => {
-				console.log('hi');
 				this.manageResourcesForm.get('invite')?.get('project')?.reset();
 				this.manageResourcesForm.get('invite')?.get('position')?.reset();
 				this.manageResourcesForm.get('invite')?.get('client')?.reset();

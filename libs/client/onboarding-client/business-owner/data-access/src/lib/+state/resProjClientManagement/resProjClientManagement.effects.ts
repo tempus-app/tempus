@@ -41,7 +41,6 @@ export class ResourceProjectClientManagementEffects {
 			switchMap(() =>
 				this.projectService.getClients().pipe(
 					map(data => {
-						console.log(data);
 						return ProjManagementActions.getAllClientsSuccess({ clientData: data });
 					}),
 					catchError(error => of(ProjManagementActions.getAllClientsBasicFailure({ error }))),
@@ -59,6 +58,34 @@ export class ResourceProjectClientManagementEffects {
 						return ProjManagementActions.createLinkSuccess();
 					}),
 					catchError(error => of(ProjManagementActions.createLinkFailure({ error }))),
+				),
+			),
+		),
+	);
+
+	createClient$ = createEffect(() =>
+		this.actions$.pipe(
+			ofType(ProjManagementActions.createClient),
+			switchMap(data =>
+				this.projectService.createClient(data.createClientDto).pipe(
+					map(createdClient => {
+						return ProjManagementActions.createClientSuccess({ client: createdClient });
+					}),
+					catchError(error => of(ProjManagementActions.createClientFailure({ error }))),
+				),
+			),
+		),
+	);
+
+	createProject$ = createEffect(() =>
+		this.actions$.pipe(
+			ofType(ProjManagementActions.createProject),
+			switchMap(data =>
+				this.projectService.createProject(data.createProjectDto).pipe(
+					map(createdProject => {
+						return ProjManagementActions.createProjectSuccess({ project: createdProject });
+					}),
+					catchError(error => of(ProjManagementActions.createProjectFailure({ error }))),
 				),
 			),
 		),

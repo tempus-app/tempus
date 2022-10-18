@@ -12,7 +12,7 @@
 				<tempus-button fxFlex="50%" (buttonClick)="assign()" [label]="'Assign'" [color]="'accent'"></tempus-button>
 				<tempus-button
 					fxFlex="50%"
-					(buttonClick)="createProject()"
+					(buttonClick)="createProjectModal()"
 					[label]="'New Project'"
 					[color]="'accent'"
 				></tempus-button>
@@ -262,7 +262,7 @@
 			</div>
 		</tempus-card>
 	</ng-template>
-	<ng-template #newProject>
+	<ng-template #newProjectTemplate>
 		<tempus-create-project-modal
 			[form]="$any(manageResourcesForm).get('createProject')"
 			[clientOptions]="clientOptions"

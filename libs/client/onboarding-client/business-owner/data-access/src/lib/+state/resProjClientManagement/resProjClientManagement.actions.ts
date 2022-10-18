@@ -1,5 +1,12 @@
 import { createAction, props } from '@ngrx/store';
-import { Client, ICreateLinkDto, IUserProjClientDto } from '@tempus/shared-domain';
+import {
+	Client,
+	ICreateClientDto,
+	ICreateLinkDto,
+	ICreateProjectDto,
+	IUserProjClientDto,
+	Project,
+} from '@tempus/shared-domain';
 
 export const getAllResProjInfo = createAction(
 	'[Onboarding Client Manage Resources Page] Get All Resources Project Info',
@@ -30,6 +37,32 @@ export const createLink = createAction(
 export const createLinkSuccess = createAction('[Onboarding Client Link API] Create Link Success');
 export const createLinkFailure = createAction(
 	'[Onboarding Client Link API] Create Link Failure',
+	props<{ error: Error }>(),
+);
+
+export const createClient = createAction(
+	'[Onboarding Client Project API] Create Client',
+	props<{ createClientDto: ICreateClientDto }>(),
+);
+export const createClientSuccess = createAction(
+	'[Onboarding Client Project API] Create Client Success',
+	props<{ client: Client }>(),
+);
+export const createClientFailure = createAction(
+	'[Onboarding Client Project API] Create Client Failure',
+	props<{ error: Error }>(),
+);
+
+export const createProject = createAction(
+	'[Onboarding Client Project API] Create Project',
+	props<{ createProjectDto: ICreateProjectDto }>(),
+);
+export const createProjectSuccess = createAction(
+	'[Onboarding Client Project API] Create Project Success',
+	props<{ project: Project }>(),
+);
+export const createProjectFailure = createAction(
+	'[Onboarding Client Project API] Create Project Failure',
 	props<{ error: Error }>(),
 );
 
