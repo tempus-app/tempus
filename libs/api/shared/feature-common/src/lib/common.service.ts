@@ -43,7 +43,6 @@ export class CommonService {
 				],
 			})
 		)[0];
-		console.log(resourceEntity);
 		if (!resourceEntity) {
 			throw new NotFoundException(`Could not find resource with email ${email}`);
 		}

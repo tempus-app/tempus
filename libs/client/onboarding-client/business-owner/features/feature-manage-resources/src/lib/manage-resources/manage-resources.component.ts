@@ -18,6 +18,7 @@ import {
 	selectAsyncStatus,
 	selectClientData,
 	selectCreatedClientData,
+	selectCreatedProjecttData,
 	selectProjectAssigned,
 	selectResProjClientData,
 } from '@tempus/client/onboarding-client/business-owner/data-access';
@@ -463,6 +464,23 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 						const createProjectDto = { ...projectData, clientId: createProjectForm?.get('client')?.value };
 						this.businessOwnerStore.dispatch(createProject({ createProjectDto }));
 					}
+
+					// after project is created, add project manager
+					this.businessOwnerStore
+						.select(selectCreatedProjecttData)
+						.pipe(takeUntil(this.$destroyed))
+						.subscribe(data => {
+							if (data) {
+								const assignProjectDto = {
+									startDate: createProjectForm?.get('startDate')?.value,
+									title: 'Project Manager',
+								};
+								const resource = createProjectForm?.get('projectManager')?.value;
+								this.businessOwnerStore.dispatch(
+									createResourceProjectAssignment({ resourceId: resource, projectId: data.id, assignProjectDto }),
+								);
+							}
+						});
 				}),
 			)
 			.subscribe(() => {
