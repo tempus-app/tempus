@@ -1,0 +1,134 @@
+<tempus-card id="create-project-model">
+	<div fxLayout="column" fxLayoutGap="15">
+		<tempus-text-input
+			id="create-project-name"
+			fxFlex="50%"
+			[inputType]="InputType.TEXT"
+			placeholder="{{ prefix + 'projectNameLabel' | translate }}"
+			cssClass="secondary"
+			[control]="$any(form).get('name')"
+		>
+		</tempus-text-input>
+		<div div *ngIf="createProjectUseExisitingClient">
+			<div fxLayout="row">
+				<tempus-dropdown
+					fxFlex="100%"
+					id="client-select"
+					[label]="prefix + 'clientLabel' | translate"
+					[optionsWithId]="clientOptions"
+					[control]="$any(form).get('client')"
+					(optionSelect)="updateClientRepresentatives()"
+				></tempus-dropdown>
+				<mat-error
+					class="mat-body-2"
+					*ngIf="
+						$any(form).get('client').invalid && ($any(form).get('client').touched || $any(form).get('client').dirty)
+					"
+				>
+					error
+				</mat-error>
+			</div>
+			<div fxLayout="row" fxLayoutAlign="end center">
+				<button (click)="changeCreateClient()" class="link-button" mat-button color="secondary">
+					{{ prefix + 'addNewClientButton' | translate }}
+				</button>
+			</div>
+		</div>
+
+		<div *ngIf="!createProjectUseExisitingClient">
+			<div fxLayout="row">
+				<tempus-text-input
+					id="create-client-name"
+					fxFlex="100%"
+					[inputType]="InputType.TEXT"
+					placeholder="{{ prefix + 'clientNameLabel' | translate }}"
+					cssClass="secondary"
+					[control]="$any(form).get('clientName')"
+				>
+				</tempus-text-input>
+			</div>
+			<div fxLayout="row" fxLayoutAlign="end center">
+				<button class="link-button" (click)="changeCreateClient()" mat-button color="secondary">
+					{{ prefix + 'useExistingClientButton' | translate }}
+				</button>
+			</div>
+		</div>
+
+		<div div *ngIf="createProjectUseExisitingClientRep && currentClientReps.length > 0">
+			<div fxLayout="row">
+				<tempus-dropdown
+					fxFlex="100%"
+					id="client-select"
+					[label]="prefix + 'clientRepLabel' | translate"
+					[optionsWithId]="currentClientReps"
+					[control]="$any(form).get('clientRepresentative')"
+				></tempus-dropdown>
+			</div>
+			<div fxLayout="row" fxLayoutAlign="end center">
+				<button class="link-button" (click)="changeCreateClientRep()" mat-button color="secondary">
+					{{ prefix + 'addNewClientRepButton' | translate }}
+				</button>
+			</div>
+		</div>
+
+		<div fxLayout="column" *ngIf="!createProjectUseExisitingClientRep || currentClientReps.length <= 0">
+			<div fxLayout="row" fxLayoutGap="10px">
+				<tempus-text-input
+					id="create-client-rep-name"
+					fxFlex="50%"
+					[inputType]="InputType.TEXT"
+					placeholder="{{ prefix + 'clientRepFirstName' | translate }}"
+					cssClass="secondary"
+					[control]="$any(form).get('clientRepFirstName')"
+				>
+				</tempus-text-input>
+
+				<tempus-text-input
+					id="create-client-rep-name"
+					fxFlex="50%"
+					[inputType]="InputType.TEXT"
+					placeholder="{{ prefix + 'clientRepLastName' | translate }}"
+					cssClass="secondary"
+					[control]="$any(form).get('clientRepLastName')"
+				>
+				</tempus-text-input>
+			</div>
+			<tempus-text-input
+				id="create-client-rep-name"
+				fxFlex="100%"
+				[inputType]="InputType.EMAIL"
+				placeholder="{{ prefix + 'clientRepEmail' | translate }}"
+				cssClass="secondary"
+				[control]="$any(form).get('clientRepEmail')"
+			>
+			</tempus-text-input>
+			<div fxLayout="row" fxLayoutAlign="end center">
+				<button
+					[disabled]="currentClientReps.length <= 0"
+					class="link-button"
+					(click)="changeCreateClientRep()"
+					mat-button
+					color="secondary"
+				>
+					{{ prefix + 'useExistingClientRepButton' | translate }}
+				</button>
+			</div>
+		</div>
+		<tempus-text-input
+			id="create-project-startDate"
+			fxFlex="100%"
+			[inputType]="InputType.DATE"
+			placeholder="{{ commonPrefix + 'dates.startPlaceholder' | translate }}"
+			[control]="$any(form).get('startDate')"
+		>
+		</tempus-text-input>
+
+		<tempus-dropdown
+			fxFlex="100%"
+			id="create-project-status"
+			[label]="prefix + 'projectStatus' | translate"
+			[options]="statusOptions"
+			[control]="$any(form).get('status')"
+		></tempus-dropdown>
+	</div>
+</tempus-card>

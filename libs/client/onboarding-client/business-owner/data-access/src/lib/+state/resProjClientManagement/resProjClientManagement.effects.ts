@@ -41,6 +41,7 @@ export class ResourceProjectClientManagementEffects {
 			switchMap(() =>
 				this.projectService.getClients().pipe(
 					map(data => {
+						console.log(data);
 						return ProjManagementActions.getAllClientsSuccess({ clientData: data });
 					}),
 					catchError(error => of(ProjManagementActions.getAllClientsBasicFailure({ error }))),

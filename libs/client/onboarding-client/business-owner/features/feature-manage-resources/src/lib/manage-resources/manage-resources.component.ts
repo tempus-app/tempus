@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/member-ordering */
 /* eslint-disable @typescript-eslint/dot-notation */
 /* eslint-disable class-methods-use-this */
 import { Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
@@ -87,7 +88,7 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 
 	prefix = 'onboardingOwnerManageResources.';
 
-  roleType = RoleType;
+	roleType = RoleType;
 
 	$destroyed = new Subject<void>();
 
@@ -95,13 +96,19 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 
 	$assignModalClosedEvent = new Subject<void>();
 
+	$createProjectModalClosedEvent = new Subject<void>();
+
 	ButtonType = ButtonType;
 
 	InputType = InputType;
 
 	loading = false;
 
+	projectModalOpen = false;
+
 	currentProjects: { val: string; id: number }[] = [];
+
+	currentClientReps: { val: string; id: number }[] = [];
 
 	clientOptions: { val: string; id: number }[] = [];
 
@@ -113,24 +120,49 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 
 	resProjClientTableDataFiltered: ProjectManagmenetTableData[] = [];
 
+	name = '';
+
+	email = '';
+
+	assigned = '';
+
+	unassigned = '';
+
+	awaitingApproval = '';
+
+	@ViewChild('inviteTemplate')
+	inviteModal!: TemplateRef<unknown>;
+
+	@ViewChild('assignTemplate')
+	assignModal!: TemplateRef<unknown>;
+
+	@ViewChild('newProject')
+	newProjectModal!: TemplateRef<unknown>;
+
+	tableColumns: Array<Column> = [];
+
+	modalServiceConfirmEvent: Subscription | undefined;
+
+	createProjectUseExisitingClient = true;
+
 	// For use in the search box
 	allSearchTerms: string[] = [];
 
 	roleTypeEnumToString = (roleType: RoleType): string => {
-		if (roleType == RoleType.AVAILABLE_RESOURCE) {
+		if (roleType === RoleType.AVAILABLE_RESOURCE) {
 			return 'Resource';
 		}
-		if (roleType == RoleType.SUPERVISOR) {
+		if (roleType === RoleType.SUPERVISOR) {
 			return 'Supervisor';
 		}
 		return '';
 	};
 
 	roleTypeStringToEnum = (roleType: string): RoleType => {
-		if (roleType == 'Resource') {
+		if (roleType === 'Resource') {
 			return RoleType.AVAILABLE_RESOURCE;
 		}
-		if (roleType == 'Supervisor') {
+		if (roleType === 'Supervisor') {
 			return RoleType.SUPERVISOR;
 		}
 		return RoleType.USER;
@@ -151,19 +183,25 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 			position: [
 				'',
 				this.requiredIfValidator(
-					() => this.manageResourcesForm.get('invite')?.get('inviteType')?.value == this.roleTypeEnumToString(RoleType.AVAILABLE_RESOURCE),
+					() =>
+						this.manageResourcesForm.get('invite')?.get('inviteType')?.value ===
+						this.roleTypeEnumToString(RoleType.AVAILABLE_RESOURCE),
 				),
 			],
 			client: [
 				'',
 				this.requiredIfValidator(
-					() => this.manageResourcesForm.get('invite')?.get('inviteType')?.value == this.roleTypeEnumToString(RoleType.AVAILABLE_RESOURCE),
+					() =>
+						this.manageResourcesForm.get('invite')?.get('inviteType')?.value ===
+						this.roleTypeEnumToString(RoleType.AVAILABLE_RESOURCE),
 				),
 			],
 			project: [
 				'',
 				this.requiredIfValidator(
-					() => this.manageResourcesForm.get('invite')?.get('inviteType')?.value == this.roleTypeEnumToString(RoleType.AVAILABLE_RESOURCE),
+					() =>
+						this.manageResourcesForm.get('invite')?.get('inviteType')?.value ===
+						this.roleTypeEnumToString(RoleType.AVAILABLE_RESOURCE),
 				),
 			],
 		}),
@@ -172,27 +210,49 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 			client: ['', Validators.required],
 			project: ['', Validators.required],
 		}),
+		createProject: this.fb.group({
+			client: [
+				'',
+				this.requiredIfValidator(() => this.manageResourcesForm.get('createProject')?.get('clientName')?.value === ''),
+			],
+			clientName: [
+				'',
+				this.requiredIfValidator(
+					() => this.manageResourcesForm.get('createProject')?.get('client')?.value === undefined,
+				),
+			],
+			clientRepresentative: [
+				'',
+				this.requiredIfValidator(
+					() =>
+						!this.manageResourcesForm.get('createProject')?.get('clientRepFirstName')?.value &&
+						!this.manageResourcesForm.get('createProject')?.get('clientRepLastName')?.value &&
+						!this.manageResourcesForm.get('createProject')?.get('clientRepEmail')?.value,
+				),
+			],
+			clientRepFirstName: [
+				'',
+				this.requiredIfValidator(
+					() => !this.manageResourcesForm.get('createProject')?.get('clientRepresentative')?.value,
+				),
+			],
+			clientRepLastName: [
+				'',
+				this.requiredIfValidator(
+					() => this.manageResourcesForm.get('createProject')?.get('clientRepresentative')?.value == null,
+				),
+			],
+			clientRepEmail: [
+				'',
+				this.requiredIfValidator(
+					() => this.manageResourcesForm.get('createProject')?.get('clientRepresentative')?.value == null,
+				),
+			],
+			startDate: ['', Validators.required],
+			status: ['', Validators.required],
+			name: ['', Validators.required],
+		}),
 	});
-
-	name = '';
-
-	email = '';
-
-	assigned = '';
-
-	unassigned = '';
-
-	awaitingApproval = '';
-
-	@ViewChild('inviteTemplate')
-	inviteModal!: TemplateRef<unknown>;
-
-	@ViewChild('assignTemplate')
-	assignModal!: TemplateRef<unknown>;
-
-	tableColumns: Array<Column> = [];
-
-	modalServiceConfirmEvent: Subscription | undefined;
 
 	ngOnInit(): void {
 		this.modalService.confirmEventSubject.pipe(takeUntil(this.$destroyed)).subscribe(modalId => {
@@ -201,6 +261,8 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 				this.$inviteModalClosedEvent.next();
 			} else if (modalId === 'assignModal') {
 				this.$assignModalClosedEvent.next();
+			} else if (modalId === 'newProject') {
+				this.$createProjectModalClosedEvent.next();
 			} else if (modalId === 'error') {
 				this.businessOwnerStore.dispatch(resetAsyncStatusState());
 			}
@@ -364,6 +426,41 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 		});
 	}
 
+	createProject() {
+		this.translateService
+			.get(`${this.prefix}modal.newProjectModal`)
+			.pipe(take(1))
+			.subscribe(data => {
+				this.modalService.open(
+					{
+						title: data.title,
+						id: 'newProjectModal',
+						closable: true,
+						confirmText: data.confirmText,
+						modalType: ModalType.INFO,
+						closeText: data.closeText,
+						template: this.newProjectModal,
+					},
+					CustomModalType.CONTENT,
+				);
+			});
+
+		this.manageResourcesForm
+			.get('createProject')
+			?.valueChanges.pipe(
+				takeUntil(this.$createProjectModalClosedEvent),
+				finalize(() => {}),
+			)
+			.subscribe(() => {
+				if (this.manageResourcesForm.get('createProject')?.valid) {
+					console.log(this.manageResourcesForm.get('createProject')?.value);
+					this.modalService.confirmDisabled()?.next(false);
+				} else {
+					this.modalService.confirmDisabled()?.next(true);
+				}
+			});
+	}
+
 	invite() {
 		this.translateService
 			.get(`${this.prefix}modal.inviteModal`)
@@ -389,10 +486,12 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 			?.get('inviteType')
 			?.valueChanges.pipe(distinctUntilChanged())
 			.subscribe(() => {
+				console.log('hi');
 				this.manageResourcesForm.get('invite')?.get('project')?.reset();
 				this.manageResourcesForm.get('invite')?.get('position')?.reset();
 				this.manageResourcesForm.get('invite')?.get('client')?.reset();
 			});
+
 		this.manageResourcesForm
 			.get('invite')
 			?.valueChanges.pipe(
@@ -406,7 +505,7 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 
 					const inviteType = this.roleTypeStringToEnum(this.inviteType);
 
-					if (inviteType == RoleType.AVAILABLE_RESOURCE) {
+					if (inviteType === RoleType.AVAILABLE_RESOURCE) {
 						(createLinkDto.projectId = this.manageResourcesForm.get('invite')?.get('project')?.value),
 							(createLinkDto.userType = RoleType.AVAILABLE_RESOURCE);
 					} else {
@@ -495,8 +594,10 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 
 	resetModalData = () => {
 		this.currentProjects = [];
+		this.currentClientReps = [];
 		this.manageResourcesForm.get('invite')?.reset();
 		this.manageResourcesForm.get('assign')?.reset();
+		this.manageResourcesForm.get('createProject')?.reset();
 	};
 
 	filter() {

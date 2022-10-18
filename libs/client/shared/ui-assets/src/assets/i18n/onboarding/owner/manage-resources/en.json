@@ -18,6 +18,23 @@
 			"clientErr": "Please select a client",
 			"projectLabel": "Project",
 			"projectErr": "Please select a project",
+			"newProjectModal": {
+				"title": "Create a New Project",
+				"closeText": "Cancel",
+				"confirmText": "Create",
+				"clientLabel": "Client",
+				"clientNameLabel": "Client Name*",
+				"addNewClientButton": "Add New Client",
+				"useExistingClientButton": "Use Existing Client",
+				"clientRepLabel": "Client Representative",
+				"clientRepFirstName": "Client Rep First Name",
+				"clientRepLastName": "Client Rep Last Name",
+				"clientRepEmail": "Client Rep Email",
+				"addNewClientRepButton": "Add New Client Representative",
+				"useExistingClientRepButton": "Use Existing Client Representative",
+				"projectStatus": "status",
+				"projectNameLabel": "Project Name*"
+			},
 			"inviteModal": {
 				"resourceLabel": "Resource",
 				"resourceErr": "Please select a resource",
@@ -25,7 +42,7 @@
 				"subtitle": "A unique invitation link will be sent by email.",
 				"closeText": "Cancel",
 				"confirmText": "Invite",
-        "typeOfUser": "Please select the type of user to invite"
+				"typeOfUser": "Please select the type of user to invite"
 			},
 			"assignModal": {
 				"firstNameLabel": "First name*",

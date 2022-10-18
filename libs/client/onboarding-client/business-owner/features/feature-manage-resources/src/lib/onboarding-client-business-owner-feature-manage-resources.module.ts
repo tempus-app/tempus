@@ -11,7 +11,10 @@ import { ClientSharedUiComponentsModalModule } from '@tempus/client/shared/ui-co
 import { HttpClient } from '@angular/common/http';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { MatButtonModule } from '@angular/material/button';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { ManageResourcesComponent } from './manage-resources/manage-resources.component';
+import { CreateProjectModalComponent } from './manage-resources/create-project-modal/create-project-modal.component';
 
 function createTranslateLoader(http: HttpClient) {
 	return new TranslateHttpLoader(http, './assets/i18n/onboarding/owner/manage-resources/', '.json');
@@ -25,6 +28,8 @@ function createTranslateLoader(http: HttpClient) {
 		ClientSharedUiComponentsInputModule,
 		MatFormFieldModule,
 		MatIconModule,
+		MatButtonModule,
+		MatTooltipModule,
 		ClientSharedUiComponentsModalModule,
 		ClientSharedUiComponentsInputModule,
 		FlexLayoutModule,
@@ -45,6 +50,6 @@ function createTranslateLoader(http: HttpClient) {
 			extend: true,
 		}),
 	],
-	declarations: [ManageResourcesComponent],
+	declarations: [ManageResourcesComponent, CreateProjectModalComponent],
 })
 export class OnboardingClientBusinessOwnerFeatureManageResourcesModule {}
