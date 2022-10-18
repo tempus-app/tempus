@@ -30,9 +30,20 @@ export class CommonService {
 		const resourceEntity = (
 			await this.resourceRepository.find({
 				where: { email },
-				relations: ['location', 'projects', 'views', 'experiences', 'educations', 'skills', 'certifications'],
+				relations: [
+					'location',
+					'projectResources',
+					'projectResources.project',
+					'projectResources.resource',
+					'views',
+					'experiences',
+					'educations',
+					'skills',
+					'certifications',
+				],
 			})
 		)[0];
+		console.log(resourceEntity);
 		if (!resourceEntity) {
 			throw new NotFoundException(`Could not find resource with email ${email}`);
 		}
