@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { ModalService } from '@tempus/client/shared/ui-components/modal';
 import { InputType } from '@tempus/client/shared/ui-components/input';
@@ -10,7 +10,7 @@ import { Client } from '@tempus/shared-domain';
 	templateUrl: './create-project-modal.component.html',
 	styleUrls: ['./create-project-modal.component.scss'],
 })
-export class CreateProjectModalComponent {
+export class CreateProjectModalComponent implements OnInit {
 	constructor(private translateService: TranslateService, private modalService: ModalService, private fb: FormBuilder) {
 		const { currentLang } = translateService;
 		// eslint-disable-next-line no-param-reassign
@@ -133,4 +133,21 @@ export class CreateProjectModalComponent {
 	resetExistingClientRepDetails = () => {
 		this.form.get('clientRepresentatice')?.reset();
 	};
+
+	ngOnInit(): void {
+		console.log('hi');
+		// reset all dynamic validators
+		this.form.get('clientRepFirstName')?.clearValidators();
+		this.form.get('clientRepLastName')?.clearValidators();
+		this.form.get('clientRepEmail')?.clearValidators();
+		this.form.get('clientName')?.clearValidators();
+		this.form.get('clientRepresentative')?.clearValidators();
+		this.form.get('client')?.clearValidators();
+
+		// initial form set up
+		this.form.get('clientRepFirstName')?.addValidators(Validators.required);
+		this.form.get('clientRepLastName')?.addValidators(Validators.required);
+		this.form.get('clientRepEmail')?.addValidators([Validators.required, Validators.email]);
+		this.form.get('client')?.addValidators(Validators.required);
+	}
 }

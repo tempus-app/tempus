@@ -21,7 +21,7 @@ export const selectCreatedClientData = createSelector(
 	(state: ResourceProjectClientManagementState) => state.createdClient,
 );
 
-export const selectCreatedProjecttData = createSelector(
+export const selectCreatedProjectData = createSelector(
 	selectProjManagementState,
 	(state: ResourceProjectClientManagementState) => state.createdProject,
 );

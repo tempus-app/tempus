@@ -18,7 +18,7 @@ import {
 	selectAsyncStatus,
 	selectClientData,
 	selectCreatedClientData,
-	selectCreatedProjecttData,
+	selectCreatedProjectData,
 	selectProjectAssigned,
 	selectResProjClientData,
 } from '@tempus/client/onboarding-client/business-owner/data-access';
@@ -341,6 +341,17 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 					this.businessOwnerStore.dispatch(getAllResProjInfo());
 				}
 			});
+
+		this.businessOwnerStore
+			.select(selectCreatedProjectData)
+			.pipe(takeUntil(this.$destroyed))
+			.subscribe(data => {
+				if (data) {
+					// after a project is created we want updated client info
+					this.businessOwnerStore.dispatch(getAllClients());
+				}
+			});
+
 		this.sharedStore
 			.select(selectLoggedInUserNameEmail)
 			.pipe(take(1))
@@ -470,7 +481,7 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 
 					// after project is created, add project manager
 					this.businessOwnerStore
-						.select(selectCreatedProjecttData)
+						.select(selectCreatedProjectData)
 						.pipe(takeUntil(this.$destroyed))
 						.subscribe(data => {
 							if (data) {
