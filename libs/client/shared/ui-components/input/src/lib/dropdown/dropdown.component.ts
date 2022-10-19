@@ -9,6 +9,8 @@ import { FormControl } from '@angular/forms';
 export class DropdownComponent {
 	@Input() options: string[] | null = null;
 
+	@Input() optionsWithKeys: { val: string; id: unknown }[] | null = null;
+
 	@Input() optionsWithId: { val: string; id: number }[] | null = null;
 
 	@Input() cssClass = 'secondary';
@@ -19,7 +21,7 @@ export class DropdownComponent {
 
 	@Output() optionSelect = new EventEmitter();
 
-	optionSelected(option?: string | number) {
+	optionSelected(option?: string | number | unknown) {
 		this.optionSelect.emit(option ? <string>option : undefined);
 	}
 }

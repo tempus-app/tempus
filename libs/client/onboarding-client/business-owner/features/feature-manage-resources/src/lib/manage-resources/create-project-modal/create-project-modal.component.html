@@ -205,7 +205,7 @@
 			fxFlex="100%"
 			id="create-project-status"
 			[label]="prefix + 'projectStatus' | translate"
-			[options]="statusOptions"
+			[optionsWithKeys]="statusOptions"
 			[control]="$any(form).get('status')"
 		></tempus-dropdown>
 		<mat-error

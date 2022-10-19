@@ -31,9 +31,8 @@ import { InputType } from '@tempus/client/shared/ui-components/input';
 import { CustomModalType, ModalService, ModalType } from '@tempus/client/shared/ui-components/modal';
 import { ButtonType, Column, ProjectManagmenetTableData } from '@tempus/client/shared/ui-components/presentational';
 import { Client, ErorType, IAssignProjectDto, ICreateLinkDto, RoleType } from '@tempus/shared-domain';
-import { distinctUntilChanged, finalize, skip, Subject, Subscription, take, takeUntil } from 'rxjs';
+import { distinctUntilChanged, finalize, Subject, Subscription, take, takeUntil } from 'rxjs';
 import { Router } from '@angular/router';
-import { I } from '@angular/cdk/keycodes';
 
 @Component({
 	selector: 'tempus-manage-resources',
@@ -438,7 +437,11 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 						clientRepresentativeLastName: createProjectForm?.get('clientRepLastName')?.value,
 						clientRepresentativeEmail: createProjectForm?.get('clientRepEmail')?.value,
 						clientRepresentativeId: createProjectForm?.get('clientRepresentative')?.value,
+						status: createProjectForm?.get('status')?.value,
 					};
+					const startDate = createProjectForm?.get('startDate')?.value;
+					const projectManager = createProjectForm?.get('projectManager')?.value;
+
 					if (clientName) {
 						const createClientDto = {
 							clientName,
@@ -472,12 +475,11 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 						.subscribe(data => {
 							if (data) {
 								const assignProjectDto = {
-									startDate: createProjectForm?.get('startDate')?.value,
+									startDate,
 									title: 'Project Manager',
 								};
-								const resource = createProjectForm?.get('projectManager')?.value;
 								this.businessOwnerStore.dispatch(
-									createResourceProjectAssignment({ resourceId: resource, projectId: data.id, assignProjectDto }),
+									createResourceProjectAssignment({ resourceId: projectManager, projectId: data.id, assignProjectDto }),
 								);
 							}
 						});
@@ -489,6 +491,13 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 				} else {
 					this.modalService.confirmDisabled()?.next(true);
 				}
+			});
+
+		this.modalService
+			.closed()
+			.pipe(take(1))
+			.subscribe(() => {
+				this.resetModalData();
 			});
 	}
 

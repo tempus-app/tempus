@@ -9,9 +9,22 @@
 				}}</mat-option>
 			</ng-container>
 			<ng-container *ngIf="optionsWithId">
-				<mat-option id="dropdown-option" (click)="optionSelected(option.id)" *ngFor="let option of optionsWithId" [value]="option.id">{{
-					option.val
-				}}</mat-option>
+				<mat-option
+					id="dropdown-option"
+					(click)="optionSelected(option.id)"
+					*ngFor="let option of optionsWithId"
+					[value]="option.id"
+					>{{ option.val }}</mat-option
+				>
+			</ng-container>
+			<ng-container *ngIf="optionsWithKeys">
+				<mat-option
+					id="dropdown-option"
+					(click)="optionSelected(option.id)"
+					*ngFor="let option of optionsWithKeys"
+					[value]="option.id"
+					>{{ option.val }}</mat-option
+				>
 			</ng-container>
 		</mat-select>
 	</mat-form-field>

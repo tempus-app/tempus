@@ -1,17 +1,16 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { ModalService } from '@tempus/client/shared/ui-components/modal';
 import { InputType } from '@tempus/client/shared/ui-components/input';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Client } from '@tempus/shared-domain';
-import { I } from '@angular/cdk/keycodes';
 
 @Component({
 	selector: 'tempus-create-project-modal',
 	templateUrl: './create-project-modal.component.html',
 	styleUrls: ['./create-project-modal.component.scss'],
 })
-export class CreateProjectModalComponent implements OnInit {
+export class CreateProjectModalComponent {
 	constructor(private translateService: TranslateService, private modalService: ModalService, private fb: FormBuilder) {
 		const { currentLang } = translateService;
 		// eslint-disable-next-line no-param-reassign
@@ -25,7 +24,11 @@ export class CreateProjectModalComponent implements OnInit {
 
 	prefix = 'onboardingOwnerManageResources.modal.newProjectModal.';
 
-	statusOptions = ['NOT_STARTED', 'IN_PROGRESS'];
+	statusOptions = [
+		{ val: 'Not Started', id: 'not_started' },
+		{ val: 'Active', id: 'active' },
+		{ val: 'Completed', id: 'completed' },
+	];
 
 	commonPrefix = 'onboardingClient.input.common.';
 
@@ -130,7 +133,4 @@ export class CreateProjectModalComponent implements OnInit {
 	resetExistingClientRepDetails = () => {
 		this.form.get('clientRepresentatice')?.reset();
 	};
-
-	// eslint-disable-next-line @angular-eslint/no-empty-lifecycle-method
-	ngOnInit(): void {}
 }
