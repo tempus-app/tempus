@@ -135,7 +135,6 @@ export class CreateProjectModalComponent implements OnInit {
 	};
 
 	ngOnInit(): void {
-		console.log('hi');
 		// reset all dynamic validators
 		this.form.get('clientRepFirstName')?.clearValidators();
 		this.form.get('clientRepLastName')?.clearValidators();

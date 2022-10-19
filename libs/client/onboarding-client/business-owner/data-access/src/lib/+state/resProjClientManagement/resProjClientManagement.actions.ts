@@ -84,3 +84,10 @@ export const resetProjManagementState = createAction(
 );
 
 export const resetAsyncStatusState = createAction('[Onboarding Client Manage Resources Page] Reset Async Status State');
+
+export const resetCreatedClientState = createAction(
+	'[Onboarding Client Manage Resources Page] Reset Create Client State',
+);
+export const resetCreatedProjectState = createAction(
+	'[Onboarding Client Manage Resources Page] Reset Create Project State',
+);

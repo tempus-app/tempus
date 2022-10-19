@@ -115,4 +115,13 @@ export const projectManagementReducer = createReducer(
 		status: AsyncRequestState.IDLE,
 		error: null,
 	})),
+	on(ProjectManagementActions.resetCreatedClientState, state => ({
+		...state,
+		createdClient: null,
+	})),
+	on(ProjectManagementActions.resetCreatedProjectState, state => ({
+		...state,
+		status: AsyncRequestState.IDLE,
+		createdProject: null,
+	})),
 );

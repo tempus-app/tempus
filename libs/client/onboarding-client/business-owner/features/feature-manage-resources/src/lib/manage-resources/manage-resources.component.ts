@@ -14,6 +14,8 @@ import {
 	getAllClients,
 	getAllResProjInfo,
 	resetAsyncStatusState,
+	resetCreatedClientState,
+	resetCreatedProjectState,
 	resetProjManagementState,
 	selectAsyncStatus,
 	selectClientData,
@@ -508,6 +510,10 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 			.closed()
 			.pipe(take(1))
 			.subscribe(() => {
+				// clean up values after we are done with them
+				this.businessOwnerStore.dispatch(resetCreatedClientState());
+				this.businessOwnerStore.dispatch(resetCreatedProjectState());
+
 				this.resetModalData();
 			});
 	}
