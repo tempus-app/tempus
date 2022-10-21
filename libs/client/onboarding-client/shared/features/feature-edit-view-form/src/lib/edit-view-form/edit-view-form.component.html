@@ -5,8 +5,9 @@
 				<div id="my-profile-container" fxFlex>
 					<tempus-text-input
 						*ngIf="!isPrimaryView && !previewViewEnabled"
-						cssClass="secondary"
+						cssClass="primary"
 						class="view-name-input"
+						[showLabel]="false"
 						placeholder="{{ editViewFormPrefix + 'viewNamePlaceholder' | translate }}"
 						[control]="viewName"
 					></tempus-text-input>
@@ -72,7 +73,7 @@
 							<div fxFlex="5"></div>
 						</div>
 					</div>
-				</ng-container>				
+				</ng-container>
 			</div>
 			<div fxFlex class="section-container">
 				<tempus-resource-info-education
@@ -107,7 +108,7 @@
 			<div class="preview-section-container">
 				<h2 class="mat-h2 section-title">{{ editViewFormPrefix + 'profileSummary.title' | translate }}</h2>
 				<tempus-card>
-					{{profileSummary}}
+					{{ profileSummary }}
 				</tempus-card>
 			</div>
 			<div class="preview-section-container">

@@ -25,16 +25,16 @@
 				"subtitle": "A unique invitation link will be sent by email.",
 				"closeText": "Cancel",
 				"confirmText": "Invite",
-        "typeOfUser": "Please select the type of user to invite"
+				"typeOfUser": "Please select the type of user to invite"
 			},
 			"assignModal": {
-				"firstNameLabel": "First name*",
+				"firstNameLabel": "First name",
 				"firstNameErr": "Please enter a first name",
-				"lastNameLabel": "Last name*",
+				"lastNameLabel": "Last name",
 				"lastNameErr": "Please enter a last name",
-				"emailAddressLabel": "Email address*",
+				"emailAddressLabel": "Email address",
 				"emailAddressErr": "Please enter a valid email address",
-				"positionLabel": "Position*",
+				"positionLabel": "Position",
 				"positionErr": "Please enter a position",
 				"title": "Assign resource to a project",
 				"confirmText": "Assign",

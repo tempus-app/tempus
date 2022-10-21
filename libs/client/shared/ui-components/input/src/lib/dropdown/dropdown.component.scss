@@ -22,3 +22,13 @@ input {
 		display: none;
 	}
 }
+
+::ng-deep .mat-form-field-wrapper {
+	& .mat-select {
+		@include abs.body-1();
+	}
+}
+
+mat-option {
+	@include abs.body-1();
+}

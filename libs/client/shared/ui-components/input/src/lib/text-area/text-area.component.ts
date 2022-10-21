@@ -11,5 +11,7 @@ export class TextAreaComponent {
 
 	@Input() placeholder = '';
 
+	@Input() showLabel = false;
+
 	@Input() control: FormControl = new FormControl();
 }

@@ -9,6 +9,20 @@ input {
 	height: 50%;
 }
 
+mat-option {
+	@include abs.body-1();
+}
+
+::ng-deep .inline .mat-form-field-wrapper {
+	.mat-form-field-flex {
+		padding-top: 0;
+		.mat-form-field-suffix {
+			padding: 0.5em;
+		}
+	}
+	padding: 0;
+}
+
 ::ng-deep .primary .mat-form-field-wrapper .mat-form-field-flex {
 	@include c.tempus-form(abs.$primary-100);
 	+ .mat-form-field-underline {

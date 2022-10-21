@@ -11,6 +11,8 @@ export class DropdownComponent {
 
 	@Input() optionsWithId: { val: string; id: number }[] | null = null;
 
+	@Input() showLabel = true;
+
 	@Input() cssClass = 'secondary';
 
 	@Input() label = '';

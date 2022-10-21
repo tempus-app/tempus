@@ -1,8 +1,8 @@
 @use 'abstracts/helper' as abs;
 
-.user-bar-container{
-    padding-top: 1em;
-    background: abs.$primary-200;
+.user-bar-container {
+	padding-top: 1em;
+	background: abs.$primary-200;
 }
 
 tempus-dropdown {
@@ -10,10 +10,10 @@ tempus-dropdown {
 }
 
 tempus-button {
-    width: 100%;
+	width: 100%;
 }
 
-mat-icon{
-    padding: 1em;
-    color: red;
+mat-icon {
+	padding: 1em;
+	color: red;
 }
