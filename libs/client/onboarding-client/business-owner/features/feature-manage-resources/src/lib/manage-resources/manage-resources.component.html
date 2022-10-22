@@ -27,8 +27,9 @@
 				<tempus-search-box
 					fxFlex="50%"
 					placeholder="{{ prefix + 'main.searchBox' | translate }}"
+					[showLabel]="false"
 					[options]="allSearchTerms"
-					cssClass="secondary"
+					cssClass="primary"
 					(optionSelect)="search($event)"
 					[control]="$any(manageResourcesForm).get('search')"
 				>

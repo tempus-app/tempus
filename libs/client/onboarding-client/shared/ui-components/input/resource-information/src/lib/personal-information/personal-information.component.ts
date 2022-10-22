@@ -81,6 +81,8 @@ export class PersonalInformationComponent implements OnInit, OnChanges {
 
 	@Input() profileSummary = '';
 
+	@Input() showPersonalSummary = true;
+
 	@Input() disablePersonalInfo = false;
 
 	@Output() formGroup = new EventEmitter();
@@ -123,9 +125,6 @@ export class PersonalInformationComponent implements OnInit, OnChanges {
 	}
 
 	updateStateOptions(inputtedCountry: string) {
-		if (inputtedCountry === '') {
-			this.states = [];
-		}
 		const countryCode = Country.getAllCountries().find(country => country.name === inputtedCountry);
 		if (countryCode != null)
 			this.states = State.getStatesOfCountry(countryCode.isoCode).map(state => {

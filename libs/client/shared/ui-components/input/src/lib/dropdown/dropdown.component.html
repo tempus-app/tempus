@@ -1,8 +1,7 @@
 <ng-container>
-	<mat-form-field class="{{ cssClass }}" id="text-area" appearance="fill">
-		<mat-label>{{ label }}</mat-label>
+	<mat-form-field [ngClass]="{ inline: !showLabel }" class="{{ cssClass }}" id="text-area" appearance="fill">
+		<mat-label *ngIf="showLabel">{{ label }}</mat-label>
 		<mat-select [formControl]="control" [value]="control.value">
-			<mat-option (click)="optionSelected()">{{ 'dropdown.none' | translate }}</mat-option>
 			<ng-container *ngIf="options">
 				<mat-option (click)="optionSelected(option)" *ngFor="let option of options" [value]="option">{{
 					option

@@ -6,6 +6,7 @@ import {
 	AppConfig,
 	ICreateResourceDto,
 	ICreateViewDto,
+	IUpdateResourceDto,
 	IUserProjClientDto,
 	Resource,
 	Revision,
@@ -66,6 +67,12 @@ export class OnboardingClientResourceService {
 
 	public editResourceView(viewId: number, newView: ICreateViewDto): Observable<Revision> {
 		return this.http.patch<Revision>(`${this.url}/profile-view/${viewId}`, newView).pipe(catchError(handleError));
+	}
+
+	public editResourcePersonalInformation(updatedPersonalInformation: IUpdateResourceDto): Observable<Resource> {
+		return this.http
+			.patch<Resource>(`${this.url}/user/resource`, updatedPersonalInformation)
+			.pipe(catchError(handleError));
 	}
 
 	public downloadProfile(id: number): Observable<Blob> {

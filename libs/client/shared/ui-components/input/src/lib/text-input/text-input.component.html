@@ -1,12 +1,13 @@
 <ng-container>
-	<mat-form-field class="{{ cssClass }}" appearance="fill">
-		<input
-			type="{{ inputType }}"
-			id="{{ id }}"
-			matInput
-			placeholder="{{ placeholder }}"
-			[formControl]="control"
-			[value]="control.value"
-		/>
-	</mat-form-field>
+  <mat-form-field class="{{ cssClass }}" appearance="fill">
+    <mat-label *ngIf="showLabel">{{ placeholder }}</mat-label>
+    <input
+      type="{{ inputType }}"
+      id="{{ id }}"
+      matInput
+      placeholder="{{ showLabel ? '' : placeholder }}"
+      [formControl]="control"
+      [value]="control.value"
+    />
+  </mat-form-field>
 </ng-container>
