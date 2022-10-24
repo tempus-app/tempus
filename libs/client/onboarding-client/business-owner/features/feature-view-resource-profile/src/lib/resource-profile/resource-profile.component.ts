@@ -6,7 +6,7 @@ import {
 	OnboardingClientState,
 	selectLoggedInUserNameEmail,
 } from '@tempus/client/onboarding-client/shared/data-access';
-import { LoadView } from '@tempus/shared-domain';
+import { LoadView, ProjectResource } from '@tempus/shared-domain';
 import { skip, take } from 'rxjs';
 import { getOriginalResume, selectOriginalResume } from '@tempus/client/onboarding-client/business-owner/data-access';
 
@@ -46,6 +46,14 @@ export class ResourceProfileComponent implements OnInit {
 
 	loadedView: LoadView = { isRevision: false };
 
+	linkedInLink = '';
+
+	githubLink = '';
+
+	otherLink = '';
+
+	projectResources: ProjectResource[] = [];
+
 	childRevisionLoaded(loadedView: LoadView) {
 		this.loadedView = loadedView;
 	}
@@ -64,6 +72,11 @@ export class ResourceProfileComponent implements OnInit {
 			this.country = resourceInfo.location.country;
 			this.phoneNumber = resourceInfo.phoneNumber;
 			this.resourceEmail = resourceInfo.email;
+			this.linkedInLink = resourceInfo.linkedInLink;
+			this.githubLink = resourceInfo.githubLink;
+			this.otherLink = resourceInfo.otherLink;
+			this.projectResources = resourceInfo.projectResources;
+			console.log(resourceInfo.projectResources);
 		});
 		this.sharedStore.dispatch(getOriginalResume({ resourceId: id }));
 
