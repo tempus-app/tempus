@@ -76,7 +76,6 @@ export class ResourceProfileComponent implements OnInit {
 			this.githubLink = resourceInfo.githubLink;
 			this.otherLink = resourceInfo.otherLink;
 			this.projectResources = resourceInfo.projectResources;
-			console.log(resourceInfo.projectResources);
 		});
 		this.sharedStore.dispatch(getOriginalResume({ resourceId: id }));
 
