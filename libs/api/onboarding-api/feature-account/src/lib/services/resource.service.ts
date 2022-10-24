@@ -84,7 +84,16 @@ export class ResourceService {
 
 	async getResource(resourceId: number): Promise<Resource> {
 		const resourceEntity = await this.resourceRepository.findOne(resourceId, {
-			relations: ['experiences', 'educations', 'skills', 'certifications', 'location'],
+			relations: [
+				'experiences',
+				'educations',
+				'skills',
+				'certifications',
+				'location',
+				'projectResources',
+				'projectResources.project',
+				'projectResources.project.client',
+			],
 		});
 
 		if (!resourceEntity) {

@@ -18,6 +18,7 @@ import {
 	LoadView,
 	ViewNames,
 	RevisionType,
+	ProjectResource,
 } from '@tempus/shared-domain';
 import { OnboardingClientResourceService } from '@tempus/client/onboarding-client/shared/data-access';
 import { ModalService, CustomModalType, ModalType } from '@tempus/client/shared/ui-components/modal';
@@ -78,6 +79,18 @@ export class ResourceProfileContentComponent implements OnInit, OnChanges {
 	@Input()
 	resume: File | null = null;
 
+	@Input()
+	linkedInLink = '';
+
+	@Input()
+	githubLink = '';
+
+	@Input()
+	otherLink = '';
+
+	@Input()
+	projectResources: ProjectResource[] = [];
+
 	experiencesSummary = '';
 
 	educationsSummary = '';
@@ -85,12 +98,6 @@ export class ResourceProfileContentComponent implements OnInit, OnChanges {
 	skillsSummary = '';
 
 	profileSummary = '';
-
-	linkedInLink = '';
-
-	githubLink = '';
-
-	otherLink = '';
 
 	workExperiences: Array<ICreateExperienceDto> = [];
 
