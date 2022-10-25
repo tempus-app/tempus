@@ -25,7 +25,7 @@
 				</div>
 				<div fxFlex>
 					<h3 class="mat-h3 section-header">{{ personalInfoPrefix + 'links.title' | translate }}</h3>
-					<p class="mat-body-1">
+					<p class="mat-body-1" *ngIf="resume !== null" >
 						<strong>{{ personalInfoPrefix + 'links.resume' | translate }}</strong>
 						<a href="javascript:;" (click)="downloadResume()">{{ resume?.name }}</a>
 					</p>
@@ -43,7 +43,7 @@
 					</p>
 				</div>
 			</div>
-			<div fxFlexFill>
+			<div fxFlexFill  *ngIf="profileSummary !== ''">
 				<p class="mat-body-1" id="profile-summary-text">{{ profileSummary }}</p>
 			</div>
 		</div>

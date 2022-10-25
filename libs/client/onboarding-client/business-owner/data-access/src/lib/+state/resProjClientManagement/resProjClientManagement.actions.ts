@@ -1,5 +1,13 @@
 import { createAction, props } from '@ngrx/store';
-import { Client, ICreateLinkDto, IUserProjClientDto } from '@tempus/shared-domain';
+import {
+	Client,
+	IAssignProjectDto,
+	ICreateClientDto,
+	ICreateLinkDto,
+	ICreateProjectDto,
+	IUserProjClientDto,
+	Project,
+} from '@tempus/shared-domain';
 
 export const getAllResProjInfo = createAction(
 	'[Onboarding Client Manage Resources Page] Get All Resources Project Info',
@@ -33,9 +41,35 @@ export const createLinkFailure = createAction(
 	props<{ error: Error }>(),
 );
 
+export const createClient = createAction(
+	'[Onboarding Client Project API] Create Client',
+	props<{ createClientDto: ICreateClientDto }>(),
+);
+export const createClientSuccess = createAction(
+	'[Onboarding Client Project API] Create Client Success',
+	props<{ client: Client }>(),
+);
+export const createClientFailure = createAction(
+	'[Onboarding Client Project API] Create Client Failure',
+	props<{ error: Error }>(),
+);
+
+export const createProject = createAction(
+	'[Onboarding Client Project API] Create Project',
+	props<{ createProjectDto: ICreateProjectDto }>(),
+);
+export const createProjectSuccess = createAction(
+	'[Onboarding Client Project API] Create Project Success',
+	props<{ project: Project }>(),
+);
+export const createProjectFailure = createAction(
+	'[Onboarding Client Project API] Create Project Failure',
+	props<{ error: Error }>(),
+);
+
 export const createResourceProjectAssignment = createAction(
 	'[Onboarding Client Manage Resources Page] Create Resource Project Assignment',
-	props<{ resourceId: number; projectId: number }>(),
+	props<{ resourceId: number; projectId: number; assignProjectDto: IAssignProjectDto }>(),
 );
 export const createResourceProjectAssignmentSuccess = createAction(
 	'[Onboarding Client Project API] Create Resource Project Assignment Success',
@@ -50,3 +84,10 @@ export const resetProjManagementState = createAction(
 );
 
 export const resetAsyncStatusState = createAction('[Onboarding Client Manage Resources Page] Reset Async Status State');
+
+export const resetCreatedClientState = createAction(
+	'[Onboarding Client Manage Resources Page] Reset Create Client State',
+);
+export const resetCreatedProjectState = createAction(
+	'[Onboarding Client Manage Resources Page] Reset Create Project State',
+);

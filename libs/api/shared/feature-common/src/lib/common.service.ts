@@ -30,7 +30,17 @@ export class CommonService {
 		const resourceEntity = (
 			await this.resourceRepository.find({
 				where: { email },
-				relations: ['location', 'projectResources', 'views', 'experiences', 'educations', 'skills', 'certifications'],
+				relations: [
+					'location',
+					'projectResources',
+					'projectResources.project',
+					'projectResources.resource',
+					'views',
+					'experiences',
+					'educations',
+					'skills',
+					'certifications',
+				],
 			})
 		)[0];
 		if (!resourceEntity) {

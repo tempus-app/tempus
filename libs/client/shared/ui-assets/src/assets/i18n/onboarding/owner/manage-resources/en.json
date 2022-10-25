@@ -18,6 +18,32 @@
 			"clientErr": "Please select a client",
 			"projectLabel": "Project",
 			"projectErr": "Please select a project",
+			"newProjectModal": {
+				"title": "Create a New Project",
+				"closeText": "Cancel",
+				"confirmText": "Create",
+				"clientLabel": "Client",
+				"clientRepLabel": "Client Representative",
+				"clientNameLabel": "Client Name",
+				"addNewClient": "New Client",
+				"clientRepFirstName": "First Name",
+				"clientRepLastName": "Last Name",
+				"clientRepEmail": "Email",
+				"addNewClientRep": "New Client Representative",
+				"projectStatus": "status",
+				"projectNameLabel": "Project Name",
+				"clientErr": "Please select or create a new client",
+				"clientRepErr": "Please select or create a new client representative",
+				"clientNameErr": "Please enter a client name, or select existing",
+				"clientRepFnameErr": "Please enter a first name",
+				"clientRepLnameErr": "Please enter a last name",
+				"clientRepEmailErr": "Please enter a valid email address",
+				"nameErr": "Please enter a project name",
+				"startDateErr": "Please enter a start date",
+				"statusErr": "Please enter a status",
+				"projectManagerLabel": "Project Manager",
+				"projectManagerErr": "Please select a Project Manager"
+			},
 			"inviteModal": {
 				"resourceLabel": "Resource",
 				"resourceErr": "Please select a resource",
@@ -25,20 +51,24 @@
 				"subtitle": "A unique invitation link will be sent by email.",
 				"closeText": "Cancel",
 				"confirmText": "Invite",
-        "typeOfUser": "Please select the type of user to invite"
+				"typeOfUser": "Please select the type of user to invite"
 			},
 			"assignModal": {
-				"firstNameLabel": "First name*",
+				"firstNameLabel": "First name",
 				"firstNameErr": "Please enter a first name",
-				"lastNameLabel": "Last name*",
+				"lastNameLabel": "Last name",
 				"lastNameErr": "Please enter a last name",
-				"emailAddressLabel": "Email address*",
+				"emailAddressLabel": "Email address",
 				"emailAddressErr": "Please enter a valid email address",
-				"positionLabel": "Position*",
+				"startDateErr": "Please enter a start date",
+				"titleLabel": "Role",
+				"titleErr": "Please enter a role for resource",
+				"positionLabel": "Position",
 				"positionErr": "Please enter a position",
 				"title": "Assign resource to a project",
 				"confirmText": "Assign",
-				"closeText": "Cancel"
+				"closeText": "Cancel",
+				"noProjError": "No Available Project, select a different client"
 			}
 		}
 	}

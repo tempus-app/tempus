@@ -1,16 +1,18 @@
 import { createReducer, on } from '@ngrx/store';
 import { AsyncRequestState } from '@tempus/client/onboarding-client/shared/data-access';
-import { Client, IUserProjClientDto } from '@tempus/shared-domain';
+import { Client, IUserProjClientDto, Project } from '@tempus/shared-domain';
 import * as ProjectManagementActions from './resProjClientManagement.actions';
 
 export const PROJECT_MANAGE_FEATURE_KEY = 'resProjClientManagement';
 
 export interface ResourceProjectClientManagementState {
+	createdProject: null | Project;
 	error: Error | null;
 	status: AsyncRequestState;
 	projResClientData: IUserProjClientDto[];
 	projAssigned: boolean;
 	clients: Client[];
+	createdClient: Client | null;
 }
 
 export const initialState: ResourceProjectClientManagementState = {
@@ -19,6 +21,8 @@ export const initialState: ResourceProjectClientManagementState = {
 	projAssigned: false,
 	projResClientData: [],
 	clients: [],
+	createdClient: null,
+	createdProject: null,
 };
 
 export const projectManagementReducer = createReducer(
@@ -26,6 +30,9 @@ export const projectManagementReducer = createReducer(
 	on(ProjectManagementActions.getAllClients, state => ({ ...state, status: AsyncRequestState.LOADING })),
 	on(ProjectManagementActions.getAllResProjInfo, state => ({ ...state, status: AsyncRequestState.LOADING })),
 	on(ProjectManagementActions.createLink, state => ({ ...state, status: AsyncRequestState.LOADING })),
+	on(ProjectManagementActions.createClient, state => ({ ...state, status: AsyncRequestState.LOADING })),
+	on(ProjectManagementActions.createProject, state => ({ ...state, status: AsyncRequestState.LOADING })),
+
 	on(ProjectManagementActions.createResourceProjectAssignment, state => ({
 		...state,
 		status: AsyncRequestState.LOADING,
@@ -42,6 +49,18 @@ export const projectManagementReducer = createReducer(
 		status: AsyncRequestState.ERROR,
 	})),
 	on(ProjectManagementActions.createLinkFailure, (state, { error }) => ({
+		...state,
+		error,
+		status: AsyncRequestState.ERROR,
+	})),
+
+	on(ProjectManagementActions.createClientFailure, (state, { error }) => ({
+		...state,
+		error,
+		status: AsyncRequestState.ERROR,
+	})),
+
+	on(ProjectManagementActions.createProjectFailure, (state, { error }) => ({
 		...state,
 		error,
 		status: AsyncRequestState.ERROR,
@@ -68,6 +87,20 @@ export const projectManagementReducer = createReducer(
 		status: AsyncRequestState.SUCCESS,
 		error: null,
 	})),
+
+	on(ProjectManagementActions.createClientSuccess, (state, { client }) => ({
+		...state,
+		status: AsyncRequestState.SUCCESS,
+		createdClient: client,
+		error: null,
+	})),
+
+	on(ProjectManagementActions.createProjectSuccess, (state, { project }) => ({
+		...state,
+		status: AsyncRequestState.SUCCESS,
+		createdProject: project,
+		error: null,
+	})),
 	on(ProjectManagementActions.createResourceProjectAssignmentSuccess, state => ({
 		...state,
 		projAssigned: true,
@@ -81,5 +114,14 @@ export const projectManagementReducer = createReducer(
 		...state,
 		status: AsyncRequestState.IDLE,
 		error: null,
+	})),
+	on(ProjectManagementActions.resetCreatedClientState, state => ({
+		...state,
+		createdClient: null,
+	})),
+	on(ProjectManagementActions.resetCreatedProjectState, state => ({
+		...state,
+		status: AsyncRequestState.IDLE,
+		createdProject: null,
 	})),
 );

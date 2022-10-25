@@ -15,6 +15,17 @@ export const selectClientData = createSelector(
 	selectProjManagementState,
 	(state: ResourceProjectClientManagementState) => state.clients,
 );
+
+export const selectCreatedClientData = createSelector(
+	selectProjManagementState,
+	(state: ResourceProjectClientManagementState) => state.createdClient,
+);
+
+export const selectCreatedProjectData = createSelector(
+	selectProjManagementState,
+	(state: ResourceProjectClientManagementState) => state.createdProject,
+);
+
 export const selectProjectAssigned = createSelector(
 	selectProjManagementState,
 	(state: ResourceProjectClientManagementState) => state.projAssigned,

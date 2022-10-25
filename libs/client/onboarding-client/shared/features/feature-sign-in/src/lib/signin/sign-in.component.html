@@ -1,38 +1,40 @@
 <ng-container>
-	<mat-grid-list cols="2" rowHeight="50px">
-		<mat-grid-tile colspan="2" rowspan="12">
-			<tempus-card>
-				<div class="card-header">
-					<h1 class="mat-h1" color="primary">{{ signInPrefix + 'title' | translate }}</h1>
-				</div>
-				<tempus-text-input
-					placeholder="{{ signInPrefix + 'usernamePlaceholder' | translate }}"
-					cssClass="secondary"
-					[control]="$any(loginForm).get('email')"
-					id="username"
-				></tempus-text-input>
-				<tempus-text-input
-					placeholder="{{ signInPrefix + 'passwordPlaceholder' | translate }}"
-					cssClass="secondary"
-					[inputType]="InputType.PASSWORD"
-					[control]="$any(loginForm).get('password')"
-					id="password"
-				></tempus-text-input>
-				<div class="login-container">
-					<button mat-raised-button color="accent" class="sign-in-button" (click)="login()">
-						{{ signInPrefix + 'loginCTA' | translate }}
-					</button>
-				</div>
-				<p class="mat-body-2 forgot-text">
-					<b
-						><a href="#">{{ signInPrefix + 'forgotPass' | translate }}</a></b
-					>
-				</p>
-				<mat-error class="mat-body-2" *ngIf="errorMessage">
-					{{ errorMessage }}
-				</mat-error>
-			</tempus-card>
-		</mat-grid-tile>
-	</mat-grid-list>
-	<tempus-spinner [showSpinner]="loading"></tempus-spinner>
+  <mat-grid-list cols="2" rowHeight="50px">
+    <mat-grid-tile colspan="2" rowspan="12">
+      <tempus-card>
+        <div class="card-header">
+          <h1 class="mat-h1" color="primary">{{ signInPrefix + 'title' | translate }}</h1>
+        </div>
+        <tempus-text-input
+          [showLabel]="false"
+          placeholder="{{ signInPrefix + 'usernamePlaceholder' | translate }}"
+          cssClass="secondary"
+          [control]="$any(loginForm).get('email')"
+          id="username"
+        ></tempus-text-input>
+        <tempus-text-input
+          [showLabel]="false"
+          placeholder="{{ signInPrefix + 'passwordPlaceholder' | translate }}"
+          cssClass="secondary"
+          [inputType]="InputType.PASSWORD"
+          [control]="$any(loginForm).get('password')"
+          id="password"
+        ></tempus-text-input>
+        <div class="login-container">
+          <button mat-raised-button color="accent" class="sign-in-button" (click)="login()">
+            {{ signInPrefix + 'loginCTA' | translate }}
+          </button>
+        </div>
+        <p class="mat-body-2 forgot-text">
+          <b
+            ><a href="#">{{ signInPrefix + 'forgotPass' | translate }}</a></b
+          >
+        </p>
+        <mat-error class="mat-body-2" *ngIf="errorMessage">
+          {{ errorMessage }}
+        </mat-error>
+      </tempus-card>
+    </mat-grid-tile>
+  </mat-grid-list>
+  <tempus-spinner [showSpinner]="loading"></tempus-spinner>
 </ng-container>

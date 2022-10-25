@@ -15,23 +15,29 @@
 		</span>
 		<div class="info-title"></div>
 	</div>
-	<div mat-dialog-content>
+	<div mat-dialog-content style="margin-top: 1rem">
 		<ng-template #childComponent [ngTemplateOutlet]="data.template"></ng-template>
-	</div>
-	<div mat-dialog-actions fxLayout="row" fxLayoutAlign="end space-around" style="margin-top: 0.5rem">
-		<tempus-button
-			*ngIf="data.closable"
-			class="dialog-button"
-			color="grey"
-			(buttonClick)="selectCancel()"
-			[label]="data.closeText"
-		></tempus-button>
-		<tempus-button
-			class="dialog-button"
-			color="accent"
-			[disabled]="$confirmDisabled | async"
-			(buttonClick)="selectConfirm()"
-			[label]="data.confirmText"
-		></tempus-button>
+		<div
+			mat-dialog-actions
+			id="modal-actions"
+			fxLayout="row"
+			align="end"
+			fxLayoutAlign="end space-around"
+			style="margin-top: 0.5rem"
+		>
+			<tempus-button
+				*ngIf="data.closable"
+				class="left-dialog-button"
+				color="grey"
+				(buttonClick)="selectCancel()"
+				[label]="data.closeText"
+			></tempus-button>
+			<tempus-button
+				color="accent"
+				[disabled]="$confirmDisabled | async"
+				(buttonClick)="selectConfirm()"
+				[label]="data.confirmText"
+			></tempus-button>
+		</div>
 	</div>
 </div>
