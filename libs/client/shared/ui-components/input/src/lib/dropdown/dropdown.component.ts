@@ -21,6 +21,8 @@ export class DropdownComponent {
 
 	@Input() control: FormControl = new FormControl();
 
+	@Input() disabled = false;
+
 	@Output() optionSelect = new EventEmitter();
 
 	optionSelected(option?: string | number | unknown) {

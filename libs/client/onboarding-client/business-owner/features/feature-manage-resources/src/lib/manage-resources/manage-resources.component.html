@@ -137,10 +137,18 @@
 							[label]="prefix + 'modal.projectLabel' | translate"
 							[optionsWithId]="currentProjects"
 							[control]="$any(manageResourcesForm).get('assign').get('project')"
+							[disabled]="currentProjects.length <= 0"
 						></tempus-dropdown>
 						<mat-error
 							class="mat-body-2"
+							*ngIf="currentProjects.length <= 0 && $any(manageResourcesForm).get('assign').get('client').value"
+						>
+							{{ prefix + 'modal.assignModal.noProjError' | translate }}
+						</mat-error>
+						<mat-error
+							class="mat-body-2"
 							*ngIf="
+								currentProjects.length > 0 &&
 								$any(manageResourcesForm).get('assign').get('project').invalid &&
 								($any(manageResourcesForm).get('assign').get('project').touched ||
 									$any(manageResourcesForm).get('assign').get('project').dirty)

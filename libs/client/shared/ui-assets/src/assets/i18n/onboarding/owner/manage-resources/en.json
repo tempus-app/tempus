@@ -67,7 +67,8 @@
 				"positionErr": "Please enter a position",
 				"title": "Assign resource to a project",
 				"confirmText": "Assign",
-				"closeText": "Cancel"
+				"closeText": "Cancel",
+				"noProjError": "No Available Project, select a different client"
 			}
 		}
 	}
