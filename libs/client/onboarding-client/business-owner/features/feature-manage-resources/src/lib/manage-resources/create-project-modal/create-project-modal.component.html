@@ -1,0 +1,206 @@
+<tempus-card id="create-project-model">
+	<div fxLayout="column">
+		<tempus-text-input
+			id="create-project-name"
+			fxFlex="50%"
+			[inputType]="InputType.TEXT"
+			placeholder="{{ prefix + 'projectNameLabel' | translate }}"
+			cssClass="secondary"
+			[control]="$any(form).get('name')"
+		>
+		</tempus-text-input>
+		<mat-error
+			class="mat-body-2"
+			*ngIf="$any(form).get('name').invalid && ($any(form).get('name').touched || $any(form).get('name').dirty)"
+		>
+			{{ prefix + 'nameErr' | translate }}
+		</mat-error>
+		<div fxLayout="row" class="toggle" fxLayoutAlign="end center">
+			<mat-slide-toggle [checked]="!createProjectUseExisitingClient" (change)="changeCreateClient()">{{
+				prefix + 'addNewClient' | translate
+			}}</mat-slide-toggle>
+		</div>
+		<div div *ngIf="createProjectUseExisitingClient">
+			<div fxLayout="row">
+				<tempus-dropdown
+					fxFlex="100%"
+					id="client-select"
+					[label]="prefix + 'clientLabel' | translate"
+					[optionsWithId]="clientOptions"
+					[control]="$any(form).get('client')"
+					(optionSelect)="updateClientRepresentatives()"
+				></tempus-dropdown>
+			</div>
+			<mat-error
+				class="mat-body-2"
+				*ngIf="$any(form).get('client').invalid && ($any(form).get('client').touched || $any(form).get('client').dirty)"
+			>
+				{{ prefix + 'clientErr' | translate }}
+			</mat-error>
+		</div>
+		<div *ngIf="!createProjectUseExisitingClient">
+			<div fxLayout="row" fxLayoutGap="10px">
+				<tempus-text-input
+					id="create-client-name"
+					fxFlex="100%"
+					[inputType]="InputType.TEXT"
+					placeholder="{{ prefix + 'clientNameLabel' | translate }}"
+					cssClass="secondary"
+					[control]="$any(form).get('clientName')"
+				>
+				</tempus-text-input>
+			</div>
+			<mat-error
+				class="mat-body-2"
+				*ngIf="
+					$any(form).get('clientName').invalid &&
+					($any(form).get('clientName').touched || $any(form).get('clientName').dirty)
+				"
+			>
+				{{ prefix + 'clientNameErr' | translate }}
+			</mat-error>
+		</div>
+		<div fxLayout="row" class="toggle" fxLayoutAlign="end center">
+			<mat-slide-toggle
+				[disabled]="currentClientReps.length <= 0"
+				(change)="changeCreateClientRep()"
+				[checked]="!createProjectUseExisitingClientRep"
+			>
+				{{ prefix + 'addNewClientRep' | translate }}
+			</mat-slide-toggle>
+		</div>
+
+		<div div *ngIf="createProjectUseExisitingClientRep">
+			<div fxLayout="row">
+				<tempus-dropdown
+					fxFlex="100%"
+					id="client-select"
+					[label]="prefix + 'clientRepLabel' | translate"
+					[optionsWithId]="currentClientReps"
+					[control]="$any(form).get('clientRepresentative')"
+				></tempus-dropdown>
+			</div>
+			<mat-error
+				class="mat-body-2"
+				*ngIf="
+					$any(form).get('clientRepresentative').invalid &&
+					($any(form).get('clientRepresentative').touched || $any(form).get('clientRepresentative').dirty)
+				"
+			>
+				{{ prefix + 'clientRepErr' | translate }}
+			</mat-error>
+		</div>
+		<tempus-card *ngIf="!createProjectUseExisitingClientRep" class="client-rep-card">
+			<h4 class="mat-h4 section-title">{{ prefix + 'clientRepLabel' | translate }}</h4>
+			<div fxLayout="column">
+				<div fxLayout="row" fxLayoutGap="4%">
+					<div fxFlex="48%">
+						<tempus-text-input
+							id="create-client-rep-fname"
+							[inputType]="InputType.TEXT"
+							placeholder="{{ prefix + 'clientRepFirstName' | translate }}"
+							cssClass="secondary"
+							[control]="$any(form).get('clientRepFirstName')"
+						>
+						</tempus-text-input>
+						<mat-error
+							class="mat-body-2"
+							*ngIf="
+								$any(form).get('clientRepFirstName').invalid &&
+								($any(form).get('clientRepFirstName').touched || $any(form).get('clientRepFirstName').dirty)
+							"
+						>
+							{{ prefix + 'clientRepFnameErr' | translate }}
+						</mat-error>
+					</div>
+					<div fxFlex="48%">
+						<tempus-text-input
+							id="create-client-rep-lname"
+							[inputType]="InputType.TEXT"
+							placeholder="{{ prefix + 'clientRepLastName' | translate }}"
+							cssClass="secondary"
+							[control]="$any(form).get('clientRepLastName')"
+						>
+						</tempus-text-input>
+						<mat-error
+							class="mat-body-2"
+							*ngIf="
+								$any(form).get('clientRepLastName').invalid &&
+								($any(form).get('clientRepLastName').touched || $any(form).get('clientRepLastName').dirty)
+							"
+						>
+							{{ prefix + 'clientRepLnameErr' | translate }}
+						</mat-error>
+					</div>
+				</div>
+				<tempus-text-input
+					id="create-client-rep-email"
+					fxFlex="100%"
+					[inputType]="InputType.EMAIL"
+					placeholder="{{ prefix + 'clientRepEmail' | translate }}"
+					cssClass="secondary"
+					[control]="$any(form).get('clientRepEmail')"
+				>
+				</tempus-text-input>
+				<mat-error
+					class="mat-body-2"
+					*ngIf="
+						$any(form).get('clientRepEmail').invalid &&
+						($any(form).get('clientRepEmail').touched || $any(form).get('clientRepEmail').dirty)
+					"
+				>
+					{{ prefix + 'clientRepEmailErr' | translate }}
+				</mat-error>
+			</div>
+		</tempus-card>
+
+		<tempus-dropdown
+			fxFlex="100%"
+			id="create-project-project-manager"
+			[label]="prefix + 'projectManagerLabel' | translate"
+			[optionsWithId]="resourceOptions"
+			[control]="$any(form).get('projectManager')"
+		></tempus-dropdown>
+		<mat-error
+			class="mat-body-2"
+			*ngIf="
+				$any(form).get('projectManager').invalid &&
+				($any(form).get('projectManager').touched || $any(form).get('projectManager').dirty)
+			"
+		>
+			{{ prefix + 'projectManagerErr' | translate }}
+		</mat-error>
+
+		<tempus-text-input
+			id="create-project-startDate"
+			fxFlex="100%"
+			[inputType]="InputType.DATE"
+			placeholder="{{ commonPrefix + 'dates.startPlaceholder' | translate }}"
+			[control]="$any(form).get('startDate')"
+		>
+		</tempus-text-input>
+		<mat-error
+			class="mat-body-2"
+			*ngIf="
+				$any(form).get('startDate').invalid &&
+				($any(form).get('startDate').touched || $any(form).get('startDate').dirty)
+			"
+		>
+			{{ prefix + 'startDateErr' | translate }}
+		</mat-error>
+
+		<tempus-dropdown
+			fxFlex="100%"
+			id="create-project-status"
+			[label]="prefix + 'projectStatus' | translate"
+			[optionsWithKeys]="statusOptions"
+			[control]="$any(form).get('status')"
+		></tempus-dropdown>
+		<mat-error
+			class="mat-body-2"
+			*ngIf="$any(form).get('status').invalid && ($any(form).get('status').touched || $any(form).get('status').dirty)"
+		>
+			{{ prefix + 'statusErr' | translate }}
+		</mat-error>
+	</div>
+</tempus-card>
