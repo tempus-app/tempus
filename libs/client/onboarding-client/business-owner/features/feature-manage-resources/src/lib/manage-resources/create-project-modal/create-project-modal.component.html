@@ -16,8 +16,8 @@
 			{{ prefix + 'nameErr' | translate }}
 		</mat-error>
 		<div fxLayout="row" class="toggle" fxLayoutAlign="end center">
-			<mat-slide-toggle (change)="changeCreateClient()">{{
-				prefix + 'useExistingClientButton' | translate
+			<mat-slide-toggle [checked]="!createProjectUseExisitingClient" (change)="changeCreateClient()">{{
+				prefix + 'addNewClient' | translate
 			}}</mat-slide-toggle>
 		</div>
 		<div div *ngIf="createProjectUseExisitingClient">
@@ -61,8 +61,12 @@
 			</mat-error>
 		</div>
 		<div fxLayout="row" class="toggle" fxLayoutAlign="end center">
-			<mat-slide-toggle [disabled]="currentClientReps.length <= 0" (change)="changeCreateClientRep()">
-				{{ prefix + 'useExistingClientRepButton' | translate }}
+			<mat-slide-toggle
+				[disabled]="currentClientReps.length <= 0"
+				(change)="changeCreateClientRep()"
+				[checked]="!createProjectUseExisitingClientRep"
+			>
+				{{ prefix + 'addNewClientRep' | translate }}
 			</mat-slide-toggle>
 		</div>
 
