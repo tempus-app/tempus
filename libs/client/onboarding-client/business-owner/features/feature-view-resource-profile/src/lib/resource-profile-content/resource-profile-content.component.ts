@@ -19,6 +19,7 @@ import {
 	ViewNames,
 	RevisionType,
 	ProjectResource,
+	ViewType,
 } from '@tempus/shared-domain';
 import { OnboardingClientResourceService } from '@tempus/client/onboarding-client/shared/data-access';
 import { ModalService, CustomModalType, ModalType } from '@tempus/client/shared/ui-components/modal';
@@ -136,12 +137,15 @@ export class ResourceProfileContentComponent implements OnInit, OnChanges {
 		this.resourceService.getResourceProfileViews(id).subscribe(profileViews => {
 			this.viewID = profileViews[0].id;
 
+			// Load view that needs approval
 			const sortedViews = sortViewsByLatestUpdated(profileViews);
 			let latestView = sortedViews[0];
 
-			// if the view has been rejected, display latest approved version
-			if (latestView.revisionType === RevisionType.REJECTED) {
-				const approvedViews = sortedViews.filter(view => view.revisionType === RevisionType.APPROVED);
+			// If no approvals, display approved Primary view
+			if (latestView.revisionType !== RevisionType.PENDING) {
+				const approvedViews = sortedViews.filter(
+					view => view.viewType === ViewType.PRIMARY && view.revisionType === RevisionType.APPROVED,
+				);
 				const [view] = approvedViews;
 				latestView = view;
 			}

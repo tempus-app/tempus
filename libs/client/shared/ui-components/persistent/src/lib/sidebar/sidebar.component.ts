@@ -28,7 +28,11 @@ export class SidebarComponent implements OnInit {
 
 	@Input() tabs: SidebarTab[] = [];
 
-	name = '';
+	firstName = '';
+
+	lastName = '';
+
+	fullName = '';
 
 	email = '';
 
@@ -84,11 +88,13 @@ export class SidebarComponent implements OnInit {
 			.select(selectLoggedInUserNameEmail)
 			.pipe(take(1))
 			.subscribe(user => {
-				this.name = `${user.firstName} ${user.lastName}`;
+				this.firstName = user.firstName || '';
+				this.lastName = user.lastName || '';
+				this.fullName = `${user.firstName} ${user.lastName}`;
 				this.email = user.email || '';
 			});
 
-		this.getInitials(this.name);
+		this.getInitials();
 		this.isVisible = true;
 	}
 
@@ -110,7 +116,7 @@ export class SidebarComponent implements OnInit {
 			.get(['sidenav.namePlaceholder', 'sidenav.emailPlaceholder', 'sidenav.logout'])
 			.pipe(take(1))
 			.subscribe(data => {
-				if (this.name === '') this.name = data['sidenav.namePlaceholder'];
+				if (this.fullName === '') this.fullName = data['sidenav.namePlaceholder'];
 				if (this.email === '') this.email = data['sidenav.emailPlaceholder'];
 			});
 	}
@@ -149,11 +155,8 @@ export class SidebarComponent implements OnInit {
 		}
 	}
 
-	getInitials(name: string) {
-		const fullName = name.split(' ');
-		const firstInitial = fullName[0].charAt(0);
-		const secondInitial = fullName.pop()?.charAt(0);
-		this.initials = firstInitial && secondInitial ? (firstInitial + secondInitial).toUpperCase() : firstInitial;
+	getInitials() {
+		this.initials = (this.firstName.charAt(0) + this.lastName.charAt(0)).toUpperCase();
 	}
 
 	toggleSidebar() {

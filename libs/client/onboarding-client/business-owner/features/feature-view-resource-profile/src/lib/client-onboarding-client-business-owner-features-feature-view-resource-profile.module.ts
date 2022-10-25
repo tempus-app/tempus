@@ -9,6 +9,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatButtonModule } from '@angular/material/button';
+import { OnboardingClientSharedFeatureEditViewFormModule } from '@tempus/onboarding-client/shared/feature-edit-view-form';
 import { ClientSharedUiComponentsPresentationalModule } from '@tempus/client/shared/ui-components/presentational';
 import { ClientSharedPresentationalResourceDisplayModule } from '@tempus/client/onboarding-client/shared/ui-components/presentational/resource-display';
 import { ClientSharedUiComponentsModalModule } from '@tempus/client/shared/ui-components/modal';
@@ -34,6 +35,7 @@ function createTranslateLoader(http: HttpClient) {
 		ReactiveFormsModule,
 		ClientSharedUiComponentsPresentationalModule,
 		ClientSharedPresentationalResourceDisplayModule,
+		OnboardingClientSharedFeatureEditViewFormModule,
 		MatIconModule,
 		MatFormFieldModule,
 		FlexLayoutModule,

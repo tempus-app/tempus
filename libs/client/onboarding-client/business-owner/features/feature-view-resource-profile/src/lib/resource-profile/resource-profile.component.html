@@ -1,24 +1,33 @@
 <ng-container>
-  <tempus-user-bar
-    [loadedView]="loadedView"
-    (newViewSelected)="newViewClickEvent($event)"
-    [resourceName]="resourceFirstName + '-' + resourceLastName"
-  ></tempus-user-bar>
-  <tempus-resource-profile-content
-    [firstName]="resourceFirstName"
-    [lastName]="resourceLastName"
-    [country]="country"
-    [state]="state"
-    [city]="city"
-    [email]="resourceEmail"
-    [phoneNumber]="phoneNumber"
-    [linkedInLink]="linkedInLink" 
-    [githubLink]="githubLink" 
-    [otherLink]="otherLink"
-    [resume]="resume"
-    [viewID]="viewIndex"
-    [projectResources] = "projectResources"
-    (revisionViewLoaded)="childRevisionLoaded($event)"
-  >
-  </tempus-resource-profile-content>
+	<tempus-user-bar
+		[loadedView]="loadedView"
+		(createNewViewSelected)="openNewViewForm()"
+		(newViewSelected)="newViewClickEvent($event)"
+		[resourceName]="resourceFirstName + '-' + resourceLastName"
+	></tempus-user-bar>
+	<tempus-edit-view-form
+		*ngIf="viewFormEnabled"
+		[isPrimaryView]="false"
+		(submitClicked)="createNewView()"
+		(closeEditViewClicked)="closeForm()"
+	>
+	</tempus-edit-view-form>
+	<tempus-resource-profile-content
+		*ngIf="!viewFormEnabled"
+		[firstName]="resourceFirstName"
+		[lastName]="resourceLastName"
+		[country]="country"
+		[state]="state"
+		[city]="city"
+		[email]="resourceEmail"
+		[phoneNumber]="phoneNumber"
+		[linkedInLink]="linkedInLink"
+		[githubLink]="githubLink"
+		[otherLink]="otherLink"
+		[resume]="resume"
+		[viewID]="viewIndex"
+		[projectResources]="projectResources"
+		(revisionViewLoaded)="childRevisionLoaded($event)"
+	>
+	</tempus-resource-profile-content>
 </ng-container>

@@ -28,6 +28,8 @@ export class UserBarComponent implements OnChanges {
 
 	@Output() newViewSelected = new EventEmitter<number>();
 
+	@Output() createNewViewSelected = new EventEmitter();
+
 	constructor(
 		private route: ActivatedRoute,
 		private resourceService: OnboardingClientResourceService,
@@ -63,5 +65,9 @@ export class UserBarComponent implements OnChanges {
 	onClick(optionSelected: string): void {
 		const index = this.viewNames.indexOf(optionSelected);
 		this.newViewSelected.emit(this.viewIDs[index]);
+	}
+
+	openViewForm() {
+		this.createNewViewSelected.emit();
 	}
 }

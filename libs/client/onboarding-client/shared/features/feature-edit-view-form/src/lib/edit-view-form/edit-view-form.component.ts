@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import {
 	OnboardingClientState,
@@ -20,7 +20,6 @@ import {
 	RevisionType,
 } from '@tempus/shared-domain';
 import { TranslateService } from '@ngx-translate/core';
-import { sortViewsByLatestUpdated } from '@tempus/client/shared/util';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({
@@ -35,6 +34,7 @@ export class EditViewFormComponent implements OnInit, OnDestroy {
 		private resourceService: OnboardingClientResourceService,
 		private store: Store<OnboardingClientState>,
 		private router: Router,
+		private route: ActivatedRoute,
 		private translateService: TranslateService,
 	) {
 		const { currentLang } = translateService;
@@ -100,38 +100,66 @@ export class EditViewFormComponent implements OnInit, OnDestroy {
 	previewViewEnabled = false;
 
 	ngOnInit(): void {
-		this.resourceService.getResourceInformation().subscribe(resData => {
-			this.userId = resData.id;
+		// Business Owner
+		const id = parseInt(this.route.snapshot.paramMap.get('id') || '0', 10);
+		this.resourceService.getResourceProfileViews(id).subscribe(profileViews => {
+			// Load form with approved Primary view
+			const filteredViews = profileViews.filter(
+				view => view.viewType === ViewType.PRIMARY && view.revisionType === RevisionType.APPROVED,
+			);
+			const latestView = filteredViews[0];
 
-			// TODO: ADD resource to the store
-			this.resourceService.getResourceOriginalResumeById(this.userId).subscribe(resumeBlob => {
-				this.resume = new File([resumeBlob], 'original-resume.pdf');
+			this.currentViewId = latestView.id;
+			this.certifications = latestView.certifications;
+			this.educations = latestView.educations;
+			this.educationsSummary = latestView.educationsSummary;
+			this.workExperiences = latestView.experiences;
+			this.experiencesSummary = latestView.experiencesSummary;
+			this.profileSummary = latestView.profileSummary;
+			this.skills = latestView.skills.map(skill => skill.skill.name);
+			this.skillsSummary = latestView.skillsSummary;
+
+			this.personalInfoForm.patchValue({
+				profileSummary: this.profileSummary,
 			});
 
-			// TODO: to edit secondary views, get latest version of that view through its revision
-			this.resourceService.getResourceProfileViews(this.userId).subscribe(views => {
-				let filteredAndSortedViews = this.isPrimaryView
-					? views.filter(view => view.viewType === ViewType.PRIMARY)
-					: views.filter(view => view.viewType === ViewType.PRIMARY && view.revisionType === RevisionType.APPROVED);
-				filteredAndSortedViews = sortViewsByLatestUpdated(filteredAndSortedViews);
-				const latestView = filteredAndSortedViews[0];
-				this.currentViewId = latestView.id;
-				this.certifications = latestView.certifications;
-				this.educations = latestView.educations;
-				this.educationsSummary = latestView.educationsSummary;
-				this.workExperiences = latestView.experiences;
-				this.experiencesSummary = latestView.experiencesSummary;
-				this.profileSummary = latestView.profileSummary;
-				this.skills = latestView.skills.map(skill => skill.skill.name);
-				this.skillsSummary = latestView.skillsSummary;
-
-				this.personalInfoForm.patchValue({
-					profileSummary: this.profileSummary,
-				});
-
-				this.dataLoaded = true;
-			});
+			this.dataLoaded = true;
 		});
+
+		// Resource
+
+		// this.resourceService.getResourceInformation().subscribe(resData => {
+		// 	this.userId = resData.id;
+
+		// 	// TODO: ADD resource to the store
+		// 	// this.resourceService.getResourceOriginalResumeById(this.userId).subscribe(resumeBlob => {
+		// 	// 	this.resume = new File([resumeBlob], 'original-resume.pdf');
+		// 	// });
+
+		// 	// TODO: to edit secondary views, get latest version of that view through its revision
+		// 	this.resourceService.getResourceProfileViews(this.userId).subscribe(views => {
+		// 		let filteredAndSortedViews = this.isPrimaryView
+		// 			? views.filter(view => view.viewType === ViewType.PRIMARY)
+		// 			: views.filter(view => view.viewType === ViewType.PRIMARY && view.revisionType === RevisionType.APPROVED);
+		// 		filteredAndSortedViews = sortViewsByLatestUpdated(filteredAndSortedViews);
+		// 		const latestView = filteredAndSortedViews[0];
+		// 		this.currentViewId = latestView.id;
+		// 		this.certifications = latestView.certifications;
+		// 		this.educations = latestView.educations;
+		// 		this.educationsSummary = latestView.educationsSummary;
+		// 		this.workExperiences = latestView.experiences;
+		// 		this.experiencesSummary = latestView.experiencesSummary;
+		// 		this.profileSummary = latestView.profileSummary;
+		// 		this.skills = latestView.skills.map(skill => skill.skill.name);
+		// 		this.skillsSummary = latestView.skillsSummary;
+
+		// 		this.personalInfoForm.patchValue({
+		// 			profileSummary: this.profileSummary,
+		// 		});
+
+		// 		this.dataLoaded = true;
+		// 	});
+		// });
 	}
 
 	loadExperiences(eventData: FormGroup) {
