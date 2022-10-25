@@ -15,6 +15,11 @@
 		>
 			{{ prefix + 'nameErr' | translate }}
 		</mat-error>
+		<div fxLayout="row" class="toggle" fxLayoutAlign="end center">
+			<mat-slide-toggle (change)="changeCreateClient()">{{
+				prefix + 'useExistingClientButton' | translate
+			}}</mat-slide-toggle>
+		</div>
 		<div div *ngIf="createProjectUseExisitingClient">
 			<div fxLayout="row">
 				<tempus-dropdown
@@ -32,11 +37,6 @@
 			>
 				{{ prefix + 'clientErr' | translate }}
 			</mat-error>
-			<div fxLayout="row" fxLayoutAlign="end center">
-				<button (click)="changeCreateClient()" class="link-button" mat-button color="secondary">
-					{{ prefix + 'addNewClientButton' | translate }}
-				</button>
-			</div>
 		</div>
 		<div *ngIf="!createProjectUseExisitingClient">
 			<div fxLayout="row" fxLayoutGap="10px">
@@ -59,11 +59,11 @@
 			>
 				{{ prefix + 'clientNameErr' | translate }}
 			</mat-error>
-			<div fxLayout="row" fxLayoutAlign="end center">
-				<button class="link-button" (click)="changeCreateClient()" mat-button color="secondary">
-					{{ prefix + 'useExistingClientButton' | translate }}
-				</button>
-			</div>
+		</div>
+		<div fxLayout="row" class="toggle" fxLayoutAlign="end center">
+			<mat-slide-toggle [disabled]="currentClientReps.length <= 0" (change)="changeCreateClientRep()">
+				{{ prefix + 'useExistingClientRepButton' | translate }}
+			</mat-slide-toggle>
 		</div>
 
 		<div div *ngIf="createProjectUseExisitingClientRep">
@@ -85,11 +85,6 @@
 			>
 				{{ prefix + 'clientRepErr' | translate }}
 			</mat-error>
-			<div fxLayout="row" fxLayoutAlign="end center">
-				<button class="link-button" (click)="changeCreateClientRep()" mat-button color="secondary">
-					{{ prefix + 'addNewClientRepButton' | translate }}
-				</button>
-			</div>
 		</div>
 		<tempus-card *ngIf="!createProjectUseExisitingClientRep" class="client-rep-card">
 			<h4 class="mat-h4 section-title">{{ prefix + 'clientRepLabel' | translate }}</h4>
@@ -152,17 +147,6 @@
 				>
 					{{ prefix + 'clientRepEmailErr' | translate }}
 				</mat-error>
-				<div fxLayout="row" fxLayoutAlign="end center">
-					<button
-						[disabled]="currentClientReps.length <= 0"
-						class="link-button"
-						(click)="changeCreateClientRep()"
-						mat-button
-						color="secondary"
-					>
-						{{ prefix + 'useExistingClientRepButton' | translate }}
-					</button>
-				</div>
 			</div>
 		</tempus-card>
 

@@ -20,7 +20,7 @@ export class CreateProjectModalComponent implements OnInit {
 
 	createProjectUseExisitingClientRep = false;
 
-	createProjectUseExisitingClient = true;
+	createProjectUseExisitingClient = false;
 
 	prefix = 'onboardingOwnerManageResources.modal.newProjectModal.';
 
@@ -147,6 +147,6 @@ export class CreateProjectModalComponent implements OnInit {
 		this.form.get('clientRepFirstName')?.addValidators(Validators.required);
 		this.form.get('clientRepLastName')?.addValidators(Validators.required);
 		this.form.get('clientRepEmail')?.addValidators([Validators.required, Validators.email]);
-		this.form.get('client')?.addValidators(Validators.required);
+		this.form.get('clientName')?.addValidators(Validators.required);
 	}
 }
