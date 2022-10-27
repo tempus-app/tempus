@@ -49,7 +49,7 @@ export class ViewsService {
 		viewEntity.createdAt = new Date(Date.now());
 		viewEntity.lastUpdateDate = new Date(Date.now());
 
-		if (user.roles.includes(RoleType.BUSINESS_OWNER)) {
+		if (user.roles.includes(RoleType.BUSINESS_OWNER) || user.roles.includes(RoleType.SUPERVISOR)) {
 			viewEntity.revisionType = RevisionType.APPROVED;
 			viewEntity.locked = false;
 			viewEntity.createdBy = RoleType.BUSINESS_OWNER;
@@ -126,6 +126,26 @@ export class ViewsService {
 			relations: ['revision', 'revision.views'],
 		});
 		if (!viewEntity) throw new NotFoundException(`Could not find view with id ${viewId}`);
+
+		if (viewEntity.viewType === ViewType.SECONDARY) {
+			if (approval === true) {
+				viewEntity.revisionType = RevisionType.APPROVED;
+				viewEntity.locked = false;
+				viewEntity.lastUpdateDate = new Date(Date.now());
+				return this.viewsRepository.save(viewEntity);
+			}
+			if (approval === false) {
+				const revisionEntity = new RevisionEntity(null, new Date(Date.now()), null, [viewEntity]);
+				revisionEntity.approved = false;
+				revisionEntity.comment = comment;
+				viewEntity.revision = revisionEntity;
+				viewEntity.revisionType = RevisionType.REJECTED;
+				viewEntity.locked = true;
+				viewEntity.lastUpdateDate = new Date(Date.now());
+				await this.viewsRepository.save(viewEntity);
+				return this.revisionRepository.save(revisionEntity);
+			}
+		}
 
 		const revisionEntity = viewEntity.revision;
 
