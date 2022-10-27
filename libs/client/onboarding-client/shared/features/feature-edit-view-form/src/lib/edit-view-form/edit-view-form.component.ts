@@ -4,8 +4,9 @@ import { Store } from '@ngrx/store';
 import {
 	OnboardingClientState,
 	OnboardingClientResourceService,
+	selectAccessToken,
 } from '@tempus/client/onboarding-client/shared/data-access';
-import { Subject } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 import { ButtonType } from '@tempus/client/shared/ui-components/presentational';
 import { UserType } from '@tempus/client/shared/ui-components/persistent';
 import {
@@ -18,9 +19,12 @@ import {
 	ICreateLocationDto,
 	ICreateSkillTypeDto,
 	RevisionType,
+	RoleType,
+	View,
 } from '@tempus/shared-domain';
 import { TranslateService } from '@ngx-translate/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { decodeJwt, sortViewsByLatestUpdated } from '@tempus/client/shared/util';
 
 @Component({
 	selector: 'tempus-edit-view-form',
@@ -52,6 +56,8 @@ export class EditViewFormComponent implements OnInit, OnDestroy {
 	submitClicked = new EventEmitter();
 
 	dataLoaded = false;
+
+	roles: string[] = [];
 
 	userId = 0;
 
@@ -100,66 +106,67 @@ export class EditViewFormComponent implements OnInit, OnDestroy {
 	previewViewEnabled = false;
 
 	ngOnInit(): void {
-		// Business Owner
-		const id = parseInt(this.route.snapshot.paramMap.get('id') || '0', 10);
-		this.resourceService.getResourceProfileViews(id).subscribe(profileViews => {
-			// Load form with approved Primary view
-			const filteredViews = profileViews.filter(
-				view => view.viewType === ViewType.PRIMARY && view.revisionType === RevisionType.APPROVED,
-			);
-			const latestView = filteredViews[0];
-
-			this.currentViewId = latestView.id;
-			this.certifications = latestView.certifications;
-			this.educations = latestView.educations;
-			this.educationsSummary = latestView.educationsSummary;
-			this.workExperiences = latestView.experiences;
-			this.experiencesSummary = latestView.experiencesSummary;
-			this.profileSummary = latestView.profileSummary;
-			this.skills = latestView.skills.map(skill => skill.skill.name);
-			this.skillsSummary = latestView.skillsSummary;
-
-			this.personalInfoForm.patchValue({
-				profileSummary: this.profileSummary,
+		this.store
+			.select(selectAccessToken)
+			.pipe(takeUntil(this.destroyed$))
+			.subscribe(token => {
+				this.roles = decodeJwt(token || '').roles;
 			});
 
-			this.dataLoaded = true;
+		// Business Owner
+		if (this.roles.includes(RoleType.BUSINESS_OWNER) || this.roles.includes(RoleType.SUPERVISOR)) {
+			const id = parseInt(this.route.snapshot.paramMap.get('id') || '0', 10);
+
+			this.resourceService.getResourceOriginalResumeById(id).subscribe(resumeBlob => {
+				this.resume = new File([resumeBlob], 'original-resume.pdf');
+			});
+
+			// Load form with approved Primary view
+			this.resourceService.getResourceProfileViews(id).subscribe(profileViews => {
+				const filteredViews = profileViews.filter(
+					view => view.viewType === ViewType.PRIMARY && view.revisionType === RevisionType.APPROVED,
+				);
+				this.setFormDataFromView(filteredViews[0]);
+				this.dataLoaded = true;
+			});
+		} else {
+			// Resource
+			this.resourceService.getResourceInformation().subscribe(resData => {
+				this.userId = resData.id;
+
+				// TODO: ADD resource to the store
+				this.resourceService.getResourceOriginalResumeById(this.userId).subscribe(resumeBlob => {
+					this.resume = new File([resumeBlob], 'original-resume.pdf');
+				});
+
+				// TODO: to edit secondary views, get latest version of that view through its revision
+				this.resourceService.getResourceProfileViews(this.userId).subscribe(views => {
+					let filteredAndSortedViews = this.isPrimaryView
+						? views.filter(view => view.viewType === ViewType.PRIMARY)
+						: views.filter(view => view.viewType === ViewType.PRIMARY && view.revisionType === RevisionType.APPROVED);
+
+					filteredAndSortedViews = sortViewsByLatestUpdated(filteredAndSortedViews);
+					this.setFormDataFromView(filteredAndSortedViews[0]);
+					this.dataLoaded = true;
+				});
+			});
+		}
+	}
+
+	setFormDataFromView(view: View) {
+		this.currentViewId = view.id;
+		this.certifications = view.certifications;
+		this.educations = view.educations;
+		this.educationsSummary = view.educationsSummary;
+		this.workExperiences = view.experiences;
+		this.experiencesSummary = view.experiencesSummary;
+		this.profileSummary = view.profileSummary;
+		this.skills = view.skills.map(skill => skill.skill.name);
+		this.skillsSummary = view.skillsSummary;
+
+		this.personalInfoForm.patchValue({
+			profileSummary: this.profileSummary,
 		});
-
-		// Resource
-
-		// this.resourceService.getResourceInformation().subscribe(resData => {
-		// 	this.userId = resData.id;
-
-		// 	// TODO: ADD resource to the store
-		// 	// this.resourceService.getResourceOriginalResumeById(this.userId).subscribe(resumeBlob => {
-		// 	// 	this.resume = new File([resumeBlob], 'original-resume.pdf');
-		// 	// });
-
-		// 	// TODO: to edit secondary views, get latest version of that view through its revision
-		// 	this.resourceService.getResourceProfileViews(this.userId).subscribe(views => {
-		// 		let filteredAndSortedViews = this.isPrimaryView
-		// 			? views.filter(view => view.viewType === ViewType.PRIMARY)
-		// 			: views.filter(view => view.viewType === ViewType.PRIMARY && view.revisionType === RevisionType.APPROVED);
-		// 		filteredAndSortedViews = sortViewsByLatestUpdated(filteredAndSortedViews);
-		// 		const latestView = filteredAndSortedViews[0];
-		// 		this.currentViewId = latestView.id;
-		// 		this.certifications = latestView.certifications;
-		// 		this.educations = latestView.educations;
-		// 		this.educationsSummary = latestView.educationsSummary;
-		// 		this.workExperiences = latestView.experiences;
-		// 		this.experiencesSummary = latestView.experiencesSummary;
-		// 		this.profileSummary = latestView.profileSummary;
-		// 		this.skills = latestView.skills.map(skill => skill.skill.name);
-		// 		this.skillsSummary = latestView.skillsSummary;
-
-		// 		this.personalInfoForm.patchValue({
-		// 			profileSummary: this.profileSummary,
-		// 		});
-
-		// 		this.dataLoaded = true;
-		// 	});
-		// });
 	}
 
 	loadExperiences(eventData: FormGroup) {

@@ -1,15 +1,17 @@
 /* eslint-disable @typescript-eslint/dot-notation */
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TranslateService } from '@ngx-translate/core';
 import {
 	logout,
 	OnboardingClientState,
+	selectAccessToken,
 	selectLoggedInUserNameEmail,
 } from '@tempus/client/onboarding-client/shared/data-access';
-import { take } from 'rxjs';
-import { UserType } from './sidebar-type-enum';
+import { Subject, take, takeUntil } from 'rxjs';
+import { RoleType } from '@tempus/shared-domain';
+import { decodeJwt } from '@tempus/client/shared/util';
 import { SidebarTab } from './sidebar-tab-enum';
 
 @Component({
@@ -17,14 +19,12 @@ import { SidebarTab } from './sidebar-tab-enum';
 	templateUrl: './sidebar.component.html',
 	styleUrls: ['./sidebar.component.scss'],
 })
-export class SidebarComponent implements OnInit {
+export class SidebarComponent implements OnInit, OnDestroy {
 	constructor(
 		private store: Store<OnboardingClientState>,
 		private translateService: TranslateService,
 		private router: Router,
 	) {}
-
-	@Input() userType?: UserType = undefined;
 
 	@Input() tabs: SidebarTab[] = [];
 
@@ -45,6 +45,8 @@ export class SidebarComponent implements OnInit {
 	bugReportingURL = 'https://forms.gle/KCoBXHmK49AdgJdV9';
 
 	currentRoute = this.router.url;
+
+	destroyed$ = new Subject<void>();
 
 	// All routes the sidebar tabs are highlighted for
 	// Base route is navigated to onclick
@@ -80,8 +82,25 @@ export class SidebarComponent implements OnInit {
 			.get(['sidenav'])
 			.pipe(take(1))
 			.subscribe(() => {
-				this.setUserTabs();
 				this.setPlaceholders();
+			});
+
+		this.store
+			.select(selectAccessToken)
+			.pipe(takeUntil(this.destroyed$))
+			.subscribe(token => {
+				const { roles } = decodeJwt(token || '');
+
+				if (roles.includes(RoleType.BUSINESS_OWNER) || roles.includes(RoleType.SUPERVISOR)) {
+					this.tabs = [SidebarTab.MANAGE_RESOURCES, SidebarTab.PENDING_APPROVALS];
+				} else if (roles.includes(RoleType.AVAILABLE_RESOURCE) || roles.includes(RoleType.ASSIGNED_RESOURCE)) {
+					this.tabs = [
+						SidebarTab.PRIMARY_VIEW,
+						SidebarTab.MY_VIEWS,
+						SidebarTab.MY_PROJECTS,
+						SidebarTab.PERSONAL_INFORMATION,
+					];
+				}
 			});
 
 		this.store
@@ -96,19 +115,6 @@ export class SidebarComponent implements OnInit {
 
 		this.getInitials();
 		this.isVisible = true;
-	}
-
-	setUserTabs() {
-		if (this.userType === UserType.OWNER) {
-			this.tabs = [SidebarTab.MANAGE_RESOURCES, SidebarTab.PENDING_APPROVALS];
-		} else {
-			this.tabs = [
-				SidebarTab.PRIMARY_VIEW,
-				SidebarTab.MY_VIEWS,
-				SidebarTab.MY_PROJECTS,
-				SidebarTab.PERSONAL_INFORMATION,
-			];
-		}
 	}
 
 	setPlaceholders() {
@@ -165,5 +171,10 @@ export class SidebarComponent implements OnInit {
 
 	openReportBugForm() {
 		window.open(this.bugReportingURL, '_blank');
+	}
+
+	ngOnDestroy() {
+		this.destroyed$.next();
+		this.destroyed$.complete();
 	}
 }

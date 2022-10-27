@@ -57,18 +57,32 @@ Custom styling:
 ### Sidebar: tempus-sidebar
 
 - side navbar based off of material UI sidenav. This is a persistent component that loads user name and email and handles navigation.
-  - `userType`: UserType [RESOURCE, OWNER]
+- tempus-sidebar is added to the router level to load components by route. Ensure that the css classes are applied as shown below to correctly display the sidebar.
 
 ```
-<tempus-sidebar [userType]="UserType.OWNER">
-```
-
-- tempus-sidebar is added to the router level to load components by route like so:
-
-```
-<tempus-sidebar [userType]="UserType.RESOURCE">
-  <router-outlet></router-outlet>
+<tempus-sidebar class="resource-shell">
+  <div class="container">
+    <router-outlet></router-outlet>
+    <tempus-footer></tempus-footer>
+  </div>
 </tempus-sidebar>
+```
+
+- all routes that the sidebar tabs are highlighted for are defined within `paths`, where the base route is what is navigated to on tab click
+
+```
+	paths = [
+		{
+			tab: SidebarTab.MANAGE_RESOURCES,
+			route: '/owner/manage-resources',
+			base: true,
+		},
+		{
+			tab: SidebarTab.MANAGE_RESOURCES,
+			route: '/owner/view-resources',
+		},
+    ...
+	];
 ```
 
 ### Stepper: tempus-stepper
