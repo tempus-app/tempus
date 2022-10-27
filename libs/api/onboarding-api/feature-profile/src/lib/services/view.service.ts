@@ -32,7 +32,7 @@ export class ViewsService {
 		viewEntity.revisionType = RevisionType.APPROVED;
 		viewEntity.resource = resourceEntity;
 		viewEntity.locked = false;
-		viewEntity.type = 'PROFILE';
+		viewEntity.type = 'Primary';
 		viewEntity.createdAt = new Date(Date.now());
 		viewEntity.lastUpdateDate = new Date(Date.now());
 
@@ -132,16 +132,16 @@ export class ViewsService {
 				viewEntity.revisionType = RevisionType.APPROVED;
 				viewEntity.locked = false;
 				viewEntity.lastUpdateDate = new Date(Date.now());
+				viewEntity.revision = null;
 				return this.viewsRepository.save(viewEntity);
 			}
 			if (approval === false) {
-				const revisionEntity = new RevisionEntity(null, new Date(Date.now()), null, null);
-				revisionEntity.approved = false;
+				const revisionEntity = new RevisionEntity(null, new Date(Date.now()), false, null);
 				revisionEntity.comment = comment;
 				const newRevision = await this.revisionRepository.save(revisionEntity);
 				viewEntity.revision = newRevision;
 				viewEntity.revisionType = RevisionType.REJECTED;
-				viewEntity.locked = true;
+				viewEntity.locked = false;
 				viewEntity.lastUpdateDate = new Date(Date.now());
 				await this.viewsRepository.save(viewEntity);
 				return newRevision;

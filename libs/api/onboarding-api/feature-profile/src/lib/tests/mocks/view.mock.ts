@@ -120,7 +120,7 @@ export const createdViewEntityPostRevision: ViewEntity = {
 };
 
 export const approveViewDto: ApproveViewDto = {
-	comment: 'approvalComment',
+	comment: '',
 	approval: true,
 };
 
@@ -135,7 +135,7 @@ export const createdViewEntity: ViewEntity = {
 	skillsSummary: 'newSkillsSummary',
 	educationsSummary: 'newEducationsSummary',
 	experiencesSummary: 'newExperiencesSummary',
-	type: 'PROFILE',
+	type: 'Primary',
 	locked: false,
 	skills: [],
 	experiences: [],

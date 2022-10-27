@@ -280,7 +280,7 @@ export class EditViewFormComponent implements OnInit, OnDestroy {
 			experiences: experiencesDto,
 			certifications: certificationsDto,
 			viewType: this.isPrimaryView ? ViewType.PRIMARY : ViewType.SECONDARY,
-			type: this.isPrimaryView ? 'PROFILE' : viewName,
+			type: this.isPrimaryView ? 'Primary' : viewName,
 		} as ICreateViewDto;
 	}
 
