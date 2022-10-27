@@ -135,15 +135,16 @@ export class ViewsService {
 				return this.viewsRepository.save(viewEntity);
 			}
 			if (approval === false) {
-				const revisionEntity = new RevisionEntity(null, new Date(Date.now()), null, [viewEntity]);
+				const revisionEntity = new RevisionEntity(null, new Date(Date.now()), null, null);
 				revisionEntity.approved = false;
 				revisionEntity.comment = comment;
-				viewEntity.revision = revisionEntity;
+				const newRevision = await this.revisionRepository.save(revisionEntity);
+				viewEntity.revision = newRevision;
 				viewEntity.revisionType = RevisionType.REJECTED;
 				viewEntity.locked = true;
 				viewEntity.lastUpdateDate = new Date(Date.now());
 				await this.viewsRepository.save(viewEntity);
-				return this.revisionRepository.save(revisionEntity);
+				return newRevision;
 			}
 		}
 
@@ -230,7 +231,7 @@ export class ViewsService {
 		}
 
 		if (viewEntity.revision) {
-			const revisionNewView = await this.viewsRepository.findOne(viewEntity.revision.views[1].id, {
+			const revisionNewView = await this.viewsRepository.findOne(viewEntity.revision.views.pop().id, {
 				relations: [
 					'experiences',
 					'resource',
@@ -245,7 +246,7 @@ export class ViewsService {
 				],
 			});
 
-			viewEntity.revision.views[1] = revisionNewView;
+			viewEntity.revision.views[viewEntity.revision.views.length] = revisionNewView;
 		}
 
 		return viewEntity;
