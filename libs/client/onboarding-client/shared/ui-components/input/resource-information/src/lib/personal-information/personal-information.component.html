@@ -90,7 +90,7 @@
             <div fxLayout="row" fxLayoutAlign="center start" fxFlex="33%" class="block-2" *ngIf="showPersonalSummary">
               <div fxFlex="95" class="grid-item">
                 <tempus-text-area
-                  id="profile-summary"
+                  id="profile-summary-text"
                   placeholder="{{ personalInfoPrefix + 'info.personalSummaryPlaceholder' | translate }}"
                   [control]="$any(myInfoForm).get('profileSummary')"
                 ></tempus-text-area>

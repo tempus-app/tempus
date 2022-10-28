@@ -35,7 +35,7 @@ describe('tempus e2e tests', () => {
 
 			// Submit for approval
 			cy.get('#submit-profile-button button').click();
-			cy.get('tempus-info-modal tempus-button:nth-child(2)').click();
+			cy.get('#info-modal-submit-button button').click();
 
 			// Verify View locked post sending for approbal
 			cy.get('#error-icon').should('be.visible');
@@ -50,6 +50,7 @@ describe('tempus e2e tests', () => {
 
 			cy.login(busOwnerEmail, busOwnerPassword);
 
+      // Wait for page load once logging in to prevent timeout issues
 			cy.wait(5000);
 
 			// Verify the error icon shows for the resource who requested approval
@@ -72,19 +73,12 @@ describe('tempus e2e tests', () => {
 
 			cy.login(resEmail, resPassword);
 
+      // Wait for page load once logging in to prevent timeout issues
 			cy.wait(5000);
 
 			cy.get('[id=edit-profile-button]').wait(2000).click();
 
 			cy.wait(2000);
-
-			// Verify personal information fields are disabled
-			cy.get('#first-name-input mat-form-field').should('have.class', 'mat-form-field-disabled');
-			cy.get('#last-name-input mat-form-field').should('have.class', 'mat-form-field-disabled');
-			cy.get('#phNum-input mat-form-field').should('have.class', 'mat-form-field-disabled');
-			cy.get('#linkedin-link-input mat-form-field').should('have.class', 'mat-form-field-disabled');
-			cy.get('#github-link-input mat-form-field').should('have.class', 'mat-form-field-disabled');
-			cy.get('#other-link-input mat-form-field').should('have.class', 'mat-form-field-disabled');
 
 			// Verify form is unsubmittable until valid
 			cy.get('#institution-input input').first().scrollIntoView().clear();
@@ -105,6 +99,7 @@ describe('tempus e2e tests', () => {
 			cy.get('[id=logout-button]').click();
 			cy.login(resEmail, resPassword);
 
+      // Wait for page load once logging in to prevent timeout issues
 			cy.wait(5000);
 
 			// Verify view not locked
@@ -112,8 +107,10 @@ describe('tempus e2e tests', () => {
 			cy.get('#edit-profile-button button').should('not.be.disabled');
 
 			// Verify correct data changed by resource shows up here
-			cy.get('[id=profile-summary-text]').should('have.text', 'New profile summary');
-			cy.get('[id=institution-name-text]').should('have.text', 'New institution name');
+			cy.get('[id=profile-summary-text]').first().should('have.text', 'New profile summary');
+			cy.get('[id=institution-name-text]').first().should('have.text', 'New institution name');
+
+      cy.get('[id=logout-button]').click();
 		});
 		it('should create revision, reject it, re revise and then approve', () => {
 			const resAccount = getUserCredentials(RoleType.AVAILABLE_RESOURCE);
@@ -122,6 +119,7 @@ describe('tempus e2e tests', () => {
 
 			cy.login(resEmail, resPassword);
 
+      // Wait for page load once logging in to prevent timeout issues
 			cy.wait(5000);
 
 			cy.get('[id=edit-profile-button]').wait(2000).click();
@@ -133,7 +131,7 @@ describe('tempus e2e tests', () => {
 			// Reject changes
 			cy.get('[id=reject-view-button]').scrollIntoView().click();
 			cy.get('#reject-revision-message-textarea textarea').type('Rejection message');
-			cy.get('tempus-content-modal tempus-button:nth-child(2)').click();
+			cy.get('#content-modal-submit-button button').click();
 
 			cy.wait(2000);
 
@@ -154,6 +152,7 @@ describe('tempus e2e tests', () => {
 			cy.get('[id=logout-button]').click();
 			cy.login(resEmail, resPassword);
 
+      // Wait for page load once logging in to prevent timeout issues
 			cy.wait(5000);
 
 			// Verify View unlocked post rejection and revision icon showing
@@ -183,6 +182,7 @@ describe('tempus e2e tests', () => {
 			cy.get('[id=logout-button]').click();
 			cy.login(resEmail, resPassword);
 
+      // Wait for page load once logging in to prevent timeout issues
 			cy.wait(5000);
 
 			// Verify view not locked
@@ -190,8 +190,10 @@ describe('tempus e2e tests', () => {
 			cy.get('#edit-profile-button button').should('not.be.disabled');
 
 			// Verify correct data changed by resource shows up here
-			cy.get('[id=profile-summary-text]').should('have.text', 'New profile summary 2');
-			cy.get('[id=institution-name-text]').should('have.text', 'New institution name 2');
+			cy.get('[id=profile-summary-text]').first().should('have.text', 'New profile summary 2');
+			cy.get('[id=institution-name-text]').first().should('have.text', 'New institution name 2');
+
+      cy.get('[id=logout-button]').click();
 		});
 	});
 
