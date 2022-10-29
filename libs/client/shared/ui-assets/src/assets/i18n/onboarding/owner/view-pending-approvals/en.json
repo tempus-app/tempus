@@ -1,0 +1,11 @@
+{
+	"onboardingOwnerViewPendingApprovals": {
+		"main": {
+			"tableHeaders": {
+				"resource": "Resource",
+				"lastUpdated": "Last Updated",
+				"type": "View"
+			}
+		}
+	}
+}

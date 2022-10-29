@@ -18,3 +18,10 @@ export interface ProjectManagmenetTableData extends TableDataModel {
 	allProjects: { val: string; id: number }[];
 	allClients: string[];
 }
+
+export interface PendingApprovalsTableData extends TableDataModel {
+	lastUpdated: string;
+	resource: string;
+	type: string;
+	email: string;
+}
