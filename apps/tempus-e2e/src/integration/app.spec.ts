@@ -13,9 +13,7 @@ describe('tempus e2e tests', () => {
 			const account = getUserCredentials(RoleType.ASSIGNED_RESOURCE);
 			const { email, password } = account;
 
-			cy.get('input[id=username]').type(email);
-			cy.get('input[id=password]').type(`${password}{enter}`);
-			cy.get('.mat-button-wrapper').click();
+			cy.login(email, password);
 			cy.url().should('include', 'resource');
 		});
 
@@ -25,14 +23,186 @@ describe('tempus e2e tests', () => {
 		});
 	});
 
+	describe('revision', () => {
+		const makeChangeSendForApprovalLoginAsBO = (resEmail: string, newProfileSummary: string, newInstName: string) => {
+			// Update profile summary and institution name
+			cy.get('#institution-input input').first().clear();
+			cy.get('#institution-input input').first().type(newInstName);
+			cy.get('#institution-error').should('not.exist');
+			cy.get('#profile-summary').scrollIntoView().clear();
+			cy.get('#profile-summary').clear();
+			cy.get('#profile-summary').type(newProfileSummary);
+
+			// Submit for approval
+			cy.get('#submit-profile-button button').click();
+			cy.get('#info-modal-submit-button button').click();
+
+			// Verify View locked post sending for approbal
+			cy.get('#error-icon').should('be.visible');
+			cy.get('#edit-profile-button button').should('be.disabled');
+
+			cy.get('[id=logout-button]').click();
+
+			// Login as business owner
+			const busOwnerAccount = getUserCredentials(RoleType.BUSINESS_OWNER);
+			const busOwnerEmail = busOwnerAccount.email;
+			const busOwnerPassword = busOwnerAccount.password;
+
+			cy.login(busOwnerEmail, busOwnerPassword);
+
+      // Wait for page load once logging in to prevent timeout issues
+			cy.wait(5000);
+
+			// Verify the error icon shows for the resource who requested approval
+			const resRow = cy.contains('tr', `(${resEmail})`);
+			resRow.get('mat-icon').should('be.visible');
+
+			cy.contains('p', `(${resEmail})`).click();
+			cy.wait(2000);
+
+			cy.get('[id=revision-icon]').should('be.visible');
+
+			// Verify correct data changed by resource shows up here
+			cy.get('[id=profile-summary-text]').should('have.text', newProfileSummary);
+			cy.get('[id=institution-name-text]').first().should('have.text', newInstName);
+		};
+		it('should create revision and approve it', () => {
+			const resAccount = getUserCredentials(RoleType.AVAILABLE_RESOURCE);
+			const resEmail = resAccount.email;
+			const resPassword = resAccount.password;
+
+			cy.login(resEmail, resPassword);
+
+      // Wait for page load once logging in to prevent timeout issues
+			cy.wait(5000);
+
+			cy.get('[id=edit-profile-button]').wait(2000).click();
+
+			cy.wait(2000);
+
+			// Verify form is unsubmittable until valid
+			cy.get('#institution-input input').first().scrollIntoView().clear();
+			cy.get('#institution-error').should('be.visible');
+			cy.get('#submit-profile-button button').should('be.disabled');
+
+			makeChangeSendForApprovalLoginAsBO(resEmail, 'New profile summary', 'New institution name');
+
+			// Approve changes
+			cy.get('[id=approve-view-button]').click();
+			cy.get('tempus-info-modal tempus-button').click();
+
+			cy.wait(2000);
+
+			// Verify the error icon does not show for the resource who requested approval
+			cy.get('#table-row-icon').should('not.exist');
+
+			cy.get('[id=logout-button]').click();
+			cy.login(resEmail, resPassword);
+
+      // Wait for page load once logging in to prevent timeout issues
+			cy.wait(5000);
+
+			// Verify view not locked
+			cy.get('#error-icon').should('not.exist');
+			cy.get('#edit-profile-button button').should('not.be.disabled');
+
+			// Verify correct data changed by resource shows up here
+			cy.get('[id=profile-summary-text]').first().should('have.text', 'New profile summary');
+			cy.get('[id=institution-name-text]').first().should('have.text', 'New institution name');
+
+      cy.get('[id=logout-button]').click();
+		});
+		it('should create revision, reject it, re revise and then approve', () => {
+			const resAccount = getUserCredentials(RoleType.AVAILABLE_RESOURCE);
+			const resEmail = resAccount.email;
+			const resPassword = resAccount.password;
+
+			cy.login(resEmail, resPassword);
+
+      // Wait for page load once logging in to prevent timeout issues
+			cy.wait(5000);
+
+			cy.get('[id=edit-profile-button]').wait(2000).click();
+
+			cy.wait(2000);
+
+			makeChangeSendForApprovalLoginAsBO(resEmail, 'New profile summary', 'New institution name');
+
+			// Reject changes
+			cy.get('[id=reject-view-button]').scrollIntoView().click();
+			cy.get('#reject-revision-message-textarea textarea').type('Rejection message');
+			cy.get('#content-modal-submit-button button').click();
+
+			cy.wait(2000);
+
+			// Verify the error icon does not show for the resource who requested approval
+			cy.get('#table-row-icon').should('not.exist');
+
+			// Click into resource profile again and verify no error icons
+			cy.contains('p', `(${resEmail})`).click();
+			cy.wait(2000);
+
+			cy.get('[id=revision-icon]').should('not.exist');
+
+			// Verify changes made by resource dont show here
+			cy.get('[id=profile-summary-text]').should('not.have.text', 'New profile summary');
+			cy.get('[id=institution-name-text]').first().should('not.have.text', 'New institution name');
+
+			// Login as resource
+			cy.get('[id=logout-button]').click();
+			cy.login(resEmail, resPassword);
+
+      // Wait for page load once logging in to prevent timeout issues
+			cy.wait(5000);
+
+			// Verify View unlocked post rejection and revision icon showing
+			cy.get('#reject-icon').should('be.visible');
+			cy.get('#edit-profile-button button').should('not.be.disabled');
+
+			// Verify rejection dialog and appropriate message shows
+			cy.get('#rejection-dialog').should('be.visible');
+			cy.get('#rejection-dialog p').should('have.text', 'Rejection message');
+
+			cy.get('[id=edit-profile-button]').wait(2000).click();
+
+			cy.wait(2000);
+
+			makeChangeSendForApprovalLoginAsBO(resEmail, 'New profile summary 2', 'New institution name 2');
+
+			// Approve changes
+			cy.get('[id=approve-view-button]').click();
+			cy.get('tempus-info-modal tempus-button').click();
+
+			cy.wait(2000);
+
+			// Verify the error icon does not show for the resource who requested approval
+			cy.get('#table-row-icon').should('not.exist');
+
+			// Login as resource who requested approval
+			cy.get('[id=logout-button]').click();
+			cy.login(resEmail, resPassword);
+
+      // Wait for page load once logging in to prevent timeout issues
+			cy.wait(5000);
+
+			// Verify view not locked
+			cy.get('#error-icon').should('not.exist');
+			cy.get('#edit-profile-button button').should('not.be.disabled');
+
+			// Verify correct data changed by resource shows up here
+			cy.get('[id=profile-summary-text]').first().should('have.text', 'New profile summary 2');
+			cy.get('[id=institution-name-text]').first().should('have.text', 'New institution name 2');
+
+      cy.get('[id=logout-button]').click();
+		});
+	});
+
 	describe('login as business owner', () => {
 		it('should login and show resource data', () => {
 			const account = getUserCredentials(RoleType.BUSINESS_OWNER);
 			const { email, password } = account;
 
-			cy.get('input[id=username]').type(email);
-			cy.get('input[id=password]').type(`${password}{enter}`);
-			cy.get('.mat-button-wrapper').click();
+			cy.login(email, password);
 			cy.get('.demarginizedCell').first().click();
 			cy.url().should('include', 'view-resource');
 		});
