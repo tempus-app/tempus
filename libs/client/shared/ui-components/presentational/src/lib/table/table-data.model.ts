@@ -5,6 +5,7 @@ export type TableDataModel = {
 		tooltip: string;
 	};
 	url?: string;
+	urlQueryParams?: { [key: string]: unknown };
 	columnsWithIcon: string[];
 	columnsWithUrl: string[];
 };

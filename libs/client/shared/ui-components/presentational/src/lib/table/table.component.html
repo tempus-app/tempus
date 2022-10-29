@@ -21,6 +21,7 @@
 					<a
 						class="mat-body-2"
 						[routerLink]="element.url"
+						[queryParams]="element.urlQueryParams"
 						*ngIf="element.url && element.columnsWithUrl.includes(disCol.columnDef)"
 						[innerHtml]="disCol.cell(element)"
 					></a>

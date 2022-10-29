@@ -78,6 +78,7 @@ export class ViewPendingApprovalsComponent implements OnInit {
 						lastUpdated: date,
 						resource: `${view.resource.firstName} ${view.resource.lastName}`,
 						url: `../view-resources/${view.resource.id}`,
+						urlQueryParams: { viewId: view.id },
 						columnsWithUrl: ['resource'],
 						email: view.resource.email,
 						columnsWithIcon: [],

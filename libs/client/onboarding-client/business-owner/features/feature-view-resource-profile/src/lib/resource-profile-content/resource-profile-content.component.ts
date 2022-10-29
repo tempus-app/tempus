@@ -145,7 +145,16 @@ export class ResourceProfileContentComponent implements OnInit, OnChanges {
 				const [view] = approvedViews;
 				latestView = view;
 			}
-			this.loadView(latestView.id, profileViews);
+			// if param is passed, we load the id
+			const currentViewId = parseInt(this.route.snapshot.queryParamMap.get('viewId') || '0', 10);
+			// if param is not passed, we load the latest id and set viewId to that param
+			if (!currentViewId) {
+				this.router.navigate([], {
+					relativeTo: this.route,
+					queryParams: { viewId: latestView.id },
+				});
+			}
+			this.loadView(currentViewId || latestView.id, profileViews);
 		});
 	}
 
