@@ -1,6 +1,7 @@
 {
 	"onboardingOwnerViewPendingApprovals": {
 		"main": {
+			"title": "Pending Approvals",
 			"tableHeaders": {
 				"resource": "Resource",
 				"lastUpdated": "Last Updated",

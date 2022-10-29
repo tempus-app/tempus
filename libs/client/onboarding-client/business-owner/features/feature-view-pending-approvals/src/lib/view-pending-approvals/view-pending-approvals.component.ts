@@ -18,7 +18,7 @@ import { Subject, take, takeUntil } from 'rxjs';
 	styleUrls: ['./view-pending-approvals.component.scss'],
 })
 export class ViewPendingApprovalsComponent implements OnInit {
-	prefix = 'onboardingOwnerViewPendingApprovals.';
+	prefix = 'onboardingOwnerViewPendingApprovals';
 
 	tableColumns: Array<Column> = [];
 
@@ -27,7 +27,7 @@ export class ViewPendingApprovalsComponent implements OnInit {
 		translateService.currentLang = '';
 		translateService.use(currentLang);
 		this.translateService
-			.get(`${this.prefix}main.tableHeaders`)
+			.get(`${this.prefix}.main.tableHeaders`)
 			.pipe(take(1))
 			.subscribe(data => {
 				this.tableColumns = [
