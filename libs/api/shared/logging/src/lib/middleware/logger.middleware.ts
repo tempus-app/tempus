@@ -5,14 +5,14 @@ import { Request, Response, NextFunction } from 'express';
 export class LoggerMiddleware implements NestMiddleware {
 	private readonly logger = new Logger('HTTP');
 
-	start = process.hrtime.bigint();
-
 	use(req: Request, res: Response, next: NextFunction) {
+		const start = process.hrtime.bigint();
+
 		res.on('finish', () => {
 			const { method, originalUrl, hostname } = req;
 			const { statusCode, statusMessage } = res;
 			const end = process.hrtime.bigint();
-			const responseTime = (end - this.start) / BigInt(1000000);
+			const responseTime = (end - start) / BigInt(1000000);
 
 			const message = `REQUEST FROM: ${hostname} ${method} ${originalUrl} ${statusCode} ${statusMessage} - RESPONSE TIME: ${responseTime}ms`;
 
