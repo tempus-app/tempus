@@ -10,14 +10,24 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { ApiSharedEntityModule } from '@tempus/api/shared/entity';
 import { ConfigModule } from '@nestjs/config';
 import { join } from 'path';
-import { ApiSharedLoggingModule } from '@tempus/api/shared/logging';
-import { LoggerMiddleware } from 'libs/api/shared/logging/src/lib/middleware/logger.middleware';
+import { ApiSharedLoggingModule, LoggerMiddleware } from '@tempus/api/shared/logging';
+import { LoggerModule } from 'nestjs-pino';
 import { AppService } from './app.service';
 import { AppController } from './app.controller';
 
 @Module({
 	imports: [
 		ConfigModule.forRoot(),
+		LoggerModule.forRoot({
+			pinoHttp: {
+				customProps: (req, res) => ({
+					context: 'HTTP',
+				}),
+				transport: {
+					target: 'pino-pretty',
+				},
+			},
+		}),
 		ServeStaticModule.forRoot({
 			rootPath: join(__dirname, './', 'onboarding-client'),
 		}),

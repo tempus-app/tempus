@@ -14,7 +14,7 @@ export class LoggerMiddleware implements NestMiddleware {
 			const end = process.hrtime.bigint();
 			const responseTime = (end - start) / BigInt(1000000);
 
-			const message = `REQUEST FROM: ${hostname} ${method} ${originalUrl} ${statusCode} ${statusMessage} - RESPONSE TIME: ${responseTime}ms`;
+			const message = `HOST: ${hostname} - REQUEST METHOD: ${method} - REQUEST URL: ${originalUrl} - STATUS CODE: ${statusCode} - MESSAGE: ${statusMessage} - RESPONSE TIME: ${responseTime}ms`;
 
 			return this.logger.log(message);
 		});

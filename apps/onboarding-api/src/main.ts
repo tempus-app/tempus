@@ -3,7 +3,9 @@
  * This is only a minimal backend to get started.
  */
 
+// need two imports so that we can log when the app starts, as that uses the NestJS logging.
 import { INestApplication, Logger, ValidationPipe } from '@nestjs/common';
+import { Logger } from 'nestjs-pino';
 import { NestFactory } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 
@@ -25,6 +27,7 @@ function setupSwagger(app: INestApplication) {
 
 async function bootstrap() {
 	const app = await NestFactory.create(AppModule);
+	app.useLogger(app.get(Logger));
 	app.enableCors();
 	const config = app.get(ConfigService);
 	const globalPrefix = 'onboarding';

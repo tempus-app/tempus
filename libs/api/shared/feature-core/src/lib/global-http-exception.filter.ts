@@ -26,7 +26,6 @@ export class HttpErrorFilter implements ExceptionFilter {
 			statusCode,
 			message,
 		};
-
 		if (statusCode >= 500) {
 			Logger.error(
 				`Host: ${request.hostname} Request method: ${request.method} Request url: ${request.url}`,
