@@ -29,6 +29,7 @@
 					[buttonType]="ButtonType.EDIT"
 					color="accent"
 					(buttonClick)="openEditView()"
+          id="edit-profile-button"
 				></tempus-button>
 				<tempus-button
 					(buttonClick)="downloadProfile()"
@@ -45,7 +46,7 @@
 		<div class="section-container">
 			<h2 class="mat-h2 section-title">Profile Summary</h2>
 			<tempus-card>
-				{{profileSummary}}
+				<p id="profile-summary-text">{{profileSummary}}</p>
 			</tempus-card>
 		</div>
 		<div class="section-container">

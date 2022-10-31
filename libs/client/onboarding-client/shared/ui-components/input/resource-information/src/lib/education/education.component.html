@@ -70,6 +70,7 @@
 									id="institution-{{ index }}"
 									placeholder="{{ educationsPrefix + 'institutionPlaceholder' | translate }}"
 									cssClass="secondary"
+                  id="institution-input"
 									[control]="$any(numEducation).get('institution')"
 								>
 								</tempus-text-input>
@@ -102,6 +103,7 @@
 							>
 								<div class="error-container">
 									<mat-error
+                    id="institution-error"
 										class="mat-body-2"
 										*ngIf="
 											$any(numEducation).get('institution').invalid &&

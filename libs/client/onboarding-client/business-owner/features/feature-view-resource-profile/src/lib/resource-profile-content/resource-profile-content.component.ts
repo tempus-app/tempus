@@ -149,6 +149,16 @@ export class ResourceProfileContentComponent implements OnInit, OnChanges {
 				const [view] = approvedViews;
 				latestView = view;
 			}
+			// if param is passed, we load the id
+			const currentViewId = parseInt(this.route.snapshot.queryParamMap.get('viewId') || '0', 10);
+			// if param is not passed, we load the latest id and set viewId to that param
+			if (!currentViewId) {
+				this.router.navigate([], {
+					relativeTo: this.route,
+					queryParams: { viewId: latestView.id },
+					replaceUrl: true,
+				});
+			}
 
 			const set = new Set();
 			const uniqueViewNames = sortedViews.filter(item => {
@@ -159,7 +169,7 @@ export class ResourceProfileContentComponent implements OnInit, OnChanges {
 				return !viewExists && item.revisionType !== RevisionType.REJECTED;
 			});
 
-			this.loadView(latestView.id, uniqueViewNames);
+			this.loadView(currentViewId || latestView.id, uniqueViewNames);
 		});
 	}
 

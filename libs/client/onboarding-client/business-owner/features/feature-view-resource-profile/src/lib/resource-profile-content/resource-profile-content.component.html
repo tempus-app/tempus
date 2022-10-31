@@ -85,10 +85,10 @@
 			fxLayoutAlign="end center"
 			*ngIf="isRevision"
 		>
-			<button mat-raised-button color="warn" (click)="openRejectionDialog()">
+			<button mat-raised-button color="warn" id="reject-view-button" (click)="openRejectionDialog()">
 				{{ viewResourceProfilePrefx + 'buttons.rejectButton.title' | translate }}
 			</button>
-			<button mat-raised-button color="success" (click)="openConfirmationDialog()">
+			<button mat-raised-button color="success" id="approve-view-button" (click)="openConfirmationDialog()">
 				{{ viewResourceProfilePrefx + 'buttons.approveButton.title' | translate }}
 			</button>
 		</div>
@@ -98,7 +98,7 @@
 	<ng-template #modalID>
 		<div>
 			<p>{{ viewResourceProfilePrefx + 'rejectDialog.helpText' | translate }}</p>
-			<tempus-text-area [control]="$any(viewResourceProfileForm).get('rejectionComments')"></tempus-text-area>
+			<tempus-text-area id="reject-revision-message-textarea" [control]="$any(viewResourceProfileForm).get('rejectionComments')"></tempus-text-area>
 		</div>
 		<div class="error-container">
 			<mat-error

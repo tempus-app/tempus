@@ -11,6 +11,7 @@
 						matTooltip="{{ element.icon.tooltip }}"
 						class="{{ element.icon.class }}"
 						*ngIf="element.icon && element.columnsWithIcon.includes(disCol.columnDef)"
+            id="table-row-icon"
 						>{{ element.icon.val }}</mat-icon
 					>
 					<p
@@ -19,8 +20,9 @@
 						[innerHtml]="disCol.cell(element)"
 					></p>
 					<a
-						class="mat-body-2"
+						class="mat-body-2 link"
 						[routerLink]="element.url"
+						[queryParams]="element.urlQueryParams"
 						*ngIf="element.url && element.columnsWithUrl.includes(disCol.columnDef)"
 						[innerHtml]="disCol.cell(element)"
 					></a>

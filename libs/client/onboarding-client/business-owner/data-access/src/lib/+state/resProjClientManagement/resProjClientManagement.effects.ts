@@ -7,6 +7,7 @@ import {
 	OnboardingClientLinkService,
 	OnboardingClientProjectService,
 	OnboardingClientResourceService,
+	OnboardingClientViewsService,
 } from '@tempus/client/onboarding-client/shared/data-access';
 import { BusinessOwnerState } from '../businessOwner.state';
 import * as ProjManagementActions from './resProjClientManagement.actions';
@@ -18,6 +19,7 @@ export class ResourceProjectClientManagementEffects {
 		private store: Store<BusinessOwnerState>,
 		private resourceService: OnboardingClientResourceService,
 		private projectService: OnboardingClientProjectService,
+		private viewsService: OnboardingClientViewsService,
 		private linkService: OnboardingClientLinkService,
 	) {}
 
@@ -63,15 +65,57 @@ export class ResourceProjectClientManagementEffects {
 		),
 	);
 
+	createClient$ = createEffect(() =>
+		this.actions$.pipe(
+			ofType(ProjManagementActions.createClient),
+			switchMap(data =>
+				this.projectService.createClient(data.createClientDto).pipe(
+					map(createdClient => {
+						return ProjManagementActions.createClientSuccess({ client: createdClient });
+					}),
+					catchError(error => of(ProjManagementActions.createClientFailure({ error }))),
+				),
+			),
+		),
+	);
+
+	createProject$ = createEffect(() =>
+		this.actions$.pipe(
+			ofType(ProjManagementActions.createProject),
+			switchMap(data =>
+				this.projectService.createProject(data.createProjectDto).pipe(
+					map(createdProject => {
+						return ProjManagementActions.createProjectSuccess({ project: createdProject });
+					}),
+					catchError(error => of(ProjManagementActions.createProjectFailure({ error }))),
+				),
+			),
+		),
+	);
+
 	assignResourceToProject$ = createEffect(() =>
 		this.actions$.pipe(
 			ofType(ProjManagementActions.createResourceProjectAssignment),
 			switchMap(data =>
-				this.projectService.assignResourceToProject(data.projectId, data.resourceId).pipe(
+				this.projectService.assignResourceToProject(data.projectId, data.resourceId, data.assignProjectDto).pipe(
 					map(() => {
 						return ProjManagementActions.createResourceProjectAssignmentSuccess();
 					}),
 					catchError(error => of(ProjManagementActions.createResourceProjectAssignmentFailure({ error }))),
+				),
+			),
+		),
+	);
+
+	getAllPendingApprovals$ = createEffect(() =>
+		this.actions$.pipe(
+			ofType(ProjManagementActions.getAllViewsByStatus),
+			switchMap(data =>
+				this.viewsService.getViewsByStatus(data.status).pipe(
+					map(views => {
+						return ProjManagementActions.getAllViewsByStatusSuccess({ views });
+					}),
+					catchError(error => of(ProjManagementActions.getAllViewsByStatusFailure({ error }))),
 				),
 			),
 		),

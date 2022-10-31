@@ -1,6 +1,6 @@
 @use 'components/helper' as cmp;
 @use 'abstracts/helper' as abs;
-.dialog-button {
+.left-dialog-button {
 	padding-right: 10px;
 }
 .modal-container {
@@ -12,4 +12,7 @@
 .mat-dialog-content {
 	@include abs.body-1();
 	overflow: initial;
+}
+
+#modal-actions{
 }

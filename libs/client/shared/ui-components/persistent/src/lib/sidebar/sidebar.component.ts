@@ -67,6 +67,11 @@ export class SidebarComponent implements OnInit, OnDestroy {
 			base: true,
 		},
 		{
+			tab: SidebarTab.PENDING_APPROVALS,
+			route: '/owner/pending-approvals',
+			base: true,
+		},
+		{
 			tab: SidebarTab.MANAGE_RESOURCES,
 			route: '/owner/view-resources',
 		},

@@ -22,6 +22,16 @@ const routes: Routes = [
 						m => m.OnboardingClientBusinessOwnerFeatureManageResourcesModule,
 					),
 			},
+			{ path: '', pathMatch: 'full', redirectTo: 'pending-approvals' },
+			{
+				path: 'pending-approvals',
+				canLoad: [AuthGuard],
+				canActivate: [AuthGuard],
+				loadChildren: () =>
+					import('@tempus/onboarding-client/business-owner/feature-view-pending-approvals').then(
+						m => m.OnboardingClientBusinessOwnerFeatureViewPendingApprovalsModule,
+					),
+			},
 			{
 				path: 'view-resources/:id',
 				canLoad: [AuthGuard],

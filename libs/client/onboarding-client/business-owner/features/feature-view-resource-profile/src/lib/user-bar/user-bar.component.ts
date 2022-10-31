@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
 import { LoadView, ViewNames } from '@tempus/shared-domain';
 import { OnboardingClientResourceService } from '@tempus/client/onboarding-client/shared/data-access';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder } from '@angular/forms';
 
 @Component({
@@ -34,6 +34,7 @@ export class UserBarComponent implements OnChanges {
 		private route: ActivatedRoute,
 		private resourceService: OnboardingClientResourceService,
 		private fb: FormBuilder,
+		private router: Router,
 	) {}
 
 	ngOnChanges(): void {
@@ -64,6 +65,10 @@ export class UserBarComponent implements OnChanges {
 
 	onClick(optionSelected: string): void {
 		const index = this.viewNames.indexOf(optionSelected);
+		this.router.navigate([], {
+			relativeTo: this.route,
+			queryParams: { viewId: this.viewIDs[index] },
+		});
 		this.newViewSelected.emit(this.viewIDs[index]);
 	}
 
