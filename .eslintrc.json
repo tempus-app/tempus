@@ -20,6 +20,7 @@
 				"arrow-body-style": "off",
 				"no-await-in-loop": "off",
 				"no-plusplus": "off",
+				"no-console": "error",
 				"prefer-arrow-callback": "off",
 				"import/prefer-default-export": "off",
 				"import/no-cycle": "off", //TODO: look into why this is happening

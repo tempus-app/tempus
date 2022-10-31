@@ -113,8 +113,8 @@
 				</div>
 			</tempus-card>
 			<tempus-card style="margin-top: 1rem">
-				<div fxLayout="row" fxLayoutGap="10px">
-					<div fxFlex="50%">
+				<div fxLayout="row" fxLayoutGap="4%">
+					<div fxFlex="48%">
 						<tempus-dropdown
 							[label]="prefix + 'modal.clientLabel' | translate"
 							[optionsWithId]="clientOptions"
@@ -132,7 +132,7 @@
 							{{ prefix + 'modal.clientErr' | translate }}
 						</mat-error>
 					</div>
-					<div fxFlex="50%">
+					<div fxFlex="48%">
 						<tempus-dropdown
 							[label]="prefix + 'modal.projectLabel' | translate"
 							[optionsWithId]="currentProjects"
@@ -180,8 +180,8 @@
 						inviteType === roleTypeEnumToString(roleType.SUPERVISOR)
 					"
 				>
-					<div fxLayout="row" fxLayoutGap="10px">
-						<div fxFlex="50%">
+					<div fxLayout="row" fxLayoutGap="4%">
+						<div fxFlex="48%">
 							<tempus-text-input
 								id="first-name-invite"
 								[inputType]="InputType.TEXT"
@@ -201,7 +201,7 @@
 								{{ prefix + 'modal.assignModal.firstNameErr' | translate }}
 							</mat-error>
 						</div>
-						<div fxFlex="50%">
+						<div fxFlex="48%">
 							<tempus-text-input
 								id="last-name-invite"
 								[inputType]="InputType.TEXT"
@@ -266,8 +266,8 @@
 							{{ prefix + 'modal.assignModal.positionErr' | translate }}
 						</mat-error>
 					</div>
-					<div fxLayout="row" fxLayoutGap="10px">
-						<div fxFlex="50%">
+					<div fxLayout="row" fxLayoutGap="4%">
+						<div fxFlex="48%">
 							<tempus-dropdown
 								id="client-invite"
 								[control]="$any(manageResourcesForm).get('invite').get('client')"
@@ -286,7 +286,7 @@
 								{{ prefix + 'modal.clientErr' | translate }}
 							</mat-error>
 						</div>
-						<div fxFlex="50%">
+						<div fxFlex="48%">
 							<tempus-dropdown
 								id="project-invite"
 								[control]="$any(manageResourcesForm).get('invite').get('project')"

@@ -242,4 +242,9 @@ export class ViewsService {
 		}
 		await this.viewsRepository.remove(viewEntity);
 	}
+
+	async getViewsByStatus(status: RevisionType) {
+		const views = await this.viewsRepository.find({ where: { revisionType: status }, relations: ['resource'] });
+		return views;
+	}
 }
