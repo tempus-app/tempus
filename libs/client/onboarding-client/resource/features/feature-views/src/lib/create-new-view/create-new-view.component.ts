@@ -46,7 +46,12 @@ export class CreateNewViewComponent implements OnInit, OnDestroy {
 
 	createNewView() {
 		const newView = this.newViewForm.generateNewView();
-		this.resourceService.createSecondaryView(this.userId, newView).subscribe();
+		this.resourceService.createSecondaryView(this.userId, newView).subscribe(view => {
+			this.router.navigate(['../'], {
+				relativeTo: this.route,
+				queryParams: { viewId: view.id },
+			});
+		});
 	}
 
 	openSubmitConfirmation() {
@@ -72,12 +77,10 @@ export class CreateNewViewComponent implements OnInit, OnDestroy {
 		this.modalService.confirmEventSubject.pipe(takeUntil(this.destroyed$)).subscribe(() => {
 			this.createNewView();
 			this.modalService.close();
-			this.closeForm();
 		});
 	}
 
 	closeForm() {
-		// TODO: navigate to new view
 		this.router.navigate(['../'], { relativeTo: this.route }).then(() => {
 			window.location.reload();
 		});
