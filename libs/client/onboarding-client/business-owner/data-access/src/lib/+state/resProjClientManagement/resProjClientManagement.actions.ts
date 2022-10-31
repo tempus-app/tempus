@@ -7,6 +7,8 @@ import {
 	ICreateProjectDto,
 	IUserProjClientDto,
 	Project,
+	RevisionType,
+	View,
 } from '@tempus/shared-domain';
 
 export const getAllResProjInfo = createAction(
@@ -90,4 +92,19 @@ export const resetCreatedClientState = createAction(
 );
 export const resetCreatedProjectState = createAction(
 	'[Onboarding Client Manage Resources Page] Reset Create Project State',
+);
+
+export const getAllViewsByStatus = createAction(
+	'[Onboarding Profile Views API] Get All Views By Status',
+	props<{ status: RevisionType }>(),
+);
+
+export const getAllViewsByStatusSuccess = createAction(
+	'[Onboarding Profile Views API] Get All Views By Status Success',
+	props<{ views: View[] }>(),
+);
+
+export const getAllViewsByStatusFailure = createAction(
+	'[Onboarding Profile Views API] Get All Views By Status Failure',
+	props<{ error: Error }>(),
 );

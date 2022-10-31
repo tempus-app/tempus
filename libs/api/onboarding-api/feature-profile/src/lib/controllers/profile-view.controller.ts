@@ -1,7 +1,20 @@
-import { Body, Controller, Delete, Get, Param, Post, UseGuards, Patch, Request, Response, Res } from '@nestjs/common';
+import {
+	Body,
+	Controller,
+	Delete,
+	Get,
+	Param,
+	Post,
+	UseGuards,
+	Patch,
+	Request,
+	Response,
+	Res,
+	Query,
+} from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { CreateViewDto, ApproveViewDto, ResumePdfTemplateDto } from '@tempus/api/shared/dto';
-import { Revision, RoleType, View } from '@tempus/shared-domain';
+import { Revision, RevisionType, RoleType, View } from '@tempus/shared-domain';
 import { JwtAuthGuard, PermissionGuard, Roles, RolesGuard, ViewsGuard } from '@tempus/api/shared/feature-auth';
 import { PdfGeneratorService } from '@tempus/api/shared/feature-pdfgenerator';
 import { ViewsService } from '../services/view.service';
@@ -10,6 +23,15 @@ import { ViewsService } from '../services/view.service';
 @Controller('profile-view')
 export class ProfileViewController {
 	constructor(private viewSerivce: ViewsService, private pdfService: PdfGeneratorService) {}
+
+	// all views of user
+	@UseGuards(JwtAuthGuard, RolesGuard)
+	@Roles(RoleType.BUSINESS_OWNER, RoleType.SUPERVISOR)
+	@Get('/views/')
+	async getViewsByStatus(@Query('status') status: RevisionType): Promise<View[]> {
+		const views = await this.viewSerivce.getViewsByStatus(status);
+		return views;
+	}
 
 	// all views of user
 	@UseGuards(JwtAuthGuard, PermissionGuard)
