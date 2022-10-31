@@ -6,7 +6,6 @@
   - [General Overview](#general-overview)
     - [Configuration](#configuration)
       - [NestJS Logger](#nestjs-logger)
-      - [Pino](#pino)
     - [Log levels](#log-levels)
     - [Middleware](#middleware)
     - [Service logging](#service-logging)
@@ -22,7 +21,7 @@
 
 ## General Overview
 
-For logging in Tempus, we have opted to use a mix of the [built-in NestJS logger](https://docs.nestjs.com/techniques/logger) and [Pino](https://github.com/iamolegga/nestjs-pino). This allows for easy installation, implementation, and configuration within our app while also providing the easy integration and detailed information of the Pino logging. The built-in logging library can be found [here](../../libs/api/shared/logging/src/lib/middleware/logger.middleware.ts).
+For logging in Tempus, we have opted to use a mix of the [built-in NestJS logger](https://docs.nestjs.com/techniques/logger). This allows for easy installation, implementation, and configuration within our app. The built-in logging library can be found [here](../../libs/api/shared/logging/src/lib/middleware/logger.middleware.ts).
 
 
 ### Configuration
@@ -39,31 +38,6 @@ export class AppModule {
  }
 ```
 The `forRoutes` determines which routes/controllers the logger middleware will affect. As of now, it will log all routes in the app.
-
-#### Pino
-
-Pino is also configured in [app-module](../../apps/onboarding-api/src/app/app.module.ts).
-
-```ts
-LoggerModule.forRoot({
-	pinoHttp: {
-		customProps: (req, res) => ({
-			context: 'HTTP',
-		}),
-		transport: {
-			target: 'pino-pretty',
-		},
-	},
-}),
-```
-
-Additionally, in [main.ts](../../apps/onboarding-api/src/main.ts), ensure NestJS utilizes Pino.
-
-```ts
-app.useLogger(app.get(Logger));
-```
-From here, NestJS automatically identifies which logger to use, allowing for seamless use of the logger within the application.
-
 
 ### Log levels
 
