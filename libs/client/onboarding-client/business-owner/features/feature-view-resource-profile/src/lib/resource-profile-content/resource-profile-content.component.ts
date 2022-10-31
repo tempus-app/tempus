@@ -150,9 +150,16 @@ export class ResourceProfileContentComponent implements OnInit, OnChanges {
 				latestView = view;
 			}
 
-			// Filter out REJECTED views from view options
-			const views = profileViews.filter(view => view.revisionType !== RevisionType.REJECTED);
-			this.loadView(latestView.id, views);
+			const set = new Set();
+			const uniqueViewNames = sortedViews.filter(item => {
+				const viewExists = set.has(item.type);
+				set.add(item.type);
+
+				// Hide rejected views
+				return !viewExists && item.revisionType !== RevisionType.REJECTED;
+			});
+
+			this.loadView(latestView.id, uniqueViewNames);
 		});
 	}
 
