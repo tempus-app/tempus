@@ -1,0 +1,34 @@
+<ng-container>
+	<tempus-card>
+		<div *ngFor="let projectResource of projectResources">
+			<div class="section-block">
+				<div fxLayout="column">
+					<div fxFlex="30" fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxFlex="33%">
+						<div fxFlex.gt-sm="75%" fxFlex.lt-md="75%" fxLayoutAlign="start start" fxFlexFill
+							class="grid-item">
+							<div class="left-card-header">
+								<h3 class="mat-h3">{{ projectResource.project.client.clientName }}</h3>
+								<p class="mat-body-2">{{ projectResource.project.name }}</p>
+								<p class="mat-body-2">{{ projectResource.title }}</p>
+							</div>
+						</div>
+						<div fxFlex.gt-sm="25%" fxFlex.lt-md="25%" fxLayoutAlign="end end"
+							fxLayoutAlign.lt-md="start start" fxFlexFill fxLayout="column" class="grid-item">
+							<div fxFill>
+								<p class="mat-body-2">
+									{{
+										projectResource.startDate && projectResource.endDate
+										? formatDate(projectResource.startDate, projectResource.endDate)
+										: projectResource.startDate && projectResource.endDate === null
+										? formatDate(projectResource.startDate, projectResource.endDate)
+										: ' '
+									}}
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</tempus-card>
+</ng-container>

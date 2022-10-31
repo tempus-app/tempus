@@ -63,11 +63,39 @@ export class ResourceProjectClientManagementEffects {
 		),
 	);
 
+	createClient$ = createEffect(() =>
+		this.actions$.pipe(
+			ofType(ProjManagementActions.createClient),
+			switchMap(data =>
+				this.projectService.createClient(data.createClientDto).pipe(
+					map(createdClient => {
+						return ProjManagementActions.createClientSuccess({ client: createdClient });
+					}),
+					catchError(error => of(ProjManagementActions.createClientFailure({ error }))),
+				),
+			),
+		),
+	);
+
+	createProject$ = createEffect(() =>
+		this.actions$.pipe(
+			ofType(ProjManagementActions.createProject),
+			switchMap(data =>
+				this.projectService.createProject(data.createProjectDto).pipe(
+					map(createdProject => {
+						return ProjManagementActions.createProjectSuccess({ project: createdProject });
+					}),
+					catchError(error => of(ProjManagementActions.createProjectFailure({ error }))),
+				),
+			),
+		),
+	);
+
 	assignResourceToProject$ = createEffect(() =>
 		this.actions$.pipe(
 			ofType(ProjManagementActions.createResourceProjectAssignment),
 			switchMap(data =>
-				this.projectService.assignResourceToProject(data.projectId, data.resourceId).pipe(
+				this.projectService.assignResourceToProject(data.projectId, data.resourceId, data.assignProjectDto).pipe(
 					map(() => {
 						return ProjManagementActions.createResourceProjectAssignmentSuccess();
 					}),

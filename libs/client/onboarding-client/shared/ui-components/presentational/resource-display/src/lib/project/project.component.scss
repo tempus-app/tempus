@@ -1,0 +1,20 @@
+@use 'abstracts/helper' as abs;
+
+.left-card-header {
+	text-align: left;
+}
+
+.section-block {
+	border-top: 2px solid abs.$primary-300;
+	margin: 1em 0;
+	padding: 1em 0;
+}
+
+::ng-deep tempus-card {
+	width: 80%;
+	height: 100%;
+	text-align: left;
+	.mat-card {
+		color: abs.$primary-800 !important;
+	}
+}

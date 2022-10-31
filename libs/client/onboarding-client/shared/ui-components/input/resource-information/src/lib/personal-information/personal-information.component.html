@@ -1,283 +1,292 @@
 <ng-container>
-	<div fxLayout="column">
-		<div fxFlex>
-			<div fxFlex="5"></div>
-			<div class="info-title">
-				<h2 class="mat-h2">{{ personalInfoPrefix + 'title' | translate }}</h2>
-			</div>
-			<div fxFlex="5"></div>
-		</div>
-		<div>
-			<div fxFlex="5"></div>
-			<tempus-card>
-				<form>
-					<div fxLayout="column" fxLayoutGap="10px">
-						<div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxFlex="33%" class="block-2">
-							<div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="center center" fxFlexFill class="grid-item">
-								<tempus-text-input
-									[inputType]="InputType.TEXT"
-									placeholder="{{ personalInfoPrefix + 'info.firstNamePlaceholder' | translate }}"
-									cssClass="secondary"
-									[control]="$any(myInfoForm).get('firstName')"
-								>
-								</tempus-text-input>
-							</div>
-							<div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="center center" fxFlexFill class="grid-item">
-								<tempus-text-input
-									[inputType]="InputType.TEXT"
-									placeholder="{{ personalInfoPrefix + 'info.lastNamePlaceholder' | translate }}"
-									cssClass="secondary"
-									[control]="$any(myInfoForm).get('lastName')"
-								>
-								</tempus-text-input>
-							</div>
-						</div>
-						<div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxFlex="33%" class="block-2">
-							<div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="center center" fxFlexFill class="grid-item">
-								<div class="error-container">
-									<mat-error
-										class="mat-body-2"
-										*ngIf="
-											$any(myInfoForm).get('firstName').invalid &&
-											($any(myInfoForm).get('firstName').touched || $any(myInfoForm).get('firstName').dirty)
-										"
-									>
-										{{ personalInfoPrefix + 'info.firstNameErr' | translate }}
-									</mat-error>
-								</div>
-							</div>
-							<div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="center center" fxFlexFill class="grid-item">
-								<div class="error-container">
-									<mat-error
-										class="mat-body-2"
-										*ngIf="
-											$any(myInfoForm).get('lastName').invalid &&
-											($any(myInfoForm).get('lastName').touched || $any(myInfoForm).get('lastName').dirty)
-										"
-									>
-										{{ personalInfoPrefix + 'info.lastNameErr' | translate }}
-									</mat-error>
-								</div>
-							</div>
-						</div>
-						<div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxFlex="33%" class="block-2">
-							<div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="center center" fxFlexFill class="grid-item">
-								<tempus-text-input
-									placeholder="{{ personalInfoPrefix + 'info.phNumPlaceholder' | translate }}"
-									cssClass="secondary"
-									[control]="$any(myInfoForm).get('phoneNumber')"
-								></tempus-text-input>
-							</div>
-						</div>
-						<div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxFlex="33%" class="block-2">
-							<div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="center center" fxFlexFill class="grid-item">
-								<div class="error-container">
-									<mat-error
-										class="mat-body-2"
-										*ngIf="
-											$any(myInfoForm).get('phoneNumber').invalid &&
-											($any(myInfoForm).get('phoneNumber').touched || $any(myInfoForm).get('phoneNumber').dirty)
-										"
-									>
-										{{ personalInfoPrefix + 'info.phNumError' | translate }}
-									</mat-error>
-								</div>
-							</div>
-						</div>
-						<div fxLayout="row" fxLayoutAlign="center start" fxFlex="33%" class="block-2" *ngIf="showPersonalSummary">
-							<div fxFlex="95" class="grid-item">
-								<tempus-text-area
-									id="profile-summary"
-									placeholder="{{ personalInfoPrefix + 'info.personalSummaryPlaceholder' | translate }}"
-									[control]="$any(myInfoForm).get('profileSummary')"
-								></tempus-text-area>
-							</div>
-						</div>
-					</div>
-				</form>
-			</tempus-card>
-			<div fxFlex="5"></div>
-		</div>
-		<div fxLayout="column">
-			<div fxFlex>
-				<div fxFlex="5"></div>
-				<div class="info-title">
-					<h2 class="mat-h2">{{ commonPrefix + 'location.address' | translate }}</h2>
-				</div>
-				<div fxFlex="5"></div>
-			</div>
-			<div>
-				<div fxFlex="5"></div>
-				<tempus-card>
-					<form>
-						<div fxLayout="column" fxLayoutGap="10px">
-							<div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxFlex="33%" class="block-2">
-								<div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="center center" fxFlexFill class="grid-item">
-									<tempus-search-box
-										[options]="countries"
-										placeholder="{{ commonPrefix + 'location.countryPlaceholder' | translate }}"
-										cssClass="secondary"
-										(optionSelect)="updateStateOptions($event)"
-										[control]="$any(myInfoForm).get('country')"
-									>
-									</tempus-search-box>
-								</div>
-								<div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="center center" fxFlexFill class="grid-item">
-									<tempus-dropdown
-										[options]="states"
-										label="{{ commonPrefix + 'location.statePlaceholder' | translate }}"
-										cssClass="secondary"
-										[control]="$any(myInfoForm).get('state')"
-									></tempus-dropdown>
-								</div>
-							</div>
-							<div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxFlex="33%" class="block-2">
-								<div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="center center" fxFlexFill class="grid-item">
-									<div class="error-container">
-										<mat-error
-											class="mat-body-2"
-											*ngIf="
-												$any(myInfoForm).get('country').invalid &&
-												($any(myInfoForm).get('country').touched || $any(myInfoForm).get('country').dirty)
-											"
-										>
-											{{ commonPrefix + 'location.validCountryErr' | translate }}
-										</mat-error>
-									</div>
-								</div>
-								<div fxFlex.gt-sm="50%" fxFlex.lt-m d="50%" fxLayoutAlign="center center" fxFlexFill class="grid-item">
-									<div class="error-container">
-										<mat-error
-											class="mat-body-2"
-											*ngIf="
-												$any(myInfoForm).get('state').invalid &&
-												($any(myInfoForm).get('state').touched || $any(myInfoForm).get('state').dirty)
-											"
-										>
-											{{ commonPrefix + 'location.validStateErr' | translate }}
-										</mat-error>
-									</div>
-								</div>
-							</div>
-							<div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxFlex="33%" class="block-2">
-								<div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="center center" fxFlexFill class="grid-item">
-									<tempus-text-input
-										placeholder="{{ commonPrefix + 'location.cityPlaceholder' | translate }}"
-										cssClass="secondary"
-										[control]="$any(myInfoForm).get('city')"
-									>
-									</tempus-text-input>
-								</div>
-							</div>
-							<div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxFlex="33%" class="block-2">
-								<div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="center center" fxFlexFill class="grid-item">
-									<div class="error-container">
-										<mat-error
-											class="mat-body-2"
-											*ngIf="
-												$any(myInfoForm).get('city').invalid &&
-												($any(myInfoForm).get('city').touched || $any(myInfoForm).get('city').dirty)
-											"
-										>
-											{{ commonPrefix + 'location.validCityErr' | translate }}
-										</mat-error>
-									</div>
-								</div>
-							</div>
-						</div>
-					</form>
-				</tempus-card>
-				<div fxFlex="5"></div>
-			</div>
-		</div>
-		<div fxFlex>
-			<div fxFlex="5"></div>
-			<div class="info-title">
-				<h2 class="mat-h2">{{ personalInfoPrefix + 'links.title' | translate }}</h2>
-			</div>
-			<div fxFlex="5"></div>
-		</div>
-		<div>
-			<div fxFlex="5"></div>
-			<tempus-card>
-				<form>
-					<div fxLayout="column" fxLayoutGap="10px">
-						<div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxFlex="33%" class="block-2">
-							<div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="center center" fxFlexFill class="grid-item">
-								<tempus-text-input
-									[inputType]="InputType.TEXT"
-									placeholder="{{ personalInfoPrefix + 'links.linkedinLinkPlaceholder' | translate }} "
-									cssClass="secondary"
-									[control]="$any(myInfoForm).get('linkedInLink')"
-								>
-								</tempus-text-input>
-							</div>
-							<div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="center center" fxFlexFill class="grid-item">
-								<tempus-text-input
-									[inputType]="InputType.TEXT"
-									placeholder="{{ personalInfoPrefix + 'links.githubLinkPlaceholder' | translate }}"
-									cssClass="secondary"
-									[control]="$any(myInfoForm).get('githubLink')"
-								>
-								</tempus-text-input>
-							</div>
-						</div>
-						<div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxFlex="33%" class="block-2">
-							<div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="center center" fxFlexFill class="grid-item">
-								<div class="error-container">
-									<mat-error
-										class="mat-body-2"
-										*ngIf="
-											$any(myInfoForm).get('linkedInLink').invalid &&
-											($any(myInfoForm).get('linkedInLink').touched || $any(myInfoForm).get('linkedInLink').dirty)
-										"
-									>
-										{{ personalInfoPrefix + 'links.invalidUrlErr' | translate }}
-									</mat-error>
-								</div>
-							</div>
-							<div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="center center" fxFlexFill class="grid-item">
-								<div class="error-container">
-									<mat-error
-										class="mat-body-2"
-										*ngIf="
-											$any(myInfoForm).get('githubLink').invalid &&
-											($any(myInfoForm).get('githubLink').touched || $any(myInfoForm).get('githubLink').dirty)
-										"
-									>
-										{{ personalInfoPrefix + 'links.invalidUrlErr' | translate }}
-									</mat-error>
-								</div>
-							</div>
-						</div>
-						<div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxFlex="33%" class="block-2">
-							<div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="center center" fxFlexFill class="grid-item">
-								<tempus-text-input
-									placeholder="{{ personalInfoPrefix + 'links.otherLinkPlaceholder' | translate }}"
-									cssClass="secondary"
-									[control]="$any(myInfoForm).get('otherLink')"
-								></tempus-text-input>
-							</div>
-						</div>
-						<div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxFlex="33%" class="block-2">
-							<div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="center center" fxFlexFill class="grid-item">
-								<div class="error-container">
-									<mat-error
-										class="mat-body-2"
-										*ngIf="
-											$any(myInfoForm).get('otherLink').invalid &&
-											($any(myInfoForm).get('otherLink').touched || $any(myInfoForm).get('otherLink').dirty)
-										"
-									>
-										{{ personalInfoPrefix + 'links.invalidUrlErr' | translate }}
-									</mat-error>
-								</div>
-							</div>
-						</div>
-					</div>
-				</form>
-			</tempus-card>
-			<div fxFlex="5"></div>
-		</div>
-	</div>
+  <div fxLayout="column">
+    <div fxFlex>
+      <div fxFlex="5"></div>
+      <div class="info-title">
+        <h2 class="mat-h2">{{ personalInfoPrefix + 'title' | translate }}</h2>
+      </div>
+      <div fxFlex="5"></div>
+    </div>
+    <div>
+      <div fxFlex="5"></div>
+      <tempus-card>
+        <form>
+          <div fxLayout="column" fxLayoutGap="10px">
+            <div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxFlex="33%" class="block-2">
+              <div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="center center" fxFlexFill class="grid-item">
+                <tempus-text-input
+                  [inputType]="InputType.TEXT"
+                  placeholder="{{ personalInfoPrefix + 'info.firstNamePlaceholder' | translate }}"
+                  cssClass="secondary"
+                  id="first-name-input"
+                  [control]="$any(myInfoForm).get('firstName')"
+                >
+                </tempus-text-input>
+              </div>
+              <div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="center center" fxFlexFill class="grid-item">
+                <tempus-text-input
+                  [inputType]="InputType.TEXT"
+                  id="last-name-input"
+                  placeholder="{{ personalInfoPrefix + 'info.lastNamePlaceholder' | translate }}"
+                  cssClass="secondary"
+                  [control]="$any(myInfoForm).get('lastName')"
+                >
+                </tempus-text-input>
+              </div>
+            </div>
+            <div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxFlex="33%" class="block-2">
+              <div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="center center" fxFlexFill class="grid-item">
+                <div class="error-container">
+                  <mat-error
+                    class="mat-body-2"
+                    *ngIf="
+                      $any(myInfoForm).get('firstName').invalid &&
+                      ($any(myInfoForm).get('firstName').touched || $any(myInfoForm).get('firstName').dirty)
+                    "
+                  >
+                    {{ personalInfoPrefix + 'info.firstNameErr' | translate }}
+                  </mat-error>
+                </div>
+              </div>
+              <div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="center center" fxFlexFill class="grid-item">
+                <div class="error-container">
+                  <mat-error
+                    class="mat-body-2"
+                    *ngIf="
+                      $any(myInfoForm).get('lastName').invalid &&
+                      ($any(myInfoForm).get('lastName').touched || $any(myInfoForm).get('lastName').dirty)
+                    "
+                  >
+                    {{ personalInfoPrefix + 'info.lastNameErr' | translate }}
+                  </mat-error>
+                </div>
+              </div>
+            </div>
+            <div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxFlex="33%" class="block-2">
+              <div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="center center" fxFlexFill class="grid-item">
+                <tempus-text-input
+                  id="phNum-input"
+                  placeholder="{{ personalInfoPrefix + 'info.phNumPlaceholder' | translate }}"
+                  cssClass="secondary"
+                  [control]="$any(myInfoForm).get('phoneNumber')"
+                ></tempus-text-input>
+              </div>
+            </div>
+            <div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxFlex="33%" class="block-2">
+              <div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="center center" fxFlexFill class="grid-item">
+                <div class="error-container">
+                  <mat-error
+                    class="mat-body-2"
+                    *ngIf="
+                      $any(myInfoForm).get('phoneNumber').invalid &&
+                      ($any(myInfoForm).get('phoneNumber').touched || $any(myInfoForm).get('phoneNumber').dirty)
+                    "
+                  >
+                    {{ personalInfoPrefix + 'info.phNumError' | translate }}
+                  </mat-error>
+                </div>
+              </div>
+            </div>
+            <div fxLayout="row" fxLayoutAlign="center start" fxFlex="33%" class="block-2" *ngIf="showPersonalSummary">
+              <div fxFlex="95" class="grid-item">
+                <tempus-text-area
+                  id="profile-summary-text"
+                  placeholder="{{ personalInfoPrefix + 'info.personalSummaryPlaceholder' | translate }}"
+                  [control]="$any(myInfoForm).get('profileSummary')"
+                ></tempus-text-area>
+              </div>
+            </div>
+          </div>
+        </form>
+      </tempus-card>
+      <div fxFlex="5"></div>
+    </div>
+    <div fxLayout="column">
+      <div fxFlex>
+        <div fxFlex="5"></div>
+        <div class="info-title">
+          <h2 class="mat-h2">{{ commonPrefix + 'location.address' | translate }}</h2>
+        </div>
+        <div fxFlex="5"></div>
+      </div>
+      <div>
+        <div fxFlex="5"></div>
+        <tempus-card>
+          <form>
+            <div fxLayout="column" fxLayoutGap="10px">
+              <div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxFlex="33%" class="block-2">
+                <div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="center center" fxFlexFill class="grid-item">
+                  <tempus-search-box
+                    [options]="countries"
+                    id="country-searchbox"
+                    placeholder="{{ commonPrefix + 'location.countryPlaceholder' | translate }}"
+                    cssClass="secondary"
+                    (optionSelect)="updateStateOptions($event)"
+                    [control]="$any(myInfoForm).get('country')"
+                  >
+                  </tempus-search-box>
+                </div>
+                <div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="center center" fxFlexFill class="grid-item">
+                  <tempus-dropdown
+                    [options]="states"
+                    id="states-dropdown"
+                    label="{{ commonPrefix + 'location.statePlaceholder' | translate }}"
+                    cssClass="secondary"
+                    [control]="$any(myInfoForm).get('state')"
+                  ></tempus-dropdown>
+                </div>
+              </div>
+              <div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxFlex="33%" class="block-2">
+                <div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="center center" fxFlexFill class="grid-item">
+                  <div class="error-container">
+                    <mat-error
+                      class="mat-body-2"
+                      *ngIf="
+                        $any(myInfoForm).get('country').invalid &&
+                        ($any(myInfoForm).get('country').touched || $any(myInfoForm).get('country').dirty)
+                      "
+                    >
+                      {{ commonPrefix + 'location.validCountryErr' | translate }}
+                    </mat-error>
+                  </div>
+                </div>
+                <div fxFlex.gt-sm="50%" fxFlex.lt-m d="50%" fxLayoutAlign="center center" fxFlexFill class="grid-item">
+                  <div class="error-container">
+                    <mat-error
+                      class="mat-body-2"
+                      *ngIf="
+                        $any(myInfoForm).get('state').invalid &&
+                        ($any(myInfoForm).get('state').touched || $any(myInfoForm).get('state').dirty)
+                      "
+                    >
+                      {{ commonPrefix + 'location.validStateErr' | translate }}
+                    </mat-error>
+                  </div>
+                </div>
+              </div>
+              <div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxFlex="33%" class="block-2">
+                <div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="center center" fxFlexFill class="grid-item">
+                  <tempus-text-input
+                    id="city-input"
+                    placeholder="{{ commonPrefix + 'location.cityPlaceholder' | translate }}"
+                    cssClass="secondary"
+                    [control]="$any(myInfoForm).get('city')"
+                  >
+                  </tempus-text-input>
+                </div>
+              </div>
+              <div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxFlex="33%" class="block-2">
+                <div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="center center" fxFlexFill class="grid-item">
+                  <div class="error-container">
+                    <mat-error
+                      class="mat-body-2"
+                      *ngIf="
+                        $any(myInfoForm).get('city').invalid &&
+                        ($any(myInfoForm).get('city').touched || $any(myInfoForm).get('city').dirty)
+                      "
+                    >
+                      {{ commonPrefix + 'location.validCityErr' | translate }}
+                    </mat-error>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+        </tempus-card>
+        <div fxFlex="5"></div>
+      </div>
+    </div>
+    <div fxFlex>
+      <div fxFlex="5"></div>
+      <div class="info-title">
+        <h2 class="mat-h2">{{ personalInfoPrefix + 'links.title' | translate }}</h2>
+      </div>
+      <div fxFlex="5"></div>
+    </div>
+    <div>
+      <div fxFlex="5"></div>
+      <tempus-card>
+        <form>
+          <div fxLayout="column" fxLayoutGap="10px">
+            <div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxFlex="33%" class="block-2">
+              <div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="center center" fxFlexFill class="grid-item">
+                <tempus-text-input
+                  id="linkedin-link-input"
+                  [inputType]="InputType.TEXT"
+                  placeholder="{{ personalInfoPrefix + 'links.linkedinLinkPlaceholder' | translate }} "
+                  cssClass="secondary"
+                  [control]="$any(myInfoForm).get('linkedInLink')"
+                >
+                </tempus-text-input>
+              </div>
+              <div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="center center" fxFlexFill class="grid-item">
+                <tempus-text-input
+                  id="github-link-input"
+                  [inputType]="InputType.TEXT"
+                  placeholder="{{ personalInfoPrefix + 'links.githubLinkPlaceholder' | translate }}"
+                  cssClass="secondary"
+                  [control]="$any(myInfoForm).get('githubLink')"
+                >
+                </tempus-text-input>
+              </div>
+            </div>
+            <div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxFlex="33%" class="block-2">
+              <div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="center center" fxFlexFill class="grid-item">
+                <div class="error-container">
+                  <mat-error
+                    class="mat-body-2"
+                    *ngIf="
+                      $any(myInfoForm).get('linkedInLink').invalid &&
+                      ($any(myInfoForm).get('linkedInLink').touched || $any(myInfoForm).get('linkedInLink').dirty)
+                    "
+                  >
+                    {{ personalInfoPrefix + 'links.invalidUrlErr' | translate }}
+                  </mat-error>
+                </div>
+              </div>
+              <div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="center center" fxFlexFill class="grid-item">
+                <div class="error-container">
+                  <mat-error
+                    class="mat-body-2"
+                    *ngIf="
+                      $any(myInfoForm).get('githubLink').invalid &&
+                      ($any(myInfoForm).get('githubLink').touched || $any(myInfoForm).get('githubLink').dirty)
+                    "
+                  >
+                    {{ personalInfoPrefix + 'links.invalidUrlErr' | translate }}
+                  </mat-error>
+                </div>
+              </div>
+            </div>
+            <div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxFlex="33%" class="block-2">
+              <div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="center center" fxFlexFill class="grid-item">
+                <tempus-text-input
+                  id="other-link-input"
+                  placeholder="{{ personalInfoPrefix + 'links.otherLinkPlaceholder' | translate }}"
+                  cssClass="secondary"
+                  [control]="$any(myInfoForm).get('otherLink')"
+                ></tempus-text-input>
+              </div>
+            </div>
+            <div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxFlex="33%" class="block-2">
+              <div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="center center" fxFlexFill class="grid-item">
+                <div class="error-container">
+                  <mat-error
+                    class="mat-body-2"
+                    *ngIf="
+                      $any(myInfoForm).get('otherLink').invalid &&
+                      ($any(myInfoForm).get('otherLink').touched || $any(myInfoForm).get('otherLink').dirty)
+                    "
+                  >
+                    {{ personalInfoPrefix + 'links.invalidUrlErr' | translate }}
+                  </mat-error>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </tempus-card>
+      <div fxFlex="5"></div>
+    </div>
+  </div>
 </ng-container>

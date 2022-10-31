@@ -13,6 +13,8 @@ export class SearchBoxComponent implements OnInit, OnChanges {
 
 	search = '';
 
+	@Input() showLabel = true;
+
 	@Input() cssClass = 'secondary';
 
 	@Input() placeholder = '';

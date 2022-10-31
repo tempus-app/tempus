@@ -70,3 +70,9 @@ tempus-button {
 	padding: 1em;
 	width: 85%;
 }
+
+tempus-card {
+	::ng-deep .mat-card-content {
+		@include abs.body-1($color: abs.$primary-800);
+	}
+}
