@@ -3,57 +3,57 @@
 $merriweather: Merriweather, serif;
 $raleway: Raleway, sans-serif;
 
-@mixin h1($font-size: 3em, $color: black) {
+@mixin h1($font-size: 3em, $color: #031927) {
 	font-family: $merriweather;
 	font-weight: bold;
 	font-size: $font-size;
 }
 
-@mixin h2($font-size: 1.875, $color: black) {
+@mixin h2($font-size: 1.875, $color: #031927) {
 	font-family: $merriweather;
 	font-weight: bold;
 	font-size: $font-size;
-    color: $color;
+	color: $color;
 }
 
-@mixin h3($font-size: 1.5em, $color: black) {
-    font-family: $raleway;
-    font-weight: 800;
-    font-size: $font-size;
-    color: $color;
+@mixin h3($font-size: 1.5em, $color: #031927) {
+	font-family: $raleway;
+	font-weight: 800;
+	font-size: $font-size;
+	color: $color;
 }
 
-@mixin body-1($font-size: 1em, $color: black) {
-    font-family: $raleway;
-    font-weight: 400;
-    font-size: $font-size;
-    color: $color;
+@mixin body-1($font-size: 1em, $color: #031927) {
+	font-family: $raleway;
+	font-weight: 400;
+	font-size: $font-size;
+	color: $color;
 }
 
-@mixin body-2($font-size: 1em, $color: black) {
-    font-family: $raleway;
-    font-weight: 600;
-    font-size: $font-size;
-    color: $color;
+@mixin body-2($font-size: 1em, $color: #3b7294) {
+	font-family: $raleway;
+	font-weight: 600;
+	font-size: $font-size;
+	color: $color;
 }
 
-@mixin button($font-size: 1.25em, $color: black) {
-    font-family: $raleway;
-    font-weight: bold;
-    font-size: $font-size;
-    color: $color;
+@mixin button($font-size: 1.25em, $color: #031927) {
+	font-family: $raleway;
+	font-weight: bold;
+	font-size: $font-size;
+	color: $color;
 }
 
-@mixin input($font-size: 1em, $color: black) {
-    font-family: $raleway;
-    font-weight: 500;
-    font-size: $font-size;
-    color: $color;
+@mixin input($font-size: 1em, $color: #031927) {
+	font-family: $raleway;
+	font-weight: 500;
+	font-size: $font-size;
+	color: $color;
 }
 
-@mixin caption($font-size: 0.75em, $color: black) {
-    font-family: $raleway;
-    font-weight: 500;
-    font-size: $font-size;
-    color: $color;
+@mixin caption($font-size: 0.75em, $color: #031927) {
+	font-family: $raleway;
+	font-weight: 500;
+	font-size: $font-size;
+	color: $color;
 }

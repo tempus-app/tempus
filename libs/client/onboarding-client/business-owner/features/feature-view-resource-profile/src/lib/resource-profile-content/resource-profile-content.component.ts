@@ -152,6 +152,7 @@ export class ResourceProfileContentComponent implements OnInit, OnChanges {
 				this.router.navigate([], {
 					relativeTo: this.route,
 					queryParams: { viewId: latestView.id },
+					replaceUrl: true,
 				});
 			}
 			this.loadView(currentViewId || latestView.id, profileViews);

@@ -35,12 +35,7 @@ export class ViewPendingApprovalsComponent implements OnInit {
 						columnDef: 'resource',
 						header: data['resource'],
 						cell: (element: Record<string, unknown>) =>
-							`<div class="demarginizedCell">${element['resource']}<p id="resource" class="mat-caption">(${element['email']})</p></div>`,
-					},
-					{
-						columnDef: 'type',
-						header: data['type'],
-						cell: (element: Record<string, unknown>) => `${element['type']}`,
+							`<div class="demarginizedCell">${element['resource']} - ${element['type']} <p id="resource" class="mat-caption">(${element['email']})</p></div>`,
 					},
 					{
 						columnDef: 'lastUpdated',
