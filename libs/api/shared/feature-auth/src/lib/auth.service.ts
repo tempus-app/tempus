@@ -1,4 +1,4 @@
-import { ForbiddenException, Injectable, InternalServerErrorException } from '@nestjs/common';
+import { ForbiddenException, Injectable, InternalServerErrorException, Logger } from '@nestjs/common';
 import { TokensDto, User, JwtPayload, JwtRefreshPayloadWithToken, AuthDto } from '@tempus/shared-domain';
 import { JwtService } from '@nestjs/jwt';
 import { compare, genSalt, hash } from 'bcrypt';
@@ -10,6 +10,8 @@ import { CommonService } from '@tempus/api/shared/feature-common';
 
 @Injectable()
 export class AuthService {
+	private readonly logger = new Logger(AuthService.name);
+
 	constructor(
 		private jwtService: JwtService,
 		@InjectRepository(UserEntity)
@@ -25,12 +27,14 @@ export class AuthService {
 		partialUser.password = null;
 		partialUser.refreshToken = null;
 		const result = new AuthDto(partialUser, tokens.accessToken, tokens.refreshToken);
+		this.logger.log(`${partialUser.email} logged in as ${partialUser.roles}`);
 		return result;
 	}
 
 	async logout(token: JwtPayload) {
 		const user = await this.commonService.findByEmail(token.email);
 		await this.updateRefreshTokenHash(user, null);
+		this.logger.log(`${user.email} logged out`);
 	}
 
 	async refreshToken(payload: JwtRefreshPayloadWithToken) {

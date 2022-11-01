@@ -3,6 +3,7 @@
  * This is only a minimal backend to get started.
  */
 
+// need two imports so that we can log when the app starts, as that uses the NestJS logging.
 import { INestApplication, Logger, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
