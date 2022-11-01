@@ -4,6 +4,7 @@ import { Subject, take, takeUntil } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
 import { ModalService, CustomModalType, ModalType } from '@tempus/client/shared/ui-components/modal';
 import { EditViewFormComponent } from '@tempus/onboarding-client/shared/feature-edit-view-form';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
 	selector: 'tempus-edit-profile',
@@ -13,6 +14,8 @@ import { EditViewFormComponent } from '@tempus/onboarding-client/shared/feature-
 export class EditProfileComponent implements OnDestroy {
 	constructor(
 		public modalService: ModalService,
+		private router: Router,
+		private route: ActivatedRoute,
 		private resourceService: OnboardingClientResourceService,
 		private translateService: TranslateService,
 	) {
@@ -37,7 +40,19 @@ export class EditProfileComponent implements OnDestroy {
 
 	updateView() {
 		const newView = this.newViewForm.generateNewView();
-		this.resourceService.editResourceView(this.newViewForm.currentViewId, newView).pipe(take(1)).subscribe();
+		this.resourceService
+			.editResourceView(this.newViewForm.currentViewId, newView)
+			.pipe(take(1))
+			.subscribe(revision => {
+				// Navigate to new view
+				this.router
+					.navigate(['../', revision.views?.pop()?.id], {
+						relativeTo: this.route,
+					})
+					.then(() => {
+						window.location.reload();
+					});
+			});
 	}
 
 	openSubmitConfirmation() {
@@ -64,7 +79,6 @@ export class EditProfileComponent implements OnDestroy {
 			this.updateView();
 			this.modalService.close();
 			this.closeEditView();
-			window.location.reload();
 		});
 	}
 

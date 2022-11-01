@@ -19,6 +19,7 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { ResourceProfileComponent } from './resource-profile/resource-profile.component';
 import { UserBarComponent } from './user-bar/user-bar.component';
 import { ResourceProfileContentComponent } from './resource-profile-content/resource-profile-content.component';
+import { BusinessOwnerCreateNewViewComponent } from './create-new-view/create-new-view.component';
 
 function createTranslateLoader(http: HttpClient) {
 	return new TranslateHttpLoader(http, './assets/i18n/onboarding/owner/view-resource-profile/', '.json');
@@ -46,6 +47,11 @@ function createTranslateLoader(http: HttpClient) {
 				pathMatch: 'full',
 				component: ResourceProfileComponent,
 			},
+			{
+				path: 'new',
+				pathMatch: 'full',
+				component: BusinessOwnerCreateNewViewComponent,
+			},
 		]),
 		TranslateModule.forChild({
 			loader: {
@@ -57,6 +63,11 @@ function createTranslateLoader(http: HttpClient) {
 			extend: true,
 		}),
 	],
-	declarations: [ResourceProfileComponent, UserBarComponent, ResourceProfileContentComponent],
+	declarations: [
+		ResourceProfileComponent,
+		UserBarComponent,
+		ResourceProfileContentComponent,
+		BusinessOwnerCreateNewViewComponent,
+	],
 })
 export class ClientOnboardingClientBusinessOwnerFeaturesFeatureViewResourceProfileModule {}

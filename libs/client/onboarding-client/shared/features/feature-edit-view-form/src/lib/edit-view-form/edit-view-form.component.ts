@@ -5,8 +5,9 @@ import {
 	OnboardingClientState,
 	OnboardingClientResourceService,
 	selectAccessToken,
+	selectLoggedInUserId,
 } from '@tempus/client/onboarding-client/shared/data-access';
-import { Subject, takeUntil } from 'rxjs';
+import { Subject, take, takeUntil } from 'rxjs';
 import { ButtonType } from '@tempus/client/shared/ui-components/presentational';
 import { UserType } from '@tempus/client/shared/ui-components/persistent';
 import {
@@ -24,7 +25,7 @@ import {
 } from '@tempus/shared-domain';
 import { TranslateService } from '@ngx-translate/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { decodeJwt, sortViewsByLatestUpdated } from '@tempus/client/shared/util';
+import { decodeJwt } from '@tempus/client/shared/util';
 
 @Component({
 	selector: 'tempus-edit-view-form',
@@ -95,8 +96,6 @@ export class EditViewFormComponent implements OnInit, OnDestroy {
 
 	skillsSummaryForm = this.fb.group({});
 
-	resume: File | null = null;
-
 	ButtonType = ButtonType;
 
 	UserType = UserType;
@@ -115,41 +114,56 @@ export class EditViewFormComponent implements OnInit, OnDestroy {
 
 		// Business Owner
 		if (this.roles.includes(RoleType.BUSINESS_OWNER) || this.roles.includes(RoleType.SUPERVISOR)) {
-			const id = parseInt(this.route.snapshot.paramMap.get('id') || '0', 10);
+			const resourceId = parseInt(this.route.snapshot.paramMap.get('id') || '0', 10);
+			const viewId = parseInt(this.route.snapshot.queryParamMap.get('viewId') || '0', 10);
 
-			this.resourceService.getResourceOriginalResumeById(id).subscribe(resumeBlob => {
-				this.resume = new File([resumeBlob], 'original-resume.pdf');
-			});
-
-			// Load form with approved Primary view
-			this.resourceService.getResourceProfileViews(id).subscribe(profileViews => {
-				const filteredViews = profileViews.filter(
-					view => view.viewType === ViewType.PRIMARY && view.revisionType === RevisionType.APPROVED,
-				);
-				this.setFormDataFromView(filteredViews[0]);
-				this.dataLoaded = true;
-			});
-		} else {
-			// Resource
-			this.resourceService.getResourceInformation().subscribe(resData => {
-				this.userId = resData.id;
-
-				// TODO: ADD resource to the store
-				this.resourceService.getResourceOriginalResumeById(this.userId).subscribe(resumeBlob => {
-					this.resume = new File([resumeBlob], 'original-resume.pdf');
-				});
-
-				// TODO: to edit secondary views, get latest version of that view through its revision
-				this.resourceService.getResourceProfileViews(this.userId).subscribe(views => {
-					let filteredAndSortedViews = this.isPrimaryView
-						? views.filter(view => view.viewType === ViewType.PRIMARY)
-						: views.filter(view => view.viewType === ViewType.PRIMARY && view.revisionType === RevisionType.APPROVED);
-
-					filteredAndSortedViews = sortViewsByLatestUpdated(filteredAndSortedViews);
-					this.setFormDataFromView(filteredAndSortedViews[0]);
+			if (viewId) {
+				this.resourceService
+					.getViewById(viewId)
+					.pipe(take(1))
+					.subscribe(view => {
+						this.setFormDataFromView(view);
+						this.dataLoaded = true;
+					});
+			} else {
+				// Load form with approved Primary view
+				this.resourceService.getResourceProfileViews(resourceId).subscribe(profileViews => {
+					const filteredViews = profileViews.filter(
+						view => view.viewType === ViewType.PRIMARY && view.revisionType === RevisionType.APPROVED,
+					);
+					this.setFormDataFromView(filteredViews[0]);
 					this.dataLoaded = true;
 				});
-			});
+			}
+		} else {
+			// Resource
+			const viewId = parseInt(this.route.snapshot.paramMap.get('id') || '0', 10);
+			if (viewId) {
+				// Edit view
+				this.resourceService
+					.getViewById(viewId)
+					.pipe(take(1))
+					.subscribe(view => {
+						this.setFormDataFromView(view);
+						this.isPrimaryView = view.viewType === ViewType.PRIMARY;
+						if (!this.isPrimaryView) {
+							this.viewName.setValue(view.type);
+						}
+						this.dataLoaded = true;
+					});
+			} else {
+				// Create new view
+				this.store.select(selectLoggedInUserId).subscribe(id => {
+					this.userId = id || 0;
+					this.resourceService.getResourceProfileViews(this.userId).subscribe(views => {
+						const approvedPrimaryView = views.find(
+							view => view.revisionType === RevisionType.APPROVED && view.viewType === ViewType.PRIMARY,
+						);
+						if (approvedPrimaryView) this.setFormDataFromView(approvedPrimaryView);
+						this.dataLoaded = true;
+					});
+				});
+			}
 		}
 	}
 

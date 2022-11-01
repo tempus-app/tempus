@@ -1,19 +1,10 @@
 <ng-container>
 	<tempus-user-bar
 		[loadedView]="loadedView"
-		(createNewViewSelected)="openNewViewForm()"
 		(newViewSelected)="newViewClickEvent($event)"
 		[resourceName]="resourceFirstName + '-' + resourceLastName"
 	></tempus-user-bar>
-	<tempus-edit-view-form
-		*ngIf="viewFormEnabled"
-		[isPrimaryView]="false"
-		(submitClicked)="createNewView()"
-		(closeEditViewClicked)="closeForm()"
-	>
-	</tempus-edit-view-form>
 	<tempus-resource-profile-content
-		*ngIf="!viewFormEnabled"
 		[firstName]="resourceFirstName"
 		[lastName]="resourceLastName"
 		[country]="country"

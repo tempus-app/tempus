@@ -7,11 +7,7 @@ import {
 } from '@tempus/client/onboarding-client/shared/data-access';
 import { LoadView, ProjectResource } from '@tempus/shared-domain';
 import { skip } from 'rxjs';
-import {
-	BusinessOwnerState,
-	getOriginalResume,
-	selectOriginalResume,
-} from '@tempus/client/onboarding-client/business-owner/data-access';
+import { getOriginalResume, selectOriginalResume } from '@tempus/client/onboarding-client/business-owner/data-access';
 import { EditViewFormComponent } from '@tempus/onboarding-client/shared/feature-edit-view-form';
 
 @Component({
@@ -24,12 +20,9 @@ export class ResourceProfileComponent implements OnInit {
 		private route: ActivatedRoute,
 		private resourceService: OnboardingClientResourceService,
 		private sharedStore: Store<OnboardingClientState>,
-		private businessOwnerStore: Store<BusinessOwnerState>,
 	) {}
 
 	@ViewChild(EditViewFormComponent) newViewForm!: EditViewFormComponent;
-
-	viewFormEnabled = false;
 
 	resourceId = 0;
 
@@ -73,10 +66,6 @@ export class ResourceProfileComponent implements OnInit {
 		this.viewIndex = viewIndex;
 	}
 
-	openNewViewForm() {
-		this.viewFormEnabled = true;
-	}
-
 	ngOnInit(): void {
 		this.resourceId = parseInt(this.route.snapshot.paramMap.get('id') || '0', 10);
 		this.resourceService.getResourceInformationById(this.resourceId).subscribe(resourceInfo => {
@@ -103,15 +92,5 @@ export class ResourceProfileComponent implements OnInit {
 					this.resume = new File([blob], 'original-resume.pdf');
 				}
 			});
-	}
-
-	createNewView() {
-		const newView = this.newViewForm.generateNewView();
-		this.resourceService.createSecondaryView(this.resourceId, newView).subscribe();
-		this.closeForm();
-	}
-
-	closeForm() {
-		this.viewFormEnabled = false;
 	}
 }
