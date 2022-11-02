@@ -44,7 +44,7 @@
 			</div>
 		</div>
 		<div id="tableContainer">
-			<tempus-table [tableColumns]="tableColumns" [tableData]="resProjClientTableDataFiltered"></tempus-table>
+			<tempus-table (paginatorEvent)="tablePaginationEvent($event)" [page]="tablePagination.page" [totalItems]="totalNumResProjClientOptions" [tableColumns]="tableColumns" [tableData]="resProjClientTableDataFiltered"></tempus-table>
 			<h2
 				style="text-align: center; margin-top: 2rem"
 				class="mat-h3"

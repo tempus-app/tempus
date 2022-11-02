@@ -1,6 +1,6 @@
 import { createReducer, on } from '@ngrx/store';
 import { AsyncRequestState } from '@tempus/client/onboarding-client/shared/data-access';
-import { Client, IUserProjClientDto, Project } from '@tempus/shared-domain';
+import { Client, IResourceBasicDto, IUserProjClientDto, Project } from '@tempus/shared-domain';
 import * as ProjectManagementActions from './resProjClientManagement.actions';
 
 export const PROJECT_MANAGE_FEATURE_KEY = 'resProjClientManagement';
@@ -10,9 +10,12 @@ export interface ResourceProjectClientManagementState {
 	error: Error | null;
 	status: AsyncRequestState;
 	projResClientData: IUserProjClientDto[];
+	projResClientDataTotalItems: number;
 	projAssigned: boolean;
 	clients: Client[];
 	createdClient: Client | null;
+	resourcesBasic: IResourceBasicDto[];
+	searchableTerms: string[];
 }
 
 export const initialState: ResourceProjectClientManagementState = {
@@ -20,7 +23,10 @@ export const initialState: ResourceProjectClientManagementState = {
 	status: AsyncRequestState.IDLE,
 	projAssigned: false,
 	projResClientData: [],
+	projResClientDataTotalItems: 0,
 	clients: [],
+	resourcesBasic: [],
+	searchableTerms: [],
 	createdClient: null,
 	createdProject: null,
 };
@@ -28,7 +34,13 @@ export const initialState: ResourceProjectClientManagementState = {
 export const projectManagementReducer = createReducer(
 	initialState,
 	on(ProjectManagementActions.getAllClients, state => ({ ...state, status: AsyncRequestState.LOADING })),
-	on(ProjectManagementActions.getAllResProjInfo, state => ({ ...state, status: AsyncRequestState.LOADING })),
+	on(ProjectManagementActions.getAllResourceInfoBasic, state => ({ ...state, status: AsyncRequestState.LOADING })),
+	on(ProjectManagementActions.getAllSearchableTerms, state => ({ ...state, status: AsyncRequestState.LOADING })),
+	on(ProjectManagementActions.getAllResProjInfo, state => ({
+		...state,
+		status: AsyncRequestState.LOADING,
+		projAssigned: false,
+	})),
 	on(ProjectManagementActions.createLink, state => ({ ...state, status: AsyncRequestState.LOADING })),
 	on(ProjectManagementActions.createClient, state => ({ ...state, status: AsyncRequestState.LOADING })),
 	on(ProjectManagementActions.createProject, state => ({ ...state, status: AsyncRequestState.LOADING })),
@@ -43,7 +55,17 @@ export const projectManagementReducer = createReducer(
 		error,
 		status: AsyncRequestState.ERROR,
 	})),
+	on(ProjectManagementActions.getAllResourceInfoBasicFailure, (state, { error }) => ({
+		...state,
+		error,
+		status: AsyncRequestState.ERROR,
+	})),
 	on(ProjectManagementActions.getAllResProjInfoFailure, (state, { error }) => ({
+		...state,
+		error,
+		status: AsyncRequestState.ERROR,
+	})),
+	on(ProjectManagementActions.getAllSearchableTermsFailure, (state, { error }) => ({
 		...state,
 		error,
 		status: AsyncRequestState.ERROR,
@@ -70,16 +92,30 @@ export const projectManagementReducer = createReducer(
 		error,
 		status: AsyncRequestState.ERROR,
 	})),
+
 	on(ProjectManagementActions.getAllClientsSuccess, (state, { clientData }) => ({
 		...state,
 		clients: clientData,
 		status: AsyncRequestState.SUCCESS,
 		error: null,
 	})),
-	on(ProjectManagementActions.getAllResProjInfoSuccess, (state, { projResClientData }) => ({
+	on(ProjectManagementActions.getAllResourceInfoBasicSuccess, (state, { resourceBasicData }) => ({
+		...state,
+		resourcesBasic: resourceBasicData,
+		status: AsyncRequestState.SUCCESS,
+		error: null,
+	})),
+	on(ProjectManagementActions.getAllSearchableTermsSuccess, (state, { searchableTerms }) => ({
+		...state,
+		searchableTerms,
+		status: AsyncRequestState.SUCCESS,
+		error: null,
+	})),
+	on(ProjectManagementActions.getAllResProjInfoSuccess, (state, { projResClientData, totalItems }) => ({
 		...state,
 		projResClientData,
 		status: AsyncRequestState.SUCCESS,
+		projResClientDataTotalItems: totalItems,
 		error: null,
 	})),
 	on(ProjectManagementActions.createLinkSuccess, state => ({
@@ -115,6 +151,7 @@ export const projectManagementReducer = createReducer(
 		status: AsyncRequestState.IDLE,
 		error: null,
 	})),
+
 	on(ProjectManagementActions.resetCreatedClientState, state => ({
 		...state,
 		createdClient: null,

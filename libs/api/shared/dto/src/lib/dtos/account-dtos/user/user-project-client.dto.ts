@@ -1,6 +1,4 @@
-import { IUserProjClientDto } from '@tempus/shared-domain';
-
-type ProjectClientData = { project: { val: string; id: number }; client: string };
+import { IUserProjClientDto, ProjectClientData } from '@tempus/shared-domain';
 
 export class UserProjectClientDto implements IUserProjClientDto {
 	firstName: string;

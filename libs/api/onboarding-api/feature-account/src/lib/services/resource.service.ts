@@ -11,11 +11,19 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { ConfigService } from '@nestjs/config';
 // eslint-disable-next-line @nrwl/nx/enforce-module-boundaries
 import { ViewsService } from '@tempus/onboarding-api/feature-profile';
-import { Resource, RevisionType, RoleType, StatusType, ViewType } from '@tempus/shared-domain';
-import { Repository } from 'typeorm';
+import {
+	Project,
+	ProjectClientData,
+	Resource,
+	RevisionType,
+	RoleType,
+	StatusType,
+	ViewType,
+} from '@tempus/shared-domain';
+import { In, Like, Repository } from 'typeorm';
 import { genSalt, hash } from 'bcrypt';
-import { ResourceEntity } from '@tempus/api/shared/entity';
-import { CreateResourceDto, UpdateResourceDto, UserProjectClientDto } from '@tempus/api/shared/dto';
+import { ClientEntity, ProjectEntity, ProjectResourceEntity, ResourceEntity } from '@tempus/api/shared/entity';
+import { CreateResourceDto, ResourceBasicDto, UpdateResourceDto, UserProjectClientDto } from '@tempus/api/shared/dto';
 import { LinkService } from './link.service';
 
 @Injectable()
@@ -23,6 +31,10 @@ export class ResourceService {
 	constructor(
 		@InjectRepository(ResourceEntity)
 		private resourceRepository: Repository<ResourceEntity>,
+		@InjectRepository(ProjectEntity)
+		private projectRespository: Repository<ProjectEntity>,
+		@InjectRepository(ProjectResourceEntity)
+		private projectResourceRepository: Repository<ProjectResourceEntity>,
 		private viewsService: ViewsService,
 		private configService: ConfigService,
 		private linkService: LinkService,
@@ -113,7 +125,7 @@ export class ResourceService {
 		return resourceEntity;
 	}
 
-	async getAllResourceProjectInfo(): Promise<UserProjectClientDto[]> {
+	async getAllSearchableTerms(): Promise<Array<string>> {
 		const resources = await this.resourceRepository.find({
 			relations: [
 				'projectResources',
@@ -123,22 +135,131 @@ export class ResourceService {
 				'views.revision',
 			],
 		});
+		let allSearchableTerms = [];
+
+		resources.forEach(res => {
+			allSearchableTerms.push(`${res.firstName} ${res.lastName}`);
+			res.projectResources.forEach(projRes => {
+				allSearchableTerms.push(projRes.project.client.clientName);
+				allSearchableTerms.push(projRes.project.name);
+			});
+		});
+
+		allSearchableTerms = Array.from(new Set(allSearchableTerms));
+
+		return allSearchableTerms;
+	}
+
+	async getProjectWithMatchingFilter(filter: string): Promise<Project[]> {
+		const projects = await this.projectRespository
+			.createQueryBuilder('project')
+			.leftJoinAndSelect('project.client', 'client')
+			.where('"project"."name" like :query OR "client"."clientName" like :query', { query: `%${filter}%` })
+			.getMany();
+		return projects;
+	}
+
+	async getProjResourcesMatchingFilter(filter: string): Promise<ProjectResourceEntity[]> {
+		const projWithFilter = await this.getProjectWithMatchingFilter(filter);
+		const projIds = projWithFilter.map(proj => proj.id);
+
+		// If no projects or client with matching filter, need this redundant id to prevent syntax error in query below
+		// as empty array of project ids causes issues
+		if (projIds.length == 0) {
+			projIds.push(-999);
+		}
+		const projResourcesMatchingFilter = await this.projectResourceRepository
+			.createQueryBuilder('projRes')
+			.leftJoinAndSelect('projRes.project', 'project')
+			.leftJoinAndSelect('projRes.resource', 'resource')
+			.where(
+				`CONCAT("resource"."firstName", ' ', "resource"."lastName") like :query OR "project"."id" IN (:...projIds)`,
+				{ query: `%${filter}%`, projIds },
+			)
+			.getMany();
+		return projResourcesMatchingFilter;
+	}
+
+	async getAllResourceProjectInfo(
+		page: number,
+		pageSize: number,
+		filter: string,
+	): Promise<{ userProjClientData: UserProjectClientDto[]; totalItems: number }> {
+		let resourcesAndCount: [ResourceEntity[], number] = [[], 0];
+		if (filter != '') {
+			const projResources = await this.getProjResourcesMatchingFilter(filter);
+			const resMatchingFilterIds = Array.from(new Set(projResources.map(projRes => projRes.resource.id)));
+			resourcesAndCount = await this.resourceRepository.findAndCount({
+				relations: [
+					'projectResources',
+					'projectResources.project',
+					'views',
+					'projectResources.project.client',
+					'views.revision',
+				],
+				take: Number(pageSize),
+				skip: Number(page) * Number(pageSize),
+				where: {
+					id: In(resMatchingFilterIds),
+				},
+			});
+		} else {
+			resourcesAndCount = await this.resourceRepository.findAndCount({
+				relations: [
+					'projectResources',
+					'projectResources.project',
+					'views',
+					'projectResources.project.client',
+					'views.revision',
+				],
+				take: Number(pageSize),
+				skip: Number(page) * Number(pageSize),
+			});
+		}
+
+		const resources = resourcesAndCount[0];
+		const countOfItems = resourcesAndCount[1];
+
+		// Converting to relevant dto array data
 		const userProjectInfo: Array<UserProjectClientDto> = resources.map(res => {
-			const projClients = res.projectResources.map(relation => {
-				return {
-					project: {
-						val: relation.project.name,
-						id: relation.project.id,
-						title: relation.title,
-						isCurrent: relation.endDate == null,
-					},
-					client: relation.project.client.clientName,
+			const clientProjsMap = {};
+			res.projectResources.map(relation => {
+				const projData = {
+					val: relation.project.name,
+					id: relation.project.id,
+					title: relation.title,
+					isCurrent: relation.endDate == null,
 				};
+				const { clientName } = relation.project.client;
+				if (clientProjsMap[clientName]) {
+					clientProjsMap[clientName].push(projData);
+				} else {
+					clientProjsMap[clientName] = [projData];
+				}
 			});
 			const revNeeded = res.views.some(view => view.revisionType === RevisionType.PENDING);
-			return new UserProjectClientDto(res.id, res.firstName, res.lastName, res.email, revNeeded, projClients);
+			const projClientData: ProjectClientData[] = Object.keys(clientProjsMap).map(clientName => {
+				return {
+					client: clientName,
+					projects: clientProjsMap[clientName],
+				} as ProjectClientData;
+			});
+			return new UserProjectClientDto(res.id, res.firstName, res.lastName, res.email, revNeeded, projClientData);
 		});
-		return userProjectInfo;
+
+		return { userProjClientData: userProjectInfo, totalItems: countOfItems };
+	}
+
+	async getAllResourcesBasic(): Promise<ResourceBasicDto[]> {
+		const resources = await this.resourceRepository.find();
+		return resources.map(res => {
+			return {
+				firstName: res.firstName,
+				lastName: res.lastName,
+				email: res.email,
+				id: res.id,
+			} as ResourceBasicDto;
+		});
 	}
 
 	// TODO: filtering

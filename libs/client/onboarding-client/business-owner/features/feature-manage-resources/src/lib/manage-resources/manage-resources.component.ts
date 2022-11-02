@@ -12,7 +12,9 @@ import {
 	createProject,
 	createResourceProjectAssignment,
 	getAllClients,
+	getAllResourceInfoBasic,
 	getAllResProjInfo,
+	getAllSearchableTerms,
 	resetAsyncStatusState,
 	resetCreatedClientState,
 	resetCreatedProjectState,
@@ -22,7 +24,9 @@ import {
 	selectCreatedClientData,
 	selectCreatedProjectData,
 	selectProjectAssigned,
+	selectResourceBasicData,
 	selectResProjClientData,
+	selectSearchableTerms,
 } from '@tempus/client/onboarding-client/business-owner/data-access';
 import {
 	AsyncRequestState,
@@ -35,6 +39,7 @@ import { ButtonType, Column, ProjectManagmenetTableData } from '@tempus/client/s
 import { Client, ErorType, IAssignProjectDto, ICreateLinkDto, RoleType } from '@tempus/shared-domain';
 import { distinctUntilChanged, finalize, Subject, Subscription, take, takeUntil } from 'rxjs';
 import { Router } from '@angular/router';
+import { PageEvent } from '@angular/material/paginator';
 
 @Component({
 	selector: 'tempus-manage-resources',
@@ -126,7 +131,15 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 
 	resProjClientTableData: ProjectManagmenetTableData[] = [];
 
+	totalNumResProjClientOptions = 0;
+
 	resProjClientTableDataFiltered: ProjectManagmenetTableData[] = [];
+
+	tablePagination: { page: number; pageSize: number; filter: string } = {
+		page: 0,
+		pageSize: 2,
+		filter: '',
+	};
 
 	name = '';
 
@@ -260,33 +273,86 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 					this.openErrorModal(asyncStatus.error.message);
 				}
 			});
-		this.businessOwnerStore.dispatch(getAllResProjInfo());
+
+		this.businessOwnerStore.dispatch(getAllResProjInfo(this.tablePagination));
 		this.businessOwnerStore.dispatch(getAllClients());
+		this.businessOwnerStore.dispatch(getAllResourceInfoBasic());
+		this.businessOwnerStore.dispatch(getAllSearchableTerms());
+
+		// Getting all resources (basic info i.e firstname, lastname, email, id)
+		this.businessOwnerStore
+			.select(selectResourceBasicData)
+			.pipe(takeUntil(this.$destroyed))
+			.subscribe(data => {
+				this.resourceOptions = data.map(res => {
+					return {
+						val: `${res.firstName} ${res.lastName} (${res.email})`,
+						id: res.id,
+					};
+				});
+			});
+
+		// Getting all Searchable terms (i.e res name, client, project)
+		this.businessOwnerStore
+			.select(selectSearchableTerms)
+			.pipe(takeUntil(this.$destroyed))
+			.subscribe(data => {
+				this.allSearchTerms = data;
+			});
+
+		// Getting all client information
+		this.businessOwnerStore
+			.select(selectClientData)
+			.pipe(takeUntil(this.$destroyed))
+			.subscribe(data => {
+				this.clients = data;
+				this.clientOptions = data.map(client => {
+					return {
+						val: client.clientName,
+						id: client.id,
+					};
+				});
+			});
+
+		// Getting if a project has recently been assigned to refresh all information
+		this.businessOwnerStore
+			.select(selectProjectAssigned)
+			.pipe(takeUntil(this.$destroyed))
+			.subscribe(assigned => {
+				if (assigned) {
+					this.businessOwnerStore.dispatch(getAllResProjInfo(this.tablePagination));
+				}
+			});
+
+		// Get logged in users username and email
+		this.sharedStore
+			.select(selectLoggedInUserNameEmail)
+			.pipe(take(1))
+			.subscribe(data => {
+				this.name = `${data.firstName} ${data.lastName}`;
+				this.email = data.email || '';
+			});
+
+		// Getting the most recent created project data to then refresh all client info
+		this.businessOwnerStore
+			.select(selectCreatedProjectData)
+			.pipe(takeUntil(this.$destroyed))
+			.subscribe(data => {
+				if (data) {
+					// after a project is created we want updated client info
+					this.businessOwnerStore.dispatch(getAllClients());
+				}
+			});
+
+		// Get table relevant data and manipulate to extract rows of information
 		this.businessOwnerStore
 			.select(selectResProjClientData)
 			.pipe(takeUntil(this.$destroyed))
 			.subscribe(data => {
-				// Getting all resources
-				this.resourceOptions = data.map(resProjClient => {
-					return {
-						val: `${resProjClient.firstName} ${resProjClient.lastName} (${resProjClient.email})`,
-						id: resProjClient.id,
-					};
-				});
-
-				// Getting all Searchable terms (i.e res name, client, project)
-				const allStrings: string[] = [];
-				data.forEach(item => {
-					allStrings.push(`${item.firstName} ${item.lastName}`);
-					item.projectClients.forEach(projClient => {
-						allStrings.push(projClient.client);
-						allStrings.push(projClient.project.val);
-					});
-				});
-				this.allSearchTerms = Array.from(new Set(allStrings));
-
+				debugger;
+				this.totalNumResProjClientOptions = data.totalItems;
 				this.resProjClientTableData = [];
-				data.forEach(resProjClientData => {
+				data.projResClientData.forEach(resProjClientData => {
 					const tableItem: ProjectManagmenetTableData = {
 						resource: `${resProjClientData.firstName} ${resProjClientData.lastName}`,
 						resourceId: resProjClientData.id,
@@ -306,14 +372,31 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 
 					// Resource with atleast one project
 					if (resProjClientData.projectClients.length > 0) {
-						const firstProj = resProjClientData.projectClients[0].project;
-						const firstClient = resProjClientData.projectClients[0].client;
-						const allProj = resProjClientData.projectClients.map(projClient => projClient.project);
+						let firstProj = resProjClientData.projectClients[0].projects[0].val;
+						let firstClient = resProjClientData.projectClients[0].client;
+						const allProj: { val: string; id: number }[] = [];
+
+						resProjClientData.projectClients.forEach(projClientData => {
+							const allProjUnderClient = projClientData.projects.map(proj => ({ val: proj.val, id: proj.id }));
+							allProjUnderClient.forEach(proj => {
+								allProj.push(proj);
+							});
+						});
 						const allClient = resProjClientData.projectClients.map(projClient => projClient.client);
 						const moreThanOneProj = Array.from(new Set(allProj)).length > 1;
 						const moreThanOneClient = Array.from(new Set(allClient)).length > 1;
 
-						tableItem.project = `${firstProj.val}${moreThanOneProj ? '...' : ''}`;
+						// if project or client searched for, make it respective first
+						const matchingProj = allProj.find(proj => proj.val == this.tablePagination.filter);
+						if (matchingProj) {
+							firstProj = matchingProj.val;
+						}
+						const matchingClient = allClient.find(client => client == this.tablePagination.filter);
+						if (matchingClient) {
+							firstClient = matchingClient;
+						}
+
+						tableItem.project = `${firstProj}${moreThanOneProj ? '...' : ''}`;
 						tableItem.client = `${firstClient}${moreThanOneClient ? '...' : ''}`;
 						tableItem.assignment = this.assigned;
 						tableItem.allClients = allClient;
@@ -322,44 +405,6 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 					this.resProjClientTableData.push(tableItem);
 				});
 				this.resProjClientTableDataFiltered = this.resProjClientTableData;
-			});
-		this.businessOwnerStore
-			.select(selectClientData)
-			.pipe(takeUntil(this.$destroyed))
-			.subscribe(data => {
-				this.clients = data;
-				this.clientOptions = data.map(client => {
-					return {
-						val: client.clientName,
-						id: client.id,
-					};
-				});
-			});
-		this.businessOwnerStore
-			.select(selectProjectAssigned)
-			.pipe(takeUntil(this.$destroyed))
-			.subscribe(assigned => {
-				if (assigned) {
-					this.businessOwnerStore.dispatch(getAllResProjInfo());
-				}
-			});
-
-		this.businessOwnerStore
-			.select(selectCreatedProjectData)
-			.pipe(takeUntil(this.$destroyed))
-			.subscribe(data => {
-				if (data) {
-					// after a project is created we want updated client info
-					this.businessOwnerStore.dispatch(getAllClients());
-				}
-			});
-
-		this.sharedStore
-			.select(selectLoggedInUserNameEmail)
-			.pipe(take(1))
-			.subscribe(data => {
-				this.name = `${data.firstName} ${data.lastName}`;
-				this.email = data.email || '';
 			});
 	}
 
@@ -666,24 +711,26 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 		// TODO
 	}
 
-	search(searchTerm: string) {
-		if (searchTerm === '') {
-			this.resProjClientTableDataFiltered = this.resProjClientTableData;
-			return;
+	tablePaginationEvent(pageEvent: PageEvent) {
+		if (pageEvent.pageSize != this.tablePagination.pageSize) {
+			this.tablePagination = {
+				page: 0,
+				pageSize: pageEvent.pageSize,
+				filter: this.tablePagination.filter,
+			};
+		} else if (pageEvent.pageIndex != this.tablePagination.page) {
+			this.tablePagination.page = pageEvent.pageIndex;
 		}
+		this.businessOwnerStore.dispatch(getAllResProjInfo(this.tablePagination));
+	}
 
-		this.resProjClientTableDataFiltered = this.resProjClientTableData.filter(resProjClientTableDatum => {
-			if (resProjClientTableDatum.resource === searchTerm) {
-				return true;
-			}
-			if (resProjClientTableDatum.allClients.includes(searchTerm)) {
-				return true;
-			}
-			if (resProjClientTableDatum.allProjects.map(proj => proj.val).includes(searchTerm)) {
-				return true;
-			}
-			return false;
-		});
+	search(searchTerm: string) {
+		this.tablePagination = {
+			page: 0,
+			pageSize: this.tablePagination.pageSize,
+			filter: searchTerm,
+		};
+		this.businessOwnerStore.dispatch(getAllResProjInfo(this.tablePagination));
 	}
 
 	ngOnDestroy(): void {

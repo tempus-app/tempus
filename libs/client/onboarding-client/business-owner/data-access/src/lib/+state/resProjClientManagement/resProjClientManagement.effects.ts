@@ -24,10 +24,13 @@ export class ResourceProjectClientManagementEffects {
 	getAllResProjInfo$ = createEffect(() =>
 		this.actions$.pipe(
 			ofType(ProjManagementActions.getAllResProjInfo),
-			switchMap(() =>
-				this.resourceService.getResProjClientData().pipe(
+			switchMap(paginationData =>
+				this.resourceService.getResProjClientData(paginationData).pipe(
 					map(data => {
-						return ProjManagementActions.getAllResProjInfoSuccess({ projResClientData: data });
+						return ProjManagementActions.getAllResProjInfoSuccess({
+							projResClientData: data.userProjClientData,
+							totalItems: data.totalItems,
+						});
 					}),
 					catchError(error => of(ProjManagementActions.getAllResProjInfoFailure({ error }))),
 				),
@@ -44,6 +47,34 @@ export class ResourceProjectClientManagementEffects {
 						return ProjManagementActions.getAllClientsSuccess({ clientData: data });
 					}),
 					catchError(error => of(ProjManagementActions.getAllClientsBasicFailure({ error }))),
+				),
+			),
+		),
+	);
+
+	getAllResourcesBasic$ = createEffect(() =>
+		this.actions$.pipe(
+			ofType(ProjManagementActions.getAllResourceInfoBasic),
+			switchMap(() =>
+				this.resourceService.getResourceBasicInformation().pipe(
+					map(data => {
+						return ProjManagementActions.getAllResourceInfoBasicSuccess({ resourceBasicData: data });
+					}),
+					catchError(error => of(ProjManagementActions.getAllResourceInfoBasicFailure({ error }))),
+				),
+			),
+		),
+	);
+
+	getAllSearchableTerms$ = createEffect(() =>
+		this.actions$.pipe(
+			ofType(ProjManagementActions.getAllSearchableTerms),
+			switchMap(() =>
+				this.resourceService.getAllSearchableTerms().pipe(
+					map(data => {
+						return ProjManagementActions.getAllSearchableTermsSuccess({ searchableTerms: data });
+					}),
+					catchError(error => of(ProjManagementActions.getAllResourceInfoBasicFailure({ error }))),
 				),
 			),
 		),
