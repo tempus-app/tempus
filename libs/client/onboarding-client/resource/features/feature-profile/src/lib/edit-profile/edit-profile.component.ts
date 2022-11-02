@@ -5,6 +5,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { ModalService, CustomModalType, ModalType } from '@tempus/client/shared/ui-components/modal';
 import { EditViewFormComponent } from '@tempus/onboarding-client/shared/feature-edit-view-form';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ViewType } from '@tempus/shared-domain';
 
 @Component({
 	selector: 'tempus-edit-profile',
@@ -44,14 +45,18 @@ export class EditProfileComponent implements OnDestroy {
 			.editResourceView(this.newViewForm.currentViewId, newView)
 			.pipe(take(1))
 			.subscribe(revision => {
-				// Navigate to new view
-				this.router
-					.navigate(['../', revision.views?.pop()?.id], {
-						relativeTo: this.route,
-					})
-					.then(() => {
-						window.location.reload();
-					});
+				if (newView.viewType === ViewType.PRIMARY) {
+					window.location.reload();
+				} else {
+					// Navigate to new view
+					this.router
+						.navigate(['../', revision.views?.pop()?.id], {
+							relativeTo: this.route,
+						})
+						.then(() => {
+							window.location.reload();
+						});
+				}
 			});
 	}
 

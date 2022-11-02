@@ -105,9 +105,9 @@ export class ViewsService {
 
 		if (view.revision) {
 			const revisionEntity = view.revision;
-			const previousNewRevision = view.revision.views[1];
+			const previousNewRevision = view.revision.views.pop();
 			await this.viewsRepository.remove(previousNewRevision);
-			revisionEntity.views[1] = newViewEntity;
+			revisionEntity.views[revisionEntity.views.length] = newViewEntity;
 			const revisionToReturn = await this.revisionRepository.save(revisionEntity);
 			return revisionToReturn;
 		}
@@ -126,7 +126,8 @@ export class ViewsService {
 		});
 		if (!viewEntity) throw new NotFoundException(`Could not find view with id ${viewId}`);
 
-		if (viewEntity.viewType === ViewType.SECONDARY) {
+		// New secondary views
+		if (viewEntity.viewType === ViewType.SECONDARY && !viewEntity.revision) {
 			if (approval === true) {
 				viewEntity.revisionType = RevisionType.APPROVED;
 				viewEntity.locked = false;
@@ -152,6 +153,17 @@ export class ViewsService {
 		revisionEntity.approved = approval;
 
 		if (approval === true) {
+			// If only one view, update view
+			if (revisionEntity.views.length === 1) {
+				const view = revisionEntity.views.pop();
+				view.revisionType = RevisionType.APPROVED;
+				view.lastUpdateDate = new Date(Date.now());
+				view.revision = null;
+				view.locked = false;
+				const toReturn = await this.viewsRepository.save(view);
+				await this.revisionRepository.remove(revisionEntity);
+				return toReturn;
+			}
 			const view = revisionEntity.views[0];
 			const newView = revisionEntity.views[1];
 			newView.revisionType = RevisionType.APPROVED;
