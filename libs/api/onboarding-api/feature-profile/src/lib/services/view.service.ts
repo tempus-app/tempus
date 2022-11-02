@@ -243,8 +243,14 @@ export class ViewsService {
 		await this.viewsRepository.remove(viewEntity);
 	}
 
-	async getViewsByStatus(status: RevisionType) {
-		const views = await this.viewsRepository.find({ where: { revisionType: status }, relations: ['resource'] });
-		return views;
+	async getViewsByStatus(status: RevisionType, page: number, pageSize: number) {
+		const viewsAndCount = await this.viewsRepository.findAndCount(
+      { 
+        where: { revisionType: status }, 
+        relations: ['resource'],
+        take: Number(pageSize),
+				skip: Number(page) * Number(pageSize),
+      });
+		return {views: viewsAndCount[0], totalPendingApprovals: viewsAndCount[1]};
 	}
 }

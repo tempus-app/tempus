@@ -120,12 +120,12 @@ export const resetCreatedProjectState = createAction(
 
 export const getAllViewsByStatus = createAction(
 	'[Onboarding Profile Views API] Get All Views By Status',
-	props<{ status: RevisionType }>(),
+	props<{ status: RevisionType, pageNum: number, pageSize: number }>(),
 );
 
 export const getAllViewsByStatusSuccess = createAction(
 	'[Onboarding Profile Views API] Get All Views By Status Success',
-	props<{ views: View[] }>(),
+	props<{ views: View[], totalPendingApprovals: number }>(),
 );
 
 export const getAllViewsByStatusFailure = createAction(

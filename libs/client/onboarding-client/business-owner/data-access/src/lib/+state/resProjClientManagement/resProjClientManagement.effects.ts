@@ -142,9 +142,9 @@ export class ResourceProjectClientManagementEffects {
 		this.actions$.pipe(
 			ofType(ProjManagementActions.getAllViewsByStatus),
 			switchMap(data =>
-				this.viewsService.getViewsByStatus(data.status).pipe(
-					map(views => {
-						return ProjManagementActions.getAllViewsByStatusSuccess({ views });
+				this.viewsService.getViewsByStatus(data.status, data.pageNum, data.pageSize).pipe(
+					map(res => {
+						return ProjManagementActions.getAllViewsByStatusSuccess({ views: res.views, totalPendingApprovals: res.totalPendingApprovals });
 					}),
 					catchError(error => of(ProjManagementActions.getAllViewsByStatusFailure({ error }))),
 				),

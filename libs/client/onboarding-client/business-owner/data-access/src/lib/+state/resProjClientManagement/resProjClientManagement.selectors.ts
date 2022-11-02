@@ -48,7 +48,12 @@ export const selectProjectAssigned = createSelector(
 
 export const selectViewsByStatus = createSelector(
 	selectProjManagementState,
-	(state: ResourceProjectClientManagementState) => state.viewsData,
+	(state: ResourceProjectClientManagementState) => {
+    return {
+      views: state.viewsData,
+      totalNumItems: state.totalViewsData
+    }
+  },
 );
 
 export const selectAsyncStatus = createSelector(
