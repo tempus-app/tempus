@@ -84,7 +84,6 @@ export class ViewsService {
 		newViewEntity.updatedBy = userRole;
 		newViewEntity.createdBy = view.createdBy;
 		newViewEntity.viewType = view.viewType;
-		newViewEntity.type = view.type;
 		newViewEntity.lastUpdateDate = new Date(Date.now());
 		newViewEntity.revisionType = RevisionType.PENDING;
 

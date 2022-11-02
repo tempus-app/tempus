@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { OnboardingClientResourceService } from '@tempus/client/onboarding-client/shared/data-access';
@@ -11,7 +11,7 @@ import { take } from 'rxjs';
 	styleUrls: ['./create-new-view.component.scss'],
 	providers: [OnboardingClientResourceService],
 })
-export class BusinessOwnerCreateNewViewComponent implements OnInit {
+export class BusinessOwnerCreateNewViewComponent {
 	constructor(
 		private router: Router,
 		private route: ActivatedRoute,
@@ -26,17 +26,6 @@ export class BusinessOwnerCreateNewViewComponent implements OnInit {
 
 	@ViewChild(EditViewFormComponent) newViewForm!: EditViewFormComponent;
 
-	userId = 0;
-
-	ngOnInit(): void {
-		this.resourceService
-			.getResourceInformation()
-			.pipe(take(1))
-			.subscribe(resData => {
-				this.userId = resData.id;
-			});
-	}
-
 	submitChanges() {
 		if (this.newViewForm.validateForm()) {
 			this.createNewView();
@@ -44,12 +33,14 @@ export class BusinessOwnerCreateNewViewComponent implements OnInit {
 	}
 
 	createNewView() {
+		const resourceId = parseInt(this.route.snapshot.paramMap.get('id') || '0', 10);
 		const newView = this.newViewForm.generateNewView();
 		this.resourceService
-			.createSecondaryView(this.userId, newView)
+			.createSecondaryView(resourceId, newView)
 			.pipe(take(1))
 			.subscribe(view => {
-				this.router.navigate(['../', view.id], {
+				this.router.navigate(['../'], {
+					queryParams: { viewId: view.id },
 					relativeTo: this.route,
 				});
 			});
