@@ -7,6 +7,7 @@ import {
 	OnboardingClientLinkService,
 	OnboardingClientProjectService,
 	OnboardingClientResourceService,
+	OnboardingClientViewsService,
 } from '@tempus/client/onboarding-client/shared/data-access';
 import { BusinessOwnerState } from '../businessOwner.state';
 import * as ProjManagementActions from './resProjClientManagement.actions';
@@ -18,6 +19,7 @@ export class ResourceProjectClientManagementEffects {
 		private store: Store<BusinessOwnerState>,
 		private resourceService: OnboardingClientResourceService,
 		private projectService: OnboardingClientProjectService,
+		private viewsService: OnboardingClientViewsService,
 		private linkService: OnboardingClientLinkService,
 	) {}
 
@@ -131,6 +133,20 @@ export class ResourceProjectClientManagementEffects {
 						return ProjManagementActions.createResourceProjectAssignmentSuccess();
 					}),
 					catchError(error => of(ProjManagementActions.createResourceProjectAssignmentFailure({ error }))),
+				),
+			),
+		),
+	);
+
+	getAllPendingApprovals$ = createEffect(() =>
+		this.actions$.pipe(
+			ofType(ProjManagementActions.getAllViewsByStatus),
+			switchMap(data =>
+				this.viewsService.getViewsByStatus(data.status).pipe(
+					map(views => {
+						return ProjManagementActions.getAllViewsByStatusSuccess({ views });
+					}),
+					catchError(error => of(ProjManagementActions.getAllViewsByStatusFailure({ error }))),
 				),
 			),
 		),

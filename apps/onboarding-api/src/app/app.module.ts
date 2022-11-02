@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module } from '@nestjs/common';
 import { CoreModule } from '@tempus/api/shared/feature-core';
 import { AccountModule } from '@tempus/onboarding-api/feature-account';
 import { ProfileModule } from '@tempus/onboarding-api/feature-profile';
@@ -10,6 +10,7 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { ApiSharedEntityModule } from '@tempus/api/shared/entity';
 import { ConfigModule } from '@nestjs/config';
 import { join } from 'path';
+import { ApiSharedLoggingModule, LoggerMiddleware } from '@tempus/api/shared/logging';
 import { AppService } from './app.service';
 import { AppController } from './app.controller';
 
@@ -27,8 +28,13 @@ import { AppController } from './app.controller';
 		EmailModule,
 		PdfgeneratorModule,
 		AuthModule,
+		ApiSharedLoggingModule,
 	],
 	controllers: [AppController],
 	providers: [AppService],
 })
-export class AppModule {}
+export class AppModule {
+	configure(consumer: MiddlewareConsumer) {
+		consumer.apply(LoggerMiddleware).forRoutes('*');
+	}
+}

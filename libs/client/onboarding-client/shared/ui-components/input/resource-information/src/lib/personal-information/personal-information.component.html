@@ -18,6 +18,7 @@
                   [inputType]="InputType.TEXT"
                   placeholder="{{ personalInfoPrefix + 'info.firstNamePlaceholder' | translate }}"
                   cssClass="secondary"
+                  id="first-name-input"
                   [control]="$any(myInfoForm).get('firstName')"
                 >
                 </tempus-text-input>
@@ -25,6 +26,7 @@
               <div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="center center" fxFlexFill class="grid-item">
                 <tempus-text-input
                   [inputType]="InputType.TEXT"
+                  id="last-name-input"
                   placeholder="{{ personalInfoPrefix + 'info.lastNamePlaceholder' | translate }}"
                   cssClass="secondary"
                   [control]="$any(myInfoForm).get('lastName')"
@@ -63,6 +65,7 @@
             <div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxFlex="33%" class="block-2">
               <div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="center center" fxFlexFill class="grid-item">
                 <tempus-text-input
+                  id="phNum-input"
                   placeholder="{{ personalInfoPrefix + 'info.phNumPlaceholder' | translate }}"
                   cssClass="secondary"
                   [control]="$any(myInfoForm).get('phoneNumber')"
@@ -87,7 +90,7 @@
             <div fxLayout="row" fxLayoutAlign="center start" fxFlex="33%" class="block-2" *ngIf="showPersonalSummary">
               <div fxFlex="95" class="grid-item">
                 <tempus-text-area
-                  id="profile-summary"
+                  id="profile-summary-text"
                   placeholder="{{ personalInfoPrefix + 'info.personalSummaryPlaceholder' | translate }}"
                   [control]="$any(myInfoForm).get('profileSummary')"
                 ></tempus-text-area>
@@ -115,6 +118,7 @@
                 <div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="center center" fxFlexFill class="grid-item">
                   <tempus-search-box
                     [options]="countries"
+                    id="country-searchbox"
                     placeholder="{{ commonPrefix + 'location.countryPlaceholder' | translate }}"
                     cssClass="secondary"
                     (optionSelect)="updateStateOptions($event)"
@@ -125,6 +129,7 @@
                 <div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="center center" fxFlexFill class="grid-item">
                   <tempus-dropdown
                     [options]="states"
+                    id="states-dropdown"
                     label="{{ commonPrefix + 'location.statePlaceholder' | translate }}"
                     cssClass="secondary"
                     [control]="$any(myInfoForm).get('state')"
@@ -162,6 +167,7 @@
               <div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxFlex="33%" class="block-2">
                 <div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="center center" fxFlexFill class="grid-item">
                   <tempus-text-input
+                    id="city-input"
                     placeholder="{{ commonPrefix + 'location.cityPlaceholder' | translate }}"
                     cssClass="secondary"
                     [control]="$any(myInfoForm).get('city')"
@@ -205,6 +211,7 @@
             <div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxFlex="33%" class="block-2">
               <div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="center center" fxFlexFill class="grid-item">
                 <tempus-text-input
+                  id="linkedin-link-input"
                   [inputType]="InputType.TEXT"
                   placeholder="{{ personalInfoPrefix + 'links.linkedinLinkPlaceholder' | translate }} "
                   cssClass="secondary"
@@ -214,6 +221,7 @@
               </div>
               <div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="center center" fxFlexFill class="grid-item">
                 <tempus-text-input
+                  id="github-link-input"
                   [inputType]="InputType.TEXT"
                   placeholder="{{ personalInfoPrefix + 'links.githubLinkPlaceholder' | translate }}"
                   cssClass="secondary"
@@ -253,6 +261,7 @@
             <div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxFlex="33%" class="block-2">
               <div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="center center" fxFlexFill class="grid-item">
                 <tempus-text-input
+                  id="other-link-input"
                   placeholder="{{ personalInfoPrefix + 'links.otherLinkPlaceholder' | translate }}"
                   cssClass="secondary"
                   [control]="$any(myInfoForm).get('otherLink')"
