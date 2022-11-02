@@ -25,7 +25,7 @@ export class ViewPendingApprovalsComponent implements OnInit {
 
   pageNum: number = 0;
 
-  pageSize: number = 2;
+  pageSize: number = 5;
 
   totalPendingApprovals: number = 0;
 

@@ -137,7 +137,7 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 
 	tablePagination: { page: number; pageSize: number; filter: string } = {
 		page: 0,
-		pageSize: 2,
+		pageSize: 5,
 		filter: '',
 	};
 
