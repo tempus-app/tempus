@@ -1,22 +1,25 @@
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { of, switchMap } from 'rxjs';
-import { map, catchError, tap } from 'rxjs/operators';
+import { map, catchError } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 import { Injectable } from '@angular/core';
 import {
 	OnboardingClientAuthService,
 	OnboardingClientResourceService,
+	OnboardingClientViewsService,
 } from '@tempus/client/onboarding-client/shared/data-access';
-import { updateInfoFailure, updateUserInfo, updateUserInfoSuccess } from './resource.actions';
-import { ResourceState } from './resource.reducers';
+import { getAllViewsByResourceId, updateInfoFailure, updateUserInfo, updateUserInfoSuccess } from './resource.actions';
+import { getAllViewsByResourceIdFailure, getAllViewsByResourceIdSuccess } from '.';
+import { TempusResourceState } from '..';
 
 @Injectable()
-export class TestEffects {
+export class ResourceEffects {
 	constructor(
 		private readonly actions$: Actions,
-		private store: Store<ResourceState>,
+		private store: Store<TempusResourceState>,
 		private authService: OnboardingClientAuthService,
 		private resourceService: OnboardingClientResourceService,
+		private viewsService: OnboardingClientViewsService,
 	) {}
 
 	updateInfo$ = createEffect(() =>
@@ -32,6 +35,20 @@ export class TestEffects {
 						});
 					}),
 					catchError(error => of(updateInfoFailure({ error }))),
+				),
+			),
+		),
+	);
+
+	getAllViews$ = createEffect(() =>
+		this.actions$.pipe(
+			ofType(getAllViewsByResourceId),
+			switchMap(data =>
+				this.viewsService.getViewsByResourceId(data.resourceId).pipe(
+					map(views => {
+						return getAllViewsByResourceIdSuccess({ views });
+					}),
+					catchError(error => of(getAllViewsByResourceIdFailure({ error }))),
 				),
 			),
 		),

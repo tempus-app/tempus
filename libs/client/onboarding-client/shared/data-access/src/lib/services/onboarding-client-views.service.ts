@@ -20,4 +20,8 @@ export class OnboardingClientViewsService {
 			})
 			.pipe(catchError(handleError));
 	}
+
+	public getViewsByResourceId(resourceId: number): Observable<View[]> {
+		return this.http.get<View[]>(`${this.url}/${resourceId}`, {}).pipe(catchError(handleError));
+	}
 }

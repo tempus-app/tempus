@@ -26,3 +26,10 @@ export interface PendingApprovalsTableData extends TableDataModel {
 	type: string;
 	email: string;
 }
+
+export interface MyViewsTableData extends TableDataModel {
+	lastUpdated: string;
+	resource: string;
+	type: string;
+	email: string;
+}
