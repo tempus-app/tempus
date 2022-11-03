@@ -5,6 +5,7 @@ import {
 	ICreateClientDto,
 	ICreateLinkDto,
 	ICreateProjectDto,
+	IResourceBasicDto,
 	IUserProjClientDto,
 	Project,
 	RevisionType,
@@ -13,13 +14,36 @@ import {
 
 export const getAllResProjInfo = createAction(
 	'[Onboarding Client Manage Resources Page] Get All Resources Project Info',
+	props<{ pageSize: number; page: number; filter: string }>(),
 );
 export const getAllResProjInfoSuccess = createAction(
 	'[Onboarding Client Resource API] Get All Resources Project Success',
-	props<{ projResClientData: IUserProjClientDto[] }>(),
+	props<{ projResClientData: IUserProjClientDto[]; totalItems: number }>(),
 );
 export const getAllResProjInfoFailure = createAction(
 	'[Onboarding Client Resource API] Get All Resources Project Failure',
+	props<{ error: Error }>(),
+);
+
+export const getAllResourceInfoBasic = createAction(
+	'[Onboarding Client Manage Resources Page] Get All Resource Info Basic',
+);
+export const getAllResourceInfoBasicSuccess = createAction(
+	'[Onboarding Client Project API] Get All Resource Info Basic Success',
+	props<{ resourceBasicData: IResourceBasicDto[] }>(),
+);
+export const getAllResourceInfoBasicFailure = createAction(
+	'[Onboarding Client Project API] Get All Resource Info Basic Failure',
+	props<{ error: Error }>(),
+);
+
+export const getAllSearchableTerms = createAction('[Onboarding Client Manage Resources Page] Get All Searchable Terms');
+export const getAllSearchableTermsSuccess = createAction(
+	'[Onboarding Client Project API] Get All Searchable Terms Success',
+	props<{ searchableTerms: string[] }>(),
+);
+export const getAllSearchableTermsFailure = createAction(
+	'[Onboarding Client Project API] Get All Resource Info Basic Failure',
 	props<{ error: Error }>(),
 );
 
@@ -96,12 +120,12 @@ export const resetCreatedProjectState = createAction(
 
 export const getAllViewsByStatus = createAction(
 	'[Onboarding Profile Views API] Get All Views By Status',
-	props<{ status: RevisionType }>(),
+	props<{ status: RevisionType, pageNum: number, pageSize: number }>(),
 );
 
 export const getAllViewsByStatusSuccess = createAction(
 	'[Onboarding Profile Views API] Get All Views By Status Success',
-	props<{ views: View[] }>(),
+	props<{ views: View[], totalPendingApprovals: number }>(),
 );
 
 export const getAllViewsByStatusFailure = createAction(

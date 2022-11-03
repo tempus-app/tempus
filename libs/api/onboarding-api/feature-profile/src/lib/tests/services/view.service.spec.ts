@@ -19,7 +19,7 @@ import {
 	rejectViewDto,
 	approveViewDto,
 	createdViewEntity,
-  supervisorUserEntity,
+	supervisorUserEntity,
 	businessOwnerCreatedSecondaryViewEntity,
 	resourceCreatedSecondaryViewEntity,
 } from '../mocks/view.mock';
@@ -267,7 +267,7 @@ describe('ViewService', () => {
 
 			adminReviseViewNonExistingRevision(businessOwnerUserEntity);
 		});
-    it('should revise view given supervisor has edited and non existing revision', async () => {
+		it('should revise view given supervisor has edited and non existing revision', async () => {
 			// Whenever a supervisor edits a view, its auto approved and no revision entity needs to be made
 
 			adminReviseViewNonExistingRevision(supervisorUserEntity);
@@ -339,7 +339,7 @@ describe('ViewService', () => {
 
 			adminReviseViewExistingRevision(businessOwnerUserEntity);
 		});
-    it('should revise view given supervisor has edited and existing revision', async () => {
+		it('should revise view given supervisor has edited and existing revision', async () => {
 			// Whenever a supervisor edits a view, its auto approved and any existing revisons need to be removed
 			// This case can only occur given a previous rejection of a revision (else the rev entity wouldnt exist if there was a previous positive approval)
 
@@ -361,8 +361,8 @@ describe('ViewService', () => {
 			expect(error.message).toEqual('Cannot edit locked view');
 		});
 
-    const adminReviseViewNonExistingRevision = async (user: UserEntity) => {
-      const createdViewEntity: ViewEntity = {
+		const adminReviseViewNonExistingRevision = async (user: UserEntity) => {
+			const createdViewEntity: ViewEntity = {
 				...createdViewEntityPostRevision,
 				createdAt: viewEntity.createdAt,
 				lastUpdateDate: new Date(CUR_DATE_CONSTANT),
@@ -382,10 +382,10 @@ describe('ViewService', () => {
 			expect(mockViewRepository.remove).toHaveBeenCalledWith(viewEntity);
 			expect(mockViewRepository.save).toHaveBeenCalledWith({ ...createdViewEntity, id: undefined });
 			expect(res).toEqual(null);
-    }
-    
-    const adminReviseViewExistingRevision = async (user: UserEntity) => {
-      const createdViewEntity: ViewEntity = {
+		};
+
+		const adminReviseViewExistingRevision = async (user: UserEntity) => {
+			const createdViewEntity: ViewEntity = {
 				...createdViewEntityPostRevision,
 				createdAt: viewEntity3.createdAt,
 				lastUpdateDate: new Date(CUR_DATE_CONSTANT),
@@ -417,7 +417,7 @@ describe('ViewService', () => {
 			expect(mockRevisionRepository.remove).toHaveBeenCalledWith(oldRevisionEntity);
 			expect(mockViewRepository.save).toHaveBeenCalledWith({ ...createdViewEntity, id: undefined });
 			expect(res).toEqual(null);
-    }
+		};
 	});
 
 	describe('DeleteView()', () => {

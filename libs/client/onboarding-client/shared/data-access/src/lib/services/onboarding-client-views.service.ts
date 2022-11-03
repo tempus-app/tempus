@@ -11,9 +11,9 @@ export class OnboardingClientViewsService {
 
 	url = `${this.appConfig.apiUrl}/onboarding/profile-view`;
 
-	public getViewsByStatus(status: RevisionType): Observable<View[]> {
+	public getViewsByStatus(status: RevisionType, page: number, pageSize: number): Observable<{views: View[], totalPendingApprovals: number}> {
 		return this.http
-			.get<View[]>(`${this.url}/views`, {
+			.get<{views: View[], totalPendingApprovals: number}>(`${this.url}/views?page=${page}&pageSize=${pageSize}`, {
 				params: {
 					status,
 				},
