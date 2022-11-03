@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRoute, CanActivate, CanLoad, Route, Router, UrlSegment, UrlTree } from '@angular/router';
+import { ActivatedRoute, CanActivate, CanLoad, Router, UrlTree } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { selectLinkData, SignupState } from '@tempus/client/onboarding-client/signup/data-access';
 import { StatusType } from '@tempus/shared-domain';
 import { Observable } from 'rxjs';
-import { take, map, tap } from 'rxjs/operators';
+import { take, map } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
 export class ValidLinkGuard implements CanLoad, CanActivate {
@@ -20,7 +20,6 @@ export class ValidLinkGuard implements CanLoad, CanActivate {
 				const curRoute = this.router.getCurrentNavigation()?.extractedUrl.toString().split('/');
 				const credentialsRoute = curRoute?.slice(0, -1);
 				credentialsRoute?.push('credentials');
-
 				this.router.navigate([credentialsRoute?.join('/')], { relativeTo: this.activatedRoute });
 				return false;
 			}),
@@ -31,10 +30,7 @@ export class ValidLinkGuard implements CanLoad, CanActivate {
 		return this.validLink();
 	}
 
-	canLoad(
-		route: Route,
-		segments: UrlSegment[],
-	): boolean | UrlTree | Observable<boolean | UrlTree> | Promise<boolean | UrlTree> {
+	canLoad(): boolean | UrlTree | Observable<boolean | UrlTree> | Promise<boolean | UrlTree> {
 		return this.validLink();
 	}
 }
