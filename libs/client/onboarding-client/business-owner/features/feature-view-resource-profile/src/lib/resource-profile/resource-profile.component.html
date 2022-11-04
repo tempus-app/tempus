@@ -2,8 +2,14 @@
 	<tempus-user-bar
 		[loadedView]="loadedView"
 		(newViewSelected)="newViewClickEvent($event)"
+		(editViewSelected)="editViewClickEvent()"
 		[resourceName]="resourceFirstName + '-' + resourceLastName"
 	></tempus-user-bar>
+	<tempus-edit-view-form
+		*ngIf="editViewEnabled"
+		(submitClicked)="submitChanges()"
+		(closeEditViewClicked)="closeEditView()"
+	></tempus-edit-view-form>
 	<tempus-resource-profile-content
 		[firstName]="resourceFirstName"
 		[lastName]="resourceLastName"

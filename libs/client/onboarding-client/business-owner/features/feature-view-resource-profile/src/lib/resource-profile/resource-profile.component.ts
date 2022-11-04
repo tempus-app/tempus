@@ -1,12 +1,12 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import {
 	OnboardingClientResourceService,
 	OnboardingClientState,
 } from '@tempus/client/onboarding-client/shared/data-access';
 import { LoadView, ProjectResource } from '@tempus/shared-domain';
-import { skip } from 'rxjs';
+import { skip, take } from 'rxjs';
 import { getOriginalResume, selectOriginalResume } from '@tempus/client/onboarding-client/business-owner/data-access';
 import { EditViewFormComponent } from '@tempus/onboarding-client/shared/feature-edit-view-form';
 
@@ -18,6 +18,7 @@ import { EditViewFormComponent } from '@tempus/onboarding-client/shared/feature-
 export class ResourceProfileComponent implements OnInit {
 	constructor(
 		private route: ActivatedRoute,
+		private router: Router,
 		private resourceService: OnboardingClientResourceService,
 		private sharedStore: Store<OnboardingClientState>,
 	) {}
@@ -58,12 +59,36 @@ export class ResourceProfileComponent implements OnInit {
 
 	projectResources: ProjectResource[] = [];
 
+	editViewEnabled = false;
+
+	isPrimaryView = false;
+
 	childRevisionLoaded(loadedView: LoadView) {
 		this.loadedView = loadedView;
 	}
 
 	newViewClickEvent(viewIndex: number) {
 		this.viewIndex = viewIndex;
+	}
+
+	editViewClickEvent() {
+		this.editViewEnabled = true;
+	}
+
+	closeEditView() {
+		this.editViewEnabled = false;
+	}
+
+	submitChanges() {
+		const viewId = parseInt(this.route.snapshot.queryParamMap.get('viewId') || '0', 10);
+		const newView = this.newViewForm.generateNewView();
+		this.resourceService
+			.editResourceView(viewId, newView)
+			.pipe(take(1))
+			.subscribe(view => {
+				this.router.navigate([], { queryParams: { viewId: view.id } }).then(() => window.location.reload());
+			});
+		this.closeEditView();
 	}
 
 	ngOnInit(): void {

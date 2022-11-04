@@ -3,6 +3,7 @@ import { LoadView, ViewNames } from '@tempus/shared-domain';
 import { OnboardingClientResourceService } from '@tempus/client/onboarding-client/shared/data-access';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder } from '@angular/forms';
+import { ButtonType } from '@tempus/client/shared/ui-components/presentational';
 
 @Component({
 	selector: 'tempus-user-bar',
@@ -24,9 +25,13 @@ export class UserBarComponent implements OnChanges {
 		viewSelected: [''],
 	});
 
+	buttonType = ButtonType;
+
 	viewResourceProfilePrefx = 'viewResourceProfile.';
 
 	@Output() newViewSelected = new EventEmitter<number>();
+
+	@Output() editViewSelected = new EventEmitter();
 
 	constructor(
 		private route: ActivatedRoute,
@@ -72,5 +77,9 @@ export class UserBarComponent implements OnChanges {
 
 	openViewForm() {
 		this.router.navigate(['./new'], { relativeTo: this.route });
+	}
+
+	openEditView() {
+		this.editViewSelected.emit();
 	}
 }

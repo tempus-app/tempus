@@ -65,7 +65,7 @@ export class ViewsService {
 		return newView;
 	}
 
-	async reviseView(viewId: number, user: User, newView: CreateViewDto): Promise<Revision> {
+	async reviseView(viewId: number, user: User, newView: CreateViewDto): Promise<Revision | View> {
 		const view = await this.getView(viewId);
 		if (view.locked) throw new UnauthorizedException(`Cannot edit locked view`);
 
@@ -90,13 +90,14 @@ export class ViewsService {
 		if (user.roles.includes(RoleType.BUSINESS_OWNER) || user.roles.includes(RoleType.SUPERVISOR)) {
 			newViewEntity.createdAt = view.createdAt;
 			newViewEntity.revisionType = RevisionType.APPROVED;
+			newViewEntity.locked = false;
 			const existingRevision = view.revision;
 			await this.viewsRepository.remove(view);
 			if (existingRevision) {
 				await this.revisionRepository.remove(existingRevision);
 			}
-			await this.viewsRepository.save(newViewEntity);
-			return null;
+			const viewToReturn = await this.viewsRepository.save(newViewEntity);
+			return viewToReturn;
 		}
 		newViewEntity = await this.viewsRepository.save(newViewEntity);
 

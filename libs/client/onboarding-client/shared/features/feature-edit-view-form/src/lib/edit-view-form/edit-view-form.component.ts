@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import {
@@ -47,8 +47,6 @@ export class EditViewFormComponent implements OnInit, OnDestroy {
 		translateService.currentLang = '';
 		translateService.use(currentLang);
 	}
-
-	@Input() isPrimaryView = true;
 
 	@Output()
 	closeEditViewClicked = new EventEmitter();
@@ -104,6 +102,10 @@ export class EditViewFormComponent implements OnInit, OnDestroy {
 
 	previewViewEnabled = false;
 
+	isSecondaryView = false;
+
+	isViewNameInputEnabled = false;
+
 	ngOnInit(): void {
 		this.store
 			.select(selectAccessToken)
@@ -123,16 +125,15 @@ export class EditViewFormComponent implements OnInit, OnDestroy {
 					.pipe(take(1))
 					.subscribe(view => {
 						this.setFormDataFromView(view);
-						this.dataLoaded = true;
 					});
 			} else {
-				// Load form with approved Primary view
+				// New View form loaded with approved Primary view
+				this.isViewNameInputEnabled = true;
 				this.resourceService.getResourceProfileViews(resourceId).subscribe(profileViews => {
 					const filteredViews = profileViews.filter(
 						view => view.viewType === ViewType.PRIMARY && view.revisionType === RevisionType.APPROVED,
 					);
 					this.setFormDataFromView(filteredViews[0]);
-					this.dataLoaded = true;
 				});
 			}
 		} else {
@@ -145,24 +146,28 @@ export class EditViewFormComponent implements OnInit, OnDestroy {
 					.pipe(take(1))
 					.subscribe(view => {
 						this.setFormDataFromView(view);
-						this.isPrimaryView = view.viewType === ViewType.PRIMARY;
-						if (!this.isPrimaryView) {
-							this.viewName.setValue(view.type);
-						}
-						this.dataLoaded = true;
+						this.isSecondaryView = view.viewType === ViewType.SECONDARY;
 					});
 			} else {
 				// Create new view
-				this.store.select(selectLoggedInUserId).subscribe(id => {
-					this.userId = id || 0;
-					this.resourceService.getResourceProfileViews(this.userId).subscribe(views => {
-						const approvedPrimaryView = views.find(
-							view => view.revisionType === RevisionType.APPROVED && view.viewType === ViewType.PRIMARY,
-						);
-						if (approvedPrimaryView) this.setFormDataFromView(approvedPrimaryView);
-						this.dataLoaded = true;
+				this.isViewNameInputEnabled = true;
+				this.store
+					.select(selectLoggedInUserId)
+					.pipe(take(1))
+					.subscribe(id => {
+						this.userId = id || 0;
+						this.resourceService
+							.getResourceProfileViews(this.userId)
+							.pipe(takeUntil(this.destroyed$))
+							.subscribe(views => {
+								const approvedPrimaryView = views.find(
+									view =>
+										view.revisionType === RevisionType.APPROVED &&
+										view.viewType === ViewType.PRIMARY,
+								);
+								if (approvedPrimaryView) this.setFormDataFromView(approvedPrimaryView);
+							});
 					});
-				});
 			}
 		}
 	}
@@ -177,10 +182,17 @@ export class EditViewFormComponent implements OnInit, OnDestroy {
 		this.profileSummary = view.profileSummary;
 		this.skills = view.skills.map(skill => skill.skill.name);
 		this.skillsSummary = view.skillsSummary;
+		this.isSecondaryView = view.viewType === ViewType.SECONDARY;
 
 		this.personalInfoForm.patchValue({
 			profileSummary: this.profileSummary,
 		});
+
+		if (this.isSecondaryView) {
+			this.viewName.setValue(view.type);
+		}
+
+		this.dataLoaded = true;
 	}
 
 	loadExperiences(eventData: FormGroup) {
@@ -293,8 +305,8 @@ export class EditViewFormComponent implements OnInit, OnDestroy {
 			educations: educationsDto,
 			experiences: experiencesDto,
 			certifications: certificationsDto,
-			viewType: this.isPrimaryView ? ViewType.PRIMARY : ViewType.SECONDARY,
-			type: this.isPrimaryView ? 'Primary' : viewName,
+			viewType: this.isSecondaryView || this.isViewNameInputEnabled ? ViewType.SECONDARY : ViewType.PRIMARY,
+			type: this.isSecondaryView || this.isViewNameInputEnabled ? viewName : 'Primary',
 		} as ICreateViewDto;
 	}
 
