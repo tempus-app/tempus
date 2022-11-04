@@ -1,13 +1,11 @@
-import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, Output } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import {
 	OnboardingClientState,
 	OnboardingClientResourceService,
-	selectAccessToken,
-	selectLoggedInUserId,
 } from '@tempus/client/onboarding-client/shared/data-access';
-import { Subject, take, takeUntil } from 'rxjs';
+import { Subject } from 'rxjs';
 import { ButtonType } from '@tempus/client/shared/ui-components/presentational';
 import { UserType } from '@tempus/client/shared/ui-components/persistent';
 import {
@@ -19,13 +17,10 @@ import {
 	ICreateSkillDto,
 	ICreateLocationDto,
 	ICreateSkillTypeDto,
-	RevisionType,
-	RoleType,
 	View,
 } from '@tempus/shared-domain';
 import { TranslateService } from '@ngx-translate/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { decodeJwt } from '@tempus/client/shared/util';
 
 @Component({
 	selector: 'tempus-edit-view-form',
@@ -33,7 +28,7 @@ import { decodeJwt } from '@tempus/client/shared/util';
 	styleUrls: ['./edit-view-form.component.scss'],
 	providers: [OnboardingClientResourceService],
 })
-export class EditViewFormComponent implements OnInit, OnDestroy {
+export class EditViewFormComponent implements OnDestroy {
 	constructor(
 		private fb: FormBuilder,
 		private resourceService: OnboardingClientResourceService,
@@ -106,70 +101,8 @@ export class EditViewFormComponent implements OnInit, OnDestroy {
 
 	isViewNameInputEnabled = false;
 
-	ngOnInit(): void {
-		this.store
-			.select(selectAccessToken)
-			.pipe(takeUntil(this.destroyed$))
-			.subscribe(token => {
-				this.roles = decodeJwt(token || '').roles;
-			});
-
-		// Business Owner
-		if (this.roles.includes(RoleType.BUSINESS_OWNER) || this.roles.includes(RoleType.SUPERVISOR)) {
-			const resourceId = parseInt(this.route.snapshot.paramMap.get('id') || '0', 10);
-			const viewId = parseInt(this.route.snapshot.queryParamMap.get('viewId') || '0', 10);
-
-			if (viewId) {
-				this.resourceService
-					.getViewById(viewId)
-					.pipe(take(1))
-					.subscribe(view => {
-						this.setFormDataFromView(view);
-					});
-			} else {
-				// New View form loaded with approved Primary view
-				this.isViewNameInputEnabled = true;
-				this.resourceService.getResourceProfileViews(resourceId).subscribe(profileViews => {
-					const filteredViews = profileViews.filter(
-						view => view.viewType === ViewType.PRIMARY && view.revisionType === RevisionType.APPROVED,
-					);
-					this.setFormDataFromView(filteredViews[0]);
-				});
-			}
-		} else {
-			// Resource
-			const viewId = parseInt(this.route.snapshot.paramMap.get('id') || '0', 10);
-			if (viewId) {
-				// Edit view
-				this.resourceService
-					.getViewById(viewId)
-					.pipe(take(1))
-					.subscribe(view => {
-						this.setFormDataFromView(view);
-						this.isSecondaryView = view.viewType === ViewType.SECONDARY;
-					});
-			} else {
-				// Create new view
-				this.isViewNameInputEnabled = true;
-				this.store
-					.select(selectLoggedInUserId)
-					.pipe(take(1))
-					.subscribe(id => {
-						this.userId = id || 0;
-						this.resourceService
-							.getResourceProfileViews(this.userId)
-							.pipe(takeUntil(this.destroyed$))
-							.subscribe(views => {
-								const approvedPrimaryView = views.find(
-									view =>
-										view.revisionType === RevisionType.APPROVED &&
-										view.viewType === ViewType.PRIMARY,
-								);
-								if (approvedPrimaryView) this.setFormDataFromView(approvedPrimaryView);
-							});
-					});
-			}
-		}
+	enableViewNameField() {
+		this.isViewNameInputEnabled = true;
 	}
 
 	setFormDataFromView(view: View) {
@@ -189,6 +122,7 @@ export class EditViewFormComponent implements OnInit, OnDestroy {
 		});
 
 		if (this.isSecondaryView) {
+			this.isViewNameInputEnabled = true;
 			this.viewName.setValue(view.type);
 		}
 

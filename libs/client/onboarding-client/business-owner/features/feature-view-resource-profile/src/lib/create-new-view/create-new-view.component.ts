@@ -1,8 +1,9 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { OnboardingClientResourceService } from '@tempus/client/onboarding-client/shared/data-access';
 import { EditViewFormComponent } from '@tempus/onboarding-client/shared/feature-edit-view-form';
+import { RevisionType, ViewType } from '@tempus/shared-domain';
 import { take } from 'rxjs';
 
 @Component({
@@ -11,7 +12,7 @@ import { take } from 'rxjs';
 	styleUrls: ['./create-new-view.component.scss'],
 	providers: [OnboardingClientResourceService],
 })
-export class BusinessOwnerCreateNewViewComponent {
+export class BusinessOwnerCreateNewViewComponent implements OnInit {
 	constructor(
 		private router: Router,
 		private route: ActivatedRoute,
@@ -26,6 +27,21 @@ export class BusinessOwnerCreateNewViewComponent {
 
 	@ViewChild(EditViewFormComponent) newViewForm!: EditViewFormComponent;
 
+	resourceId = 0;
+
+	ngOnInit(): void {
+		this.resourceId = parseInt(this.route.snapshot.paramMap.get('id') || '0', 10);
+
+		// New view form loaded with latest approved Primary view
+		this.resourceService.getResourceProfileViews(this.resourceId).subscribe(profileViews => {
+			const filteredViews = profileViews.filter(
+				view => view.viewType === ViewType.PRIMARY && view.revisionType === RevisionType.APPROVED,
+			);
+			this.newViewForm.setFormDataFromView(filteredViews[0]);
+			this.newViewForm.enableViewNameField();
+		});
+	}
+
 	submitChanges() {
 		if (this.newViewForm.validateForm()) {
 			this.createNewView();
@@ -33,10 +49,9 @@ export class BusinessOwnerCreateNewViewComponent {
 	}
 
 	createNewView() {
-		const resourceId = parseInt(this.route.snapshot.paramMap.get('id') || '0', 10);
 		const newView = this.newViewForm.generateNewView();
 		this.resourceService
-			.createSecondaryView(resourceId, newView)
+			.createSecondaryView(this.resourceId, newView)
 			.pipe(take(1))
 			.subscribe(view => {
 				this.router.navigate(['../'], {

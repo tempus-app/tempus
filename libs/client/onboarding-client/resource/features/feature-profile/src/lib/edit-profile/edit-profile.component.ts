@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnDestroy, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { OnboardingClientResourceService } from '@tempus/client/onboarding-client/shared/data-access';
 import { Subject, take, takeUntil } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
@@ -6,13 +6,14 @@ import { ModalService, CustomModalType, ModalType } from '@tempus/client/shared/
 import { EditViewFormComponent } from '@tempus/onboarding-client/shared/feature-edit-view-form';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ViewType } from '@tempus/shared-domain';
+import { sortViewsByLatestUpdated } from '@tempus/client/shared/util';
 
 @Component({
 	selector: 'tempus-edit-profile',
 	templateUrl: './edit-profile.component.html',
 	styleUrls: ['./edit-profile.component.scss'],
 })
-export class EditProfileComponent implements OnDestroy {
+export class EditProfileComponent implements OnInit, OnDestroy {
 	constructor(
 		public modalService: ModalService,
 		private router: Router,
@@ -32,6 +33,36 @@ export class EditProfileComponent implements OnDestroy {
 	closeEditViewClicked = new EventEmitter();
 
 	destroyed$ = new Subject<void>();
+
+	ngOnInit(): void {
+		this.resourceService
+			.getResourceInformation()
+			.pipe(take(1))
+			.subscribe(resData => {
+				const resourceId = resData.id;
+
+				// Load Secondary view from route
+				const viewId = parseInt(this.route.snapshot.paramMap.get('id') || '0', 10);
+				if (viewId) {
+					this.resourceService
+						.getViewById(viewId)
+						.pipe(take(1))
+						.subscribe(view => {
+							this.newViewForm.setFormDataFromView(view);
+						});
+				} else {
+					// Display latest Primary view
+					this.resourceService
+						.getResourceProfileViews(resourceId)
+						.pipe(takeUntil(this.destroyed$))
+						.subscribe(views => {
+							let filteredAndSortedViews = views.filter(view => view.viewType === ViewType.PRIMARY);
+							filteredAndSortedViews = sortViewsByLatestUpdated(filteredAndSortedViews);
+							this.newViewForm.setFormDataFromView(filteredAndSortedViews[0]);
+						});
+				}
+			});
+	}
 
 	submitChanges() {
 		if (this.newViewForm.validateForm()) {

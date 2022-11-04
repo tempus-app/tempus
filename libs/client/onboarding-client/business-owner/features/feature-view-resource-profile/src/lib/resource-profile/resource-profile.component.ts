@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import {
@@ -19,11 +19,14 @@ export class ResourceProfileComponent implements OnInit {
 	constructor(
 		private route: ActivatedRoute,
 		private router: Router,
+		private changeDetector: ChangeDetectorRef,
 		private resourceService: OnboardingClientResourceService,
 		private sharedStore: Store<OnboardingClientState>,
 	) {}
 
-	@ViewChild(EditViewFormComponent) newViewForm!: EditViewFormComponent;
+	@ViewChild(EditViewFormComponent, { static: false }) newViewForm!: EditViewFormComponent;
+
+	@Input() editViewEnabled = false;
 
 	resourceId = 0;
 
@@ -59,8 +62,6 @@ export class ResourceProfileComponent implements OnInit {
 
 	projectResources: ProjectResource[] = [];
 
-	editViewEnabled = false;
-
 	isPrimaryView = false;
 
 	childRevisionLoaded(loadedView: LoadView) {
@@ -73,10 +74,21 @@ export class ResourceProfileComponent implements OnInit {
 
 	editViewClickEvent() {
 		this.editViewEnabled = true;
+		this.changeDetector.detectChanges();
+		const viewId = parseInt(this.route.snapshot.queryParamMap.get('viewId') || '0', 10);
+		if (viewId) {
+			this.resourceService
+				.getViewById(viewId)
+				.pipe(take(1))
+				.subscribe(view => {
+					this.newViewForm.setFormDataFromView(view);
+				});
+		}
 	}
 
 	closeEditView() {
 		this.editViewEnabled = false;
+		this.changeDetector.detectChanges();
 	}
 
 	submitChanges() {
