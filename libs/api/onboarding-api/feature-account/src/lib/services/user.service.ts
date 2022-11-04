@@ -1,5 +1,5 @@
 import { Resource, User } from '@tempus/shared-domain';
-import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
+import { ForbiddenException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ConfigService } from '@nestjs/config';
 import { Repository } from 'typeorm';
@@ -20,6 +20,9 @@ export class UserService {
 	async createUser(user: CreateUserDto): Promise<User> {
 		const userEntity = UserEntity.fromDto(user);
 		userEntity.password = await this.hashPassword(userEntity.password);
+		if ((await this.userRepository.findOne({ email: userEntity.email })) !== undefined) {
+			throw new ForbiddenException('Cannot create a user that already exists');
+		}
 		const createdUser = await this.userRepository.save(userEntity);
 		createdUser.password = null;
 		return createdUser;
@@ -27,8 +30,8 @@ export class UserService {
 
 	async updateUser(updateUserData: UpdateUserDto): Promise<User> {
 		const userEntity = await this.userRepository.findOne(updateUserData.id);
-		if (!userEntity) {
-			throw new NotFoundException(`Could not find user with id ${userEntity.id}`);
+		if (userEntity === undefined) {
+			throw new NotFoundException(`Could not find user with id ${updateUserData.id}`);
 		}
 		const user = UserEntity.fromDto(updateUserData);
 		Object.entries(user).forEach(entry => {
@@ -52,15 +55,7 @@ export class UserService {
 	}
 
 	// TODO: filtering
-	// ROLES?
-	// get by resource etc
 	async getAllUsers(): Promise<User[]> {
-		// location?: string[] | string,
-		// skills?: string[] | string,
-		// title?: string[] | string,
-		// project?: string[] | string,
-		// status?: string[] | string,
-		// sortBy?: string,
 		const users = await this.userRepository.find();
 
 		return users;
@@ -68,7 +63,7 @@ export class UserService {
 
 	async deleteUser(userId: number): Promise<void> {
 		const userEntity = await this.userRepository.findOne(userId);
-		if (!userEntity) {
+		if (userEntity === undefined) {
 			throw new NotFoundException(`Could not find user with id ${userId}`);
 		}
 		await this.userRepository.remove(userEntity);
