@@ -21,7 +21,7 @@ export class CommonService {
 				where: { email },
 			})
 		)[0];
-		if (!user) {
+		if (user === undefined) {
 			throw new NotFoundException(`Could not find user with email ${email}`);
 		}
 		if (user.roles.includes(RoleType.BUSINESS_OWNER) || user.roles.includes(RoleType.SUPERVISOR)) {
