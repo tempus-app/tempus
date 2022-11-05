@@ -328,7 +328,10 @@ describe('ViewService', () => {
 			expect(getViewSpy).toHaveBeenCalledWith(3);
 			expect(mockResourceService.getResourceInfo).toHaveBeenCalledWith(viewEntity.resource.id);
 			expect(mockViewRepository.save).toHaveBeenNthCalledWith(1, { ...createdViewEntity, id: undefined });
-			expect(mockViewRepository.save).toHaveBeenNthCalledWith(2, { ...existingViewEntityWithRevision, locked: true });
+			expect(mockViewRepository.save).toHaveBeenNthCalledWith(2, {
+				...existingViewEntityWithRevision,
+				locked: true,
+			});
 			expect(mockRevisionRepository.save).toHaveBeenNthCalledWith(1, newRevisionEntity);
 			expect(mockViewRepository.remove).toHaveBeenCalledWith(viewEntity2);
 			expect(res).toEqual({ ...newRevisionEntity, id: 3 });
@@ -345,7 +348,7 @@ describe('ViewService', () => {
 
 			adminReviseViewExistingRevision(supervisorUserEntity);
 		});
-		it('should throw error if editing locked view', async () => {
+		it('should throw error if resource editing locked view', async () => {
 			const lockedView: ViewEntity = {
 				...viewEntity,
 				locked: true,
@@ -366,6 +369,7 @@ describe('ViewService', () => {
 				...createdViewEntityPostRevision,
 				createdAt: viewEntity.createdAt,
 				lastUpdateDate: new Date(CUR_DATE_CONSTANT),
+				locked: false,
 				revisionType: RevisionType.APPROVED,
 				updatedBy: user.roles[0],
 			};
@@ -373,6 +377,7 @@ describe('ViewService', () => {
 			const getViewSpy = jest.spyOn(viewService, 'getView');
 
 			mockViewRepository.findOne.mockResolvedValue(viewEntity);
+			mockViewRepository.save.mockResolvedValue(createdViewEntity);
 			mockResourceService.getResourceInfo.mockResolvedValue(resourceEntity);
 
 			const res = await viewService.reviseView(3, user, newViewDto);
@@ -381,7 +386,7 @@ describe('ViewService', () => {
 			expect(mockResourceService.getResourceInfo).toHaveBeenCalledWith(viewEntity.resource.id);
 			expect(mockViewRepository.remove).toHaveBeenCalledWith(viewEntity);
 			expect(mockViewRepository.save).toHaveBeenCalledWith({ ...createdViewEntity, id: undefined });
-			expect(res).toEqual(null);
+			expect(res).toEqual(createdViewEntity);
 		};
 
 		const adminReviseViewExistingRevision = async (user: UserEntity) => {
@@ -390,6 +395,7 @@ describe('ViewService', () => {
 				createdAt: viewEntity3.createdAt,
 				lastUpdateDate: new Date(CUR_DATE_CONSTANT),
 				revisionType: RevisionType.APPROVED,
+				locked: false,
 				updatedBy: user.roles[0],
 			};
 
@@ -407,6 +413,7 @@ describe('ViewService', () => {
 
 			mockViewRepository.findOne.mockResolvedValueOnce(viewEntityWithRevision);
 			mockViewRepository.findOne.mockResolvedValueOnce(viewEntity2); // this  comes from getView call
+			mockViewRepository.save.mockResolvedValue(createdViewEntity);
 			mockResourceService.getResourceInfo.mockResolvedValue(resourceEntity);
 
 			const res = await viewService.reviseView(3, user, newViewDto);
@@ -416,7 +423,7 @@ describe('ViewService', () => {
 			expect(mockViewRepository.remove).toHaveBeenCalledWith(viewEntityWithRevision);
 			expect(mockRevisionRepository.remove).toHaveBeenCalledWith(oldRevisionEntity);
 			expect(mockViewRepository.save).toHaveBeenCalledWith({ ...createdViewEntity, id: undefined });
-			expect(res).toEqual(null);
+			expect(res).toEqual(createdViewEntity);
 		};
 	});
 
@@ -459,7 +466,10 @@ describe('ViewService', () => {
 			]);
 			const newRevisionEntity: RevisionEntity = {
 				...oldRevisionEntity,
-				views: [oldRevisionEntity.views[0], { ...viewEntity2, locked: false, revisionType: RevisionType.REJECTED }],
+				views: [
+					oldRevisionEntity.views[0],
+					{ ...viewEntity2, locked: false, revisionType: RevisionType.REJECTED },
+				],
 				comment: rejectViewDto.comment,
 			};
 
@@ -535,10 +545,42 @@ describe('ViewService', () => {
 			};
 
 			mockViewRepository.findOne.mockResolvedValue(pendingNewView);
+			mockViewRepository.save.mockResolvedValue(approvedNewView);
 
-			await viewService.approveOrDenyView(pendingNewView.id, approveViewDto);
+			const res = await viewService.approveOrDenyView(pendingNewView.id, approveViewDto);
 
 			expect(mockViewRepository.save).toHaveBeenCalledWith(approvedNewView);
+			expect(res).toEqual(approvedNewView);
+		});
+		it('should accept edited secondary view given approval', async () => {
+			const editedSecondaryViewEntity: ViewEntity = {
+				...resourceCreatedSecondaryViewEntity,
+				locked: true,
+				revisionType: RevisionType.PENDING,
+			};
+
+			const revision: RevisionEntity = new RevisionEntity(null, new Date(1, 2, 3), false, [
+				editedSecondaryViewEntity,
+			]);
+
+			editedSecondaryViewEntity.revision = revision;
+
+			const approvedNewView: ViewEntity = {
+				...resourceCreatedSecondaryViewEntity,
+				locked: false,
+				revisionType: RevisionType.APPROVED,
+				revision: null,
+				lastUpdateDate: new Date(CUR_DATE_CONSTANT),
+			};
+
+			mockViewRepository.findOne.mockResolvedValue(editedSecondaryViewEntity);
+			mockViewRepository.save.mockResolvedValue(approvedNewView);
+
+			const res = await viewService.approveOrDenyView(editedSecondaryViewEntity.id, approveViewDto);
+
+			expect(mockRevisionRepository.remove).toHaveBeenCalledWith(revision);
+			expect(mockViewRepository.save).toHaveBeenCalledWith(approvedNewView);
+			expect(res).toEqual(approvedNewView);
 		});
 		it('should reject new secondary view given rejection', async () => {
 			const pendingNewView: ViewEntity = {
@@ -552,17 +594,21 @@ describe('ViewService', () => {
 				lastUpdateDate: new Date(CUR_DATE_CONSTANT),
 			};
 
-			const newRevisionEntity: RevisionEntity = new RevisionEntity(null, rejectedNewView.lastUpdateDate, false, null);
-			newRevisionEntity.comment = rejectViewDto.comment;
+			const newRevisionEntity: RevisionEntity = new RevisionEntity(
+				null,
+				rejectedNewView.lastUpdateDate,
+				false,
+				null,
+			);
 
 			rejectedNewView.revision = newRevisionEntity;
+			newRevisionEntity.comment = rejectViewDto.comment;
 
 			mockViewRepository.findOne.mockResolvedValue(pendingNewView);
 
 			await viewService.approveOrDenyView(pendingNewView.id, rejectViewDto);
 
 			expect(mockRevisionRepository.save).toHaveBeenCalledWith(newRevisionEntity);
-			// expect(mockViewRepository.save).toHaveBeenCalledWith(rejectedNewView);
 		});
 		it('should throw an error if id not found', async () => {
 			mockViewRepository.findOne.mockResolvedValue(undefined);
