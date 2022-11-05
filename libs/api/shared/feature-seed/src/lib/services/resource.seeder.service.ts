@@ -235,7 +235,6 @@ export class ResourceSeederService {
 		for (let i = 0; i < links.length; i++) {
 			const resource = ResourceSeederService.createResource(RoleType.AVAILABLE_RESOURCE, links[i].id);
 			const { password } = resource;
-			resource.linkId = links[i].id;
 
 			const createdUser = await this.resourceService.createResource(resource);
 			createdResources.push({ ...createdUser, password });

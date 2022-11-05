@@ -9,11 +9,26 @@ export const selectProjManagementState = createSelector(
 
 export const selectResProjClientData = createSelector(
 	selectProjManagementState,
-	(state: ResourceProjectClientManagementState) => state.projResClientData,
+	(state: ResourceProjectClientManagementState) => {
+		return {
+			projResClientData: state.projResClientData,
+			totalItems: state.projResClientDataTotalItems,
+		};
+	},
 );
 export const selectClientData = createSelector(
 	selectProjManagementState,
 	(state: ResourceProjectClientManagementState) => state.clients,
+);
+
+export const selectResourceBasicData = createSelector(
+	selectProjManagementState,
+	(state: ResourceProjectClientManagementState) => state.resourcesBasic,
+);
+
+export const selectSearchableTerms = createSelector(
+	selectProjManagementState,
+	(state: ResourceProjectClientManagementState) => state.searchableTerms,
 );
 
 export const selectCreatedClientData = createSelector(
@@ -33,7 +48,12 @@ export const selectProjectAssigned = createSelector(
 
 export const selectViewsByStatus = createSelector(
 	selectProjManagementState,
-	(state: ResourceProjectClientManagementState) => state.viewsData,
+	(state: ResourceProjectClientManagementState) => {
+    return {
+      views: state.viewsData,
+      totalNumItems: state.totalViewsData
+    }
+  },
 );
 
 export const selectAsyncStatus = createSelector(

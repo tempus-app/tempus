@@ -1,0 +1,23 @@
+{
+	"root": "libs/api/shared/logging",
+	"sourceRoot": "libs/api/shared/logging/src",
+	"projectType": "library",
+	"targets": {
+		"lint": {
+			"executor": "@nrwl/linter:eslint",
+			"outputs": ["{options.outputFile}"],
+			"options": {
+				"lintFilePatterns": ["libs/api/shared/logging/**/*.ts"]
+			}
+		},
+		"test": {
+			"executor": "@nrwl/jest:jest",
+			"outputs": ["coverage/libs/api/shared/logging"],
+			"options": {
+				"jestConfig": "libs/api/shared/logging/jest.config.js",
+				"passWithNoTests": true
+			}
+		}
+	},
+	"tags": []
+}

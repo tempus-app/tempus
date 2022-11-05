@@ -101,10 +101,23 @@ describe('LinkController', () => {
 
 	describe('CREATE', () => {
 		it('should successfully create a link', async () => {
-			const createLinkDto = new CreateLinkDto('john', 'doe', 'test@email.com', new Date('01-03-2024'), 1, RoleType.AVAILABLE_RESOURCE);
+			const createLinkDto = new CreateLinkDto(
+				'john',
+				'doe',
+				'test@email.com',
+				new Date('01-03-2024'),
+				1,
+				RoleType.AVAILABLE_RESOURCE,
+			);
 			const res = await linkController.createLink(createLinkDto);
 			expect(mockLinkService.createLink).toBeCalledWith(
-				{ ...createLinkEntity, id: undefined, token: undefined, status: undefined, userType: RoleType.AVAILABLE_RESOURCE },
+				{
+					...createLinkEntity,
+					id: undefined,
+					token: undefined,
+					status: undefined,
+					userType: RoleType.AVAILABLE_RESOURCE,
+				},
 				1,
 			);
 			expect(res).toEqual({
@@ -119,7 +132,14 @@ describe('LinkController', () => {
 
 		it('should bubble up Create error', async () => {
 			mockLinkService.createLink.mockRejectedValue(new BadRequestException('could not create link'));
-			const createLinkDto = new CreateLinkDto('john', 'doe', 'test@email.com', new Date('01-03-2022'), 1, RoleType.AVAILABLE_RESOURCE);
+			const createLinkDto = new CreateLinkDto(
+				'john',
+				'doe',
+				'test@email.com',
+				new Date('01-03-2022'),
+				1,
+				RoleType.AVAILABLE_RESOURCE,
+			);
 			let error;
 			try {
 				await linkController.createLink(createLinkDto);

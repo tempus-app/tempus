@@ -28,9 +28,13 @@ export class ProfileViewController {
 	@UseGuards(JwtAuthGuard, RolesGuard)
 	@Roles(RoleType.BUSINESS_OWNER, RoleType.SUPERVISOR)
 	@Get('/views/')
-	async getViewsByStatus(@Query('status') status: RevisionType): Promise<View[]> {
-		const views = await this.viewSerivce.getViewsByStatus(status);
-		return views;
+	async getViewsByStatus(
+    @Query('status') status: RevisionType,
+    @Query('page') page: number, 
+    @Query('pageSize') pageSize: number
+  ): Promise<{views: View[], totalPendingApprovals: number}> {
+		const viewsAndCount = await this.viewSerivce.getViewsByStatus(status, page, pageSize);
+		return viewsAndCount;
 	}
 
 	// all views of user

@@ -24,6 +24,7 @@
 			"@tempus/api/shared/feature-email": ["libs/api/shared/feature-email/src/index.ts"],
 			"@tempus/api/shared/feature-pdfgenerator": ["libs/api/shared/feature-pdfgenerator/src/index.ts"],
 			"@tempus/api/shared/feature-seed": ["libs/api/shared/feature-seed/src/index.ts"],
+			"@tempus/api/shared/logging": ["libs/api/shared/logging/src/index.ts"],
 			"@tempus/app-config": ["libs/app-config/index.ts"],
 			"@tempus/client/onboarding-client/business-owner/data-access": [
 				"libs/client/onboarding-client/business-owner/data-access/src/index.ts"

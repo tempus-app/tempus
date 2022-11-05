@@ -6,6 +6,7 @@ import {
 	AppConfig,
 	ICreateResourceDto,
 	ICreateViewDto,
+	IResourceBasicDto,
 	IUpdateResourceDto,
 	IUserProjClientDto,
 	Resource,
@@ -33,8 +34,25 @@ export class OnboardingClientResourceService {
 		return this.http.patch<FormData>(`${this.url}/user/${resourceId}/resume`, formData);
 	}
 
-	public getResProjClientData(): Observable<IUserProjClientDto[]> {
-		return this.http.get<IUserProjClientDto[]>(`${this.url}/user/basic`).pipe(catchError(handleError));
+	public getResProjClientData(paginationData: {
+		page: number;
+		pageSize: number;
+		filter: string;
+	}): Observable<{ userProjClientData: IUserProjClientDto[]; totalItems: number }> {
+		const { page, pageSize, filter } = paginationData;
+		return this.http
+			.get<{ userProjClientData: IUserProjClientDto[]; totalItems: number }>(
+				`${this.url}/user/resProjects?page=${page}&pageSize=${pageSize}&filter=${filter}`,
+			)
+			.pipe(catchError(handleError));
+	}
+
+	public getResourceBasicInformation(): Observable<IResourceBasicDto[]> {
+		return this.http.get<IResourceBasicDto[]>(`${this.url}/user/resourcesBasic`).pipe(catchError(handleError));
+	}
+
+	public getAllSearchableTerms(): Observable<Array<string>> {
+		return this.http.get<Array<string>>(`${this.url}/user/searchableTerms`).pipe(catchError(handleError));
 	}
 
 	public getResourceInformation(): Observable<Resource> {
