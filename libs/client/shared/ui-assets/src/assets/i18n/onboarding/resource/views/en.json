@@ -11,9 +11,11 @@
 		"main": {
 			"title": "My Approvals",
 			"tableHeaders": {
-				"resource": "Resource",
+				"status": "Status",
 				"type": "View",
-				"lastUpdated": "Last Updated"
+				"lastUpdated": "Last Updated",
+				"dateCreated": "Date Created",
+				"createdBy": "Created By"
 			}
 		}
 	}

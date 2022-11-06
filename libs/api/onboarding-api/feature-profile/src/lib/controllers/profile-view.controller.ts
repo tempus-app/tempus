@@ -24,7 +24,7 @@ import { ViewsService } from '../services/view.service';
 export class ProfileViewController {
 	constructor(private viewSerivce: ViewsService, private pdfService: PdfGeneratorService) {}
 
-	// all views of user
+	// all views of user by status
 	@UseGuards(JwtAuthGuard, RolesGuard)
 	@Roles(RoleType.BUSINESS_OWNER, RoleType.SUPERVISOR)
 	@Get('/views/')
