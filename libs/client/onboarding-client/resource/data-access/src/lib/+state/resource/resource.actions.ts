@@ -24,12 +24,12 @@ export const updateInfoFailure = createAction(
 
 export const getAllViewsByResourceId = createAction(
 	'[Onboarding Client Profile Views API] Get All Views By Resource Id',
-	props<{ resourceId: number }>(),
+	props<{ resourceId: number; pageNum: number; pageSize: number }>(),
 );
 
 export const getAllViewsByResourceIdSuccess = createAction(
 	'[Onboarding Client Profile Views API] Get All Views By Resource Id Success',
-	props<{ views: View[] }>(),
+	props<{ views: View[]; totalViews: number }>(),
 );
 
 export const getAllViewsByResourceIdFailure = createAction(

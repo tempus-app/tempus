@@ -44,9 +44,9 @@ export class ResourceEffects {
 		this.actions$.pipe(
 			ofType(getAllViewsByResourceId),
 			switchMap(data =>
-				this.viewsService.getViewsByResourceId(data.resourceId).pipe(
-					map(views => {
-						return getAllViewsByResourceIdSuccess({ views });
+				this.viewsService.getViewsByResourceId(data.resourceId, data.pageNum, data.pageSize).pipe(
+					map(res => {
+						return getAllViewsByResourceIdSuccess({ views: res.views, totalViews: res.totalViews });
 					}),
 					catchError(error => of(getAllViewsByResourceIdFailure({ error }))),
 				),

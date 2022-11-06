@@ -10,6 +10,7 @@ export interface ResourceState {
 	lastName: string | null;
 	email: string | null;
 	views: View[] | null;
+	totalViewsData: number;
 }
 
 export const initialState: ResourceState = {
@@ -17,6 +18,7 @@ export const initialState: ResourceState = {
 	lastName: null,
 	email: null,
 	views: null,
+	totalViewsData: 0,
 };
 
 export const resourceReducer = createReducer(
@@ -34,9 +36,10 @@ export const resourceReducer = createReducer(
 		error,
 	})),
 	on(ResourceActions.getAllViewsByResourceId, state => ({ ...state, status: AsyncRequestState.LOADING })),
-	on(ResourceActions.getAllViewsByResourceIdSuccess, (state, { views }) => ({
+	on(ResourceActions.getAllViewsByResourceIdSuccess, (state, { views, totalViews }) => ({
 		...state,
 		views,
+		totalViewsData: totalViews,
 		status: AsyncRequestState.SUCCESS,
 		error: null,
 	})),

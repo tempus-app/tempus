@@ -17,7 +17,7 @@ export interface ResourceProjectClientManagementState {
 	resourcesBasic: IResourceBasicDto[];
 	searchableTerms: string[];
 	viewsData: View[] | null;
-  totalViewsData: number;
+	totalViewsData: number;
 }
 
 export const initialState: ResourceProjectClientManagementState = {
@@ -32,7 +32,7 @@ export const initialState: ResourceProjectClientManagementState = {
 	createdClient: null,
 	createdProject: null,
 	viewsData: [],
-  totalViewsData: 0
+	totalViewsData: 0,
 };
 
 export const projectManagementReducer = createReducer(
@@ -170,7 +170,7 @@ export const projectManagementReducer = createReducer(
 		...state,
 		viewsData: views,
 		status: AsyncRequestState.SUCCESS,
-    totalViewsData: totalPendingApprovals,
+		totalViewsData: totalPendingApprovals,
 		error: null,
 	})),
 	on(ProjectManagementActions.getAllViewsByStatusFailure, (state, { error }) => ({

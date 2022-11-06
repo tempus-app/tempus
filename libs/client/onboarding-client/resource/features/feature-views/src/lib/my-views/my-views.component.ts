@@ -28,6 +28,12 @@ export class MyViewsComponent implements OnInit, OnDestroy {
 
 	tableColumns: Array<Column> = [];
 
+	pageNum = 0;
+
+	pageSize = 5;
+
+	totalViews = 0;
+
 	constructor(
 		private resourceStore: Store<TempusResourceState>,
 		private router: Router,
@@ -107,15 +113,17 @@ export class MyViewsComponent implements OnInit, OnDestroy {
 				this.email = data.email || '';
 			});
 
-		this.resourceStore.dispatch(getAllViewsByResourceId({ resourceId: this.userId }));
+		this.resourceStore.dispatch(
+			getAllViewsByResourceId({ resourceId: this.userId, pageSize: this.pageSize, pageNum: this.pageNum }),
+		);
 
 		this.resourceStore
 			.select(selectResourceViews)
 			.pipe(takeUntil(this.$destroyed))
 			.subscribe(data => {
 				this.myViewsTableData = [];
-
-				data?.forEach(view => {
+				this.totalViews = data.totalViews;
+				data?.views?.forEach(view => {
 					let lastUpdateDate = '-';
 					let dateCreated = '-';
 					let approvalStatus = '';

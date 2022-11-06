@@ -144,7 +144,10 @@ export class ResourceProjectClientManagementEffects {
 			switchMap(data =>
 				this.viewsService.getViewsByStatus(data.status, data.pageNum, data.pageSize).pipe(
 					map(res => {
-						return ProjManagementActions.getAllViewsByStatusSuccess({ views: res.views, totalPendingApprovals: res.totalPendingApprovals });
+						return ProjManagementActions.getAllViewsByStatusSuccess({
+							views: res.views,
+							totalPendingApprovals: res.totalPendingApprovals,
+						});
 					}),
 					catchError(error => of(ProjManagementActions.getAllViewsByStatusFailure({ error }))),
 				),

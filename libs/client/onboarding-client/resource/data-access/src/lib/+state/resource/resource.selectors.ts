@@ -11,4 +11,6 @@ export const selectResourceBasicDetails = createSelector(selectState, (state: Re
 	return { firstName: state.firstName, lastName: state.lastName, email: state.email };
 });
 
-export const selectResourceViews = createSelector(selectState, (state: ResourceState) => state.views);
+export const selectResourceViews = createSelector(selectState, (state: ResourceState) => {
+	return { views: state.views, totalViews: state.totalViewsData };
+});

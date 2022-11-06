@@ -29,10 +29,10 @@ export class ProfileViewController {
 	@Roles(RoleType.BUSINESS_OWNER, RoleType.SUPERVISOR)
 	@Get('/views/')
 	async getViewsByStatus(
-    @Query('status') status: RevisionType,
-    @Query('page') page: number, 
-    @Query('pageSize') pageSize: number
-  ): Promise<{views: View[], totalPendingApprovals: number}> {
+		@Query('status') status: RevisionType,
+		@Query('page') page: number,
+		@Query('pageSize') pageSize: number,
+	): Promise<{ views: View[]; totalPendingApprovals: number }> {
 		const viewsAndCount = await this.viewSerivce.getViewsByStatus(status, page, pageSize);
 		return viewsAndCount;
 	}
@@ -40,9 +40,13 @@ export class ProfileViewController {
 	// all views of user
 	@UseGuards(JwtAuthGuard, PermissionGuard)
 	@Get('/:userId')
-	async getViews(@Param('userId') userId: number): Promise<View[]> {
-		const views = await this.viewSerivce.getViewsByResource(userId);
-		return views;
+	async getViews(
+		@Param('userId') userId: number,
+		@Query('page') page: number,
+		@Query('pageSize') pageSize: number,
+	): Promise<{ views: View[]; totalViews: number }> {
+		const viewsAndCount = await this.viewSerivce.getViewsByResource(userId, page, pageSize);
+		return viewsAndCount;
 	}
 
 	// all views of user
