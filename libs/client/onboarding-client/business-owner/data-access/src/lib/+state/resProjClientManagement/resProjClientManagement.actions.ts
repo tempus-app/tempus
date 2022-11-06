@@ -93,10 +93,13 @@ export const createProjectFailure = createAction(
 	props<{ error: Error }>(),
 );
 
-export const getAllProjectInfo = createAction('[Onboarding Client Project API] Get All Projects Info');
+export const getAllProjectInfo = createAction(
+	'[Onboarding Client Project API] Get All Projects Info',
+	props<{ pageSize: number; page: number }>(),
+);
 export const getAllProjectInfoSuccess = createAction(
 	'[Onboarding Client Project API] Get All Projects Info Success',
-	props<{ projectsInfo: Project[] }>(),
+	props<{ projects: Project[]; totalItems: number }>(),
 );
 export const getAllProjectInfoFailure = createAction(
 	'[Onboarding Client Project API]  Get All Projects Info Failure',

@@ -42,8 +42,16 @@ export class ProjectService {
 		return projectEntity;
 	}
 
-	async getAllProjects(): Promise<Project[]> {
-		return this.projectRepository.find({ relations: ['client'] });
+	async getAllProjects(page: number, pageSize: number): Promise<{ projectData: Project[]; totalItems: number }> {
+		const projectsAndCount = await this.projectRepository.findAndCount({
+			relations: ['client'],
+			take: Number(pageSize),
+			skip: Number(page) * Number(pageSize),
+		});
+
+		const projects = projectsAndCount[0];
+		const countOfItems = projectsAndCount[1];
+		return { projectData: projects, totalItems: countOfItems };
 	}
 
 	async getAllProjectInfo(): Promise<Project[]> {

@@ -9,7 +9,7 @@ import {
 	ICreateProjectDto,
 	Project,
 } from '@tempus/shared-domain';
-import { catchError, Observable } from 'rxjs';
+import { catchError, Observable, Subject } from 'rxjs';
 import { handleError } from './errorHandler';
 
 @Injectable({ providedIn: 'root' })
@@ -19,6 +19,16 @@ export class OnboardingClientProjectService {
 	clientURL = `${this.appConfig.apiUrl}/onboarding/client`;
 
 	projectURL = `${this.appConfig.apiUrl}/onboarding/project`;
+
+	private subject = new Subject<boolean>();
+
+	sendCreateProjectClickEvent(clicked: boolean) {
+		this.subject.next(clicked);
+	}
+
+	getCreateProjectClickEvent(): Observable<boolean> {
+		return this.subject.asObservable();
+	}
 
 	public getClients(): Observable<Client[]> {
 		return this.http.get<Client[]>(`${this.clientURL}/`).pipe(catchError(handleError));
@@ -32,8 +42,14 @@ export class OnboardingClientProjectService {
 		return this.http.post<Project>(`${this.projectURL}/`, createProjectDto).pipe(catchError(handleError));
 	}
 
-	public getAllProjects(): Observable<Project[]> {
-		return this.http.get<Project[]>(`${this.projectURL}/`).pipe(catchError(handleError));
+	public getAllProjects(paginationData: {
+		page: number;
+		pageSize: number;
+	}): Observable<{ projectData: Project[]; totalItems: number }> {
+		const { page, pageSize } = paginationData;
+		return this.http
+			.get<{ projectData: Project[]; totalItems: number }>(`${this.projectURL}?page=${page}&pageSize=${pageSize}`)
+			.pipe(catchError(handleError));
 	}
 
 	public assignResourceToProject(

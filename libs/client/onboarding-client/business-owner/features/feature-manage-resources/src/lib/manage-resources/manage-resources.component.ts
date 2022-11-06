@@ -30,6 +30,7 @@ import {
 } from '@tempus/client/onboarding-client/business-owner/data-access';
 import {
 	AsyncRequestState,
+	OnboardingClientProjectService,
 	OnboardingClientState,
 	selectLoggedInUserNameEmail,
 } from '@tempus/client/onboarding-client/shared/data-access';
@@ -47,6 +48,8 @@ import { PageEvent } from '@angular/material/paginator';
 	styleUrls: ['./manage-resources.component.scss'],
 })
 export class ManageResourcesComponent implements OnInit, OnDestroy {
+	clickCreateProjectEventsubscription: Subscription;
+
 	constructor(
 		private modalService: ModalService,
 		private businessOwnerStore: Store<BusinessOwnerState>,
@@ -54,6 +57,7 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 		private fb: FormBuilder,
 		private translateService: TranslateService,
 		private router: Router,
+		private projectService: OnboardingClientProjectService,
 	) {
 		const { currentLang } = translateService;
 		// eslint-disable-next-line no-param-reassign
@@ -95,6 +99,10 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 			.subscribe(data => {
 				this.awaitingApproval = data;
 			});
+
+		this.clickCreateProjectEventsubscription = this.projectService.getCreateProjectClickEvent().subscribe(() => {
+			this.createProjectModal();
+		});
 	}
 
 	prefix = 'onboardingOwnerManageResources.';
@@ -349,7 +357,6 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 			.select(selectResProjClientData)
 			.pipe(takeUntil(this.$destroyed))
 			.subscribe(data => {
-				debugger;
 				this.totalNumResProjClientOptions = data.totalItems;
 				this.resProjClientTableData = [];
 				data.projResClientData.forEach(resProjClientData => {

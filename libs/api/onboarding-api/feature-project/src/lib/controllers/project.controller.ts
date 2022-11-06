@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query, UseGuards } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { AssignProjectDto, CreateProjectDto, UpdateProjectDto } from '@tempus/api/shared/dto';
 import { JwtAuthGuard, Roles, RolesGuard } from '@tempus/api/shared/feature-auth';
@@ -18,8 +18,11 @@ export class ProjectController {
 
 	@UseGuards(JwtAuthGuard)
 	@Get('/')
-	async getAllProjects(): Promise<Project[]> {
-		return this.projectService.getAllProjects();
+	async getAllProjects(
+		@Query('page') page: number,
+		@Query('pageSize') pageSize: number,
+	): Promise<{ projectData: Project[]; totalItems: number }> {
+		return this.projectService.getAllProjects(page, pageSize);
 	}
 
 	@UseGuards(JwtAuthGuard, RolesGuard)

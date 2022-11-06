@@ -8,6 +8,7 @@ import {
 	getAllProjectInfo,
 	selectAllProjects,
 } from '@tempus/client/onboarding-client/business-owner/data-access';
+import { OnboardingClientProjectService } from '@tempus/client/onboarding-client/shared/data-access';
 import { Column, ViewProjects } from '@tempus/client/shared/ui-components/presentational';
 import { take, Subject, takeUntil } from 'rxjs';
 
@@ -27,7 +28,11 @@ export class ViewProjectsComponent implements OnInit {
 
 	totalProjects = 0;
 
-	constructor(private businessOwnerStore: Store<BusinessOwnerState>, private translateService: TranslateService) {
+	constructor(
+		private businessOwnerStore: Store<BusinessOwnerState>,
+		private translateService: TranslateService,
+		private projectService: OnboardingClientProjectService,
+	) {
 		const { currentLang } = translateService;
 		translateService.currentLang = '';
 		translateService.use(currentLang);
@@ -37,14 +42,14 @@ export class ViewProjectsComponent implements OnInit {
 			.subscribe(data => {
 				this.tableColumns = [
 					{
-						columnDef: 'name',
-						header: data.name,
-						cell: (element: Record<string, unknown>) => `${element.name}`,
-					},
-					{
 						columnDef: 'project',
 						header: data.project,
 						cell: (element: Record<string, unknown>) => `${element.project}`,
+					},
+					{
+						columnDef: 'name',
+						header: data.name,
+						cell: (element: Record<string, unknown>) => `${element.name}`,
 					},
 					{
 						columnDef: 'assigned',
@@ -65,19 +70,20 @@ export class ViewProjectsComponent implements OnInit {
 	projectsInfoTableData: ViewProjects[] = [];
 
 	ngOnInit(): void {
-		this.businessOwnerStore.dispatch(getAllProjectInfo());
+		this.businessOwnerStore.dispatch(getAllProjectInfo({ page: this.pageNum, pageSize: this.pageSize }));
 
 		this.businessOwnerStore
 			.select(selectAllProjects)
 			.pipe(takeUntil(this.$destroyed))
 			.subscribe(data => {
 				this.projectsInfoTableData = [];
-				this.totalProjects = data?.length || 0;
-				data?.forEach(project => {
+				this.totalProjects = data.totalItems;
+				data.projects.forEach(project => {
+					const assignedDate = new Date(project.startDate).toDateString();
 					this.projectsInfoTableData.push({
 						name: project.client.clientName,
 						project: project.name,
-						assigned: project.startDate,
+						assigned: assignedDate,
 						status: project.status.toString(),
 						columnsWithIcon: [],
 						columnsWithUrl: [],
@@ -93,6 +99,10 @@ export class ViewProjectsComponent implements OnInit {
 		} else if (pageEvent.pageIndex !== this.pageNum) {
 			this.pageNum = pageEvent.pageIndex;
 		}
-		this.businessOwnerStore.dispatch(getAllProjectInfo());
+		this.businessOwnerStore.dispatch(getAllProjectInfo({ page: this.pageNum, pageSize: this.pageSize }));
+	}
+
+	openProjectModal() {
+		this.projectService.sendCreateProjectClickEvent(true);
 	}
 }

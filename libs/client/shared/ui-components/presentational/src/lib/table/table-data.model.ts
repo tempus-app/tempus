@@ -30,6 +30,6 @@ export interface PendingApprovalsTableData extends TableDataModel {
 export interface ViewProjects extends TableDataModel {
 	name: string;
 	project: string;
-	assigned: Date;
+	assigned: string;
 	status: string;
 }

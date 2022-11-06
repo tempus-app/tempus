@@ -127,10 +127,13 @@ export class ResourceProjectClientManagementEffects {
 	getAllProjects$ = createEffect(() =>
 		this.actions$.pipe(
 			ofType(ProjManagementActions.getAllProjectInfo),
-			switchMap(() =>
-				this.projectService.getAllProjects().pipe(
-					map(projects => {
-						return ProjManagementActions.getAllProjectInfoSuccess({ projectsInfo: projects });
+			switchMap(paginationData =>
+				this.projectService.getAllProjects(paginationData).pipe(
+					map(data => {
+						return ProjManagementActions.getAllProjectInfoSuccess({
+							projects: data.projectData,
+							totalItems: data.totalItems,
+						});
 					}),
 					catchError(error => of(ProjManagementActions.getAllProjectInfoFailure({ error }))),
 				),
