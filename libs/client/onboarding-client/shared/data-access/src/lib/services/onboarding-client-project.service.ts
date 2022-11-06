@@ -32,6 +32,10 @@ export class OnboardingClientProjectService {
 		return this.http.post<Project>(`${this.projectURL}/`, createProjectDto).pipe(catchError(handleError));
 	}
 
+	public getAllProjects(): Observable<Project[]> {
+		return this.http.get<Project[]>(`${this.projectURL}/`).pipe(catchError(handleError));
+	}
+
 	public assignResourceToProject(
 		projectId: number,
 		resourceId: number,

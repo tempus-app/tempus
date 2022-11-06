@@ -19,7 +19,7 @@ export class ProjectController {
 	@UseGuards(JwtAuthGuard)
 	@Get('/')
 	async getAllProjects(): Promise<Project[]> {
-		return this.projectService.getAllProjectInfo();
+		return this.projectService.getAllProjects();
 	}
 
 	@UseGuards(JwtAuthGuard, RolesGuard)

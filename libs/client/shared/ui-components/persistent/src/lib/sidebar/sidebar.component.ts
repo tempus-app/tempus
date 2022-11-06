@@ -66,6 +66,11 @@ export class SidebarComponent implements OnInit {
 			base: true,
 		},
 		{
+			tab: SidebarTab.PROJECTS,
+			route: '/owner/projects',
+			base: true,
+		},
+		{
 			tab: SidebarTab.MANAGE_RESOURCES,
 			route: '/owner/view-resources',
 		},
@@ -99,7 +104,7 @@ export class SidebarComponent implements OnInit {
 
 	setUserTabs() {
 		if (this.userType === UserType.OWNER) {
-			this.tabs = [SidebarTab.MANAGE_RESOURCES, SidebarTab.PENDING_APPROVALS];
+			this.tabs = [SidebarTab.MANAGE_RESOURCES, SidebarTab.PENDING_APPROVALS, SidebarTab.PROJECTS];
 		} else {
 			this.tabs = [
 				SidebarTab.PRIMARY_VIEW,
