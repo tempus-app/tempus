@@ -13,6 +13,7 @@ import {
 	UploadedFile,
 	StreamableFile,
 	Res,
+	Query,
 } from '@nestjs/common';
 import { Resource, RoleType, User } from '@tempus/shared-domain';
 import { JwtAuthGuard, Roles, RolesGuard, PermissionGuard } from '@tempus/api/shared/feature-auth';
@@ -23,6 +24,7 @@ import {
 	UpdateUserDto,
 	UpdateResourceDto,
 	UserProjectClientDto,
+	ResourceBasicDto,
 } from '@tempus/api/shared/dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Express, Response } from 'express';
@@ -54,9 +56,20 @@ export class UserController {
 
 	@UseGuards(JwtAuthGuard, RolesGuard)
 	@Roles(RoleType.BUSINESS_OWNER, RoleType.SUPERVISOR)
-	@Get('basic')
-	async getAllResourceProjInfo(): Promise<UserProjectClientDto[]> {
-		return this.resourceService.getAllResourceProjectInfo();
+	@Get('searchableTerms')
+	async getAllSearchableTerms(): Promise<string[]> {
+		return this.resourceService.getAllSearchableTerms();
+	}
+
+	@UseGuards(JwtAuthGuard, RolesGuard)
+	@Roles(RoleType.BUSINESS_OWNER, RoleType.SUPERVISOR)
+	@Get('resProjects')
+	async getAllResourceProjInfo(
+		@Query('page') page: number,
+		@Query('pageSize') pageSize: number,
+		@Query('filter') filter: string,
+	): Promise<{ userProjClientData: UserProjectClientDto[]; totalItems: number }> {
+		return this.resourceService.getAllResourceProjectInfo(page, pageSize, filter);
 	}
 
 	@UseGuards(JwtAuthGuard, RolesGuard)
@@ -64,6 +77,13 @@ export class UserController {
 	@Get('resources')
 	async getResources(): Promise<Resource[]> {
 		return this.resourceService.getAllResources();
+	}
+
+	@UseGuards(JwtAuthGuard, RolesGuard)
+	@Roles(RoleType.BUSINESS_OWNER, RoleType.SUPERVISOR)
+	@Get('resourcesBasic')
+	async getResourcesBasic(): Promise<ResourceBasicDto[]> {
+		return this.resourceService.getAllResourcesBasic();
 	}
 
 	// gets a User or Resource

@@ -1,6 +1,7 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable @typescript-eslint/dot-notation */
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { PageEvent } from '@angular/material/paginator';
 import { Store } from '@ngrx/store';
 import { TranslateService } from '@ngx-translate/core';
 import {
@@ -21,6 +22,12 @@ export class ViewPendingApprovalsComponent implements OnInit, OnDestroy {
 	prefix = 'onboardingOwnerViewPendingApprovals';
 
 	tableColumns: Array<Column> = [];
+
+	pageNum = 0;
+
+	pageSize = 5;
+
+	totalPendingApprovals = 0;
 
 	constructor(private businessOwnerStore: Store<BusinessOwnerState>, private translateService: TranslateService) {
 		const { currentLang } = translateService;
@@ -51,15 +58,17 @@ export class ViewPendingApprovalsComponent implements OnInit, OnDestroy {
 	pendingApprovalsTableData: PendingApprovalsTableData[] = [];
 
 	ngOnInit(): void {
-		this.businessOwnerStore.dispatch(getAllViewsByStatus({ status: RevisionType.PENDING }));
+		this.businessOwnerStore.dispatch(
+			getAllViewsByStatus({ status: RevisionType.PENDING, pageSize: this.pageSize, pageNum: this.pageNum }),
+		);
 
 		this.businessOwnerStore
 			.select(selectViewsByStatus)
 			.pipe(takeUntil(this.$destroyed))
 			.subscribe(data => {
 				this.pendingApprovalsTableData = [];
-
-				data?.forEach(view => {
+				this.totalPendingApprovals = data.totalNumItems;
+				data?.views?.forEach(view => {
 					let date = '-';
 					let { type } = view;
 					if (view.lastUpdateDate) {
@@ -85,5 +94,17 @@ export class ViewPendingApprovalsComponent implements OnInit, OnDestroy {
 	ngOnDestroy(): void {
 		this.$destroyed.next();
 		this.$destroyed.complete();
+	}
+
+	tablePaginationEvent(pageEvent: PageEvent) {
+		if (pageEvent.pageSize !== this.pageSize) {
+			this.pageSize = pageEvent.pageSize;
+			this.pageNum = 0;
+		} else if (pageEvent.pageIndex !== this.pageNum) {
+			this.pageNum = pageEvent.pageIndex;
+		}
+		this.businessOwnerStore.dispatch(
+			getAllViewsByStatus({ status: RevisionType.PENDING, pageSize: this.pageSize, pageNum: this.pageNum }),
+		);
 	}
 }
