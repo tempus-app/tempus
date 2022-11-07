@@ -16,6 +16,7 @@ import {
 	selectResourceViews,
 	TempusResourceState,
 } from '@tempus/client/onboarding-client/resource/data-access';
+import { PageEvent } from '@angular/material/paginator';
 
 @Component({
 	selector: 'tempus-my-views',
@@ -162,19 +163,23 @@ export class MyViewsComponent implements OnInit, OnDestroy {
 					});
 				});
 			});
-		// this.res;
-		// this.resourceService.getResourceInformation().subscribe(resData => {
-		// 	this.userId = resData.id;
-		// 	this.firstName = resData.firstName;
-		// 	this.lastName = resData.lastName;
-		// 	this.fullName = `${resData.firstName} ${resData.lastName}`;
-		// 	this.email = resData.email;
-		// });
 	}
 
 	ngOnDestroy(): void {
 		this.$destroyed.next();
 		this.$destroyed.complete();
+	}
+
+	tablePaginationEvent(pageEvent: PageEvent) {
+		if (pageEvent.pageSize !== this.pageSize) {
+			this.pageSize = pageEvent.pageSize;
+			this.pageNum = 0;
+		} else if (pageEvent.pageIndex !== this.pageNum) {
+			this.pageNum = pageEvent.pageIndex;
+		}
+		this.resourceStore.dispatch(
+			getAllViewsByResourceId({ resourceId: this.userId, pageSize: this.pageSize, pageNum: this.pageNum }),
+		);
 	}
 
 	navigateToCreateNewView() {

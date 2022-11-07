@@ -9,13 +9,18 @@
 	},
 	"onboardingResourceMyViews": {
 		"main": {
-			"title": "My Approvals",
+			"title": "My Views",
 			"tableHeaders": {
 				"status": "Status",
 				"type": "View",
 				"lastUpdated": "Last Updated",
 				"dateCreated": "Date Created",
 				"createdBy": "Created By"
+			},
+			"buttons": {
+				"deleteButton": {
+					"title": "DELETE"
+				}
 			}
 		}
 	}
