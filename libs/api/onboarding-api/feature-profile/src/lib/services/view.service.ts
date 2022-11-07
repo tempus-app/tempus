@@ -244,13 +244,12 @@ export class ViewsService {
 	}
 
 	async getViewsByStatus(status: RevisionType, page: number, pageSize: number) {
-		const viewsAndCount = await this.viewsRepository.findAndCount(
-      { 
-        where: { revisionType: status }, 
-        relations: ['resource'],
-        take: Number(pageSize),
-				skip: Number(page) * Number(pageSize),
-      });
-		return {views: viewsAndCount[0], totalPendingApprovals: viewsAndCount[1]};
+		const viewsAndCount = await this.viewsRepository.findAndCount({
+			where: { revisionType: status },
+			relations: ['resource'],
+			take: Number(pageSize),
+			skip: Number(page) * Number(pageSize),
+		});
+		return { views: viewsAndCount[0], totalPendingApprovals: viewsAndCount[1] };
 	}
 }
