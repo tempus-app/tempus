@@ -9,7 +9,7 @@ import {
 	ICreateProjectDto,
 	Project,
 } from '@tempus/shared-domain';
-import { catchError, Observable, Subject } from 'rxjs';
+import { catchError, Observable } from 'rxjs';
 import { handleError } from './errorHandler';
 
 @Injectable({ providedIn: 'root' })
@@ -19,16 +19,6 @@ export class OnboardingClientProjectService {
 	clientURL = `${this.appConfig.apiUrl}/onboarding/client`;
 
 	projectURL = `${this.appConfig.apiUrl}/onboarding/project`;
-
-	private subject = new Subject<boolean>();
-
-	sendCreateProjectClickEvent(clicked: boolean) {
-		this.subject.next(clicked);
-	}
-
-	getCreateProjectClickEvent(): Observable<boolean> {
-		return this.subject.asObservable();
-	}
 
 	public getClients(): Observable<Client[]> {
 		return this.http.get<Client[]>(`${this.clientURL}/`).pipe(catchError(handleError));

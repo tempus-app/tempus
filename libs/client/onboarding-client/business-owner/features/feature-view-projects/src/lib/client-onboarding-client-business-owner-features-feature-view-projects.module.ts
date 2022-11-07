@@ -5,6 +5,7 @@ import { RouterModule } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { ClientSharedUiComponentsInputModule } from '@tempus/client/shared/ui-components/input';
 import { ViewProjectsComponent } from './view-projects/view-projects.component';
 
 function createTranslateLoader(http: HttpClient) {
@@ -15,6 +16,7 @@ function createTranslateLoader(http: HttpClient) {
 	imports: [
 		CommonModule,
 		ClientSharedUiComponentsPresentationalModule,
+		ClientSharedUiComponentsInputModule,
 		RouterModule.forChild([
 			{
 				path: '',

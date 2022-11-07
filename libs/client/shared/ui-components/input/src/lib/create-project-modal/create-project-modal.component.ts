@@ -22,7 +22,7 @@ export class CreateProjectModalComponent implements OnInit {
 
 	createProjectUseExisitingClient = false;
 
-	prefix = 'onboardingOwnerManageResources.modal.newProjectModal.';
+	prefix = 'modal.newProjectModal.';
 
 	statusOptions = [
 		{ val: 'Not Started', id: 'not_started' },

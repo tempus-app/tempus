@@ -101,8 +101,4 @@ export class ViewProjectsComponent implements OnInit {
 		}
 		this.businessOwnerStore.dispatch(getAllProjectInfo({ page: this.pageNum, pageSize: this.pageSize }));
 	}
-
-	openProjectModal() {
-		this.projectService.sendCreateProjectClickEvent(true);
-	}
 }

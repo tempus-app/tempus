@@ -48,8 +48,6 @@ import { PageEvent } from '@angular/material/paginator';
 	styleUrls: ['./manage-resources.component.scss'],
 })
 export class ManageResourcesComponent implements OnInit, OnDestroy {
-	clickCreateProjectEventsubscription: Subscription;
-
 	constructor(
 		private modalService: ModalService,
 		private businessOwnerStore: Store<BusinessOwnerState>,
@@ -99,10 +97,6 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 			.subscribe(data => {
 				this.awaitingApproval = data;
 			});
-
-		this.clickCreateProjectEventsubscription = this.projectService.getCreateProjectClickEvent().subscribe(() => {
-			this.createProjectModal();
-		});
 	}
 
 	prefix = 'onboardingOwnerManageResources.';
