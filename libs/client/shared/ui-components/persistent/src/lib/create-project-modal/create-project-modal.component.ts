@@ -3,7 +3,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { ModalService } from '@tempus/client/shared/ui-components/modal';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Client } from '@tempus/shared-domain';
-import { InputType } from '../..';
+import { InputType } from '@tempus/client/shared/ui-components/input';
 
 @Component({
 	selector: 'tempus-create-project-modal',
