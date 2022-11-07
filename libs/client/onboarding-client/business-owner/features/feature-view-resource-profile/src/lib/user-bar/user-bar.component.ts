@@ -49,8 +49,7 @@ export class UserBarComponent implements OnChanges {
 			this.viewDropDownForm.patchValue({
 				viewSelected: this.loadedView.currentViewName,
 			});
-			const index = this.viewNames.indexOf(this.loadedView.currentViewName);
-			this.currentViewID = this.viewIDs[index];
+			this.currentViewID = parseInt(this.route.snapshot.queryParamMap.get('viewId') || '0', 10);
 		}
 	}
 
@@ -60,7 +59,7 @@ export class UserBarComponent implements OnChanges {
 			const downloadURL = window.URL.createObjectURL(data);
 			const link = document.createElement('a');
 			link.href = downloadURL;
-			const index = this.viewIDs.indexOf(this.currentViewID, 10);
+			const index = this.viewIDs.indexOf(this.currentViewID);
 			link.download = `${this.resourceName}-${this.viewNames[index]}`;
 			link.click();
 		});
