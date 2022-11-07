@@ -1,14 +1,17 @@
-import { Component, Input, OnInit, TemplateRef, ViewChild } from '@angular/core';
+/* eslint-disable @typescript-eslint/dot-notation */
+import { Component, Input, OnChanges, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { TranslateService } from '@ngx-translate/core';
 import {
 	BusinessOwnerState,
 	createResourceProjectAssignment,
+	getAllClients,
+	selectClientData,
 } from '@tempus/client/onboarding-client/business-owner/data-access';
 import { InputType } from '@tempus/client/shared/ui-components/input';
 import { ModalService, ModalType, CustomModalType } from '@tempus/client/shared/ui-components/modal';
-import { Client, IAssignProjectDto } from '@tempus/shared-domain';
+import { Client, IAssignProjectDto, ProjectResource, Resource } from '@tempus/shared-domain';
 import { Router } from '@angular/router';
 import { take, takeUntil, finalize, Subject } from 'rxjs';
 import { ProjectManagmenetTableData } from '@tempus/client/shared/ui-components/presentational';
@@ -18,7 +21,7 @@ import { ProjectManagmenetTableData } from '@tempus/client/shared/ui-components/
 	templateUrl: './assign-resource-modal.component.html',
 	styleUrls: ['./assign-resource-modal.component.scss'],
 })
-export class AssignResourceModalComponent implements OnInit {
+export class AssignResourceModalComponent implements OnInit, OnChanges {
 	constructor(
 		private modalService: ModalService,
 		private businessOwnerStore: Store<BusinessOwnerState>,
@@ -28,10 +31,7 @@ export class AssignResourceModalComponent implements OnInit {
 	) {}
 
 	@Input()
-	clientOptions: { val: string; id: number }[] = [];
-
-	@Input()
-	clients: Client[] = [];
+	resource: Resource | undefined = undefined;
 
 	@Input()
 	resourceOptions: { val: string; id: number }[] = [];
@@ -39,7 +39,24 @@ export class AssignResourceModalComponent implements OnInit {
 	@Input()
 	resProjClientTableData: ProjectManagmenetTableData[] = [];
 
+	// this is the case when we are assigning specific to project, so modal is disabled
+
+	@Input() resourceName = '';
+
+	@Input() resourceEmail = '';
+
+	@Input() resourceId = 0;
+
+	@Input() selectResource = false;
+
+	@Input()
+	projectResources: ProjectResource[] = [];
+
 	currentProjects: { val: string; id: number }[] = [];
+
+	clients: Client[] = [];
+
+	clientOptions: { val: string; id: number }[] = [];
 
 	prefix = 'onboardingOwnerManageResources.';
 
@@ -63,12 +80,45 @@ export class AssignResourceModalComponent implements OnInit {
 	});
 
 	ngOnInit(): void {
+		this.businessOwnerStore.dispatch(getAllClients());
+
+		this.businessOwnerStore
+			.select(selectClientData)
+			.pipe(takeUntil(this.$destroyed))
+			.subscribe(data => {
+				this.clients = data;
+				this.clientOptions = data.map(client => {
+					return {
+						val: client.clientName,
+						id: client.id,
+					};
+				});
+			});
+
 		this.modalService.confirmEventSubject.pipe(takeUntil(this.$destroyed)).subscribe(modalId => {
 			this.modalService.close();
 			if (modalId === 'assignModal') {
 				this.$assignModalClosedEvent.next();
 			}
 		});
+
+		if (this.selectResource) {
+			this.setResourceDetails();
+			this.filterCurrentProjectsResource();
+		}
+	}
+
+	setResourceDetails = () => {
+		this.resourceOptions = [{ val: `${this.resourceName} (${this.resourceEmail})`, id: this.resourceId }];
+		this.assignForm.controls['resource']?.setValue(this.resourceId);
+		this.assignForm.controls['resource']?.disable();
+	};
+
+	ngOnChanges() {
+		if (this.selectResource) {
+			this.setResourceDetails();
+			this.filterCurrentProjectsResource();
+		}
 	}
 
 	updateProjects = () => {
@@ -83,10 +133,22 @@ export class AssignResourceModalComponent implements OnInit {
 					};
 				}) || [];
 		const resource = this.assignForm.get('resource')?.value;
-		if (resource) {
+		if (resource && !this.selectResource) {
 			this.filterCurrentProjectsBySelectedResource(resource);
 		}
+		if (this.selectResource) {
+			this.filterCurrentProjectsResource();
+		}
 	};
+
+	filterCurrentProjectsResource() {
+		this.currentProjects = this.currentProjects.filter(curFilteredProj => {
+			if (this.projectResources && this.projectResources.length > 0) {
+				return !this.projectResources.some(projRes => projRes.project.id === curFilteredProj.id);
+			}
+			return true;
+		});
+	}
 
 	filterCurrentProjectsBySelectedResource(resource: string) {
 		const curSelectedRes = resource;
@@ -108,21 +170,25 @@ export class AssignResourceModalComponent implements OnInit {
 
 	assign() {
 		this.translateService
-			.get(`${this.prefix}modal.assignModal`)
+			.get(`assignModal`, { resourceName: 'John' })
 			.pipe(take(1))
 			.subscribe(data => {
-				this.modalService.open(
-					{
-						title: data.title,
-						id: 'assignModal',
-						closable: true,
-						confirmText: data.confirmText,
-						modalType: ModalType.INFO,
-						closeText: data.closeText,
-						template: this.assignModal,
-					},
-					CustomModalType.CONTENT,
-				);
+				this.translateService
+					.get('assignModal.title', { resourceName: this.resourceName || 'Resource' })
+					.subscribe((updatedTitle: string) => {
+						this.modalService.open(
+							{
+								title: updatedTitle,
+								id: 'assignModal',
+								closable: true,
+								confirmText: data.confirmText,
+								modalType: ModalType.INFO,
+								closeText: data.closeText,
+								template: this.assignModal,
+							},
+							CustomModalType.CONTENT,
+						);
+					});
 			});
 		this.modalService.confirmDisabled()?.next(true);
 		this.assignForm.valueChanges
@@ -155,6 +221,11 @@ export class AssignResourceModalComponent implements OnInit {
 			.subscribe(() => {
 				this.assignForm.reset();
 				this.currentProjects = [];
+
+				// don't want to reset resource name
+				if (this.selectResource) {
+					this.setResourceDetails();
+				}
 			});
 	}
 }

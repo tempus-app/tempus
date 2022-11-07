@@ -7,9 +7,14 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { TranslateModule } from '@ngx-translate/core';
 import { RouterModule } from '@angular/router';
+import { ClientSharedUiComponentsInputModule } from '@tempus/client/shared/ui-components/input';
+import { ClientSharedUiComponentsPresentationalModule } from '@tempus/client/shared/ui-components/presentational';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { FlexLayoutModule } from '@angular/flex-layout';
 import { FooterComponent } from './footer/footer.component';
 import { StepperComponent } from './stepper/stepper.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
+import { AssignResourceModalComponent } from './assign-resource-modal/assign-resource-modal.component';
 
 @NgModule({
 	imports: [
@@ -19,13 +24,17 @@ import { SidebarComponent } from './sidebar/sidebar.component';
 		MatStepperModule,
 		MatSidenavModule,
 		MatButtonToggleModule,
+		FlexLayoutModule,
+		MatFormFieldModule,
+		ClientSharedUiComponentsInputModule,
+		ClientSharedUiComponentsPresentationalModule,
 		RouterModule,
 		TranslateModule.forChild({
 			isolate: false,
 			extend: true,
 		}),
 	],
-	declarations: [FooterComponent, StepperComponent, SidebarComponent],
-	exports: [FooterComponent, StepperComponent, SidebarComponent],
+	declarations: [FooterComponent, StepperComponent, SidebarComponent, AssignResourceModalComponent],
+	exports: [FooterComponent, StepperComponent, SidebarComponent, AssignResourceModalComponent],
 })
 export class ClientSharedUiComponentsPersistentModule {}
