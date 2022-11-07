@@ -92,8 +92,6 @@ export class MyViewsComponent implements OnInit, OnDestroy {
 
 	fullName = '';
 
-	email = '';
-
 	ButtonType = ButtonType;
 
 	ngOnInit(): void {
@@ -111,7 +109,6 @@ export class MyViewsComponent implements OnInit, OnDestroy {
 			.subscribe(data => {
 				this.firstName = data.firstName || '';
 				this.lastName = data.lastName || '';
-				this.email = data.email || '';
 			});
 
 		this.resourceStore.dispatch(

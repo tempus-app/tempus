@@ -1,6 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { OnboardingClientResourceService } from '@tempus/client/onboarding-client/shared/data-access';
-import { Subject } from 'rxjs';
+import {
+	OnboardingClientResourceService,
+	OnboardingClientState,
+	selectLoggedInUserId,
+	selectLoggedInUserNameEmail,
+} from '@tempus/client/onboarding-client/shared/data-access';
+import { Subject, take, takeUntil } from 'rxjs';
 import { ButtonType } from '@tempus/client/shared/ui-components/presentational';
 import {
 	ICreateExperienceDto,
@@ -9,8 +14,14 @@ import {
 	ViewType,
 	RevisionType,
 } from '@tempus/shared-domain';
+import {
+	getAllViewsByResourceId,
+	selectResourceViews,
+	TempusResourceState,
+} from '@tempus/client/onboarding-client/resource/data-access';
 import { TranslateService } from '@ngx-translate/core';
 import { sortViewsByLatestUpdated } from '@tempus/client/shared/util';
+import { Store } from '@ngrx/store';
 
 @Component({
 	selector: 'tempus-profile',
@@ -19,7 +30,19 @@ import { sortViewsByLatestUpdated } from '@tempus/client/shared/util';
 	providers: [OnboardingClientResourceService],
 })
 export class ProfileComponent implements OnInit, OnDestroy {
-	constructor(private resourceService: OnboardingClientResourceService, private translateService: TranslateService) {
+	pageNum = 0;
+
+	// make it very large so that it fetches all the views of the user
+	pageSize = 1000;
+
+	totalViews = 0;
+
+	constructor(
+		private resourceService: OnboardingClientResourceService,
+		private translateService: TranslateService,
+		private sharedStore: Store<OnboardingClientState>,
+		private resourceStore: Store<TempusResourceState>,
+	) {
 		const { currentLang } = translateService;
 		// eslint-disable-next-line no-param-reassign
 		translateService.currentLang = '';
@@ -71,20 +94,37 @@ export class ProfileComponent implements OnInit, OnDestroy {
 	editViewEnabled = false;
 
 	ngOnInit(): void {
-		this.resourceService.getResourceInformation().subscribe(resData => {
-			this.userId = resData.id;
-			this.firstName = resData.firstName;
-			this.lastName = resData.lastName;
-			this.fullName = `${resData.firstName} ${resData.lastName}`;
-
-			// TODO: ADD resource to the store
-			this.resourceService.getResourceOriginalResumeById(this.userId).subscribe(resumeBlob => {
-				this.resume = new File([resumeBlob], 'original-resume.pdf');
+		this.sharedStore
+			.select(selectLoggedInUserId)
+			.pipe(take(1))
+			.subscribe(data => {
+				if (data) {
+					this.userId = data;
+				}
+			});
+		this.sharedStore
+			.select(selectLoggedInUserNameEmail)
+			.pipe(take(1))
+			.subscribe(data => {
+				this.firstName = data.firstName || '';
+				this.lastName = data.lastName || '';
 			});
 
-			// display latest primary view
-			this.resourceService.getResourceProfileViews(this.userId).subscribe(views => {
-				let filteredAndSortedViews = views.filter(view => view.viewType === ViewType.PRIMARY);
+		// TODO: ADD resource to the store
+		this.resourceService.getResourceOriginalResumeById(this.userId).subscribe(resumeBlob => {
+			this.resume = new File([resumeBlob], 'original-resume.pdf');
+		});
+
+		this.resourceStore.dispatch(
+			getAllViewsByResourceId({ resourceId: this.userId, pageSize: this.pageSize, pageNum: this.pageNum }),
+		);
+
+		// display latest primary view
+		this.resourceStore
+			.select(selectResourceViews)
+			.pipe(takeUntil(this.destroyed$))
+			.subscribe(data => {
+				let filteredAndSortedViews = data?.views?.filter(view => view.viewType === ViewType.PRIMARY) || [];
 				filteredAndSortedViews = sortViewsByLatestUpdated(filteredAndSortedViews);
 
 				const latestView = filteredAndSortedViews[0];
@@ -104,7 +144,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
 				this.dataLoaded = true;
 			});
-		});
 	}
 
 	openEditView() {
