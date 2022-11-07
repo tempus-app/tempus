@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
-import { LoadView, ViewNames } from '@tempus/shared-domain';
+import { LoadView, ProjectResource, ViewNames } from '@tempus/shared-domain';
 import { OnboardingClientResourceService } from '@tempus/client/onboarding-client/shared/data-access';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder } from '@angular/forms';
@@ -13,6 +13,13 @@ export class UserBarComponent implements OnChanges {
 	@Input() loadedView: LoadView = { isRevision: false };
 
 	@Input() resourceName = '';
+
+	@Input() resourceEmail = '';
+
+	@Input() resourceId = 0;
+
+	@Input()
+	projectResources: ProjectResource[] = [];
 
 	viewNames: string[] = [];
 

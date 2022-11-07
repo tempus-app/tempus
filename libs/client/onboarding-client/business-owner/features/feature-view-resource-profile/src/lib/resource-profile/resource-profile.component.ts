@@ -52,6 +52,8 @@ export class ResourceProfileComponent implements OnInit {
 
 	otherLink = '';
 
+	resourceId = 0;
+
 	projectResources: ProjectResource[] = [];
 
 	childRevisionLoaded(loadedView: LoadView) {
@@ -64,6 +66,7 @@ export class ResourceProfileComponent implements OnInit {
 
 	ngOnInit(): void {
 		const id = parseInt(this.route.snapshot.paramMap.get('id') || '0', 10);
+		this.resourceId = id;
 		this.resourceService.getResourceInformationById(id).subscribe(resourceInfo => {
 			this.resourceFirstName = resourceInfo.firstName;
 			this.resourceLastName = resourceInfo.lastName;

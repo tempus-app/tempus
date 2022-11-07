@@ -1,24 +1,27 @@
 <ng-container>
-  <tempus-user-bar
-    [loadedView]="loadedView"
-    (newViewSelected)="newViewClickEvent($event)"
-    [resourceName]="resourceFirstName + '-' + resourceLastName"
-  ></tempus-user-bar>
-  <tempus-resource-profile-content
-    [firstName]="resourceFirstName"
-    [lastName]="resourceLastName"
-    [country]="country"
-    [state]="state"
-    [city]="city"
-    [email]="resourceEmail"
-    [phoneNumber]="phoneNumber"
-    [linkedInLink]="linkedInLink" 
-    [githubLink]="githubLink" 
-    [otherLink]="otherLink"
-    [resume]="resume"
-    [viewID]="viewIndex"
-    [projectResources] = "projectResources"
-    (revisionViewLoaded)="childRevisionLoaded($event)"
-  >
-  </tempus-resource-profile-content>
+	<tempus-user-bar
+		[loadedView]="loadedView"
+		(newViewSelected)="newViewClickEvent($event)"
+		[resourceName]="resourceFirstName + ' ' + resourceLastName"
+		[resourceEmail]="resourceEmail"
+		[resourceId]="resourceId"
+		[projectResources]="projectResources"
+	></tempus-user-bar>
+	<tempus-resource-profile-content
+		[firstName]="resourceFirstName"
+		[lastName]="resourceLastName"
+		[country]="country"
+		[state]="state"
+		[city]="city"
+		[email]="resourceEmail"
+		[phoneNumber]="phoneNumber"
+		[linkedInLink]="linkedInLink"
+		[githubLink]="githubLink"
+		[otherLink]="otherLink"
+		[resume]="resume"
+		[viewID]="viewIndex"
+		[projectResources]="projectResources"
+		(revisionViewLoaded)="childRevisionLoaded($event)"
+	>
+	</tempus-resource-profile-content>
 </ng-container>

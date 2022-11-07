@@ -34,5 +34,28 @@
 		"workExperience": "Work Experience",
 		"Education": "Education",
 		"review": "Review"
+	},
+	"assignModal": {
+		"clientLabel": "Client",
+		"clientErr": "Please select a client",
+		"projectLabel": "Project",
+		"projectErr": "Please select a project",
+		"resourceLabel": "Resource",
+		"resourceErr": "Please select a resource",
+		"firstNameLabel": "First name",
+		"firstNameErr": "Please enter a first name",
+		"lastNameLabel": "Last name",
+		"lastNameErr": "Please enter a last name",
+		"emailAddressLabel": "Email address",
+		"emailAddressErr": "Please enter a valid email address",
+		"startDateErr": "Please enter a start date",
+		"titleLabel": "Role",
+		"titleErr": "Please enter a role for resource",
+		"positionLabel": "Position",
+		"positionErr": "Please enter a position",
+		"title": "Assign {{resourceName}} to a project",
+		"confirmText": "Assign",
+		"closeText": "Cancel",
+		"noProjError": "No Available Project, select a different client"
 	}
 }
