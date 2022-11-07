@@ -1,362 +1,402 @@
 <ng-container>
-  <div fxLayout="column">
-    <div fxFlex>
-      <div fxFlex="5"></div>
-      <div class="info-title">
-        <h2 class="mat-h2">{{ workExpPrefix + 'title' | translate }}</h2>
-      </div>
-      <div>
-        <button
-          mat-mini-fab
-          (click)="addWorkSections()"
-          matTooltip="{{ workExpPrefix + 'addMoreTooltip' | translate }}"
-          class="experience-button"
-          color="primary"
-        >
-          <mat-icon>add</mat-icon>
-        </button>
-      </div>
-      <div fxFlex="8"></div>
-    </div>
-    <div fxFlex>
-      <div fxFlex="5"></div>
-      <tempus-card>
-        <form>
-          <h3 class="mat-h3" color="primary">{{ workExpPrefix + 'summary' | translate }}</h3>
-          <tempus-text-area
-            id="work-experience-summary"
-            placeholder="{{ workExpPrefix + 'summaryPlaceholder' | translate }}"
-            [control]="$any(myInfoForm).get('workExperienceSummary')"
-          ></tempus-text-area>
-        </form>
-      </tempus-card>
-      <div fxFlex="5"></div>
-    </div>
-    <div *ngFor="let numExperience of totalWorkExperience.controls; let index = index">
-      <div fxFlex="5"></div>
-      <tempus-card>
-        <form>
-          <div class="card-header">
-            <div class="experience-button">
-              <button
-                mat-mini-fab
-                (click)="removeWorkSection(index)"
-                matTooltip="{{ workExpPrefix + 'removeTooltip' | translate }}"
-                color="primary"
-              >
-                <mat-icon>remove</mat-icon>
-              </button>
-            </div>
-            <div>
-              <h3 class="mat-h3">
-                <span>{{ workExpPrefix + 'itemLabel' | translate }}</span
-                >{{ index + 1 }}
-              </h3>
-            </div>
-          </div>
+	<div fxLayout="column">
+		<div fxFlex>
+			<div fxFlex="5"></div>
+			<div class="info-title">
+				<h2 class="mat-h2">{{ workExpPrefix + 'title' | translate }}</h2>
+			</div>
+			<div class="add-section__container">
+				<tempus-ghost-button (click)="addWorkSections()" [label]="'Add section'" [icon]="'add'">
+				</tempus-ghost-button>
+			</div>
+			<div fxFlex="8"></div>
+		</div>
+		<div fxFlex>
+			<div fxFlex="5"></div>
+			<tempus-card>
+				<form>
+					<h3 class="mat-h3" color="primary">{{ workExpPrefix + 'summary' | translate }}</h3>
+					<tempus-text-area
+						id="work-experience-summary"
+						placeholder="{{ workExpPrefix + 'summaryPlaceholder' | translate }}"
+						[control]="$any(myInfoForm).get('workExperienceSummary')"
+					></tempus-text-area>
+				</form>
+			</tempus-card>
+			<div fxFlex="5"></div>
+		</div>
+		<div *ngFor="let numExperience of totalWorkExperience.controls; let index = index">
+			<div fxFlex="5"></div>
+			<tempus-card>
+				<form>
+					<div class="card-header">
+						<div class="experience-button">
+							<button
+								class="remove-button"
+								mat-mini-fab
+								(click)="removeWorkSection(index)"
+								matTooltip="{{ workExpPrefix + 'removeTooltip' | translate }}"
+								color="primary"
+							>
+								<span class="material-icons">remove</span>
+							</button>
+						</div>
+						<div>
+							<h3 class="mat-h3">
+								<span>{{ workExpPrefix + 'itemLabel' | translate }}</span
+								>{{ index + 1 }}
+							</h3>
+						</div>
+					</div>
 
-          <div fxLayout="column" fxLayoutGap="10px">
-            <div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxFlex="33%" class="block-2">
-              <div
-                fxFlex.gt-sm="50%"
-                fxFlex.lt-md="50%"
-                fxLayoutAlign="start center"
-                fxLayoutAlign.lt-md="center center"
-                fxFlexFill
-                class="grid-item"
-              >
-                <tempus-text-input
-                  id="title-{{ index }}"
-                  placeholder="{{ workExpPrefix + 'expTitlePlaceholder' | translate }}"
-                  cssClass="secondary"
-                  [control]="$any(numExperience).get('title')"
-                >
-                </tempus-text-input>
-              </div>
-              <div
-                fxFlex.gt-sm="50%"
-                fxFlex.lt-md="50%"
-                fxLayoutAlign="end center"
-                fxLayoutAlign.lt-md="center center"
-                fxFlexFill
-                class="grid-item"
-              >
-                <tempus-text-input
-                  id="company-{{ index }}"
-                  placeholder="{{ workExpPrefix + 'companyPlaceholder' | translate }}"
-                  cssClass="secondary"
-                  [control]="$any(numExperience).get('company')"
-                >
-                </tempus-text-input>
-              </div>
-            </div>
+					<div fxLayout="column" fxLayoutGap="10px">
+						<div
+							fxLayout.gt-sm="row"
+							fxLayout.lt-md="column"
+							fxLayoutGap="10px"
+							fxFlex="33%"
+							class="block-2"
+						>
+							<div
+								fxFlex.gt-sm="50%"
+								fxFlex.lt-md="50%"
+								fxLayoutAlign="start center"
+								fxLayoutAlign.lt-md="center center"
+								fxFlexFill
+								class="grid-item"
+							>
+								<tempus-text-input
+									id="title-{{ index }}"
+									placeholder="{{ workExpPrefix + 'expTitlePlaceholder' | translate }}"
+									cssClass="secondary"
+									[control]="$any(numExperience).get('title')"
+								>
+								</tempus-text-input>
+							</div>
+							<div
+								fxFlex.gt-sm="50%"
+								fxFlex.lt-md="50%"
+								fxLayoutAlign="end center"
+								fxLayoutAlign.lt-md="center center"
+								fxFlexFill
+								class="grid-item"
+							>
+								<tempus-text-input
+									id="company-{{ index }}"
+									placeholder="{{ workExpPrefix + 'companyPlaceholder' | translate }}"
+									cssClass="secondary"
+									[control]="$any(numExperience).get('company')"
+								>
+								</tempus-text-input>
+							</div>
+						</div>
 
-            <div fxLayout.gt-sm="row" fxLayout.lt-md="column">
-              <div
-                fxFlex.gt-sm="50%"
-                fxFlex.lt-md="50%"
-                fxLayoutAlign="left center"
-                fxLayoutAlign.lt-md="center center"
-                fxFlexFill
-                class="grid-item"
-              >
-                <div class="error-container">
-                  <mat-error
-                    class="mat-body-2"
-                    *ngIf="
-                      $any(numExperience).get('title').invalid &&
-                      ($any(numExperience).get('title').touched || $any(numExperience).get('title').dirty)
-                    "
-                  >
-                    {{ workExpPrefix + 'posErr' | translate }}
-                  </mat-error>
-                </div>
-              </div>
-              <div
-                fxFlex.gt-sm="50%"
-                fxFlex.lt-md="50%"
-                fxLayoutAlign="end center"
-                fxLayoutAlign.lt-md="center center"
-                fxFlexFill
-                class="grid-item"
-              >
-                <div class="error-container">
-                  <mat-error
-                    class="mat-body-2"
-                    *ngIf="
-                      $any(numExperience).get('company').invalid &&
-                      ($any(numExperience).get('company').touched || $any(numExperience).get('company').dirty)
-                    "
-                  >
-                    {{ workExpPrefix + 'companyErr' | translate }}
-                  </mat-error>
-                </div>
-              </div>
-            </div>
+						<div fxLayout.gt-sm="row" fxLayout.lt-md="column">
+							<div
+								fxFlex.gt-sm="50%"
+								fxFlex.lt-md="50%"
+								fxLayoutAlign="left center"
+								fxLayoutAlign.lt-md="center center"
+								fxFlexFill
+								class="grid-item"
+							>
+								<div class="error-container">
+									<mat-error
+										class="mat-body-2"
+										*ngIf="
+											$any(numExperience).get('title').invalid &&
+											($any(numExperience).get('title').touched ||
+												$any(numExperience).get('title').dirty)
+										"
+									>
+										{{ workExpPrefix + 'posErr' | translate }}
+									</mat-error>
+								</div>
+							</div>
+							<div
+								fxFlex.gt-sm="50%"
+								fxFlex.lt-md="50%"
+								fxLayoutAlign="end center"
+								fxLayoutAlign.lt-md="center center"
+								fxFlexFill
+								class="grid-item"
+							>
+								<div class="error-container">
+									<mat-error
+										class="mat-body-2"
+										*ngIf="
+											$any(numExperience).get('company').invalid &&
+											($any(numExperience).get('company').touched ||
+												$any(numExperience).get('company').dirty)
+										"
+									>
+										{{ workExpPrefix + 'companyErr' | translate }}
+									</mat-error>
+								</div>
+							</div>
+						</div>
 
-            <div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxFlex="33%" class="block-2">
-              <div
-                fxFlex.gt-sm="50%"
-                fxFlex.lt-md="33%"
-                fxLayoutAlign="start center"
-                fxLayoutAlign.lt-md="center center"
-                fxFlexFill
-                class="grid-item"
-              >
-                <tempus-search-box
-                  id="country-{{ index }}"
-                  [options]="countries"
-                  placeholder="{{ commonPrefix + 'location.countryPlaceholder' | translate }}"
-                  cssClass="secondary"
-                  (optionSelect)="updateStateOptions($event)"
-                  [control]="$any(numExperience).get('country')"
-                ></tempus-search-box>
-              </div>
-              <div fxFlex.gt-sm="50%" fxFlex.lt-md="33%" fxLayoutAlign="center center" fxFlexFill class="grid-item">
-                <tempus-dropdown
-                  id="state-{{ index }}"
-                  [options]="states"
-                  label="{{ commonPrefix + 'location.statePlaceholder' | translate }}"
-                  cssClass="secondary"
-                  [control]="$any(numExperience).get('state')"
-                >
-                </tempus-dropdown>
-              </div>
-              <div
-                fxFlex.gt-sm="50%"
-                fxFlex.lt-md="33%"
-                fxLayoutAlign="end center"
-                fxLayoutAlign.lt-md="center center"
-                fxFlexFill
-                class="grid-item"
-              >
-                <tempus-text-input
-                  id="city-{{ index }}"
-                  placeholder="{{ commonPrefix + 'location.cityPlaceholder' | translate }}"
-                  cssClass="secondary"
-                  [control]="$any(numExperience).get('city')"
-                ></tempus-text-input>
-              </div>
-            </div>
+						<div
+							fxLayout.gt-sm="row"
+							fxLayout.lt-md="column"
+							fxLayoutGap="10px"
+							fxFlex="33%"
+							class="block-2"
+						>
+							<div
+								fxFlex.gt-sm="50%"
+								fxFlex.lt-md="33%"
+								fxLayoutAlign="start center"
+								fxLayoutAlign.lt-md="center center"
+								fxFlexFill
+								class="grid-item"
+							>
+								<tempus-search-box
+									id="country-{{ index }}"
+									[options]="countries"
+									placeholder="{{ commonPrefix + 'location.countryPlaceholder' | translate }}"
+									cssClass="secondary"
+									(optionSelect)="updateStateOptions($event)"
+									[control]="$any(numExperience).get('country')"
+								></tempus-search-box>
+							</div>
+							<div
+								fxFlex.gt-sm="50%"
+								fxFlex.lt-md="33%"
+								fxLayoutAlign="center center"
+								fxFlexFill
+								class="grid-item"
+							>
+								<tempus-dropdown
+									id="state-{{ index }}"
+									[options]="states"
+									label="{{ commonPrefix + 'location.statePlaceholder' | translate }}"
+									cssClass="secondary"
+									[control]="$any(numExperience).get('state')"
+								>
+								</tempus-dropdown>
+							</div>
+							<div
+								fxFlex.gt-sm="50%"
+								fxFlex.lt-md="33%"
+								fxLayoutAlign="end center"
+								fxLayoutAlign.lt-md="center center"
+								fxFlexFill
+								class="grid-item"
+							>
+								<tempus-text-input
+									id="city-{{ index }}"
+									placeholder="{{ commonPrefix + 'location.cityPlaceholder' | translate }}"
+									cssClass="secondary"
+									[control]="$any(numExperience).get('city')"
+								></tempus-text-input>
+							</div>
+						</div>
 
-            <div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxFlex="33%" class="block-2">
-              <div
-                fxFlex.gt-sm="50%"
-                fxFlex.lt-md="33%"
-                fxLayoutAlign="start center"
-                fxLayoutAlign.lt-md="center center"
-                fxFlexFill
-                class="grid-item"
-              >
-                <div class="error-container">
-                  <mat-error
-                    class="mat-body-2"
-                    *ngIf="
-                      $any(numExperience).get('country').invalid &&
-                      ($any(numExperience).get('country').touched || $any(numExperience).get('country').dirty)
-                    "
-                  >
-                    {{ commonPrefix + 'location.validCountryErr' | translate }}
-                  </mat-error>
-                </div>
-              </div>
-              <div fxFlex.gt-sm="50%" fxFlex.lt-md="33%" fxLayoutAlign="center center" fxFlexFill class="grid-item">
-                <div class="error-container">
-                  <mat-error
-                    class="mat-body-2"
-                    *ngIf="
-                      $any(numExperience).get('state').invalid &&
-                      ($any(numExperience).get('state').touched || $any(numExperience).get('state').dirty)
-                    "
-                  >
-                    {{ commonPrefix + 'location.validStateErr' | translate }}
-                  </mat-error>
-                </div>
-              </div>
-              <div
-                fxFlex.gt-sm="50%"
-                fxFlex.lt-md="33%"
-                fxLayoutAlign="end center"
-                fxLayoutAlign.lt-md="center center"
-                fxFlexFill
-                class="grid-item"
-              >
-                <div class="error-container">
-                  <mat-error
-                    class="mat-body-2"
-                    *ngIf="
-                      $any(numExperience).get('city').invalid &&
-                      ($any(numExperience).get('city').touched || $any(numExperience).get('city').dirty)
-                    "
-                  >
-                    {{ commonPrefix + 'location.validCityErr' | translate }}
-                  </mat-error>
-                </div>
-              </div>
-            </div>
+						<div
+							fxLayout.gt-sm="row"
+							fxLayout.lt-md="column"
+							fxLayoutGap="10px"
+							fxFlex="33%"
+							class="block-2"
+						>
+							<div
+								fxFlex.gt-sm="50%"
+								fxFlex.lt-md="33%"
+								fxLayoutAlign="start center"
+								fxLayoutAlign.lt-md="center center"
+								fxFlexFill
+								class="grid-item"
+							>
+								<div class="error-container">
+									<mat-error
+										class="mat-body-2"
+										*ngIf="
+											$any(numExperience).get('country').invalid &&
+											($any(numExperience).get('country').touched ||
+												$any(numExperience).get('country').dirty)
+										"
+									>
+										{{ commonPrefix + 'location.validCountryErr' | translate }}
+									</mat-error>
+								</div>
+							</div>
+							<div
+								fxFlex.gt-sm="50%"
+								fxFlex.lt-md="33%"
+								fxLayoutAlign="center center"
+								fxFlexFill
+								class="grid-item"
+							>
+								<div class="error-container">
+									<mat-error
+										class="mat-body-2"
+										*ngIf="
+											$any(numExperience).get('state').invalid &&
+											($any(numExperience).get('state').touched ||
+												$any(numExperience).get('state').dirty)
+										"
+									>
+										{{ commonPrefix + 'location.validStateErr' | translate }}
+									</mat-error>
+								</div>
+							</div>
+							<div
+								fxFlex.gt-sm="50%"
+								fxFlex.lt-md="33%"
+								fxLayoutAlign="end center"
+								fxLayoutAlign.lt-md="center center"
+								fxFlexFill
+								class="grid-item"
+							>
+								<div class="error-container">
+									<mat-error
+										class="mat-body-2"
+										*ngIf="
+											$any(numExperience).get('city').invalid &&
+											($any(numExperience).get('city').touched ||
+												$any(numExperience).get('city').dirty)
+										"
+									>
+										{{ commonPrefix + 'location.validCityErr' | translate }}
+									</mat-error>
+								</div>
+							</div>
+						</div>
 
-            <div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxFlex="33%" class="block-2">
-              <div
-                fxFlex.gt-sm="50%"
-                fxFlex.lt-md="50%"
-                fxLayoutAlign="start center"
-                fxLayoutAlign.lt-md="center center"
-                fxFlexFill
-                class="grid-item"
-              >
-                <tempus-text-input
-                  id="start-date-{{ index }}"
-                  [inputType]="InputType.DATE"
-                  placeholder="{{ commonPrefix + 'dates.startPlaceholder' | translate }}"
-                  cssClass="secondary"
-                  [control]="$any(numExperience).get('startDate')"
-                ></tempus-text-input>
-              </div>
-              <div
-                fxFlex.gt-sm="50%"
-                fxFlex.lt-md="50%"
-                fxLayoutAlign="end center"
-                fxLayoutAlign.lt-md="center center"
-                fxFlexFill
-                fxLayout.lt-md="column"
-                fxLayout="column"
-                class="grid-item"
-              >
-                <tempus-text-input
-                  id="end-date-{{ index }}"
-                  [inputType]="InputType.DATE"
-                  placeholder="{{ commonPrefix + 'dates.endPlaceholder' | translate }}"
-                  cssClass="secondary"
-                  [control]="$any(numExperience).get('endDate')"
-                ></tempus-text-input>
-                <div style="display: flex; justify-content: flex-start; width: 100%; margin-left: 3rem">
-                  <mat-checkbox
-                    class="checkbox"
-                    [checked]="$any(numExperience).get('endDate').disabled"
-                    (change)="setCheck($event.checked, numExperience)"
-                  >
-                    <p class="mat-body-2 checkbox-label">{{ commonPrefix + 'dates.present' | translate }}</p>
-                  </mat-checkbox>
-                </div>
-              </div>
-            </div>
+						<div
+							fxLayout.gt-sm="row"
+							fxLayout.lt-md="column"
+							fxLayoutGap="10px"
+							fxFlex="33%"
+							class="block-2"
+						>
+							<div
+								fxFlex.gt-sm="50%"
+								fxFlex.lt-md="50%"
+								fxLayoutAlign="start center"
+								fxLayoutAlign.lt-md="center center"
+								fxFlexFill
+								class="grid-item"
+							>
+								<tempus-text-input
+									id="start-date-{{ index }}"
+									[inputType]="InputType.DATE"
+									placeholder="{{ commonPrefix + 'dates.startPlaceholder' | translate }}"
+									cssClass="secondary"
+									[control]="$any(numExperience).get('startDate')"
+								></tempus-text-input>
+							</div>
+							<div
+								fxFlex.gt-sm="50%"
+								fxFlex.lt-md="50%"
+								fxLayoutAlign="end center"
+								fxLayoutAlign.lt-md="center center"
+								fxFlexFill
+								fxLayout.lt-md="column"
+								fxLayout="column"
+								class="grid-item"
+							>
+								<tempus-text-input
+									id="end-date-{{ index }}"
+									[inputType]="InputType.DATE"
+									placeholder="{{ commonPrefix + 'dates.endPlaceholder' | translate }}"
+									cssClass="secondary"
+									[control]="$any(numExperience).get('endDate')"
+								></tempus-text-input>
+								<div style="display: flex; justify-content: flex-start; width: 100%; margin-left: 3rem">
+									<mat-checkbox
+										class="checkbox"
+										[checked]="$any(numExperience).get('endDate').disabled"
+										(change)="setCheck($event.checked, numExperience)"
+									>
+										<p class="mat-body-2 checkbox-label">
+											{{ commonPrefix + 'dates.present' | translate }}
+										</p>
+									</mat-checkbox>
+								</div>
+							</div>
+						</div>
 
-            <div fxLayout.gt-sm="row" fxLayout.lt-md="column">
-              <div
-                fxFlex.gt-sm="50%"
-                fxFlex.lt-md="50%"
-                fxLayoutAlign="start center"
-                fxLayoutAlign.lt-md="center center"
-                fxFlexFill
-                class="grid-item"
-              >
-                <div class="error-container">
-                  <mat-error
-                    class="mat-body-2"
-                    *ngIf="
-                      $any(numExperience).get('startDate').invalid &&
-                      ($any(numExperience).get('startDate').touched || $any(numExperience).get('startDate').dirty)
-                    "
-                  >
-                    {{ commonPrefix + 'dates.validStartDateErr' | translate }}
-                  </mat-error>
-                </div>
-              </div>
-              <div
-                fxFlex.gt-sm="50%"
-                fxFlex.lt-md="50%"
-                fxLayoutAlign="end center"
-                fxLayoutAlign.lt-md="center center"
-                fxFlexFill
-                class="grid-item"
-              >
-                <div class="error-container">
-                  <mat-error
-                    class="mat-body-2"
-                    *ngIf="
-                      $any(numExperience).get('endDate').invalid &&
-                      ($any(numExperience).get('endDate').touched || $any(numExperience).get('endDate').dirty)
-                    "
-                  >
-                    {{ commonPrefix + 'dates.validEndDateErr' | translate }}
-                  </mat-error>
-                </div>
-              </div>
-            </div>
+						<div fxLayout.gt-sm="row" fxLayout.lt-md="column">
+							<div
+								fxFlex.gt-sm="50%"
+								fxFlex.lt-md="50%"
+								fxLayoutAlign="start center"
+								fxLayoutAlign.lt-md="center center"
+								fxFlexFill
+								class="grid-item"
+							>
+								<div class="error-container">
+									<mat-error
+										class="mat-body-2"
+										*ngIf="
+											$any(numExperience).get('startDate').invalid &&
+											($any(numExperience).get('startDate').touched ||
+												$any(numExperience).get('startDate').dirty)
+										"
+									>
+										{{ commonPrefix + 'dates.validStartDateErr' | translate }}
+									</mat-error>
+								</div>
+							</div>
+							<div
+								fxFlex.gt-sm="50%"
+								fxFlex.lt-md="50%"
+								fxLayoutAlign="end center"
+								fxLayoutAlign.lt-md="center center"
+								fxFlexFill
+								class="grid-item"
+							>
+								<div class="error-container">
+									<mat-error
+										class="mat-body-2"
+										*ngIf="
+											$any(numExperience).get('endDate').invalid &&
+											($any(numExperience).get('endDate').touched ||
+												$any(numExperience).get('endDate').dirty)
+										"
+									>
+										{{ commonPrefix + 'dates.validEndDateErr' | translate }}
+									</mat-error>
+								</div>
+							</div>
+						</div>
 
-            <div>
-              <mat-error class="mat-body-2" *ngIf="$any(numExperience).errors?.['dateError']">
-                {{ commonPrefix + 'dates.startBeforeEndErr' | translate }}
-              </mat-error>
-            </div>
+						<div>
+							<mat-error class="mat-body-2" *ngIf="$any(numExperience).errors?.['dateError']">
+								{{ commonPrefix + 'dates.startBeforeEndErr' | translate }}
+							</mat-error>
+						</div>
 
-            <div>
-              <tempus-text-area
-                id="description-{{ index }}"
-                [showLabel]="true"
-                placeholder="{{ workExpPrefix + 'descriptionPlaceholder' | translate }}"
-                cssClass="secondary"
-                [control]="$any(numExperience).get('description')"
-              >
-              </tempus-text-area>
-            </div>
-            <div>
-              <div class="error-container">
-                <mat-error
-                  class="mat-body-2"
-                  *ngIf="
-                    $any(numExperience).get('description').invalid &&
-                    ($any(numExperience).get('description').touched || $any(numExperience).get('description').dirty)
-                  "
-                >
-                  {{ workExpPrefix + 'descriptionErr' | translate }}
-                </mat-error>
-              </div>
-            </div>
-          </div>
-        </form>
-      </tempus-card>
-      <div fxFlex="5"></div>
-    </div>
-  </div>
+						<div>
+							<tempus-text-area
+								id="description-{{ index }}"
+								[showLabel]="true"
+								placeholder="{{ workExpPrefix + 'descriptionPlaceholder' | translate }}"
+								cssClass="secondary"
+								[control]="$any(numExperience).get('description')"
+							>
+							</tempus-text-area>
+						</div>
+						<div>
+							<div class="error-container">
+								<mat-error
+									class="mat-body-2"
+									*ngIf="
+										$any(numExperience).get('description').invalid &&
+										($any(numExperience).get('description').touched ||
+											$any(numExperience).get('description').dirty)
+									"
+								>
+									{{ workExpPrefix + 'descriptionErr' | translate }}
+								</mat-error>
+							</div>
+						</div>
+					</div>
+				</form>
+			</tempus-card>
+			<div fxFlex="5"></div>
+		</div>
+	</div>
 </ng-container>
