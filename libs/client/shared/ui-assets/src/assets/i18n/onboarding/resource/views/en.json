@@ -13,7 +13,6 @@
 			"tableHeaders": {
 				"status": "Status",
 				"type": "View",
-				"lastUpdated": "Last Updated",
 				"dateCreated": "Date Created",
 				"createdBy": "Created By"
 			},

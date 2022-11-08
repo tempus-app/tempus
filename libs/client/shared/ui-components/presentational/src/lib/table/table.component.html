@@ -16,7 +16,7 @@
 					>
 					<p
 						class="mat-body-2"
-						*ngIf="!(element.url && element.columnsWithUrl.includes(disCol.columnDef))"
+						*ngIf="!(element.url && element.columnsWithUrl.includes(disCol.columnDef) || element.columnsWithChips.includes(disCol.columnDef))"
 						[innerHtml]="disCol.cell(element)"
 					></p>
 					<a
@@ -26,6 +26,13 @@
 						*ngIf="element.url && element.columnsWithUrl.includes(disCol.columnDef)"
 						[innerHtml]="disCol.cell(element)"
 					></a>
+					<tempus-chip
+						*ngIf="element.columnsWithChips.includes(disCol.columnDef)"
+						cssId="{{ element.status | lowercase }}"
+						typography="mat-body"
+						content="{{ disCol.cell(element) }} "
+						[removable]="false"
+				  	></tempus-chip>
 				</span>
 			</td>
 		</ng-container>

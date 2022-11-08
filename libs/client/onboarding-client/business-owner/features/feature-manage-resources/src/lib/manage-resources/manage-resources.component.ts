@@ -365,6 +365,7 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 						allClients: [],
 						columnsWithIcon: ['resource'],
 						columnsWithUrl: ['resource'],
+						columnsWithChips: [],
 					};
 					if (resProjClientData.reviewNeeded) {
 						tableItem.icon = { val: 'error', class: 'priorityIcon', tooltip: 'Awaiting approval' };

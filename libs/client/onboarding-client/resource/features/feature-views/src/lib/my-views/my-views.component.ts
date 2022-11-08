@@ -67,11 +67,6 @@ export class MyViewsComponent implements OnInit, OnDestroy {
 						cell: (element: Record<string, unknown>) => `${element['dateCreated']}`,
 					},
 					{
-						columnDef: 'lastUpdated',
-						header: data.lastUpdated,
-						cell: (element: Record<string, unknown>) => `${element['lastUpdated']}`,
-					},
-					{
 						columnDef: 'status',
 						header: data.status,
 						cell: (element: Record<string, unknown>) => `${element['status']}`,
@@ -122,14 +117,10 @@ export class MyViewsComponent implements OnInit, OnDestroy {
 				this.myViewsTableData = [];
 				this.totalViews = data.totalViews;
 				data?.views?.forEach(view => {
-					let lastUpdateDate = '-';
 					let dateCreated = '-';
 					let approvalStatus = '';
 					let createdBy = 'CAL';
 					let { type } = view;
-					if (view.lastUpdateDate) {
-						lastUpdateDate = new Date(view.lastUpdateDate).toISOString().slice(0, 10) || '-';
-					}
 					if (view.createdAt) {
 						dateCreated = new Date(view.createdAt).toISOString().slice(0, 10) || '-';
 					}
@@ -150,13 +141,13 @@ export class MyViewsComponent implements OnInit, OnDestroy {
 
 					this.myViewsTableData.push({
 						type,
-						lastUpdated: lastUpdateDate,
 						dateCreated,
 						createdBy,
 						status: approvalStatus,
 						url: `../my-views/${view.id}`,
 						columnsWithUrl: ['type'],
 						columnsWithIcon: [],
+						columnsWithChips: ['status'],
 					});
 				});
 			});
