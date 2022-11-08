@@ -22,6 +22,7 @@ export const updateInfoFailure = createAction(
 	props<{ error: Error }>(),
 );
 
+// get all views by resource id
 export const getAllViewsByResourceId = createAction(
 	'[Onboarding Client Profile Views API] Get All Views By Resource Id',
 	props<{ resourceId: number; pageNum: number; pageSize: number }>(),
@@ -33,6 +34,38 @@ export const getAllViewsByResourceIdSuccess = createAction(
 );
 
 export const getAllViewsByResourceIdFailure = createAction(
-	'[Onboarding Profile Views API] Get All Views By Resource Id Failure',
+	'[Onboarding Client Profile Views API] Get All Views By Resource Id Failure',
+	props<{ error: Error }>(),
+);
+
+// get original resume by resource id
+export const getResourceOriginalResumeById = createAction(
+	'[Onboarding Client User API] Get Original Resume By Resource Id',
+	props<{ resourceId: number }>(),
+);
+
+export const getResourceOriginalResumeByIdSuccess = createAction(
+	'[Onboarding Client User API] Get Original Resume By Resource Id Success',
+	props<{ resume: Blob }>(),
+);
+
+export const getResourceOriginalResumeByIdFailure = createAction(
+	'[Onboarding Client User API] Get Original Resume By Resource Id Failure',
+	props<{ error: Error }>(),
+);
+
+// download profile/resume
+export const downloadProfileByViewId = createAction(
+	'[Onboarding Client Profile Views API] Download Profile By View Id',
+	props<{ viewId: number }>(),
+);
+
+export const downloadProfileByViewIdSuccess = createAction(
+	'[Onboarding Client Profile Views API] Download Profile By View Id Success',
+	props<{ resume: Blob }>(),
+);
+
+export const downloadProfileByViewIdFailure = createAction(
+	'[Onboarding Client Profile Views API] Download Profile By View Id Failure',
 	props<{ error: Error }>(),
 );

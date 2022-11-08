@@ -69,10 +69,12 @@ export class OnboardingClientResourceService {
 			.pipe(catchError(handleError));
 	}
 
+	// TODO: look into moving to views service
 	public getViewById(viewId: number): Observable<View> {
 		return this.http.get<View>(`${this.url}/profile-view/view/${viewId}`).pipe(catchError(handleError));
 	}
 
+	// TODO: look into moving to views service
 	public getResourceProfileViews(resourceId: number): Observable<Array<View>> {
 		return this.http.get<Array<View>>(`${this.url}/profile-view/${resourceId}`).pipe(catchError(handleError));
 	}
@@ -93,11 +95,11 @@ export class OnboardingClientResourceService {
 			.pipe(catchError(handleError));
 	}
 
-	public downloadProfile(id: number): Observable<Blob> {
+	public downloadProfile(viewId: number): Observable<Blob> {
 		const httpOptions = {
 			responseType: 'blob' as 'json',
 		};
-		return this.http.get<Blob>(`${this.url}/profile-view/download-resume/${id}`, httpOptions);
+		return this.http.get<Blob>(`${this.url}/profile-view/download-resume/${viewId}`, httpOptions);
 	}
 
 	public approveOrDenyRevision(id: number, comment: string, approval: boolean): Observable<ApproveViewDto> {

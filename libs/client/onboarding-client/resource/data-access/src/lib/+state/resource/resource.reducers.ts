@@ -10,6 +10,7 @@ export interface ResourceState {
 	lastName: string | null;
 	email: string | null;
 	views: View[] | null;
+	resume: Blob | null;
 	totalViewsData: number;
 }
 
@@ -18,6 +19,7 @@ export const initialState: ResourceState = {
 	lastName: null,
 	email: null,
 	views: null,
+	resume: null,
 	totalViewsData: 0,
 };
 
@@ -47,5 +49,25 @@ export const resourceReducer = createReducer(
 		...state,
 		error,
 		status: AsyncRequestState.ERROR,
+	})),
+	on(ResourceActions.getResourceOriginalResumeById, state => ({ ...state, status: AsyncRequestState.LOADING })),
+	on(ResourceActions.getResourceOriginalResumeByIdSuccess, (state, { resume }) => ({
+		...state,
+		resume,
+		status: AsyncRequestState.SUCCESS,
+	})),
+	on(ResourceActions.getResourceOriginalResumeByIdFailure, (state, { error }) => ({
+		...state,
+		error,
+	})),
+	on(ResourceActions.downloadProfileByViewId, state => ({ ...state, status: AsyncRequestState.LOADING })),
+	on(ResourceActions.downloadProfileByViewIdSuccess, (state, { resume }) => ({
+		...state,
+		resume,
+		status: AsyncRequestState.SUCCESS,
+	})),
+	on(ResourceActions.downloadProfileByViewIdFailure, (state, { error }) => ({
+		...state,
+		error,
 	})),
 );

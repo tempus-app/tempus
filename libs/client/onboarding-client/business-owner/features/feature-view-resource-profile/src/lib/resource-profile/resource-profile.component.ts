@@ -8,7 +8,11 @@ import {
 } from '@tempus/client/onboarding-client/shared/data-access';
 import { LoadView, ProjectResource } from '@tempus/shared-domain';
 import { skip, take } from 'rxjs';
-import { getOriginalResume, selectOriginalResume } from '@tempus/client/onboarding-client/business-owner/data-access';
+import {
+	BusinessOwnerState,
+	getOriginalResume,
+	selectOriginalResume,
+} from '@tempus/client/onboarding-client/business-owner/data-access';
 
 @Component({
 	selector: 'tempus-resource-profile',
@@ -20,6 +24,7 @@ export class ResourceProfileComponent implements OnInit {
 		private route: ActivatedRoute,
 		private resourceService: OnboardingClientResourceService,
 		private sharedStore: Store<OnboardingClientState>,
+		private businessOwnerStore: Store<BusinessOwnerState>,
 	) {}
 
 	resourceFirstName = '';
@@ -77,7 +82,7 @@ export class ResourceProfileComponent implements OnInit {
 			this.otherLink = resourceInfo.otherLink;
 			this.projectResources = resourceInfo.projectResources;
 		});
-		this.sharedStore.dispatch(getOriginalResume({ resourceId: id }));
+		this.businessOwnerStore.dispatch(getOriginalResume({ resourceId: id }));
 
 		this.sharedStore
 			.select(selectLoggedInUserNameEmail)
@@ -87,7 +92,7 @@ export class ResourceProfileComponent implements OnInit {
 				this.email = data.email || '';
 			});
 
-		this.sharedStore
+		this.businessOwnerStore
 			.select(selectOriginalResume)
 			.pipe(skip(1))
 			.subscribe(blob => {

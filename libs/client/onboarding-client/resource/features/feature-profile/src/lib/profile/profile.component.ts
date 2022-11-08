@@ -15,7 +15,11 @@ import {
 	RevisionType,
 } from '@tempus/shared-domain';
 import {
+	downloadProfileByViewId,
 	getAllViewsByResourceId,
+	getResourceOriginalResumeById,
+	selectDownloadProfile,
+	selectResourceOriginalResume,
 	selectResourceViews,
 	TempusResourceState,
 } from '@tempus/client/onboarding-client/resource/data-access';
@@ -110,10 +114,16 @@ export class ProfileComponent implements OnInit, OnDestroy {
 				this.lastName = data.lastName || '';
 			});
 
-		// TODO: ADD resource to the store
-		this.resourceService.getResourceOriginalResumeById(this.userId).subscribe(resumeBlob => {
-			this.resume = new File([resumeBlob], 'original-resume.pdf');
-		});
+		this.resourceStore.dispatch(getResourceOriginalResumeById({ resourceId: this.userId }));
+
+		this.resourceStore
+			.select(selectResourceOriginalResume)
+			.pipe(takeUntil(this.destroyed$))
+			.subscribe(blob => {
+				if (blob) {
+					this.resume = new File([blob], 'original-resume.pdf');
+				}
+			});
 
 		this.resourceStore.dispatch(
 			getAllViewsByResourceId({ resourceId: this.userId, pageSize: this.pageSize, pageNum: this.pageNum }),
@@ -156,14 +166,20 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
 	downloadProfile() {
 		// Taken from https://stackoverflow.com/questions/52154874/angular-6-downloading-file-from-rest-api
-		this.resourceService.downloadProfile(this.currentViewId).subscribe(data => {
-			const downloadURL = window.URL.createObjectURL(data);
-			const link = document.createElement('a');
-			link.href = downloadURL;
-			// const index = this.viewIDs.indexOf(parseInt(this.currentViewID, 10));
-			link.download = `${this.fullName}-Primary`;
-			link.click();
-		});
+		this.resourceStore.dispatch(downloadProfileByViewId({ viewId: this.currentViewId }));
+		this.resourceStore
+			.select(selectDownloadProfile)
+			.pipe(takeUntil(this.destroyed$))
+			.subscribe(data => {
+				if (data) {
+					const downloadURL = window.URL.createObjectURL(data);
+					const link = document.createElement('a');
+					link.href = downloadURL;
+					// const index = this.viewIDs.indexOf(parseInt(this.currentViewID, 10));
+					link.download = `${this.fullName}-Primary`;
+					link.click();
+				}
+			});
 	}
 
 	ngOnDestroy(): void {

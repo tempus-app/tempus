@@ -8,8 +8,21 @@ import {
 	OnboardingClientResourceService,
 	OnboardingClientViewsService,
 } from '@tempus/client/onboarding-client/shared/data-access';
-import { getAllViewsByResourceId, updateInfoFailure, updateUserInfo, updateUserInfoSuccess } from './resource.actions';
-import { getAllViewsByResourceIdFailure, getAllViewsByResourceIdSuccess } from '.';
+import {
+	getAllViewsByResourceId,
+	getResourceOriginalResumeById,
+	updateInfoFailure,
+	updateUserInfo,
+	updateUserInfoSuccess,
+} from './resource.actions';
+import {
+	downloadProfileByViewId,
+	downloadProfileByViewIdFailure,
+	downloadProfileByViewIdSuccess,
+	getAllViewsByResourceIdFailure,
+	getAllViewsByResourceIdSuccess,
+	getResourceOriginalResumeByIdSuccess,
+} from '.';
 import { TempusResourceState } from '..';
 
 @Injectable()
@@ -49,6 +62,34 @@ export class ResourceEffects {
 						return getAllViewsByResourceIdSuccess({ views: res.views, totalViews: res.totalViews });
 					}),
 					catchError(error => of(getAllViewsByResourceIdFailure({ error }))),
+				),
+			),
+		),
+	);
+
+	getResourceOriginalResume$ = createEffect(() =>
+		this.actions$.pipe(
+			ofType(getResourceOriginalResumeById),
+			switchMap(data =>
+				this.resourceService.getResourceOriginalResumeById(data.resourceId).pipe(
+					map(res => {
+						return getResourceOriginalResumeByIdSuccess({ resume: res });
+					}),
+					catchError(error => of(getAllViewsByResourceIdFailure({ error }))),
+				),
+			),
+		),
+	);
+
+	downloadProfile$ = createEffect(() =>
+		this.actions$.pipe(
+			ofType(downloadProfileByViewId),
+			switchMap(data =>
+				this.resourceService.downloadProfile(data.viewId).pipe(
+					map(res => {
+						return downloadProfileByViewIdSuccess({ resume: res });
+					}),
+					catchError(error => of(downloadProfileByViewIdFailure({ error }))),
 				),
 			),
 		),
