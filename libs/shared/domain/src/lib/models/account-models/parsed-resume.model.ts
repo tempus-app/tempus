@@ -58,11 +58,12 @@ export type ParsedResume = {
 	emails: Array<ParsedEmail>;
 	links: Array<string>;
 	location: ParsedLocation;
-	names: Array<string>;
-	phones: Array<ParsedPhones>;
-	positions: Array<ParsedWorkExperience>;
+	name: string;
+	mobile_number: string;
+	skills: string[];
+	experience: Array<ParsedWorkExperience>;
 	summary: ParsedSummary;
-	schools: Array<ParsedEducation>;
+	degree: string;
 };
 
 export type RawResume = {
