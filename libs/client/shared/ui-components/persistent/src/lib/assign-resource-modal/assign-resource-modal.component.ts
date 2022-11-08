@@ -47,7 +47,7 @@ export class AssignResourceModalComponent implements OnInit, OnChanges {
 
 	@Input() resourceId = 0;
 
-	@Input() selectResource = false;
+	@Input() preSelectedResource = false;
 
 	@Input()
 	projectResources: ProjectResource[] = [];
@@ -102,7 +102,7 @@ export class AssignResourceModalComponent implements OnInit, OnChanges {
 			}
 		});
 
-		if (this.selectResource) {
+		if (this.preSelectedResource) {
 			this.setResourceDetails();
 			this.filterCurrentProjectsResource();
 		}
@@ -115,7 +115,7 @@ export class AssignResourceModalComponent implements OnInit, OnChanges {
 	};
 
 	ngOnChanges() {
-		if (this.selectResource) {
+		if (this.preSelectedResource) {
 			this.setResourceDetails();
 			this.filterCurrentProjectsResource();
 		}
@@ -133,10 +133,10 @@ export class AssignResourceModalComponent implements OnInit, OnChanges {
 					};
 				}) || [];
 		const resource = this.assignForm.get('resource')?.value;
-		if (resource && !this.selectResource) {
+		if (resource && !this.preSelectedResource) {
 			this.filterCurrentProjectsBySelectedResource(resource);
 		}
-		if (this.selectResource) {
+		if (this.preSelectedResource) {
 			this.filterCurrentProjectsResource();
 		}
 	};
@@ -223,7 +223,7 @@ export class AssignResourceModalComponent implements OnInit, OnChanges {
 				this.currentProjects = [];
 
 				// don't want to reset resource name
-				if (this.selectResource) {
+				if (this.preSelectedResource) {
 					this.setResourceDetails();
 				}
 			});
