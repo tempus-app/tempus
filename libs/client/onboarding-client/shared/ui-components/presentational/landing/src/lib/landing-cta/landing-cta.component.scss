@@ -1,0 +1,17 @@
+@use 'abstracts/helper' as abs;
+
+.landing-cta {
+	display: flex;
+	flex-direction: column;
+
+	&__subheading {
+		@include abs.h3($color: abs.$primary-800);
+		font-weight: 900;
+		font-size: 1.5em;
+		align-self: center;
+	}
+
+	&__tempus-logo {
+		height: 20rem;
+	}
+}

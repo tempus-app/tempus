@@ -6,6 +6,15 @@
 	td:first-child {
 		padding-left: 30px;
 	}
+
+	box-shadow: none;
+
+	th {
+		@include abs.h3($color: abs.$primary-800);
+		font-size: 1em;
+		font-weight: 900;
+		background-color: abs.$primary-100;
+	}
 }
 
 .priorityIcon {

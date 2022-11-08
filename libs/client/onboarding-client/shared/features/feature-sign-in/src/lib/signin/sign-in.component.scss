@@ -13,6 +13,20 @@ a:active {
 	color: #031927;
 }
 
+.sign-in {
+	display: flex;
+	flex-direction: row;
+
+	&__credentials {
+		width: 100%;
+	}
+
+	&__landing {
+		width: auto;
+		margin: 6em 8em auto 4em;
+	}
+}
+
 .sign-in-button {
 	width: 8.375em;
 }

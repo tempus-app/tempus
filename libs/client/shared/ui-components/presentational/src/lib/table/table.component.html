@@ -1,7 +1,7 @@
 <ng-container>
 	<table mat-table [dataSource]="dataSource" class="mat-elevation-z8 tempusTable">
 		<ng-container *ngFor="let disCol of tableColumns; let colIndex = index" matColumnDef="{{ disCol.columnDef }}">
-			<th class="mat-body-2" mat-header-cell *matHeaderCellDef>
+			<th class="mat-h3" mat-header-cell *matHeaderCellDef>
 				{{ disCol.header }}
 			</th>
 
@@ -11,7 +11,7 @@
 						matTooltip="{{ element.icon.tooltip }}"
 						class="{{ element.icon.class }}"
 						*ngIf="element.icon && element.columnsWithIcon.includes(disCol.columnDef)"
-            id="table-row-icon"
+						id="table-row-icon"
 						>{{ element.icon.val }}</mat-icon
 					>
 					<p
@@ -35,11 +35,13 @@
 		<tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
 	</table>
 
-  <mat-paginator [pageSizeOptions]="[5, 10, 20, 50, 100]"
-                 showFirstLastButtons 
-                 (page)="pageOutput($event)"
-                 [pageIndex]="page"
-                 [length]="totalItems"
-                 aria-label="Select page of periodic elements">
-  </mat-paginator>
+	<mat-paginator
+		[pageSizeOptions]="[5, 10, 20, 50, 100]"
+		showFirstLastButtons
+		(page)="pageOutput($event)"
+		[pageIndex]="page"
+		[length]="totalItems"
+		aria-label="Select page of periodic elements"
+	>
+	</mat-paginator>
 </ng-container>
