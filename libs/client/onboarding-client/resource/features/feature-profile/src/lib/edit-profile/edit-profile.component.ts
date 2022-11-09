@@ -81,7 +81,7 @@ export class EditProfileComponent implements OnInit, OnDestroy {
 				} else {
 					// Navigate to new view
 					this.router
-						.navigate(['../', revision.views?.pop()?.id], {
+						.navigate(['../', revision.views[revision.views.length - 1]?.id], {
 							relativeTo: this.route,
 						})
 						.then(() => {

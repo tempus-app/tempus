@@ -91,6 +91,7 @@ export class ViewsService {
 		newViewEntity.revisionType = RevisionType.PENDING;
 
 		if (user.roles.includes(RoleType.BUSINESS_OWNER) || user.roles.includes(RoleType.SUPERVISOR)) {
+			// Approve changes
 			newViewEntity.createdAt = view.createdAt;
 			newViewEntity.revisionType = RevisionType.APPROVED;
 			newViewEntity.locked = false;
@@ -104,15 +105,16 @@ export class ViewsService {
 		}
 		newViewEntity = await this.viewsRepository.save(newViewEntity);
 
+		// Lock original view so it cannot be edited again
 		view.locked = true;
 		await this.viewsRepository.save(view);
 
 		if (view.revision) {
-			const revisionEntity = view.revision;
-			const previousNewRevision = view.revision.views.pop();
-			await this.viewsRepository.remove(previousNewRevision);
-			revisionEntity.views[revisionEntity.views.length] = newViewEntity;
-			const revisionToReturn = await this.revisionRepository.save(revisionEntity);
+			// Replace rejected view with new
+			const rejectedView = view.revision.views[view.revision.views.length - 1];
+			view.revision.views[view.revision.views.length - 1] = newViewEntity;
+			await this.viewsRepository.remove(rejectedView);
+			const revisionToReturn = await this.revisionRepository.save(view.revision);
 			return revisionToReturn;
 		}
 		const revisionEntity = new RevisionEntity(null, newViewEntity.createdAt, null, [view, newViewEntity]);
@@ -157,9 +159,9 @@ export class ViewsService {
 		revisionEntity.approved = approval;
 
 		if (approval === true) {
-			// If only one view, update view
+			// If only one view, approve view
 			if (revisionEntity.views.length === 1) {
-				const view = revisionEntity.views.pop();
+				const view = revisionEntity.views[0];
 				view.revisionType = RevisionType.APPROVED;
 				view.lastUpdateDate = new Date(Date.now());
 				view.revision = null;
@@ -181,6 +183,13 @@ export class ViewsService {
 			return toReturn;
 		}
 		if (approval === false) {
+			revisionEntity.comment = comment;
+			if (revisionEntity.views.length === 1) {
+				revisionEntity.views[0].locked = false;
+				revisionEntity.views[0].revisionType = RevisionType.REJECTED;
+				await this.viewsRepository.save(revisionEntity.views[0]);
+				return this.revisionRepository.save(revisionEntity);
+			}
 			revisionEntity.comment = comment;
 			revisionEntity.views[1].locked = false;
 			revisionEntity.views[1].revisionType = RevisionType.REJECTED;
@@ -208,7 +217,6 @@ export class ViewsService {
 				resource: {
 					id: resourceId,
 				},
-				// revisionType: RevisionType.APPROVED,
 			},
 		});
 
@@ -246,22 +254,25 @@ export class ViewsService {
 		}
 
 		if (viewEntity.revision) {
-			const revisionNewView = await this.viewsRepository.findOne(viewEntity.revision.views.pop().id, {
-				relations: [
-					'experiences',
-					'resource',
-					'educations',
-					'skills',
-					'experiences.location',
-					'educations.location',
-					'certifications',
-					'skills.skill',
-					'revision',
-					'revision.views',
-				],
-			});
+			const revisionNewView = await this.viewsRepository.findOne(
+				viewEntity.revision.views[viewEntity.revision.views.length - 1].id,
+				{
+					relations: [
+						'experiences',
+						'resource',
+						'educations',
+						'skills',
+						'experiences.location',
+						'educations.location',
+						'certifications',
+						'skills.skill',
+						'revision',
+						'revision.views',
+					],
+				},
+			);
 
-			viewEntity.revision.views[viewEntity.revision.views.length] = revisionNewView;
+			viewEntity.revision.views[viewEntity.revision.views.length - 1] = revisionNewView;
 		}
 
 		return viewEntity;
@@ -280,13 +291,12 @@ export class ViewsService {
 	}
 
 	async getViewsByStatus(status: RevisionType, page: number, pageSize: number) {
-		const viewsAndCount = await this.viewsRepository.findAndCount(
-      { 
-        where: { revisionType: status }, 
-        relations: ['resource'],
-        take: Number(pageSize),
-				skip: Number(page) * Number(pageSize),
-      });
-		return {views: viewsAndCount[0], totalPendingApprovals: viewsAndCount[1]};
+		const viewsAndCount = await this.viewsRepository.findAndCount({
+			where: { revisionType: status },
+			relations: ['resource'],
+			take: Number(pageSize),
+			skip: Number(page) * Number(pageSize),
+		});
+		return { views: viewsAndCount[0], totalPendingApprovals: viewsAndCount[1] };
 	}
 }

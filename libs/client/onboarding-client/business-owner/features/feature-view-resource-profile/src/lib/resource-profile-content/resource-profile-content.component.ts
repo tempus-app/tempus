@@ -163,13 +163,20 @@ export class ResourceProfileContentComponent implements OnInit, OnChanges {
 			const set = new Set();
 			const uniqueViewNames = sortedViews.filter(item => {
 				const viewExists = set.has(item.type);
+				// Filter out rejected views
 				if (item.revisionType === RevisionType.REJECTED) {
 					return false;
 				}
+
+				// Filter out views that have been renamed
+				const latestRevisedView = item.revision?.views[item.revision.views.length - 1];
+				if (latestRevisedView && latestRevisedView?.type !== item.type) {
+					return false;
+				}
+
 				set.add(item.type);
 				return !viewExists;
 			});
-
 			this.loadView(currentViewId || latestView.id, uniqueViewNames);
 		});
 	}
