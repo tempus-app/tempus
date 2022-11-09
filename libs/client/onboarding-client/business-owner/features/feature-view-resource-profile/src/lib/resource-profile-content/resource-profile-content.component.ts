@@ -169,9 +169,11 @@ export class ResourceProfileContentComponent implements OnInit, OnChanges {
 				}
 
 				// Filter out views that have been renamed
-				const latestRevisedView = item.revision?.views[item.revision.views.length - 1];
-				if (latestRevisedView && latestRevisedView?.type !== item.type) {
-					return false;
+				if (item.revision) {
+					const latestViews = sortViewsByLatestUpdated(item.revision.views);
+					if (latestViews[0].type !== item.type) {
+						return false;
+					}
 				}
 
 				set.add(item.type);

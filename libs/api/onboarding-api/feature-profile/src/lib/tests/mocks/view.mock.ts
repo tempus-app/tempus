@@ -125,7 +125,7 @@ export const approveViewDto: ApproveViewDto = {
 };
 
 export const rejectViewDto: ApproveViewDto = {
-	comment: 'approvalComment',
+	comment: 'rejectionComment',
 	approval: false,
 };
 
