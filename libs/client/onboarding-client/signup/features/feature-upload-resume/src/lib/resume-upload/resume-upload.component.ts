@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Country } from 'country-state-city';
 import {
 	createResumeUpload,
 	SignupState,
@@ -12,16 +11,7 @@ import {
 } from '@tempus/client/onboarding-client/signup/data-access';
 import { Store } from '@ngrx/store';
 import { HttpClient } from '@angular/common/http';
-import {
-	ICreateLocationDto,
-	ICreateExperienceDto,
-	ICreateEducationDto,
-	ICreateSkillDto,
-	ICreateSkillTypeDto,
-	ParsedEducation,
-	ParsedResume,
-	ParsedWorkExperience,
-} from '@tempus/shared-domain';
+import { ICreateEducationDto, ICreateSkillDto, ICreateSkillTypeDto, ParsedResume } from '@tempus/shared-domain';
 import { TranslateService } from '@ngx-translate/core';
 import { take } from 'rxjs';
 
@@ -80,8 +70,7 @@ export class ResumeUploadComponent implements OnInit {
 	async parseFile(file: File) {
 		const formData = new FormData();
 		formData.append('file', file);
-
-		return this.http.post('python-api/parse', formData);
+		return this.http.post('python-api/parse-resume', formData);
 	}
 
 	async onUpload(file: File, makeRequest: boolean) {
@@ -89,9 +78,9 @@ export class ResumeUploadComponent implements OnInit {
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 			(await this.parseFile(file)).subscribe((event: any) => {
 				if (typeof event === 'object') {
-					this.createUserDetails(JSON.parse(event.body));
-					this.createWorkDetails(JSON.parse(event.body));
-					this.createTrainingandSkilsDetails(JSON.parse(event.body));
+					this.createUserDetails(event.body);
+					this.createWorkDetails(event.body);
+					this.createTrainingandSkilsDetails(event.body);
 					this.resumeParsed = true;
 				}
 			});
@@ -105,33 +94,21 @@ export class ResumeUploadComponent implements OnInit {
 	}
 
 	createTrainingandSkilsDetails(parsedResumeJSON: ParsedResume) {
-		const skillsList = parsedResumeJSON.summary.skills.split(',');
+		const skillsList: string[] = parsedResumeJSON.skills;
+		const education: ICreateEducationDto = {
+			degree: parsedResumeJSON.degree,
+			institution: '',
+			location: {
+				city: '',
+				province: '',
+				country: '',
+			},
+		};
 		this.store.dispatch(
 			createTrainingAndSkillDetails({
 				skillsSummary: '',
 				educationsSummary: '',
-				educations: parsedResumeJSON.schools.map((qualification: ParsedEducation) => {
-					let formattedStartDate;
-					let formattedEndDate;
-					// Add a 0 in front of the month if it's under 10 to follow date standard format
-					if (qualification.start) {
-						formattedStartDate = `${qualification.start.year}-${`0${qualification.start.month}`.slice(-2)}-01`;
-					}
-					if (qualification.end) {
-						formattedEndDate = `${qualification.end.year}-${`0${qualification.end.month}`.slice(-2)}-01`;
-					}
-					return {
-						degree: qualification.degree,
-						institution: qualification.org,
-						startDate: formattedStartDate || undefined,
-						endDate: formattedEndDate || undefined,
-						location: {
-							country: '',
-							city: '',
-							province: '',
-						} as ICreateLocationDto,
-					} as ICreateEducationDto;
-				}),
+				educations: [education],
 				skills: skillsList.map(skill => {
 					return {
 						skill: {
@@ -148,54 +125,43 @@ export class ResumeUploadComponent implements OnInit {
 		this.store.dispatch(
 			createWorkExperienceDetails({
 				experiencesSummary: '',
-				experiences: parsedResumeJSON.positions.map((workExperience: ParsedWorkExperience) => {
-					let formattedStartDate;
-					let formattedEndDate;
-					// Add a 0 in front of the month if it's under 10 to follow date standard format
-					if (workExperience.start) {
-						formattedStartDate = `${workExperience.start.year}-${`0${workExperience.start.month}`.slice(-2)}-01`;
-					}
-					if (workExperience.end) {
-						formattedEndDate = `${workExperience.end.year}-${`0${workExperience.end.month}`.slice(-2)}-01`;
-					}
-					return {
-						title: workExperience.title,
-						company: workExperience.org,
-						location: {
-							country: '',
-							province: '',
-							city: '',
-						} as ICreateLocationDto,
-						startDate: formattedStartDate || undefined,
-						endDate: formattedEndDate || undefined,
+				experiences: [
+					{
+						title: '',
+
 						summary: '',
-						description: [workExperience.summary],
-					} as ICreateExperienceDto;
-				}),
+
+						description: [parsedResumeJSON.experience.join()],
+
+						company: '',
+
+						location: {
+							city: '',
+							province: '',
+							country: '',
+						},
+					},
+				],
 			}),
 		);
 	}
 
 	createUserDetails(parsedResumeJSON: ParsedResume) {
-		const splitNames = parsedResumeJSON.names[0].split(' ');
-		let country;
-		if (parsedResumeJSON.location.address) {
-			country = Country.getCountryByCode(parsedResumeJSON.location.address.CountryCode)?.name;
-		}
+		const splitNames = parsedResumeJSON.name.split(' ');
 		this.store.dispatch(
 			createUserDetails({
 				firstName: splitNames[0],
 				lastName: splitNames[1],
-				phoneNumber: parsedResumeJSON.phones[0].value.substring(1),
+				phoneNumber: parsedResumeJSON.mobile_number,
 				linkedInLink: '',
 				githubLink: '',
 				otherLink: '',
 				location: {
 					city: '',
 					province: '',
-					country: country || '',
+					country: '',
 				},
-				profileSummary: parsedResumeJSON.summary.executiveSummary,
+				profileSummary: '',
 			}),
 		);
 	}
