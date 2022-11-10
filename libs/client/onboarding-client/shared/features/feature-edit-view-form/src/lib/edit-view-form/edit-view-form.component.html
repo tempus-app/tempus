@@ -4,17 +4,22 @@
 			<div fxLayout="column" fxFlex>
 				<div id="my-profile-container" fxFlex>
 					<tempus-text-input
-						*ngIf="!isPrimaryView && !previewViewEnabled"
+						*ngIf="(isSecondaryView || isViewNameInputEnabled) && !previewViewEnabled"
 						cssClass="primary"
 						class="view-name-input"
 						[showLabel]="false"
 						placeholder="{{ editViewFormPrefix + 'viewNamePlaceholder' | translate }}"
 						[control]="viewName"
 					></tempus-text-input>
-					<h2 *ngIf="!isPrimaryView && previewViewEnabled" class="mat-h2 page-title">
+					<h2
+						*ngIf="(isSecondaryView || isViewNameInputEnabled) && previewViewEnabled"
+						class="mat-h2 page-title"
+					>
 						{{ viewName.value }}
 					</h2>
-					<h2 *ngIf="isPrimaryView" class="mat-h2 page-title">{{ editViewFormPrefix + 'primaryView' | translate }}</h2>
+					<h2 *ngIf="!(isSecondaryView || isViewNameInputEnabled)" class="mat-h2 page-title">
+						{{ editViewFormPrefix + 'primaryView' | translate }}
+					</h2>
 				</div>
 				<div *ngIf="viewName.invalid" class="error-container" fxFlex>
 					<mat-error class="mat-body-2">{{ editViewFormPrefix + 'viewNameError' | translate }}</mat-error>
@@ -39,7 +44,7 @@
 					(buttonClick)="submitChanges()"
 					matTooltip="{{ editViewFormPrefix + 'buttons.submit.tooltip' | translate }}"
 					matTooltipClass="tooltip"
-          id="submit-profile-button"
+					id="submit-profile-button"
 				></tempus-button>
 			</div>
 		</div>
@@ -63,7 +68,10 @@
 											<div fxFlex="95" class="grid-item">
 												<tempus-text-area
 													id="profile-summary"
-													placeholder="{{ editViewFormPrefix + 'profileSummary.textAreaPlaceHolder' | translate }}"
+													placeholder="{{
+														editViewFormPrefix + 'profileSummary.textAreaPlaceHolder'
+															| translate
+													}}"
 													[control]="$any(personalInfoForm).get('profileSummary')"
 												></tempus-text-area>
 											</div>

@@ -1,0 +1,26 @@
+{
+	"projectType": "library",
+	"root": "libs/client/onboarding-client/business-owner/features/feature-view-pending-approvals",
+	"sourceRoot": "libs/client/onboarding-client/business-owner/features/feature-view-pending-approvals/src",
+	"prefix": "tempus",
+	"targets": {
+		"test": {
+			"executor": "@nrwl/jest:jest",
+			"outputs": ["coverage/libs/client/onboarding-client/business-owner/features/feature-view-pending-approvals"],
+			"options": {
+				"jestConfig": "libs/client/onboarding-client/business-owner/features/feature-view-pending-approvals/jest.config.js",
+				"passWithNoTests": true
+			}
+		},
+		"lint": {
+			"executor": "@nrwl/linter:eslint",
+			"options": {
+				"lintFilePatterns": [
+					"libs/client/onboarding-client/business-owner/features/feature-view-pending-approvals/src/**/*.ts",
+					"libs/client/onboarding-client/business-owner/features/feature-view-pending-approvals/src/**/*.html"
+				]
+			}
+		}
+	},
+	"tags": []
+}

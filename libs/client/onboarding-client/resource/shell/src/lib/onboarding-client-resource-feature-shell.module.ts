@@ -39,6 +39,15 @@ const routes: Routes = [
 						m => m.OnboardingClientResourceFeatureViewsModule,
 					),
 			},
+			{
+				path: 'my-views/:id',
+				canLoad: [AuthGuard],
+				canActivate: [AuthGuard],
+				loadChildren: () =>
+					import('@tempus/onboarding-client/resource/feature-profile').then(
+						m => m.OnboardingClientResourceFeatureProfileModule,
+					),
+			},
 		],
 	},
 ];

@@ -10,20 +10,20 @@
 	text-align: left;
 }
 
-.section-header {
-	border-bottom: 2px solid abs.$primary-300;
-}
-
 .experience-button {
 	float: right;
 }
 
-.button-container {
+.add-section__container {
 	display: flex;
-	flex-direction: row;
-	justify-content: space-between;
-	position: relative;
-	bottom: 0;
+	justify-content: flex-end;
+	width: auto;
+	border-bottom: 2px solid abs.$primary-300;
+}
+
+.remove-button {
+	scale: 0.75;
+	box-shadow: 1px 1px 3px 1px rgba(0, 0, 0, 0.1);
 }
 
 h3 {

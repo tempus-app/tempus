@@ -18,6 +18,7 @@ import { ChipComponent } from './chip/chip.component';
 import { TableComponent } from './table/table.component';
 import { SpinnerComponent } from './spinner/spinner.component';
 import { ButtonComponent } from './button/button.component';
+import { GhostButtonComponent } from './button/ghost-button/ghost-button.component';
 
 @NgModule({
 	imports: [
@@ -39,7 +40,14 @@ import { ButtonComponent } from './button/button.component';
 		}),
 		RouterModule,
 	],
-	declarations: [CardComponent, ChipComponent, ButtonComponent, TableComponent, SpinnerComponent],
-	exports: [CardComponent, ChipComponent, ButtonComponent, TableComponent, SpinnerComponent],
+	declarations: [
+		CardComponent,
+		ChipComponent,
+		ButtonComponent,
+		GhostButtonComponent,
+		TableComponent,
+		SpinnerComponent,
+	],
+	exports: [CardComponent, ChipComponent, ButtonComponent, GhostButtonComponent, TableComponent, SpinnerComponent],
 })
 export class ClientSharedUiComponentsPresentationalModule {}
