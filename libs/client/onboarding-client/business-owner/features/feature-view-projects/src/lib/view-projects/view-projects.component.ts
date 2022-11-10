@@ -10,6 +10,7 @@ import {
 } from '@tempus/client/onboarding-client/business-owner/data-access';
 import { OnboardingClientProjectService } from '@tempus/client/onboarding-client/shared/data-access';
 import { Column, ViewProjects } from '@tempus/client/shared/ui-components/presentational';
+import { ProjectStatus } from '@tempus/shared-domain';
 import { take, Subject, takeUntil } from 'rxjs';
 
 @Component({
@@ -52,9 +53,9 @@ export class ViewProjectsComponent implements OnInit {
 						cell: (element: Record<string, unknown>) => `${element.name}`,
 					},
 					{
-						columnDef: 'assigned',
-						header: data.assigned,
-						cell: (element: Record<string, unknown>) => `${element.assigned}`,
+						columnDef: 'start_date',
+						header: data.start_date,
+						cell: (element: Record<string, unknown>) => `${element.start_date}`,
 					},
 					{
 						columnDef: 'status',
@@ -79,12 +80,13 @@ export class ViewProjectsComponent implements OnInit {
 				this.projectsInfoTableData = [];
 				this.totalProjects = data.totalItems;
 				data.projects.forEach(project => {
-					const assignedDate = new Date(project.startDate).toDateString();
+					const startDate = new Date(project.startDate).toISOString().slice(0, 10);
+					const status = project.status.toString() === 'not_started' ? 'Not Started' : project.status;
 					this.projectsInfoTableData.push({
 						name: project.client.clientName,
 						project: project.name,
-						assigned: assignedDate,
-						status: project.status.toString(),
+						start_date: startDate,
+						status,
 						columnsWithIcon: [],
 						columnsWithUrl: [],
 					});

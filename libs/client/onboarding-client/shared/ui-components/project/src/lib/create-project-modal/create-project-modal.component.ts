@@ -11,7 +11,11 @@ import { InputType } from '@tempus/client/shared/ui-components/input';
 	styleUrls: ['./create-project-modal.component.scss'],
 })
 export class CreateProjectModalComponent implements OnInit {
-	constructor(private translateService: TranslateService, private modalService: ModalService, private fb: FormBuilder) {
+	constructor(
+		private translateService: TranslateService,
+		private modalService: ModalService,
+		private fb: FormBuilder,
+	) {
 		const { currentLang } = translateService;
 		// eslint-disable-next-line no-param-reassign
 		translateService.currentLang = '';

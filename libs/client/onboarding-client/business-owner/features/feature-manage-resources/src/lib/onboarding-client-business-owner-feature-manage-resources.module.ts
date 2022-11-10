@@ -14,6 +14,7 @@ import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { ClientOnboardingSharedProjectModule } from '@tempus/client/onboarding-client/shared/ui-components/project';
 import { ManageResourcesComponent } from './manage-resources/manage-resources.component';
 
 function createTranslateLoader(http: HttpClient) {
@@ -26,6 +27,7 @@ function createTranslateLoader(http: HttpClient) {
 		ClientSharedUiComponentsPersistentModule,
 		ClientSharedUiComponentsPresentationalModule,
 		ClientSharedUiComponentsInputModule,
+		ClientOnboardingSharedProjectModule,
 		MatFormFieldModule,
 		MatIconModule,
 		MatButtonModule,

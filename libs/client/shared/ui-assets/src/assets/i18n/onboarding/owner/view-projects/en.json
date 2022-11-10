@@ -5,7 +5,7 @@
 			"tableHeaders": {
 				"name": "Client Name",
 				"project": "Project",
-				"assigned": "Assigned",
+				"start_date": "Start Date",
 				"status": "Status"
 			}
 		}

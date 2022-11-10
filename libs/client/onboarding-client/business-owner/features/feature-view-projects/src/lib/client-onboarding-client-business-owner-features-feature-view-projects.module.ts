@@ -7,6 +7,7 @@ import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { ClientSharedUiComponentsInputModule } from '@tempus/client/shared/ui-components/input';
 import { ClientSharedUiComponentsPersistentModule } from '@tempus/client/shared/ui-components/persistent';
+import { ClientOnboardingSharedProjectModule } from '@tempus/client/onboarding-client/shared/ui-components/project';
 import { ViewProjectsComponent } from './view-projects/view-projects.component';
 
 function createTranslateLoader(http: HttpClient) {
@@ -18,6 +19,7 @@ function createTranslateLoader(http: HttpClient) {
 		CommonModule,
 		ClientSharedUiComponentsPresentationalModule,
 		ClientSharedUiComponentsPersistentModule,
+		ClientOnboardingSharedProjectModule,
 		ClientSharedUiComponentsInputModule,
 		RouterModule.forChild([
 			{
