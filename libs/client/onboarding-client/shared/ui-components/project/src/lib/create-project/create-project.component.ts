@@ -140,6 +140,7 @@ export class CreateProjectComponent implements OnInit, OnDestroy {
 	}
 
 	createProjectModal() {
+		console.log(this.createProjectForm.valid);
 		this.translateService
 			.get(`modal.newProjectModal`)
 			.pipe(take(1))
@@ -157,7 +158,7 @@ export class CreateProjectComponent implements OnInit, OnDestroy {
 					CustomModalType.CONTENT,
 				);
 			});
-
+		this.modalService.confirmDisabled()?.next(true);
 		this.createProjectForm.valueChanges
 			.pipe(
 				takeUntil(this.$createProjectModalClosedEvent),
