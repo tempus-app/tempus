@@ -5,7 +5,7 @@
 	<div *ngIf="!editViewEnabled" id="page-container" fxLayout="column" fxFill fxLayoutGap="20px">
 		<div id="title-container">
 			<div id="my-profile-container">
-				<h2 class="mat-h2 page-title">{{ profilePrefix + 'myProfile' | translate }}</h2>
+				<h2 class="mat-h2 page-title">{{ pageTitle }}</h2>
 				<span
 					*ngIf="isPendingApproval"
 					id="error-icon"
@@ -29,7 +29,7 @@
 					[buttonType]="ButtonType.EDIT"
 					color="accent"
 					(buttonClick)="openEditView()"
-          id="edit-profile-button"
+					id="edit-profile-button"
 				></tempus-button>
 				<tempus-button
 					(buttonClick)="downloadProfile()"
@@ -46,7 +46,7 @@
 		<div class="section-container">
 			<h2 class="mat-h2 section-title">Profile Summary</h2>
 			<tempus-card>
-				<p id="profile-summary-text">{{profileSummary}}</p>
+				<p id="profile-summary-text">{{ profileSummary }}</p>
 			</tempus-card>
 		</div>
 		<div class="section-container">

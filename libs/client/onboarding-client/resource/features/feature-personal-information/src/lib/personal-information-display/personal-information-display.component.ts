@@ -5,7 +5,7 @@ import { UserType } from '@tempus/client/shared/ui-components/persistent';
 import { ButtonType } from '@tempus/client/shared/ui-components/presentational';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ICreateLocationDto, IUpdateResourceDto } from '@tempus/shared-domain';
-import { TempusResourceState, updateUserInfo } from 'libs/client/onboarding-client/resource/data-access/src/lib/+state';
+import { TempusResourceState, updateUserInfo } from '@tempus/client/onboarding-client/resource/data-access';
 import { OnboardingClientResourceService } from '@tempus/client/onboarding-client/shared/data-access';
 
 @Component({
@@ -25,6 +25,8 @@ export class PersonalInformationDisplayComponent implements OnInit {
 	fullName = '';
 
 	email = '';
+
+	resume: File | null = null;
 
 	phoneNumber = '';
 
@@ -76,6 +78,10 @@ export class PersonalInformationDisplayComponent implements OnInit {
 			this.githubLink = resData.githubLink;
 			this.otherLink = resData.otherLink;
 			this.fullName = `${resData.firstName} ${resData.lastName}`;
+		});
+
+		this.resourceService.getResourceOriginalResumeById(this.userId).subscribe(resumeBlob => {
+			this.resume = new File([resumeBlob], 'original-resume.pdf');
 		});
 	}
 

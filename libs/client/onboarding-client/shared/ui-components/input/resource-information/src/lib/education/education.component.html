@@ -5,16 +5,9 @@
 			<div class="info-title">
 				<h2 class="mat-h2">{{ educationsPrefix + 'title' | translate }}</h2>
 			</div>
-			<div>
-				<button
-					mat-mini-fab
-					(click)="addEducationSections()"
-					matTooltip="{{ educationsPrefix + 'addMoreTooltip' | translate }}"
-					class="header-button"
-					color="primary"
-				>
-					<mat-icon>add</mat-icon>
-				</button>
+			<div class="add-section__container">
+				<tempus-ghost-button (click)="addEducationSections()" [label]="'Add section'" [icon]="'add'">
+				</tempus-ghost-button>
 			</div>
 			<div fxFlex="5"></div>
 		</div>
@@ -41,23 +34,31 @@
 					<div class="card-header">
 						<div class="header-button">
 							<button
+								class="remove-button"
 								mat-mini-fab
 								(click)="removeEducationSection(index)"
 								matTooltip="{{ educationsPrefix + 'removeTooltip' | translate }}"
 								color="primary"
 							>
-								<mat-icon>remove</mat-icon>
+								<span class="material-icons">remove</span>
 							</button>
 						</div>
 						<div>
 							<h3 class="mat-h3" color="primary">
-								<span>{{ educationsPrefix + 'qualificationItemLabel' | translate }} </span>{{ index + 1 }}
+								<span>{{ educationsPrefix + 'qualificationItemLabel' | translate }} </span
+								>{{ index + 1 }}
 							</h3>
 						</div>
 					</div>
 
 					<div fxLayout="column" fxLayoutGap="10px">
-						<div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxFlex="33%" class="block-2">
+						<div
+							fxLayout.gt-sm="row"
+							fxLayout.lt-md="column"
+							fxLayoutGap="10px"
+							fxFlex="33%"
+							class="block-2"
+						>
 							<div
 								fxFlex.gt-sm="50%"
 								fxFlex.lt-md="50%"
@@ -70,7 +71,7 @@
 									id="institution-{{ index }}"
 									placeholder="{{ educationsPrefix + 'institutionPlaceholder' | translate }}"
 									cssClass="secondary"
-                  id="institution-input"
+									id="institution-input"
 									[control]="$any(numEducation).get('institution')"
 								>
 								</tempus-text-input>
@@ -103,11 +104,12 @@
 							>
 								<div class="error-container">
 									<mat-error
-                    id="institution-error"
+										id="institution-error"
 										class="mat-body-2"
 										*ngIf="
 											$any(numEducation).get('institution').invalid &&
-											($any(numEducation).get('institution').touched || $any(numEducation).get('institution').dirty)
+											($any(numEducation).get('institution').touched ||
+												$any(numEducation).get('institution').dirty)
 										"
 									>
 										{{ educationsPrefix + 'institutionErr' | translate }}
@@ -127,7 +129,8 @@
 										class="mat-body-2"
 										*ngIf="
 											$any(numEducation).get('field').invalid &&
-											($any(numEducation).get('field').touched || $any(numEducation).get('field').dirty)
+											($any(numEducation).get('field').touched ||
+												$any(numEducation).get('field').dirty)
 										"
 									>
 										{{ educationsPrefix + 'qualificationErr' | translate }}
@@ -136,7 +139,13 @@
 							</div>
 						</div>
 
-						<div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxFlex="33%" class="block-2">
+						<div
+							fxLayout.gt-sm="row"
+							fxLayout.lt-md="column"
+							fxLayoutGap="10px"
+							fxFlex="33%"
+							class="block-2"
+						>
 							<div
 								fxFlex.gt-sm="50%"
 								fxFlex.lt-md="33%"
@@ -154,7 +163,13 @@
 									[control]="$any(numEducation).get('country')"
 								></tempus-search-box>
 							</div>
-							<div fxFlex.gt-sm="50%" fxFlex.lt-md="33%" fxLayoutAlign="center center" fxFlexFill class="grid-item">
+							<div
+								fxFlex.gt-sm="50%"
+								fxFlex.lt-md="33%"
+								fxLayoutAlign="center center"
+								fxFlexFill
+								class="grid-item"
+							>
 								<tempus-dropdown
 									id="state-{{ index }}"
 									[options]="states"
@@ -181,7 +196,13 @@
 							</div>
 						</div>
 
-						<div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxFlex="33%" class="block-2">
+						<div
+							fxLayout.gt-sm="row"
+							fxLayout.lt-md="column"
+							fxLayoutGap="10px"
+							fxFlex="33%"
+							class="block-2"
+						>
 							<div
 								fxFlex.gt-sm="50%"
 								fxFlex.lt-md="50%"
@@ -221,7 +242,9 @@
 										[checked]="$any(numEducation).get('endDate').disabled"
 										(change)="setCheck($event.checked, numEducation)"
 									>
-										<p class="mat-body-2 checkbox-label">{{ commonPrefix + 'dates.present' | translate }}</p>
+										<p class="mat-body-2 checkbox-label">
+											{{ commonPrefix + 'dates.present' | translate }}
+										</p>
 									</mat-checkbox>
 								</div>
 							</div>
@@ -241,7 +264,8 @@
 										class="mat-body-2"
 										*ngIf="
 											$any(numEducation).get('startDate').invalid &&
-											($any(numEducation).get('startDate').touched || $any(numEducation).get('startDate').dirty)
+											($any(numEducation).get('startDate').touched ||
+												$any(numEducation).get('startDate').dirty)
 										"
 									>
 										{{ commonPrefix + 'dates.validStartDateErr' | translate }}
@@ -261,7 +285,8 @@
 										class="mat-body-2"
 										*ngIf="
 											$any(numEducation).get('endDate').invalid &&
-											($any(numEducation).get('endDate').touched || $any(numEducation).get('endDate').dirty)
+											($any(numEducation).get('endDate').touched ||
+												$any(numEducation).get('endDate').dirty)
 										"
 									>
 										{{ commonPrefix + 'dates.validEndDateErr' | translate }}

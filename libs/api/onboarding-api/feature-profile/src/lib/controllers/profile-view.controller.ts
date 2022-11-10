@@ -71,7 +71,10 @@ export class ProfileViewController {
 	@UseGuards(JwtAuthGuard, RolesGuard)
 	@Roles(RoleType.BUSINESS_OWNER, RoleType.SUPERVISOR)
 	@Post('/approve/:viewId')
-	async approveView(@Param('viewId') viewId: number, @Body() approveViewDto: ApproveViewDto): Promise<Revision | View> {
+	async approveView(
+		@Param('viewId') viewId: number,
+		@Body() approveViewDto: ApproveViewDto,
+	): Promise<Revision | View> {
 		const approvalResult = await this.viewSerivce.approveOrDenyView(viewId, approveViewDto);
 		return approvalResult;
 	}
@@ -100,7 +103,7 @@ export class ProfileViewController {
 		@Param('viewId') viewId: number,
 		@Request() req,
 		@Body() createViewDto: CreateViewDto,
-	): Promise<Revision> {
+	): Promise<Revision | View> {
 		const revision = await this.viewSerivce.reviseView(viewId, req.user, createViewDto);
 		return revision;
 	}

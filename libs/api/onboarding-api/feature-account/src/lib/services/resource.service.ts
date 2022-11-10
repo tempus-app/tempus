@@ -54,7 +54,7 @@ export class ResourceService {
 		if (createdResource.roles.includes(RoleType.AVAILABLE_RESOURCE)) {
 			const view = await this.viewsService.createView(createdResource.id, {
 				viewType: ViewType.PRIMARY,
-				type: 'PROFILE',
+				type: 'Primary',
 				educationsSummary: resource.educationsSummary,
 				educations: createdResource.educations,
 				certifications: createdResource.certifications,

@@ -9,7 +9,7 @@ export const viewEntity: ViewEntity = {
 	skillsSummary: 'skillSummary',
 	educationsSummary: 'educationSummary',
 	experiencesSummary: 'experiencesSummary',
-	type: '',
+	type: 'Primary',
 	locked: false,
 	skills: [],
 	experiences: [],
@@ -45,7 +45,7 @@ export const viewEntity3: ViewEntity = {
 	skillsSummary: 'skillSummary3',
 	educationsSummary: 'educationSummary3',
 	experiencesSummary: 'experiencesSummary3',
-	type: '',
+	type: 'Primary',
 	locked: false,
 	skills: [],
 	experiences: [],
@@ -90,7 +90,7 @@ export const newViewDto: CreateViewDto = {
 	profileSummary: 'newProfileSummary',
 	educationsSummary: 'newEducationsSummary',
 	experiencesSummary: 'newExperiencesSummary',
-	type: '',
+	type: 'Primary',
 	skills: [],
 	experiences: [],
 	educations: [],
@@ -104,7 +104,7 @@ export const createdViewEntityPostRevision: ViewEntity = {
 	skillsSummary: 'newSkillsSummary',
 	educationsSummary: 'newEducationsSummary',
 	experiencesSummary: 'newExperiencesSummary',
-	type: '',
+	type: 'Primary',
 	locked: true,
 	skills: [],
 	experiences: [],
@@ -120,12 +120,12 @@ export const createdViewEntityPostRevision: ViewEntity = {
 };
 
 export const approveViewDto: ApproveViewDto = {
-	comment: 'approvalComment',
+	comment: '',
 	approval: true,
 };
 
 export const rejectViewDto: ApproveViewDto = {
-	comment: 'approvalComment',
+	comment: 'rejectionComment',
 	approval: false,
 };
 
@@ -135,7 +135,7 @@ export const createdViewEntity: ViewEntity = {
 	skillsSummary: 'newSkillsSummary',
 	educationsSummary: 'newEducationsSummary',
 	experiencesSummary: 'newExperiencesSummary',
-	type: 'PROFILE',
+	type: 'Primary',
 	locked: false,
 	skills: [],
 	experiences: [],
