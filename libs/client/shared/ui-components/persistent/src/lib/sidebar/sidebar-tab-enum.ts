@@ -7,4 +7,5 @@ export enum SidebarTab {
 	MY_VIEWS = 'myViews',
 	MY_PROJECTS = 'myProjects',
 	PERSONAL_INFORMATION = 'personalInformation',
+	PROJECTS = 'projects',
 }

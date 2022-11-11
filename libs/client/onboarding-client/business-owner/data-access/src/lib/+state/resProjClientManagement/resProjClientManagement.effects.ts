@@ -124,6 +124,23 @@ export class ResourceProjectClientManagementEffects {
 		),
 	);
 
+	getAllProjects$ = createEffect(() =>
+		this.actions$.pipe(
+			ofType(ProjManagementActions.getAllProjectInfo),
+			switchMap(paginationData =>
+				this.projectService.getAllProjects(paginationData).pipe(
+					map(data => {
+						return ProjManagementActions.getAllProjectInfoSuccess({
+							projects: data.projectData,
+							totalItems: data.totalItems,
+						});
+					}),
+					catchError(error => of(ProjManagementActions.getAllProjectInfoFailure({ error }))),
+				),
+			),
+		),
+	);
+
 	assignResourceToProject$ = createEffect(() =>
 		this.actions$.pipe(
 			ofType(ProjManagementActions.createResourceProjectAssignment),
@@ -144,7 +161,10 @@ export class ResourceProjectClientManagementEffects {
 			switchMap(data =>
 				this.viewsService.getViewsByStatus(data.status, data.pageNum, data.pageSize).pipe(
 					map(res => {
-						return ProjManagementActions.getAllViewsByStatusSuccess({ views: res.views, totalPendingApprovals: res.totalPendingApprovals });
+						return ProjManagementActions.getAllViewsByStatusSuccess({
+							views: res.views,
+							totalPendingApprovals: res.totalPendingApprovals,
+						});
 					}),
 					catchError(error => of(ProjManagementActions.getAllViewsByStatusFailure({ error }))),
 				),

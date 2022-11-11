@@ -32,6 +32,16 @@ export class OnboardingClientProjectService {
 		return this.http.post<Project>(`${this.projectURL}/`, createProjectDto).pipe(catchError(handleError));
 	}
 
+	public getAllProjects(paginationData: {
+		page: number;
+		pageSize: number;
+	}): Observable<{ projectData: Project[]; totalItems: number }> {
+		const { page, pageSize } = paginationData;
+		return this.http
+			.get<{ projectData: Project[]; totalItems: number }>(`${this.projectURL}?page=${page}&pageSize=${pageSize}`)
+			.pipe(catchError(handleError));
+	}
+
 	public assignResourceToProject(
 		projectId: number,
 		resourceId: number,

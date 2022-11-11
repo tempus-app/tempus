@@ -96,7 +96,7 @@ export function sortViewsByLatestUpdated(views: View[]) {
 			? new Date(a.lastUpdateDate).getTime() > new Date(b.lastUpdateDate).getTime()
 				? -1
 				: 1
-			: a.createdAt.getTime() > b.createdAt.getTime()
+			: new Date(a.createdAt).getTime() > new Date(b.createdAt).getTime()
 				? -1
 				: 1,
 	);

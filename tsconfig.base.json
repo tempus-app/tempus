@@ -32,6 +32,9 @@
 			"@tempus/client/onboarding-client/business-owner/features/feature-view-pending-approvals": [
 				"libs/client/onboarding-client/business-owner/features/feature-view-pending-approvals/src/index.ts"
 			],
+			"@tempus/client/onboarding-client/business-owner/features/feature-view-projects": [
+				"libs/client/onboarding-client/business-owner/features/feature-view-projects/src/index.ts"
+			],
 			"@tempus/client/onboarding-client/business-owner/features/feature-view-resource-profile": [
 				"libs/client/onboarding-client/business-owner/features/feature-view-resource-profile/src/index.ts"
 			],
@@ -50,6 +53,9 @@
 			],
 			"@tempus/client/onboarding-client/shared/ui-components/presentational/resource-display": [
 				"libs/client/onboarding-client/shared/ui-components/presentational/resource-display/src/index.ts"
+			],
+			"@tempus/client/onboarding-client/shared/ui-components/project": [
+				"libs/client/onboarding-client/shared/ui-components/project/src/index.ts"
 			],
 			"@tempus/client/onboarding-client/shell": ["libs/client/onboarding-client/shell/src/index.ts"],
 			"@tempus/client/onboarding-client/signup/data-access": [

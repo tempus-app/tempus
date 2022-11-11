@@ -7,6 +7,8 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { TranslateModule } from '@ngx-translate/core';
 import { RouterModule } from '@angular/router';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { FooterComponent } from './footer/footer.component';
 import { StepperComponent } from './stepper/stepper.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
@@ -14,11 +16,13 @@ import { SidebarComponent } from './sidebar/sidebar.component';
 @NgModule({
 	imports: [
 		CommonModule,
+		MatSlideToggleModule,
 		MatIconModule,
 		MatButtonModule,
 		MatStepperModule,
 		MatSidenavModule,
 		MatButtonToggleModule,
+		MatFormFieldModule,
 		RouterModule,
 		TranslateModule.forChild({
 			isolate: false,

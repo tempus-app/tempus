@@ -4,10 +4,11 @@ import { TranslateService } from '@ngx-translate/core';
 import { OnboardingClientResourceService } from '@tempus/client/onboarding-client/shared/data-access';
 import { CustomModalType, ModalService, ModalType } from '@tempus/client/shared/ui-components/modal';
 import { EditViewFormComponent } from '@tempus/onboarding-client/shared/feature-edit-view-form';
+import { RevisionType, ViewType } from '@tempus/shared-domain';
 import { Subject, take, takeUntil } from 'rxjs';
 
 @Component({
-	selector: 'tempus-create-new-view',
+	selector: 'tempus-resource-create-new-view',
 	templateUrl: './create-new-view.component.html',
 	styleUrls: ['./create-new-view.component.scss'],
 	providers: [OnboardingClientResourceService],
@@ -33,9 +34,24 @@ export class CreateNewViewComponent implements OnInit, OnDestroy {
 	destroyed$ = new Subject<void>();
 
 	ngOnInit(): void {
-		this.resourceService.getResourceInformation().subscribe(resData => {
-			this.userId = resData.id;
-		});
+		this.resourceService
+			.getResourceInformation()
+			.pipe(take(1))
+			.subscribe(resData => {
+				this.userId = resData.id;
+				this.resourceService
+					.getResourceProfileViews(this.userId)
+					.pipe(takeUntil(this.destroyed$))
+					.subscribe(views => {
+						const approvedPrimaryView = views.find(
+							view => view.revisionType === RevisionType.APPROVED && view.viewType === ViewType.PRIMARY,
+						);
+						if (approvedPrimaryView) {
+							this.newViewForm.setFormDataFromView(approvedPrimaryView);
+							this.newViewForm.enableViewNameField();
+						}
+					});
+			});
 	}
 
 	submitChanges() {
@@ -46,7 +62,14 @@ export class CreateNewViewComponent implements OnInit, OnDestroy {
 
 	createNewView() {
 		const newView = this.newViewForm.generateNewView();
-		this.resourceService.createSecondaryView(this.userId, newView).subscribe();
+		this.resourceService
+			.createSecondaryView(this.userId, newView)
+			.pipe(take(1))
+			.subscribe(view => {
+				this.router.navigate(['../', view.id], {
+					relativeTo: this.route,
+				});
+			});
 	}
 
 	openSubmitConfirmation() {
@@ -72,12 +95,10 @@ export class CreateNewViewComponent implements OnInit, OnDestroy {
 		this.modalService.confirmEventSubject.pipe(takeUntil(this.destroyed$)).subscribe(() => {
 			this.createNewView();
 			this.modalService.close();
-			this.closeForm();
 		});
 	}
 
 	closeForm() {
-		// TODO: navigate to new view
 		this.router.navigate(['../'], { relativeTo: this.route }).then(() => {
 			window.location.reload();
 		});
