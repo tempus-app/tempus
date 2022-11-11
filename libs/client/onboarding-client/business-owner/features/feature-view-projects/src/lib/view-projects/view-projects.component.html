@@ -1,0 +1,16 @@
+<div fxLayout="column" id="page-container">
+	<div id="title-container">
+		<h2 class="mat-h2 page-title">{{ prefix + '.main.title' | translate }}</h2>
+		<tempus-create-project></tempus-create-project>
+	</div>
+	<div id="table-container">
+		<tempus-table
+			(paginatorEvent)="tablePaginationEvent($event)"
+			[page]="pageNum"
+			[totalItems]="totalProjects"
+			[tableColumns]="tableColumns"
+			[tableData]="projectsInfoTableData"
+		></tempus-table>
+	</div>
+
+</div>

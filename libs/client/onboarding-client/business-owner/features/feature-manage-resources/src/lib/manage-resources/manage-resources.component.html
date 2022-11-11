@@ -10,12 +10,7 @@
 					[color]="'accent'"
 				></tempus-button>
 				<tempus-button fxFlex="50%" (buttonClick)="assign()" [label]="'Assign'" [color]="'accent'"></tempus-button>
-				<tempus-button
-					fxFlex="50%"
-					(buttonClick)="createProjectModal()"
-					[label]="'New Project'"
-					[color]="'accent'"
-				></tempus-button>
+				<tempus-create-project></tempus-create-project>
 			</div>
 			<div
 				fxFlex="min(60%, 40rem)"
@@ -308,15 +303,6 @@
 				</div>
 			</div>
 		</tempus-card>
-	</ng-template>
-	<ng-template #newProjectTemplate>
-		<tempus-create-project-modal
-			[form]="$any(manageResourcesForm).get('createProject')"
-			[clientOptions]="clientOptions"
-			[resourceOptions]="resourceOptions"
-			[clients]="clients"
-			style="margin-top: 1rem"
-		></tempus-create-project-modal>
 	</ng-template>
 	<tempus-spinner [showSpinner]="loading"></tempus-spinner>
 </div>

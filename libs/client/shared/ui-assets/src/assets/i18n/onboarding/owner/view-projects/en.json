@@ -1,0 +1,13 @@
+{
+	"onboardingOwnerViewProjects": {
+		"main": {
+			"title": "Client Projects",
+			"tableHeaders": {
+				"name": "Client Name",
+				"project": "Project",
+				"start_date": "Start Date",
+				"status": "Status"
+			}
+		}
+	}
+}

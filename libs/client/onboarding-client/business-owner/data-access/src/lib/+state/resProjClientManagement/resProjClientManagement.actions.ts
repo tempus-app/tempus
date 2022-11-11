@@ -93,6 +93,19 @@ export const createProjectFailure = createAction(
 	props<{ error: Error }>(),
 );
 
+export const getAllProjectInfo = createAction(
+	'[Onboarding Client Project API] Get All Projects Info',
+	props<{ pageSize: number; page: number }>(),
+);
+export const getAllProjectInfoSuccess = createAction(
+	'[Onboarding Client Project API] Get All Projects Info Success',
+	props<{ projects: Project[]; totalItems: number }>(),
+);
+export const getAllProjectInfoFailure = createAction(
+	'[Onboarding Client Project API]  Get All Projects Info Failure',
+	props<{ error: Error }>(),
+);
+
 export const createResourceProjectAssignment = createAction(
 	'[Onboarding Client Manage Resources Page] Create Resource Project Assignment',
 	props<{ resourceId: number; projectId: number; assignProjectDto: IAssignProjectDto }>(),
@@ -120,12 +133,12 @@ export const resetCreatedProjectState = createAction(
 
 export const getAllViewsByStatus = createAction(
 	'[Onboarding Profile Views API] Get All Views By Status',
-	props<{ status: RevisionType, pageNum: number, pageSize: number }>(),
+	props<{ status: RevisionType; pageNum: number; pageSize: number }>(),
 );
 
 export const getAllViewsByStatusSuccess = createAction(
 	'[Onboarding Profile Views API] Get All Views By Status Success',
-	props<{ views: View[], totalPendingApprovals: number }>(),
+	props<{ views: View[]; totalPendingApprovals: number }>(),
 );
 
 export const getAllViewsByStatusFailure = createAction(

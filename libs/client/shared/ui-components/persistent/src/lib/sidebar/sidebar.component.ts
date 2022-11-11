@@ -72,6 +72,11 @@ export class SidebarComponent implements OnInit, OnDestroy {
 			base: true,
 		},
 		{
+			tab: SidebarTab.PROJECTS,
+			route: '/owner/projects',
+			base: true,
+		},
+		{
 			tab: SidebarTab.MANAGE_RESOURCES,
 			route: '/owner/view-resources',
 		},
@@ -97,7 +102,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
 				const { roles } = decodeJwt(token || '');
 
 				if (roles.includes(RoleType.BUSINESS_OWNER) || roles.includes(RoleType.SUPERVISOR)) {
-					this.tabs = [SidebarTab.MANAGE_RESOURCES, SidebarTab.PENDING_APPROVALS];
+					this.tabs = [SidebarTab.MANAGE_RESOURCES, SidebarTab.PENDING_APPROVALS, SidebarTab.PROJECTS];
 				} else if (roles.includes(RoleType.AVAILABLE_RESOURCE) || roles.includes(RoleType.ASSIGNED_RESOURCE)) {
 					this.tabs = [
 						SidebarTab.PRIMARY_VIEW,

@@ -23,11 +23,11 @@ export class ViewPendingApprovalsComponent implements OnInit {
 
 	tableColumns: Array<Column> = [];
 
-  pageNum: number = 0;
+	pageNum = 0;
 
-  pageSize: number = 5;
+	pageSize = 5;
 
-  totalPendingApprovals: number = 0;
+	totalPendingApprovals = 0;
 
 	constructor(private businessOwnerStore: Store<BusinessOwnerState>, private translateService: TranslateService) {
 		const { currentLang } = translateService;
@@ -58,14 +58,16 @@ export class ViewPendingApprovalsComponent implements OnInit {
 	pendingApprovalsTableData: PendingApprovalsTableData[] = [];
 
 	ngOnInit(): void {
-		this.businessOwnerStore.dispatch(getAllViewsByStatus({ status: RevisionType.PENDING, pageSize: this.pageSize, pageNum: this.pageNum }));
+		this.businessOwnerStore.dispatch(
+			getAllViewsByStatus({ status: RevisionType.PENDING, pageSize: this.pageSize, pageNum: this.pageNum }),
+		);
 
 		this.businessOwnerStore
 			.select(selectViewsByStatus)
 			.pipe(takeUntil(this.$destroyed))
 			.subscribe(data => {
 				this.pendingApprovalsTableData = [];
-        this.totalPendingApprovals = data.totalNumItems;
+				this.totalPendingApprovals = data.totalNumItems;
 				data?.views?.forEach(view => {
 					let date = '-';
 					let { type } = view;
@@ -89,13 +91,15 @@ export class ViewPendingApprovalsComponent implements OnInit {
 			});
 	}
 
-  tablePaginationEvent(pageEvent: PageEvent) {
-		if (pageEvent.pageSize != this.pageSize) {
+	tablePaginationEvent(pageEvent: PageEvent) {
+		if (pageEvent.pageSize !== this.pageSize) {
 			this.pageSize = pageEvent.pageSize;
-      this.pageNum = 0;
-		} else if (pageEvent.pageIndex != this.pageNum) {
+			this.pageNum = 0;
+		} else if (pageEvent.pageIndex !== this.pageNum) {
 			this.pageNum = pageEvent.pageIndex;
 		}
-		this.businessOwnerStore.dispatch(getAllViewsByStatus({ status: RevisionType.PENDING, pageSize: this.pageSize, pageNum: this.pageNum }));
+		this.businessOwnerStore.dispatch(
+			getAllViewsByStatus({ status: RevisionType.PENDING, pageSize: this.pageSize, pageNum: this.pageNum }),
+		);
 	}
 }
