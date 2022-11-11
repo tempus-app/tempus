@@ -16,6 +16,7 @@ import { ClientSharedUiComponentsModalModule } from '@tempus/client/shared/ui-co
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { HttpClient } from '@angular/common/http';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { ClientOnboardingSharedProjectModule } from '@tempus/client/onboarding-client/shared/ui-components/project';
 import { ResourceProfileComponent } from './resource-profile/resource-profile.component';
 import { UserBarComponent } from './user-bar/user-bar.component';
 import { ResourceProfileContentComponent } from './resource-profile-content/resource-profile-content.component';
@@ -36,6 +37,7 @@ function createTranslateLoader(http: HttpClient) {
 		ReactiveFormsModule,
 		ClientSharedUiComponentsPresentationalModule,
 		ClientSharedPresentationalResourceDisplayModule,
+		ClientOnboardingSharedProjectModule,
 		OnboardingClientSharedFeatureEditViewFormModule,
 		MatIconModule,
 		MatFormFieldModule,

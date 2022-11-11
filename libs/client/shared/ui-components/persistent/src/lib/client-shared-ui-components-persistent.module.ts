@@ -12,7 +12,6 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { FooterComponent } from './footer/footer.component';
 import { StepperComponent } from './stepper/stepper.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
-import { AssignResourceModalComponent } from './assign-resource-modal/assign-resource-modal.component';
 
 @NgModule({
 	imports: [
@@ -30,7 +29,7 @@ import { AssignResourceModalComponent } from './assign-resource-modal/assign-res
 			extend: true,
 		}),
 	],
-	declarations: [FooterComponent, StepperComponent, SidebarComponent, AssignResourceModalComponent],
-	exports: [FooterComponent, StepperComponent, SidebarComponent, AssignResourceModalComponent],
+	declarations: [FooterComponent, StepperComponent, SidebarComponent],
+	exports: [FooterComponent, StepperComponent, SidebarComponent],
 })
 export class ClientSharedUiComponentsPersistentModule {}

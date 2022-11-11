@@ -8,6 +8,7 @@ import {
 	createResourceProjectAssignment,
 	getAllClients,
 	selectClientData,
+	selectResourceBasicData,
 } from '@tempus/client/onboarding-client/business-owner/data-access';
 import { InputType } from '@tempus/client/shared/ui-components/input';
 import { ModalService, ModalType, CustomModalType } from '@tempus/client/shared/ui-components/modal';
@@ -33,7 +34,6 @@ export class AssignResourceModalComponent implements OnInit, OnChanges {
 	@Input()
 	resource: Resource | undefined = undefined;
 
-	@Input()
 	resourceOptions: { val: string; id: number }[] = [];
 
 	@Input()
@@ -58,8 +58,6 @@ export class AssignResourceModalComponent implements OnInit, OnChanges {
 
 	clientOptions: { val: string; id: number }[] = [];
 
-	prefix = 'onboardingOwnerManageResources.';
-
 	commonPrefix = 'onboardingClient.input.common.';
 
 	@ViewChild('assignTemplate')
@@ -70,6 +68,8 @@ export class AssignResourceModalComponent implements OnInit, OnChanges {
 	$assignModalClosedEvent = new Subject<void>();
 
 	InputType = InputType;
+
+	prefix = 'modal.assignModal';
 
 	assignForm = this.fb.group({
 		resource: ['', Validators.required],
@@ -91,6 +91,19 @@ export class AssignResourceModalComponent implements OnInit, OnChanges {
 					return {
 						val: client.clientName,
 						id: client.id,
+					};
+				});
+			});
+
+		// Getting all resources (basic info i.e firstname, lastname, email, id)
+		this.businessOwnerStore
+			.select(selectResourceBasicData)
+			.pipe(takeUntil(this.$destroyed))
+			.subscribe(data => {
+				this.resourceOptions = data.map(res => {
+					return {
+						val: `${res.firstName} ${res.lastName} (${res.email})`,
+						id: res.id,
 					};
 				});
 			});
@@ -170,11 +183,11 @@ export class AssignResourceModalComponent implements OnInit, OnChanges {
 
 	assign() {
 		this.translateService
-			.get(`assignModal`, { resourceName: 'John' })
+			.get(`modal.assignModal`)
 			.pipe(take(1))
 			.subscribe(data => {
 				this.translateService
-					.get('assignModal.title', { resourceName: this.resourceName || 'Resource' })
+					.get('modal.assignModal.title', { resourceName: this.resourceName || 'Resource' })
 					.subscribe((updatedTitle: string) => {
 						this.modalService.open(
 							{

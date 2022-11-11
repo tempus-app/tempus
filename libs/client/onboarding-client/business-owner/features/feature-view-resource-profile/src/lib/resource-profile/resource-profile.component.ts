@@ -60,8 +60,6 @@ export class ResourceProfileComponent implements OnInit {
 
 	otherLink = '';
 
-	resourceId = 0;
-
 	projectResources: ProjectResource[] = [];
 
 	isPrimaryView = false;

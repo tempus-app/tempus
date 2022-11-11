@@ -37,7 +37,7 @@
 		"review": "Review"
 	},
 	"modal": {
-		"assign": {
+		"assignModal": {
 			"clientLabel": "Client",
 			"clientErr": "Please select a client",
 			"projectLabel": "Project",
