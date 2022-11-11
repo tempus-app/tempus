@@ -3,6 +3,7 @@ import { LoadView, ProjectResource, ViewNames } from '@tempus/shared-domain';
 import { OnboardingClientResourceService } from '@tempus/client/onboarding-client/shared/data-access';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder } from '@angular/forms';
+import { ButtonType } from '@tempus/client/shared/ui-components/presentational';
 
 @Component({
 	selector: 'tempus-user-bar',
@@ -31,9 +32,13 @@ export class UserBarComponent implements OnChanges {
 		viewSelected: [''],
 	});
 
+	buttonType = ButtonType;
+
 	viewResourceProfilePrefx = 'viewResourceProfile.';
 
 	@Output() newViewSelected = new EventEmitter<number>();
+
+	@Output() editViewSelected = new EventEmitter();
 
 	constructor(
 		private route: ActivatedRoute,
@@ -51,8 +56,7 @@ export class UserBarComponent implements OnChanges {
 			this.viewDropDownForm.patchValue({
 				viewSelected: this.loadedView.currentViewName,
 			});
-			const index = this.viewNames.indexOf(this.loadedView.currentViewName);
-			this.currentViewID = this.viewIDs[index];
+			this.currentViewID = parseInt(this.route.snapshot.queryParamMap.get('viewId') || '0', 10);
 		}
 	}
 
@@ -62,7 +66,7 @@ export class UserBarComponent implements OnChanges {
 			const downloadURL = window.URL.createObjectURL(data);
 			const link = document.createElement('a');
 			link.href = downloadURL;
-			const index = this.viewIDs.indexOf(this.currentViewID, 10);
+			const index = this.viewIDs.indexOf(this.currentViewID);
 			link.download = `${this.resourceName}-${this.viewNames[index]}`;
 			link.click();
 		});
@@ -75,5 +79,13 @@ export class UserBarComponent implements OnChanges {
 			queryParams: { viewId: this.viewIDs[index] },
 		});
 		this.newViewSelected.emit(this.viewIDs[index]);
+	}
+
+	openViewForm() {
+		this.router.navigate(['./new'], { relativeTo: this.route });
+	}
+
+	openEditView() {
+		this.editViewSelected.emit();
 	}
 }

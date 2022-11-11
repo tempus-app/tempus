@@ -32,9 +32,13 @@
 		</div>
 		<div>
 			<tempus-button
+				(buttonClick)="openViewForm()"
 				label="{{ viewResourceProfilePrefx + 'buttons.createNewViewButton.title' | translate }}"
 				color="accent"
 			></tempus-button>
+		</div>
+		<div>
+			<tempus-button (buttonClick)="openEditView()" [buttonType]="buttonType.EDIT" color="accent"></tempus-button>
 		</div>
 		<div>
 			<tempus-button

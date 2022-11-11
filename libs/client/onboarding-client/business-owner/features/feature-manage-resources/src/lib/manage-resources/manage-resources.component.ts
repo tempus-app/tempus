@@ -28,6 +28,7 @@ import {
 } from '@tempus/client/onboarding-client/business-owner/data-access';
 import {
 	AsyncRequestState,
+	OnboardingClientProjectService,
 	OnboardingClientState,
 	selectLoggedInUserNameEmail,
 } from '@tempus/client/onboarding-client/shared/data-access';
@@ -54,6 +55,7 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 		private fb: FormBuilder,
 		private translateService: TranslateService,
 		private router: Router,
+		private projectService: OnboardingClientProjectService,
 	) {
 		const { currentLang } = translateService;
 		// eslint-disable-next-line no-param-reassign
@@ -362,7 +364,10 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 						const allProj: { val: string; id: number }[] = [];
 
 						resProjClientData.projectClients.forEach(projClientData => {
-							const allProjUnderClient = projClientData.projects.map(proj => ({ val: proj.val, id: proj.id }));
+							const allProjUnderClient = projClientData.projects.map(proj => ({
+								val: proj.val,
+								id: proj.id,
+							}));
 							allProjUnderClient.forEach(proj => {
 								allProj.push(proj);
 							});
@@ -426,108 +431,6 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 					};
 				}) || [];
 	};
-
-	createProjectModal() {
-		this.translateService
-			.get(`${this.prefix}modal.newProjectModal`)
-			.pipe(take(1))
-			.subscribe(data => {
-				this.modalService.open(
-					{
-						title: data.title,
-						id: 'newProjectModal',
-						closable: true,
-						confirmText: data.confirmText,
-						modalType: ModalType.INFO,
-						closeText: data.closeText,
-						template: this.newProjectModal,
-					},
-					CustomModalType.CONTENT,
-				);
-			});
-
-		this.manageResourcesForm
-			.get('createProject')
-			?.valueChanges.pipe(
-				takeUntil(this.$createProjectModalClosedEvent),
-				finalize(() => {
-					const createProjectForm = this.manageResourcesForm.get('createProject');
-					const clientName = createProjectForm?.get('clientName')?.value;
-					const projectData = {
-						name: createProjectForm?.get('name')?.value,
-						startDate: createProjectForm?.get('startDate')?.value,
-						clientRepresentativeFirstName: createProjectForm?.get('clientRepFirstName')?.value,
-						clientRepresentativeLastName: createProjectForm?.get('clientRepLastName')?.value,
-						clientRepresentativeEmail: createProjectForm?.get('clientRepEmail')?.value,
-						clientRepresentativeId: createProjectForm?.get('clientRepresentative')?.value,
-						status: createProjectForm?.get('status')?.value,
-					};
-					const startDate = createProjectForm?.get('startDate')?.value;
-					const projectManager = createProjectForm?.get('projectManager')?.value;
-
-					if (clientName) {
-						const createClientDto = {
-							clientName,
-						};
-						// create client
-						this.businessOwnerStore.dispatch(
-							createClient({
-								createClientDto,
-							}),
-						);
-
-						// call with createdclient
-						this.businessOwnerStore
-							.select(selectCreatedClientData)
-							.pipe(takeUntil(this.$destroyed))
-							.subscribe(data => {
-								if (data) {
-									const createProjectDto = { ...projectData, clientId: data?.id };
-									this.businessOwnerStore.dispatch(createProject({ createProjectDto }));
-								}
-							});
-					} else {
-						const createProjectDto = { ...projectData, clientId: createProjectForm?.get('client')?.value };
-						this.businessOwnerStore.dispatch(createProject({ createProjectDto }));
-					}
-
-					// after project is created, add project manager
-					this.businessOwnerStore
-						.select(selectCreatedProjectData)
-						.pipe(takeUntil(this.$destroyed))
-						.subscribe(data => {
-							if (data) {
-								const assignProjectDto = {
-									startDate,
-									title: 'Project Manager',
-								};
-								this.businessOwnerStore.dispatch(
-									createResourceProjectAssignment({ resourceId: projectManager, projectId: data.id, assignProjectDto }),
-								);
-
-								// clean up values after we are done with them
-
-								this.businessOwnerStore.dispatch(resetCreatedClientState());
-								this.businessOwnerStore.dispatch(resetCreatedProjectState());
-							}
-						});
-				}),
-			)
-			.subscribe(() => {
-				if (this.manageResourcesForm.get('createProject')?.valid) {
-					this.modalService.confirmDisabled()?.next(false);
-				} else {
-					this.modalService.confirmDisabled()?.next(true);
-				}
-			});
-
-		this.modalService
-			.closed()
-			.pipe(take(1))
-			.subscribe(() => {
-				this.resetModalData();
-			});
-	}
 
 	invite() {
 		this.translateService
@@ -616,7 +519,6 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 		this.currentProjects = [];
 		this.currentClientReps = [];
 		this.manageResourcesForm.get('invite')?.reset();
-		this.manageResourcesForm.get('createProject')?.reset();
 	};
 
 	filter() {
@@ -624,13 +526,13 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 	}
 
 	tablePaginationEvent(pageEvent: PageEvent) {
-		if (pageEvent.pageSize != this.tablePagination.pageSize) {
+		if (pageEvent.pageSize !== this.tablePagination.pageSize) {
 			this.tablePagination = {
 				page: 0,
 				pageSize: pageEvent.pageSize,
 				filter: this.tablePagination.filter,
 			};
-		} else if (pageEvent.pageIndex != this.tablePagination.page) {
+		} else if (pageEvent.pageIndex !== this.tablePagination.page) {
 			this.tablePagination.page = pageEvent.pageIndex;
 		}
 		this.businessOwnerStore.dispatch(getAllResProjInfo(this.tablePagination));

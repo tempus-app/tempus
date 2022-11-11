@@ -1,9 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { ModalService } from '@tempus/client/shared/ui-components/modal';
-import { InputType } from '@tempus/client/shared/ui-components/input';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Client } from '@tempus/shared-domain';
+import { InputType } from '@tempus/client/shared/ui-components/input';
 
 @Component({
 	selector: 'tempus-create-project-modal',
@@ -11,7 +11,11 @@ import { Client } from '@tempus/shared-domain';
 	styleUrls: ['./create-project-modal.component.scss'],
 })
 export class CreateProjectModalComponent implements OnInit {
-	constructor(private translateService: TranslateService, private modalService: ModalService, private fb: FormBuilder) {
+	constructor(
+		private translateService: TranslateService,
+		private modalService: ModalService,
+		private fb: FormBuilder,
+	) {
 		const { currentLang } = translateService;
 		// eslint-disable-next-line no-param-reassign
 		translateService.currentLang = '';
@@ -22,7 +26,7 @@ export class CreateProjectModalComponent implements OnInit {
 
 	createProjectUseExisitingClient = false;
 
-	prefix = 'onboardingOwnerManageResources.modal.newProjectModal.';
+	prefix = 'modal.newProjectModal.';
 
 	statusOptions = [
 		{ val: 'Not Started', id: 'not_started' },

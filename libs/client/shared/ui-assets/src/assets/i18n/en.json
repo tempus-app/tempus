@@ -16,7 +16,8 @@
 			"primaryView": "Primary View",
 			"myViews": "My Views",
 			"myProjects": "My Projects",
-			"personalInformation": "Personal Information"
+			"personalInformation": "Personal Information",
+			"projects": "Projects"
 		}
 	},
 	"button": {
@@ -35,27 +36,56 @@
 		"Education": "Education",
 		"review": "Review"
 	},
-	"assignModal": {
-		"clientLabel": "Client",
-		"clientErr": "Please select a client",
-		"projectLabel": "Project",
-		"projectErr": "Please select a project",
-		"resourceLabel": "Resource",
-		"resourceErr": "Please select a resource",
-		"firstNameLabel": "First name",
-		"firstNameErr": "Please enter a first name",
-		"lastNameLabel": "Last name",
-		"lastNameErr": "Please enter a last name",
-		"emailAddressLabel": "Email address",
-		"emailAddressErr": "Please enter a valid email address",
-		"startDateErr": "Please enter a start date",
-		"titleLabel": "Role",
-		"titleErr": "Please enter a role for resource",
-		"positionLabel": "Position",
-		"positionErr": "Please enter a position",
-		"title": "Assign {{resourceName}} to a project",
-		"confirmText": "Assign",
-		"closeText": "Cancel",
-		"noProjError": "No Available Project, select a different client"
+	"modal": {
+		"assign": {
+			"clientLabel": "Client",
+			"clientErr": "Please select a client",
+			"projectLabel": "Project",
+			"projectErr": "Please select a project",
+			"resourceLabel": "Resource",
+			"resourceErr": "Please select a resource",
+			"firstNameLabel": "First name",
+			"firstNameErr": "Please enter a first name",
+			"lastNameLabel": "Last name",
+			"lastNameErr": "Please enter a last name",
+			"emailAddressLabel": "Email address",
+			"emailAddressErr": "Please enter a valid email address",
+			"startDateErr": "Please enter a start date",
+			"titleLabel": "Role",
+			"titleErr": "Please enter a role for resource",
+			"positionLabel": "Position",
+			"positionErr": "Please enter a position",
+			"title": "Assign {{resourceName}} to a project",
+			"confirmText": "Assign",
+			"closeText": "Cancel",
+			"noProjError": "No Available Project, select a different client"
+		},
+
+		"newProjectModal": {
+			"title": "Create a New Project",
+			"closeText": "Cancel",
+			"confirmText": "Create",
+			"clientLabel": "Client",
+			"clientRepLabel": "Client Representative",
+			"clientNameLabel": "Client Name",
+			"addNewClient": "New Client",
+			"clientRepFirstName": "First Name",
+			"clientRepLastName": "Last Name",
+			"clientRepEmail": "Email",
+			"addNewClientRep": "New Client Representative",
+			"projectStatus": "status",
+			"projectNameLabel": "Project Name",
+			"clientErr": "Please select or create a new client",
+			"clientRepErr": "Please select or create a new client representative",
+			"clientNameErr": "Please enter a client name, or select existing",
+			"clientRepFnameErr": "Please enter a first name",
+			"clientRepLnameErr": "Please enter a last name",
+			"clientRepEmailErr": "Please enter a valid email address",
+			"nameErr": "Please enter a project name",
+			"startDateErr": "Please enter a start date",
+			"statusErr": "Please enter a status",
+			"projectManagerLabel": "Project Manager",
+			"projectManagerErr": "Please select a Project Manager"
+		}
 	}
 }

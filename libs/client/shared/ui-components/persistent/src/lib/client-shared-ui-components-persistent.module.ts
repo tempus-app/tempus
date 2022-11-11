@@ -7,10 +7,8 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { TranslateModule } from '@ngx-translate/core';
 import { RouterModule } from '@angular/router';
-import { ClientSharedUiComponentsInputModule } from '@tempus/client/shared/ui-components/input';
-import { ClientSharedUiComponentsPresentationalModule } from '@tempus/client/shared/ui-components/presentational';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { FlexLayoutModule } from '@angular/flex-layout';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { FooterComponent } from './footer/footer.component';
 import { StepperComponent } from './stepper/stepper.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
@@ -19,15 +17,13 @@ import { AssignResourceModalComponent } from './assign-resource-modal/assign-res
 @NgModule({
 	imports: [
 		CommonModule,
+		MatSlideToggleModule,
 		MatIconModule,
 		MatButtonModule,
 		MatStepperModule,
 		MatSidenavModule,
 		MatButtonToggleModule,
-		FlexLayoutModule,
 		MatFormFieldModule,
-		ClientSharedUiComponentsInputModule,
-		ClientSharedUiComponentsPresentationalModule,
 		RouterModule,
 		TranslateModule.forChild({
 			isolate: false,

@@ -8,6 +8,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatCardModule } from '@angular/material/card';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { TranslateModule } from '@ngx-translate/core';
 import { FileUploadComponent } from './file-upload/file-upload.component';
@@ -22,6 +23,7 @@ import { DropdownComponent } from './dropdown/dropdown.component';
 		FormsModule,
 		MatInputModule,
 		MatIconModule,
+		MatSlideToggleModule,
 		MatSelectModule,
 		NgxDropzoneModule,
 		MatAutocompleteModule,

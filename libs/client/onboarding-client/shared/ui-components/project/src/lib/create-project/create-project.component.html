@@ -1,0 +1,7 @@
+<tempus-button fxFlex="50%" (buttonClick)="createProjectModal()" [label]="'New Project'" [color]="'accent'">
+</tempus-button>
+
+<ng-template #newProjectTemplate>
+    <tempus-create-project-modal [form]="$any(createProjectForm)" [clientOptions]="clientOptions"
+        [resourceOptions]="resourceOptions" [clients]="clients" style="margin-top: 1rem"></tempus-create-project-modal>
+</ng-template>

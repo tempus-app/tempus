@@ -9,6 +9,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatButtonModule } from '@angular/material/button';
+import { OnboardingClientSharedFeatureEditViewFormModule } from '@tempus/onboarding-client/shared/feature-edit-view-form';
 import { ClientSharedUiComponentsPresentationalModule } from '@tempus/client/shared/ui-components/presentational';
 import { ClientSharedPresentationalResourceDisplayModule } from '@tempus/client/onboarding-client/shared/ui-components/presentational/resource-display';
 import { ClientSharedUiComponentsModalModule } from '@tempus/client/shared/ui-components/modal';
@@ -18,6 +19,7 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { ResourceProfileComponent } from './resource-profile/resource-profile.component';
 import { UserBarComponent } from './user-bar/user-bar.component';
 import { ResourceProfileContentComponent } from './resource-profile-content/resource-profile-content.component';
+import { BusinessOwnerCreateNewViewComponent } from './create-new-view/create-new-view.component';
 
 function createTranslateLoader(http: HttpClient) {
 	return new TranslateHttpLoader(http, './assets/i18n/onboarding/owner/view-resource-profile/', '.json');
@@ -34,7 +36,7 @@ function createTranslateLoader(http: HttpClient) {
 		ReactiveFormsModule,
 		ClientSharedUiComponentsPresentationalModule,
 		ClientSharedPresentationalResourceDisplayModule,
-		ClientSharedUiComponentsModalModule,
+		OnboardingClientSharedFeatureEditViewFormModule,
 		MatIconModule,
 		MatFormFieldModule,
 		FlexLayoutModule,
@@ -44,6 +46,11 @@ function createTranslateLoader(http: HttpClient) {
 				path: '',
 				pathMatch: 'full',
 				component: ResourceProfileComponent,
+			},
+			{
+				path: 'new',
+				pathMatch: 'full',
+				component: BusinessOwnerCreateNewViewComponent,
 			},
 		]),
 		TranslateModule.forChild({
@@ -56,6 +63,11 @@ function createTranslateLoader(http: HttpClient) {
 			extend: true,
 		}),
 	],
-	declarations: [ResourceProfileComponent, UserBarComponent, ResourceProfileContentComponent],
+	declarations: [
+		ResourceProfileComponent,
+		UserBarComponent,
+		ResourceProfileContentComponent,
+		BusinessOwnerCreateNewViewComponent,
+	],
 })
 export class ClientOnboardingClientBusinessOwnerFeaturesFeatureViewResourceProfileModule {}
