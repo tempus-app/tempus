@@ -140,7 +140,6 @@ export class CreateProjectComponent implements OnInit, OnDestroy {
 	}
 
 	createProjectModal() {
-		console.log(this.createProjectForm.valid);
 		this.translateService
 			.get(`modal.newProjectModal`)
 			.pipe(take(1))
@@ -198,7 +197,10 @@ export class CreateProjectComponent implements OnInit, OnDestroy {
 								}
 							});
 					} else {
-						const createProjectDto = { ...projectData, clientId: this.createProjectForm?.get('client')?.value };
+						const createProjectDto = {
+							...projectData,
+							clientId: this.createProjectForm?.get('client')?.value,
+						};
 						this.businessOwnerStore.dispatch(createProject({ createProjectDto }));
 					}
 
@@ -213,7 +215,11 @@ export class CreateProjectComponent implements OnInit, OnDestroy {
 									title: 'Project Manager',
 								};
 								this.businessOwnerStore.dispatch(
-									createResourceProjectAssignment({ resourceId: projectManager, projectId: data.id, assignProjectDto }),
+									createResourceProjectAssignment({
+										resourceId: projectManager,
+										projectId: data.id,
+										assignProjectDto,
+									}),
 								);
 
 								// clean up values after we are done with them

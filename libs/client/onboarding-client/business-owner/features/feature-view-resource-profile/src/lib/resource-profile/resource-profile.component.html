@@ -4,6 +4,9 @@
 		(newViewSelected)="newViewClickEvent($event)"
 		(editViewSelected)="editViewClickEvent()"
 		[resourceName]="resourceFirstName + '-' + resourceLastName"
+		[resourceEmail]="resourceEmail"
+		[resourceId]="resourceId"
+		[projectResources]="projectResources"
 	></tempus-user-bar>
 	<tempus-edit-view-form
 		*ngIf="editViewEnabled"

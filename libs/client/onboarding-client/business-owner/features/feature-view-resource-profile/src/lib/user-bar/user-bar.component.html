@@ -22,10 +22,13 @@
 			></tempus-dropdown>
 		</div>
 		<div>
-			<tempus-button
-				label="{{ viewResourceProfilePrefx + 'buttons.assignButton.title' | translate }}"
-				color="accent"
-			></tempus-button>
+			<tempus-assign-resource-modal
+				[resourceName]="resourceName"
+				[resourceEmail]="resourceEmail"
+				[resourceId]="resourceId"
+				[preSelectedResource]="true"
+				[projectResources]="projectResources"
+			></tempus-assign-resource-modal>
 		</div>
 		<div>
 			<tempus-button
