@@ -8,10 +8,24 @@
 		@include abs.h3($color: abs.$primary-800);
 		font-weight: 900;
 		font-size: 1.5em;
-		align-self: center;
+		text-align: center;
+
+		@media (max-width: abs.$small) {
+			font-size: 1em;
+		}
 	}
 
 	&__tempus-logo {
-		height: 20rem;
+		height: 20em;
+		max-width: 42.8em;
+		align-self: center;
+
+		@media (max-width: abs.$medium) {
+			height: 16em;
+		}
+
+		@media (max-width: abs.$small) {
+			height: 12em;
+		}
 	}
 }
