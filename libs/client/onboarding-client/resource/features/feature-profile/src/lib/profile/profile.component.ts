@@ -185,8 +185,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
 						this.pageTitle = data;
 					});
 
-				this.resourceService.getResourceProfileViews(this.userId).subscribe(views => {
-					let filteredAndSortedViews = views.filter(view => view.viewType === ViewType.PRIMARY);
+				this.resourceService.getResourceProfileViews(this.userId).subscribe(data => {
+					let filteredAndSortedViews = data.views?.filter(view => view.viewType === ViewType.PRIMARY);
 					filteredAndSortedViews = sortViewsByLatestUpdated(filteredAndSortedViews);
 					this.loadView(filteredAndSortedViews[0]);
 					this.dataLoaded = true;

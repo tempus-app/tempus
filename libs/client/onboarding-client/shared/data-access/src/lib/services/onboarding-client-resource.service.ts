@@ -75,8 +75,10 @@ export class OnboardingClientResourceService {
 	}
 
 	// TODO: look into moving to views service
-	public getResourceProfileViews(resourceId: number): Observable<Array<View>> {
-		return this.http.get<Array<View>>(`${this.url}/profile-view/${resourceId}`).pipe(catchError(handleError));
+	public getResourceProfileViews(resourceId: number): Observable<{ views: View[]; totalPendingApprovals: number }> {
+		return this.http
+			.get<{ views: View[]; totalPendingApprovals: number }>(`${this.url}/profile-view/${resourceId}`)
+			.pipe(catchError(handleError));
 	}
 
 	public createSecondaryView(resourceId: number, newView: ICreateViewDto): Observable<View> {

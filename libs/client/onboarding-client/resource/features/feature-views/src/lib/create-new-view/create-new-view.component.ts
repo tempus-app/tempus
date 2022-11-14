@@ -42,8 +42,8 @@ export class CreateNewViewComponent implements OnInit, OnDestroy {
 				this.resourceService
 					.getResourceProfileViews(this.userId)
 					.pipe(takeUntil(this.destroyed$))
-					.subscribe(views => {
-						const approvedPrimaryView = views.find(
+					.subscribe(data => {
+						const approvedPrimaryView = data.views?.find(
 							view => view.revisionType === RevisionType.APPROVED && view.viewType === ViewType.PRIMARY,
 						);
 						if (approvedPrimaryView) {
