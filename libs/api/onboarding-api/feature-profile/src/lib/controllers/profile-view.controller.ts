@@ -24,7 +24,7 @@ import { ViewsService } from '../services/view.service';
 export class ProfileViewController {
 	constructor(private viewSerivce: ViewsService, private pdfService: PdfGeneratorService) {}
 
-	// all views of user
+	// all views of user by status
 	@UseGuards(JwtAuthGuard, RolesGuard)
 	@Roles(RoleType.BUSINESS_OWNER, RoleType.SUPERVISOR)
 	@Get('/views/')
@@ -40,9 +40,13 @@ export class ProfileViewController {
 	// all views of user
 	@UseGuards(JwtAuthGuard, PermissionGuard)
 	@Get('/:userId')
-	async getViews(@Param('userId') userId: number): Promise<View[]> {
-		const views = await this.viewSerivce.getViewsByResource(userId);
-		return views;
+	async getViews(
+		@Param('userId') userId: number,
+		@Query('page') page: number,
+		@Query('pageSize') pageSize: number,
+	): Promise<{ views: View[]; totalViews: number }> {
+		const viewsAndCount = await this.viewSerivce.getViewsByResource(userId, page, pageSize);
+		return viewsAndCount;
 	}
 
 	// all views of user
@@ -71,7 +75,7 @@ export class ProfileViewController {
 	@UseGuards(JwtAuthGuard, ViewsGuard)
 	@Get('/:userId/download-resume')
 	async downloadAllResumesForUser(@Res() res: Response, @Param('userId') userId: number): Promise<void> {
-		const views: View[] = await this.viewSerivce.getViewsByResource(userId);
+		const views: View[] = await (await this.viewSerivce.getViewsByResource(userId, 0, 1000)).views;
 		views.forEach(async view => {
 			const resume = new ResumePdfTemplateDto(view.type, view);
 			await this.pdfService.createPDF(res, resume, undefined, true);

@@ -1,6 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { OnboardingClientResourceService } from '@tempus/client/onboarding-client/shared/data-access';
-import { Subject, take } from 'rxjs';
+import {
+	OnboardingClientResourceService,
+	OnboardingClientState,
+	selectLoggedInUserId,
+	selectLoggedInUserNameEmail,
+} from '@tempus/client/onboarding-client/shared/data-access';
+import { Subject, take, takeUntil } from 'rxjs';
 import { ButtonType } from '@tempus/client/shared/ui-components/presentational';
 import {
 	ICreateExperienceDto,
@@ -10,8 +15,17 @@ import {
 	RevisionType,
 	View,
 } from '@tempus/shared-domain';
+import {
+	downloadProfileByViewId,
+	getAllViewsByResourceId,
+	getResourceOriginalResumeById,
+	selectDownloadProfile,
+	selectResourceOriginalResume,
+	TempusResourceState,
+} from '@tempus/client/onboarding-client/resource/data-access';
 import { TranslateService } from '@ngx-translate/core';
 import { sortViewsByLatestUpdated } from '@tempus/client/shared/util';
+import { Store } from '@ngrx/store';
 import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
@@ -21,9 +35,18 @@ import { ActivatedRoute, Router } from '@angular/router';
 	providers: [OnboardingClientResourceService],
 })
 export class ProfileComponent implements OnInit, OnDestroy {
+	pageNum = 0;
+
+	// make it very large so that it fetches all the views of the user
+	pageSize = 1000;
+
+	totalViews = 0;
+
 	constructor(
 		private resourceService: OnboardingClientResourceService,
 		private translateService: TranslateService,
+		private sharedStore: Store<OnboardingClientState>,
+		private resourceStore: Store<TempusResourceState>,
 		private router: Router,
 		private route: ActivatedRoute,
 	) {
@@ -43,7 +66,13 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
 	viewName = '';
 
+	firstName = '';
+
+	lastName = '';
+
 	fullName = '';
+
+	resume: File | null = null;
 
 	experiencesSummary = '';
 
@@ -76,6 +105,63 @@ export class ProfileComponent implements OnInit, OnDestroy {
 	editViewEnabled = false;
 
 	ngOnInit(): void {
+		this.sharedStore
+			.select(selectLoggedInUserId)
+			.pipe(take(1))
+			.subscribe(data => {
+				if (data) {
+					this.userId = data;
+				}
+			});
+		this.sharedStore
+			.select(selectLoggedInUserNameEmail)
+			.pipe(take(1))
+			.subscribe(data => {
+				this.firstName = data.firstName || '';
+				this.lastName = data.lastName || '';
+			});
+
+		this.resourceStore.dispatch(getResourceOriginalResumeById({ resourceId: this.userId }));
+
+		this.resourceStore
+			.select(selectResourceOriginalResume)
+			.pipe(takeUntil(this.destroyed$))
+			.subscribe(blob => {
+				if (blob) {
+					this.resume = new File([blob], 'original-resume.pdf');
+				}
+			});
+
+		this.resourceStore.dispatch(
+			getAllViewsByResourceId({ resourceId: this.userId, pageSize: this.pageSize, pageNum: this.pageNum }),
+		);
+
+		// display latest primary view
+		// this.resourceStore
+		// 	.select(selectResourceViews)
+		// 	.pipe(takeUntil(this.destroyed$))
+		// 	.subscribe(data => {
+		// 		let filteredAndSortedViews = data?.views?.filter(view => view.viewType === ViewType.PRIMARY) || [];
+		// 		filteredAndSortedViews = sortViewsByLatestUpdated(filteredAndSortedViews);
+
+		// 		const latestView = filteredAndSortedViews[0];
+		// 		console.log(latestView);
+		// 		this.currentViewId = latestView.id;
+		// 		this.certifications = latestView.certifications;
+		// 		this.educations = latestView.educations;
+		// 		this.educationsSummary = latestView.educationsSummary;
+		// 		this.workExperiences = latestView.experiences;
+		// 		this.experiencesSummary = latestView.experiencesSummary;
+		// 		this.profileSummary = latestView.profileSummary;
+		// 		this.skills = latestView.skills.map(skill => skill.skill.name);
+		// 		this.skillsSummary = latestView.skillsSummary;
+		// 		this.isRejected = latestView.revisionType === RevisionType.REJECTED;
+		// 		this.isPendingApproval = latestView.revisionType === RevisionType.PENDING;
+		// 		this.rejectionComments = latestView.revision?.comment ? latestView.revision.comment : '';
+
+		// 		this.dataLoaded = true;
+		// 	});
+
 		this.resourceService.getResourceInformation().subscribe(resData => {
 			this.userId = resData.id;
 			this.fullName = `${resData.firstName} ${resData.lastName}`;
@@ -97,8 +183,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
 						this.pageTitle = data;
 					});
 
-				this.resourceService.getResourceProfileViews(this.userId).subscribe(views => {
-					let filteredAndSortedViews = views.filter(view => view.viewType === ViewType.PRIMARY);
+				this.resourceService.getResourceProfileViews(this.userId).subscribe(data => {
+					let filteredAndSortedViews = data.views?.filter(view => view.viewType === ViewType.PRIMARY);
 					filteredAndSortedViews = sortViewsByLatestUpdated(filteredAndSortedViews);
 					this.loadView(filteredAndSortedViews[0]);
 					this.dataLoaded = true;
@@ -133,14 +219,20 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
 	downloadProfile() {
 		// Taken from https://stackoverflow.com/questions/52154874/angular-6-downloading-file-from-rest-api
-		this.resourceService.downloadProfile(this.currentViewId).subscribe(data => {
-			const downloadURL = window.URL.createObjectURL(data);
-			const link = document.createElement('a');
-			link.href = downloadURL;
-			// const index = this.viewIDs.indexOf(parseInt(this.currentViewID, 10));
-			link.download = `${this.fullName}-${this.viewName}`;
-			link.click();
-		});
+		this.resourceStore.dispatch(downloadProfileByViewId({ viewId: this.currentViewId }));
+		this.resourceStore
+			.select(selectDownloadProfile)
+			.pipe(takeUntil(this.destroyed$))
+			.subscribe(data => {
+				if (data) {
+					const downloadURL = window.URL.createObjectURL(data);
+					const link = document.createElement('a');
+					link.href = downloadURL;
+					// const index = this.viewIDs.indexOf(parseInt(this.currentViewID, 10));
+					link.download = `${this.fullName}-${this.viewName}`;
+					link.click();
+				}
+			});
 	}
 
 	ngOnDestroy(): void {

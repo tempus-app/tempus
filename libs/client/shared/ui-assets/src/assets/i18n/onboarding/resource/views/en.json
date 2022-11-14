@@ -6,5 +6,21 @@
 			"closeText": "Cancel",
 			"confirmText": "Submit"
 		}
+	},
+	"onboardingResourceMyViews": {
+		"main": {
+			"title": "My Views",
+			"tableHeaders": {
+				"status": "Status",
+				"type": "View",
+				"dateCreated": "Date Created",
+				"createdBy": "Created By"
+			},
+			"buttons": {
+				"deleteButton": {
+					"title": "DELETE"
+				}
+			}
+		}
 	}
 }

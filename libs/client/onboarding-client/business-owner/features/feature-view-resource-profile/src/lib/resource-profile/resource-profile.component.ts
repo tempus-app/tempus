@@ -7,7 +7,11 @@ import {
 } from '@tempus/client/onboarding-client/shared/data-access';
 import { LoadView, ProjectResource } from '@tempus/shared-domain';
 import { skip, take } from 'rxjs';
-import { getOriginalResume, selectOriginalResume } from '@tempus/client/onboarding-client/business-owner/data-access';
+import {
+	BusinessOwnerState,
+	getOriginalResume,
+	selectOriginalResume,
+} from '@tempus/client/onboarding-client/business-owner/data-access';
 import { EditViewFormComponent } from '@tempus/onboarding-client/shared/feature-edit-view-form';
 
 @Component({
@@ -22,6 +26,7 @@ export class ResourceProfileComponent implements OnInit {
 		private changeDetector: ChangeDetectorRef,
 		private resourceService: OnboardingClientResourceService,
 		private sharedStore: Store<OnboardingClientState>,
+		private businessOwnerStore: Store<BusinessOwnerState>,
 	) {}
 
 	@ViewChild(EditViewFormComponent, { static: false }) newViewForm!: EditViewFormComponent;
@@ -118,10 +123,9 @@ export class ResourceProfileComponent implements OnInit {
 			this.otherLink = resourceInfo.otherLink;
 			this.projectResources = resourceInfo.projectResources;
 		});
+		this.businessOwnerStore.dispatch(getOriginalResume({ resourceId: this.resourceId }));
 
-		this.sharedStore.dispatch(getOriginalResume({ resourceId: this.resourceId }));
-
-		this.sharedStore
+		this.businessOwnerStore
 			.select(selectOriginalResume)
 			.pipe(skip(1))
 			.subscribe(blob => {

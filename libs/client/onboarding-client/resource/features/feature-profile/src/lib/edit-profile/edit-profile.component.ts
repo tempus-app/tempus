@@ -55,8 +55,8 @@ export class EditProfileComponent implements OnInit, OnDestroy {
 					this.resourceService
 						.getResourceProfileViews(resourceId)
 						.pipe(takeUntil(this.destroyed$))
-						.subscribe(views => {
-							let filteredAndSortedViews = views.filter(view => view.viewType === ViewType.PRIMARY);
+						.subscribe(data => {
+							let filteredAndSortedViews = data.views.filter(view => view.viewType === ViewType.PRIMARY);
 							filteredAndSortedViews = sortViewsByLatestUpdated(filteredAndSortedViews);
 							this.newViewForm.setFormDataFromView(filteredAndSortedViews[0]);
 						});

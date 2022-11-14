@@ -8,6 +8,7 @@ export type TableDataModel = {
 	urlQueryParams?: { [key: string]: unknown };
 	columnsWithIcon: string[];
 	columnsWithUrl: string[];
+	columnsWithChips: string[];
 };
 export interface ProjectManagmenetTableData extends TableDataModel {
 	resource: string;
@@ -27,6 +28,12 @@ export interface PendingApprovalsTableData extends TableDataModel {
 	email: string;
 }
 
+export interface MyViewsTableData extends TableDataModel {
+	type: string;
+	createdBy: string;
+	dateCreated: string;
+	status: string;
+}
 export interface ViewProjects extends TableDataModel {
 	name: string;
 	project: string;

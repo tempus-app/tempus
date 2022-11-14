@@ -134,11 +134,11 @@ export class ResourceProfileContentComponent implements OnInit, OnChanges {
 
 	ngOnInit() {
 		const id = parseInt(this.route.snapshot.paramMap.get('id') || '0', 10);
-		this.resourceService.getResourceProfileViews(id).subscribe(profileViews => {
-			this.viewID = profileViews[0].id;
+		this.resourceService.getResourceProfileViews(id).subscribe(data => {
+			this.viewID = data.views[0].id;
 
 			// Load view that needs approval
-			const sortedViews = sortViewsByLatestUpdated(profileViews);
+			const sortedViews = sortViewsByLatestUpdated(data.views);
 			let latestView = sortedViews[0];
 
 			// If no approvals, display approved Primary view

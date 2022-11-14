@@ -213,10 +213,11 @@ export class ViewsService {
 		}
 	}
 
-	async getViewsByResource(resourceId: number): Promise<View[]> {
+	async getViewsByResource(resourceId: number, page: number, pageSize: number) {
 		// error check
+
 		await this.resourceService.getResourceInfo(resourceId);
-		const viewsInResource = await this.viewsRepository.find({
+		const viewsAndCount = await this.viewsRepository.findAndCount({
 			relations: [
 				'experiences',
 				'educations',
@@ -233,9 +234,11 @@ export class ViewsService {
 					id: resourceId,
 				},
 			},
+			take: Number(pageSize),
+			skip: Number(page) * Number(pageSize),
 		});
 
-		return viewsInResource;
+		return { views: viewsAndCount[0], totalViews: viewsAndCount[1] };
 	}
 
 	async getViewsByMultipleResource(resourceIds: number[]): Promise<View[]> {
