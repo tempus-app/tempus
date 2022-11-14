@@ -1,5 +1,8 @@
 {
 	"onboardingClient": {
+		"landingCTA": {
+			"title": "CAL Onboarding System"
+		},
 		"signinFeature": {
 			"title": "Sign In",
 			"usernamePlaceholder": "Username",
@@ -33,7 +36,7 @@
 			}
 		},
 		"presentational": {
-			"noInfoSection": "You have not entered information for this section",
+			"noInfoSection": "No information has been entered for this section",
 			"personalInfo": {
 				"userDetails": {
 					"title": "Personal Information",

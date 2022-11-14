@@ -1,8 +1,7 @@
 <tempus-stepper
+	*ngIf="stepperIndex !== -1"
 	[steps]="steps"
 	[completed]="completed"
 	[inputedIndex]="stepperIndex"
-	(stepClicked)="navigateToStep($event)"
 ></tempus-stepper>
 <router-outlet></router-outlet>
-<!-- <tempus-footer></tempus-footer> -->
