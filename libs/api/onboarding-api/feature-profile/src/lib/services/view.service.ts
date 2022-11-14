@@ -238,6 +238,52 @@ export class ViewsService {
 		return viewsInResource;
 	}
 
+	async getViewsByMultipleResource(resourceIds: number[]): Promise<View[]> {
+		const viewsToReturn = [];
+
+		resourceIds.forEach(async resourceId => {
+			await this.resourceService.getResourceInfo(resourceId);
+			const viewsInResource = await this.viewsRepository.find({
+				relations: [
+					'experiences',
+					'educations',
+					'skills',
+					'experiences.location',
+					'educations.location',
+					'skills.skill',
+					'certifications',
+					'revision',
+					'revision.views',
+				],
+				where: {
+					resource: {
+						id: resourceId,
+					},
+				},
+			});
+			viewsToReturn.push(viewsInResource);
+		});
+		return viewsToReturn;
+	}
+
+	async getAllViews(): Promise<View[]> {
+		const views = await this.viewsRepository.find({
+			relations: [
+				'experiences',
+				'educations',
+				'skills',
+				'experiences.location',
+				'educations.location',
+				'skills.skill',
+				'certifications',
+				'revision',
+				'revision.views',
+			],
+		});
+
+		return views;
+	}
+
 	async getViewsNamesByResource(resourceId: number): Promise<View[]> {
 		await this.resourceService.getResourceInfo(resourceId);
 		const viewsInResource = await this.viewsRepository
