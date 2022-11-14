@@ -17,6 +17,7 @@ import {
 	TempusResourceState,
 } from '@tempus/client/onboarding-client/resource/data-access';
 import { PageEvent } from '@angular/material/paginator';
+import { RevisionType } from '@tempus/shared-domain';
 
 @Component({
 	selector: 'tempus-my-views',
@@ -117,7 +118,25 @@ export class MyViewsComponent implements OnInit, OnDestroy {
 				this.myViewsTableData = [];
 				this.totalViews = data.totalViews;
 				const viewTypeSet = new Set();
-				data?.views?.forEach(view => {
+				const uniqueViews = data?.views?.filter(view => {
+					const viewExists = viewTypeSet.has(view.type);
+					let { type } = view;
+					if (type === 'PROFILE') {
+						type = 'Primary';
+					}
+
+					if (view.revision?.views) {
+						const latestView = view.revision.views.find(v => v.revisionType !== RevisionType.APPROVED);
+						if (latestView?.type !== view.type) {
+							return false;
+						}
+					}
+
+					viewTypeSet.add(view.type);
+					return !viewExists;
+				});
+
+				uniqueViews?.forEach(view => {
 					let dateCreated = '-';
 					let approvalStatus = '';
 					let createdBy = 'CAL';
@@ -135,20 +154,9 @@ export class MyViewsComponent implements OnInit, OnDestroy {
 
 					if (view.revisionType) {
 						approvalStatus = view.revisionType;
-						if (approvalStatus === 'NEW') {
+						if (approvalStatus === RevisionType.PENDING) {
 							approvalStatus = 'PENDING';
 						}
-					}
-
-					// removes duplicate view types and only shows most recent
-					// assumed that a NEW or REJECTED view will always be more recent than an APPROVED view
-					if (viewTypeSet.has(type)) {
-						const viewWithExistingType = this.myViewsTableData.find(v => v.type === type);
-						if (viewWithExistingType?.status === 'APPROVED') {
-							this.myViewsTableData = this.myViewsTableData.filter(item => item !== viewWithExistingType);
-						}
-					} else {
-						viewTypeSet.add(type);
 					}
 
 					this.myViewsTableData.push({

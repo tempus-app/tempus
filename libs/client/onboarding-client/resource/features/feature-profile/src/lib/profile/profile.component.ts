@@ -21,7 +21,6 @@ import {
 	getResourceOriginalResumeById,
 	selectDownloadProfile,
 	selectResourceOriginalResume,
-	selectResourceViews,
 	TempusResourceState,
 } from '@tempus/client/onboarding-client/resource/data-access';
 import { TranslateService } from '@ngx-translate/core';
@@ -138,32 +137,31 @@ export class ProfileComponent implements OnInit, OnDestroy {
 		);
 
 		// display latest primary view
-		this.resourceStore
-			.select(selectResourceViews)
-			.pipe(takeUntil(this.destroyed$))
-			.subscribe(data => {
-				let filteredAndSortedViews = data?.views?.filter(view => view.viewType === ViewType.PRIMARY) || [];
-				filteredAndSortedViews = sortViewsByLatestUpdated(filteredAndSortedViews);
+		// this.resourceStore
+		// 	.select(selectResourceViews)
+		// 	.pipe(takeUntil(this.destroyed$))
+		// 	.subscribe(data => {
+		// 		let filteredAndSortedViews = data?.views?.filter(view => view.viewType === ViewType.PRIMARY) || [];
+		// 		filteredAndSortedViews = sortViewsByLatestUpdated(filteredAndSortedViews);
 
-				const latestView = filteredAndSortedViews[0];
+		// 		const latestView = filteredAndSortedViews[0];
+		// 		console.log(latestView);
+		// 		this.currentViewId = latestView.id;
+		// 		this.certifications = latestView.certifications;
+		// 		this.educations = latestView.educations;
+		// 		this.educationsSummary = latestView.educationsSummary;
+		// 		this.workExperiences = latestView.experiences;
+		// 		this.experiencesSummary = latestView.experiencesSummary;
+		// 		this.profileSummary = latestView.profileSummary;
+		// 		this.skills = latestView.skills.map(skill => skill.skill.name);
+		// 		this.skillsSummary = latestView.skillsSummary;
+		// 		this.isRejected = latestView.revisionType === RevisionType.REJECTED;
+		// 		this.isPendingApproval = latestView.revisionType === RevisionType.PENDING;
+		// 		this.rejectionComments = latestView.revision?.comment ? latestView.revision.comment : '';
 
-				this.currentViewId = latestView.id;
-				this.certifications = latestView.certifications;
-				this.educations = latestView.educations;
-				this.educationsSummary = latestView.educationsSummary;
-				this.workExperiences = latestView.experiences;
-				this.experiencesSummary = latestView.experiencesSummary;
-				this.profileSummary = latestView.profileSummary;
-				this.skills = latestView.skills.map(skill => skill.skill.name);
-				this.skillsSummary = latestView.skillsSummary;
-				this.isRejected = latestView.revisionType === RevisionType.REJECTED;
-				this.isPendingApproval = latestView.revisionType === RevisionType.PENDING;
-				this.rejectionComments = latestView.revision?.comment ? latestView.revision.comment : '';
+		// 		this.dataLoaded = true;
+		// 	});
 
-				this.dataLoaded = true;
-			});
-
-		// TODO: implement in store
 		this.resourceService.getResourceInformation().subscribe(resData => {
 			this.userId = resData.id;
 			this.fullName = `${resData.firstName} ${resData.lastName}`;
