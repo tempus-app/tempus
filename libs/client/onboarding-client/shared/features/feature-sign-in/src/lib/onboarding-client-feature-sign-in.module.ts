@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ClientSharedUiComponentsInputModule } from '@tempus/client/shared/ui-components/input';
 import { ClientSharedUiComponentsPresentationalModule } from '@tempus/client/shared/ui-components/presentational';
+import { ClientSharedPresentationalLandingModule } from '@tempus/client/onboarding-client/shared/ui-components/presentational/landing';
 import { RouterModule } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -17,6 +18,7 @@ import { SignInComponent } from './signin/sign-in.component';
 		CommonModule,
 		ClientSharedUiComponentsInputModule,
 		ClientSharedUiComponentsPresentationalModule,
+		ClientSharedPresentationalLandingModule,
 		MatIconModule,
 		MatButtonModule,
 		MatGridListModule,

@@ -48,6 +48,9 @@
 			"@tempus/client/onboarding-client/shared/ui-components/input/resource-information": [
 				"libs/client/onboarding-client/shared/ui-components/input/resource-information/src/index.ts"
 			],
+			"@tempus/client/onboarding-client/shared/ui-components/presentational/landing": [
+				"libs/client/onboarding-client/shared/ui-components/presentational/landing/src/index.ts"
+			],
 			"@tempus/client/onboarding-client/shared/ui-components/presentational/resource-display": [
 				"libs/client/onboarding-client/shared/ui-components/presentational/resource-display/src/index.ts"
 			],

@@ -1,0 +1,26 @@
+{
+	"projectType": "library",
+	"root": "libs/client/onboarding-client/shared/ui-components/presentational/landing",
+	"sourceRoot": "libs/client/onboarding-client/shared/ui-components/presentational/landing/src",
+	"prefix": "tempus",
+	"targets": {
+		"test": {
+			"executor": "@nrwl/jest:jest",
+			"outputs": ["coverage/libs/client/onboarding-client/shared/ui-components/presentational/landing"],
+			"options": {
+				"jestConfig": "libs/client/onboarding-client/shared/ui-components/presentational/landing/jest.config.js",
+				"passWithNoTests": true
+			}
+		},
+		"lint": {
+			"executor": "@nrwl/linter:eslint",
+			"options": {
+				"lintFilePatterns": [
+					"libs/client/onboarding-client/shared/ui-components/presentational/landing/src/**/*.ts",
+					"libs/client/onboarding-client/shared/ui-components/presentational/landing/src/**/*.html"
+				]
+			}
+		}
+	},
+	"tags": []
+}

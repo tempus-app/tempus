@@ -12,6 +12,7 @@
 		"api-shared-feature-seed": "libs/api/shared/feature-seed",
 		"api-shared-logging": "libs/api/shared/logging",
 		"client-onboarding-client-business-owner-features-feature-view-resource-profile": "libs/client/onboarding-client/business-owner/features/feature-view-resource-profile",
+		"onboarding-client-shared-presentational-landing": "libs/client/onboarding-client/shared/ui-components/presentational/landing",
 		"client-onboarding-shared-project": "libs/client/onboarding-client/shared/ui-components/project",
 		"client-shared-ui-assets": "libs/client/shared/ui-assets",
 		"client-shared-ui-components-input": "libs/client/shared/ui-components/input",

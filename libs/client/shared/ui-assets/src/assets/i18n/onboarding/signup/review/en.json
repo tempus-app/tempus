@@ -15,13 +15,13 @@
 		},
 		"modal": {
 			"successModal": {
-				"title": "Resource Created Successfully.",
+				"title": "Your account has been created successfully!",
 				"closeText": "CANCEL",
 				"confirmText": "LOGIN",
-				"message": "Click LOGIN to continue."
+				"message": "Login to continue."
 			},
 			"errorModal": {
-				"title": "Error Creating Resource.",
+				"title": "There was an error creating your account.",
 				"closeText": "CANCEL",
 				"confirmText": "OK",
 				"message": "Please try again."

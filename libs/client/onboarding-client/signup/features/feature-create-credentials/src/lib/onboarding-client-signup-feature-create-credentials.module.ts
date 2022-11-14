@@ -12,9 +12,9 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { HttpClient } from '@angular/common/http';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { ClientSharedPresentationalLandingModule } from '@tempus/client/onboarding-client/shared/ui-components/presentational/landing';
 import { CredentialsComponent } from './credentials/credentials.component';
 import { SignUpComponent } from './sign-up/sign-up.component';
-import { LandingCtaComponent } from './landing-cta/landing-cta.component';
 
 function createTranslateLoader(http: HttpClient) {
 	return new TranslateHttpLoader(http, './assets/i18n/onboarding/signup/credentials/', '.json');
@@ -26,6 +26,7 @@ function createTranslateLoader(http: HttpClient) {
 		ClientSharedUiComponentsModalModule,
 		ClientSharedUiComponentsInputModule,
 		ClientSharedUiComponentsPresentationalModule,
+		ClientSharedPresentationalLandingModule,
 		FlexLayoutModule,
 		MatButtonModule,
 		MatFormFieldModule,
@@ -50,6 +51,6 @@ function createTranslateLoader(http: HttpClient) {
 			extend: true,
 		}),
 	],
-	declarations: [CredentialsComponent, SignUpComponent, LandingCtaComponent],
+	declarations: [CredentialsComponent, SignUpComponent],
 })
 export class OnboardingClientSignupFeatureCreateCredentialsModule {}
