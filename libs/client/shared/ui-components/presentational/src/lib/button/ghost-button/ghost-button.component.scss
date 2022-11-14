@@ -1,0 +1,31 @@
+@use 'abstracts/helper' as abs;
+@use 'components/helper' as cmp;
+
+.ghost-button {
+	&__button {
+		@include abs.body-2();
+		border-radius: 1em;
+		border: abs.$primary-600 solid 2px;
+		background: none;
+		padding: 0.5em 1em;
+		width: auto;
+		transition: background-color 200ms ease-out 100ms;
+	}
+	&__button:hover {
+		background-color: abs.$primary-100;
+		cursor: pointer;
+	}
+	&__label {
+		display: flex;
+		align-self: center;
+		text-align: center;
+		margin: none;
+		justify-content: center;
+		white-space: nowrap;
+	}
+	&__icon-container {
+		display: flex;
+		flex-direction: row;
+		gap: 0.5rem;
+	}
+}

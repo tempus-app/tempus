@@ -2,26 +2,18 @@
 /* eslint-disable @typescript-eslint/dot-notation */
 /* eslint-disable class-methods-use-this */
 import { Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { FormBuilder, Validators, FormControl } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { TranslateService } from '@ngx-translate/core';
 import {
 	BusinessOwnerState,
-	createClient,
 	createLink,
-	createProject,
-	createResourceProjectAssignment,
 	getAllClients,
 	getAllResourceInfoBasic,
 	getAllResProjInfo,
 	getAllSearchableTerms,
 	resetAsyncStatusState,
-	resetCreatedClientState,
-	resetCreatedProjectState,
 	resetProjManagementState,
 	selectAsyncStatus,
 	selectClientData,
-	selectCreatedClientData,
 	selectCreatedProjectData,
 	selectProjectAssigned,
 	selectResourceBasicData,
@@ -30,16 +22,19 @@ import {
 } from '@tempus/client/onboarding-client/business-owner/data-access';
 import {
 	AsyncRequestState,
+	OnboardingClientProjectService,
 	OnboardingClientState,
 	selectLoggedInUserNameEmail,
 } from '@tempus/client/onboarding-client/shared/data-access';
 import { InputType } from '@tempus/client/shared/ui-components/input';
 import { CustomModalType, ModalService, ModalType } from '@tempus/client/shared/ui-components/modal';
 import { ButtonType, Column, ProjectManagmenetTableData } from '@tempus/client/shared/ui-components/presentational';
-import { Client, ErorType, IAssignProjectDto, ICreateLinkDto, RoleType } from '@tempus/shared-domain';
+import { Client, ErorType, ICreateLinkDto, RoleType } from '@tempus/shared-domain';
 import { distinctUntilChanged, finalize, Subject, Subscription, take, takeUntil } from 'rxjs';
 import { Router } from '@angular/router';
 import { PageEvent } from '@angular/material/paginator';
+import { TranslateService } from '@ngx-translate/core';
+import { FormBuilder, Validators, FormControl } from '@angular/forms';
 
 @Component({
 	selector: 'tempus-manage-resources',
@@ -54,6 +49,7 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 		private fb: FormBuilder,
 		private translateService: TranslateService,
 		private router: Router,
+		private projectService: OnboardingClientProjectService,
 	) {
 		const { currentLang } = translateService;
 		// eslint-disable-next-line no-param-reassign
@@ -107,8 +103,6 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 
 	$inviteModalClosedEvent = new Subject<void>();
 
-	$assignModalClosedEvent = new Subject<void>();
-
 	$createProjectModalClosedEvent = new Subject<void>();
 
 	ButtonType = ButtonType;
@@ -153,9 +147,6 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 
 	@ViewChild('inviteTemplate')
 	inviteModal!: TemplateRef<unknown>;
-
-	@ViewChild('assignTemplate')
-	assignModal!: TemplateRef<unknown>;
 
 	@ViewChild('newProjectTemplate')
 	newProjectModal!: TemplateRef<unknown>;
@@ -226,13 +217,6 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 				),
 			],
 		}),
-		assign: this.fb.group({
-			resource: ['', Validators.required],
-			client: ['', Validators.required],
-			project: ['', Validators.required],
-			startDate: ['', Validators.required],
-			title: ['', Validators.required],
-		}),
 		createProject: this.fb.group({
 			client: ['', Validators.required],
 			clientName: [''],
@@ -252,8 +236,6 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 			this.modalService.close();
 			if (modalId === 'inviteModal') {
 				this.$inviteModalClosedEvent.next();
-			} else if (modalId === 'assignModal') {
-				this.$assignModalClosedEvent.next();
 			} else if (modalId === 'newProjectModal') {
 				this.$createProjectModalClosedEvent.next();
 			} else if (modalId === 'error') {
@@ -349,7 +331,6 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 			.select(selectResProjClientData)
 			.pipe(takeUntil(this.$destroyed))
 			.subscribe(data => {
-				debugger;
 				this.totalNumResProjClientOptions = data.totalItems;
 				this.resProjClientTableData = [];
 				data.projResClientData.forEach(resProjClientData => {
@@ -378,7 +359,10 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 						const allProj: { val: string; id: number }[] = [];
 
 						resProjClientData.projectClients.forEach(projClientData => {
-							const allProjUnderClient = projClientData.projects.map(proj => ({ val: proj.val, id: proj.id }));
+							const allProjUnderClient = projClientData.projects.map(proj => ({
+								val: proj.val,
+								id: proj.id,
+							}));
 							allProjUnderClient.forEach(proj => {
 								allProj.push(proj);
 							});
@@ -429,9 +413,7 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 
 	// Projects should be those that are under the client and not already assigned to the resource
 	updateProjects = (clientId?: string) => {
-		const existingSelectedClient = this.manageResourcesForm.get('assign')?.get('client')?.value;
-		const id = parseInt(clientId || existingSelectedClient, 10);
-		this.manageResourcesForm.get('assign')?.get('project')?.reset();
+		const id = parseInt(clientId || '0', 10);
 		this.manageResourcesForm.get('invite')?.get('project')?.reset();
 
 		this.currentProjects =
@@ -443,127 +425,7 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 						id: proj.id,
 					};
 				}) || [];
-		this.filterCurrentProjectsBySelectedResource();
 	};
-
-	// Shouldnt see a projectif the currently selected resource is already assigned to it
-	filterCurrentProjectsBySelectedResource() {
-		const curSelectedRes = this.manageResourcesForm.get('assign')?.get('resource')?.value;
-		this.currentProjects = this.currentProjects.filter(curFilteredProj => {
-			if (curSelectedRes) {
-				const curResProjClientTableDatum = this.resProjClientTableData.find(
-					resProjClient => resProjClient.resourceId === curSelectedRes,
-				);
-				if (curResProjClientTableDatum && curResProjClientTableDatum?.allProjects.length > 0) {
-					return !curResProjClientTableDatum?.allProjects.some(proj => proj.id === curFilteredProj.id);
-				}
-				return true;
-			}
-			return true;
-		});
-	}
-
-	createProjectModal() {
-		this.translateService
-			.get(`${this.prefix}modal.newProjectModal`)
-			.pipe(take(1))
-			.subscribe(data => {
-				this.modalService.open(
-					{
-						title: data.title,
-						id: 'newProjectModal',
-						closable: true,
-						confirmText: data.confirmText,
-						modalType: ModalType.INFO,
-						closeText: data.closeText,
-						template: this.newProjectModal,
-					},
-					CustomModalType.CONTENT,
-				);
-			});
-
-		this.manageResourcesForm
-			.get('createProject')
-			?.valueChanges.pipe(
-				takeUntil(this.$createProjectModalClosedEvent),
-				finalize(() => {
-					const createProjectForm = this.manageResourcesForm.get('createProject');
-					const clientName = createProjectForm?.get('clientName')?.value;
-					const projectData = {
-						name: createProjectForm?.get('name')?.value,
-						startDate: createProjectForm?.get('startDate')?.value,
-						clientRepresentativeFirstName: createProjectForm?.get('clientRepFirstName')?.value,
-						clientRepresentativeLastName: createProjectForm?.get('clientRepLastName')?.value,
-						clientRepresentativeEmail: createProjectForm?.get('clientRepEmail')?.value,
-						clientRepresentativeId: createProjectForm?.get('clientRepresentative')?.value,
-						status: createProjectForm?.get('status')?.value,
-					};
-					const startDate = createProjectForm?.get('startDate')?.value;
-					const projectManager = createProjectForm?.get('projectManager')?.value;
-
-					if (clientName) {
-						const createClientDto = {
-							clientName,
-						};
-						// create client
-						this.businessOwnerStore.dispatch(
-							createClient({
-								createClientDto,
-							}),
-						);
-
-						// call with createdclient
-						this.businessOwnerStore
-							.select(selectCreatedClientData)
-							.pipe(takeUntil(this.$destroyed))
-							.subscribe(data => {
-								if (data) {
-									const createProjectDto = { ...projectData, clientId: data?.id };
-									this.businessOwnerStore.dispatch(createProject({ createProjectDto }));
-								}
-							});
-					} else {
-						const createProjectDto = { ...projectData, clientId: createProjectForm?.get('client')?.value };
-						this.businessOwnerStore.dispatch(createProject({ createProjectDto }));
-					}
-
-					// after project is created, add project manager
-					this.businessOwnerStore
-						.select(selectCreatedProjectData)
-						.pipe(takeUntil(this.$destroyed))
-						.subscribe(data => {
-							if (data) {
-								const assignProjectDto = {
-									startDate,
-									title: 'Project Manager',
-								};
-								this.businessOwnerStore.dispatch(
-									createResourceProjectAssignment({ resourceId: projectManager, projectId: data.id, assignProjectDto }),
-								);
-
-								// clean up values after we are done with them
-
-								this.businessOwnerStore.dispatch(resetCreatedClientState());
-								this.businessOwnerStore.dispatch(resetCreatedProjectState());
-							}
-						});
-				}),
-			)
-			.subscribe(() => {
-				if (this.manageResourcesForm.get('createProject')?.valid) {
-					this.modalService.confirmDisabled()?.next(false);
-				} else {
-					this.modalService.confirmDisabled()?.next(true);
-				}
-			});
-
-		this.modalService
-			.closed()
-			.pipe(take(1))
-			.subscribe(() => {
-				this.resetModalData();
-			});
-	}
 
 	invite() {
 		this.translateService
@@ -648,64 +510,10 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 		};
 	}
 
-	assign() {
-		this.translateService
-			.get(`${this.prefix}modal.assignModal`)
-			.pipe(take(1))
-			.subscribe(data => {
-				this.modalService.open(
-					{
-						title: data['title'],
-						id: 'assignModal',
-						closable: true,
-						confirmText: data['confirmText'],
-						modalType: ModalType.INFO,
-						closeText: data['closeText'],
-						template: this.assignModal,
-					},
-					CustomModalType.CONTENT,
-				);
-			});
-		this.modalService.confirmDisabled()?.next(true);
-		this.manageResourcesForm
-			.get('assign')
-			?.valueChanges.pipe(
-				takeUntil(this.$assignModalClosedEvent),
-				finalize(() => {
-					const assignDto: IAssignProjectDto = {
-						title: this.manageResourcesForm.get('assign')?.get('title')?.value,
-						startDate: this.manageResourcesForm.get('assign')?.get('startDate')?.value,
-					};
-					this.businessOwnerStore.dispatch(
-						createResourceProjectAssignment({
-							resourceId: this.manageResourcesForm.get('assign')?.get('resource')?.value,
-							projectId: this.manageResourcesForm.get('assign')?.get('project')?.value,
-							assignProjectDto: assignDto,
-						}),
-					);
-				}),
-			)
-			.subscribe(() => {
-				if (this.manageResourcesForm.get('assign')?.valid) {
-					this.modalService.confirmDisabled()?.next(false);
-				} else {
-					this.modalService.confirmDisabled()?.next(true);
-				}
-			});
-		this.modalService
-			.closed()
-			.pipe(take(1))
-			.subscribe(() => {
-				this.resetModalData();
-			});
-	}
-
 	resetModalData = () => {
 		this.currentProjects = [];
 		this.currentClientReps = [];
 		this.manageResourcesForm.get('invite')?.reset();
-		this.manageResourcesForm.get('assign')?.reset();
-		this.manageResourcesForm.get('createProject')?.reset();
 	};
 
 	filter() {
@@ -713,13 +521,13 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 	}
 
 	tablePaginationEvent(pageEvent: PageEvent) {
-		if (pageEvent.pageSize != this.tablePagination.pageSize) {
+		if (pageEvent.pageSize !== this.tablePagination.pageSize) {
 			this.tablePagination = {
 				page: 0,
 				pageSize: pageEvent.pageSize,
 				filter: this.tablePagination.filter,
 			};
-		} else if (pageEvent.pageIndex != this.tablePagination.page) {
+		} else if (pageEvent.pageIndex !== this.tablePagination.page) {
 			this.tablePagination.page = pageEvent.pageIndex;
 		}
 		this.businessOwnerStore.dispatch(getAllResProjInfo(this.tablePagination));

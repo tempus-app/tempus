@@ -1,0 +1,26 @@
+{
+	"projectType": "library",
+	"root": "libs/client/onboarding-client/business-owner/features/feature-view-projects",
+	"sourceRoot": "libs/client/onboarding-client/business-owner/features/feature-view-projects/src",
+	"prefix": "tempus",
+	"targets": {
+		"test": {
+			"executor": "@nrwl/jest:jest",
+			"outputs": ["coverage/libs/client/onboarding-client/business-owner/features/feature-view-projects"],
+			"options": {
+				"jestConfig": "libs/client/onboarding-client/business-owner/features/feature-view-projects/jest.config.js",
+				"passWithNoTests": true
+			}
+		},
+		"lint": {
+			"executor": "@nrwl/linter:eslint",
+			"options": {
+				"lintFilePatterns": [
+					"libs/client/onboarding-client/business-owner/features/feature-view-projects/src/**/*.ts",
+					"libs/client/onboarding-client/business-owner/features/feature-view-projects/src/**/*.html"
+				]
+			}
+		}
+	},
+	"tags": []
+}

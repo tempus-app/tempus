@@ -9,6 +9,7 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { ApproveViewDto, CreateViewDto } from '@tempus/api/shared/dto';
 import { RevisionEntity, ViewEntity } from '@tempus/api/shared/entity';
+import { sortViewsByLatestUpdated } from '@tempus/client/shared/util';
 // eslint-disable-next-line @nrwl/nx/enforce-module-boundaries
 import { ResourceService } from '@tempus/onboarding-api/feature-account';
 import { Revision, RevisionType, RoleType, User, View, ViewType } from '@tempus/shared-domain';
@@ -32,7 +33,7 @@ export class ViewsService {
 		viewEntity.revisionType = RevisionType.APPROVED;
 		viewEntity.resource = resourceEntity;
 		viewEntity.locked = false;
-		viewEntity.type = 'PROFILE';
+		viewEntity.type = 'Primary';
 		viewEntity.createdAt = new Date(Date.now());
 		viewEntity.lastUpdateDate = new Date(Date.now());
 
@@ -49,7 +50,7 @@ export class ViewsService {
 		viewEntity.createdAt = new Date(Date.now());
 		viewEntity.lastUpdateDate = new Date(Date.now());
 
-		if (user.roles.includes(RoleType.BUSINESS_OWNER)) {
+		if (user.roles.includes(RoleType.BUSINESS_OWNER) || user.roles.includes(RoleType.SUPERVISOR)) {
 			viewEntity.revisionType = RevisionType.APPROVED;
 			viewEntity.locked = false;
 			viewEntity.createdBy = RoleType.BUSINESS_OWNER;
@@ -65,10 +66,7 @@ export class ViewsService {
 		return newView;
 	}
 
-	async reviseView(viewId: number, user: User, newView: CreateViewDto): Promise<Revision> {
-		const view = await this.getView(viewId);
-		if (view.locked) throw new UnauthorizedException(`Cannot edit locked view`);
-
+	async reviseView(viewId: number, user: User, newView: CreateViewDto): Promise<Revision | View> {
 		let userRole = RoleType.USER;
 		if (user.roles.includes(RoleType.BUSINESS_OWNER)) {
 			userRole = RoleType.BUSINESS_OWNER;
@@ -76,7 +74,14 @@ export class ViewsService {
 			userRole = RoleType.SUPERVISOR;
 		}
 
+		const view = await this.getView(viewId);
+
+		if (userRole === RoleType.USER) {
+			if (view.locked) throw new UnauthorizedException(`Cannot edit locked view`);
+		}
 		const resourceEntity = await this.resourceService.getResourceInfo(view.resource.id);
+
+		// Create new Pending view
 		let newViewEntity = ViewEntity.fromDto(newView);
 		newViewEntity.resource = resourceEntity;
 		newViewEntity.locked = true;
@@ -84,34 +89,45 @@ export class ViewsService {
 		newViewEntity.updatedBy = userRole;
 		newViewEntity.createdBy = view.createdBy;
 		newViewEntity.viewType = view.viewType;
-		newViewEntity.type = view.type;
 		newViewEntity.lastUpdateDate = new Date(Date.now());
 		newViewEntity.revisionType = RevisionType.PENDING;
 
+		// Business Owner changes are directly approved
 		if (user.roles.includes(RoleType.BUSINESS_OWNER) || user.roles.includes(RoleType.SUPERVISOR)) {
+			// Replace with new Approved view
 			newViewEntity.createdAt = view.createdAt;
 			newViewEntity.revisionType = RevisionType.APPROVED;
+			newViewEntity.locked = false;
+			const newApprovedView = await this.viewsRepository.save(newViewEntity);
+
+			// Delete old view and its revisions
 			const existingRevision = view.revision;
 			await this.viewsRepository.remove(view);
 			if (existingRevision) {
+				await this.viewsRepository.remove(existingRevision.views);
 				await this.revisionRepository.remove(existingRevision);
 			}
-			await this.viewsRepository.save(newViewEntity);
-			return null;
+
+			return newApprovedView;
 		}
+
 		newViewEntity = await this.viewsRepository.save(newViewEntity);
 
+		// Lock original view so it cannot be edited again
 		view.locked = true;
 		await this.viewsRepository.save(view);
 
+		// If view has been previously rejected, replace Rejected view with Pending
 		if (view.revision) {
-			const revisionEntity = view.revision;
-			const previousNewRevision = view.revision.views[1];
-			await this.viewsRepository.remove(previousNewRevision);
-			revisionEntity.views[1] = newViewEntity;
-			const revisionToReturn = await this.revisionRepository.save(revisionEntity);
+			const rejectedView = view.revision.views.find(item => item.revisionType === RevisionType.REJECTED);
+			const rejectedIndex = view.revision.views.indexOf(rejectedView);
+			view.revision.views[rejectedIndex] = newViewEntity;
+			await this.viewsRepository.remove(rejectedView);
+			const revisionToReturn = await this.revisionRepository.save(view.revision);
 			return revisionToReturn;
 		}
+
+		// Otherwise create a new revision
 		const revisionEntity = new RevisionEntity(null, newViewEntity.createdAt, null, [view, newViewEntity]);
 		const revisionToReturn = await this.revisionRepository.save(revisionEntity);
 
@@ -127,28 +143,72 @@ export class ViewsService {
 		});
 		if (!viewEntity) throw new NotFoundException(`Could not find view with id ${viewId}`);
 
-		const revisionEntity = viewEntity.revision;
+		// New secondary views
+		if (viewEntity.viewType === ViewType.SECONDARY && !viewEntity.revision) {
+			if (approval === true) {
+				viewEntity.revisionType = RevisionType.APPROVED;
+				viewEntity.locked = false;
+				viewEntity.lastUpdateDate = new Date(Date.now());
+				viewEntity.revision = null;
+				return this.viewsRepository.save(viewEntity);
+			}
+			if (approval === false) {
+				const revisionEntity = new RevisionEntity(null, new Date(Date.now()), false, null);
+				revisionEntity.comment = comment;
+				const newRevision = await this.revisionRepository.save(revisionEntity);
+				viewEntity.revision = newRevision;
+				viewEntity.revisionType = RevisionType.REJECTED;
+				viewEntity.locked = false;
+				viewEntity.lastUpdateDate = new Date(Date.now());
+				await this.viewsRepository.save(viewEntity);
+				return newRevision;
+			}
+		}
 
+		const revisionEntity = viewEntity.revision;
 		revisionEntity.approved = approval;
+		revisionEntity.comment = comment;
+
+		const sortedRevisionViews = sortViewsByLatestUpdated(revisionEntity.views);
+		const latestView = sortedRevisionViews[0];
+		const oldView = sortedRevisionViews[1];
 
 		if (approval === true) {
-			const view = revisionEntity.views[0];
-			const newView = revisionEntity.views[1];
-			newView.revisionType = RevisionType.APPROVED;
-			newView.lastUpdateDate = new Date(Date.now());
-			await this.viewsRepository.remove(view);
-			newView.revision = null;
-			newView.locked = false;
-			newView.createdAt = view.createdAt;
-			const toReturn = await this.viewsRepository.save(newView);
+			// If only one view, approve view
+			if (revisionEntity.views.length === 1) {
+				latestView.revisionType = RevisionType.APPROVED;
+				latestView.lastUpdateDate = new Date(Date.now());
+				latestView.revision = null;
+				latestView.locked = false;
+				const toReturn = await this.viewsRepository.save(latestView);
+				await this.revisionRepository.remove(revisionEntity);
+				return toReturn;
+			}
+
+			// Replace latest view with new Approved view, delete any revisions
+			latestView.revisionType = RevisionType.APPROVED;
+			latestView.lastUpdateDate = new Date(Date.now());
+			latestView.revision = null;
+			latestView.locked = false;
+			latestView.createdAt = oldView.createdAt;
+			const toReturn = await this.viewsRepository.save(latestView);
+
+			await this.viewsRepository.remove(oldView);
 			await this.revisionRepository.remove(revisionEntity);
 			return toReturn;
 		}
 		if (approval === false) {
 			revisionEntity.comment = comment;
-			revisionEntity.views[1].locked = false;
-			revisionEntity.views[1].revisionType = RevisionType.REJECTED;
-			await this.viewsRepository.save(revisionEntity.views[1]);
+			if (revisionEntity.views.length === 1) {
+				latestView.locked = false;
+				latestView.revisionType = RevisionType.REJECTED;
+				await this.viewsRepository.save(latestView);
+				return this.revisionRepository.save(revisionEntity);
+			}
+			// Update latest view to Rejected
+			latestView.locked = false;
+			latestView.revisionType = RevisionType.REJECTED;
+			await this.viewsRepository.save(latestView);
 			return this.revisionRepository.save(revisionEntity);
 		}
 	}
@@ -212,7 +272,9 @@ export class ViewsService {
 		}
 
 		if (viewEntity.revision) {
-			const revisionNewView = await this.viewsRepository.findOne(viewEntity.revision.views[1].id, {
+			const sortedViews = sortViewsByLatestUpdated(viewEntity.revision.views);
+			const newView = sortedViews[0];
+			const revisionNewView = await this.viewsRepository.findOne(newView.id, {
 				relations: [
 					'experiences',
 					'resource',
@@ -227,7 +289,8 @@ export class ViewsService {
 				],
 			});
 
-			viewEntity.revision.views[1] = revisionNewView;
+			const index = viewEntity.revision.views.indexOf(newView);
+			viewEntity.revision.views[index] = revisionNewView;
 		}
 
 		return viewEntity;

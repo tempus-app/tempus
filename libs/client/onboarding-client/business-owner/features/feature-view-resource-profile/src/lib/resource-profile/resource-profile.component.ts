@@ -1,10 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ChangeDetectorRef, Component, Input, OnInit, ViewChild } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import {
 	OnboardingClientResourceService,
 	OnboardingClientState,
-	selectLoggedInUserNameEmail,
 } from '@tempus/client/onboarding-client/shared/data-access';
 import { LoadView, ProjectResource } from '@tempus/shared-domain';
 import { skip, take } from 'rxjs';
@@ -13,6 +12,7 @@ import {
 	getOriginalResume,
 	selectOriginalResume,
 } from '@tempus/client/onboarding-client/business-owner/data-access';
+import { EditViewFormComponent } from '@tempus/onboarding-client/shared/feature-edit-view-form';
 
 @Component({
 	selector: 'tempus-resource-profile',
@@ -22,10 +22,18 @@ import {
 export class ResourceProfileComponent implements OnInit {
 	constructor(
 		private route: ActivatedRoute,
+		private router: Router,
+		private changeDetector: ChangeDetectorRef,
 		private resourceService: OnboardingClientResourceService,
 		private sharedStore: Store<OnboardingClientState>,
 		private businessOwnerStore: Store<BusinessOwnerState>,
 	) {}
+
+	@ViewChild(EditViewFormComponent, { static: false }) newViewForm!: EditViewFormComponent;
+
+	@Input() editViewEnabled = false;
+
+	resourceId = 0;
 
 	resourceFirstName = '';
 
@@ -59,6 +67,8 @@ export class ResourceProfileComponent implements OnInit {
 
 	projectResources: ProjectResource[] = [];
 
+	isPrimaryView = false;
+
 	childRevisionLoaded(loadedView: LoadView) {
 		this.loadedView = loadedView;
 	}
@@ -67,9 +77,40 @@ export class ResourceProfileComponent implements OnInit {
 		this.viewIndex = viewIndex;
 	}
 
+	editViewClickEvent() {
+		this.editViewEnabled = true;
+		this.changeDetector.detectChanges();
+		const viewId = parseInt(this.route.snapshot.queryParamMap.get('viewId') || '0', 10);
+		if (viewId) {
+			this.resourceService
+				.getViewById(viewId)
+				.pipe(take(1))
+				.subscribe(view => {
+					this.newViewForm.setFormDataFromView(view);
+				});
+		}
+	}
+
+	closeEditView() {
+		this.editViewEnabled = false;
+		this.changeDetector.detectChanges();
+	}
+
+	submitChanges() {
+		const viewId = parseInt(this.route.snapshot.queryParamMap.get('viewId') || '0', 10);
+		const newView = this.newViewForm.generateNewView();
+		this.resourceService
+			.editResourceView(viewId, newView)
+			.pipe(take(1))
+			.subscribe(view => {
+				this.router.navigate([], { queryParams: { viewId: view.id } }).then(() => window.location.reload());
+			});
+		this.closeEditView();
+	}
+
 	ngOnInit(): void {
-		const id = parseInt(this.route.snapshot.paramMap.get('id') || '0', 10);
-		this.resourceService.getResourceInformationById(id).subscribe(resourceInfo => {
+		this.resourceId = parseInt(this.route.snapshot.paramMap.get('id') || '0', 10);
+		this.resourceService.getResourceInformationById(this.resourceId).subscribe(resourceInfo => {
 			this.resourceFirstName = resourceInfo.firstName;
 			this.resourceLastName = resourceInfo.lastName;
 			this.city = resourceInfo.location.city;
@@ -82,15 +123,7 @@ export class ResourceProfileComponent implements OnInit {
 			this.otherLink = resourceInfo.otherLink;
 			this.projectResources = resourceInfo.projectResources;
 		});
-		this.businessOwnerStore.dispatch(getOriginalResume({ resourceId: id }));
-
-		this.sharedStore
-			.select(selectLoggedInUserNameEmail)
-			.pipe(take(1))
-			.subscribe(data => {
-				this.name = `${data.firstName} ${data.lastName}`;
-				this.email = data.email || '';
-			});
+		this.businessOwnerStore.dispatch(getOriginalResume({ resourceId: this.resourceId }));
 
 		this.businessOwnerStore
 			.select(selectOriginalResume)

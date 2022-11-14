@@ -1,5 +1,5 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, EventEmitter, OnDestroy, Output } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import {
 	OnboardingClientState,
@@ -17,10 +17,9 @@ import {
 	ICreateSkillDto,
 	ICreateLocationDto,
 	ICreateSkillTypeDto,
-	RevisionType,
+	View,
 } from '@tempus/shared-domain';
 import { TranslateService } from '@ngx-translate/core';
-import { sortViewsByLatestUpdated } from '@tempus/client/shared/util';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({
@@ -29,12 +28,13 @@ import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@ang
 	styleUrls: ['./edit-view-form.component.scss'],
 	providers: [OnboardingClientResourceService],
 })
-export class EditViewFormComponent implements OnInit, OnDestroy {
+export class EditViewFormComponent implements OnDestroy {
 	constructor(
 		private fb: FormBuilder,
 		private resourceService: OnboardingClientResourceService,
 		private store: Store<OnboardingClientState>,
 		private router: Router,
+		private route: ActivatedRoute,
 		private translateService: TranslateService,
 	) {
 		const { currentLang } = translateService;
@@ -43,8 +43,6 @@ export class EditViewFormComponent implements OnInit, OnDestroy {
 		translateService.use(currentLang);
 	}
 
-	@Input() isPrimaryView = true;
-
 	@Output()
 	closeEditViewClicked = new EventEmitter();
 
@@ -52,6 +50,8 @@ export class EditViewFormComponent implements OnInit, OnDestroy {
 	submitClicked = new EventEmitter();
 
 	dataLoaded = false;
+
+	roles: string[] = [];
 
 	userId = 0;
 
@@ -89,8 +89,6 @@ export class EditViewFormComponent implements OnInit, OnDestroy {
 
 	skillsSummaryForm = this.fb.group({});
 
-	resume: File | null = null;
-
 	ButtonType = ButtonType;
 
 	UserType = UserType;
@@ -99,39 +97,36 @@ export class EditViewFormComponent implements OnInit, OnDestroy {
 
 	previewViewEnabled = false;
 
-	ngOnInit(): void {
-		this.resourceService.getResourceInformation().subscribe(resData => {
-			this.userId = resData.id;
+	isSecondaryView = false;
 
-			// TODO: ADD resource to the store
-			this.resourceService.getResourceOriginalResumeById(this.userId).subscribe(resumeBlob => {
-				this.resume = new File([resumeBlob], 'original-resume.pdf');
-			});
+	isViewNameInputEnabled = false;
 
-			// TODO: to edit secondary views, get latest version of that view through its revision
-			this.resourceService.getResourceProfileViews(this.userId).subscribe(views => {
-				let filteredAndSortedViews = this.isPrimaryView
-					? views.filter(view => view.viewType === ViewType.PRIMARY)
-					: views.filter(view => view.viewType === ViewType.PRIMARY && view.revisionType === RevisionType.APPROVED);
-				filteredAndSortedViews = sortViewsByLatestUpdated(filteredAndSortedViews);
-				const latestView = filteredAndSortedViews[0];
-				this.currentViewId = latestView.id;
-				this.certifications = latestView.certifications;
-				this.educations = latestView.educations;
-				this.educationsSummary = latestView.educationsSummary;
-				this.workExperiences = latestView.experiences;
-				this.experiencesSummary = latestView.experiencesSummary;
-				this.profileSummary = latestView.profileSummary;
-				this.skills = latestView.skills.map(skill => skill.skill.name);
-				this.skillsSummary = latestView.skillsSummary;
+	enableViewNameField() {
+		this.isViewNameInputEnabled = true;
+	}
 
-				this.personalInfoForm.patchValue({
-					profileSummary: this.profileSummary,
-				});
+	setFormDataFromView(view: View) {
+		this.currentViewId = view.id;
+		this.certifications = view.certifications;
+		this.educations = view.educations;
+		this.educationsSummary = view.educationsSummary;
+		this.workExperiences = view.experiences;
+		this.experiencesSummary = view.experiencesSummary;
+		this.profileSummary = view.profileSummary;
+		this.skills = view.skills.map(skill => skill.skill.name);
+		this.skillsSummary = view.skillsSummary;
+		this.isSecondaryView = view.viewType === ViewType.SECONDARY;
 
-				this.dataLoaded = true;
-			});
+		this.personalInfoForm.patchValue({
+			profileSummary: this.profileSummary,
 		});
+
+		if (this.isSecondaryView) {
+			this.isViewNameInputEnabled = true;
+			this.viewName.setValue(view.type);
+		}
+
+		this.dataLoaded = true;
 	}
 
 	loadExperiences(eventData: FormGroup) {
@@ -244,8 +239,8 @@ export class EditViewFormComponent implements OnInit, OnDestroy {
 			educations: educationsDto,
 			experiences: experiencesDto,
 			certifications: certificationsDto,
-			viewType: this.isPrimaryView ? ViewType.PRIMARY : ViewType.SECONDARY,
-			type: this.isPrimaryView ? 'PROFILE' : viewName,
+			viewType: this.isSecondaryView || this.isViewNameInputEnabled ? ViewType.SECONDARY : ViewType.PRIMARY,
+			type: this.isSecondaryView || this.isViewNameInputEnabled ? viewName : 'Primary',
 		} as ICreateViewDto;
 	}
 

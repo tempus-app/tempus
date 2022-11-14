@@ -18,6 +18,8 @@ export interface ResourceProjectClientManagementState {
 	searchableTerms: string[];
 	viewsData: View[] | null;
 	totalViewsData: number;
+	projects: Project[];
+	projectsTotalItems: number;
 }
 
 export const initialState: ResourceProjectClientManagementState = {
@@ -33,6 +35,8 @@ export const initialState: ResourceProjectClientManagementState = {
 	createdProject: null,
 	viewsData: [],
 	totalViewsData: 0,
+	projects: [],
+	projectsTotalItems: 0,
 };
 
 export const projectManagementReducer = createReducer(
@@ -174,6 +178,19 @@ export const projectManagementReducer = createReducer(
 		error: null,
 	})),
 	on(ProjectManagementActions.getAllViewsByStatusFailure, (state, { error }) => ({
+		...state,
+		error,
+		status: AsyncRequestState.ERROR,
+	})),
+	on(ProjectManagementActions.getAllProjectInfo, state => ({ ...state, status: AsyncRequestState.LOADING })),
+	on(ProjectManagementActions.getAllProjectInfoSuccess, (state, { projects, totalItems }) => ({
+		...state,
+		projects,
+		projectsTotalItems: totalItems,
+		status: AsyncRequestState.SUCCESS,
+		error: null,
+	})),
+	on(ProjectManagementActions.getAllProjectInfoFailure, (state, { error }) => ({
 		...state,
 		error,
 		status: AsyncRequestState.ERROR,

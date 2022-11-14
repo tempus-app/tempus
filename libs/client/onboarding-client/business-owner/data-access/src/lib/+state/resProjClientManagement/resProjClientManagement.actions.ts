@@ -93,6 +93,19 @@ export const createProjectFailure = createAction(
 	props<{ error: Error }>(),
 );
 
+export const getAllProjectInfo = createAction(
+	'[Onboarding Client Project API] Get All Projects Info',
+	props<{ pageSize: number; page: number }>(),
+);
+export const getAllProjectInfoSuccess = createAction(
+	'[Onboarding Client Project API] Get All Projects Info Success',
+	props<{ projects: Project[]; totalItems: number }>(),
+);
+export const getAllProjectInfoFailure = createAction(
+	'[Onboarding Client Project API]  Get All Projects Info Failure',
+	props<{ error: Error }>(),
+);
+
 export const createResourceProjectAssignment = createAction(
 	'[Onboarding Client Manage Resources Page] Create Resource Project Assignment',
 	props<{ resourceId: number; projectId: number; assignProjectDto: IAssignProjectDto }>(),

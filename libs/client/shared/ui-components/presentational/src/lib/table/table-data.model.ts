@@ -32,5 +32,10 @@ export interface MyViewsTableData extends TableDataModel {
 	type: string;
 	createdBy: string;
 	dateCreated: string;
+}
+export interface ViewProjects extends TableDataModel {
+	name: string;
+	project: string;
+	start_date: string;
 	status: string;
 }

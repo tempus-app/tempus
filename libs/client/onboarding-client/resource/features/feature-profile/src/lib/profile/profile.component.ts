@@ -13,6 +13,7 @@ import {
 	ICreateCertificationDto,
 	ViewType,
 	RevisionType,
+	View,
 } from '@tempus/shared-domain';
 import {
 	downloadProfileByViewId,
@@ -26,6 +27,7 @@ import {
 import { TranslateService } from '@ngx-translate/core';
 import { sortViewsByLatestUpdated } from '@tempus/client/shared/util';
 import { Store } from '@ngrx/store';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
 	selector: 'tempus-profile',
@@ -46,6 +48,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
 		private translateService: TranslateService,
 		private sharedStore: Store<OnboardingClientState>,
 		private resourceStore: Store<TempusResourceState>,
+		private router: Router,
+		private route: ActivatedRoute,
 	) {
 		const { currentLang } = translateService;
 		// eslint-disable-next-line no-param-reassign
@@ -59,11 +63,17 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
 	currentViewId = 0;
 
+	pageTitle = '';
+
+	viewName = '';
+
 	firstName = '';
 
 	lastName = '';
 
 	fullName = '';
+
+	resume: File | null = null;
 
 	experiencesSummary = '';
 
@@ -82,8 +92,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
 	skills: Array<string> = [];
 
 	destroyed$ = new Subject<void>();
-
-	resume: File | null = null;
 
 	profilePrefix = 'onboardingResourceProfile.';
 
@@ -154,6 +162,53 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
 				this.dataLoaded = true;
 			});
+
+		// TODO: implement in store
+		this.resourceService.getResourceInformation().subscribe(resData => {
+			this.userId = resData.id;
+			this.fullName = `${resData.firstName} ${resData.lastName}`;
+
+			// Use viewId from route
+			const viewId = parseInt(this.route.snapshot.paramMap.get('id') || '0', 10);
+			if (viewId) {
+				this.resourceService.getViewById(viewId).subscribe(view => {
+					this.pageTitle = view.type;
+					this.loadView(view);
+					this.dataLoaded = true;
+				});
+			} else {
+				// Display Primary view
+				this.translateService
+					.get('onboardingResourceProfile.myProfile')
+					.pipe(take(1))
+					.subscribe(data => {
+						this.pageTitle = data;
+					});
+
+				this.resourceService.getResourceProfileViews(this.userId).subscribe(views => {
+					let filteredAndSortedViews = views.filter(view => view.viewType === ViewType.PRIMARY);
+					filteredAndSortedViews = sortViewsByLatestUpdated(filteredAndSortedViews);
+					this.loadView(filteredAndSortedViews[0]);
+					this.dataLoaded = true;
+				});
+			}
+		});
+	}
+
+	loadView(view: View) {
+		this.currentViewId = view.id;
+		this.viewName = view.type;
+		this.certifications = view.certifications;
+		this.educations = view.educations;
+		this.educationsSummary = view.educationsSummary;
+		this.workExperiences = view.experiences;
+		this.experiencesSummary = view.experiencesSummary;
+		this.profileSummary = view.profileSummary;
+		this.skills = view.skills.map(skill => skill.skill.name);
+		this.skillsSummary = view.skillsSummary;
+		this.isRejected = view.revisionType === RevisionType.REJECTED;
+		this.isPendingApproval = view.revisionType === RevisionType.PENDING;
+		this.rejectionComments = view.revision?.comment ? view.revision.comment : '';
 	}
 
 	openEditView() {
@@ -176,7 +231,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
 					const link = document.createElement('a');
 					link.href = downloadURL;
 					// const index = this.viewIDs.indexOf(parseInt(this.currentViewID, 10));
-					link.download = `${this.fullName}-Primary`;
+					link.download = `${this.fullName}-${this.viewName}`;
 					link.click();
 				}
 			});

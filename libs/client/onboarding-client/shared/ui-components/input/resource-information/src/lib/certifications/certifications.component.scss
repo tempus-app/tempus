@@ -14,34 +14,21 @@
 	float: right;
 }
 
-.example-chip-list {
-	width: 100%;
-}
-
-.button-container {
+.add-section__container {
 	display: flex;
-	flex-direction: row;
-	justify-content: space-between;
-	position: relative;
-	bottom: 0;
+	justify-content: flex-end;
+	width: auto;
+	border-bottom: 2px solid abs.$primary-300;
 }
 
-#skillChipInput {
-	text-align: left;
+.remove-button {
+	scale: 0.75;
+	box-shadow: 1px 1px 3px 1px rgba(0, 0, 0, 0.1);
 }
 
 h3 {
 	text-align: left;
 	color: abs.$primary-800;
-}
-
-mat-chip-list {
-	align-items: left;
-	width: 100%;
-}
-
-tempus-chip {
-	margin: 0.25em;
 }
 
 tempus-card {
@@ -51,16 +38,6 @@ tempus-card {
 }
 
 tempus-text-input {
-	text-align: center;
-	width: 90%;
-}
-
-tempus-search-box {
-	text-align: center;
-	width: 90%;
-}
-
-tempus-dropdown {
 	text-align: center;
 	width: 90%;
 }

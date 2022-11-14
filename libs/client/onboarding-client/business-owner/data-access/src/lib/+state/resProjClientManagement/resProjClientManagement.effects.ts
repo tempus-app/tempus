@@ -124,6 +124,23 @@ export class ResourceProjectClientManagementEffects {
 		),
 	);
 
+	getAllProjects$ = createEffect(() =>
+		this.actions$.pipe(
+			ofType(ProjManagementActions.getAllProjectInfo),
+			switchMap(paginationData =>
+				this.projectService.getAllProjects(paginationData).pipe(
+					map(data => {
+						return ProjManagementActions.getAllProjectInfoSuccess({
+							projects: data.projectData,
+							totalItems: data.totalItems,
+						});
+					}),
+					catchError(error => of(ProjManagementActions.getAllProjectInfoFailure({ error }))),
+				),
+			),
+		),
+	);
+
 	assignResourceToProject$ = createEffect(() =>
 		this.actions$.pipe(
 			ofType(ProjManagementActions.createResourceProjectAssignment),

@@ -33,6 +33,15 @@ const routes: Routes = [
 					),
 			},
 			{
+				path: 'projects',
+				canLoad: [AuthGuard],
+				canActivate: [AuthGuard],
+				loadChildren: () =>
+					import('@tempus/client/onboarding-client/business-owner/features/feature-view-projects').then(
+						m => m.OnboardingClientBusinessOwnerFeatureViewProjectsModule,
+					),
+			},
+			{
 				path: 'view-resources/:id',
 				canLoad: [AuthGuard],
 				canActivate: [AuthGuard],

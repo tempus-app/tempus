@@ -1,46 +1,53 @@
 <ng-container>
-  <div
-    fxLayout="row"
-    fxLayoutGap="10px"
-    fxLayoutAlign="center start"
-    fxLayoutAlign.lt-lg="center center"
-    fxLayout.gt-sm="row"
-    fxLayout.lt-lg="column"
-    class="user-bar-container"
-  >
-    <div fxFlex="1"></div>
-    <div *ngIf="loadedView.isRevision" fxFlex>
-      <mat-icon id="revision-icon">error</mat-icon>
-    </div>
-    <div fxFlex="60">
-      <tempus-dropdown
-        [showLabel]="false"
-        [options]="viewNames"
-        label="View"
-        (optionSelect)="onClick($event)"
-        [control]="$any(viewDropDownForm).get('viewSelected')"
-      ></tempus-dropdown>
-    </div>
-    <div>
-      <tempus-button
-        label="{{ viewResourceProfilePrefx + 'buttons.assignButton.title' | translate }}"
-        color="accent"
-      ></tempus-button>
-    </div>
-    <div>
-      <tempus-button
-        label="{{ viewResourceProfilePrefx + 'buttons.createNewViewButton.title' | translate }}"
-        color="accent"
-      ></tempus-button>
-    </div>
-    <div>
-      <tempus-button
-        (buttonClick)="downloadProfile()"
-        label="{{ viewResourceProfilePrefx + 'buttons.downloadProfile.title' | translate }}"
-        color="accent"
-        icon="cloud_download"
-      ></tempus-button>
-    </div>
-    <div fxFlex="2"></div>
-  </div>
+	<div
+		fxLayout="row"
+		fxLayoutGap="10px"
+		fxLayoutAlign="center start"
+		fxLayoutAlign.lt-lg="center center"
+		fxLayout.gt-sm="row"
+		fxLayout.lt-lg="column"
+		class="user-bar-container"
+	>
+		<div fxFlex="1"></div>
+		<div *ngIf="loadedView.isRevision" fxFlex>
+			<mat-icon id="revision-icon">error</mat-icon>
+		</div>
+		<div fxFlex="60">
+			<tempus-dropdown
+				[showLabel]="false"
+				[options]="viewNames"
+				label="View"
+				(optionSelect)="onClick($event)"
+				[control]="$any(viewDropDownForm).get('viewSelected')"
+			></tempus-dropdown>
+		</div>
+		<div>
+			<tempus-assign-resource-modal
+				[resourceName]="resourceName"
+				[resourceEmail]="resourceEmail"
+				[resourceId]="resourceId"
+				[preSelectedResource]="true"
+				[projectResources]="projectResources"
+			></tempus-assign-resource-modal>
+		</div>
+		<div>
+			<tempus-button
+				(buttonClick)="openViewForm()"
+				label="{{ viewResourceProfilePrefx + 'buttons.createNewViewButton.title' | translate }}"
+				color="accent"
+			></tempus-button>
+		</div>
+		<div>
+			<tempus-button (buttonClick)="openEditView()" [buttonType]="buttonType.EDIT" color="accent"></tempus-button>
+		</div>
+		<div>
+			<tempus-button
+				(buttonClick)="downloadProfile()"
+				label="{{ viewResourceProfilePrefx + 'buttons.downloadProfile.title' | translate }}"
+				color="accent"
+				icon="cloud_download"
+			></tempus-button>
+		</div>
+		<div fxFlex="2"></div>
+	</div>
 </ng-container>

@@ -9,13 +9,10 @@
 					[buttonType]="ButtonType.INVITE"
 					[color]="'accent'"
 				></tempus-button>
-				<tempus-button fxFlex="50%" (buttonClick)="assign()" [label]="'Assign'" [color]="'accent'"></tempus-button>
-				<tempus-button
-					fxFlex="50%"
-					(buttonClick)="createProjectModal()"
-					[label]="'New Project'"
-					[color]="'accent'"
-				></tempus-button>
+				<tempus-assign-resource-modal
+					[resProjClientTableData]="resProjClientTableData"
+				></tempus-assign-resource-modal>
+				<tempus-create-project></tempus-create-project>
 			</div>
 			<div
 				fxFlex="min(60%, 40rem)"
@@ -44,7 +41,13 @@
 			</div>
 		</div>
 		<div id="tableContainer">
-			<tempus-table (paginatorEvent)="tablePaginationEvent($event)" [page]="tablePagination.page" [totalItems]="totalNumResProjClientOptions" [tableColumns]="tableColumns" [tableData]="resProjClientTableDataFiltered"></tempus-table>
+			<tempus-table
+				(paginatorEvent)="tablePaginationEvent($event)"
+				[page]="tablePagination.page"
+				[totalItems]="totalNumResProjClientOptions"
+				[tableColumns]="tableColumns"
+				[tableData]="resProjClientTableDataFiltered"
+			></tempus-table>
 			<h2
 				style="text-align: center; margin-top: 2rem"
 				class="mat-h3"
@@ -54,113 +57,7 @@
 			</h2>
 		</div>
 	</div>
-	<ng-template #assignTemplate>
-		<div fxLayout="column">
-			<tempus-card style="margin-top: 1rem">
-				<tempus-dropdown
-					[label]="prefix + 'modal.inviteModal.resourceLabel' | translate"
-					(optionSelect)="updateProjects()"
-					[optionsWithId]="resourceOptions"
-					[control]="$any(manageResourcesForm).get('assign').get('resource')"
-				></tempus-dropdown>
-				<mat-error
-					class="mat-body-2"
-					*ngIf="
-						$any(manageResourcesForm).get('assign').get('resource').invalid &&
-						($any(manageResourcesForm).get('assign').get('resource').touched ||
-							$any(manageResourcesForm).get('assign').get('resource').dirty)
-					"
-				>
-					{{ prefix + 'modal.inviteModal.resourceErr' | translate }}
-				</mat-error>
-				<div fxLayout="row" fxLayoutGap="4%">
-					<div fxFlex="48%">
-						<tempus-text-input
-							[inputType]="InputType.DATE"
-							placeholder="{{ commonPrefix + 'dates.startPlaceholder' | translate }}"
-							[control]="$any(manageResourcesForm).get('assign').get('startDate')"
-						>
-						</tempus-text-input>
-						<mat-error
-							class="mat-body-2"
-							*ngIf="
-								$any(manageResourcesForm).get('assign').get('startDate').invalid &&
-								($any(manageResourcesForm).get('assign').get('startDate').touched ||
-									$any(manageResourcesForm).get('assign').get('startDate').dirty)
-							"
-						>
-							{{ prefix + 'modal.assignModal.startDateErr' | translate }}
-						</mat-error>
-					</div>
-					<div fxFlex="48%">
-						<tempus-text-input
-							[inputType]="InputType.TEXT"
-							placeholder="{{ prefix + 'modal.assignModal.titleLabel' | translate }}"
-							[control]="$any(manageResourcesForm).get('assign').get('title')"
-						>
-						</tempus-text-input>
-						<mat-error
-							class="mat-body-2"
-							*ngIf="
-								$any(manageResourcesForm).get('assign').get('title').invalid &&
-								($any(manageResourcesForm).get('assign').get('title').touched ||
-									$any(manageResourcesForm).get('assign').get('title').dirty)
-							"
-						>
-							{{ prefix + 'modal.assignModal.titleErr' | translate }}
-						</mat-error>
-					</div>
-				</div>
-			</tempus-card>
-			<tempus-card style="margin-top: 1rem">
-				<div fxLayout="row" fxLayoutGap="4%">
-					<div fxFlex="48%">
-						<tempus-dropdown
-							[label]="prefix + 'modal.clientLabel' | translate"
-							[optionsWithId]="clientOptions"
-							(optionSelect)="updateProjects($event)"
-							[control]="$any(manageResourcesForm).get('assign').get('client')"
-						></tempus-dropdown>
-						<mat-error
-							class="mat-body-2"
-							*ngIf="
-								$any(manageResourcesForm).get('assign').get('client').invalid &&
-								($any(manageResourcesForm).get('assign').get('client').touched ||
-									$any(manageResourcesForm).get('assign').get('client').dirty)
-							"
-						>
-							{{ prefix + 'modal.clientErr' | translate }}
-						</mat-error>
-					</div>
-					<div fxFlex="48%">
-						<tempus-dropdown
-							[label]="prefix + 'modal.projectLabel' | translate"
-							[optionsWithId]="currentProjects"
-							[control]="$any(manageResourcesForm).get('assign').get('project')"
-							[disabled]="currentProjects.length <= 0"
-						></tempus-dropdown>
-						<mat-error
-							class="mat-body-2"
-							*ngIf="currentProjects.length <= 0 && $any(manageResourcesForm).get('assign').get('client').value"
-						>
-							{{ prefix + 'modal.assignModal.noProjError' | translate }}
-						</mat-error>
-						<mat-error
-							class="mat-body-2"
-							*ngIf="
-								currentProjects.length > 0 &&
-								$any(manageResourcesForm).get('assign').get('project').invalid &&
-								($any(manageResourcesForm).get('assign').get('project').touched ||
-									$any(manageResourcesForm).get('assign').get('project').dirty)
-							"
-						>
-							{{ prefix + 'modal.projectErr' | translate }}
-						</mat-error>
-					</div>
-				</div>
-			</tempus-card>
-		</div>
-	</ng-template>
+
 	<ng-template #inviteTemplate>
 		<tempus-card style="margin-top: 1rem">
 			<div fxLayout="column">
@@ -244,7 +141,11 @@
 						</mat-error>
 					</div>
 				</div>
-				<div fxLayout="column" fxFlex="100%" *ngIf="inviteType === roleTypeEnumToString(roleType.AVAILABLE_RESOURCE)">
+				<div
+					fxLayout="column"
+					fxFlex="100%"
+					*ngIf="inviteType === roleTypeEnumToString(roleType.AVAILABLE_RESOURCE)"
+				>
 					<div fxLayout="column" fxFlex="100%">
 						<tempus-text-input
 							id="position-invite"
@@ -272,7 +173,7 @@
 								id="client-invite"
 								[control]="$any(manageResourcesForm).get('invite').get('client')"
 								[label]="prefix + 'modal.clientLabel' | translate"
-								(optionSelect)="updateProjects($event)"
+								(optionSelect)="updateProjects()"
 								[optionsWithId]="clientOptions"
 							></tempus-dropdown>
 							<mat-error
@@ -308,15 +209,6 @@
 				</div>
 			</div>
 		</tempus-card>
-	</ng-template>
-	<ng-template #newProjectTemplate>
-		<tempus-create-project-modal
-			[form]="$any(manageResourcesForm).get('createProject')"
-			[clientOptions]="clientOptions"
-			[resourceOptions]="resourceOptions"
-			[clients]="clients"
-			style="margin-top: 1rem"
-		></tempus-create-project-modal>
 	</ng-template>
 	<tempus-spinner [showSpinner]="loading"></tempus-spinner>
 </div>

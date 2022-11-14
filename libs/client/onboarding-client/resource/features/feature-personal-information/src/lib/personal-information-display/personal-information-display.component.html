@@ -1,40 +1,68 @@
 <ng-container>
-        <div id="page-container" fxLayout="column" fxFill fxLayoutGap="20px">
-            <div id="title-container">
-                <div id="my-profile-container">
-                    <h2 class="mat-h2 page-title"> {{profilePrefix + 'title' | translate}}</h2>
-                </div>
-                <div id="button-container" class="page-title">
-                    <tempus-button *ngIf="!editViewEnabled" [buttonType]="ButtonType.EDIT" color="accent"
-                        (buttonClick)="openEditView()"></tempus-button>
-                    <tempus-button *ngIf="editViewEnabled"
-                        label="{{ profilePrefix + 'cancel' | translate }}" color="accent"
-                        (buttonClick)="closeEditView()"
-                        matTooltipClass="tooltip"></tempus-button>
+	<div id="page-container" fxLayout="column" fxFill fxLayoutGap="20px">
+		<div id="title-container">
+			<div id="my-profile-container">
+				<h2 class="mat-h2 page-title">{{ profilePrefix + 'title' | translate }}</h2>
+			</div>
+			<div id="button-container" class="page-title">
+				<tempus-button
+					*ngIf="!editViewEnabled"
+					[buttonType]="ButtonType.EDIT"
+					color="accent"
+					(buttonClick)="openEditView()"
+				></tempus-button>
+				<tempus-button
+					*ngIf="editViewEnabled"
+					label="{{ profilePrefix + 'cancel' | translate }}"
+					color="accent"
+					(buttonClick)="closeEditView()"
+					matTooltipClass="tooltip"
+				></tempus-button>
 
-                    <tempus-button *ngIf="editViewEnabled"
-                    [disabled]="!isValid()"
-                        label="{{ profilePrefix + 'submit' | translate }}" color="accent"
-                        (buttonClick)="submitChanges()"
-                        matTooltipClass="tooltip"></tempus-button>
-                </div>
-            </div>
-            <div class="section-container">
-                <div *ngIf="!editViewEnabled">
-                    <tempus-resource-display-personal-information [firstName]="firstName" [lastName]="lastName"
-                        [country]="country" [state]="state" [city]="city" [phoneNumber]="phoneNumber" [email]="email"
-                        [linkedInLink]="linkedInLink" [githubLink]="githubLink" [otherLink]="otherLink">
-                    </tempus-resource-display-personal-information>
-                </div>
+				<tempus-button
+					*ngIf="editViewEnabled"
+					[disabled]="!isValid()"
+					label="{{ profilePrefix + 'submit' | translate }}"
+					color="accent"
+					(buttonClick)="submitChanges()"
+					matTooltipClass="tooltip"
+				></tempus-button>
+			</div>
+		</div>
+		<div class="section-container">
+			<div *ngIf="!editViewEnabled">
+				<tempus-resource-display-personal-information
+					[firstName]="firstName"
+					[lastName]="lastName"
+					[country]="country"
+					[state]="state"
+					[city]="city"
+					[phoneNumber]="phoneNumber"
+					[email]="email"
+					[resume]="resume"
+					[linkedInLink]="linkedInLink"
+					[githubLink]="githubLink"
+					[otherLink]="otherLink"
+				>
+				</tempus-resource-display-personal-information>
+			</div>
 
-                <div *ngIf="editViewEnabled">
-
-                    <tempus-resource-info-personal-information (formGroup)="loadPersonalInfo($event)" [firstName]="firstName" [lastName]="lastName"
-                        [phoneNumber]="phoneNumber" [country]="country" [state]="state" [city]="city"
-                        [linkedInLink]="linkedInLink" [showPersonalSummary]="false" [githubLink]="githubLink" [otherLink]="otherLink">
-                    </tempus-resource-info-personal-information>
-                </div>
-
-            </div>
-        </div>
-    </ng-container>
+			<div *ngIf="editViewEnabled">
+				<tempus-resource-info-personal-information
+					(formGroup)="loadPersonalInfo($event)"
+					[firstName]="firstName"
+					[lastName]="lastName"
+					[phoneNumber]="phoneNumber"
+					[country]="country"
+					[state]="state"
+					[city]="city"
+					[linkedInLink]="linkedInLink"
+					[showPersonalSummary]="false"
+					[githubLink]="githubLink"
+					[otherLink]="otherLink"
+				>
+				</tempus-resource-info-personal-information>
+			</div>
+		</div>
+	</div>
+</ng-container>
