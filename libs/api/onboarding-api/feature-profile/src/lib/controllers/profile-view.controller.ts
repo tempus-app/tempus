@@ -75,7 +75,7 @@ export class ProfileViewController {
 	@UseGuards(JwtAuthGuard, ViewsGuard)
 	@Get('/:userId/download-resume')
 	async downloadAllResumesForUser(@Res() res: Response, @Param('userId') userId: number): Promise<void> {
-		const views: View[] = await this.viewSerivce.getViewsByResource(userId);
+		const views: View[] = await (await this.viewSerivce.getViewsByResource(userId, 0, 1000)).views;
 		views.forEach(async view => {
 			const resume = new ResumePdfTemplateDto(view.type, view);
 			await this.pdfService.createPDF(res, resume, undefined, true);
