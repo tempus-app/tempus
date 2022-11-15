@@ -25,7 +25,7 @@ export class ViewProjectsComponent implements OnInit {
 
 	pageNum = 0;
 
-	pageSize = 5;
+	pageSize = 10;
 
 	totalProjects = 0;
 
