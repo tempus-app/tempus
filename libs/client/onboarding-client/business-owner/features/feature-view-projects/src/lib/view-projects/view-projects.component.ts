@@ -89,6 +89,7 @@ export class ViewProjectsComponent implements OnInit {
 						status,
 						columnsWithIcon: [],
 						columnsWithUrl: [],
+						columnsWithChips: [],
 					});
 				});
 			});

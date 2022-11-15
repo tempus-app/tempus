@@ -198,9 +198,9 @@ describe('ViewService', () => {
 	describe('GetViewsByResource()', () => {
 		it('should get views by resource', async () => {
 			const returnedViews = [viewEntity, viewEntity2];
-			mockViewRepository.find.mockResolvedValue(returnedViews);
-			const res = await viewService.getViewsByResource(0);
-			expect(mockViewRepository.find).toHaveBeenCalledWith({
+			mockViewRepository.findAndCount.mockResolvedValue([returnedViews, 2]);
+			const res = await viewService.getViewsByResource(0, 0, 1000);
+			expect(mockViewRepository.findAndCount).toHaveBeenCalledWith({
 				relations: [
 					'experiences',
 					'educations',
@@ -217,9 +217,11 @@ describe('ViewService', () => {
 						id: 0,
 					},
 				},
+				take: Number(1000),
+				skip: Number(0) * Number(1000),
 			});
 			expect(mockResourceService.getResourceInfo).toHaveBeenCalledWith(0);
-			expect(res).toEqual(returnedViews);
+			expect(res.views).toEqual(returnedViews);
 		});
 	});
 

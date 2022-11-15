@@ -11,13 +11,27 @@ export class OnboardingClientViewsService {
 
 	url = `${this.appConfig.apiUrl}/onboarding/profile-view`;
 
-	public getViewsByStatus(status: RevisionType, page: number, pageSize: number): Observable<{views: View[], totalPendingApprovals: number}> {
+	public getViewsByStatus(
+		status: RevisionType,
+		page: number,
+		pageSize: number,
+	): Observable<{ views: View[]; totalPendingApprovals: number }> {
 		return this.http
-			.get<{views: View[], totalPendingApprovals: number}>(`${this.url}/views?page=${page}&pageSize=${pageSize}`, {
+			.get<{ views: View[]; totalPendingApprovals: number }>(`${this.url}/views?page=${page}&pageSize=${pageSize}`, {
 				params: {
 					status,
 				},
 			})
+			.pipe(catchError(handleError));
+	}
+
+	public getViewsByResourceId(
+		resourceId: number,
+		page: number,
+		pageSize: number,
+	): Observable<{ views: View[]; totalViews: number }> {
+		return this.http
+			.get<{ views: View[]; totalViews: number }>(`${this.url}/${resourceId}?page=${page}&pageSize=${pageSize}`, {})
 			.pipe(catchError(handleError));
 	}
 }

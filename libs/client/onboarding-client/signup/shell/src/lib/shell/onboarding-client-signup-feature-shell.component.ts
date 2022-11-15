@@ -13,20 +13,15 @@ import { Subject, take, takeUntil } from 'rxjs';
 export class SignupShellComponent implements OnInit, OnDestroy {
 	steps = [];
 
-	links = ['credentials', 'uploadresume', 'myinfoone', 'myinfotwo', 'myinfothree', 'review'];
+	links = ['uploadresume', 'myinfoone', 'myinfotwo', 'myinfothree', 'review'];
 
-	completed = [true, false, false, false, false, false];
+	completed = [false, false, false, false, false];
 
 	isDisabled = false;
 
-	stepperIndex = 0;
+	stepperIndex = -1;
 
 	destroyed$ = new Subject<void>();
-
-	navigateToStep(stepIndex: number) {
-		// this.stepperIndex = stepIndex;
-		// this.router.navigate([`../${this.links[this.stepperIndex]}`], { relativeTo: this.route });
-	}
 
 	constructor(
 		private router: Router,

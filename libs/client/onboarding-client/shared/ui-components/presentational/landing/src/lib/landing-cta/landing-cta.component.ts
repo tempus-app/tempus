@@ -6,5 +6,5 @@ import { Component } from '@angular/core';
 	styleUrls: ['./landing-cta.component.scss'],
 })
 export class LandingCtaComponent {
-	landingPrefix = 'onboardingSignupCredentials.landingCTA.';
+	landingPrefix = 'onboardingClient.landingCTA.';
 }

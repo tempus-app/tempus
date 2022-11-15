@@ -33,8 +33,8 @@ export class BusinessOwnerCreateNewViewComponent implements OnInit {
 		this.resourceId = parseInt(this.route.snapshot.paramMap.get('id') || '0', 10);
 
 		// New view form loaded with latest approved Primary view
-		this.resourceService.getResourceProfileViews(this.resourceId).subscribe(profileViews => {
-			const filteredViews = profileViews.filter(
+		this.resourceService.getResourceProfileViews(this.resourceId).subscribe(data => {
+			const filteredViews = data.views.filter(
 				view => view.viewType === ViewType.PRIMARY && view.revisionType === RevisionType.APPROVED,
 			);
 			this.newViewForm.setFormDataFromView(filteredViews[0]);

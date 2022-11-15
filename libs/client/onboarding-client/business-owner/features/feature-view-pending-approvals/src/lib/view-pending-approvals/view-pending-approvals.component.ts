@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable @typescript-eslint/dot-notation */
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { Store } from '@ngrx/store';
 import { TranslateService } from '@ngx-translate/core';
@@ -18,7 +18,7 @@ import { Subject, take, takeUntil } from 'rxjs';
 	templateUrl: './view-pending-approvals.component.html',
 	styleUrls: ['./view-pending-approvals.component.scss'],
 })
-export class ViewPendingApprovalsComponent implements OnInit {
+export class ViewPendingApprovalsComponent implements OnInit, OnDestroy {
 	prefix = 'onboardingOwnerViewPendingApprovals';
 
 	tableColumns: Array<Column> = [];
@@ -86,9 +86,15 @@ export class ViewPendingApprovalsComponent implements OnInit {
 						columnsWithUrl: ['resource'],
 						email: view.resource.email,
 						columnsWithIcon: [],
+						columnsWithChips: [],
 					});
 				});
 			});
+	}
+
+	ngOnDestroy(): void {
+		this.$destroyed.next();
+		this.$destroyed.complete();
 	}
 
 	tablePaginationEvent(pageEvent: PageEvent) {

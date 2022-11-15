@@ -13,7 +13,7 @@ import {
 	Query,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { CreateViewDto, ApproveViewDto, ResumePdfTemplateDto } from '@tempus/api/shared/dto';
+import { CreateViewDto, ApproveViewDto, ResumePdfTemplateDto, DownloadAllResumesDto } from '@tempus/api/shared/dto';
 import { Revision, RevisionType, RoleType, View } from '@tempus/shared-domain';
 import { JwtAuthGuard, PermissionGuard, Roles, RolesGuard, ViewsGuard } from '@tempus/api/shared/feature-auth';
 import { PdfGeneratorService } from '@tempus/api/shared/feature-pdfgenerator';
@@ -24,15 +24,15 @@ import { ViewsService } from '../services/view.service';
 export class ProfileViewController {
 	constructor(private viewSerivce: ViewsService, private pdfService: PdfGeneratorService) {}
 
-	// all views of user
+	// all views of user by status
 	@UseGuards(JwtAuthGuard, RolesGuard)
 	@Roles(RoleType.BUSINESS_OWNER, RoleType.SUPERVISOR)
 	@Get('/views/')
 	async getViewsByStatus(
-    @Query('status') status: RevisionType,
-    @Query('page') page: number, 
-    @Query('pageSize') pageSize: number
-  ): Promise<{views: View[], totalPendingApprovals: number}> {
+		@Query('status') status: RevisionType,
+		@Query('page') page: number,
+		@Query('pageSize') pageSize: number,
+	): Promise<{ views: View[]; totalPendingApprovals: number }> {
 		const viewsAndCount = await this.viewSerivce.getViewsByStatus(status, page, pageSize);
 		return viewsAndCount;
 	}
@@ -40,9 +40,13 @@ export class ProfileViewController {
 	// all views of user
 	@UseGuards(JwtAuthGuard, PermissionGuard)
 	@Get('/:userId')
-	async getViews(@Param('userId') userId: number): Promise<View[]> {
-		const views = await this.viewSerivce.getViewsByResource(userId);
-		return views;
+	async getViews(
+		@Param('userId') userId: number,
+		@Query('page') page: number,
+		@Query('pageSize') pageSize: number,
+	): Promise<{ views: View[]; totalViews: number }> {
+		const viewsAndCount = await this.viewSerivce.getViewsByResource(userId, page, pageSize);
+		return viewsAndCount;
 	}
 
 	// all views of user
@@ -66,6 +70,31 @@ export class ProfileViewController {
 		const view = await this.viewSerivce.getView(viewId);
 		const resume = new ResumePdfTemplateDto('testresume', view);
 		await this.pdfService.createPDF(res, resume, undefined, true);
+	}
+
+	@UseGuards(JwtAuthGuard, ViewsGuard)
+	@Get('/:userId/download-resume')
+	async downloadAllResumesForUser(@Res() res: Response, @Param('userId') userId: number): Promise<void> {
+		const views: View[] = await (await this.viewSerivce.getViewsByResource(userId, 0, 1000)).views;
+		views.forEach(async view => {
+			const resume = new ResumePdfTemplateDto(view.type, view);
+			await this.pdfService.createPDF(res, resume, undefined, true);
+		});
+	}
+
+	@UseGuards(JwtAuthGuard, ViewsGuard)
+	@Get('/download-resume')
+	async downloadAllResumes(@Res() res: Response, @Body() downloadResumeDto: DownloadAllResumesDto): Promise<void> {
+		let views: View[];
+		if (!downloadResumeDto.resourceIds) {
+			views = await this.viewSerivce.getAllViews();
+		} else {
+			views = await this.viewSerivce.getViewsByMultipleResource(downloadResumeDto.resourceIds);
+		}
+		views.forEach(async view => {
+			const resume = new ResumePdfTemplateDto(view.type, view);
+			await this.pdfService.createPDF(res, resume, undefined, true);
+		});
 	}
 
 	@UseGuards(JwtAuthGuard, RolesGuard)
