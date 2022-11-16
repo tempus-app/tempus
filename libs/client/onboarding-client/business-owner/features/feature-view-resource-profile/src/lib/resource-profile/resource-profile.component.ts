@@ -1,12 +1,14 @@
-import { ChangeDetectorRef, Component, Input, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import {
 	OnboardingClientResourceService,
 	OnboardingClientState,
+	getResourceInformationById,
+	selectResourceDetails,
 } from '@tempus/client/onboarding-client/shared/data-access';
 import { LoadView, ProjectResource } from '@tempus/shared-domain';
-import { skip, take } from 'rxjs';
+import { skip, Subject, take, takeUntil } from 'rxjs';
 import {
 	BusinessOwnerState,
 	getOriginalResume,
@@ -19,7 +21,7 @@ import { EditViewFormComponent } from '@tempus/onboarding-client/shared/feature-
 	templateUrl: './resource-profile.component.html',
 	styleUrls: ['./resource-profile.component.scss'],
 })
-export class ResourceProfileComponent implements OnInit {
+export class ResourceProfileComponent implements OnInit, OnDestroy {
 	constructor(
 		private route: ActivatedRoute,
 		private router: Router,
@@ -32,6 +34,8 @@ export class ResourceProfileComponent implements OnInit {
 	@ViewChild(EditViewFormComponent, { static: false }) newViewForm!: EditViewFormComponent;
 
 	@Input() editViewEnabled = false;
+
+	$destroyed = new Subject<void>();
 
 	resourceId = 0;
 
@@ -110,19 +114,38 @@ export class ResourceProfileComponent implements OnInit {
 
 	ngOnInit(): void {
 		this.resourceId = parseInt(this.route.snapshot.paramMap.get('id') || '0', 10);
-		this.resourceService.getResourceInformationById(this.resourceId).subscribe(resourceInfo => {
-			this.resourceFirstName = resourceInfo.firstName;
-			this.resourceLastName = resourceInfo.lastName;
-			this.city = resourceInfo.location.city;
-			this.state = resourceInfo.location.province;
-			this.country = resourceInfo.location.country;
-			this.phoneNumber = resourceInfo.phoneNumber;
-			this.resourceEmail = resourceInfo.email;
-			this.linkedInLink = resourceInfo.linkedInLink;
-			this.githubLink = resourceInfo.githubLink;
-			this.otherLink = resourceInfo.otherLink;
-			this.projectResources = resourceInfo.projectResources;
-		});
+
+		this.sharedStore.dispatch(getResourceInformationById({ resourceId: this.resourceId }));
+		this.sharedStore
+			.select(selectResourceDetails)
+			.pipe(skip(1), takeUntil(this.$destroyed))
+			.subscribe(data => {
+				this.resourceFirstName = data.firstName || '';
+				this.resourceLastName = data.lastName || '';
+				this.city = data.city || '';
+				this.state = data.province || '';
+				this.country = data.country || '';
+				this.phoneNumber = data.phoneNumber || '';
+				this.resourceEmail = data.email || '';
+				this.linkedInLink = data.linkedInLink || '';
+				this.githubLink = data.githubLink || '';
+				this.otherLink = data.otherLink || '';
+				this.projectResources = data.projectResources || [];
+			});
+
+		// this.resourceService.getResourceInformationById(this.resourceId).subscribe(resourceInfo => {
+		// 	this.resourceFirstName = resourceInfo.firstName;
+		// 	this.resourceLastName = resourceInfo.lastName;
+		// 	this.city = resourceInfo.location.city;
+		// 	this.state = resourceInfo.location.province;
+		// 	this.country = resourceInfo.location.country;
+		// 	this.phoneNumber = resourceInfo.phoneNumber;
+		// 	this.resourceEmail = resourceInfo.email;
+		// 	this.linkedInLink = resourceInfo.linkedInLink;
+		// 	this.githubLink = resourceInfo.githubLink;
+		// 	this.otherLink = resourceInfo.otherLink;
+		// 	this.projectResources = resourceInfo.projectResources;
+		// });
 		this.businessOwnerStore.dispatch(getOriginalResume({ resourceId: this.resourceId }));
 
 		this.businessOwnerStore
@@ -133,5 +156,10 @@ export class ResourceProfileComponent implements OnInit {
 					this.resume = new File([blob], 'original-resume.pdf');
 				}
 			});
+	}
+
+	ngOnDestroy(): void {
+		this.$destroyed.next();
+		this.$destroyed.complete();
 	}
 }

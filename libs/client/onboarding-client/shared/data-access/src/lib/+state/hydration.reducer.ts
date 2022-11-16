@@ -19,7 +19,15 @@ export const hydrationMetaReducer = (
 			if (newState.auth) {
 				newState = {
 					...newState,
-					auth: { ...newState.auth, accessToken, refreshToken, loggedInUserId: userId, firstName, lastName, email },
+					auth: {
+						...newState.auth,
+						accessToken,
+						refreshToken,
+						loggedInUserId: userId,
+						firstName,
+						lastName,
+						email,
+					},
 				};
 			}
 			return reducer(newState as OnboardingClientState, action);

@@ -1,6 +1,6 @@
 import { createReducer, on } from '@ngrx/store';
-import { AsyncRequestState } from '@tempus/client/onboarding-client/shared/data-access';
-import { View } from '@tempus/shared-domain';
+import { ProjectResource, View } from '@tempus/shared-domain';
+import { AsyncRequestState } from '../../enum';
 import * as ResourceActions from './resource.actions';
 
 export const RESOURCE_INFO_FEATURE_KEY = 'resource';
@@ -9,9 +9,17 @@ export interface ResourceState {
 	firstName: string | null;
 	lastName: string | null;
 	email: string | null;
+	phoneNumber: string | null;
 	views: View[] | null;
 	resume: Blob | null;
 	totalViewsData: number;
+	city: string | null;
+	province: string | null;
+	country: string | null;
+	linkedInLink: string | null;
+	githubLink: string | null;
+	otherLink: string | null;
+	projectResources: ProjectResource[] | null;
 	error: Error | null;
 }
 
@@ -19,14 +27,63 @@ export const initialState: ResourceState = {
 	firstName: null,
 	lastName: null,
 	email: null,
+	phoneNumber: null,
 	views: null,
 	resume: null,
 	totalViewsData: 0,
+	city: null,
+	province: null,
+	country: null,
+	linkedInLink: null,
+	githubLink: null,
+	otherLink: null,
+	projectResources: null,
 	error: null,
 };
 
 export const resourceReducer = createReducer(
 	initialState,
+	// getResourceInformationById
+	on(ResourceActions.getResourceInformationById, state => ({ ...state, status: AsyncRequestState.LOADING })),
+	on(
+		ResourceActions.getResourceInformationByIdSuccess,
+		(
+			state,
+			{
+				firstName,
+				lastName,
+				email,
+				city,
+				province,
+				country,
+				phoneNumber,
+				linkedInLink,
+				githubLink,
+				otherLink,
+				projectResources,
+			},
+		) => ({
+			...state,
+			firstName,
+			lastName,
+			email,
+			city,
+			province,
+			country,
+			phoneNumber,
+			linkedInLink,
+			githubLink,
+			otherLink,
+			projectResources,
+		}),
+	),
+	on(ResourceActions.getResourceInformationByIdFailure, (state, { error }) => ({
+		...state,
+		status: AsyncRequestState.ERROR,
+		error,
+	})),
+
+	// updateUserInformation
 	on(ResourceActions.updateUserInfo, state => ({ ...state, status: AsyncRequestState.LOADING })),
 	on(ResourceActions.updateUserInfoSuccess, (state, { firstName, lastName, email }) => ({
 		...state,
@@ -39,6 +96,7 @@ export const resourceReducer = createReducer(
 		status: AsyncRequestState.ERROR,
 		error,
 	})),
+	// getAllViewsByResourceId
 	on(ResourceActions.getAllViewsByResourceId, state => ({ ...state, status: AsyncRequestState.LOADING })),
 	on(ResourceActions.getAllViewsByResourceIdSuccess, (state, { views, totalViews }) => ({
 		...state,
@@ -52,6 +110,7 @@ export const resourceReducer = createReducer(
 		error,
 		status: AsyncRequestState.ERROR,
 	})),
+	// getResourceOriginalResumeById
 	on(ResourceActions.getResourceOriginalResumeById, state => ({ ...state, status: AsyncRequestState.LOADING })),
 	on(ResourceActions.getResourceOriginalResumeByIdSuccess, (state, { resume }) => ({
 		...state,
@@ -62,6 +121,7 @@ export const resourceReducer = createReducer(
 		...state,
 		error,
 	})),
+	// downloadProfileByViewId
 	on(ResourceActions.downloadProfileByViewId, state => ({ ...state, status: AsyncRequestState.LOADING })),
 	on(ResourceActions.downloadProfileByViewIdSuccess, (state, { resume }) => ({
 		...state,
