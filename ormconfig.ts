@@ -15,6 +15,7 @@ import {
 	ProjectEntity,
 	ClientRepresentativeEntity,
 	ProjectResourceEntity,
+	PasswordResetEntity,
 } from '@tempus/api/shared/entity';
 
 const config: PostgresConnectionOptions = {
@@ -40,6 +41,7 @@ const config: PostgresConnectionOptions = {
 		CertificationEntity,
 		ClientRepresentativeEntity,
 		ProjectResourceEntity,
+		PasswordResetEntity,
 	],
 	synchronize: false,
 	migrations: [`${__dirname}/dist/apps/onboarding-api/migrations/**/*.ts`],
