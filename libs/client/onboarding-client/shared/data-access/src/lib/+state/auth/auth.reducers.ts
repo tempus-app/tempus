@@ -8,7 +8,6 @@ export const AUTH_FEATURE_KEY = 'auth';
 export interface AuthState {
 	accessToken: string | null;
 	refreshToken: string | null;
-	loggedInUserId: number | null;
 	firstName: string | null;
 	lastName: string | null;
 	email: string | null;
@@ -19,7 +18,6 @@ export interface AuthState {
 export const initialState: AuthState = {
 	accessToken: null,
 	refreshToken: null,
-	loggedInUserId: null,
 	error: null,
 	firstName: null,
 	lastName: null,
@@ -30,11 +28,10 @@ export const initialState: AuthState = {
 export const authReducer = createReducer(
 	initialState,
 	on(AuthActions.login, state => ({ ...state, status: AsyncRequestState.LOADING })),
-	on(AuthActions.loginSuccess, (state, { accessToken, refreshToken, loggedInUserId, firstName, lastName, email }) => ({
+	on(AuthActions.loginSuccess, (state, { accessToken, refreshToken, firstName, lastName, email }) => ({
 		...state,
 		accessToken,
 		refreshToken,
-		loggedInUserId,
 		firstName,
 		lastName,
 		email,

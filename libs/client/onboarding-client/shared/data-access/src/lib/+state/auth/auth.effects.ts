@@ -1,6 +1,6 @@
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { of, switchMap } from 'rxjs';
-import { map, catchError, tap } from 'rxjs/operators';
+import { map, catchError } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
@@ -27,7 +27,6 @@ export class AuthEffects {
 						return loginSuccess({
 							accessToken: data.accessToken,
 							refreshToken: data.refreshToken,
-							loggedInUserId: data.user.id,
 							firstName: data.user.firstName,
 							lastName: data.user.lastName,
 							email: data.user.email,
@@ -44,7 +43,7 @@ export class AuthEffects {
 			ofType(logout),
 			switchMap(options =>
 				this.authService.logout().pipe(
-					map(_ => {
+					map(() => {
 						this.authService.resetSessionStorage();
 						if (options.redirect) {
 							this.router.navigateByUrl('/signin');

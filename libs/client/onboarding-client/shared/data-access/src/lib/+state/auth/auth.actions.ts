@@ -9,7 +9,6 @@ export const loginSuccess = createAction(
 	props<{
 		accessToken: string;
 		refreshToken: string;
-		loggedInUserId: number;
 		firstName: string;
 		lastName: string;
 		email: string;

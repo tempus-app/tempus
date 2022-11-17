@@ -24,6 +24,7 @@ export class AuthService {
 		const tokens = await this.createTokens(user);
 		await this.updateRefreshTokenHash(user, tokens.refreshToken);
 		const partialUser: UserEntity = { ...user };
+		partialUser.id = null;
 		partialUser.password = null;
 		partialUser.refreshToken = null;
 		const result = new AuthDto(partialUser, tokens.accessToken, tokens.refreshToken);

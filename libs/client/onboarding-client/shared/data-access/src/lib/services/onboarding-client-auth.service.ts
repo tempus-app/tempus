@@ -19,7 +19,6 @@ export class OnboardingClientAuthService {
 				this.setUserDataInSessionStorage(
 					data.accessToken,
 					data.refreshToken,
-					data.user.id,
 					data.user.firstName,
 					data.user.lastName,
 					data.user.email,
@@ -42,15 +41,12 @@ export class OnboardingClientAuthService {
 	public getUserDataFromSessionStorage(): {
 		accessToken: string | null;
 		refreshToken: string | null;
-		userId: number | null;
 		email: string | null;
 		firstName: string | null;
 		lastName: string | null;
 	} {
 		const accessToken: string | null = sessionStorage.getItem(SessionStorageKey.TEMPUS_ACCESS_TOKEN);
 		const refreshToken: string | null = sessionStorage.getItem(SessionStorageKey.TEMPUS_REFRESH_TOKEN);
-		const userIdString: string | null = sessionStorage.getItem(SessionStorageKey.TEMPUS_USER_ID);
-		const userId: number | null = userIdString ? parseInt(userIdString, 10) : null;
 		const firstName: string | null = sessionStorage.getItem(SessionStorageKey.TEMPUS_FIRST_NAME);
 		const lastName: string | null = sessionStorage.getItem(SessionStorageKey.TEMPUS_LAST_NAME);
 		const email: string | null = sessionStorage.getItem(SessionStorageKey.TEMPUS_EMAIL);
@@ -58,7 +54,6 @@ export class OnboardingClientAuthService {
 		return {
 			accessToken,
 			refreshToken,
-			userId,
 			firstName,
 			lastName,
 			email,
@@ -73,14 +68,12 @@ export class OnboardingClientAuthService {
 	public setUserDataInSessionStorage(
 		accessToken: string,
 		refreshToken: string,
-		userId: number,
 		firstName: string,
 		lastName: string,
 		email: string,
 	) {
 		sessionStorage.setItem(SessionStorageKey.TEMPUS_ACCESS_TOKEN, accessToken);
 		sessionStorage.setItem(SessionStorageKey.TEMPUS_REFRESH_TOKEN, refreshToken);
-		sessionStorage.setItem(SessionStorageKey.TEMPUS_USER_ID, userId.toString());
 		sessionStorage.setItem(SessionStorageKey.TEMPUS_FIRST_NAME, firstName);
 		sessionStorage.setItem(SessionStorageKey.TEMPUS_LAST_NAME, lastName);
 		sessionStorage.setItem(SessionStorageKey.TEMPUS_EMAIL, email);
@@ -92,7 +85,6 @@ export class OnboardingClientAuthService {
 
 	public resetSessionStorage() {
 		sessionStorage.removeItem(SessionStorageKey.TEMPUS_ACCESS_TOKEN);
-		sessionStorage.removeItem(SessionStorageKey.TEMPUS_USER_ID);
 		sessionStorage.removeItem(SessionStorageKey.TEMPUS_FIRST_NAME);
 		sessionStorage.removeItem(SessionStorageKey.TEMPUS_LAST_NAME);
 		sessionStorage.removeItem(SessionStorageKey.TEMPUS_EMAIL);
