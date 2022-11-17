@@ -59,7 +59,7 @@ export class MyInfoTwoComponent implements AfterViewInit {
 				this.workExperiences = createResourceDto.experiences;
 				const workExperienceArray = this.totalWorkExperience;
 				createResourceDto.experiences.forEach(experience => {
-          const combinedDesc = "-"+experience.description.join("\r\n-");
+          const combinedDesc = "*"+experience.description.join("\r\n*");
 					workExperienceArray.push(
 						this.fb.group(
 							{

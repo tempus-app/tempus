@@ -114,7 +114,7 @@ export class EditViewFormComponent implements OnDestroy {
 		this.workExperiences = view.experiences;
 
     this.workExperiences.forEach(workExp => {
-      const combinedDesc = "-"+workExp.description.join("\r\n-");
+      const combinedDesc = "*"+workExp.description.join("\r\n*");
       workExp.description = [combinedDesc];
     });
 
@@ -169,7 +169,7 @@ export class EditViewFormComponent implements OnDestroy {
     
     if (!this.previewViewEnabled) {
       this.workExperiences.forEach(workExp => {
-        const combinedDesc = "-"+workExp.description.join("\r\n-");
+        const combinedDesc = "*"+workExp.description.join("\r\n*");
         workExp.description = [combinedDesc];
       });
     }
