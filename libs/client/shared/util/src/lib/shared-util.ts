@@ -90,7 +90,6 @@ export function decodeJwt(token: string) {
  * @returns array of split items extracted from string
  */
 export function splitStringIntoBulletPoints(data: string): Array<string> {
-  console.log("YO", data);
   let splitString = data.split("-");
   for(let i = 0; i < splitString.length; i++) {
     splitString[i] = splitString[i].replace(/(\r\n|\n|\r)/gm, "");
