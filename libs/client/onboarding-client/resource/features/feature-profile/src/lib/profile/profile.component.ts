@@ -2,8 +2,8 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import {
 	OnboardingClientResourceService,
 	OnboardingClientState,
-	selectLoggedInUserId,
 	selectLoggedInUserNameEmail,
+	selectResourceId,
 } from '@tempus/client/onboarding-client/shared/data-access';
 import { Subject, take, takeUntil } from 'rxjs';
 import { ButtonType } from '@tempus/client/shared/ui-components/presentational';
@@ -106,7 +106,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
 	ngOnInit(): void {
 		this.sharedStore
-			.select(selectLoggedInUserId)
+			.select(selectResourceId)
 			.pipe(take(1))
 			.subscribe(data => {
 				if (data) {

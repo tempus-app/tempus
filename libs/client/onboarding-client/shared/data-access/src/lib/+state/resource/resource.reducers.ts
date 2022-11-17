@@ -6,6 +6,7 @@ import * as ResourceActions from './resource.actions';
 export const RESOURCE_INFO_FEATURE_KEY = 'resource';
 
 export interface ResourceState {
+	userId: number;
 	firstName: string | null;
 	lastName: string | null;
 	email: string | null;
@@ -24,6 +25,7 @@ export interface ResourceState {
 }
 
 export const initialState: ResourceState = {
+	userId: 0,
 	firstName: null,
 	lastName: null,
 	email: null,
@@ -43,6 +45,47 @@ export const initialState: ResourceState = {
 
 export const resourceReducer = createReducer(
 	initialState,
+	// getResourceInformation
+	on(ResourceActions.getResourceInformation, state => ({ ...state, status: AsyncRequestState.LOADING })),
+	on(
+		ResourceActions.getResourceInformationSuccess,
+		(
+			state,
+			{
+				userId,
+				firstName,
+				lastName,
+				email,
+				city,
+				province,
+				country,
+				phoneNumber,
+				linkedInLink,
+				githubLink,
+				otherLink,
+				projectResources,
+			},
+		) => ({
+			...state,
+			userId,
+			firstName,
+			lastName,
+			email,
+			city,
+			province,
+			country,
+			phoneNumber,
+			linkedInLink,
+			githubLink,
+			otherLink,
+			projectResources,
+		}),
+	),
+	on(ResourceActions.getResourceInformationFailure, (state, { error }) => ({
+		...state,
+		status: AsyncRequestState.ERROR,
+		error,
+	})),
 	// getResourceInformationById
 	on(ResourceActions.getResourceInformationById, state => ({ ...state, status: AsyncRequestState.LOADING })),
 	on(

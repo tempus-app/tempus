@@ -10,8 +10,10 @@ import {
 } from '../../services';
 import {
 	getAllViewsByResourceId,
+	getResourceInformation,
 	getResourceInformationById,
 	getResourceInformationByIdSuccess,
+	getResourceInformationFailure,
 	getResourceOriginalResumeById,
 	updateInfoFailure,
 	updateUserInfo,
@@ -24,6 +26,7 @@ import {
 	getAllViewsByResourceIdFailure,
 	getAllViewsByResourceIdSuccess,
 	getResourceInformationByIdFailure,
+	getResourceInformationSuccess,
 	getResourceOriginalResumeByIdSuccess,
 } from '.';
 import { OnboardingClientState } from '../onboardingClient.state';
@@ -37,6 +40,33 @@ export class ResourceEffects {
 		private resourceService: OnboardingClientResourceService,
 		private viewsService: OnboardingClientViewsService,
 	) {}
+
+	getResourceInformation$ = createEffect(() =>
+		this.actions$.pipe(
+			ofType(getResourceInformation),
+			switchMap(() =>
+				this.resourceService.getResourceInformation().pipe(
+					map(data => {
+						return getResourceInformationSuccess({
+							userId: data.id,
+							firstName: data.firstName,
+							lastName: data.lastName,
+							email: data.email,
+							phoneNumber: data.phoneNumber,
+							city: data.location.city,
+							province: data.location.province,
+							country: data.location.country,
+							linkedInLink: data.linkedInLink,
+							githubLink: data.githubLink,
+							otherLink: data.otherLink,
+							projectResources: data.projectResources,
+						});
+					}),
+					catchError(error => of(getResourceInformationFailure({ error }))),
+				),
+			),
+		),
+	);
 
 	getResourceInformationById$ = createEffect(() =>
 		this.actions$.pipe(

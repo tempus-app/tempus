@@ -8,6 +8,8 @@ export const selectState = createSelector(
 	(state: OnboardingClientState) => state[RESOURCE_INFO_FEATURE_KEY],
 );
 
+export const selectResourceId = createSelector(selectState, (state: ResourceState) => state.userId);
+
 export const selectResourceDetails = createSelector(selectState, (state: ResourceState) => {
 	return {
 		firstName: state.firstName,

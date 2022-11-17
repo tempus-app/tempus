@@ -6,8 +6,8 @@ import { TranslateService } from '@ngx-translate/core';
 import {
 	OnboardingClientResourceService,
 	OnboardingClientState,
-	selectLoggedInUserId,
 	selectLoggedInUserNameEmail,
+	selectResourceId,
 } from '@tempus/client/onboarding-client/shared/data-access';
 import { ButtonType, Column, MyViewsTableData } from '@tempus/client/shared/ui-components/presentational';
 import { Subject, take, takeUntil } from 'rxjs';
@@ -92,7 +92,7 @@ export class MyViewsComponent implements OnInit, OnDestroy {
 
 	ngOnInit(): void {
 		this.sharedStore
-			.select(selectLoggedInUserId)
+			.select(selectResourceId)
 			.pipe(take(1))
 			.subscribe(data => {
 				if (data) {
