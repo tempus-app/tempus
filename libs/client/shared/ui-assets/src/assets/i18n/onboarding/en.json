@@ -121,7 +121,8 @@
 				"posErr": "Please enter a position title",
 				"companyErr": "Please enter a company name",
 				"descriptionErr": "Please enter a description.",
-				"descriptionPlaceholder": "Description"
+				"descriptionPlaceholder": "Description",
+        "descriptionCaption": "*Please enter description using bullet points (dashes)"
 			},
 			"personalInfo": {
 				"title": "Personal Information",

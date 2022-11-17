@@ -2,7 +2,7 @@ import { AfterViewInit, ChangeDetectorRef, Component, EventEmitter, OnInit, Outp
 import { filter, switchMap, take } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { checkEnteredDates } from '@tempus/client/shared/util';
+import { checkEnteredDates, splitStringIntoBulletPoints } from '@tempus/client/shared/util';
 import { Store } from '@ngrx/store';
 import {
 	createWorkExperienceDetails,
@@ -59,6 +59,7 @@ export class MyInfoTwoComponent implements AfterViewInit {
 				this.workExperiences = createResourceDto.experiences;
 				const workExperienceArray = this.totalWorkExperience;
 				createResourceDto.experiences.forEach(experience => {
+          const combinedDesc = "-"+experience.description.join("\r\n-");
 					workExperienceArray.push(
 						this.fb.group(
 							{
@@ -69,7 +70,7 @@ export class MyInfoTwoComponent implements AfterViewInit {
 								city: [experience.location.city, Validators.required],
 								startDate: [experience.startDate, Validators.required],
 								endDate: [{ value: experience.endDate, disabled: !experience.endDate }, Validators.required],
-								description: [experience.description, Validators.required],
+								description: [combinedDesc, Validators.required],
 							},
 							{ validators: checkEnteredDates() },
 						),
@@ -109,7 +110,7 @@ export class MyInfoTwoComponent implements AfterViewInit {
 								startDate: workExperience.startDate,
 								endDate: workExperience.endDate ? workExperience.endDate : null,
 								summary: workExperience.description,
-								description: [workExperience.description],
+								description: splitStringIntoBulletPoints(workExperience.description),
 							} as ICreateExperienceDto;
 						},
 					),
