@@ -63,7 +63,7 @@ export class AuthService {
 			relations: ['user'],
 		});
 		if (data.length === 0) {
-			throw new Error('Invalid code provided');
+			throw new Error('Invalid token provided');
 		}
 		const passwordResetDetails = data[0];
 
@@ -76,17 +76,16 @@ export class AuthService {
 			const updateUserDto = new UpdateUserDto(passwordResetDetails.user.id);
 			updateUserDto.password = resetPasswordDto.newPassword;
 			await this.userService.updateUser(updateUserDto);
+			this.passwordResetRepository.save({ ...passwordResetDetails, status: PasswordResetStatus.INVALID });
 		} else {
+			this.passwordResetRepository.save({ ...passwordResetDetails, status: PasswordResetStatus.INVALID });
 			throw new Error('Invalid token provided');
 		}
-
-		// either token was expired, invalid, or used so now it is not reusauble
-		this.passwordResetRepository.save({ ...passwordResetDetails, status: PasswordResetStatus.INVALID });
 	}
 
-	private static async isTokenValid(passwordResetDetails: PasswordResetEntity) {
+	private static isTokenValid(passwordResetDetails: PasswordResetEntity) {
 		if (
-			passwordResetDetails.expiry.getTime() <= Date.now() &&
+			passwordResetDetails.expiry.getTime() >= Date.now() &&
 			passwordResetDetails.status === PasswordResetStatus.VALID
 		) {
 			return true;
@@ -123,7 +122,6 @@ export class AuthService {
 					.getRepository(PasswordResetEntity)
 					.save({ ...request, status: PasswordResetStatus.INVALID });
 			});
-
 			await manager.getRepository(PasswordResetEntity).save(passwordResetDetails);
 			try {
 				await this.emailService.sendResetEmail(passwordResetDetails);

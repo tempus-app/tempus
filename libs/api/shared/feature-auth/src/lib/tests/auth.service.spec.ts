@@ -1,14 +1,19 @@
+/* eslint-disable @nrwl/nx/enforce-module-boundaries */
+// eslint-disable-next-line import/no-extraneous-dependencies
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { UserEntity } from '@tempus/api/shared/entity';
+import { PasswordResetEntity, UserEntity } from '@tempus/api/shared/entity';
 import { createMock } from '@golevelup/ts-jest';
 import { Repository } from 'typeorm';
 import { JwtService } from '@nestjs/jwt';
 import { CommonService } from '@tempus/api/shared/feature-common';
 import { ConfigService } from '@nestjs/config';
-import { JwtPayload } from '@tempus/shared-domain';
+import { JwtPayload, PasswordResetStatus } from '@tempus/shared-domain';
 import { ForbiddenException } from '@nestjs/common';
 import { compare } from 'bcrypt';
+import { EmailService } from '@tempus/api/shared/feature-email';
+import { UserService } from '@tempus/onboarding-api/feature-account';
+import { UpdateUserDto } from '@tempus/api/shared/dto';
 import { AuthService } from '../auth.service';
 import {
 	accessTokenPayload,
@@ -18,10 +23,19 @@ import {
 	loggedInUserEntity,
 	tokens,
 	invalidRefreshTokenPayloadWithToken,
+	user,
+	passwordResetMock,
+	resetPasswordDto,
+	userWithId,
 } from './auth.mock';
 
 const mockUserRepository = createMock<Repository<UserEntity>>();
+const mockPasswordResetRepository = createMock<Repository<PasswordResetEntity>>();
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const mockEntityManager = { getRepository: (entity: PasswordResetEntity) => mockPasswordResetRepository };
+
 const mockCommonService = createMock<CommonService>();
+const transactionMock = jest.fn(async passedFunction => passedFunction(mockEntityManager));
 
 const mockJwtService = {
 	signAsync: jest
@@ -47,6 +61,24 @@ jest.mock('bcrypt', () => ({
 	compare: jest.fn(),
 }));
 
+const mockEmailService = {
+	sendResetEmail: jest.fn(),
+};
+
+jest.mock('uuid', () => ({ v4: () => 'fake-uuid' }));
+
+jest.mock('typeorm', () => {
+	const originalModule = jest.requireActual('typeorm');
+
+	return {
+		__esModule: true,
+		...originalModule,
+		getManager: () => ({ transaction: transactionMock }),
+	};
+});
+
+const mockUserService = createMock<UserService>();
+
 describe('AuthService', () => {
 	let moduleRef: TestingModule;
 	let authService: AuthService;
@@ -60,6 +92,10 @@ describe('AuthService', () => {
 					useValue: mockUserRepository,
 				},
 				{
+					provide: EmailService,
+					useValue: mockEmailService,
+				},
+				{
 					provide: JwtService,
 					useValue: mockJwtService,
 				},
@@ -70,6 +106,14 @@ describe('AuthService', () => {
 				{
 					provide: ConfigService,
 					useValue: mockConfigService,
+				},
+				{
+					provide: getRepositoryToken(PasswordResetEntity),
+					useValue: mockPasswordResetRepository,
+				},
+				{
+					provide: UserService,
+					useValue: mockUserService,
 				},
 			],
 		}).compile();
@@ -170,6 +214,163 @@ describe('AuthService', () => {
 		});
 	});
 
+	describe('forget password()', () => {
+		it('should successfully save details and send email', async () => {
+			mockCommonService.findByEmail.mockResolvedValue(user);
+			const currentDate = new Date();
+			const resetData = new PasswordResetEntity(
+				null,
+				user,
+				new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() + 1),
+				'fake-uuid',
+				PasswordResetStatus.VALID,
+			);
+
+			await authService.forgotPassword(user.email);
+			expect(mockCommonService.findByEmail).toBeCalledWith(user.email);
+			expect(mockEmailService.sendResetEmail).toBeCalledWith(resetData);
+			expect(mockPasswordResetRepository.save).toBeCalledWith(resetData);
+		});
+
+		it('should successfully save details and send email, and set old active codes to invalid', async () => {
+			mockCommonService.findByEmail.mockResolvedValue(user);
+			mockPasswordResetRepository.find.mockResolvedValue([passwordResetMock]);
+			const currentDate = new Date();
+			const resetData = new PasswordResetEntity(
+				null,
+				user,
+				new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() + 1),
+				'fake-uuid',
+				PasswordResetStatus.VALID,
+			);
+
+			await authService.forgotPassword(user.email);
+			expect(mockCommonService.findByEmail).toBeCalledWith(user.email);
+			expect(mockEmailService.sendResetEmail).toBeCalledWith(resetData);
+			expect(mockPasswordResetRepository.save).nthCalledWith(1, {
+				...passwordResetMock,
+				status: PasswordResetStatus.INVALID,
+			});
+
+			expect(mockPasswordResetRepository.save).nthCalledWith(2, resetData);
+		});
+
+		it('should return error if email cannot be found', async () => {
+			mockCommonService.findByEmail.mockRejectedValue(
+				new Error('Could not find user with email wrong@email.com'),
+			);
+			let error;
+			try {
+				await authService.forgotPassword(user.email);
+			} catch (e) {
+				error = e;
+			}
+			expect(error).toBeInstanceOf(Error);
+			expect(error.message).toBe('Could not find user with email wrong@email.com');
+		});
+
+		it('should return error and not save details if email cannot be sent', async () => {
+			mockEmailService.sendResetEmail.mockRejectedValue(new Error('Something went wrong'));
+			mockCommonService.findByEmail.mockResolvedValue(user);
+
+			let error;
+			try {
+				await authService.forgotPassword(user.email);
+			} catch (e) {
+				error = e;
+			}
+			expect(error).toBeInstanceOf(Error);
+			expect(error.message).toBe('Email unable to be sent.');
+		});
+	});
+
+	describe('reset password()', () => {
+		it('should successfully reset user password', async () => {
+			mockPasswordResetRepository.find.mockResolvedValue([passwordResetMock]);
+			await authService.resetPassword(resetPasswordDto);
+			expect(mockPasswordResetRepository.find).toBeCalledWith({
+				where: { token: resetPasswordDto.token },
+				relations: ['user'],
+			});
+
+			const updateUserDto = new UpdateUserDto(passwordResetMock.user.id);
+			updateUserDto.password = resetPasswordDto.newPassword;
+			expect(mockUserService.updateUser).toBeCalledWith(updateUserDto);
+
+			expect(mockPasswordResetRepository.save).toBeCalledWith({
+				...passwordResetMock,
+				status: PasswordResetStatus.INVALID,
+			});
+		});
+
+		it('should throw an erorr if the token does not exist', async () => {
+			mockPasswordResetRepository.find.mockResolvedValue([]);
+
+			let error;
+			try {
+				await authService.resetPassword(resetPasswordDto);
+			} catch (e) {
+				error = e;
+			}
+			expect(error).toBeInstanceOf(Error);
+			expect(error.message).toBe('Invalid token provided');
+		});
+
+		it('should throw an erorr if the token and email mismatch', async () => {
+			mockPasswordResetRepository.find.mockResolvedValue([
+				{ ...passwordResetMock, user: { ...userWithId, email: 'different.email@gmail.com' } },
+			]);
+
+			let error;
+			try {
+				await authService.resetPassword(resetPasswordDto);
+			} catch (e) {
+				error = e;
+			}
+			expect(error).toBeInstanceOf(Error);
+			expect(error.message).toBe('Invalid token or email provided');
+		});
+
+		it('should throw an erorr if the token is expired', async () => {
+			mockPasswordResetRepository.find.mockResolvedValue([
+				{ ...passwordResetMock, expiry: new Date('2000-08-16') },
+			]);
+
+			let error;
+			try {
+				await authService.resetPassword(resetPasswordDto);
+			} catch (e) {
+				error = e;
+			}
+			expect(error).toBeInstanceOf(Error);
+			expect(error.message).toBe('Invalid token provided');
+			expect(mockPasswordResetRepository.save).toBeCalledWith({
+				...passwordResetMock,
+				expiry: new Date('2000-08-16'),
+				status: PasswordResetStatus.INVALID,
+			});
+		});
+
+		it('should throw an erorr if the token is invalid', async () => {
+			mockPasswordResetRepository.find.mockResolvedValue([
+				{ ...passwordResetMock, status: PasswordResetStatus.INVALID },
+			]);
+
+			let error;
+			try {
+				await authService.resetPassword(resetPasswordDto);
+			} catch (e) {
+				error = e;
+			}
+			expect(error).toBeInstanceOf(Error);
+			expect(error.message).toBe('Invalid token provided');
+			expect(mockPasswordResetRepository.save).toBeCalledWith({
+				...passwordResetMock,
+				status: PasswordResetStatus.INVALID,
+			});
+		});
+	});
+
 	describe('logout()', () => {
 		it('should successfully logout a user', async () => {
 			mockCommonService.findByEmail.mockResolvedValue(loggedInUserEntity);
@@ -180,7 +381,9 @@ describe('AuthService', () => {
 		});
 
 		it('should return an error since it could not find user', async () => {
-			mockCommonService.findByEmail.mockRejectedValue(new Error('Could not find user with email wrong@email.com'));
+			mockCommonService.findByEmail.mockRejectedValue(
+				new Error('Could not find user with email wrong@email.com'),
+			);
 			let error;
 			try {
 				await authService.logout(new JwtPayload('wrong@email.com', null, null, null));
