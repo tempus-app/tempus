@@ -81,6 +81,7 @@ export class AuthService {
 			this.passwordResetRepository.save({ ...passwordResetDetails, status: PasswordResetStatus.INVALID });
 			throw new Error('Invalid token provided');
 		}
+		this.logger.log(`${resetPasswordDto.email} has successfully changed their password`);
 	}
 
 	private static isTokenValid(passwordResetDetails: PasswordResetEntity) {
@@ -109,6 +110,7 @@ export class AuthService {
 			PasswordResetStatus.VALID, // valid on reaction
 		);
 		await this.saveResetDetailsAndSendEmail(passwordReset);
+		this.logger.log(`${user.email} has requested a password change`);
 	}
 
 	async saveResetDetailsAndSendEmail(passwordResetDetails: PasswordResetEntity) {
