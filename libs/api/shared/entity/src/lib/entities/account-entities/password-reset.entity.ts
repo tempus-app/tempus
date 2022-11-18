@@ -29,7 +29,7 @@ export class PasswordResetEntity implements PasswordReset {
 	@Column({
 		type: 'enum',
 		enum: PasswordResetStatus,
-		array: true,
+		array: false,
 	})
 	status: PasswordResetStatus;
 }
