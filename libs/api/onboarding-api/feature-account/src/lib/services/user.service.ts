@@ -36,7 +36,7 @@ export class UserService {
 		const user = UserEntity.fromDto(updateUserData);
 
 		if (user.password) {
-			user.password = await this.hashPassword(userEntity.password);
+			user.password = await this.hashPassword(user.password);
 		}
 		Object.entries(user).forEach(entry => {
 			if (!entry[1]) {
