@@ -1,12 +1,33 @@
-import { ForbiddenException, Injectable, InternalServerErrorException, Logger } from '@nestjs/common';
-import { TokensDto, User, JwtPayload, JwtRefreshPayloadWithToken, AuthDto } from '@tempus/shared-domain';
+/* eslint-disable @nrwl/nx/enforce-module-boundaries */
+import {
+	ForbiddenException,
+	forwardRef,
+	Inject,
+	Injectable,
+	InternalServerErrorException,
+	Logger,
+} from '@nestjs/common';
+import {
+	TokensDto,
+	User,
+	JwtPayload,
+	JwtRefreshPayloadWithToken,
+	AuthDto,
+	PasswordReset,
+	PasswordResetStatus,
+	ResetPasswordDto,
+} from '@tempus/shared-domain';
 import { JwtService } from '@nestjs/jwt';
 import { compare, genSalt, hash } from 'bcrypt';
-import { Repository } from 'typeorm';
+import { getManager, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UserEntity } from '@tempus/api/shared/entity';
+import { PasswordResetEntity, UserEntity } from '@tempus/api/shared/entity';
 import { ConfigService } from '@nestjs/config';
 import { CommonService } from '@tempus/api/shared/feature-common';
+import { v4 as uuidv4 } from 'uuid';
+import { EmailService } from '@tempus/api/shared/feature-email';
+import { UpdateUserDto } from '@tempus/api/shared/dto';
+import { UserService } from '@tempus/onboarding-api/feature-account';
 
 @Injectable()
 export class AuthService {
@@ -14,10 +35,15 @@ export class AuthService {
 
 	constructor(
 		private jwtService: JwtService,
+		private emailService: EmailService,
 		@InjectRepository(UserEntity)
 		private userRepository: Repository<UserEntity>,
+		@InjectRepository(PasswordResetEntity)
+		private passwordResetRepository: Repository<PasswordResetEntity>,
 		private configService: ConfigService,
 		private commonService: CommonService,
+		@Inject(forwardRef(() => UserService))
+		private userService: UserService,
 	) {}
 
 	async login(user: User): Promise<AuthDto> {
@@ -29,6 +55,82 @@ export class AuthService {
 		const result = new AuthDto(partialUser, tokens.accessToken, tokens.refreshToken);
 		this.logger.log(`${partialUser.email} logged in as ${partialUser.roles}`);
 		return result;
+	}
+
+	async resetPassword(resetPasswordDto: ResetPasswordDto) {
+		const data = await this.passwordResetRepository.find({
+			where: { token: resetPasswordDto.token },
+			relations: ['user'],
+		});
+		if (data.length === 0) {
+			throw new Error('Invalid code provided');
+		}
+		const passwordResetDetails = data[0];
+
+		if (passwordResetDetails.user.email !== resetPasswordDto.email) {
+			throw new Error('Invalid token or email provided');
+		}
+
+		if (AuthService.isTokenValid(passwordResetDetails)) {
+			// reset password
+			const updateUserDto = new UpdateUserDto(passwordResetDetails.user.id);
+			updateUserDto.password = resetPasswordDto.newPassword;
+			await this.userService.updateUser(updateUserDto);
+		} else {
+			throw new Error('Invalid token provided');
+		}
+
+		// either token was expired, invalid, or used so now it is not reusauble
+		this.passwordResetRepository.save({ ...passwordResetDetails, status: PasswordResetStatus.INVALID });
+	}
+
+	private static async isTokenValid(passwordResetDetails: PasswordResetEntity) {
+		if (
+			passwordResetDetails.expiry.getTime() <= Date.now() &&
+			passwordResetDetails.status === PasswordResetStatus.VALID
+		) {
+			return true;
+		}
+		return false;
+	}
+
+	async forgotPassword(userEmail: string): Promise<void> {
+		const user = await this.commonService.findByEmail(userEmail); // if user does not exist, will throw error
+		const token = uuidv4();
+
+		// expire in 24 hours
+		const currentDate = new Date();
+		const expiryDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() + 1);
+
+		const passwordReset: PasswordReset = new PasswordResetEntity(
+			null,
+			user,
+			expiryDate,
+			token,
+			PasswordResetStatus.VALID, // valid on reaction
+		);
+		await this.saveResetDetailsAndSendEmail(passwordReset);
+	}
+
+	async saveResetDetailsAndSendEmail(passwordResetDetails: PasswordResetEntity) {
+		return getManager().transaction(async manager => {
+			const oldRequests = await manager.getRepository(PasswordResetEntity).find({
+				where: { user: passwordResetDetails.user },
+			});
+			// if the user repeatedly sends reset reuqests, we want the last one to be valid
+			oldRequests.forEach(async request => {
+				await manager
+					.getRepository(PasswordResetEntity)
+					.save({ ...request, status: PasswordResetStatus.INVALID });
+			});
+
+			await manager.getRepository(PasswordResetEntity).save(passwordResetDetails);
+			try {
+				await this.emailService.sendResetEmail(passwordResetDetails);
+			} catch (err) {
+				throw new Error('Email unable to be sent.');
+			}
+		});
 	}
 
 	async logout(token: JwtPayload) {
