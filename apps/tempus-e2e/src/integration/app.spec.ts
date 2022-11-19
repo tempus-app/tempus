@@ -85,7 +85,7 @@ describe('tempus e2e tests', () => {
 			cy.get('#institution-error').should('be.visible');
 			cy.get('#submit-profile-button button').should('be.disabled');
 
-			makeChangeSendForApprovalLoginAsBO(resEmail, 'New profile summary', 'New institution name');
+			makeChangeSendForApprovalLoginAsBO(resEmail, 'New profile summary', 'aaNew institution name');
 
 			// Approve changes
 			cy.get('[id=approve-view-button]').click();
@@ -108,9 +108,10 @@ describe('tempus e2e tests', () => {
 
 			// Verify correct data changed by resource shows up here
 			cy.get('[id=profile-summary-text]').first().should('have.text', 'New profile summary');
-			cy.get('[id=institution-name-text]').first().should('have.text', 'New institution name');
+			cy.get('[id=institution-name-text]').first().should('have.text', 'aaNew institution name');
 
       cy.get('[id=logout-button]').click();
+      cy.wait(3000);
 		});
 		it('should create revision, reject it, re revise and then approve', () => {
 			const resAccount = getUserCredentials(RoleType.AVAILABLE_RESOURCE);
@@ -126,7 +127,7 @@ describe('tempus e2e tests', () => {
 
 			cy.wait(2000);
 
-			makeChangeSendForApprovalLoginAsBO(resEmail, 'New profile summary', 'New institution name');
+			makeChangeSendForApprovalLoginAsBO(resEmail, 'New new profile summary', 'aaNew new institution name');
 
 			// Reject changes
 			cy.get('[id=reject-view-button]').scrollIntoView().click();
@@ -145,8 +146,8 @@ describe('tempus e2e tests', () => {
 			cy.get('[id=revision-icon]').should('not.exist');
 
 			// Verify changes made by resource dont show here
-			cy.get('[id=profile-summary-text]').should('not.have.text', 'New profile summary');
-			cy.get('[id=institution-name-text]').first().should('not.have.text', 'New institution name');
+			cy.get('[id=profile-summary-text]').should('not.have.text', 'New new profile summary');
+			cy.get('[id=institution-name-text]').first().should('not.have.text', 'aaNew new institution name');
 
 			// Login as resource
 			cy.get('[id=logout-button]').click();
@@ -167,7 +168,7 @@ describe('tempus e2e tests', () => {
 
 			cy.wait(2000);
 
-			makeChangeSendForApprovalLoginAsBO(resEmail, 'New profile summary 2', 'New institution name 2');
+			makeChangeSendForApprovalLoginAsBO(resEmail, 'New new profile summary 2', 'aaNew new institution name 2');
 
 			// Approve changes
 			cy.get('[id=approve-view-button]').click();
@@ -190,10 +191,11 @@ describe('tempus e2e tests', () => {
 			cy.get('#edit-profile-button button').should('not.be.disabled');
 
 			// Verify correct data changed by resource shows up here
-			cy.get('[id=profile-summary-text]').first().should('have.text', 'New profile summary 2');
-			cy.get('[id=institution-name-text]').first().should('have.text', 'New institution name 2');
+			cy.get('[id=profile-summary-text]').first().should('have.text', 'New new profile summary 2');
+			cy.get('[id=institution-name-text]').first().should('have.text', 'aaNew new institution name 2');
 
       cy.get('[id=logout-button]').click();
+      cy.wait(3000);
 		});
 	});
 
