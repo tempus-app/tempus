@@ -1,3 +1,4 @@
+/* eslint-disable @nrwl/nx/enforce-module-boundaries */
 import { EmailModule } from '@tempus/api/shared/feature-email';
 import { forwardRef, Module } from '@nestjs/common';
 import { ProfileModule } from '@tempus/onboarding-api/feature-profile';
@@ -17,7 +18,7 @@ import { UserController } from './controllers/user.controller';
 		forwardRef(() => ProfileModule),
 		EmailModule,
 		ConfigModule,
-		AuthModule,
+		forwardRef(() => AuthModule),
 		CommonModule,
 	],
 	controllers: [UserController, LinkController],
