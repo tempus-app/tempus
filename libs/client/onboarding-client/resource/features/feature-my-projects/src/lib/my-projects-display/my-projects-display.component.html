@@ -9,6 +9,7 @@
           <div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="center center" fxFlexFill class="grid-item" class="section-container">
             <tempus-card>
                 <p> {{ projectPrefix + 'assigned' | translate }} {{formatDate(project.startDate)}}</p>
+                <p *ngIf="project.endDate"> {{ projectPrefix + 'endDate' | translate }} {{formatDate(project.endDate)}}</p>
                 <h2>{{ projectPrefix + 'client' | translate }}: <span class='normal-font'>{{project.project.client.clientName}}</span></h2>
                 <div class="section-header">
                     <h2>{{ projectPrefix + 'project' | translate }}: <span class='normal-font'>{{project.project.name}}</span></h2>

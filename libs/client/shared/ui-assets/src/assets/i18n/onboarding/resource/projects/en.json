@@ -4,6 +4,7 @@
         "assigned": "Assigned on",
         "client": "Client",
         "project": "Project",
-        "position": "Position"
+        "position": "Position",
+        "endDate": "End date"
     }
 }
