@@ -1,0 +1,22 @@
+<div fxLayout="column" id="page-container">
+	<div>
+		<div id="title-container">
+			<h2 class="mat-h2 page-title">{{ 'title' | translate }}</h2>
+		</div>
+	</div>
+    <div fxLayout="column" fxLayoutGap="10px">
+        <div fxLayout.gt-sm="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxFlex="33%" class="block-2" *ngFor="let project of projects">
+          <div fxFlex.gt-sm="50%" fxFlex.lt-md="50%" fxLayoutAlign="center center" fxFlexFill class="grid-item" class="section-container">
+            <tempus-card>
+                <p> {{ projectPrefix + 'assigned' | translate }} {{formatDate(project.startDate)}}</p>
+                <h2>{{ projectPrefix + 'client' | translate }}: <span class='normal-font'>{{project.project.client.clientName}}</span></h2>
+                <div class="section-header">
+                    <h2>{{ projectPrefix + 'project' | translate }}: <span class='normal-font'>{{project.project.name}}</span></h2>
+                </div>
+                <h4>{{ projectPrefix + 'position' | translate }}: <span class='normal-font'>{{project.title}}</span></h4>
+            </tempus-card> 
+          </div>
+        </div>
+    </div>
+
+</div>
