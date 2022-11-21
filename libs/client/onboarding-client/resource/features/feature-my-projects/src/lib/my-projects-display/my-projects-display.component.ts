@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Subject } from 'rxjs';
-import { ProjectResource } from '@tempus/shared-domain';
+import { ProjectResource, ProjectStatus } from '@tempus/shared-domain';
 import { TranslateService } from '@ngx-translate/core';
 import { OnboardingClientResourceService } from '@tempus/client/onboarding-client/shared/data-access';
 
@@ -31,5 +31,9 @@ export class MyProjectsDisplayComponent implements OnInit {
 
 	formatDate(date: Date) {
 		return new Date(date).toISOString().slice(0, 10);
+	}
+
+	convertProjectStatusToString(status: string) {
+		return status.toString() === 'not_started' ? 'Not Started' : status;
 	}
 }

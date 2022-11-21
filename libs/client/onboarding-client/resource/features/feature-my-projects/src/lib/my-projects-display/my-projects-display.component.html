@@ -13,6 +13,7 @@
                 <h2>{{ projectPrefix + 'client' | translate }}: <span class='normal-font'>{{project.project.client.clientName}}</span></h2>
                 <div class="section-header">
                     <h2>{{ projectPrefix + 'project' | translate }}: <span class='normal-font'>{{project.project.name}}</span></h2>
+                    <h2>{{ projectPrefix + 'projectStatus' | translate }}: <span class='normal-font'>{{convertProjectStatusToString(project.project.status)}}</span></h2>
                 </div>
                 <h4>{{ projectPrefix + 'position' | translate }}: <span class='normal-font'>{{project.title}}</span></h4>
             </tempus-card> 
