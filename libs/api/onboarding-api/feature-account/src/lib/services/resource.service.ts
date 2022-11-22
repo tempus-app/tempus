@@ -20,9 +20,9 @@ import {
 	StatusType,
 	ViewType,
 } from '@tempus/shared-domain';
-import { In, Like, Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { genSalt, hash } from 'bcrypt';
-import { ClientEntity, ProjectEntity, ProjectResourceEntity, ResourceEntity } from '@tempus/api/shared/entity';
+import { ProjectEntity, ProjectResourceEntity, ResourceEntity } from '@tempus/api/shared/entity';
 import { CreateResourceDto, ResourceBasicDto, UpdateResourceDto, UserProjectClientDto } from '@tempus/api/shared/dto';
 import { LinkService } from './link.service';
 
@@ -91,11 +91,10 @@ export class ResourceService {
 		if (!resourceEntity) {
 			throw new NotFoundException(`Could not find resource with id ${resourceId}`);
 		}
-    if(resourceEntity.resume) {
-      return new StreamableFile(resourceEntity.resume);
-    } else {
-      return null
-    }
+		if (resourceEntity.resume) {
+			return new StreamableFile(resourceEntity.resume);
+		}
+		return null;
 	}
 
 	async getResource(resourceId: number): Promise<Resource> {
@@ -169,7 +168,7 @@ export class ResourceService {
 
 		// If no projects or client with matching filter, need this redundant id to prevent syntax error in query below
 		// as empty array of project ids causes issues
-		if (projIds.length == 0) {
+		if (projIds.length === 0) {
 			projIds.push(-999);
 		}
 		const projResourcesMatchingFilter = await this.projectResourceRepository
@@ -190,7 +189,7 @@ export class ResourceService {
 		filter: string,
 	): Promise<{ userProjClientData: UserProjectClientDto[]; totalItems: number }> {
 		let resourcesAndCount: [ResourceEntity[], number] = [[], 0];
-		if (filter != '') {
+		if (filter !== '') {
 			const projResources = await this.getProjResourcesMatchingFilter(filter);
 			const resMatchingFilterIds = Array.from(new Set(projResources.map(projRes => projRes.resource.id)));
 			resourcesAndCount = await this.resourceRepository.findAndCount({
@@ -227,6 +226,7 @@ export class ResourceService {
 		// Converting to relevant dto array data
 		const userProjectInfo: Array<UserProjectClientDto> = resources.map(res => {
 			const clientProjsMap = {};
+			// eslint-disable-next-line array-callback-return
 			res.projectResources.map(relation => {
 				const projData = {
 					val: relation.project.name,

@@ -5,3 +5,4 @@ export * from './jwtRefreshPayloadWithToken.dto';
 export * from './IcreateLocation.dto';
 export * from './IupdateLocation.dto';
 export * from './resumeComponents.dto';
+export * from './resetPassword.dto';

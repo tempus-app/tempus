@@ -1,5 +1,5 @@
-import { Request, Controller, Post, UseGuards, HttpCode, HttpStatus } from '@nestjs/common';
-import { TokensDto, AuthDto } from '@tempus/shared-domain';
+import { Request, Controller, Post, UseGuards, HttpCode, HttpStatus, Query, Body } from '@nestjs/common';
+import { TokensDto, AuthDto, ResetPasswordDto } from '@tempus/shared-domain';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { AuthService } from './auth.service';
 import { JwtRefreshGuard } from './guards/jwt-refresh.guard';
@@ -14,6 +14,18 @@ export class AuthController {
 	@Post('login')
 	login(@Request() req): Promise<AuthDto> {
 		return this.authService.login(req.user);
+	}
+
+	@HttpCode(HttpStatus.OK)
+	@Post('forgot-password')
+	forgotPassword(@Query('email') email: string): Promise<void> {
+		return this.authService.forgotPassword(email);
+	}
+
+	@HttpCode(HttpStatus.OK)
+	@Post('reset-password')
+	resetPassword(@Body() resetPasswordData: ResetPasswordDto): Promise<void> {
+		return this.authService.resetPassword(resetPasswordData);
 	}
 
 	@UseGuards(JwtAuthGuard)

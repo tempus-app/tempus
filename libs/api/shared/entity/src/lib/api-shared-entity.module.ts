@@ -17,6 +17,7 @@ import {
 	ProjectEntity,
 	ClientRepresentativeEntity,
 	ProjectResourceEntity,
+	PasswordResetEntity,
 } from './entities';
 
 @Module({
@@ -37,6 +38,7 @@ import {
 			ProjectEntity,
 			ClientRepresentativeEntity,
 			ProjectResourceEntity,
+			PasswordResetEntity,
 		]),
 	],
 	controllers: [],

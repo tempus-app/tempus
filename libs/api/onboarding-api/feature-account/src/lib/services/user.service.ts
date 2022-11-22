@@ -34,6 +34,10 @@ export class UserService {
 			throw new NotFoundException(`Could not find user with id ${updateUserData.id}`);
 		}
 		const user = UserEntity.fromDto(updateUserData);
+
+		if (user.password) {
+			user.password = await this.hashPassword(user.password);
+		}
 		Object.entries(user).forEach(entry => {
 			if (!entry[1]) {
 				delete user[entry[0]];

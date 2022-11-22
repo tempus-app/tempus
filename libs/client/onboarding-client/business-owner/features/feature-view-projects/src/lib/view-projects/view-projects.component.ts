@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/dot-notation */
 /* eslint-disable no-param-reassign */
 import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
@@ -10,7 +11,6 @@ import {
 } from '@tempus/client/onboarding-client/business-owner/data-access';
 import { OnboardingClientProjectService } from '@tempus/client/onboarding-client/shared/data-access';
 import { Column, ViewProjects } from '@tempus/client/shared/ui-components/presentational';
-import { ProjectStatus } from '@tempus/shared-domain';
 import { take, Subject, takeUntil } from 'rxjs';
 
 @Component({
@@ -25,7 +25,7 @@ export class ViewProjectsComponent implements OnInit {
 
 	pageNum = 0;
 
-	pageSize = 5;
+	pageSize = 10;
 
 	totalProjects = 0;
 
@@ -45,22 +45,22 @@ export class ViewProjectsComponent implements OnInit {
 					{
 						columnDef: 'project',
 						header: data.project,
-						cell: (element: Record<string, unknown>) => `${element.project}`,
+						cell: (element: Record<string, unknown>) => `${element['project']}`,
 					},
 					{
 						columnDef: 'name',
 						header: data.name,
-						cell: (element: Record<string, unknown>) => `${element.name}`,
+						cell: (element: Record<string, unknown>) => `${element['name']}`,
 					},
 					{
 						columnDef: 'start_date',
 						header: data.start_date,
-						cell: (element: Record<string, unknown>) => `${element.start_date}`,
+						cell: (element: Record<string, unknown>) => `${element['start_date']}`,
 					},
 					{
 						columnDef: 'status',
 						header: data.status,
-						cell: (element: Record<string, unknown>) => `${element.status}`,
+						cell: (element: Record<string, unknown>) => `${element['status']}`,
 					},
 				];
 			});

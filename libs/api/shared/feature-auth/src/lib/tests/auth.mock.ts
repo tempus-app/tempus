@@ -1,5 +1,12 @@
-import { UserEntity } from '@tempus/api/shared/entity';
-import { AuthDto, JwtPayload, JwtRefreshPayloadWithToken, TokensDto } from '@tempus/shared-domain';
+import { PasswordResetEntity, UserEntity } from '@tempus/api/shared/entity';
+import {
+	AuthDto,
+	JwtPayload,
+	JwtRefreshPayloadWithToken,
+	PasswordResetStatus,
+	ResetPasswordDto,
+	TokensDto,
+} from '@tempus/shared-domain';
 
 export const accessToken = 'accessTokenMock';
 
@@ -30,3 +37,16 @@ export const invalidRefreshTokenPayloadWithToken = new JwtRefreshPayloadWithToke
 	null,
 	null,
 );
+
+export const user = new UserEntity(null, 'Jessica', 'Adams', 'jessicaadams@email.com', 'password1', null);
+export const userWithId = new UserEntity(4, 'Jessica', 'Adams', 'jessicaadams@email.com', 'password1', null);
+
+const currentDate = new Date();
+export const passwordResetMock = new PasswordResetEntity(
+	null,
+	userWithId,
+	new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() + 1),
+	'fake-uuid',
+	PasswordResetStatus.VALID,
+);
+export const resetPasswordDto = new ResetPasswordDto('jessicaadams@email.com', 'fake-uuid', 'password16');

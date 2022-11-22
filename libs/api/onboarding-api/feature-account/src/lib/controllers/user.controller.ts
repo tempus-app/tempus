@@ -16,6 +16,7 @@ import {
 	Query,
 } from '@nestjs/common';
 import { Resource, RoleType, User } from '@tempus/shared-domain';
+// eslint-disable-next-line @nrwl/nx/enforce-module-boundaries
 import { JwtAuthGuard, Roles, RolesGuard, PermissionGuard } from '@tempus/api/shared/feature-auth';
 import { ApiTags } from '@nestjs/swagger';
 import {
@@ -36,10 +37,7 @@ import { UserService } from '../services/user.service';
 @ApiTags('User')
 @Controller('user')
 export class UserController {
-	constructor(
-		private userService: UserService,
-		private resourceService: ResourceService, // private authService: AuthService,
-	) {}
+	constructor(private userService: UserService, private resourceService: ResourceService) {}
 
 	@UseGuards(JwtAuthGuard, RolesGuard)
 	@Roles(RoleType.BUSINESS_OWNER, RoleType.SUPERVISOR)
