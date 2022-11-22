@@ -85,6 +85,11 @@ export class SidebarComponent implements OnInit, OnDestroy {
 			route: '/resource/personal-information',
 			base: true,
 		},
+		{
+			tab: SidebarTab.MY_PROJECTS,
+			route: '/resource/my-projects',
+			base: true,
+		},
 	];
 
 	ngOnInit(): void {

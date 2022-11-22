@@ -11,6 +11,10 @@ export const selectResourceBasicDetails = createSelector(selectState, (state: Re
 	return { firstName: state.firstName, lastName: state.lastName, email: state.email };
 });
 
+export const selectResourceProjectDetails = createSelector(selectState, (state: ResourceState) => {
+	return { projectResources: state.projectResources };
+});
+
 export const selectResourceViews = createSelector(selectState, (state: ResourceState) => {
 	return { views: state.views, totalViews: state.totalViewsData };
 });
