@@ -12,7 +12,6 @@ import {
 	OnboardingClientResourceService,
 	OnboardingClientState,
 	selectResourceDetails,
-	selectResourceId,
 	selectResourceOriginalResume,
 } from '@tempus/client/onboarding-client/shared/data-access';
 import { Subject, takeUntil } from 'rxjs';
@@ -78,16 +77,10 @@ export class PersonalInformationDisplayComponent implements OnInit {
 		this.sharedStore.dispatch(getResourceInformation());
 
 		this.sharedStore
-			.select(selectResourceId)
-			.pipe(takeUntil(this.$destroyed))
-			.subscribe(data => {
-				this.userId = data;
-			});
-
-		this.sharedStore
 			.select(selectResourceDetails)
 			.pipe(takeUntil(this.$destroyed))
 			.subscribe(data => {
+				this.userId = data.userId;
 				this.firstName = data.firstName || '';
 				this.lastName = data.lastName || '';
 				this.city = data.city || '';

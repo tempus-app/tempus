@@ -1,9 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import {
+	getResourceInformation,
 	OnboardingClientResourceService,
 	OnboardingClientState,
-	selectLoggedInUserNameEmail,
-	selectResourceId,
+	selectResourceDetails,
 } from '@tempus/client/onboarding-client/shared/data-access';
 import { Subject, take, takeUntil } from 'rxjs';
 import { ButtonType } from '@tempus/client/shared/ui-components/presentational';
@@ -106,22 +106,17 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
 	ngOnInit(): void {
 		this.sharedStore
-			.select(selectResourceId)
+			.select(selectResourceDetails)
 			.pipe(take(1))
 			.subscribe(data => {
 				if (data) {
-					this.userId = data;
+					this.userId = data.userId;
+					this.firstName = data.firstName || '';
+					this.lastName = data.lastName || '';
+				} else {
+					this.sharedStore.dispatch(getResourceInformation());
 				}
 			});
-		this.sharedStore
-			.select(selectLoggedInUserNameEmail)
-			.pipe(take(1))
-			.subscribe(data => {
-				this.firstName = data.firstName || '';
-				this.lastName = data.lastName || '';
-			});
-
-		this.resourceStore.dispatch(getResourceOriginalResumeById({ resourceId: this.userId }));
 
 		this.resourceStore
 			.select(selectResourceOriginalResume)
@@ -129,6 +124,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
 			.subscribe(blob => {
 				if (blob) {
 					this.resume = new File([blob], 'original-resume.pdf');
+				} else {
+					this.resourceStore.dispatch(getResourceOriginalResumeById({ resourceId: this.userId }));
 				}
 			});
 
@@ -162,34 +159,58 @@ export class ProfileComponent implements OnInit, OnDestroy {
 		// 		this.dataLoaded = true;
 		// 	});
 
+		const viewId = parseInt(this.route.snapshot.paramMap.get('id') || '0', 10);
+		if (viewId) {
+			this.resourceService.getViewById(viewId).subscribe(view => {
+				this.pageTitle = view.type;
+				this.loadView(view);
+				this.dataLoaded = true;
+			});
+		} else {
+			// Display Primary view
+			this.translateService
+				.get('onboardingResourceProfile.myProfile')
+				.pipe(take(1))
+				.subscribe(data => {
+					this.pageTitle = data;
+				});
+
+			this.resourceService.getResourceProfileViews(this.userId).subscribe(data => {
+				let filteredAndSortedViews = data.views?.filter(view => view.viewType === ViewType.PRIMARY);
+				filteredAndSortedViews = sortViewsByLatestUpdated(filteredAndSortedViews);
+				this.loadView(filteredAndSortedViews[0]);
+				this.dataLoaded = true;
+			});
+		}
+
 		this.resourceService.getResourceInformation().subscribe(resData => {
 			this.userId = resData.id;
 			this.fullName = `${resData.firstName} ${resData.lastName}`;
 
 			// Use viewId from route
-			const viewId = parseInt(this.route.snapshot.paramMap.get('id') || '0', 10);
-			if (viewId) {
-				this.resourceService.getViewById(viewId).subscribe(view => {
-					this.pageTitle = view.type;
-					this.loadView(view);
-					this.dataLoaded = true;
-				});
-			} else {
-				// Display Primary view
-				this.translateService
-					.get('onboardingResourceProfile.myProfile')
-					.pipe(take(1))
-					.subscribe(data => {
-						this.pageTitle = data;
-					});
+			// const viewId = parseInt(this.route.snapshot.paramMap.get('id') || '0', 10);
+			// if (viewId) {
+			// 	this.resourceService.getViewById(viewId).subscribe(view => {
+			// 		this.pageTitle = view.type;
+			// 		this.loadView(view);
+			// 		this.dataLoaded = true;
+			// 	});
+			// } else {
+			// 	// Display Primary view
+			// 	this.translateService
+			// 		.get('onboardingResourceProfile.myProfile')
+			// 		.pipe(take(1))
+			// 		.subscribe(data => {
+			// 			this.pageTitle = data;
+			// 		});
 
-				this.resourceService.getResourceProfileViews(this.userId).subscribe(data => {
-					let filteredAndSortedViews = data.views?.filter(view => view.viewType === ViewType.PRIMARY);
-					filteredAndSortedViews = sortViewsByLatestUpdated(filteredAndSortedViews);
-					this.loadView(filteredAndSortedViews[0]);
-					this.dataLoaded = true;
-				});
-			}
+			// 	this.resourceService.getResourceProfileViews(this.userId).subscribe(data => {
+			// 		let filteredAndSortedViews = data.views?.filter(view => view.viewType === ViewType.PRIMARY);
+			// 		filteredAndSortedViews = sortViewsByLatestUpdated(filteredAndSortedViews);
+			// 		this.loadView(filteredAndSortedViews[0]);
+			// 		this.dataLoaded = true;
+			// 	});
+			// }
 		});
 	}
 
