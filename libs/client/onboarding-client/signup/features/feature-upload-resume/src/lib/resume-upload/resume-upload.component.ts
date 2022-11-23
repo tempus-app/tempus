@@ -129,8 +129,6 @@ export class ResumeUploadComponent implements OnInit {
 					{
 						title: '',
 
-						summary: '',
-
 						description: [parsedResumeJSON.experience.join()],
 
 						company: '',

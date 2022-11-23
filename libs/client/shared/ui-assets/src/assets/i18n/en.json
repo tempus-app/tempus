@@ -26,7 +26,8 @@
 		"invite": "invite",
 		"edit": "edit",
 		"downloadView": "download view",
-		"createNewView": "create new view"
+		"createNewView": "create new view",
+    "updateStatus": "update status"
 	},
 	"stepper": {
 		"uploadResume": "Upload Resume",

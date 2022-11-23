@@ -39,4 +39,6 @@ export interface ViewProjects extends TableDataModel {
 	project: string;
 	start_date: string;
 	status: string;
+  clientReprFullName: string;
+  clientReprEmail: string;
 }

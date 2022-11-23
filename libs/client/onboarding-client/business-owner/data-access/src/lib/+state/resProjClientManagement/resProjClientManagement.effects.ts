@@ -141,6 +141,20 @@ export class ResourceProjectClientManagementEffects {
 		),
 	);
 
+  updateProjectStatus$ = createEffect(() =>
+		this.actions$.pipe(
+			ofType(ProjManagementActions.updateProjStatus),
+			switchMap(data =>
+				this.projectService.updateProjectStatus(data.projId, data.status).pipe(
+					map(_ => {
+						return ProjManagementActions.updateProjStatusSuccess();
+					}),
+					catchError(error => of(ProjManagementActions.updateProjStatusFailure({ error }))),
+				),
+			),
+		),
+	);
+
 	assignResourceToProject$ = createEffect(() =>
 		this.actions$.pipe(
 			ofType(ProjManagementActions.createResourceProjectAssignment),

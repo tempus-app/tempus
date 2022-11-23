@@ -44,7 +44,7 @@ export class ProjectService {
 
 	async getAllProjects(page: number, pageSize: number): Promise<{ projectData: Project[]; totalItems: number }> {
 		const projectsAndCount = await this.projectRepository.findAndCount({
-			relations: ['client'],
+			relations: ['client', 'clientRepresentative'],
 			take: Number(pageSize),
 			skip: Number(page) * Number(pageSize),
 		});
@@ -155,13 +155,20 @@ export class ProjectService {
 		}
 	}
 
-	async completeProject(projectId: number): Promise<ProjectEntity> {
+	async updateProjStatus(projectId: number, status: ProjectStatus): Promise<ProjectEntity> {
 		const projectEntity = await this.getProject(projectId);
 
-		projectEntity.status = ProjectStatus.COMPLETED;
-		const dateToday = new Date();
+    const dateToday = new Date();
 		dateToday.setHours(0, 0, 0, 0);
-		projectEntity.endDate = dateToday;
+
+    if (status == ProjectStatus.ACTIVE) {
+      projectEntity.status = ProjectStatus.ACTIVE;
+      projectEntity.startDate = dateToday;
+      return await this.projectRepository.save(projectEntity);
+    } else {
+      projectEntity.status = ProjectStatus.COMPLETED;
+		  projectEntity.endDate = dateToday;
+    }
 
 		const { projectResources } = projectEntity;
 		await this.projectRepository.save(projectEntity);
