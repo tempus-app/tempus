@@ -7,6 +7,7 @@ import { skip, Subject, take, takeUntil } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import {
+	createAzureAccount,
 	createResource,
 	resetCreateResourceState,
 	resetLinkState,
@@ -187,6 +188,7 @@ export class ReviewComponent implements OnInit, OnDestroy, AfterViewInit {
 			.subscribe(resourceId => {
 				if (resourceId) {
 					this.store.dispatch(saveResume({ resourceId }));
+					this.store.dispatch(createAzureAccount({ resourceId }));
 				}
 			});
 	}

@@ -206,6 +206,7 @@ export class ResourceSeederService {
 			password,
 			[role],
 			faker.phone.phoneNumber(),
+			undefined,
 			faker.name.jobTitle(),
 			faker.internet.url(),
 			faker.internet.url(),

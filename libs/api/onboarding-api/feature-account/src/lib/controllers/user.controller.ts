@@ -15,7 +15,7 @@ import {
 	Res,
 	Query,
 } from '@nestjs/common';
-import { Resource, RoleType, User } from '@tempus/shared-domain';
+import { AzureAccount, Resource, RoleType, User } from '@tempus/shared-domain';
 // eslint-disable-next-line @nrwl/nx/enforce-module-boundaries
 import { JwtAuthGuard, Roles, RolesGuard, PermissionGuard } from '@tempus/api/shared/feature-auth';
 import { ApiTags } from '@nestjs/swagger';
@@ -33,11 +33,16 @@ import { Express, Response } from 'express';
 import { Multer } from 'multer'; // hack to use mutler
 import { ResourceService } from '../services/resource.service';
 import { UserService } from '../services/user.service';
+import { GraphService } from '../services/graph.service';
 
 @ApiTags('User')
 @Controller('user')
 export class UserController {
-	constructor(private userService: UserService, private resourceService: ResourceService) {}
+	constructor(
+		private userService: UserService,
+		private resourceService: ResourceService,
+		private graphService: GraphService,
+	) {}
 
 	@UseGuards(JwtAuthGuard, RolesGuard)
 	@Roles(RoleType.BUSINESS_OWNER, RoleType.SUPERVISOR)
@@ -109,6 +114,12 @@ export class UserController {
 	@Post('resource')
 	async createResource(@Body() user: CreateResourceDto): Promise<Resource> {
 		return this.resourceService.createResource(user);
+	}
+
+	// creates Azure AD account for resource
+	@Post('/azureAccount/:resourceId')
+	async createResourceAzureAccount(@Param('resourceId') resourceId: number): Promise<AzureAccount> {
+		return this.graphService.createUser(resourceId);
 	}
 
 	@Patch(':resourceId/resume')

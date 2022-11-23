@@ -18,6 +18,9 @@ export class CreateResourceDto extends CreateUserDto implements ICreateResourceD
 	phoneNumber: string;
 
 	@ApiProperty()
+	calEmail: string;
+
+	@ApiProperty()
 	linkedInLink: string;
 
 	@ApiProperty()
@@ -63,6 +66,7 @@ export class CreateResourceDto extends CreateUserDto implements ICreateResourceD
 		password: string,
 		roles: RoleType[],
 		phoneNumber: string,
+		calEmail: string,
 		title: string,
 		linkedInLink: string,
 		githubLink: string,
@@ -81,6 +85,7 @@ export class CreateResourceDto extends CreateUserDto implements ICreateResourceD
 		super(firstName, lastName, email, password, roles);
 		this.roles = roles;
 		this.phoneNumber = phoneNumber;
+		this.calEmail = calEmail;
 		this.title = title;
 		this.location = location;
 		this.experiences = experiences;
