@@ -21,6 +21,7 @@ import {
 } from '@tempus/shared-domain';
 import { TranslateService } from '@ngx-translate/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { splitStringIntoBulletPoints } from '@tempus/client/shared/util';
 
 @Component({
 	selector: 'tempus-edit-view-form',
@@ -111,6 +112,12 @@ export class EditViewFormComponent implements OnDestroy {
 		this.educations = view.educations;
 		this.educationsSummary = view.educationsSummary;
 		this.workExperiences = view.experiences;
+
+    this.workExperiences.forEach(workExp => {
+      const combinedDesc = "*"+workExp.description.join("\r\n*");
+      workExp.description = [combinedDesc];
+    });
+
 		this.experiencesSummary = view.experiencesSummary;
 		this.profileSummary = view.profileSummary;
 		this.skills = view.skills.map(skill => skill.skill.name);
@@ -159,6 +166,14 @@ export class EditViewFormComponent implements OnDestroy {
 		this.educationsSummary = editedForms.educationsSummary;
 		this.experiencesSummary = editedForms.experiencesSummary;
 		this.workExperiences = editedForms.experiences;
+    
+    if (!this.previewViewEnabled) {
+      this.workExperiences.forEach(workExp => {
+        const combinedDesc = "*"+workExp.description.join("\r\n*");
+        workExp.description = [combinedDesc];
+      });
+    }
+
 		this.educations = editedForms.educations;
 		this.certifications = editedForms.certifications;
 		this.skillsSummary = editedForms.skillsSummary;
@@ -189,7 +204,7 @@ export class EditViewFormComponent implements OnDestroy {
 		for (let i = 0; i < experiencesArray?.length; i++) {
 			const experience: ICreateExperienceDto = {
 				title: (experiencesArray?.at(i) as FormGroup).get('title')?.value,
-				description: [(experiencesArray?.at(i) as FormGroup).get('description')?.value],
+				description: splitStringIntoBulletPoints((experiencesArray?.at(i) as FormGroup).get('description')?.value),
 				startDate: (experiencesArray?.at(i) as FormGroup).get('startDate')?.value,
 				endDate: (experiencesArray?.at(i) as FormGroup).get('endDate')?.value,
 				company: (experiencesArray?.at(i) as FormGroup).get('company')?.value,
