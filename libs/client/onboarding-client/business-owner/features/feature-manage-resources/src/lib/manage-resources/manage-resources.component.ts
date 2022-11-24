@@ -167,6 +167,9 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 		if (roleType === RoleType.SUPERVISOR) {
 			return 'Supervisor';
 		}
+    if (roleType === RoleType.BUSINESS_OWNER) {
+      return 'Business Owner';
+    }
 		return '';
 	};
 
@@ -177,12 +180,16 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 		if (roleType === 'Supervisor') {
 			return RoleType.SUPERVISOR;
 		}
+    if (roleType === 'Business Owner') {
+      return RoleType.BUSINESS_OWNER;
+    }
 		return RoleType.USER;
 	};
 
 	inviteTypeOptions: string[] = [
 		this.roleTypeEnumToString(RoleType.AVAILABLE_RESOURCE),
 		this.roleTypeEnumToString(RoleType.SUPERVISOR),
+    this.roleTypeEnumToString(RoleType.BUSINESS_OWNER),
 	];
 
 	manageResourcesForm = this.fb.group({
@@ -473,9 +480,11 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 					if (inviteType === RoleType.AVAILABLE_RESOURCE) {
 						(createLinkDto.projectId = this.manageResourcesForm.get('invite')?.get('project')?.value),
 							(createLinkDto.userType = RoleType.AVAILABLE_RESOURCE);
-					} else {
+					} else if (inviteType === RoleType.SUPERVISOR) {
 						createLinkDto.userType = RoleType.SUPERVISOR;
-					}
+					} else {
+            createLinkDto.userType = RoleType.BUSINESS_OWNER;
+          }
 					this.businessOwnerStore.dispatch(
 						createLink({
 							createLinkDto,

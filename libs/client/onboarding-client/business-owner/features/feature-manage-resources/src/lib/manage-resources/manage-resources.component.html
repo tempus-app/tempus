@@ -74,7 +74,8 @@
 					fxFlex="100%"
 					*ngIf="
 						inviteType === roleTypeEnumToString(roleType.AVAILABLE_RESOURCE) ||
-						inviteType === roleTypeEnumToString(roleType.SUPERVISOR)
+						inviteType === roleTypeEnumToString(roleType.SUPERVISOR) ||
+            inviteType === roleTypeEnumToString(roleType.BUSINESS_OWNER)
 					"
 				>
 					<div fxLayout="row" fxLayoutGap="4%">
