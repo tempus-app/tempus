@@ -25,7 +25,7 @@ export class ViewPendingApprovalsComponent implements OnInit, OnDestroy {
 
 	pageNum = 0;
 
-	pageSize = 5;
+	pageSize = 10;
 
 	totalPendingApprovals = 0;
 

@@ -11,6 +11,9 @@ import {
 import {
 	getAllViewsByResourceId,
 	getResourceOriginalResumeById,
+	getResourceProjects,
+	getResourceProjectsFailure,
+	getResourceProjectsSuccess,
 	updateInfoFailure,
 	updateUserInfo,
 	updateUserInfoSuccess,
@@ -34,6 +37,20 @@ export class ResourceEffects {
 		private resourceService: OnboardingClientResourceService,
 		private viewsService: OnboardingClientViewsService,
 	) {}
+
+	getResourceProjects$ = createEffect(() =>
+		this.actions$.pipe(
+			ofType(getResourceProjects),
+			switchMap(() =>
+				this.resourceService.getResourceInformation().pipe(
+					map(res => {
+						return getResourceProjectsSuccess({ projectResources: res.projectResources });
+					}),
+					catchError(error => of(getResourceProjectsFailure({ error }))),
+				),
+			),
+		),
+	);
 
 	updateInfo$ = createEffect(() =>
 		this.actions$.pipe(

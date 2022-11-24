@@ -1,6 +1,6 @@
 import { createReducer, on } from '@ngrx/store';
 import { AsyncRequestState } from '@tempus/client/onboarding-client/shared/data-access';
-import { View } from '@tempus/shared-domain';
+import { ProjectResource, View } from '@tempus/shared-domain';
 import * as ResourceActions from './resource.actions';
 
 export const RESOURCE_INFO_FEATURE_KEY = 'resource';
@@ -12,6 +12,7 @@ export interface ResourceState {
 	views: View[] | null;
 	resume: Blob | null;
 	totalViewsData: number;
+	projectResources: ProjectResource[];
 }
 
 export const initialState: ResourceState = {
@@ -21,10 +22,21 @@ export const initialState: ResourceState = {
 	views: null,
 	resume: null,
 	totalViewsData: 0,
+	projectResources: [],
 };
 
 export const resourceReducer = createReducer(
 	initialState,
+	on(ResourceActions.getResourceProjects, state => ({ ...state, status: AsyncRequestState.LOADING })),
+	on(ResourceActions.getResourceProjectsSuccess, (state, { projectResources }) => ({
+		...state,
+		projectResources,
+	})),
+	on(ResourceActions.getResourceProjectsFailure, (state, { error }) => ({
+		...state,
+		status: AsyncRequestState.ERROR,
+		error,
+	})),
 	on(ResourceActions.updateUserInfo, state => ({ ...state, status: AsyncRequestState.LOADING })),
 	on(ResourceActions.updateUserInfoSuccess, (state, { firstName, lastName, email }) => ({
 		...state,

@@ -40,6 +40,15 @@ const routes: Routes = [
 					),
 			},
 			{
+				path: 'my-projects',
+				canLoad: [AuthGuard],
+				canActivate: [AuthGuard],
+				loadChildren: () =>
+					import('@tempus/onboarding-client/resource/feature-my-projects').then(
+						m => m.OnboardingClientResourceMyProjectsFeature,
+					),
+			},
+			{
 				path: 'my-views/:id',
 				canLoad: [AuthGuard],
 				canActivate: [AuthGuard],

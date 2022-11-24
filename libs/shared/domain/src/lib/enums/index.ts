@@ -5,3 +5,4 @@ export * from './viewtype';
 export * from './revisiontype';
 export * from './errorType';
 export * from './projectstatus';
+export * from './passwordresetstatus';

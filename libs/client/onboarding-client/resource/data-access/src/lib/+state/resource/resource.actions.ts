@@ -1,5 +1,19 @@
 import { createAction, props } from '@ngrx/store';
-import { IUpdateResourceDto, View } from '@tempus/shared-domain';
+import { IUpdateResourceDto, ProjectResource, View } from '@tempus/shared-domain';
+
+export const getResourceProjects = createAction('[Onboarding Client Resource Project Api] Get Resource Projects');
+
+export const getResourceProjectsSuccess = createAction(
+	'[Onboarding Client Resource Project Api] Get Resource Projects Success',
+	props<{
+		projectResources: ProjectResource[];
+	}>(),
+);
+
+export const getResourceProjectsFailure = createAction(
+	'[Onboarding Client Resource Project Api] Get Resource Projects Failure',
+	props<{ error: Error }>(),
+);
 
 export const updateUserInfo = createAction(
 	'[Onboarding Client Api] Update Info',
