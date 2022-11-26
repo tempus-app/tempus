@@ -44,6 +44,9 @@
 			"@tempus/client/onboarding-client/shared/data-access": [
 				"libs/client/onboarding-client/shared/data-access/src/index.ts"
 			],
+			"@tempus/onboarding-client/shared/feature-reset-password": [
+				"libs/client/onboarding-client/shared/features/feature-reset-password/src/index.ts"
+			],
 			"@tempus/client/onboarding-client/shared/guards": [
 				"libs/client/onboarding-client/shared/guards/src/index.ts"
 			],
@@ -62,9 +65,6 @@
 			"@tempus/client/onboarding-client/shell": ["libs/client/onboarding-client/shell/src/index.ts"],
 			"@tempus/client/onboarding-client/signup/data-access": [
 				"libs/client/onboarding-client/signup/data-access/src/index.ts"
-			],
-			"@tempus/onboarding-client/shared/feature-forgot-password": [
-				"libs/client/onboarding-client/shared/features/feature-forgot-password/src/index.ts"
 			],
 			"@tempus/client/onboarding-client/signup/guards": [
 				"libs/client/onboarding-client/signup/guards/src/index.ts"
@@ -105,6 +105,9 @@
 			"@tempus/onboarding-client/resource/shell": ["libs/client/onboarding-client/resource/shell/src/index.ts"],
 			"@tempus/onboarding-client/shared/feature-edit-view-form": [
 				"libs/client/onboarding-client/shared/features/feature-edit-view-form/src/index.ts"
+			],
+			"@tempus/onboarding-client/shared/feature-forgot-password": [
+				"libs/client/onboarding-client/shared/features/feature-forgot-password/src/index.ts"
 			],
 			"@tempus/onboarding-client/shared/feature-sign-in": [
 				"libs/client/onboarding-client/shared/features/feature-sign-in/src/index.ts"

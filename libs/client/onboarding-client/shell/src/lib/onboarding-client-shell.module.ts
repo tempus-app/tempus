@@ -34,8 +34,8 @@ const routes: Routes = [
 			{
 				path: 'reset-password/:token',
 				loadChildren: () =>
-					import('@tempus/onboarding-client/shared/feature-forgot-password').then(
-						m => m.OnboardingClientSharedFeatureForgotPasswordModule,
+					import('@tempus/onboarding-client/shared/feature-reset-password').then(
+						m => m.OnboardingClientSharedFeatureResetPasswordModule,
 					),
 			},
 			{

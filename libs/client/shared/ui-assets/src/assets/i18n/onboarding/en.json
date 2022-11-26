@@ -15,6 +15,7 @@
 			"title": "Forgot Password?",
 			"subtitle": "No worries, we will send a recovery link to the email below",
 			"forgotPasswordCTA": "Send email",
+			"emailLabel": "Email",
 			"modal": {
 				"successModal": {
 					"title": "An email has been sent!",
@@ -27,6 +28,26 @@
 					"message": "Please try again, and make sure your are using the correct email."
 				}
 			}
+		},
+		"resetPassword": {
+			"title": "Reset Password",
+			"subtitle": "Enter the email associated with your account and your new password",
+			"resetPasswordCTA": "Reset Password",
+			"passwordLabel": "New Password",
+			"confirmPasswordLabel": "Confirm Password",
+			"emailLabel": "Email",
+			"passReq": {
+				"title": "Password must be:",
+				"minChar": "min 8 characters",
+				"uppercase": "1 uppercase letter",
+				"lowercase": "1 lowercase letter",
+				"number": "1 number",
+				"specialChar": "1 special character"
+			},
+			"passDontMatchErr": "Passwords do not match.",
+			"passConfirmErr": "Please retype your password",
+			"passwordError": "Please enter a valid password",
+			"emailError": "Please enter a valid email"
 		},
 		"editViewForm": {
 			"viewNamePlaceholder": "View name",

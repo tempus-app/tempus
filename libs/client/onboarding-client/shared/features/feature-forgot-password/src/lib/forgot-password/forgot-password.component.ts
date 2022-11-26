@@ -33,8 +33,6 @@ export class ForgotPasswordComponent implements OnInit {
 		});
 	}
 
-	$assignModalClosedEvent = new Subject<void>();
-
 	modalText: {
 		successModal: {
 			title: string;
