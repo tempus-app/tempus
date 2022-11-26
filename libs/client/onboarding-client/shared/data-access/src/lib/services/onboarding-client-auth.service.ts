@@ -38,7 +38,12 @@ export class OnboardingClientAuthService {
 		);
 	}
 
-	// UNUSED FOR NOW -- will need to figure out how to inject into hyrdationReducer to use this in there
+	// eslint-disable-next-line @typescript-eslint/ban-types
+	public forgotPassword(email: string): Observable<Object> {
+		// eslint-disable-next-line @typescript-eslint/ban-types
+		return this.http.post<Object>(`${this.url}/forgot-password?email=${email}`, {}).pipe(catchError(handleError));
+	}
+
 	public getUserDataFromSessionStorage(): {
 		accessToken: string | null;
 		refreshToken: string | null;

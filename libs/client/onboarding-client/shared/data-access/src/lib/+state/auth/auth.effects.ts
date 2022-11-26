@@ -1,11 +1,21 @@
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { of, switchMap } from 'rxjs';
-import { map, catchError, tap } from 'rxjs/operators';
+import { map, catchError } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { OnboardingClientState } from '../onboardingClient.state';
-import { login, loginFailure, loginSuccess, logout, logoutFailure, logoutSuccess } from './auth.actions';
+import {
+	forgotPassword,
+	forgotPasswordFailure,
+	forgotPasswordSuccess,
+	login,
+	loginFailure,
+	loginSuccess,
+	logout,
+	logoutFailure,
+	logoutSuccess,
+} from './auth.actions';
 import { OnboardingClientAuthService, OnboardingClientResourceService } from '../../services';
 
 @Injectable()
@@ -44,6 +54,7 @@ export class AuthEffects {
 			ofType(logout),
 			switchMap(options =>
 				this.authService.logout().pipe(
+					// eslint-disable-next-line @typescript-eslint/no-unused-vars
 					map(_ => {
 						this.authService.resetSessionStorage();
 						if (options.redirect) {
@@ -53,6 +64,22 @@ export class AuthEffects {
 					}),
 					catchError(error => {
 						return of(logoutFailure(error));
+					}),
+				),
+			),
+		),
+	);
+
+	forgotPassword$ = createEffect(() =>
+		this.actions$.pipe(
+			ofType(forgotPassword),
+			switchMap(options =>
+				this.authService.forgotPassword(options.email).pipe(
+					map(() => {
+						return forgotPasswordSuccess();
+					}),
+					catchError(error => {
+						return of(forgotPasswordFailure(error));
 					}),
 				),
 			),

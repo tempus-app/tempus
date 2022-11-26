@@ -30,17 +30,20 @@ export const initialState: AuthState = {
 export const authReducer = createReducer(
 	initialState,
 	on(AuthActions.login, state => ({ ...state, status: AsyncRequestState.LOADING })),
-	on(AuthActions.loginSuccess, (state, { accessToken, refreshToken, loggedInUserId, firstName, lastName, email }) => ({
-		...state,
-		accessToken,
-		refreshToken,
-		loggedInUserId,
-		firstName,
-		lastName,
-		email,
-		status: AsyncRequestState.SUCCESS,
-		error: null,
-	})),
+	on(
+		AuthActions.loginSuccess,
+		(state, { accessToken, refreshToken, loggedInUserId, firstName, lastName, email }) => ({
+			...state,
+			accessToken,
+			refreshToken,
+			loggedInUserId,
+			firstName,
+			lastName,
+			email,
+			status: AsyncRequestState.SUCCESS,
+			error: null,
+		}),
+	),
 	on(AuthActions.loginFailure, (state, { error }) => ({
 		...state,
 		status: AsyncRequestState.ERROR,
@@ -57,4 +60,12 @@ export const authReducer = createReducer(
 		accessToken,
 		refreshToken,
 	})),
+
+	on(AuthActions.forgotPasswordFailure, (state, { error }) => ({
+		...state,
+		status: AsyncRequestState.ERROR,
+		error,
+	})),
+	on(AuthActions.forgotPassword, state => ({ ...state, status: AsyncRequestState.LOADING })),
+	on(AuthActions.forgotPasswordSuccess, state => ({ ...state, status: AsyncRequestState.SUCCESS })),
 );

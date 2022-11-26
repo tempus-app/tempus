@@ -27,3 +27,10 @@ export const refreshSuccess = createAction(
 	'[Onboarding Client Auth Api] Refresh Success',
 	props<{ accessToken: string; refreshToken: string }>(),
 );
+
+export const forgotPassword = createAction('[Onboarding Client Auth Api] Forgot Password', props<{ email: string }>());
+export const forgotPasswordSuccess = createAction('[Onboarding Client Auth Api] Forgot Password Success');
+export const forgotPasswordFailure = createAction(
+	'[Onboarding Client Auth Api] Forgot Password Failure',
+	props<{ error: Error }>(),
+);
