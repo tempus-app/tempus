@@ -44,7 +44,9 @@
 			"@tempus/client/onboarding-client/shared/data-access": [
 				"libs/client/onboarding-client/shared/data-access/src/index.ts"
 			],
-			"@tempus/client/onboarding-client/shared/guards": ["libs/client/onboarding-client/shared/guards/src/index.ts"],
+			"@tempus/client/onboarding-client/shared/guards": [
+				"libs/client/onboarding-client/shared/guards/src/index.ts"
+			],
 			"@tempus/client/onboarding-client/shared/ui-components/input/resource-information": [
 				"libs/client/onboarding-client/shared/ui-components/input/resource-information/src/index.ts"
 			],
@@ -61,10 +63,17 @@
 			"@tempus/client/onboarding-client/signup/data-access": [
 				"libs/client/onboarding-client/signup/data-access/src/index.ts"
 			],
-			"@tempus/client/onboarding-client/signup/guards": ["libs/client/onboarding-client/signup/guards/src/index.ts"],
+			"@tempus/onboarding-client/shared/feature-forgot-password": [
+				"libs/client/onboarding-client/shared/features/feature-forgot-password/src/index.ts"
+			],
+			"@tempus/client/onboarding-client/signup/guards": [
+				"libs/client/onboarding-client/signup/guards/src/index.ts"
+			],
 			"@tempus/client/shared/ui-components/input": ["libs/client/shared/ui-components/input/src/index.ts"],
 			"@tempus/client/shared/ui-components/modal": ["libs/client/shared/ui-components/modal/src/index.ts"],
-			"@tempus/client/shared/ui-components/persistent": ["libs/client/shared/ui-components/persistent/src/index.ts"],
+			"@tempus/client/shared/ui-components/persistent": [
+				"libs/client/shared/ui-components/persistent/src/index.ts"
+			],
 			"@tempus/client/shared/ui-components/presentational": [
 				"libs/client/shared/ui-components/presentational/src/index.ts"
 			],

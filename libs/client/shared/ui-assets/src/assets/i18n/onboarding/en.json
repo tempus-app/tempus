@@ -11,6 +11,23 @@
 			"loginCTA": "Login",
 			"noRoles": "No defined roles"
 		},
+		"forgotPassword": {
+			"title": "Forgot Password?",
+			"subtitle": "No worries, we will send a recovery link to the email below",
+			"forgotPasswordCTA": "Send email",
+			"modal": {
+				"successModal": {
+					"title": "An email has been sent!",
+					"confirmText": "OK",
+					"message": "Check your inbox for a linkt to reset your password."
+				},
+				"errorModal": {
+					"title": "Error sending recovery link",
+					"confirmText": "OK",
+					"message": "Please try again, and make sure your are using the correct email."
+				}
+			}
+		},
 		"editViewForm": {
 			"viewNamePlaceholder": "View name",
 			"viewNameError": "Please enter a name for your view.",
