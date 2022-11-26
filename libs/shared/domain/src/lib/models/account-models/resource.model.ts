@@ -5,7 +5,7 @@ import { ProjectResource } from '../project-models';
 
 export interface Resource extends User {
 	phoneNumber: string;
-	calEmail: string;
+	calEmail?: string;
 	location: Location;
 	title: string;
 	projectResources: ProjectResource[];

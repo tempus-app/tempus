@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { OnboardingClientResourceService } from '@tempus/client/onboarding-client/shared/data-access';
 import { formatAddress, formatName } from '@tempus/client/shared/util';
 
 @Component({
@@ -12,6 +13,9 @@ export class PersonalInformationComponent {
 
 	@Input()
 	lastName = '';
+
+	@Input()
+	calEmail = '';
 
 	@Input()
 	country = '';
@@ -45,12 +49,14 @@ export class PersonalInformationComponent {
 
 	personalInfoPrefix = 'onboardingClient.presentational.personalInfo.';
 
-	formatAddress(country: string, state: string, city: string) {
-		return formatAddress(country, state, city);
+	constructor(private resourceService: OnboardingClientResourceService) {}
+
+	formatAddress() {
+		return formatAddress(this.country, this.state, this.city);
 	}
 
-	formatName(first: string, last: string) {
-		return formatName(first, last);
+	formatName() {
+		return formatName(this.firstName, this.lastName);
 	}
 
 	downloadResume() {

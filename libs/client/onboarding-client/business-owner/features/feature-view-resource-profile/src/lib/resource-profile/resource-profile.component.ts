@@ -43,6 +43,8 @@ export class ResourceProfileComponent implements OnInit {
 
 	email = '';
 
+	calEmail = '';
+
 	country = '';
 
 	state = '';
@@ -113,6 +115,7 @@ export class ResourceProfileComponent implements OnInit {
 		this.resourceService.getResourceInformationById(this.resourceId).subscribe(resourceInfo => {
 			this.resourceFirstName = resourceInfo.firstName;
 			this.resourceLastName = resourceInfo.lastName;
+			this.calEmail = resourceInfo.calEmail ? resourceInfo.calEmail : '';
 			this.city = resourceInfo.location.city;
 			this.state = resourceInfo.location.province;
 			this.country = resourceInfo.location.country;
