@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { ICreateExperienceDto, ICreateEducationDto, ICreateCertificationDto } from '@tempus/shared-domain';
 import { CustomModalType, ModalService, ModalType } from '@tempus/client/shared/ui-components/modal';
 
@@ -88,6 +88,9 @@ export class ReviewComponent implements OnInit, OnDestroy, AfterViewInit {
 		translateService.use(currentLang);
 	}
 
+	@ViewChild('accountCreatedModal')
+	accountCreatedTemplate!: TemplateRef<unknown>;
+
 	ngOnDestroy(): void {
 		this.$destroyed.next();
 		this.$destroyed.complete();
@@ -136,40 +139,67 @@ export class ReviewComponent implements OnInit, OnDestroy, AfterViewInit {
 			.subscribe(reqStatusData => {
 				if (reqStatusData.status === AsyncRequestState.LOADING) {
 					this.loading = true;
-				} else if (reqStatusData.status === AsyncRequestState.SUCCESS && reqStatusData.resumeSaved) {
-					this.openDialog('successModal');
+				} else if (
+					reqStatusData.status === AsyncRequestState.SUCCESS &&
+					reqStatusData.resumeSaved &&
+					reqStatusData.azureAccountCreated
+				) {
 					this.loading = false;
-					this.store.dispatch(resetLinkState());
-					this.store.dispatch(resetCreateResourceState());
+					this.openModal('azureModal');
 				} else if (reqStatusData.status === AsyncRequestState.ERROR) {
 					this.loading = false;
-					this.openDialog('errorModal');
+
+					// If Azure account creation fails, open simple success modal
+					if (reqStatusData.resumeSaved && !reqStatusData.azureAccountCreated) {
+						this.openModal('successModal');
+					}
+
+					if (!reqStatusData.resumeSaved) {
+						this.openModal('errorModal');
+					}
 				} else {
 					this.loading = false;
 				}
 			});
 	}
 
-	openDialog = (key: string) => {
+	openModal = (key: string) => {
 		this.translateService
 			.get([`onboardingClientSignupReview.modal.${key}`])
 			.pipe(take(1))
 			.subscribe(data => {
 				const dialogText = data[`onboardingClientSignupReview.modal.${key}`];
-				this.modalService.open(
-					{
-						title: dialogText.title,
-						confirmText: dialogText.confirmText,
-						message: dialogText.message,
-						modalType: key === 'successModal' ? ModalType.INFO : ModalType.ERROR,
-						closable: true,
-						id: key,
-					},
-					CustomModalType.INFO,
-				);
+
+				if (key === 'azureModal') {
+					this.modalService.open(
+						{
+							id: 'accountCreatedModal',
+							title: dialogText.title,
+							confirmText: dialogText.confirmText,
+							closable: false,
+							template: this.accountCreatedTemplate,
+						},
+						CustomModalType.CONTENT,
+					);
+				} else {
+					this.modalService.open(
+						{
+							title: dialogText.title,
+							confirmText: dialogText.confirmText,
+							message: dialogText.message,
+							modalType: key === 'successModal' ? ModalType.INFO : ModalType.ERROR,
+							closable: true,
+							id: key,
+						},
+						CustomModalType.INFO,
+					);
+				}
 			});
 
 		this.modalService.confirmEventSubject.subscribe(() => {
+			this.store.dispatch(resetLinkState());
+			this.store.dispatch(resetCreateResourceState());
+
 			this.router.navigate(['../../../signin'], { relativeTo: this.route });
 			this.modalService.close();
 			this.modalService.confirmEventSubject.unsubscribe();

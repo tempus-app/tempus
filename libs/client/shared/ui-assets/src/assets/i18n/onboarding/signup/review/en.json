@@ -14,11 +14,21 @@
 			"title": "Skills"
 		},
 		"modal": {
+			"azureModal": {
+				"title": "Set up your Outlook account",
+				"confirmText": "Done",
+				"headline": "Welcome to CAL & Associates!",
+				"accountCreated": "A Microsoft Outlook account has been created for you.",
+				"tempPassword": "Your temporary password for ",
+				"is": " is",
+				"copyPassword": "Please copy the password as it will not be shown again!",
+				"newPassword": "Once you login to your account, you will be prompted to set a new password."
+			},
 			"successModal": {
 				"title": "Your account has been created successfully!",
 				"closeText": "CANCEL",
 				"confirmText": "LOGIN",
-				"message": "Login to continue."
+				"message": "You can now login to your Tempus account."
 			},
 			"errorModal": {
 				"title": "There was an error creating your account.",
