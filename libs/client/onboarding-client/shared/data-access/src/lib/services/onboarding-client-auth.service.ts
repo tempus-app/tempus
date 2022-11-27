@@ -1,7 +1,7 @@
 /* eslint-disable class-methods-use-this */
 import { HttpClient } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
-import { AppConfig, AuthDto, TokensDto } from '@tempus/shared-domain';
+import { AppConfig, AuthDto, ResetPasswordDto, TokensDto } from '@tempus/shared-domain';
 import { catchError, Observable, tap } from 'rxjs';
 import { APP_CONFIG } from '@tempus/app-config';
 import { SessionStorageKey } from '../enum';
@@ -38,10 +38,12 @@ export class OnboardingClientAuthService {
 		);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/ban-types
-	public forgotPassword(email: string): Observable<Object> {
-		// eslint-disable-next-line @typescript-eslint/ban-types
-		return this.http.post<Object>(`${this.url}/forgot-password?email=${email}`, {}).pipe(catchError(handleError));
+	public forgotPassword(email: string): Observable<void> {
+		return this.http.post<void>(`${this.url}/forgot-password?email=${email}`, {}).pipe(catchError(handleError));
+	}
+
+	public resetPassword(resetPasswordDto: ResetPasswordDto): Observable<void> {
+		return this.http.post<void>(`${this.url}/reset-password`, resetPasswordDto).pipe(catchError(handleError));
 	}
 
 	public getUserDataFromSessionStorage(): {

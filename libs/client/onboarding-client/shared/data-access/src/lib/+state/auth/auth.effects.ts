@@ -15,6 +15,9 @@ import {
 	logout,
 	logoutFailure,
 	logoutSuccess,
+	resetPassword,
+	resetPasswordFailure,
+	resetPasswordSuccess,
 } from './auth.actions';
 import { OnboardingClientAuthService, OnboardingClientResourceService } from '../../services';
 
@@ -79,9 +82,27 @@ export class AuthEffects {
 						return forgotPasswordSuccess();
 					}),
 					catchError(error => {
-						return of(forgotPasswordFailure(error));
+						return of(forgotPasswordFailure({ error }));
 					}),
 				),
+			),
+		),
+	);
+
+	resetPassword$ = createEffect(() =>
+		this.actions$.pipe(
+			ofType(resetPassword),
+			switchMap(data =>
+				this.authService
+					.resetPassword({ email: data.email, token: data.token, newPassword: data.password })
+					.pipe(
+						map(() => {
+							return resetPasswordSuccess();
+						}),
+						catchError(error => {
+							return of(resetPasswordFailure({ error }));
+						}),
+					),
 			),
 		),
 	);

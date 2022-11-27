@@ -68,4 +68,12 @@ export const authReducer = createReducer(
 	})),
 	on(AuthActions.forgotPassword, state => ({ ...state, status: AsyncRequestState.LOADING })),
 	on(AuthActions.forgotPasswordSuccess, state => ({ ...state, status: AsyncRequestState.SUCCESS })),
+
+	on(AuthActions.resetPasswordFailure, (state, { error }) => ({
+		...state,
+		status: AsyncRequestState.ERROR,
+		error,
+	})),
+	on(AuthActions.resetPassword, state => ({ ...state, status: AsyncRequestState.LOADING })),
+	on(AuthActions.resetPasswordSuccess, state => ({ ...state, status: AsyncRequestState.SUCCESS })),
 );

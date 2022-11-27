@@ -34,3 +34,13 @@ export const forgotPasswordFailure = createAction(
 	'[Onboarding Client Auth Api] Forgot Password Failure',
 	props<{ error: Error }>(),
 );
+
+export const resetPassword = createAction(
+	'[Onboarding Client Auth Api] Reset Password',
+	props<{ email: string; password: string; token: string }>(),
+);
+export const resetPasswordSuccess = createAction('[Onboarding Client Auth Api] Reset Password Success');
+export const resetPasswordFailure = createAction(
+	'[Onboarding Client Auth Api] Reset Password Failure',
+	props<{ error: Error }>(),
+);

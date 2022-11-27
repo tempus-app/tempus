@@ -8,7 +8,7 @@ import {
 	login,
 	OnboardingClientState,
 	selectAccessToken,
-	selectLoginStatus,
+	selectAuthStatus,
 } from '@tempus/client/onboarding-client/shared/data-access';
 import { InputType } from '@tempus/client/shared/ui-components/input';
 import { decodeJwt } from '@tempus/client/shared/util';
@@ -52,7 +52,7 @@ export class SignInComponent implements OnInit, OnDestroy {
 
 	ngOnInit(): void {
 		this.store
-			.select(selectLoginStatus)
+			.select(selectAuthStatus)
 			.pipe(takeUntil(this.destroyed$))
 			.subscribe(loginStatus => {
 				if (loginStatus.status === AsyncRequestState.LOADING) {

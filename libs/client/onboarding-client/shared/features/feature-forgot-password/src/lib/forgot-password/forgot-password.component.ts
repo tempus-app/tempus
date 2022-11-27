@@ -6,7 +6,7 @@ import {
 	AsyncRequestState,
 	forgotPassword,
 	OnboardingClientState,
-	selectLoginStatus,
+	selectAuthStatus,
 } from '@tempus/client/onboarding-client/shared/data-access';
 import { ModalService, ModalType, CustomModalType } from '@tempus/client/shared/ui-components/modal';
 import { skip, Subject, takeUntil } from 'rxjs';
@@ -95,12 +95,15 @@ export class ForgotPasswordComponent implements OnInit {
 			);
 
 			this.store
-				.select(selectLoginStatus)
+				.select(selectAuthStatus)
 				.pipe(skip(1), takeUntil(this.$destroyed))
 				.subscribe(reqStatusData => {
 					if (reqStatusData.status === AsyncRequestState.SUCCESS) {
 						this.openDialog(this.modalText.successModal, 'successModal');
 					} else if (reqStatusData.status === AsyncRequestState.ERROR) {
+						this.modalText.errorModal.message =
+							reqStatusData.error?.message || this.modalText.errorModal.message;
+
 						this.openDialog(this.modalText.errorModal, 'errorModal');
 					}
 				});

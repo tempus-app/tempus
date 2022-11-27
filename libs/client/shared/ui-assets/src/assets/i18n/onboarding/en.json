@@ -20,7 +20,7 @@
 				"successModal": {
 					"title": "An email has been sent!",
 					"confirmText": "OK",
-					"message": "Check your inbox for a linkt to reset your password."
+					"message": "Check your inbox for a link to reset your password."
 				},
 				"errorModal": {
 					"title": "Error sending recovery link",
@@ -47,7 +47,19 @@
 			"passDontMatchErr": "Passwords do not match.",
 			"passConfirmErr": "Please retype your password",
 			"passwordError": "Please enter a valid password",
-			"emailError": "Please enter a valid email"
+			"emailError": "Please enter a valid email",
+			"modal": {
+				"successModal": {
+					"title": "Your password has been successfully reset",
+					"confirmText": "OK",
+					"message": "Please login with your new password"
+				},
+				"errorModal": {
+					"title": "Password reset failed",
+					"confirmText": "OK",
+					"message": "Please try again using latest token sent and the correct email."
+				}
+			}
 		},
 		"editViewForm": {
 			"viewNamePlaceholder": "View name",
