@@ -369,7 +369,7 @@
 							</mat-error>
 						</div>
 
-						<div>
+						<div style="text-align: start">
 							<tempus-text-area
 								id="description-{{ index }}"
 								[showLabel]="true"
@@ -378,6 +378,7 @@
 								[control]="$any(numExperience).get('description')"
 							>
 							</tempus-text-area>
+              <p style="margin: 0" class="mat-caption">{{ workExpPrefix + 'descriptionCaption' | translate }}</p>
 						</div>
 						<div>
 							<div class="error-container">

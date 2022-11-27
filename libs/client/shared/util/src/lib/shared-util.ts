@@ -85,6 +85,21 @@ export function decodeJwt(token: string) {
 }
 
 /**
+ * Format string into bulleted array
+ * @param  {string} data
+ * @returns array of split items extracted from string
+ */
+export function splitStringIntoBulletPoints(data: string): Array<string> {
+  let splitString = data.split("*");
+  for(let i = 0; i < splitString.length; i++) {
+    splitString[i] = splitString[i].replace(/(\r\n|\n|\r)/gm, "");
+    splitString[i] = splitString[i].trim();
+  }
+  splitString = splitString.filter(item => item.trim() !== "");
+  return splitString;
+}
+
+/**
  * Returns views sorted by last update date
  * @param {View[]} views 
  * @returns sorted views

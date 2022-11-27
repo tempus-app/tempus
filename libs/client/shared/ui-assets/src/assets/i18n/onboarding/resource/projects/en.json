@@ -1,0 +1,11 @@
+{
+	"title": "My Projects",
+    "projectCard": {
+        "assigned": "Assigned on",
+        "client": "Client",
+        "project": "Project",
+        "position": "Position",
+        "endDate": "End date at",
+        "projectStatus": "Project Status"
+    }
+}

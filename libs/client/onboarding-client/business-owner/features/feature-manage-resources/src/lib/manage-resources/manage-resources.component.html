@@ -74,7 +74,8 @@
 					fxFlex="100%"
 					*ngIf="
 						inviteType === roleTypeEnumToString(roleType.AVAILABLE_RESOURCE) ||
-						inviteType === roleTypeEnumToString(roleType.SUPERVISOR)
+						inviteType === roleTypeEnumToString(roleType.SUPERVISOR) ||
+            inviteType === roleTypeEnumToString(roleType.BUSINESS_OWNER)
 					"
 				>
 					<div fxLayout="row" fxLayoutGap="4%">
@@ -173,7 +174,7 @@
 								id="client-invite"
 								[control]="$any(manageResourcesForm).get('invite').get('client')"
 								[label]="prefix + 'modal.clientLabel' | translate"
-								(optionSelect)="updateProjects()"
+								(optionSelect)="updateProjects($event)"
 								[optionsWithId]="clientOptions"
 							></tempus-dropdown>
 							<mat-error
