@@ -120,11 +120,12 @@ export class ResetPasswordComponent implements OnInit {
 
 	ngOnInit(): void {
 		this.modalService.confirmEventSubject.pipe(takeUntil(this.$destroyed)).subscribe(modalId => {
-			this.modalService.close();
-			this.modalService.confirmEventSubject.unsubscribe();
 			if (modalId === 'successModal') {
 				this.router.navigate(['../../signin'], { relativeTo: this.route });
+				this.modalService.close();
+				this.modalService.confirmEventSubject.unsubscribe();
 			}
+			this.modalService.close();
 		});
 	}
 }

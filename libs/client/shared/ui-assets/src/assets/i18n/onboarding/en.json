@@ -50,8 +50,8 @@
 			"emailError": "Please enter a valid email",
 			"modal": {
 				"successModal": {
-					"title": "Your password has been successfully reset",
-					"confirmText": "OK",
+					"title": "Password has been successfully reset",
+					"confirmText": "Sign In",
 					"message": "Please login with your new password"
 				},
 				"errorModal": {
