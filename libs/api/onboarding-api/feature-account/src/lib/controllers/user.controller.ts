@@ -122,6 +122,14 @@ export class UserController {
 		return this.graphService.createUser(resourceId);
 	}
 
+	// deletes Azure AD account for resource
+	@UseGuards(JwtAuthGuard, RolesGuard)
+	@Roles(RoleType.BUSINESS_OWNER)
+	@Delete('/azureAccount/:resourceId')
+	async deleteResourceAzureAccount(@Param('resourceId') resourceId: number): Promise<void> {
+		return this.graphService.deleteUser(resourceId);
+	}
+
 	@Patch(':resourceId/resume')
 	@UseInterceptors(FileInterceptor('resume'))
 	async saveResume(

@@ -21,6 +21,7 @@ services:
             - CLIENT_ID=${CLIENT_ID}
             - CLIENT_SECRET=${CLIENT_SECRET}
             - TENANT_ID=${TENANT_ID}
+            - AZURE_DOMAIN=${AZURE_DOMAIN}
             - EMAIL_HOST=${EMAIL_HOST}
             - EMAIL_PORT=${EMAIL_PORT}
             - EMAIL_USERNAME=${EMAIL_USERNAME}

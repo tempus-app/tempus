@@ -1,6 +1,6 @@
 import 'isomorphic-fetch';
 import generator from 'generate-password-ts';
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { ClientSecretCredential } from '@azure/identity';
 import { Client } from '@microsoft/microsoft-graph-client';
 import { TokenCredentialAuthenticationProvider } from '@microsoft/microsoft-graph-client/authProviders/azureTokenCredentials';
@@ -72,6 +72,10 @@ export class GraphService {
 			relations: ['location'],
 		});
 
+		if (!resource) {
+			throw new NotFoundException(`Could not find resource with id ${resourceId}`);
+		}
+
 		// Create unique email address
 		let email = `${resource.firstName}.${resource.lastName}${domain}`;
 		const existingUser = await this.resourceRepository.findOne({ where: { calEmail: email } });
@@ -108,6 +112,33 @@ export class GraphService {
 			await this.resourceRepository.save(resource);
 
 			return account;
+		} catch (e) {
+			throw new BadRequestException(e);
+		}
+	}
+
+	/**
+	 * Delete the Microsoft Azure AD account associated with resourceId, only if the account was created by Tempus.
+	 * @param resourceId
+	 */
+	async deleteUser(resourceId: number): Promise<void> {
+		this.initializeGraphAuthProvider();
+
+		const resourceEntity = await this.resourceRepository.findOne(resourceId);
+		if (!resourceEntity) {
+			throw new NotFoundException(`Could not find resource with id ${resourceId}`);
+		}
+
+		if (!resourceEntity.calEmail) {
+			throw new NotFoundException(
+				`The Outlook account for resource with id ${resourceId} was not created by Tempus. Please delete this account manually from Azure.`,
+			);
+		}
+
+		try {
+			const userPrincipalName = resourceEntity.calEmail;
+			const user: User = await this.appClient.api(`/users/${userPrincipalName}`).get();
+			await this.appClient.api(`/users/${user.id}`).delete();
 		} catch (e) {
 			throw new BadRequestException(e);
 		}

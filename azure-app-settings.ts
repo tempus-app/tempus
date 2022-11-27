@@ -2,7 +2,7 @@ const settings = {
 	clientId: process.env.CLIENT_ID.toString(),
 	clientSecret: process.env.CLIENT_SECRET.toString(),
 	tenantId: process.env.TENANT_ID.toString(),
-	domain: '@tempusADoutlook.onmicrosoft.com',
+	domain: process.env.AZURE_DOMAIN.toString(),
 	authTenant: 'common',
 };
 

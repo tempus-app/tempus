@@ -39,6 +39,18 @@ export class OnboardingClientResourceService {
 			.pipe(catchError(handleError));
 	}
 
+	public deleteResourceAzureAccount(resourceId: number): Observable<void> {
+		const httpOptions = {
+			headers: new HttpHeaders({
+				'Access-Control-Allow-Origin': '*',
+			}),
+		};
+
+		return this.http
+			.delete<void>(`${this.url}/user/azureAccount/${resourceId}`, httpOptions)
+			.pipe(catchError(handleError));
+	}
+
 	public saveResume(resourceId: number, resume: File | null): Observable<FormData> {
 		const formData = new FormData();
 		if (resume) {
