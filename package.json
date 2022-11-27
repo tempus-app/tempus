@@ -10,7 +10,7 @@
 		"build:client:prod": "nx run onboarding-client:build:production --outputPath dist/apps/onboarding-api/onboarding-client/",
 		"build:onboarding-api": "nx build onboarding-api --production",
 		"test": "npx nx run-many --all --target=test",
-		"test:api:unit": "npx jest  --testPathPattern='./libs/api' --verbose --collectCoverage",
+		"test:api:unit": "npx jest  --testPathPattern='./libs/api' --verbose --collectCoverage --setupFiles dotenv/config",
 		"test:client:unit": "npx jest  --testPathPattern='./libs/client' --verbose --collectCoverage",
 		"prepare": "node ./scripts/skip.js || husky install",
 		"format:all": "prettier --config .prettierrc ./**/*.{js,ts,html,css,scss,json} --write",
@@ -155,7 +155,7 @@
 		"postcss-preset-env": "^7.4.1",
 		"postcss-url": "^10.1.1",
 		"prettier": "^2.5.1",
-		"ts-jest": "27.0.5",
+		"ts-jest": "^27.0.5",
 		"ts-node": "^10.7.0",
 		"typescript": "~4.5.2"
 	}
