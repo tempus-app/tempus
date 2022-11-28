@@ -130,15 +130,14 @@ export class GraphService {
 		}
 
 		if (!resourceEntity.calEmail) {
-			throw new NotFoundException(
+			throw new Error(
 				`The Outlook account for resource with id ${resourceId} was not created by Tempus. Please delete this account manually from Azure.`,
 			);
 		}
 
 		try {
 			const userPrincipalName = resourceEntity.calEmail;
-			const user: User = await this.appClient.api(`/users/${userPrincipalName}`).get();
-			await this.appClient.api(`/users/${user.id}`).delete();
+			await this.appClient.api(`/users/${userPrincipalName}`).delete();
 		} catch (e) {
 			throw new BadRequestException(e);
 		}

@@ -52,13 +52,7 @@ export class InterceptorService implements HttpInterceptor {
 
 	intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
 		// Any endpoints which are not expected to involve access tokens should be added to omitted endpoints
-		const omitEndpoints = [
-			'auth/login',
-			'./assets',
-			'onboarding/link',
-			'python-api/parse',
-			'onboarding/user/azureAccount',
-		];
+		const omitEndpoints = ['auth/login', './assets', 'onboarding/link', 'python-api/parse'];
 		omitEndpoints.forEach(endpoint => {
 			if (req.url.includes(endpoint)) {
 				this.skipInterceptor = true;
@@ -70,6 +64,11 @@ export class InterceptorService implements HttpInterceptor {
 
 		// Saving resume does not need access token
 		if (req.method === 'PATCH' && req.url.includes('resume')) {
+			this.skipInterceptor = true;
+		}
+
+		// Creating Azure account is done anonymously
+		if (req.method === 'POST' && req.url.includes('onboarding/user/azureAccount')) {
 			this.skipInterceptor = true;
 		}
 
