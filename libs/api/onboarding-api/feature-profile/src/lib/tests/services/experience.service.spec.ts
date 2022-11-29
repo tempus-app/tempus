@@ -114,10 +114,8 @@ describe('ExperienceService', () => {
 
 	describe('EditExperience()', () => {
 		it('should edit education with empty fields', async () => {
-			// summary should remain the same as its not specified in the update cert dto
 			const updatedExperienceEntity: ExperienceEntity = {
 				...experienceEntity,
-				summary: updateExperienceDtoNullAndMissingData.summary,
 				location: {
 					...experienceEntity.location,
 					city: updateExperienceDtoNullAndMissingData.location.city,

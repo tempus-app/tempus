@@ -359,6 +359,8 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 						tableItem.icon = { val: 'error', class: 'priorityIcon', tooltip: 'Awaiting approval' };
 					}
 
+          let activeProjExists = false;
+
 					// Resource with atleast one project
 					if (resProjClientData.projectClients.length > 0) {
 						let firstProj = resProjClientData.projectClients[0].projects[0].val;
@@ -373,6 +375,9 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 							allProjUnderClient.forEach(proj => {
 								allProj.push(proj);
 							});
+              if (!activeProjExists) {
+                activeProjExists = projClientData.projects.some(proj => proj.isCurrent);
+              }
 						});
 						const allClient = resProjClientData.projectClients.map(projClient => projClient.client);
 						const moreThanOneProj = Array.from(new Set(allProj)).length > 1;
@@ -390,7 +395,7 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 
 						tableItem.project = `${firstProj}${moreThanOneProj ? '...' : ''}`;
 						tableItem.client = `${firstClient}${moreThanOneClient ? '...' : ''}`;
-						tableItem.assignment = this.assigned;
+						tableItem.assignment = activeProjExists ? this.assigned : this.unassigned;
 						tableItem.allClients = allClient;
 						tableItem.allProjects = allProj;
 					}

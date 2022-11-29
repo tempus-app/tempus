@@ -9,6 +9,7 @@ import { ClientSharedUiComponentsInputModule } from '@tempus/client/shared/ui-co
 import { ClientSharedUiComponentsPersistentModule } from '@tempus/client/shared/ui-components/persistent';
 import { ClientOnboardingSharedProjectModule } from '@tempus/client/onboarding-client/shared/ui-components/project';
 import { ViewProjectsComponent } from './view-projects/view-projects.component';
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 function createTranslateLoader(http: HttpClient) {
 	return new TranslateHttpLoader(http, './assets/i18n/onboarding/owner/view-projects/', '.json');
@@ -21,6 +22,7 @@ function createTranslateLoader(http: HttpClient) {
 		ClientSharedUiComponentsPersistentModule,
 		ClientOnboardingSharedProjectModule,
 		ClientSharedUiComponentsInputModule,
+    FlexLayoutModule,
 		RouterModule.forChild([
 			{
 				path: '',

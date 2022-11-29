@@ -204,7 +204,6 @@ export class EditViewFormComponent implements OnDestroy {
 		for (let i = 0; i < experiencesArray?.length; i++) {
 			const experience: ICreateExperienceDto = {
 				title: (experiencesArray?.at(i) as FormGroup).get('title')?.value,
-				summary: (experiencesArray?.at(i) as FormGroup).get('description')?.value,
 				description: splitStringIntoBulletPoints((experiencesArray?.at(i) as FormGroup).get('description')?.value),
 				startDate: (experiencesArray?.at(i) as FormGroup).get('startDate')?.value,
 				endDate: (experiencesArray?.at(i) as FormGroup).get('endDate')?.value,

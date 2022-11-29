@@ -11,7 +11,6 @@ export class ExperienceEntity implements Experience {
 		id?: number,
 		title?: string,
 		company?: string,
-		summary?: string,
 		description?: string[],
 		startDate?: Date,
 		endDate?: Date,
@@ -21,7 +20,6 @@ export class ExperienceEntity implements Experience {
 		this.id = id;
 		this.title = title;
 		this.company = company;
-		this.summary = summary;
 		this.description = description;
 		this.startDate = startDate;
 		this.endDate = endDate;
@@ -37,9 +35,6 @@ export class ExperienceEntity implements Experience {
 
 	@Column()
 	title: string;
-
-	@Column()
-	summary: string;
 
 	@Column('simple-array', { nullable: true })
 	description: string[];
@@ -64,7 +59,6 @@ export class ExperienceEntity implements Experience {
 			undefined,
 			dto.title,
 			dto.company,
-			dto.summary,
 			dto.description,
 			dto.startDate,
 			dto.endDate,
