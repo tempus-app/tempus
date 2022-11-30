@@ -1,11 +1,11 @@
-import { Resource, User } from '@tempus/shared-domain';
+import { Resource, RoleType, User } from '@tempus/shared-domain';
 import { ForbiddenException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ConfigService } from '@nestjs/config';
 import { Repository } from 'typeorm';
 import { genSalt, hash } from 'bcrypt';
 import { UserEntity } from '@tempus/api/shared/entity';
-import { CreateUserDto, JwtPayload, UpdateUserDto } from '@tempus/api/shared/dto';
+import { CreateUserDto, JwtPayload, UpdateUserDto, UserBasicDto } from '@tempus/api/shared/dto';
 import { CommonService } from '@tempus/api/shared/feature-common';
 
 @Injectable()
@@ -58,11 +58,45 @@ export class UserService {
 		return userEntity;
 	}
 
+	async getAdminMatchingFilter(filter: string): Promise<UserEntity[]> {
+		const adminMatchingFilter = await this.userRepository
+			.createQueryBuilder('admin')
+			.where({ query: `%${filter}%` })
+			.getMany();
+		return adminMatchingFilter;
+	}
+
 	// TODO: filtering
 	async getAllUsers(): Promise<User[]> {
 		const users = await this.userRepository.find();
 
 		return users;
+	}
+
+	async getAllAdmin(
+		page: number,
+		pageSize: number,
+		filter: string,
+	): Promise<{ userData: UserBasicDto[]; totalItems: number }> {
+		// eslint-disable-next-line no-console
+		console.log(filter);
+
+		let usersAndCount: [UserEntity[], number] = [[], 0];
+
+		usersAndCount = await this.userRepository.findAndCount({
+			take: Number(pageSize),
+			skip: Number(page) * Number(pageSize),
+			where: [{ roles: RoleType.SUPERVISOR }, { roles: RoleType.BUSINESS_OWNER }],
+		});
+
+		const users = usersAndCount[0];
+		const countOfItems = usersAndCount[1];
+
+		const userInfo: Array<UserBasicDto> = users.map(res => {
+			return new UserBasicDto(res.id, res.firstName, res.lastName, res.email, res.roles);
+		});
+
+		return { userData: userInfo, totalItems: countOfItems };
 	}
 
 	async deleteUser(userId: number): Promise<void> {

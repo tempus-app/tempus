@@ -11,6 +11,7 @@
 		"emailPlaceholder": "Placeholder Email",
 		"reportBugs": "Report Bugs",
 		"tabs": {
+			"adminManagement": "Admin Management",
 			"manageResources": "Manage Resources",
 			"pendingApprovals": "Pending Approvals",
 			"primaryView": "Primary View",

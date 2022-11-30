@@ -1,0 +1,32 @@
+{
+	"onboardingOwnerAdminManagement": {
+		"main": {
+			"noResourcesToShow": "No Resources to Show",
+			"searchBox": "Search...",
+			"tableHeaders": {
+				"user": "User",
+				"role": "Role",
+				"project": "Project",
+				"client": "Client",
+				"assigned": "Assigned",
+				"unassigned": "Unassigned"
+			},
+			"approvalTooltip": "Awaiting approval"
+		},
+		"modal": {
+			"clientLabel": "Client",
+			"clientErr": "Please select a client",
+			"projectLabel": "Project",
+			"projectErr": "Please select a project",
+			"inviteModal": {
+				"resourceLabel": "Resource",
+				"resourceErr": "Please select a resource",
+				"title": "Invite a user to Tempus",
+				"subtitle": "A unique invitation link will be sent by email.",
+				"closeText": "Cancel",
+				"confirmText": "Invite",
+				"typeOfUser": "Please select the type of user to invite"
+			}
+		}
+	}
+}

@@ -25,6 +25,7 @@
 		"onboarding-api-feature-project": "libs/api/onboarding-api/feature-project",
 		"onboarding-client": "apps/onboarding-client",
 		"onboarding-client-business-owner-data-access": "libs/client/onboarding-client/business-owner/data-access",
+		"onboarding-client-business-owner-feature-admin-management": "libs/client/onboarding-client/business-owner/features/feature-admin-management",
 		"onboarding-client-business-owner-feature-manage-resources": "libs/client/onboarding-client/business-owner/features/feature-manage-resources",
 		"onboarding-client-business-owner-feature-shell": "libs/client/onboarding-client/business-owner/shell",
 		"onboarding-client-business-owner-feature-view-pending-approvals": "libs/client/onboarding-client/business-owner/features/feature-view-pending-approvals",

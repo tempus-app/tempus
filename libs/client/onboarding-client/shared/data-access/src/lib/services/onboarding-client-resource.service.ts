@@ -9,6 +9,7 @@ import {
 	ICreateViewDto,
 	IResourceBasicDto,
 	IUpdateResourceDto,
+	IUserBasicDto,
 	IUserProjClientDto,
 	Resource,
 	Revision,
@@ -57,6 +58,19 @@ export class OnboardingClientResourceService {
 			formData.append('resume', resume);
 		}
 		return this.http.patch<FormData>(`${this.url}/user/${resourceId}/resume`, formData);
+	}
+
+	public getAllAdmin(paginationData: {
+		page: number;
+		pageSize: number;
+		filter: string;
+	}): Observable<{ userData: IUserBasicDto[]; totalItems: number }> {
+		const { page, pageSize, filter } = paginationData;
+		return this.http
+			.get<{ userData: IUserBasicDto[]; totalItems: number }>(
+				`${this.url}/user/admin?page=${page}&pageSize=${pageSize}&filter=${filter}`,
+			)
+			.pipe(catchError(handleError));
 	}
 
 	public getResProjClientData(paginationData: {

@@ -26,6 +26,7 @@ import {
 	UpdateResourceDto,
 	UserProjectClientDto,
 	ResourceBasicDto,
+	UserBasicDto,
 } from '@tempus/api/shared/dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Express, Response } from 'express';
@@ -80,6 +81,17 @@ export class UserController {
 	@Get('resources')
 	async getResources(): Promise<Resource[]> {
 		return this.resourceService.getAllResources();
+	}
+
+	@UseGuards(JwtAuthGuard, RolesGuard)
+	@Roles(RoleType.BUSINESS_OWNER, RoleType.SUPERVISOR)
+	@Get('admin')
+	async getAllAdmin(
+		@Query('page') page: number,
+		@Query('pageSize') pageSize: number,
+		@Query('filter') filter: string,
+	): Promise<{ userData: UserBasicDto[]; totalItems: number }> {
+		return this.userService.getAllAdmin(page, pageSize, filter);
 	}
 
 	@UseGuards(JwtAuthGuard, RolesGuard)
