@@ -63,6 +63,9 @@ export class ResourceProfileContentComponent implements OnInit, OnChanges {
 	email = '';
 
 	@Input()
+	calEmail = '';
+
+	@Input()
 	phoneNumber = '';
 
 	@Input()

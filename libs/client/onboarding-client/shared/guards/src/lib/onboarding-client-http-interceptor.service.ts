@@ -67,6 +67,11 @@ export class InterceptorService implements HttpInterceptor {
 			this.skipInterceptor = true;
 		}
 
+		// Creating Azure account is done anonymously
+		if (req.method === 'POST' && req.url.includes('onboarding/user/azureAccount')) {
+			this.skipInterceptor = true;
+		}
+
 		// Modify headers to add access bearer token before being sent out to server
 		if (!this.skipInterceptor) {
 			return this.sharedStore.select(selectAccessRefreshToken).pipe(
@@ -88,7 +93,10 @@ export class InterceptorService implements HttpInterceptor {
 												switchMap((tokenDto: TokensDto) => {
 													// update store with new tokens
 													this.sharedStore.dispatch(
-														refreshSuccess({ accessToken: tokenDto.accessToken, refreshToken: tokenDto.refreshToken }),
+														refreshSuccess({
+															accessToken: tokenDto.accessToken,
+															refreshToken: tokenDto.refreshToken,
+														}),
 													);
 													this.refreshTokenSubject.next(tokenDto);
 													this.isRefreshing = false;

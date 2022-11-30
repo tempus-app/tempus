@@ -16,6 +16,7 @@ import { HttpClient } from '@angular/common/http';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { ClientSharedUiComponentsModalModule } from '@tempus/client/shared/ui-components/modal';
 import { ReviewComponent } from './review/review.component';
+import { AccountCreationModalComponent } from './account-creation-modal/account-creation-modal.component';
 
 function createTranslateLoader(http: HttpClient) {
 	return new TranslateHttpLoader(http, './assets/i18n/onboarding/signup/review/', '.json');
@@ -51,6 +52,6 @@ function createTranslateLoader(http: HttpClient) {
 			extend: true,
 		}),
 	],
-	declarations: [ReviewComponent],
+	declarations: [ReviewComponent, AccountCreationModalComponent],
 })
 export class OnboardingClientSignupFeatureReviewInfoModule {}

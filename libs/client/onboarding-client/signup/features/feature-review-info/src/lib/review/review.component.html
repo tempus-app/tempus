@@ -82,9 +82,14 @@
 			<div fxFlex="5"></div>
 		</div>
 		<div class="container button-container">
-			<button color="primary" mat-raised-button matStepperPrevious type="button" (click)="backStep()">Back</button>
+			<button color="primary" mat-raised-button matStepperPrevious type="button" (click)="backStep()">
+				Back
+			</button>
 			<button color="primary" mat-raised-button matStepperNext="button" (click)="submit()">Submit</button>
 		</div>
 	</div>
+	<ng-template #accountCreatedModal>
+		<tempus-account-creation-modal></tempus-account-creation-modal>
+	</ng-template>
 	<tempus-spinner [showSpinner]="loading"></tempus-spinner>
 </ng-container>
