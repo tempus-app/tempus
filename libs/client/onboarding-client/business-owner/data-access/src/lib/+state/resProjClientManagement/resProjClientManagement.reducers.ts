@@ -20,6 +20,7 @@ export interface ResourceProjectClientManagementState {
 	totalViewsData: number;
 	projects: Project[];
 	projectsTotalItems: number;
+  projStatusUpdated: boolean;
 }
 
 export const initialState: ResourceProjectClientManagementState = {
@@ -37,6 +38,7 @@ export const initialState: ResourceProjectClientManagementState = {
 	totalViewsData: 0,
 	projects: [],
 	projectsTotalItems: 0,
+  projStatusUpdated: false,
 };
 
 export const projectManagementReducer = createReducer(
@@ -49,6 +51,11 @@ export const projectManagementReducer = createReducer(
 		status: AsyncRequestState.LOADING,
 		projAssigned: false,
 	})),
+  on(ProjectManagementActions.updateProjStatus, state => ({ 
+    ...state, 
+    projStatusUpdated: false, 
+    status: AsyncRequestState.LOADING, 
+  })),
 	on(ProjectManagementActions.createLink, state => ({ ...state, status: AsyncRequestState.LOADING })),
 	on(ProjectManagementActions.createClient, state => ({ ...state, status: AsyncRequestState.LOADING })),
 	on(ProjectManagementActions.createProject, state => ({ ...state, status: AsyncRequestState.LOADING })),
@@ -69,6 +76,11 @@ export const projectManagementReducer = createReducer(
 		status: AsyncRequestState.ERROR,
 	})),
 	on(ProjectManagementActions.getAllResProjInfoFailure, (state, { error }) => ({
+		...state,
+		error,
+		status: AsyncRequestState.ERROR,
+	})),
+  on(ProjectManagementActions.updateProjStatusFailure, (state, { error }) => ({
 		...state,
 		error,
 		status: AsyncRequestState.ERROR,
@@ -124,6 +136,12 @@ export const projectManagementReducer = createReducer(
 		projResClientData,
 		status: AsyncRequestState.SUCCESS,
 		projResClientDataTotalItems: totalItems,
+		error: null,
+	})),
+  on(ProjectManagementActions.updateProjStatusSuccess, (state) => ({
+		...state,
+    projStatusUpdated: true,
+		status: AsyncRequestState.SUCCESS,
 		error: null,
 	})),
 	on(ProjectManagementActions.createLinkSuccess, state => ({

@@ -6,8 +6,17 @@
 				"name": "Client Name",
 				"project": "Project",
 				"start_date": "Start Date",
-				"status": "Status"
+				"status": "Status",
+        "clientRepr": "Client Representative"
 			}
-		}
+		},
+    "projectStatusModal": {
+      "title": "Change project status",
+      "subtitle": "Please note, once you change project status, it cannot be changed back",
+      "closeText": "Cancel",
+      "confirmText": "Update",
+      "project": "Select a project...",
+      "status": "Select a status..."
+    }
 	}
 }

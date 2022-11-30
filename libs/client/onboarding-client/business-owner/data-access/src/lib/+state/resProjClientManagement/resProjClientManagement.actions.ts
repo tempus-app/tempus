@@ -8,6 +8,7 @@ import {
 	IResourceBasicDto,
 	IUserProjClientDto,
 	Project,
+	ProjectStatus,
 	RevisionType,
 	View,
 } from '@tempus/shared-domain';
@@ -103,6 +104,16 @@ export const getAllProjectInfoSuccess = createAction(
 );
 export const getAllProjectInfoFailure = createAction(
 	'[Onboarding Client Project API]  Get All Projects Info Failure',
+	props<{ error: Error }>(),
+);
+
+export const updateProjStatus = createAction(
+	'[Onboarding Client Project API] Update Project Status',
+	props<{ projId: number; status: ProjectStatus }>(),
+);
+export const updateProjStatusSuccess = createAction('[Onboarding Client Project API] Update Project Status Success');
+export const updateProjStatusFailure = createAction(
+	'[Onboarding Client Project API]  Update Project Status Failure',
 	props<{ error: Error }>(),
 );
 

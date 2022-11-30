@@ -165,8 +165,7 @@ export class ResourceSeederService {
 			experiences.push(
 				new CreateExperienceDto(
 					faker.name.jobTitle(),
-					faker.lorem.sentences(7),
-					ResourceSeederService.generateParagraph(),
+					faker.lorem.sentences(7, ',').split(','),
 					faker.company.companyName(),
 					date.startDate,
 					date.endDate,
@@ -206,6 +205,7 @@ export class ResourceSeederService {
 			password,
 			[role],
 			faker.phone.phoneNumber(),
+			undefined,
 			faker.name.jobTitle(),
 			faker.internet.url(),
 			faker.internet.url(),

@@ -4,30 +4,37 @@
 name: Node.js CI
 
 on:
-  push:
-    branches: [main, prod]
-  pull_request:
-    branches: [main, prod]
+    push:
+        branches: [main, prod]
+    pull_request:
+        branches: [main, prod]
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
+    build:
+        runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        node-version: [16.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+        strategy:
+            matrix:
+                node-version: [16.x]
+                # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
-    steps:
-      - uses: actions/checkout@v2
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v2
-        with:
-          node-version: ${{ matrix.node-version }}
-          cache: 'npm'
-      - run: npm ci
-      #- run: npm run lint:check
-      - run: npm run build:onboarding-api --if-present
-      - run: npm run build:client:prod --if-present
-      - run: npm run test:api:unit
-      #- run: npm run test:client:unit
+        steps:
+            - uses: actions/checkout@v2
+            - name: create env file
+              run: |
+                  touch .env
+                  echo CLIENT_ID=${{ secrets.CLIENT_ID }} >> .env
+                  echo CLIENT_SECRET=${{ secrets.CLIENT_SECRET }} >> .env
+                  echo TENANT_ID=${{ secrets.TENANT_ID }} >> .env
+                  echo AZURE_DOMAIN=${{ secrets.AZURE_DOMAIN }} >> .env
+            - name: Use Node.js ${{ matrix.node-version }}
+              uses: actions/setup-node@v2
+              with:
+                  node-version: ${{ matrix.node-version }}
+                  cache: 'npm'
+            - run: npm ci
+            #- run: npm run lint:check
+            - run: npm run build:onboarding-api --if-present
+            - run: npm run build:client:prod --if-present
+            - run: npm run test:api:unit
+            #- run: npm run test:client:unit

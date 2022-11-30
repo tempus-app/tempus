@@ -2,7 +2,7 @@ import { Body, Controller, Delete, Get, Param, Patch, Post, Query, UseGuards } f
 import { ApiTags } from '@nestjs/swagger';
 import { AssignProjectDto, CreateProjectDto, UpdateProjectDto } from '@tempus/api/shared/dto';
 import { JwtAuthGuard, Roles, RolesGuard } from '@tempus/api/shared/feature-auth';
-import { Project, RoleType } from '@tempus/shared-domain';
+import { Project, ProjectStatus, RoleType } from '@tempus/shared-domain';
 import { ProjectService } from '../services/project.service';
 
 @ApiTags('Projects')
@@ -66,9 +66,11 @@ export class ProjectController {
 
 	@UseGuards(JwtAuthGuard, RolesGuard)
 	@Roles(RoleType.BUSINESS_OWNER, RoleType.SUPERVISOR)
-	@Patch('/:projectId/complete')
-	async completeProject(@Param('projectId') projectId: number): Promise<Project> {
-		return this.projectService.completeProject(projectId);
+	@Patch('/:projectId/updateStatus')
+	async completeProject(
+    @Param('projectId') projectId: number,
+    @Query('status') status: ProjectStatus): Promise<Project> {
+		return this.projectService.updateProjStatus(projectId, status);
 	}
 
 	@UseGuards(JwtAuthGuard, RolesGuard)

@@ -6,7 +6,6 @@ export const experienceEntity: ExperienceEntity = {
 	id: null,
 	company: 'company',
 	title: 'title',
-	summary: 'summary',
 	description: [],
 	startDate: new Date(1, 2, 3),
 	endDate: new Date(1, 2, 3),
@@ -23,5 +22,4 @@ export const updateExperienceDtoNullAndMissingData: UpdateExperienceDto = {
 	location: {
 		city: 'new city',
 	} as UpdateLocationDto,
-	summary: 'new summary',
 };

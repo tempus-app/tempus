@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
@@ -11,9 +11,16 @@ import {
 } from '@tempus/client/onboarding-client/signup/data-access';
 import { Store } from '@ngrx/store';
 import { HttpClient } from '@angular/common/http';
-import { ICreateEducationDto, ICreateSkillDto, ICreateSkillTypeDto, ParsedResume } from '@tempus/shared-domain';
+import {
+	AppConfig,
+	ICreateEducationDto,
+	ICreateSkillDto,
+	ICreateSkillTypeDto,
+	ParsedResume,
+} from '@tempus/shared-domain';
 import { TranslateService } from '@ngx-translate/core';
 import { take } from 'rxjs';
+import { APP_CONFIG } from '@tempus/app-config';
 
 @Component({
 	selector: 'tempus-resume-upload',
@@ -31,12 +38,15 @@ export class ResumeUploadComponent implements OnInit {
 
 	uploadResumePrefix = 'onboardingSignupUploadResume.resumeUpload.';
 
+	url = `${this.appConfig.pythonUrl}`;
+
 	constructor(
 		private router: Router,
 		private route: ActivatedRoute,
 		private store: Store<SignupState>,
 		private http: HttpClient,
 		private translateService: TranslateService,
+		@Inject(APP_CONFIG) private appConfig: AppConfig,
 	) {
 		const { currentLang } = translateService;
 		// eslint-disable-next-line no-param-reassign
@@ -70,7 +80,7 @@ export class ResumeUploadComponent implements OnInit {
 	async parseFile(file: File) {
 		const formData = new FormData();
 		formData.append('file', file);
-		return this.http.post('python-api/parse-resume', formData);
+		return this.http.post(`${this.url}/python-api/parse-resume`, formData);
 	}
 
 	async onUpload(file: File, makeRequest: boolean) {
@@ -128,8 +138,6 @@ export class ResumeUploadComponent implements OnInit {
 				experiences: [
 					{
 						title: '',
-
-						summary: '',
 
 						description: [parsedResumeJSON.experience.join()],
 

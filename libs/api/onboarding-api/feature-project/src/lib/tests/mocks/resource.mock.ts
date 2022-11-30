@@ -3,6 +3,7 @@ import { RoleType } from '@tempus/shared-domain';
 
 export const resourceEntityMock: ResourceEntity = {
 	phoneNumber: '',
+	calEmail: '',
 	location: undefined,
 	title: '',
 	projectResources: [],
@@ -26,6 +27,7 @@ export const resourceEntityMock: ResourceEntity = {
 
 export const resourceTwoEntityMock: ResourceEntity = {
 	phoneNumber: '',
+	calEmail: '',
 	location: undefined,
 	title: '',
 	projectResources: [],

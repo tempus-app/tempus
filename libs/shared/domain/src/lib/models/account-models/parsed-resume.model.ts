@@ -28,7 +28,6 @@ export type ParsedWorkExperience = {
 	};
 	isCurrent: boolean;
 	org: string;
-	summary: string;
 	title: string;
 };
 

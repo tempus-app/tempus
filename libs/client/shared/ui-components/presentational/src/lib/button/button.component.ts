@@ -27,6 +27,7 @@ export class ButtonComponent implements OnInit {
 		[ButtonType.INVITE]: '',
 		[ButtonType.DOWNLOAD_VIEW]: '',
 		[ButtonType.CREATE_NEW_VIEW]: '',
+    [ButtonType.UPDATE_STATUS]: ''
 	};
 
 	constructor(private translateService: TranslateService) {}
@@ -38,6 +39,7 @@ export class ButtonComponent implements OnInit {
 			this.buttonTypeLabels.filter = data.filter;
 			this.buttonTypeLabels.invite = data.invite;
 			this.buttonTypeLabels.edit = data.edit;
+      this.buttonTypeLabels['update status'] = data.updateStatus;
 
 			this.label = this.buttonType !== undefined ? this.buttonTypeLabels[this.buttonType] : this.label;
 			// eslint-disable-next-line default-case
@@ -60,6 +62,10 @@ export class ButtonComponent implements OnInit {
 				}
 				case ButtonType.CREATE_NEW_VIEW: {
 					this.icon = 'add';
+					break;
+				}
+        case ButtonType.UPDATE_STATUS: {
+					this.icon = 'update';
 					break;
 				}
 				default: {

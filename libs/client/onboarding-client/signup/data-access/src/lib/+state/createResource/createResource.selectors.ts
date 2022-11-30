@@ -14,11 +14,17 @@ export const selectCreatedResourceId = createSelector(
 	(state: ResourceState) => state.createdResourceId,
 );
 
+export const selectCreatedAzureAccount = createSelector(selectResource, (state: ResourceState) => ({
+	calEmail: state.createdCalEmail,
+	temporaryPassword: state.tempPassword,
+}));
+
 export const selectResourceStatus = createSelector(selectResource, (state: ResourceState) => {
 	return {
 		status: state.status,
 		error: state.error,
 		resumeSaved: state.savedResume,
+		azureAccountCreated: state.azureAccountCreated,
 	};
 });
 export const selectCredentialsCreated = createSelector(

@@ -1,7 +1,20 @@
 <div fxLayout="column" id="page-container">
 	<div id="title-container">
 		<h2 class="mat-h2 page-title">{{ prefix + '.main.title' | translate }}</h2>
-		<tempus-create-project></tempus-create-project>
+    <div fxLayout="row" fxLayoutGap="10px">
+      <div fxLayout="column" fxLayoutAlign="space-between center">
+        <tempus-button 
+          (buttonClick)="updateProjectStatus()" 
+          [label]="'Update Project Status'" 
+          [color]="'accent'"
+          [buttonType]="ButtonType.UPDATE_STATUS"
+          >
+        </tempus-button>
+      </div>
+      <div fxLayout="column">
+        <tempus-create-project></tempus-create-project>
+      </div>
+    </div>
 	</div>
 	<div id="table-container">
 		<tempus-table
@@ -12,5 +25,24 @@
 			[tableData]="projectsInfoTableData"
 		></tempus-table>
 	</div>
-
 </div>
+
+<ng-template #projectStatusModal>
+  <tempus-card style="margin-top: 1rem">
+    <div fxLayout="column">
+      <tempus-dropdown
+        id="project-options"
+        [control]="$any(updateProjectStatusForm).get('project')"
+        [label]="prefix + '.projectStatusModal.project' | translate"
+        (optionSelect)="updateSelectedProject($event)"
+        [optionsWithId]="projectOptions"
+      ></tempus-dropdown>
+      <tempus-dropdown
+        id="status-options"
+        [control]="$any(updateProjectStatusForm).get('status')"
+        [label]="prefix + '.projectStatusModal.status' | translate"
+        [options]="selectedProjStatusOptions"
+      ></tempus-dropdown>
+    </div>
+  </tempus-card>
+</ng-template>
