@@ -21,6 +21,8 @@ export interface ProjectManagmenetTableData extends TableDataModel {
 	allClients: string[];
 }
 
+export type AdminManagementTablData = TableDataModel;
+
 export interface PendingApprovalsTableData extends TableDataModel {
 	lastUpdated: string;
 	resource: string;

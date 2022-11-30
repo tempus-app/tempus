@@ -81,6 +81,9 @@
 			"@tempus/onboarding-api/feature-account": ["libs/api/onboarding-api/feature-account/src/index.ts"],
 			"@tempus/onboarding-api/feature-profile": ["libs/api/onboarding-api/feature-profile/src/index.ts"],
 			"@tempus/onboarding-api/feature-project": ["libs/api/onboarding-api/feature-project/src/index.ts"],
+			"@tempus/onboarding-client/business-owner/feature-admin-management": [
+				"libs/client/onboarding-client/business-owner/features/feature-admin-management/src/index.ts"
+			],
 			"@tempus/onboarding-client/business-owner/feature-manage-resources": [
 				"libs/client/onboarding-client/business-owner/features/feature-manage-resources/src/index.ts"
 			],

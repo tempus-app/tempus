@@ -4,3 +4,4 @@ export * from './create-resource.dto';
 export * from './update-resource.dto';
 export * from './user-project-client.dto';
 export * from './resource-basic.dto';
+export * from './user-basic.dto';

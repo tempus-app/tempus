@@ -62,6 +62,11 @@ export class SidebarComponent implements OnInit, OnDestroy {
 			base: true,
 		},
 		{
+			tab: SidebarTab.ADMIN_MANAGEMENT,
+			route: '/owner/admin-management',
+			base: true,
+		},
+		{
 			tab: SidebarTab.MANAGE_RESOURCES,
 			route: '/owner/manage-resources',
 			base: true,
@@ -107,7 +112,12 @@ export class SidebarComponent implements OnInit, OnDestroy {
 				const { roles } = decodeJwt(token || '');
 
 				if (roles.includes(RoleType.BUSINESS_OWNER) || roles.includes(RoleType.SUPERVISOR)) {
-					this.tabs = [SidebarTab.MANAGE_RESOURCES, SidebarTab.PENDING_APPROVALS, SidebarTab.PROJECTS];
+					this.tabs = [
+						SidebarTab.ADMIN_MANAGEMENT,
+						SidebarTab.MANAGE_RESOURCES,
+						SidebarTab.PENDING_APPROVALS,
+						SidebarTab.PROJECTS,
+					];
 				} else if (roles.includes(RoleType.AVAILABLE_RESOURCE) || roles.includes(RoleType.ASSIGNED_RESOURCE)) {
 					this.tabs = [
 						SidebarTab.PRIMARY_VIEW,
@@ -163,7 +173,6 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
 	navigate(tab: SidebarTab) {
 		const baseRoute = this.paths.filter(x => x.tab === tab && x.base).map(y => y.route)[0];
-
 		switch (tab) {
 			case SidebarTab.LOGOUT:
 				this.store.dispatch(logout({ redirect: true }));

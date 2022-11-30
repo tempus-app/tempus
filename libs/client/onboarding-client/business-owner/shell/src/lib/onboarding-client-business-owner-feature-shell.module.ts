@@ -14,6 +14,15 @@ const routes: Routes = [
 		children: [
 			{ path: '', pathMatch: 'full', redirectTo: 'manage-resources' },
 			{
+				path: 'admin-management',
+				canLoad: [AuthGuard],
+				canActivate: [AuthGuard],
+				loadChildren: () =>
+					import('@tempus/onboarding-client/business-owner/feature-admin-management').then(
+						m => m.OnboardingClientBusinessOwnerFeatureAdminManagementModule,
+					),
+			},
+			{
 				path: 'manage-resources',
 				canLoad: [AuthGuard],
 				canActivate: [AuthGuard],
@@ -46,9 +55,9 @@ const routes: Routes = [
 				canLoad: [AuthGuard],
 				canActivate: [AuthGuard],
 				loadChildren: () =>
-					import('@tempus/client/onboarding-client/business-owner/features/feature-view-resource-profile').then(
-						m => m.ClientOnboardingClientBusinessOwnerFeaturesFeatureViewResourceProfileModule,
-					),
+					import(
+						'@tempus/client/onboarding-client/business-owner/features/feature-view-resource-profile'
+					).then(m => m.ClientOnboardingClientBusinessOwnerFeaturesFeatureViewResourceProfileModule),
 			},
 		],
 	},
