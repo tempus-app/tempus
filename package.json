@@ -77,7 +77,6 @@
 		"csv-writer": "^1.6.0",
 		"esbuild": "^0.14.23",
 		"express": "^4.17.3",
-		"generate-password-ts": "^1.6.3",
 		"handlebars": "^4.7.7",
 		"install": "^0.13.0",
 		"isomorphic-fetch": "^3.0.0",

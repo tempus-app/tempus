@@ -1,5 +1,5 @@
 import 'isomorphic-fetch';
-import generator from 'generate-password-ts';
+import { faker } from '@faker-js/faker';
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { ClientSecretCredential } from '@azure/identity';
 import { Client } from '@microsoft/microsoft-graph-client';
@@ -61,12 +61,8 @@ export class GraphService {
 
 		const { domain } = settings;
 
-		const tempPassword = generator.generate({
-			length: 10,
-			numbers: true,
-			symbols: true,
-			strict: true,
-		});
+		// eslint-disable-next-line no-useless-escape
+		const tempPassword = faker.internet.password(12, false, /[A-Za-z0-9!@#\$%\^\&*\)\(+=._-]/);
 
 		const resource = await this.resourceRepository.findOne(resourceId, {
 			relations: ['location'],
