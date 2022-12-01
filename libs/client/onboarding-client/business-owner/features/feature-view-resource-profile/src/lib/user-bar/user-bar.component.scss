@@ -1,8 +1,7 @@
 @use 'abstracts/helper' as abs;
 
 .user-bar-container {
-	padding-top: 1em;
-	background: abs.$primary-200;
+	padding: 1em 1em 0 1em;
 }
 
 tempus-dropdown {
@@ -13,7 +12,7 @@ tempus-button {
 	width: 100%;
 }
 
-mat-icon {
-	padding: 1em;
+.approval-icon {
+	padding: 0.5em;
 	color: red;
 }

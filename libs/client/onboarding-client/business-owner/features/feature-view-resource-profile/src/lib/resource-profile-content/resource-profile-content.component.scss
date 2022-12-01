@@ -1,4 +1,4 @@
-@use "abstracts/helper" as abs;
+@use 'abstracts/helper' as abs;
 
 .section-header {
 	border-bottom: 2px solid abs.$primary-300;
@@ -8,19 +8,24 @@
 	width: 100%;
 }
 
-.mat-raised-button.mat-success {
-	color: #f0fff3;
-	background-color: #66b95f;
-}
-.mat-raised-button.mat-warn {
-	color: #f0fff3;
-	background-color: #DF5252;
+.approve-button {
+	::ng-deep .mat-raised-button {
+		color: #f0fff3;
+		background-color: #66b95f;
+	}
 }
 
-.button-container{
+.reject-button {
+	::ng-deep .mat-raised-button {
+		color: #f0fff3;
+		background-color: #df5252;
+	}
+}
+
+.button-container {
 	padding: 1em;
 }
 
-tempus-card{
+tempus-card {
 	width: 100%;
 }

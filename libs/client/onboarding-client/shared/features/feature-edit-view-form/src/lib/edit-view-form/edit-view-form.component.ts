@@ -113,10 +113,10 @@ export class EditViewFormComponent implements OnDestroy {
 		this.educationsSummary = view.educationsSummary;
 		this.workExperiences = view.experiences;
 
-    this.workExperiences.forEach(workExp => {
-      const combinedDesc = "*"+workExp.description.join("\r\n*");
-      workExp.description = [combinedDesc];
-    });
+		this.workExperiences.forEach(workExp => {
+			const combinedDesc = `*${workExp.description.join('\r\n*')}`;
+			workExp.description = [combinedDesc];
+		});
 
 		this.experiencesSummary = view.experiencesSummary;
 		this.profileSummary = view.profileSummary;
@@ -166,13 +166,13 @@ export class EditViewFormComponent implements OnDestroy {
 		this.educationsSummary = editedForms.educationsSummary;
 		this.experiencesSummary = editedForms.experiencesSummary;
 		this.workExperiences = editedForms.experiences;
-    
-    if (!this.previewViewEnabled) {
-      this.workExperiences.forEach(workExp => {
-        const combinedDesc = "*"+workExp.description.join("\r\n*");
-        workExp.description = [combinedDesc];
-      });
-    }
+
+		if (!this.previewViewEnabled) {
+			this.workExperiences.forEach(workExp => {
+				const combinedDesc = `*${workExp.description.join('\r\n*')}`;
+				workExp.description = [combinedDesc];
+			});
+		}
 
 		this.educations = editedForms.educations;
 		this.certifications = editedForms.certifications;
@@ -204,7 +204,9 @@ export class EditViewFormComponent implements OnDestroy {
 		for (let i = 0; i < experiencesArray?.length; i++) {
 			const experience: ICreateExperienceDto = {
 				title: (experiencesArray?.at(i) as FormGroup).get('title')?.value,
-				description: splitStringIntoBulletPoints((experiencesArray?.at(i) as FormGroup).get('description')?.value),
+				description: splitStringIntoBulletPoints(
+					(experiencesArray?.at(i) as FormGroup).get('description')?.value,
+				),
 				startDate: (experiencesArray?.at(i) as FormGroup).get('startDate')?.value,
 				endDate: (experiencesArray?.at(i) as FormGroup).get('endDate')?.value,
 				company: (experiencesArray?.at(i) as FormGroup).get('company')?.value,

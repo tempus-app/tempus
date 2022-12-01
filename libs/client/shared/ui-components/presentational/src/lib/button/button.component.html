@@ -1,14 +1,14 @@
 <ng-container>
-	<button
-		mat-raised-button
-		color="{{ color }}"
-		class="{{ buttonType }}"
-		(click)="buttonClicked(true)"
-		[disabled]="disabled ? disabled : false"
-	>
-		<div id="button-container">
-			<span *ngIf="icon !== ''" id="{{ icon }}" class="material-icons">{{icon}}</span>
-			<div class="label">{{ label }}</div>
-		</div>
-	</button>
+    <button
+        mat-raised-button
+        color="{{ color }}"
+        class="{{ buttonType }}"
+        (click)="buttonClicked(true)"
+        [disabled]="disabled ? disabled : false"
+    >
+        <div id="button-container">
+            <span *ngIf="icon !== ''" id="{{ icon }}" class="material-icons">{{ icon }}</span>
+            <div class="label">{{ label }}</div>
+        </div>
+    </button>
 </ng-container>
