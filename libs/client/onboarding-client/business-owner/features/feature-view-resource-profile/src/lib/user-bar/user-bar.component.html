@@ -32,13 +32,18 @@
 		</div>
 		<div>
 			<tempus-button
+        *ngIf="isValidRole(roles, [roleType.BUSINESS_OWNER])"
 				(buttonClick)="openViewForm()"
 				label="{{ viewResourceProfilePrefx + 'buttons.createNewViewButton.title' | translate }}"
 				color="accent"
 			></tempus-button>
 		</div>
 		<div>
-			<tempus-button (buttonClick)="openEditView()" [buttonType]="buttonType.EDIT" color="accent"></tempus-button>
+			<tempus-button 
+        *ngIf="isValidRole(roles, [roleType.BUSINESS_OWNER])" 
+        (buttonClick)="openEditView()" 
+        [buttonType]="buttonType.EDIT" 
+        color="accent"></tempus-button>
 		</div>
 		<div>
 			<tempus-button

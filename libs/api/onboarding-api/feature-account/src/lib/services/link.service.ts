@@ -1,9 +1,9 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UpdatelinkDto } from '@tempus/api/shared/dto';
 import { LinkEntity, ProjectEntity, ResourceEntity } from '@tempus/api/shared/entity';
 import { EmailService } from '@tempus/api/shared/feature-email';
-import { Link, StatusType } from '@tempus/shared-domain';
+import { JwtPayload, Link, RoleType, StatusType } from '@tempus/shared-domain';
 import { getManager, Repository } from 'typeorm';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -31,7 +31,12 @@ export class LinkService {
 		});
 	}
 
-	async createLink(link: LinkEntity, projectId: number, sendEmail = true): Promise<Link> {
+	async createLink(token: JwtPayload, link: LinkEntity, projectId: number, sendEmail = true): Promise<Link> {
+
+    if (link.userType !== RoleType.SUPERVISOR && !token.roles.includes(RoleType.BUSINESS_OWNER)) {
+      throw new ForbiddenException('Forbidden. Supervisor cannot invite non supervisors.');
+    }
+
 		const uniqueToken = uuidv4();
 		let expiryDate = new Date(link.expiry);
 		const currentDate = new Date();

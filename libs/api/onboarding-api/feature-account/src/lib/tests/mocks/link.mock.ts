@@ -1,5 +1,5 @@
 import { LinkEntity, ProjectEntity } from '@tempus/api/shared/entity';
-import { Link, RoleType, StatusType } from '@tempus/shared-domain';
+import { JwtPayload, Link, RoleType, StatusType } from '@tempus/shared-domain';
 
 export const linkEntity: Link = {
 	firstName: 'john',
@@ -12,6 +12,20 @@ export const linkEntity: Link = {
 	createdAt: new Date('01-01-2022'),
 	userType: RoleType.AVAILABLE_RESOURCE,
 };
+
+export const supervisorJwtPayload: JwtPayload = {
+  email: 'test@email.com',
+  iat: 123456,
+  exp: 123456,
+  roles: [RoleType.SUPERVISOR]
+}
+
+export const businessOwnerJwtPayload: JwtPayload = {
+  email: 'test@email.com',
+  iat: 123456,
+  exp: 123456,
+  roles: [RoleType.BUSINESS_OWNER]
+}
 
 export const createLinkEntity = new LinkEntity(
 	null,

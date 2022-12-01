@@ -16,8 +16,9 @@ import { take, Subject, takeUntil, finalize, identity, skip } from 'rxjs';
 import { ButtonType } from '@tempus/client/shared/ui-components/presentational';
 import { CustomModalType, ModalService, ModalType } from '@tempus/client/shared/ui-components/modal';
 import { FormBuilder, Validators, FormControl } from '@angular/forms';
-import { ErorType, ProjectStatus } from '@tempus/shared-domain';
-import { AsyncRequestState } from '@tempus/client/onboarding-client/shared/data-access';
+import { ErorType, ProjectStatus, RoleType } from '@tempus/shared-domain';
+import { AsyncRequestState, OnboardingClientState, selectLoggedInUserNameEmail } from '@tempus/client/onboarding-client/shared/data-access';
+import { isValidRole } from '@tempus/client/shared/util';
 
 @Component({
 	selector: 'tempus-view-projects',
@@ -36,6 +37,10 @@ export class ViewProjectsComponent implements OnInit {
   ButtonType = ButtonType;
 
 	totalProjects = 0;
+
+  roles: RoleType[] = [];
+
+  roleType = RoleType;
   
   @ViewChild('projectStatusModal')
 	projectStatusModal!: TemplateRef<unknown>;
@@ -44,6 +49,7 @@ export class ViewProjectsComponent implements OnInit {
 
 	constructor(
 		private businessOwnerStore: Store<BusinessOwnerState>,
+    private sharedStore: Store<OnboardingClientState>,
 		private translateService: TranslateService,
     private fb: FormBuilder,
     private modalService: ModalService,
@@ -103,6 +109,13 @@ export class ViewProjectsComponent implements OnInit {
 
 	ngOnInit(): void {
 		this.businessOwnerStore.dispatch(getAllProjectInfo({ page: this.pageNum, pageSize: this.pageSize }));
+
+    this.sharedStore
+			.select(selectLoggedInUserNameEmail)
+			.pipe(take(1))
+			.subscribe(data => {
+        this.roles = data.roles;
+			});
 
     this.modalService.confirmEventSubject.pipe(takeUntil(this.$destroyed)).subscribe(modalId => {
 			this.modalService.close();
@@ -167,6 +180,8 @@ export class ViewProjectsComponent implements OnInit {
 				}
 			});
 	}
+
+  isValidRole = isValidRole;
 
   openErrorModal = (errorMessage: string) => {
 		this.modalService.open(

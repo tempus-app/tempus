@@ -7,7 +7,8 @@
 			<div class="mat-h3" id="icon">
 				<div id="initials">{{ initials }}</div>
 			</div>
-			<h2 class="mat-h2">{{ fullName }}</h2>
+			<h2 class="mat-h2" style="margin-bottom: 0;">{{ fullName }}</h2>
+      <h4 class="mat-body-2" style="margin-top: 0;" id="role">({{ roleToDisplay | lowercase }})</h4>
 			<div class="mat-body-2" id="email">{{ email }}</div>
 		</div>
 		<mat-button-toggle-group name="userBar" vertical>
