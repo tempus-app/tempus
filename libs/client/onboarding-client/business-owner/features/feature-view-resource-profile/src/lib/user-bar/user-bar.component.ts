@@ -1,9 +1,13 @@
+/* eslint-disable @typescript-eslint/dot-notation */
 import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
 import { LoadView, ProjectResource, ViewNames } from '@tempus/shared-domain';
 import { OnboardingClientResourceService } from '@tempus/client/onboarding-client/shared/data-access';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder } from '@angular/forms';
 import { ButtonType } from '@tempus/client/shared/ui-components/presentational';
+import { ModalService, ModalType, CustomModalType } from '@tempus/client/shared/ui-components/modal';
+import { TranslateService } from '@ngx-translate/core';
+import { take } from 'rxjs';
 
 @Component({
 	selector: 'tempus-user-bar',
@@ -45,7 +49,14 @@ export class UserBarComponent implements OnChanges {
 		private resourceService: OnboardingClientResourceService,
 		private fb: FormBuilder,
 		private router: Router,
-	) {}
+		private modalService: ModalService,
+		private translateService: TranslateService,
+	) {
+		const { currentLang } = translateService;
+		// eslint-disable-next-line no-param-reassign
+		translateService.currentLang = '';
+		translateService.use(currentLang);
+	}
 
 	ngOnChanges(): void {
 		if (this.loadedView.resourceViews) {
@@ -70,6 +81,22 @@ export class UserBarComponent implements OnChanges {
 			link.download = `${this.resourceName}-${this.viewNames[index]}`;
 			link.click();
 		});
+		this.translateService
+			.get(`${this.viewResourceProfilePrefx}downloadDialog`)
+			.pipe(take(1))
+			.subscribe(data => {
+				this.modalService.open(
+					{
+						title: data['title'],
+						confirmText: data['confirmText'],
+						message: data['message'],
+						modalType: ModalType.INFO,
+						closable: true,
+						id: 'info',
+					},
+					CustomModalType.INFO,
+				);
+			});
 	}
 
 	onClick(optionSelected: string): void {

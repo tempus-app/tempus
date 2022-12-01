@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/dot-notation */
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import {
 	OnboardingClientResourceService,
@@ -27,6 +28,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { sortViewsByLatestUpdated } from '@tempus/client/shared/util';
 import { Store } from '@ngrx/store';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ModalType, CustomModalType, ModalService } from '@tempus/client/shared/ui-components/modal';
 
 @Component({
 	selector: 'tempus-profile',
@@ -47,6 +49,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
 		private translateService: TranslateService,
 		private sharedStore: Store<OnboardingClientState>,
 		private resourceStore: Store<TempusResourceState>,
+		private modalService: ModalService,
 		private router: Router,
 		private route: ActivatedRoute,
 	) {
@@ -135,33 +138,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
 		this.resourceStore.dispatch(
 			getAllViewsByResourceId({ resourceId: this.userId, pageSize: this.pageSize, pageNum: this.pageNum }),
 		);
-
-		// display latest primary view
-		// this.resourceStore
-		// 	.select(selectResourceViews)
-		// 	.pipe(takeUntil(this.destroyed$))
-		// 	.subscribe(data => {
-		// 		let filteredAndSortedViews = data?.views?.filter(view => view.viewType === ViewType.PRIMARY) || [];
-		// 		filteredAndSortedViews = sortViewsByLatestUpdated(filteredAndSortedViews);
-
-		// 		const latestView = filteredAndSortedViews[0];
-		// 		console.log(latestView);
-		// 		this.currentViewId = latestView.id;
-		// 		this.certifications = latestView.certifications;
-		// 		this.educations = latestView.educations;
-		// 		this.educationsSummary = latestView.educationsSummary;
-		// 		this.workExperiences = latestView.experiences;
-		// 		this.experiencesSummary = latestView.experiencesSummary;
-		// 		this.profileSummary = latestView.profileSummary;
-		// 		this.skills = latestView.skills.map(skill => skill.skill.name);
-		// 		this.skillsSummary = latestView.skillsSummary;
-		// 		this.isRejected = latestView.revisionType === RevisionType.REJECTED;
-		// 		this.isPendingApproval = latestView.revisionType === RevisionType.PENDING;
-		// 		this.rejectionComments = latestView.revision?.comment ? latestView.revision.comment : '';
-
-		// 		this.dataLoaded = true;
-		// 	});
-
 		this.resourceService.getResourceInformation().subscribe(resData => {
 			this.userId = resData.id;
 			this.fullName = `${resData.firstName} ${resData.lastName}`;
@@ -219,7 +195,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
 	downloadProfile() {
 		// Taken from https://stackoverflow.com/questions/52154874/angular-6-downloading-file-from-rest-api
-		this.resourceStore.dispatch(downloadProfileByViewId({ viewId: this.currentViewId }));
 		this.resourceStore
 			.select(selectDownloadProfile)
 			.pipe(takeUntil(this.destroyed$))
@@ -232,6 +207,23 @@ export class ProfileComponent implements OnInit, OnDestroy {
 					link.download = `${this.fullName}-${this.viewName}`;
 					link.click();
 				}
+			});
+
+		this.translateService
+			.get(`${this.profilePrefix}downloadDialog`)
+			.pipe(take(1))
+			.subscribe(data => {
+				this.modalService.open(
+					{
+						title: data['title'],
+						confirmText: data['confirmText'],
+						message: data['message'],
+						modalType: ModalType.INFO,
+						closable: true,
+						id: 'info',
+					},
+					CustomModalType.INFO,
+				);
 			});
 	}
 

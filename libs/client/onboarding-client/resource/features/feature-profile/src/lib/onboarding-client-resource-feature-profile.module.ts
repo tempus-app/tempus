@@ -16,6 +16,7 @@ import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { HttpClient } from '@angular/common/http';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { OnboardingClientSharedFeatureEditViewFormModule } from '@tempus/onboarding-client/shared/feature-edit-view-form';
+import { MatDialogModule } from '@angular/material/dialog';
 import { EditProfileComponent } from './edit-profile/edit-profile.component';
 import { ProfileComponent } from './profile/profile.component';
 
@@ -27,6 +28,7 @@ function createTranslateLoader(http: HttpClient) {
 	imports: [
 		CommonModule,
 		MatIconModule,
+		MatDialogModule,
 		MatTooltipModule,
 		MatSlideToggleModule,
 		FlexLayoutModule,
