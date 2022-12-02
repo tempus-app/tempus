@@ -33,6 +33,7 @@
         </div>
         <div>
             <tempus-button
+                *ngIf="isValidRole(roles, [roleType.BUSINESS_OWNER])"
                 (buttonClick)="openViewForm()"
                 label="{{ viewResourceProfilePrefx + 'buttons.createNewViewButton.title' | translate }}"
                 color="accent"
@@ -40,6 +41,7 @@
         </div>
         <div>
             <tempus-button
+                *ngIf="isValidRole(roles, [roleType.BUSINESS_OWNER])"
                 (buttonClick)="deleteView()"
                 label="{{ viewResourceProfilePrefx + 'buttons.deleteViewButton.title' | translate }}"
                 color="accent"

@@ -1,4 +1,5 @@
 import { createReducer, on } from '@ngrx/store';
+import { RoleType } from '@tempus/shared-domain';
 import { AsyncRequestState } from '../../enum';
 
 import * as AuthActions from './auth.actions';
@@ -12,6 +13,7 @@ export interface AuthState {
 	firstName: string | null;
 	lastName: string | null;
 	email: string | null;
+  roles: RoleType[];
 	error: Error | null;
 	status: AsyncRequestState;
 }
@@ -24,13 +26,14 @@ export const initialState: AuthState = {
 	firstName: null,
 	lastName: null,
 	email: null,
+  roles: [],
 	status: AsyncRequestState.IDLE,
 };
 
 export const authReducer = createReducer(
 	initialState,
 	on(AuthActions.login, state => ({ ...state, status: AsyncRequestState.LOADING })),
-	on(AuthActions.loginSuccess, (state, { accessToken, refreshToken, loggedInUserId, firstName, lastName, email }) => ({
+	on(AuthActions.loginSuccess, (state, { accessToken, refreshToken, loggedInUserId, firstName, lastName, email, roles }) => ({
 		...state,
 		accessToken,
 		refreshToken,
@@ -38,6 +41,7 @@ export const authReducer = createReducer(
 		firstName,
 		lastName,
 		email,
+    roles,
 		status: AsyncRequestState.SUCCESS,
 		error: null,
 	})),

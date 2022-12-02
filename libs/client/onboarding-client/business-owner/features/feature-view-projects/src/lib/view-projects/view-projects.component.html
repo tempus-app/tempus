@@ -12,7 +12,7 @@
         </tempus-button>
       </div>
       <div fxLayout="column">
-        <tempus-create-project></tempus-create-project>
+        <tempus-create-project *ngIf="isValidRole(roles, [roleType.BUSINESS_OWNER])"></tempus-create-project>
       </div>
     </div>
 	</div>

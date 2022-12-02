@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
-import { LoadView, ProjectResource, ViewNames } from '@tempus/shared-domain';
+import { LoadView, ProjectResource, RoleType, ViewNames } from '@tempus/shared-domain';
 import {
 	OnboardingClientResourceService,
 	OnboardingClientViewsService,
@@ -10,6 +10,7 @@ import { ButtonType, SnackbarService } from '@tempus/client/shared/ui-components
 import { CustomModalType, ModalService, ModalType } from '@tempus/client/shared/ui-components/modal';
 import { catchError, of, Subject, take, takeUntil } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
+import { isValidRole } from '@tempus/client/shared/util';
 
 @Component({
 	selector: 'tempus-user-bar',
@@ -28,6 +29,8 @@ export class UserBarComponent implements OnChanges {
 	@Input()
 	projectResources: ProjectResource[] = [];
 
+	@Input() roles: RoleType[] = [];
+
 	viewNames: string[] = [];
 
 	viewIDs: number[] = [];
@@ -41,6 +44,10 @@ export class UserBarComponent implements OnChanges {
 	buttonType = ButtonType;
 
 	viewResourceProfilePrefx = 'viewResourceProfile.';
+
+	isValidRole = isValidRole;
+
+	roleType = RoleType;
 
 	@Output() newViewSelected = new EventEmitter<number>();
 

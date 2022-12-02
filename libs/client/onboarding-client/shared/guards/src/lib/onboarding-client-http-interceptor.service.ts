@@ -52,13 +52,18 @@ export class InterceptorService implements HttpInterceptor {
 
 	intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
 		// Any endpoints which are not expected to involve access tokens should be added to omitted endpoints
-		const omitEndpoints = ['auth/login', './assets', 'onboarding/link', 'python-api/parse'];
+		const omitEndpoints = ['auth/login', './assets', 'python-api/parse'];
 		omitEndpoints.forEach(endpoint => {
 			if (req.url.includes(endpoint)) {
 				this.skipInterceptor = true;
 			}
 		});
 		if (req.method === 'POST' && req.url.includes('onboarding/user/resource')) {
+			this.skipInterceptor = true;
+		}
+
+    // Link info retrieved by users signing up to the app
+    if (req.method === 'GET' && req.url.includes('onboarding/link')) {
 			this.skipInterceptor = true;
 		}
 
