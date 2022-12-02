@@ -1,6 +1,6 @@
 import jwt_decode from 'jwt-decode';
 import { AbstractControl } from '@angular/forms';
-import { View } from '@tempus/shared-domain';
+import { View, RoleType } from '@tempus/shared-domain';
 
 // TODO FIGURE OUT THE USE OF 'PRSENT'
 /**
@@ -82,6 +82,16 @@ export function formatName(first: string, last: string) {
 export function decodeJwt(token: string) {
 	const decodedToken: { email: string; roles: string[]; iat: number; exp: number } = jwt_decode(token || '');
 	return decodedToken;
+}
+
+/**
+ * Returns whether there is an intersection between roles and valid roles
+ * @param  {string} roles - the roles you want to check
+ * @param  {string} validRoels - the expected roles
+ */
+export function isValidRole(roles: RoleType[], validRoles: RoleType[]) {
+	const intersection = roles.filter(role => validRoles.indexOf(role) !== -1);
+	return intersection.length > 0;
 }
 
 /**

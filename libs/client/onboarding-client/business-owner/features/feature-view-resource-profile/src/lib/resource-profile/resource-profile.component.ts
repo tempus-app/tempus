@@ -4,8 +4,9 @@ import { Store } from '@ngrx/store';
 import {
 	OnboardingClientResourceService,
 	OnboardingClientState,
+  selectLoggedInUserNameEmail,
 } from '@tempus/client/onboarding-client/shared/data-access';
-import { LoadView, ProjectResource } from '@tempus/shared-domain';
+import { LoadView, ProjectResource, RoleType } from '@tempus/shared-domain';
 import { skip, take } from 'rxjs';
 import {
 	BusinessOwnerState,
@@ -71,6 +72,8 @@ export class ResourceProfileComponent implements OnInit {
 
 	isPrimaryView = false;
 
+  roles: RoleType[] = [];
+
 	childRevisionLoaded(loadedView: LoadView) {
 		this.loadedView = loadedView;
 	}
@@ -127,6 +130,13 @@ export class ResourceProfileComponent implements OnInit {
 			this.projectResources = resourceInfo.projectResources;
 		});
 		this.businessOwnerStore.dispatch(getOriginalResume({ resourceId: this.resourceId }));
+
+		this.sharedStore
+			.select(selectLoggedInUserNameEmail)
+			.pipe(take(1))
+			.subscribe(data => {
+        this.roles = data.roles;
+			});
 
 		this.businessOwnerStore
 			.select(selectOriginalResume)

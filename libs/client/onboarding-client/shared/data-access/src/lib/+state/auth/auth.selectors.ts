@@ -20,5 +20,8 @@ export const selectAuthStatus = createSelector(selectAuth, (state: AuthState) =>
 	};
 });
 export const selectLoggedInUserNameEmail = createSelector(selectAuth, (state: AuthState) => {
-	return { firstName: state.firstName, lastName: state.lastName, email: state.email };
+	return { firstName: state.firstName, lastName: state.lastName, email: state.email, roles: state.roles };
+});
+export const selectLoggedInRoles = createSelector(selectAuth, (state: AuthState) => {
+	return { roles: state.roles };
 });

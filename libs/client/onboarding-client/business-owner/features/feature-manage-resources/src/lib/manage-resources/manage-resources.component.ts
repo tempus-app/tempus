@@ -35,6 +35,7 @@ import { Router } from '@angular/router';
 import { PageEvent } from '@angular/material/paginator';
 import { TranslateService } from '@ngx-translate/core';
 import { FormBuilder, Validators, FormControl } from '@angular/forms';
+import { isValidRole } from '@tempus/client/shared/util';
 
 @Component({
 	selector: 'tempus-manage-resources',
@@ -139,6 +140,8 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 
 	email = '';
 
+  roles: RoleType[] = [];
+
 	assigned = '';
 
 	unassigned = '';
@@ -186,16 +189,16 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 		return RoleType.USER;
 	};
 
+  isValidRole = isValidRole;
+
 	inviteTypeOptions: string[] = [
-		this.roleTypeEnumToString(RoleType.AVAILABLE_RESOURCE),
 		this.roleTypeEnumToString(RoleType.SUPERVISOR),
-    this.roleTypeEnumToString(RoleType.BUSINESS_OWNER),
 	];
 
 	manageResourcesForm = this.fb.group({
 		search: [''],
 		invite: this.fb.group({
-			inviteType: [this.roleTypeEnumToString(RoleType.AVAILABLE_RESOURCE), Validators.required],
+			inviteType: [this.roleTypeEnumToString(RoleType.SUPERVISOR), Validators.required],
 			firstName: ['', Validators.required],
 			lastName: ['', Validators.required],
 			emailAddress: ['', [Validators.required, Validators.email]],
@@ -320,6 +323,14 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 			.subscribe(data => {
 				this.name = `${data.firstName} ${data.lastName}`;
 				this.email = data.email || '';
+        this.roles = data.roles;
+        if (this.roles.includes(RoleType.BUSINESS_OWNER)) {
+          this.inviteTypeOptions = [
+            this.roleTypeEnumToString(RoleType.AVAILABLE_RESOURCE),
+            this.roleTypeEnumToString(RoleType.SUPERVISOR),
+            this.roleTypeEnumToString(RoleType.BUSINESS_OWNER),
+          ]
+        }
 			});
 
 		// Getting the most recent created project data to then refresh all client info

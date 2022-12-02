@@ -6,6 +6,7 @@ import { catchError, Observable, tap } from 'rxjs';
 import { APP_CONFIG } from '@tempus/app-config';
 import { SessionStorageKey } from '../enum';
 import { handleError } from './errorHandler';
+import { decodeJwt } from '@tempus/client/shared/util';
 
 @Injectable({ providedIn: 'root' })
 export class OnboardingClientAuthService {
@@ -16,6 +17,7 @@ export class OnboardingClientAuthService {
 	public login(password: string, email: string): Observable<AuthDto> {
 		return this.http.post<AuthDto>(`${this.url}/login`, { password, email }).pipe(
 			tap(data => {
+        const { roles } = decodeJwt(data.accessToken || '');
 				this.setUserDataInSessionStorage(
 					data.accessToken,
 					data.refreshToken,
@@ -23,6 +25,7 @@ export class OnboardingClientAuthService {
 					data.user.firstName,
 					data.user.lastName,
 					data.user.email,
+          roles
 				);
 			}),
 			catchError(handleError),
@@ -46,35 +49,11 @@ export class OnboardingClientAuthService {
 		return this.http.post<void>(`${this.url}/reset-password`, resetPasswordDto).pipe(catchError(handleError));
 	}
 
-	public getUserDataFromSessionStorage(): {
-		accessToken: string | null;
-		refreshToken: string | null;
-		userId: number | null;
-		email: string | null;
-		firstName: string | null;
-		lastName: string | null;
-	} {
-		const accessToken: string | null = sessionStorage.getItem(SessionStorageKey.TEMPUS_ACCESS_TOKEN);
-		const refreshToken: string | null = sessionStorage.getItem(SessionStorageKey.TEMPUS_REFRESH_TOKEN);
-		const userIdString: string | null = sessionStorage.getItem(SessionStorageKey.TEMPUS_USER_ID);
-		const userId: number | null = userIdString ? parseInt(userIdString, 10) : null;
-		const firstName: string | null = sessionStorage.getItem(SessionStorageKey.TEMPUS_FIRST_NAME);
-		const lastName: string | null = sessionStorage.getItem(SessionStorageKey.TEMPUS_LAST_NAME);
-		const email: string | null = sessionStorage.getItem(SessionStorageKey.TEMPUS_EMAIL);
-
-		return {
-			accessToken,
-			refreshToken,
-			userId,
-			firstName,
-			lastName,
-			email,
-		};
-	}
-
 	public updateAccessAndRefreshTokenInStorage(accessToken: string, refreshToken: string) {
+    const { roles } = decodeJwt(accessToken || '');
 		sessionStorage.setItem(SessionStorageKey.TEMPUS_ACCESS_TOKEN, accessToken);
 		sessionStorage.setItem(SessionStorageKey.TEMPUS_REFRESH_TOKEN, refreshToken);
+    sessionStorage.setItem(SessionStorageKey.TEMPUS_ROLES, JSON.stringify(roles));
 	}
 
 	public setUserDataInSessionStorage(
@@ -84,6 +63,7 @@ export class OnboardingClientAuthService {
 		firstName: string,
 		lastName: string,
 		email: string,
+    roles: string[]
 	) {
 		sessionStorage.setItem(SessionStorageKey.TEMPUS_ACCESS_TOKEN, accessToken);
 		sessionStorage.setItem(SessionStorageKey.TEMPUS_REFRESH_TOKEN, refreshToken);
@@ -91,6 +71,7 @@ export class OnboardingClientAuthService {
 		sessionStorage.setItem(SessionStorageKey.TEMPUS_FIRST_NAME, firstName);
 		sessionStorage.setItem(SessionStorageKey.TEMPUS_LAST_NAME, lastName);
 		sessionStorage.setItem(SessionStorageKey.TEMPUS_EMAIL, email);
+    sessionStorage.setItem(SessionStorageKey.TEMPUS_ROLES, JSON.stringify(roles));
 	}
 
 	public logout() {
@@ -104,5 +85,6 @@ export class OnboardingClientAuthService {
 		sessionStorage.removeItem(SessionStorageKey.TEMPUS_LAST_NAME);
 		sessionStorage.removeItem(SessionStorageKey.TEMPUS_EMAIL);
 		sessionStorage.removeItem(SessionStorageKey.TEMPUS_REFRESH_TOKEN);
+    sessionStorage.removeItem(SessionStorageKey.TEMPUS_ROLES);
 	}
 }

@@ -101,6 +101,26 @@ describe('ViewService', () => {
 			expect(res).toEqual(createdView);
 		});
 
+    it('should throw error if supervisor creating secondary view', async () => {
+			const createdView: ViewEntity = {
+				...resourceCreatedSecondaryViewEntity,
+				createdAt: new Date(CUR_DATE_CONSTANT),
+				lastUpdateDate: new Date(CUR_DATE_CONSTANT),
+				updatedBy: RoleType.USER,
+				resource: resourceEntity,
+			};
+			mockResourceService.getResourceInfo.mockResolvedValue(resourceEntity);
+			mockViewRepository.save.mockResolvedValue(createdView);
+			let error;
+			try {
+				await viewService.createSecondaryView(0, supervisorUserEntity, newSecondaryViewDto);
+			} catch (e) {
+				error = e;
+			}
+			expect(error).toBeInstanceOf(ForbiddenException);
+			expect(error.message).toEqual('Forbidden. Supervisor cannot create a secondary view.');
+		});
+
 		it('should create a new pending view given created by resource', async () => {
 			const createdView: ViewEntity = {
 				...resourceCreatedSecondaryViewEntity,
@@ -269,12 +289,6 @@ describe('ViewService', () => {
 
 			adminReviseViewNonExistingRevision(businessOwnerUserEntity);
 		});
-		it('should revise view given supervisor has edited and non existing revision', async () => {
-			// Whenever a supervisor edits a view, its auto approved and no revision entity needs to be made
-
-			adminReviseViewNonExistingRevision(supervisorUserEntity);
-		});
-
 		it('should revise view given resource has edited and existing revision', async () => {
 			// Original view locked, original revisions new view is updated to a new created view that is locked and pending (deletion of old revised view occurs), revision and new created view saved
 			// This case can only occur given a previous rejection of a revision (else the rev entity wouldnt exist if there was a previous positive approval)
@@ -350,12 +364,6 @@ describe('ViewService', () => {
 
 			adminReviseViewExistingRevision(businessOwnerUserEntity);
 		});
-		it('should revise view given supervisor has edited and existing revision', async () => {
-			// Whenever a supervisor edits a view, its auto approved and any existing revisons need to be removed
-			// This case can only occur given a previous rejection of a revision (else the rev entity wouldnt exist if there was a previous positive approval)
-
-			adminReviseViewExistingRevision(supervisorUserEntity);
-		});
 		it('should throw error if resource editing locked view', async () => {
 			const lockedView: ViewEntity = {
 				...viewEntity,
@@ -370,6 +378,18 @@ describe('ViewService', () => {
 			}
 			expect(error).toBeInstanceOf(UnauthorizedException);
 			expect(error.message).toEqual('Cannot edit locked view');
+		});
+
+    it('should throw error if supervisor editing view', async () => {
+			mockViewRepository.findOne.mockResolvedValue(viewEntity);
+			let error;
+			try {
+				await viewService.reviseView(3, supervisorUserEntity, viewEntity);
+			} catch (e) {
+				error = e;
+			}
+			expect(error).toBeInstanceOf(ForbiddenException);
+			expect(error.message).toEqual('Forbidden. Supervisor cannot edit view.');
 		});
 
 		const adminReviseViewNonExistingRevision = async (user: UserEntity) => {

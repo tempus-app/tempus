@@ -57,7 +57,6 @@ export class InterceptorService implements HttpInterceptor {
 			'auth/forgot-password',
 			'auth/reset-password',
 			'./assets',
-			'onboarding/link',
 			'python-api/parse',
 		];
 		omitEndpoints.forEach(endpoint => {
@@ -66,6 +65,11 @@ export class InterceptorService implements HttpInterceptor {
 			}
 		});
 		if (req.method === 'POST' && req.url.includes('onboarding/user/resource')) {
+			this.skipInterceptor = true;
+		}
+
+    // Link info retrieved by users signing up to the app
+    if (req.method === 'GET' && req.url.includes('onboarding/link')) {
 			this.skipInterceptor = true;
 		}
 

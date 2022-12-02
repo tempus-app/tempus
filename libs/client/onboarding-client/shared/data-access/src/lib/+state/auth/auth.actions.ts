@@ -1,4 +1,5 @@
 import { createAction, props } from '@ngrx/store';
+import { RoleType } from '@tempus/shared-domain';
 
 export const login = createAction(
 	'[Onboarding Client Signin Page] Login',
@@ -13,6 +14,7 @@ export const loginSuccess = createAction(
 		firstName: string;
 		lastName: string;
 		email: string;
+    roles: RoleType[];
 	}>(),
 );
 export const loginFailure = createAction('[Onboarding Client Auth Api] Login Failure', props<{ error: Error }>());
