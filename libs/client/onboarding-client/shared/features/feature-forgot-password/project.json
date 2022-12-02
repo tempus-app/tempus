@@ -1,0 +1,26 @@
+{
+	"projectType": "library",
+	"root": "libs/client/onboarding-client/shared/features/feature-forgot-password",
+	"sourceRoot": "libs/client/onboarding-client/shared/features/feature-forgot-password/src",
+	"prefix": "tempus",
+	"targets": {
+		"test": {
+			"executor": "@nrwl/jest:jest",
+			"outputs": ["coverage/libs/client/onboarding-client/shared/features/feature-forgot-password"],
+			"options": {
+				"jestConfig": "libs/client/onboarding-client/shared/features/feature-forgot-password/jest.config.js",
+				"passWithNoTests": true
+			}
+		},
+		"lint": {
+			"executor": "@nrwl/linter:eslint",
+			"options": {
+				"lintFilePatterns": [
+					"libs/client/onboarding-client/shared/features/feature-forgot-password/src/**/*.ts",
+					"libs/client/onboarding-client/shared/features/feature-forgot-password/src/**/*.html"
+				]
+			}
+		}
+	},
+	"tags": []
+}

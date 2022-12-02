@@ -6,7 +6,9 @@
 	"targets": {
 		"test": {
 			"executor": "@nrwl/jest:jest",
-			"outputs": ["coverage/libs/client/onboarding-client/business-owner/features/feature-view-pending-approvals"],
+			"outputs": [
+				"coverage/libs/client/onboarding-client/business-owner/features/feature-view-pending-approvals"
+			],
 			"options": {
 				"jestConfig": "libs/client/onboarding-client/business-owner/features/feature-view-pending-approvals/jest.config.js",
 				"passWithNoTests": true

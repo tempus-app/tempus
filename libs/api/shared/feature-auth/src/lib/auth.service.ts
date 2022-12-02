@@ -71,27 +71,25 @@ export class AuthService {
 			throw new Error('Invalid token or email provided');
 		}
 
-		if (AuthService.isTokenValid(passwordResetDetails)) {
+		if (this.isTokenValid(passwordResetDetails)) {
 			// reset password
 			const updateUserDto = new UpdateUserDto(passwordResetDetails.user.id);
 			updateUserDto.password = resetPasswordDto.newPassword;
 			await this.userService.updateUser(updateUserDto);
 			this.passwordResetRepository.save({ ...passwordResetDetails, status: PasswordResetStatus.INVALID });
-		} else {
-			this.passwordResetRepository.save({ ...passwordResetDetails, status: PasswordResetStatus.INVALID });
-			throw new Error('Invalid token provided');
 		}
 		this.logger.log(`${resetPasswordDto.email} has successfully changed their password`);
 	}
 
-	private static isTokenValid(passwordResetDetails: PasswordResetEntity) {
-		if (
-			passwordResetDetails.expiry.getTime() >= Date.now() &&
-			passwordResetDetails.status === PasswordResetStatus.VALID
-		) {
+	private isTokenValid(passwordResetDetails: PasswordResetEntity) {
+		if (passwordResetDetails.expiry.getTime() < Date.now()) {
+			this.passwordResetRepository.save({ ...passwordResetDetails, status: PasswordResetStatus.INVALID });
+			throw new Error('Reset link has expired');
+		} else if (passwordResetDetails.status !== PasswordResetStatus.VALID) {
+			throw new Error('Invalid reset link');
+		} else {
 			return true;
 		}
-		return false;
 	}
 
 	async forgotPassword(userEmail: string): Promise<void> {

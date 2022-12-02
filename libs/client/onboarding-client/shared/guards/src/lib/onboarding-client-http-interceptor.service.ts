@@ -52,7 +52,13 @@ export class InterceptorService implements HttpInterceptor {
 
 	intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
 		// Any endpoints which are not expected to involve access tokens should be added to omitted endpoints
-		const omitEndpoints = ['auth/login', './assets', 'python-api/parse'];
+		const omitEndpoints = [
+			'auth/login',
+			'auth/forgot-password',
+			'auth/reset-password',
+			'./assets',
+			'python-api/parse',
+		];
 		omitEndpoints.forEach(endpoint => {
 			if (req.url.includes(endpoint)) {
 				this.skipInterceptor = true;

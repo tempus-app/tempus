@@ -29,3 +29,20 @@ export const refreshSuccess = createAction(
 	'[Onboarding Client Auth Api] Refresh Success',
 	props<{ accessToken: string; refreshToken: string }>(),
 );
+
+export const forgotPassword = createAction('[Onboarding Client Auth Api] Forgot Password', props<{ email: string }>());
+export const forgotPasswordSuccess = createAction('[Onboarding Client Auth Api] Forgot Password Success');
+export const forgotPasswordFailure = createAction(
+	'[Onboarding Client Auth Api] Forgot Password Failure',
+	props<{ error: Error }>(),
+);
+
+export const resetPassword = createAction(
+	'[Onboarding Client Auth Api] Reset Password',
+	props<{ email: string; password: string; token: string }>(),
+);
+export const resetPasswordSuccess = createAction('[Onboarding Client Auth Api] Reset Password Success');
+export const resetPasswordFailure = createAction(
+	'[Onboarding Client Auth Api] Reset Password Failure',
+	props<{ error: Error }>(),
+);

@@ -11,6 +11,56 @@
 			"loginCTA": "Login",
 			"noRoles": "No defined roles"
 		},
+		"forgotPassword": {
+			"title": "Forgot Password?",
+			"subtitle": "No worries, we will send a recovery link to the email below",
+			"forgotPasswordCTA": "Send email",
+			"emailLabel": "Email",
+			"modal": {
+				"successModal": {
+					"title": "An email has been sent!",
+					"confirmText": "OK",
+					"message": "Check your inbox for a link to reset your password."
+				},
+				"errorModal": {
+					"title": "Error sending recovery link",
+					"confirmText": "OK",
+					"message": "Please try again, and make sure your are using the correct email."
+				}
+			}
+		},
+		"resetPassword": {
+			"title": "Reset Password",
+			"subtitle": "Enter the email associated with your account and your new password",
+			"resetPasswordCTA": "Reset Password",
+			"passwordLabel": "New Password",
+			"confirmPasswordLabel": "Confirm Password",
+			"emailLabel": "Email",
+			"passReq": {
+				"title": "Password must be:",
+				"minChar": "min 8 characters",
+				"uppercase": "1 uppercase letter",
+				"lowercase": "1 lowercase letter",
+				"number": "1 number",
+				"specialChar": "1 special character"
+			},
+			"passDontMatchErr": "Passwords do not match.",
+			"passConfirmErr": "Please retype your password",
+			"passwordError": "Please enter a valid password",
+			"emailError": "Please enter a valid email",
+			"modal": {
+				"successModal": {
+					"title": "Password has been successfully reset",
+					"confirmText": "Sign In",
+					"message": "Please login with your new password"
+				},
+				"errorModal": {
+					"title": "Password reset failed",
+					"confirmText": "OK",
+					"message": "Please try again using latest token sent and the correct email."
+				}
+			}
+		},
 		"editViewForm": {
 			"viewNamePlaceholder": "View name",
 			"viewNameError": "Please enter a name for your view.",
