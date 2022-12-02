@@ -26,7 +26,7 @@ export class ProjectController {
 	}
 
 	@UseGuards(JwtAuthGuard, RolesGuard)
-	@Roles(RoleType.BUSINESS_OWNER, RoleType.SUPERVISOR)
+	@Roles(RoleType.BUSINESS_OWNER)
 	@Post('/')
 	async createProject(@Body() createProjectDto: CreateProjectDto): Promise<Project> {
 		return this.projectService.createProject(createProjectDto);

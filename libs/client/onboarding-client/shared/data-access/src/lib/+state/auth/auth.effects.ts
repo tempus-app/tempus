@@ -7,6 +7,8 @@ import { Router } from '@angular/router';
 import { OnboardingClientState } from '../onboardingClient.state';
 import { login, loginFailure, loginSuccess, logout, logoutFailure, logoutSuccess } from './auth.actions';
 import { OnboardingClientAuthService, OnboardingClientResourceService } from '../../services';
+import { decodeJwt } from '@tempus/client/shared/util';
+import { RoleType } from '@tempus/shared-domain';
 
 @Injectable()
 export class AuthEffects {
@@ -24,6 +26,8 @@ export class AuthEffects {
 			switchMap(action =>
 				this.authService.login(action.password, action.email).pipe(
 					map(data => {
+            const { roles } = decodeJwt(data.accessToken);
+            const rolesTyped: RoleType[] = roles.map(role => RoleType[role as keyof typeof RoleType]);
 						return loginSuccess({
 							accessToken: data.accessToken,
 							refreshToken: data.refreshToken,
@@ -31,6 +35,7 @@ export class AuthEffects {
 							firstName: data.user.firstName,
 							lastName: data.user.lastName,
 							email: data.user.email,
+              roles: rolesTyped
 						});
 					}),
 					catchError(error => of(loginFailure({ error }))),
