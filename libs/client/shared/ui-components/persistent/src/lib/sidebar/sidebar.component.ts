@@ -44,8 +44,6 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
 	initials = '';
 
-  roleToDisplay: string = "";
-
 	isVisible = true;
 
 	bugReportingURL = 'https://forms.gle/KCoBXHmK49AdgJdV9';
@@ -117,14 +115,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
 				if (roles.includes(RoleType.BUSINESS_OWNER) || roles.includes(RoleType.SUPERVISOR)) {
 					this.tabs = [SidebarTab.MANAGE_RESOURCES, SidebarTab.PENDING_APPROVALS, SidebarTab.PROJECTS];
-          if (roles.includes(RoleType.BUSINESS_OWNER)) {
-            this.roleToDisplay = RoleType.BUSINESS_OWNER;
-          } else {
-            this.roleToDisplay = RoleType.SUPERVISOR;
-          }
 				} else if (roles.includes(RoleType.AVAILABLE_RESOURCE) || roles.includes(RoleType.ASSIGNED_RESOURCE)) {
-          this.roleToDisplay = RoleType.ASSIGNED_RESOURCE;
-          this.roleToDisplay = this.roleToDisplay.split("_")[1];
 					this.tabs = [
 						SidebarTab.PRIMARY_VIEW,
 						SidebarTab.MY_VIEWS,
@@ -132,8 +123,6 @@ export class SidebarComponent implements OnInit, OnDestroy {
 						SidebarTab.PERSONAL_INFORMATION,
 					];
 				}
-
-        this.roleToDisplay = this.roleToDisplay.replace("_", " ");
 			});
 
 		this.store
