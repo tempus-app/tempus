@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/dot-notation */
 /* eslint-disable no-param-reassign */
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
@@ -7,17 +8,20 @@ import {
 	BusinessOwnerState,
 	getAllProjectInfo,
 	selectAllProjects,
-  selectAsyncStatus,
-  selectProjStatusUpdated,
-  updateProjStatus,
+	selectAsyncStatus,
+	selectProjStatusUpdated,
+	updateProjStatus,
 } from '@tempus/client/onboarding-client/business-owner/data-access';
-import { Column, ViewProjects } from '@tempus/client/shared/ui-components/presentational';
-import { take, Subject, takeUntil, finalize, identity, skip } from 'rxjs';
-import { ButtonType } from '@tempus/client/shared/ui-components/presentational';
+import { Column, ViewProjects, ButtonType } from '@tempus/client/shared/ui-components/presentational';
+import { take, Subject, takeUntil, finalize, skip } from 'rxjs';
 import { CustomModalType, ModalService, ModalType } from '@tempus/client/shared/ui-components/modal';
-import { FormBuilder, Validators, FormControl } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { ErorType, ProjectStatus, RoleType } from '@tempus/shared-domain';
-import { AsyncRequestState, OnboardingClientState, selectLoggedInUserNameEmail } from '@tempus/client/onboarding-client/shared/data-access';
+import {
+	AsyncRequestState,
+	OnboardingClientState,
+	selectLoggedInUserNameEmail,
+} from '@tempus/client/onboarding-client/shared/data-access';
 import { isValidRole } from '@tempus/client/shared/util';
 
 @Component({
@@ -34,25 +38,25 @@ export class ViewProjectsComponent implements OnInit {
 
 	pageSize = 10;
 
-  ButtonType = ButtonType;
+	ButtonType = ButtonType;
 
 	totalProjects = 0;
 
-  roles: RoleType[] = [];
+	roles: RoleType[] = [];
 
-  roleType = RoleType;
-  
-  @ViewChild('projectStatusModal')
+	roleType = RoleType;
+
+	@ViewChild('projectStatusModal')
 	projectStatusModal!: TemplateRef<unknown>;
 
-  $projectStatusModalClosedEvent = new Subject<void>();
+	$projectStatusModalClosedEvent = new Subject<void>();
 
 	constructor(
 		private businessOwnerStore: Store<BusinessOwnerState>,
-    private sharedStore: Store<OnboardingClientState>,
+		private sharedStore: Store<OnboardingClientState>,
 		private translateService: TranslateService,
-    private fb: FormBuilder,
-    private modalService: ModalService,
+		private fb: FormBuilder,
+		private modalService: ModalService,
 	) {
 		const { currentLang } = translateService;
 		translateService.currentLang = '';
@@ -65,71 +69,75 @@ export class ViewProjectsComponent implements OnInit {
 					{
 						columnDef: 'project',
 						header: data.project,
-						cell: (element: Record<string, unknown>) => `${element.project}`,
+						cell: (element: Record<string, unknown>) => `${element['project']}`,
 					},
 					{
 						columnDef: 'name',
 						header: data.name,
-						cell: (element: Record<string, unknown>) => `${element.name}`,
+						cell: (element: Record<string, unknown>) => `${element['name']}`,
 					},
 					{
 						columnDef: 'start_date',
 						header: data.start_date,
-						cell: (element: Record<string, unknown>) => `${element.start_date}`,
+						cell: (element: Record<string, unknown>) => `${element['start_date']}`,
 					},
 					{
 						columnDef: 'status',
 						header: data.status,
-						cell: (element: Record<string, unknown>) => `${element.status}`,
+						cell: (element: Record<string, unknown>) => `${element['status']}`,
 					},
-          {
+					{
 						columnDef: 'clientRepr',
 						header: data.clientRepr,
 						cell: (element: Record<string, any>) =>
-							`<div class="demarginizedCell">${element.clientReprFullName}<p id="resource" class="mat-caption">(${element.clientReprEmail})</p></div>`,
-					}
+							`<div class="demarginizedCell">${element['clientReprFullName']}<p id="resource" class="mat-caption">(${element.clientReprEmail})</p></div>`,
+					},
 				];
 			});
 	}
 
-  updateProjectStatusForm = this.fb.group({
-    project: ['', Validators.required],
-    status: ['', Validators.required],
-  })
+	updateProjectStatusForm = this.fb.group({
+		project: ['', Validators.required],
+		status: ['', Validators.required],
+	});
 
 	$destroyed = new Subject<void>();
 
 	projectsInfoTableData: ViewProjects[] = [];
-  
-  projectOptions: { id: number, val: string }[] =[];
 
-  selectedProjStatusOptions: ProjectStatus[] = [ProjectStatus.NOT_STARTED, ProjectStatus.ACTIVE, ProjectStatus.COMPLETED];
-  
-  projStatusOptions: {id: number, opts: ProjectStatus[]}[] = [];
+	projectOptions: { id: number; val: string }[] = [];
+
+	selectedProjStatusOptions: ProjectStatus[] = [
+		ProjectStatus.NOT_STARTED,
+		ProjectStatus.ACTIVE,
+		ProjectStatus.COMPLETED,
+	];
+
+	projStatusOptions: { id: number; opts: ProjectStatus[] }[] = [];
 
 	ngOnInit(): void {
 		this.businessOwnerStore.dispatch(getAllProjectInfo({ page: this.pageNum, pageSize: this.pageSize }));
 
-    this.sharedStore
+		this.sharedStore
 			.select(selectLoggedInUserNameEmail)
 			.pipe(take(1))
 			.subscribe(data => {
-        this.roles = data.roles;
+				this.roles = data.roles;
 			});
 
-    this.modalService.confirmEventSubject.pipe(takeUntil(this.$destroyed)).subscribe(modalId => {
+		this.modalService.confirmEventSubject.pipe(takeUntil(this.$destroyed)).subscribe(modalId => {
 			this.modalService.close();
 			if (modalId === 'projectStatusModal') {
 				this.$projectStatusModalClosedEvent.next();
 			}
 		});
 
-    this.businessOwnerStore
-      .select(selectProjStatusUpdated)
-      .pipe(takeUntil(this.$destroyed), skip(1))
-      .subscribe(_ => {
-        this.businessOwnerStore.dispatch(getAllProjectInfo({ page: this.pageNum, pageSize: this.pageSize }));
-      })
+		this.businessOwnerStore
+			.select(selectProjStatusUpdated)
+			.pipe(takeUntil(this.$destroyed), skip(1))
+			.subscribe(_ => {
+				this.businessOwnerStore.dispatch(getAllProjectInfo({ page: this.pageNum, pageSize: this.pageSize }));
+			});
 
 		this.businessOwnerStore
 			.select(selectAllProjects)
@@ -137,37 +145,40 @@ export class ViewProjectsComponent implements OnInit {
 			.subscribe(data => {
 				this.projectsInfoTableData = [];
 				this.totalProjects = data.totalItems;
-        this.projectOptions = data.projects.filter(proj => proj.status != ProjectStatus.COMPLETED).map(proj => {
-          return {id: proj.id, val: proj.name};
-        })
-        this.projStatusOptions = data.projects.map(proj => {
-          const statusOptions = [];
-          if (proj.status == ProjectStatus.NOT_STARTED) { 
-            statusOptions.push(ProjectStatus.ACTIVE);
-            statusOptions.push(ProjectStatus.COMPLETED);
-          } else if (proj.status == ProjectStatus.ACTIVE) {
-            statusOptions.push(ProjectStatus.COMPLETED);
-          }
-          return { id: proj.id, opts: statusOptions };
-        })
+				this.projectOptions = data.projects
+					.filter(proj => proj.status !== ProjectStatus.COMPLETED)
+					.map(proj => {
+						return { id: proj.id, val: proj.name };
+					});
+				this.projStatusOptions = data.projects.map(proj => {
+					const statusOptions = [];
+					if (proj.status === ProjectStatus.NOT_STARTED) {
+						statusOptions.push(ProjectStatus.ACTIVE);
+						statusOptions.push(ProjectStatus.COMPLETED);
+					} else if (proj.status === ProjectStatus.ACTIVE) {
+						statusOptions.push(ProjectStatus.COMPLETED);
+					}
+					return { id: proj.id, opts: statusOptions };
+				});
 				data.projects.forEach(project => {
 					const startDate = new Date(project.startDate).toISOString().slice(0, 10);
 					const status = project.status.toString() === 'not_started' ? 'Not Started' : project.status;
 					this.projectsInfoTableData.push({
-            name: project.client.clientName,
-            project: project.name,
-            start_date: startDate,
-            status,
-            clientReprFullName: project.clientRepresentative.firstName + " " + project.clientRepresentative.lastName,
-            clientReprEmail: project.clientRepresentative.email,
-            columnsWithIcon: [],
-            columnsWithUrl: [],
-            columnsWithChips: [],
-          });
+						name: project.client.clientName,
+						project: project.name,
+						start_date: startDate,
+						status,
+						clientReprFullName: `${project.clientRepresentative.firstName} ${project.clientRepresentative.lastName}`,
+						clientReprEmail: project.clientRepresentative.email,
+						columnsWithIcon: [],
+						columnsWithUrl: [],
+						columnsWithChips: [],
+						columnsWithButtonIcon: [],
+					});
 				});
 			});
 
-      this.businessOwnerStore
+		this.businessOwnerStore
 			.select(selectAsyncStatus)
 			.pipe(takeUntil(this.$destroyed))
 			.subscribe(asyncStatus => {
@@ -181,9 +192,9 @@ export class ViewProjectsComponent implements OnInit {
 			});
 	}
 
-  isValidRole = isValidRole;
+	isValidRole = isValidRole;
 
-  openErrorModal = (errorMessage: string) => {
+	openErrorModal = (errorMessage: string) => {
 		this.modalService.open(
 			{
 				title: 'Error',
@@ -197,39 +208,39 @@ export class ViewProjectsComponent implements OnInit {
 		);
 	};
 
-  updateSelectedProject = (id: number) => {
-    const selectedOpts = this.projStatusOptions.find(opt => opt.id == id)?.opts;
-    this.selectedProjStatusOptions = selectedOpts ? selectedOpts : [];
-  }
+	updateSelectedProject = (id: number) => {
+		const selectedOpts = this.projStatusOptions.find(opt => opt.id === id)?.opts;
+		this.selectedProjStatusOptions = selectedOpts || [];
+	};
 
-  updateProjectStatus = () => {
-    this.translateService
+	updateProjectStatus = () => {
+		this.translateService
 			.get(`${this.prefix}.projectStatusModal`)
 			.pipe(take(1))
 			.subscribe(data => {
 				this.modalService.open(
 					{
-						title: data['title'],
+						title: data.title,
 						id: 'projectStatusModal',
 						closable: true,
-						confirmText: data['confirmText'],
+						confirmText: data.confirmText,
 						modalType: ModalType.INFO,
-						closeText: data['closeText'],
+						closeText: data.closeText,
 						template: this.projectStatusModal,
-						subtitle: data['subtitle'],
+						subtitle: data.subtitle,
 					},
 					CustomModalType.CONTENT,
 				);
 			});
-      this.modalService.confirmDisabled()?.next(true);
-      this.updateProjectStatusForm
-			?.valueChanges.pipe(
+		this.modalService.confirmDisabled()?.next(true);
+		this.updateProjectStatusForm?.valueChanges
+			.pipe(
 				takeUntil(this.$projectStatusModalClosedEvent),
 				finalize(() => {
-          const project: number = this.updateProjectStatusForm.get('project')?.value;
-          const status: ProjectStatus = this.updateProjectStatusForm.get('status')?.value;
-          this.updateProjectStatusForm.reset();
-          this.businessOwnerStore.dispatch(updateProjStatus({ projId: project, status }));
+					const project: number = this.updateProjectStatusForm.get('project')?.value;
+					const status: ProjectStatus = this.updateProjectStatusForm.get('status')?.value;
+					this.updateProjectStatusForm.reset();
+					this.businessOwnerStore.dispatch(updateProjStatus({ projId: project, status }));
 				}),
 			)
 			.subscribe(() => {
@@ -239,7 +250,7 @@ export class ViewProjectsComponent implements OnInit {
 					this.modalService.confirmDisabled()?.next(true);
 				}
 			});
-  }
+	};
 
 	tablePaginationEvent(pageEvent: PageEvent) {
 		if (pageEvent.pageSize !== this.pageSize) {
