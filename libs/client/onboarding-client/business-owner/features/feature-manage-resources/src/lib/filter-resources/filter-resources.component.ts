@@ -44,6 +44,7 @@ export class FilterResourcesComponent {
 			this.states = State.getStatesOfCountry(countryCode.isoCode).map(state => {
 				return state.name;
 			});
+		this.filterForm.get('province')?.setValue('');
 	}
 
 	selectFilter() {
