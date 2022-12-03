@@ -59,7 +59,7 @@ export const selectAllProjects = createSelector(
 export const selectProjStatusUpdated = createSelector(
 	selectProjManagementState,
 	(state: ResourceProjectClientManagementState) => {
-		return state.projStatusUpdated
+		return state.projStatusUpdated;
 	},
 );
 
@@ -81,4 +81,9 @@ export const selectAsyncStatus = createSelector(
 			error: state.error,
 		};
 	},
+);
+
+export const selectedDeleteResource = createSelector(
+	selectProjManagementState,
+	(state: ResourceProjectClientManagementState) => state.deletedResource,
 );

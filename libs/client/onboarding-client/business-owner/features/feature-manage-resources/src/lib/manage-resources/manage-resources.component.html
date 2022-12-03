@@ -43,6 +43,7 @@
 		<div id="tableContainer">
 			<tempus-table
 				(paginatorEvent)="tablePaginationEvent($event)"
+				(buttonClickedEvent)="deleteEvent($event)"
 				[page]="tablePagination.page"
 				[totalItems]="totalNumResProjClientOptions"
 				[tableColumns]="tableColumns"
@@ -75,7 +76,7 @@
 					*ngIf="
 						inviteType === roleTypeEnumToString(roleType.AVAILABLE_RESOURCE) ||
 						inviteType === roleTypeEnumToString(roleType.SUPERVISOR) ||
-            inviteType === roleTypeEnumToString(roleType.BUSINESS_OWNER)
+						inviteType === roleTypeEnumToString(roleType.BUSINESS_OWNER)
 					"
 				>
 					<div fxLayout="row" fxLayoutGap="4%">

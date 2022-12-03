@@ -87,6 +87,7 @@ export class ViewPendingApprovalsComponent implements OnInit, OnDestroy {
 						email: view.resource.email,
 						columnsWithIcon: [],
 						columnsWithChips: [],
+						columnsWithButtonIcon: [],
 					});
 				});
 			});

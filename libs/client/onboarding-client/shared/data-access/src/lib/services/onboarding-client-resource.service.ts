@@ -134,4 +134,8 @@ export class OnboardingClientResourceService {
 			.post<ApproveViewDto>(`${this.url}/profile-view/approve/${id}`, { comment, approval })
 			.pipe(catchError(handleError));
 	}
+
+	public deleteResource(resourceId: number): Observable<Resource> {
+		return this.http.delete<Resource>(`${this.url}/user/${resourceId}`).pipe(catchError(handleError));
+	}
 }

@@ -156,3 +156,18 @@ export const getAllViewsByStatusFailure = createAction(
 	'[Onboarding Profile Views API] Get All Views By Status Failure',
 	props<{ error: Error }>(),
 );
+
+export const deleteResource = createAction(
+	'[Onboarding Client Resource API] Delete Resource',
+	props<{ resourceId: number }>(),
+);
+
+export const deleteResourceSuccess = createAction(
+	'[Onboarding Client Resource API] Delete Resource Success',
+	props<{ resourceId: number }>(),
+);
+
+export const deleteResourceFailure = createAction(
+	'[Onboarding Client Resource API] Delete Resource Failure',
+	props<{ error: Error }>(),
+);
