@@ -8,6 +8,7 @@ import { CommonService } from '@tempus/api/shared/feature-common';
 import { UpdateUserDto } from '@tempus/api/shared/dto';
 import { NotFoundException } from '@nestjs/common';
 // eslint-disable-next-line @nrwl/nx/enforce-module-boundaries
+import { EmailService } from '@tempus/api/shared/feature-email';
 import { UserService } from '../../services';
 import { createUserEntity, dbUser, jwtPayload, userEntity } from '../mocks/user.mock';
 
@@ -32,6 +33,9 @@ jest.mock('typeorm', () => {
 		getManager: () => ({ transaction: transactionMock }),
 	};
 });
+const mockEmailService = {
+	sendDeletedAccountEmail: jest.fn(),
+};
 
 describe('UserService', () => {
 	let moduleRef: TestingModule;
@@ -44,6 +48,10 @@ describe('UserService', () => {
 				UserService,
 				ConfigService,
 				CommonService,
+				{
+					provide: EmailService,
+					useValue: mockEmailService,
+				},
 				{
 					provide: getRepositoryToken(UserEntity),
 					useValue: mockUserRepository,

@@ -32,6 +32,7 @@
 				>
 				</tempus-search-box>
 				<tempus-filter-resources
+					*ngIf="isValidRole(roles, [roleType.BUSINESS_OWNER])"
 					fxFlex="30%"
 					(clearFilterEvent)="filterEvent('clearTableEvent')"
 					(filterTableEvent)="filterEvent('filterTableEvent')"

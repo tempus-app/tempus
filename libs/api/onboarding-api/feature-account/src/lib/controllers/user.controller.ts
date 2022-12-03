@@ -169,7 +169,7 @@ export class UserController {
 	// delete User or Resource
 	@UseGuards(JwtAuthGuard, PermissionGuard)
 	@Delete(':userId')
-	async deleteUser(@Param('userId') userId: number): Promise<void> {
-		return this.userService.deleteUser(userId);
+	async deleteUser(@Param('userId') userId: number, @Request() req): Promise<void> {
+		return this.userService.deleteUser(req.user, userId);
 	}
 }

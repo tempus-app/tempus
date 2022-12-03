@@ -38,11 +38,13 @@ import { PageEvent } from '@angular/material/paginator';
 import { TranslateService } from '@ngx-translate/core';
 import { FormBuilder, Validators, FormControl } from '@angular/forms';
 import { isValidRole } from '@tempus/client/shared/util';
+import { MatExpansionPanel } from '@angular/material/expansion';
 
 @Component({
 	selector: 'tempus-manage-resources',
 	templateUrl: './manage-resources.component.html',
 	styleUrls: ['./manage-resources.component.scss'],
+	viewProviders: [MatExpansionPanel],
 })
 export class ManageResourcesComponent implements OnInit, OnDestroy {
 	constructor(
@@ -70,6 +72,11 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 						header: data['resource'],
 						cell: (element: Record<string, any>) =>
 							`<div class="demarginizedCell">${element['resource']}<p id="resource" class="mat-caption">(${element['email']})</p></div>`,
+					},
+					{
+						columnDef: 'location',
+						header: data['location'],
+						cell: (element: Record<string, any>) => `${element['location']}`,
 					},
 					{
 						columnDef: 'assignment',
@@ -123,6 +130,8 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 
 	projectModalOpen = false;
 
+	chipList: string[] = [];
+
 	currentProjects: { val: string; id: number }[] = [];
 
 	currentClientReps: { val: string; id: number }[] = [];
@@ -139,7 +148,16 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 
 	resProjClientTableDataFiltered: ProjectManagmenetTableData[] = [];
 
-	tablePagination: { page: number; pageSize: number; filter: string } = {
+	RoleType = RoleType;
+
+	tablePagination: {
+		page: number;
+		pageSize: number;
+		filter: string;
+		roleType?: RoleType[];
+		country?: string;
+		province?: string;
+	} = {
 		page: 0,
 		pageSize: 10,
 		filter: '',
@@ -206,6 +224,12 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 
 	manageResourcesForm = this.fb.group({
 		search: [''],
+		filterForm: this.fb.group({
+			assignedResource: [false],
+			availableResource: [false],
+			country: [''],
+			province: [''],
+		}),
 		invite: this.fb.group({
 			inviteType: [this.roleTypeEnumToString(RoleType.SUPERVISOR), Validators.required],
 			firstName: ['', Validators.required],
@@ -237,7 +261,7 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 			],
 		}),
 		createProject: this.fb.group({
-			client: ['', Validators.required],
+			client: [null, Validators.required],
 			clientName: [''],
 			clientRepresentative: [''],
 			clientRepFirstName: ['', Validators.required],
@@ -382,6 +406,7 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 						assignment: this.unassigned,
 						email: `${resProjClientData.email}`,
 						url: `../view-resources/${resProjClientData.id}`,
+						location: resProjClientData.location,
 						project: '-',
 						client: '-',
 						allProjects: [],
@@ -396,6 +421,7 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 					}
 					tableItem.buttonIcon = {
 						icon: 'delete',
+						color: 'warn',
 					};
 					let activeProjExists = false;
 
@@ -595,8 +621,50 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 		this.manageResourcesForm.get('invite')?.reset();
 	};
 
-	filter() {
-		// TODO
+	filterEvent(event: string) {
+		if (event === 'filterTableEvent') {
+			this.chipList = [];
+			const filterForm = this.manageResourcesForm.get('filterForm');
+
+			if (filterForm?.get('assignedResource')?.value) {
+				this.chipList.push('Assigned');
+			}
+			if (filterForm?.get('availableResource')?.value) {
+				this.chipList.push('Unassigned');
+			}
+			if (filterForm?.get('country')?.value) {
+				this.chipList.push(filterForm?.get('country')?.value);
+			}
+			if (filterForm?.get('province')?.value) {
+				this.chipList.push(filterForm?.get('province')?.value);
+			}
+			const roleType = [];
+			if (filterForm?.get('assignedResource')?.value) {
+				roleType.push(RoleType.ASSIGNED_RESOURCE);
+			}
+			if (filterForm?.get('availableResource')?.value) {
+				roleType.push(RoleType.AVAILABLE_RESOURCE);
+			}
+
+			this.tablePagination = {
+				page: 0,
+				pageSize: this.tablePagination.pageSize,
+				filter: this.tablePagination.filter,
+				country: filterForm?.get('country')?.value,
+				province: filterForm?.get('province')?.value,
+				roleType: roleType || null,
+			};
+		} else if (event === 'clearTableEvent') {
+			this.chipList = [];
+
+			this.tablePagination = {
+				page: 0,
+				pageSize: this.tablePagination.pageSize,
+				filter: this.tablePagination.filter,
+			};
+		}
+
+		this.businessOwnerStore.dispatch(getAllResProjInfo(this.tablePagination)); // TODO
 	}
 
 	tablePaginationEvent(pageEvent: PageEvent) {
@@ -612,7 +680,17 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 		this.businessOwnerStore.dispatch(getAllResProjInfo(this.tablePagination));
 	}
 
+	resetFilterForm() {
+		const filterForm = this.manageResourcesForm.get('filterForm');
+		filterForm?.get('assignedResource')?.setValue(false);
+		filterForm?.get('availableResource')?.setValue(false);
+		filterForm?.get('country')?.setValue('');
+		filterForm?.get('province')?.setValue('');
+	}
+
 	search(searchTerm: string) {
+		this.chipList = [];
+		this.resetFilterForm();
 		this.tablePagination = {
 			page: 0,
 			pageSize: this.tablePagination.pageSize,

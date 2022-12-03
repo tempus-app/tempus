@@ -1,4 +1,4 @@
-import { Resource, User } from '@tempus/shared-domain';
+import { Resource, RoleType, User } from '@tempus/shared-domain';
 import { ForbiddenException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ConfigService } from '@nestjs/config';
@@ -67,7 +67,10 @@ export class UserService {
 		return users;
 	}
 
-	async deleteUser(userId: number): Promise<void> {
+	async deleteUser(token: JwtPayload, userId: number): Promise<void> {
+		if (token.roles.includes(RoleType.SUPERVISOR) && !token.roles.includes(RoleType.BUSINESS_OWNER)) {
+			throw new ForbiddenException('Forbidden. Supervisors cannot delete accounts');
+		}
 		const userEntity = await this.userRepository.findOne(userId);
 		if (userEntity === undefined) {
 			throw new NotFoundException(`Could not find user with id ${userId}`);
