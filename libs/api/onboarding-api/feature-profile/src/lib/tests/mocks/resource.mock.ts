@@ -2,6 +2,7 @@ import { ResourceEntity } from '@tempus/api/shared/entity';
 
 export const resourceEntity: ResourceEntity = {
 	phoneNumber: '',
+	calEmail: '',
 	location: undefined,
 	title: '',
 	projectResources: [],

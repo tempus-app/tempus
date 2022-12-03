@@ -50,6 +50,13 @@ export const setResourceLinkId = createAction(
 	}>(),
 );
 
+export const createAzureAccount = createAction(
+	'[Signup Review Page] Create Azure Account',
+	props<{
+		resourceId: number;
+	}>(),
+);
+
 export const createResource = createAction(
 	'[Signup Review Page] Create Resource',
 	props<{
@@ -73,10 +80,25 @@ export const createResourceSuccess = createAction(
 	}>(),
 );
 
+export const createAzureAccountSuccess = createAction(
+	'[Onboarding Client User API] Create Azure Account Success',
+	props<{
+		calEmail?: string;
+		azurePassword?: string;
+	}>(),
+);
+
 export const saveResumeSuccess = createAction('[Signup Review Page] Save Resume Success');
 
 export const createResourceFailure = createAction(
 	'[Onboarding Client User API] Create Resource Failure',
+	props<{
+		error: Error;
+	}>(),
+);
+
+export const createAzureAccountFailure = createAction(
+	'[Onboarding Client User API] Create Azure Account Failure',
 	props<{
 		error: Error;
 	}>(),

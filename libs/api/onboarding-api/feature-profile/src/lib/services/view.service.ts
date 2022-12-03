@@ -43,6 +43,11 @@ export class ViewsService {
 	}
 
 	async createSecondaryView(userId: number, user: User, createViewDto: CreateViewDto): Promise<View> {
+
+    if (user.roles.length == 1 && user.roles.includes(RoleType.SUPERVISOR)) {
+      throw new ForbiddenException("Forbidden. Supervisor cannot create a secondary view.");
+    }
+
 		const resourceEntity = await this.resourceService.getResourceInfo(userId);
 
 		const viewEntity = ViewEntity.fromDto(createViewDto);
@@ -67,11 +72,14 @@ export class ViewsService {
 	}
 
 	async reviseView(viewId: number, user: User, newView: CreateViewDto): Promise<Revision | View> {
-		let userRole = RoleType.USER;
+		
+    if (user.roles.length == 1 && user.roles.includes(RoleType.SUPERVISOR)) {
+      throw new ForbiddenException("Forbidden. Supervisor cannot edit view.");
+    }
+    
+    let userRole = RoleType.USER;
 		if (user.roles.includes(RoleType.BUSINESS_OWNER)) {
 			userRole = RoleType.BUSINESS_OWNER;
-		} else if (user.roles.includes(RoleType.SUPERVISOR)) {
-			userRole = RoleType.SUPERVISOR;
 		}
 
 		const view = await this.getView(viewId);
@@ -93,7 +101,7 @@ export class ViewsService {
 		newViewEntity.revisionType = RevisionType.PENDING;
 
 		// Business Owner changes are directly approved
-		if (user.roles.includes(RoleType.BUSINESS_OWNER) || user.roles.includes(RoleType.SUPERVISOR)) {
+		if (user.roles.includes(RoleType.BUSINESS_OWNER)) {
 			// Replace with new Approved view
 			newViewEntity.createdAt = view.createdAt;
 			newViewEntity.revisionType = RevisionType.APPROVED;

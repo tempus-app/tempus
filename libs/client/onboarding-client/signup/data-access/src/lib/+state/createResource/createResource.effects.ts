@@ -5,6 +5,9 @@ import { OnboardingClientResourceService } from '@tempus/client/onboarding-clien
 import { Store } from '@ngrx/store';
 import { Injectable } from '@angular/core';
 import {
+	createAzureAccount,
+	createAzureAccountFailure,
+	createAzureAccountSuccess,
 	createResource,
 	createResourceFailure,
 	createResourceSuccess,
@@ -22,6 +25,25 @@ export class ResourceEffects {
 		private store: Store<SignupState>,
 		private resourceService: OnboardingClientResourceService,
 	) {}
+
+	createAzureAccount$ = createEffect(() =>
+		this.actions$.pipe(
+			ofType(createAzureAccount),
+			withLatestFrom(this.store.select(selectResourceData)),
+			// eslint-disable-next-line @typescript-eslint/no-unused-vars
+			switchMap(([action]) =>
+				this.resourceService.createResourceAzureAccount(action.resourceId).pipe(
+					map(data =>
+						createAzureAccountSuccess({
+							calEmail: data.user.userPrincipalName?.toString(),
+							azurePassword: data.temporaryPassword,
+						}),
+					),
+					catchError(error => of(createAzureAccountFailure({ error }))),
+				),
+			),
+		),
+	);
 
 	createResource$ = createEffect(() =>
 		this.actions$.pipe(

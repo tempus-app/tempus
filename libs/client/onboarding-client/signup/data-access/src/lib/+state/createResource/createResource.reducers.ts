@@ -13,10 +13,13 @@ export interface ResourceState {
 	userDetailsCreated: boolean;
 	workExperienceDetailsCreated: boolean;
 	trainingAndSkillDetailsCreated: boolean;
+	azureAccountCreated: boolean;
 	uploadedResume: File | null;
 	error: Error | null;
 	status: AsyncRequestState;
 	createdResourceId: number | null;
+	createdCalEmail: string | null;
+	tempPassword: string | null;
 	savedResume: boolean;
 }
 
@@ -27,10 +30,13 @@ export const initialState: ResourceState = {
 	userDetailsCreated: false,
 	workExperienceDetailsCreated: false,
 	trainingAndSkillDetailsCreated: false,
+	azureAccountCreated: false,
 	uploadedResume: null,
 	error: null,
 	status: AsyncRequestState.IDLE,
 	createdResourceId: null,
+	createdCalEmail: null,
+	tempPassword: null,
 	savedResume: false,
 };
 
@@ -48,7 +54,10 @@ export const resourceReducer = createReducer(
 	})),
 	on(
 		ResourceActions.createUserDetails,
-		(state, { firstName, lastName, phoneNumber, linkedInLink, githubLink, otherLink, location, profileSummary }) => ({
+		(
+			state,
+			{ firstName, lastName, phoneNumber, linkedInLink, githubLink, otherLink, location, profileSummary },
+		) => ({
 			...state,
 			userDetailsCreated: true,
 			createResourceData: {
@@ -91,6 +100,20 @@ export const resourceReducer = createReducer(
 	on(ResourceActions.setResourceLinkId, (state, { linkId }) => ({
 		...state,
 		createResourceData: { ...state.createResourceData, linkId },
+	})),
+	on(ResourceActions.createAzureAccount, state => ({ ...state, status: AsyncRequestState.LOADING })),
+	on(ResourceActions.createAzureAccountSuccess, (state, { calEmail, azurePassword }) => ({
+		...state,
+		error: null,
+		status: AsyncRequestState.SUCCESS,
+		azureAccountCreated: true,
+		createdCalEmail: calEmail || null,
+		tempPassword: azurePassword || null,
+	})),
+	on(ResourceActions.createAzureAccountFailure, (state, { error }) => ({
+		...state,
+		status: AsyncRequestState.ERROR,
+		error,
 	})),
 	on(ResourceActions.createResource, state => ({ ...state, status: AsyncRequestState.LOADING })),
 	on(ResourceActions.createResourceSuccess, (state, { resourceId }) => ({

@@ -27,6 +27,8 @@ export class PersonalInformationDisplayComponent implements OnInit {
 
 	fullName = '';
 
+	calEmail = '';
+
 	email = '';
 
 	resume: File | null = null;
@@ -76,6 +78,7 @@ export class PersonalInformationDisplayComponent implements OnInit {
 			this.country = resData.location.country;
 			this.phoneNumber = resData.phoneNumber;
 			this.email = resData.email;
+			this.calEmail = resData.calEmail;
 			this.phoneNumber = resData.phoneNumber;
 			this.linkedInLink = resData.linkedInLink;
 			this.githubLink = resData.githubLink;

@@ -20,17 +20,37 @@ const routes: Routes = [
 			{
 				path: 'signin',
 				loadChildren: () =>
-					import('@tempus/onboarding-client/shared/feature-sign-in').then(m => m.OnboardingClientFeatureSignInModule),
+					import('@tempus/onboarding-client/shared/feature-sign-in').then(
+						m => m.OnboardingClientFeatureSignInModule,
+					),
+			},
+			{
+				path: 'forgot-password',
+				loadChildren: () =>
+					import('@tempus/onboarding-client/shared/feature-forgot-password').then(
+						m => m.OnboardingClientSharedFeatureForgotPasswordModule,
+					),
+			},
+			{
+				path: 'reset-password/:token',
+				loadChildren: () =>
+					import('@tempus/onboarding-client/shared/feature-reset-password').then(
+						m => m.OnboardingClientSharedFeatureResetPasswordModule,
+					),
 			},
 			{
 				path: 'signup/:token',
 				loadChildren: () =>
-					import('@tempus/onboarding-client/signup/shell').then(m => m.OnboardingClientSignupFeatureShellModule),
+					import('@tempus/onboarding-client/signup/shell').then(
+						m => m.OnboardingClientSignupFeatureShellModule,
+					),
 			},
 			{
 				path: 'resource',
 				loadChildren: () =>
-					import('@tempus/onboarding-client/resource/shell').then(m => m.OnboardingClientResourceFeatureShellModule),
+					import('@tempus/onboarding-client/resource/shell').then(
+						m => m.OnboardingClientResourceFeatureShellModule,
+					),
 			},
 			{
 				path: 'owner',

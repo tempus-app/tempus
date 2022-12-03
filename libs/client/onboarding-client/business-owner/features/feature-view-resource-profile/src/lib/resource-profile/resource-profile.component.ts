@@ -4,8 +4,9 @@ import { Store } from '@ngrx/store';
 import {
 	OnboardingClientResourceService,
 	OnboardingClientState,
+  selectLoggedInUserNameEmail,
 } from '@tempus/client/onboarding-client/shared/data-access';
-import { LoadView, ProjectResource } from '@tempus/shared-domain';
+import { LoadView, ProjectResource, RoleType } from '@tempus/shared-domain';
 import { skip, take } from 'rxjs';
 import {
 	BusinessOwnerState,
@@ -43,6 +44,8 @@ export class ResourceProfileComponent implements OnInit {
 
 	email = '';
 
+	calEmail = '';
+
 	country = '';
 
 	state = '';
@@ -68,6 +71,8 @@ export class ResourceProfileComponent implements OnInit {
 	projectResources: ProjectResource[] = [];
 
 	isPrimaryView = false;
+
+  roles: RoleType[] = [];
 
 	childRevisionLoaded(loadedView: LoadView) {
 		this.loadedView = loadedView;
@@ -113,6 +118,7 @@ export class ResourceProfileComponent implements OnInit {
 		this.resourceService.getResourceInformationById(this.resourceId).subscribe(resourceInfo => {
 			this.resourceFirstName = resourceInfo.firstName;
 			this.resourceLastName = resourceInfo.lastName;
+			this.calEmail = resourceInfo.calEmail ? resourceInfo.calEmail : '';
 			this.city = resourceInfo.location.city;
 			this.state = resourceInfo.location.province;
 			this.country = resourceInfo.location.country;
@@ -124,6 +130,13 @@ export class ResourceProfileComponent implements OnInit {
 			this.projectResources = resourceInfo.projectResources;
 		});
 		this.businessOwnerStore.dispatch(getOriginalResume({ resourceId: this.resourceId }));
+
+		this.sharedStore
+			.select(selectLoggedInUserNameEmail)
+			.pipe(take(1))
+			.subscribe(data => {
+        this.roles = data.roles;
+			});
 
 		this.businessOwnerStore
 			.select(selectOriginalResume)

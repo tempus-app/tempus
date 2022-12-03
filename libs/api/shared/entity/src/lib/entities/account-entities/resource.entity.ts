@@ -11,6 +11,7 @@ export class ResourceEntity extends UserEntity implements Resource {
 	constructor(
 		id?: number,
 		phoneNumber?: string,
+		calEmail?: string,
 		title?: string,
 		linkedInLink?: string,
 		githubLink?: string,
@@ -30,6 +31,7 @@ export class ResourceEntity extends UserEntity implements Resource {
 		resume?: Uint8Array,
 	) {
 		super(id, firstName, lastName, email, password, roles);
+		this.calEmail = calEmail;
 		this.phoneNumber = phoneNumber;
 		this.title = title;
 		this.location = location;
@@ -47,6 +49,9 @@ export class ResourceEntity extends UserEntity implements Resource {
 
 	@Column({ nullable: true })
 	phoneNumber: string;
+
+	@Column({ nullable: true })
+	calEmail: string;
 
 	@Column({ nullable: true })
 	linkedInLink: string;
@@ -89,6 +94,7 @@ export class ResourceEntity extends UserEntity implements Resource {
 		return new ResourceEntity(
 			undefined,
 			dto.phoneNumber,
+			dto.calEmail,
 			dto.title,
 			dto.linkedInLink,
 			dto.githubLink,

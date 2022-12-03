@@ -1,9 +1,10 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
 import { ApproveViewDto } from '@tempus/api/shared/dto';
 import { APP_CONFIG } from '@tempus/app-config';
 import {
 	AppConfig,
+	AzureAccount,
 	ICreateResourceDto,
 	ICreateViewDto,
 	IResourceBasicDto,
@@ -24,6 +25,30 @@ export class OnboardingClientResourceService {
 
 	public createResource(createResourceDto: ICreateResourceDto): Observable<Resource> {
 		return this.http.post<Resource>(`${this.url}/user/resource`, createResourceDto);
+	}
+
+	public createResourceAzureAccount(resourceId: number): Observable<AzureAccount> {
+		const httpOptions = {
+			headers: new HttpHeaders({
+				'Access-Control-Allow-Origin': '*',
+			}),
+		};
+
+		return this.http
+			.post<AzureAccount>(`${this.url}/user/azureAccount/${resourceId}`, httpOptions)
+			.pipe(catchError(handleError));
+	}
+
+	public deleteResourceAzureAccount(resourceId: number): Observable<void> {
+		const httpOptions = {
+			headers: new HttpHeaders({
+				'Access-Control-Allow-Origin': '*',
+			}),
+		};
+
+		return this.http
+			.delete<void>(`${this.url}/user/azureAccount/${resourceId}`, httpOptions)
+			.pipe(catchError(handleError));
 	}
 
 	public saveResume(resourceId: number, resume: File | null): Observable<FormData> {

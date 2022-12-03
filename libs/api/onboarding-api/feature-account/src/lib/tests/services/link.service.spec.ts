@@ -4,11 +4,11 @@ import { LinkEntity, ProjectEntity } from '@tempus/api/shared/entity';
 import { EmailService } from '@tempus/api/shared/feature-email';
 import { createMock } from '@golevelup/ts-jest';
 import { Repository } from 'typeorm';
-import { StatusType } from '@tempus/shared-domain';
-import { BadRequestException, NotFoundException } from '@nestjs/common';
+import { RoleType, StatusType } from '@tempus/shared-domain';
+import { BadRequestException, ForbiddenException, NotFoundException } from '@nestjs/common';
 import { UpdatelinkDto } from '@tempus/api/shared/dto';
 import { LinkService } from '../../services/link.service';
-import { createLinkEntity, dbLink, expiredDBLink, linkEntity, mockProject } from '../mocks/link.mock';
+import { businessOwnerJwtPayload, createLinkEntity, dbLink, expiredDBLink, linkEntity, mockProject, supervisorJwtPayload } from '../mocks/link.mock';
 
 // mock depdencies
 const mockLinkRepository = createMock<Repository<LinkEntity>>();
@@ -66,19 +66,45 @@ describe('LinkService', () => {
 		jest.clearAllMocks();
 	});
 	describe('createLink()', () => {
-		it('should successfully create a link from entity and send email', async () => {
+		it('should successfully create a link as business owner from entity and send email', async () => {
 			const createdLink = {
 				...createLinkEntity,
 				id: 3,
 				status: StatusType.ACTIVE,
 				token: 'fake-uuid',
 				project: mockProject,
+        userType: RoleType.AVAILABLE_RESOURCE
 			};
 
 			mockLinkRepository.save.mockResolvedValue(createdLink);
 			mockLinkRepository.findOne.mockResolvedValue(undefined);
+      mockProjectRepository.findOne.mockResolvedValue(mockProject);
 
-			const res = await linkService.createLink(createLinkEntity, 1);
+			const res = await linkService.createLink(businessOwnerJwtPayload, {...createLinkEntity, userType: RoleType.AVAILABLE_RESOURCE}, 1);
+
+			expect(mockLinkRepository.save).toBeCalledWith({ ...createdLink, id: null });
+			expect(mockEmailService.sendInvitationEmail).toBeCalledWith({ ...createdLink, id: 3 });
+
+			expect(mockProjectRepository.findOne).toBeCalledWith(1);
+
+			expect(res).toEqual(createdLink);
+		});
+
+    it('should successfully create a link for a supervisor as supervisor owner from entity and send email', async () => {
+			const createdLink = {
+				...createLinkEntity,
+				id: 3,
+				status: StatusType.ACTIVE,
+				token: 'fake-uuid',
+				project: mockProject,
+        userType: RoleType.SUPERVISOR
+			};
+
+			mockLinkRepository.save.mockResolvedValue(createdLink);
+			mockLinkRepository.findOne.mockResolvedValue(undefined);
+      mockProjectRepository.findOne.mockResolvedValue(mockProject);
+
+			const res = await linkService.createLink(businessOwnerJwtPayload, {...createLinkEntity, userType: RoleType.SUPERVISOR}, 1);
 
 			expect(mockLinkRepository.save).toBeCalledWith({ ...createdLink, id: null });
 			expect(mockEmailService.sendInvitationEmail).toBeCalledWith({ ...createdLink, id: 3 });
@@ -103,7 +129,7 @@ describe('LinkService', () => {
 			mockLinkRepository.save.mockResolvedValue(createdLink);
 			mockLinkRepository.findOne.mockResolvedValue(undefined);
 
-			const res = await linkService.createLink({ ...createLinkEntity, expiry: undefined }, 1);
+			const res = await linkService.createLink(businessOwnerJwtPayload, { ...createLinkEntity, expiry: undefined }, 1);
 			expect(mockLinkRepository.save).toBeCalledWith({ ...createdLink, id: null });
 
 			expect(res).toEqual(createdLink);
@@ -112,7 +138,7 @@ describe('LinkService', () => {
 		it('should throw an error if the link is in the past or today', async () => {
 			let error;
 			try {
-				await linkService.createLink({ ...createLinkEntity, expiry: new Date() }, 1);
+				await linkService.createLink(businessOwnerJwtPayload, { ...createLinkEntity, expiry: new Date() }, 1);
 			} catch (e) {
 				error = e;
 			}
@@ -121,11 +147,23 @@ describe('LinkService', () => {
 			expect(mockLinkRepository.save).not.toBeCalled();
 		});
 
+    it('should throw an error if supervisor creating link for non supervisor', async () => {
+			let error;
+			try {
+				await linkService.createLink(supervisorJwtPayload, { ...createLinkEntity, expiry: new Date(), userType: RoleType.AVAILABLE_RESOURCE }, 1);
+			} catch (e) {
+				error = e;
+			}
+			expect(error).toBeInstanceOf(ForbiddenException);
+			expect(error.message).toBe('Forbidden. Supervisor cannot invite non supervisors.');
+			expect(mockLinkRepository.save).not.toBeCalled();
+		});
+
 		it('should throw an error if link email already exists', async () => {
 			let error;
 			mockLinkRepository.findOne.mockResolvedValue(createLinkEntity);
 			try {
-				await linkService.createLink(createLinkEntity, 1);
+				await linkService.createLink(businessOwnerJwtPayload, createLinkEntity, 1);
 			} catch (e) {
 				error = e;
 			}
@@ -140,7 +178,7 @@ describe('LinkService', () => {
 
 			let error;
 			try {
-				await linkService.createLink(createLinkEntity, 1);
+				await linkService.createLink(businessOwnerJwtPayload, createLinkEntity, 1);
 			} catch (e) {
 				error = e;
 			}
@@ -154,7 +192,7 @@ describe('LinkService', () => {
 
 			let error;
 			try {
-				await linkService.createLink(createLinkEntity, 40);
+				await linkService.createLink(businessOwnerJwtPayload, createLinkEntity, 40);
 			} catch (e) {
 				error = e;
 			}
