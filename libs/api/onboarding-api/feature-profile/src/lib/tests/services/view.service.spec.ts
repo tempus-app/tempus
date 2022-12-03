@@ -22,6 +22,8 @@ import {
 	supervisorUserEntity,
 	businessOwnerCreatedSecondaryViewEntity,
 	resourceCreatedSecondaryViewEntity,
+  supervisorJwtPayload,
+  businessOwnerJwtPayload,
 } from '../mocks/view.mock';
 import { resourceEntity } from '../mocks/resource.mock';
 
@@ -436,9 +438,9 @@ describe('ViewService', () => {
 	});
 
 	describe('DeleteView()', () => {
-		it('should delete view', async () => {
+		it('should delete view as business owner', async () => {
 			mockViewRepository.findOne.mockResolvedValue(viewEntity2);
-			const res = await viewService.deleteView(4);
+			const res = await viewService.deleteView(businessOwnerJwtPayload, 4);
 			expect(mockViewRepository.findOne).toBeCalledWith(4);
 			expect(mockViewRepository.remove).toBeCalledWith(viewEntity2);
 		});
@@ -446,7 +448,7 @@ describe('ViewService', () => {
 			mockViewRepository.findOne.mockResolvedValue(undefined);
 			let error;
 			try {
-				await viewService.deleteView(3);
+				await viewService.deleteView(businessOwnerJwtPayload, 3);
 			} catch (e) {
 				error = e;
 			}
@@ -457,12 +459,23 @@ describe('ViewService', () => {
 			mockViewRepository.findOne.mockResolvedValue(viewEntity);
 			let error;
 			try {
-				await viewService.deleteView(3);
+				await viewService.deleteView(businessOwnerJwtPayload, 3);
 			} catch (e) {
 				error = e;
 			}
 			expect(error).toBeInstanceOf(ForbiddenException);
 			expect(error.message).toEqual('Cannot delete primary view');
+		});
+    it('should throw an error if supervisor deleting', async () => {
+			mockViewRepository.findOne.mockResolvedValue(viewEntity);
+			let error;
+			try {
+				await viewService.deleteView(supervisorJwtPayload, 4);
+			} catch (e) {
+				error = e;
+			}
+			expect(error).toBeInstanceOf(ForbiddenException);
+			expect(error.message).toEqual('Forbidden. Supervisors cannot delete views');
 		});
 	});
 
