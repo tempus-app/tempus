@@ -1,5 +1,6 @@
 {
 	"viewResourceProfile": {
+		"pendingApprovalTooltip": "This view requires your approval",
 		"project": {
 			"title": "Projects"
 		},
@@ -29,10 +30,13 @@
 				"title": "ASSIGN"
 			},
 			"createNewViewButton": {
-				"title": "NEW VIEW"
+				"title": "Create a new view"
 			},
 			"deleteViewButton": {
-				"title": "DELETE VIEW"
+				"title": "Delete view"
+			},
+			"editViewButton": {
+				"title": "Edit view"
 			},
 			"downloadProfile": {
 				"title": "DOWNLOAD"

@@ -6,7 +6,7 @@ import {
 } from '@tempus/client/onboarding-client/shared/data-access';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder } from '@angular/forms';
-import { ButtonType, SnackbarService } from '@tempus/client/shared/ui-components/presentational';
+import { ButtonType } from '@tempus/client/shared/ui-components/presentational';
 import { CustomModalType, ModalService, ModalType } from '@tempus/client/shared/ui-components/modal';
 import { catchError, of, Subject, take, takeUntil } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
@@ -59,7 +59,6 @@ export class UserBarComponent implements OnChanges {
 		private viewsService: OnboardingClientViewsService,
 		private modalService: ModalService,
 		private translateService: TranslateService,
-		private snackbar: SnackbarService,
 		private fb: FormBuilder,
 		private router: Router,
 	) {}
@@ -128,9 +127,6 @@ export class UserBarComponent implements OnChanges {
 						this.openDeleteViewErrorModal(error.message);
 					} else {
 						this.modalService.confirmEventSubject.unsubscribe();
-						this.translateService.get(`viewResourceProfile.deleteViewSuccess`).subscribe(message => {
-							this.snackbar.open(message);
-						});
 						this.router.navigate(['../', this.resourceId], { relativeTo: this.route }).then(() => {
 							window.location.reload();
 						});

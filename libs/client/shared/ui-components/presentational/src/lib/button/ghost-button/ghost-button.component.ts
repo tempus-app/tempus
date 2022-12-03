@@ -14,6 +14,8 @@ export class GhostButtonComponent {
 
 	@Input() icon = '';
 
+	@Input() cssClass = 'ghost-button__button';
+
 	buttonClicked(value: boolean) {
 		this.buttonClick.emit(value);
 	}

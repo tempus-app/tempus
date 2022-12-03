@@ -16,6 +16,8 @@ export class MyProjectsDisplayComponent implements OnInit {
 
 	projectPrefix = 'projectCard.';
 
+	emptyState = false;
+
 	constructor(private resourceService: OnboardingClientResourceService, private translateService: TranslateService) {
 		const { currentLang } = translateService;
 		// eslint-disable-next-line no-param-reassign
@@ -26,6 +28,10 @@ export class MyProjectsDisplayComponent implements OnInit {
 	ngOnInit(): void {
 		this.resourceService.getResourceInformation().subscribe(resData => {
 			this.projects = resData.projectResources;
+
+			if (this.projects.length === 0) {
+				this.emptyState = true;
+			}
 		});
 	}
 

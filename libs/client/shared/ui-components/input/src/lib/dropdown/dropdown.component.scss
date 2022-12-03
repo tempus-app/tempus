@@ -28,6 +28,8 @@ input {
 }
 
 ::ng-deep .mat-form-field-wrapper {
+	padding-bottom: 0.5em;
+
 	& .mat-select {
 		@include abs.body-1();
 	}
