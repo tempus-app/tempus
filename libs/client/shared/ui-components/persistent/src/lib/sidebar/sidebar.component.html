@@ -4,12 +4,19 @@
 			<mat-icon>menu</mat-icon>
 		</button>
 		<div class="user-container">
-			<div class="mat-h3" id="icon">
+			<div
+				class="mat-h3 icon"
+				[ngClass]="{
+					icon__resource: role === RoleType.ASSIGNED_RESOURCE || role === RoleType.AVAILABLE_RESOURCE
+				}"
+			>
 				<div id="initials">{{ initials }}</div>
 			</div>
-			<h2 class="mat-h2" style="margin-bottom: 0;">{{ fullName }}</h2>
-      <h4 class="mat-body-2" style="margin-top: 0;" id="role">({{ roleToDisplay | lowercase }})</h4>
+			<h2 class="mat-h2">{{ fullName }}</h2>
 			<div class="mat-body-2" id="email">{{ email }}</div>
+			<div class="mat-body-2 role_type" *ngIf="role === RoleType.SUPERVISOR || role === RoleType.BUSINESS_OWNER">
+				{{ formatRole() }}
+			</div>
 		</div>
 		<mat-button-toggle-group name="userBar" vertical>
 			<mat-button-toggle

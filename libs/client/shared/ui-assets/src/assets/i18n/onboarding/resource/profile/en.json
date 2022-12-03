@@ -8,7 +8,14 @@
 			"title": "Download Started",
 			"confirmText": "Okay",
 			"message": "Download in progress!"
-		}
+		},
+		"deleteViewModal": {
+			"title": "Delete {{viewName}}?",
+			"message": "Are you sure you want to permanently delete this view?",
+			"confirmText": "Yes, delete",
+			"closeText": "Cancel"
+		},
+		"deleteViewSuccess": "View deleted."
 	},
 	"onboardingResourceEditProfile": {
 		"modal": {

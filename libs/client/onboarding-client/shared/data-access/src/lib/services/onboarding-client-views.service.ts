@@ -17,11 +17,14 @@ export class OnboardingClientViewsService {
 		pageSize: number,
 	): Observable<{ views: View[]; totalPendingApprovals: number }> {
 		return this.http
-			.get<{ views: View[]; totalPendingApprovals: number }>(`${this.url}/views?page=${page}&pageSize=${pageSize}`, {
-				params: {
-					status,
+			.get<{ views: View[]; totalPendingApprovals: number }>(
+				`${this.url}/views?page=${page}&pageSize=${pageSize}`,
+				{
+					params: {
+						status,
+					},
 				},
-			})
+			)
 			.pipe(catchError(handleError));
 	}
 
@@ -31,7 +34,14 @@ export class OnboardingClientViewsService {
 		pageSize: number,
 	): Observable<{ views: View[]; totalViews: number }> {
 		return this.http
-			.get<{ views: View[]; totalViews: number }>(`${this.url}/${resourceId}?page=${page}&pageSize=${pageSize}`, {})
+			.get<{ views: View[]; totalViews: number }>(
+				`${this.url}/${resourceId}?page=${page}&pageSize=${pageSize}`,
+				{},
+			)
 			.pipe(catchError(handleError));
+	}
+
+	public deleteView(viewId: number): Observable<any> {
+		return this.http.delete<any>(`${this.url}/${viewId}`).pipe(catchError(handleError));
 	}
 }
