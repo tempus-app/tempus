@@ -4,11 +4,15 @@ export type TableDataModel = {
 		class: string;
 		tooltip: string;
 	};
+	buttonIcon?: {
+		icon: string;
+	};
 	url?: string;
 	urlQueryParams?: { [key: string]: unknown };
 	columnsWithIcon: string[];
 	columnsWithUrl: string[];
 	columnsWithChips: string[];
+	columnsWithButtonIcon: string[];
 };
 export interface ProjectManagmenetTableData extends TableDataModel {
 	resource: string;
@@ -19,6 +23,7 @@ export interface ProjectManagmenetTableData extends TableDataModel {
 	email: string;
 	allProjects: { val: string; id: number }[];
 	allClients: string[];
+	delete: string;
 }
 
 export interface PendingApprovalsTableData extends TableDataModel {
@@ -39,6 +44,6 @@ export interface ViewProjects extends TableDataModel {
 	project: string;
 	start_date: string;
 	status: string;
-  clientReprFullName: string;
-  clientReprEmail: string;
+	clientReprFullName: string;
+	clientReprEmail: string;
 }

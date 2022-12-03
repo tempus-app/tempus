@@ -16,7 +16,12 @@
 					>
 					<p
 						class="mat-body-2"
-						*ngIf="!(element.url && element.columnsWithUrl.includes(disCol.columnDef) || element.columnsWithChips.includes(disCol.columnDef))"
+						*ngIf="
+							!(
+								(element.url && element.columnsWithUrl.includes(disCol.columnDef)) ||
+								element.columnsWithChips.includes(disCol.columnDef)
+							)
+						"
 						[innerHtml]="disCol.cell(element)"
 					></p>
 					<a
@@ -32,7 +37,17 @@
 						typography="mat-body"
 						content="{{ disCol.cell(element) }} "
 						[removable]="false"
-				  	></tempus-chip>
+					></tempus-chip>
+					<button
+						fxLayout="row"
+						fxLayoutAlign="center"
+						(click)="buttonClick(element)"
+						mat-icon-button
+						color="accent"
+						*ngIf="element.columnsWithButtonIcon.includes(disCol.columnDef)"
+					>
+						<mat-icon class="buttonIcon" fxFlexAlign="center">{{ element.buttonIcon.icon }}</mat-icon>
+					</button>
 				</span>
 			</td>
 		</ng-container>
@@ -42,11 +57,13 @@
 		<tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
 	</table>
 
-  <mat-paginator [pageSizeOptions]="[10, 20, 50, 100]"
-                 showFirstLastButtons 
-                 (page)="pageOutput($event)"
-                 [pageIndex]="page"
-                 [length]="totalItems"
-                 aria-label="Select page of periodic elements">
-  </mat-paginator>
+	<mat-paginator
+		[pageSizeOptions]="[10, 20, 50, 100]"
+		showFirstLastButtons
+		(page)="pageOutput($event)"
+		[pageIndex]="page"
+		[length]="totalItems"
+		aria-label="Select page of periodic elements"
+	>
+	</mat-paginator>
 </ng-container>
