@@ -1,7 +1,7 @@
 <div fxLayout="column" class="modal-container">
 	<div fxLayout="column" fxLayoutAlign="end end">
 		<div *ngIf="data.closable">
-			<button mat-icon-button aria-label="close dialog" mat-dialog-close>
+			<button mat-icon-button aria-label="close dialog" mat-dialog-close (click)="selectClose()">
 				<mat-icon class="close-icon" inline>close</mat-icon>
 			</button>
 		</div>

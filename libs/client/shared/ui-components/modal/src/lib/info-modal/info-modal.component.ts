@@ -29,6 +29,7 @@ export class InfoModalComponent {
 	public selectClose() {
 		if (this.data.closable) {
 			this.close(true);
+			this.modalService.close();
 		}
 	}
 
