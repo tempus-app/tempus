@@ -1,70 +1,68 @@
 <ng-container>
-    <div
-        fxLayout="row"
-        fxLayoutGap="10px"
-        fxLayoutAlign="center start"
-        fxLayoutAlign.lt-lg="center center"
-        fxLayout.gt-sm="row"
-        fxLayout.lt-lg="column"
-        class="user-bar-container"
-    >
-        <div fxFlex="60">
-            <div fxLayout="row">
-                <div
-                    *ngIf="loadedView.isRevision"
-                    fxFlex
-                    matTooltip="{{ viewResourceProfilePrefx + 'pendingApprovalTooltip' | translate }}"
-                    matTooltipClass="tooltip"
-                >
-                    <mat-icon class="approval-icon" id="revision-icon">error</mat-icon>
-                </div>
-                <tempus-dropdown
-                    cssClass="primary"
-                    [showLabel]="false"
-                    [options]="viewNames"
-                    label="View"
-                    (optionSelect)="onClick($event)"
-                    [control]="$any(viewDropDownForm).get('viewSelected')"
-                ></tempus-dropdown>
-            </div>
-            <div>
-                <tempus-ghost-button
-                    (click)="openEditView()"
-                    cssClass="yellow"
-                    label="{{ viewResourceProfilePrefx + 'buttons.editViewButton.title' | translate }}"
-                    icon="edit"
-                ></tempus-ghost-button>
-                <tempus-ghost-button
-                    *ngIf="isValidRole(roles, [roleType.BUSINESS_OWNER])"
-                    (click)="openViewForm()"
-                    cssClass="green"
-                    label="{{ viewResourceProfilePrefx + 'buttons.createNewViewButton.title' | translate }}"
-                    icon="add"
-                ></tempus-ghost-button>
-                <tempus-ghost-button
-                    *ngIf="isValidRole(roles, [roleType.BUSINESS_OWNER])"
-                    (click)="deleteView()"
-                    label="{{ viewResourceProfilePrefx + 'buttons.deleteViewButton.title' | translate }}"
-                    cssClass="red"
-                    icon="delete"
-                ></tempus-ghost-button>
-            </div>
-        </div>
-        <div fxLayout="row" fxLayoutGap="10px" fxLayout.lt-md="column">
-            <tempus-assign-resource-modal
-                [resourceName]="resourceName"
-                [resourceEmail]="resourceEmail"
-                [resourceId]="resourceId"
-                [preSelectedResource]="true"
-                [projectResources]="projectResources"
-            ></tempus-assign-resource-modal>
-            <tempus-button
-                (buttonClick)="downloadProfile()"
-                label="{{ viewResourceProfilePrefx + 'buttons.downloadProfile.title' | translate }}"
-                color="accent"
-                icon="download"
-            ></tempus-button>
-        </div>
-        <div fxFlex="2"></div>
-    </div>
+	<div
+		fxLayout="row"
+		fxLayoutGap="10px"
+		fxLayoutAlign="center start"
+		fxLayoutAlign.lt-lg="center center"
+		fxLayout.gt-sm="row"
+		fxLayout.lt-lg="column"
+		class="user-bar-container"
+	>
+		<div fxFlex="60">
+			<div fxLayout="row">
+				<div
+					*ngIf="loadedView.isRevision"
+					fxFlex
+					matTooltip="{{ viewResourceProfilePrefx + 'pendingApprovalTooltip' | translate }}"
+					matTooltipClass="tooltip"
+				>
+					<mat-icon class="approval-icon" id="revision-icon">error</mat-icon>
+				</div>
+				<tempus-dropdown
+					cssClass="primary"
+					[showLabel]="false"
+					[options]="viewNames"
+					label="View"
+					(optionSelect)="onClick($event)"
+					[control]="$any(viewDropDownForm).get('viewSelected')"
+				></tempus-dropdown>
+			</div>
+			<div *ngIf="isValidRole(roles, [roleType.BUSINESS_OWNER])">
+				<tempus-ghost-button
+					(click)="openEditView()"
+					cssClass="yellow"
+					label="{{ viewResourceProfilePrefx + 'buttons.editViewButton.title' | translate }}"
+					icon="edit"
+				></tempus-ghost-button>
+				<tempus-ghost-button
+					(click)="openViewForm()"
+					cssClass="green"
+					label="{{ viewResourceProfilePrefx + 'buttons.createNewViewButton.title' | translate }}"
+					icon="add"
+				></tempus-ghost-button>
+				<tempus-ghost-button
+					(click)="deleteView()"
+					label="{{ viewResourceProfilePrefx + 'buttons.deleteViewButton.title' | translate }}"
+					cssClass="red"
+					icon="delete"
+				></tempus-ghost-button>
+			</div>
+		</div>
+		<div fxLayout="row" fxLayoutGap="10px" fxLayout.lt-md="column">
+			<tempus-assign-resource-modal
+				[resourceName]="resourceName"
+				[resourceEmail]="resourceEmail"
+				[resourceId]="resourceId"
+				[preSelectedResource]="true"
+				[projectResources]="projectResources"
+			></tempus-assign-resource-modal>
+			<tempus-button
+				(buttonClick)="downloadProfile()"
+				label="{{ viewResourceProfilePrefx + 'buttons.downloadProfile.title' | translate }}"
+				color="accent"
+				icon="download"
+			></tempus-button>
+		</div>
+		<div fxFlex="2"></div>
+	</div>
 </ng-container>
