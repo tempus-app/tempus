@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatSelectModule } from '@angular/material/select';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatCardModule } from '@angular/material/card';
@@ -19,6 +20,7 @@ import { TableComponent } from './table/table.component';
 import { SpinnerComponent } from './spinner/spinner.component';
 import { ButtonComponent } from './button/button.component';
 import { GhostButtonComponent } from './button/ghost-button/ghost-button.component';
+import { SnackbarService } from './snackbar/snackbar.service';
 
 @NgModule({
 	imports: [
@@ -33,6 +35,7 @@ import { GhostButtonComponent } from './button/ghost-button/ghost-button.compone
 		MatPaginatorModule,
 		MatButtonModule,
 		MatSortModule,
+		MatSnackBarModule,
 		MatTooltipModule,
 		TranslateModule.forChild({
 			isolate: false,
@@ -49,5 +52,6 @@ import { GhostButtonComponent } from './button/ghost-button/ghost-button.compone
 		SpinnerComponent,
 	],
 	exports: [CardComponent, ChipComponent, ButtonComponent, GhostButtonComponent, TableComponent, SpinnerComponent],
+	providers: [SnackbarService],
 })
 export class ClientSharedUiComponentsPresentationalModule {}
