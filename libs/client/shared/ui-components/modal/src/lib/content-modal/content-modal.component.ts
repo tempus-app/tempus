@@ -25,7 +25,6 @@ export class ContentModalComponent {
 
 	public close(value: boolean) {
 		this.mdDialogRef.close(value);
-		this.modalService.close(); // remove reference
 	}
 
 	public selectConfirm() {

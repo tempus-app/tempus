@@ -472,7 +472,7 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 						this.modalService.open(
 							{
 								title,
-								closeText: data['cancelText'],
+								closeText: data['closeText'],
 								confirmText: data['confirmText'],
 								message: data['message'],
 								modalType: ModalType.WARNING,
