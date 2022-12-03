@@ -2,10 +2,7 @@
     <div id="title-container">
         <h2 class="mat-h2 page-title">{{ prefix + '.main.title' | translate }}</h2>
     </div>
-    <div class="empty-state" *ngIf="totalPendingApprovals === 0">
-        {{ prefix + '.main.emptyState' | translate }}
-    </div>
-    <div id="table-container" *ngIf="totalPendingApprovals !== 0">
+    <div id="table-container">
         <tempus-table
             (paginatorEvent)="tablePaginationEvent($event)"
             [page]="pageNum"
@@ -13,5 +10,8 @@
             [tableColumns]="tableColumns"
             [tableData]="pendingApprovalsTableData"
         ></tempus-table>
+        <h2 style="text-align: center; margin-top: 2rem" class="mat-h3" *ngIf="pendingApprovalsTableData.length === 0">
+            {{ prefix + '.main.noPendingApprovals' | translate }}
+        </h2>
     </div>
 </div>

@@ -13,7 +13,7 @@ export const selectAccessRefreshToken = createSelector(selectAuth, (state: AuthS
 	refreshToken: state.refreshToken,
 }));
 export const selectLoggedInUserId = createSelector(selectAuth, (state: AuthState) => state.loggedInUserId);
-export const selectLoginStatus = createSelector(selectAuth, (state: AuthState) => {
+export const selectAuthStatus = createSelector(selectAuth, (state: AuthState) => {
 	return {
 		status: state.status,
 		error: state.error,

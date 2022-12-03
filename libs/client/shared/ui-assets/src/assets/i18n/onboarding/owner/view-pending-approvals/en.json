@@ -7,7 +7,8 @@
 				"resource": "Resource",
 				"lastUpdated": "Last Updated",
 				"type": "View"
-			}
+			},
+			"noPendingApprovals": "No Pending Approvals"
 		}
 	}
 }

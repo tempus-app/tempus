@@ -18,13 +18,13 @@ export class AuthController {
 
 	@HttpCode(HttpStatus.OK)
 	@Post('forgot-password')
-	forgotPassword(@Query('email') email: string): Promise<void> {
+	forgotPassword(@Query('email') email: string) {
 		return this.authService.forgotPassword(email);
 	}
 
 	@HttpCode(HttpStatus.OK)
 	@Post('reset-password')
-	resetPassword(@Body() resetPasswordData: ResetPasswordDto): Promise<void> {
+	resetPassword(@Body() resetPasswordData: ResetPasswordDto) {
 		return this.authService.resetPassword(resetPasswordData);
 	}
 
