@@ -2,7 +2,6 @@
 	"onboardingOwnerViewPendingApprovals": {
 		"main": {
 			"title": "Pending Approvals",
-			"emptyState": "There are no view changes that require your approval.",
 			"tableHeaders": {
 				"resource": "Resource",
 				"lastUpdated": "Last Updated",

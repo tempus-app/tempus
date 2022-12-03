@@ -14,9 +14,3 @@
 #table-container {
 	margin-top: 3%;
 }
-
-.empty-state {
-	margin: 2em;
-	text-align: center;
-	@include abs.h3($color: abs.$primary-700);
-}
