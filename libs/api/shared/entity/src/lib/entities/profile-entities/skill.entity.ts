@@ -1,6 +1,6 @@
 import { CreateSkillDto } from '@tempus/api/shared/dto';
 import { Skill } from '@tempus/shared-domain';
-import { Entity, Column, PrimaryGeneratedColumn, JoinColumn, ManyToOne } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, JoinColumn, ManyToOne } from 'typeorm';
 import { ResourceEntity } from '../account-entities';
 import { SkillTypeEntity } from './skilltype.entity';
 
@@ -19,7 +19,9 @@ export class SkillEntity implements Skill {
 	@JoinColumn([{ name: 'skill_key', referencedColumnName: 'name' }])
 	skill: SkillTypeEntity;
 
-	@ManyToOne(() => ResourceEntity, resource => resource.skills)
+	@ManyToOne(() => ResourceEntity, resource => resource.skills, {
+		onDelete: 'CASCADE',
+	})
 	resource: ResourceEntity;
 
 	public static fromDto(dto: CreateSkillDto): SkillEntity {
