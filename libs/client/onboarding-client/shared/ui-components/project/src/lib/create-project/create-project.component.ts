@@ -52,9 +52,9 @@ export class CreateProjectComponent implements OnInit, OnDestroy {
 	loading = false;
 
 	createProjectForm = this.fb.group({
-		client: ['', Validators.required],
+		client: [null, Validators.required],
 		clientName: [''],
-		clientRepresentative: [''],
+		clientRepresentative: [null],
 		clientRepFirstName: ['', Validators.required],
 		clientRepLastName: ['', Validators.required],
 		clientRepEmail: ['', [Validators.email, Validators.required]],

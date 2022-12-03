@@ -15,7 +15,13 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { ClientOnboardingSharedProjectModule } from '@tempus/client/onboarding-client/shared/ui-components/project';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatChipsModule } from '@angular/material/chips';
 import { ManageResourcesComponent } from './manage-resources/manage-resources.component';
+import { FilterResourcesComponent } from './filter-resources/filter-resources.component';
 
 function createTranslateLoader(http: HttpClient) {
 	return new TranslateHttpLoader(http, './assets/i18n/onboarding/owner/manage-resources/', '.json');
@@ -33,6 +39,11 @@ function createTranslateLoader(http: HttpClient) {
 		MatButtonModule,
 		MatTooltipModule,
 		MatSlideToggleModule,
+		MatExpansionModule,
+		MatMenuModule,
+		MatChipsModule,
+		ReactiveFormsModule,
+		MatCheckboxModule,
 		ClientSharedUiComponentsModalModule,
 		FlexLayoutModule,
 		RouterModule.forChild([
@@ -52,6 +63,6 @@ function createTranslateLoader(http: HttpClient) {
 			extend: true,
 		}),
 	],
-	declarations: [ManageResourcesComponent],
+	declarations: [ManageResourcesComponent, FilterResourcesComponent],
 })
 export class OnboardingClientBusinessOwnerFeatureManageResourcesModule {}

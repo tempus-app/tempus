@@ -46,7 +46,9 @@
 						color="accent"
 						*ngIf="element.columnsWithButtonIcon.includes(disCol.columnDef)"
 					>
-						<mat-icon class="buttonIcon" fxFlexAlign="center">{{ element.buttonIcon.icon }}</mat-icon>
+						<mat-icon class="buttonIcon" color="{{ element.buttonIcon.color }}" fxFlexAlign="center">{{
+							element.buttonIcon.icon
+						}}</mat-icon>
 					</button>
 				</span>
 			</td>

@@ -1,0 +1,70 @@
+<tempus-button
+	fxFlex="100%"
+	[buttonType]="ButtonType.FILTER"
+	[color]="'accent'"
+	[matMenuTriggerFor]="menu"
+></tempus-button>
+<mat-menu #menu="matMenu" fxFlex="min(50%, 10rem)" fxFlex.lt-md="50%">
+	<div (click)="$event.stopPropagation()">
+		<mat-expansion-panel class="filter-dropdown">
+			<mat-expansion-panel-header>
+				<mat-panel-title class="mat-body-2">
+					{{ prefix + 'filter.availabilityHeader' | translate }}
+				</mat-panel-title>
+			</mat-expansion-panel-header>
+			<div class="availabilityPanel">
+				<ul>
+					<li>
+						<mat-checkbox
+							class="listItem"
+							id="assignedResources"
+							[value]="RoleType.ASSIGNED_RESOURCE"
+							[formControl]="$any(filterForm).get('assignedResource')"
+						>
+							<span class="mat-body-2">{{ prefix + 'filter.assignedResource' | translate }}</span>
+						</mat-checkbox>
+					</li>
+					<li>
+						<mat-checkbox
+							class="listItem mat-body-2"
+							id="availableResources"
+							[value]="RoleType.AVAILABLE_RESOURCE"
+							[formControl]="$any(filterForm).get('availableResource')"
+						>
+							<span class="mat-body-2">{{ prefix + 'filter.availableResource' | translate }}</span>
+						</mat-checkbox>
+					</li>
+				</ul>
+			</div>
+		</mat-expansion-panel>
+	</div>
+	<div (click)="$event.stopPropagation()">
+		<mat-expansion-panel class="filter-dropdown">
+			<mat-expansion-panel-header>
+				<mat-panel-title class="mat-body-2">
+					{{ prefix + 'filter.locationHeader' | translate }}
+				</mat-panel-title>
+			</mat-expansion-panel-header>
+			<tempus-search-box
+				id="country-search"
+				[options]="countries"
+				placeholder="{{ commonPrefix + 'location.countryPlaceholder' | translate }}"
+				cssClass="secondary"
+				(optionSelect)="updateStateOptions($event)"
+				[control]="$any(filterForm).get('country')"
+			></tempus-search-box>
+			<tempus-dropdown
+				id="state-search"
+				[options]="states"
+				label="{{ commonPrefix + 'location.statePlaceholder' | translate }}"
+				cssClass="secondary"
+				[control]="$any(filterForm).get('province')"
+			>
+			</tempus-dropdown>
+		</mat-expansion-panel>
+	</div>
+	<div (click)="$event.stopPropagation()" fxFlex fxLayoutGap="10" class="filterControl">
+		<tempus-button fxFlex="50%" [label]="'clear'" color="grey" (buttonClick)="selectClearFilter()"></tempus-button>
+		<tempus-button fxFlex="50%" [label]="'apply'" [color]="'accent'" (buttonClick)="selectFilter()"></tempus-button>
+	</div>
+</mat-menu>

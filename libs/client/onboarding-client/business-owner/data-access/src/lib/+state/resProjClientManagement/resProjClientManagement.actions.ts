@@ -10,12 +10,20 @@ import {
 	Project,
 	ProjectStatus,
 	RevisionType,
+	RoleType,
 	View,
 } from '@tempus/shared-domain';
 
 export const getAllResProjInfo = createAction(
 	'[Onboarding Client Manage Resources Page] Get All Resources Project Info',
-	props<{ pageSize: number; page: number; filter: string }>(),
+	props<{
+		pageSize: number;
+		page: number;
+		filter: string;
+		roleType?: RoleType[];
+		country?: string;
+		province?: string;
+	}>(),
 );
 export const getAllResProjInfoSuccess = createAction(
 	'[Onboarding Client Resource API] Get All Resources Project Success',

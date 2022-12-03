@@ -6,6 +6,7 @@ export type TableDataModel = {
 	};
 	buttonIcon?: {
 		icon: string;
+		color: string;
 	};
 	url?: string;
 	urlQueryParams?: { [key: string]: unknown };
@@ -24,6 +25,7 @@ export interface ProjectManagmenetTableData extends TableDataModel {
 	allProjects: { val: string; id: number }[];
 	allClients: string[];
 	delete: string;
+	location: string;
 }
 
 export interface PendingApprovalsTableData extends TableDataModel {

@@ -24,7 +24,7 @@ export class CreateProjectModalComponent implements OnInit {
 
 	createProjectUseExisitingClientRep = false;
 
-	createProjectUseExisitingClient = false;
+	createProjectUseExisitingClient = true;
 
 	prefix = 'modal.newProjectModal.';
 

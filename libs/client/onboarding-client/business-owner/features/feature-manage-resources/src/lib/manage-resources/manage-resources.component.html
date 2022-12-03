@@ -17,9 +17,9 @@
 			<div
 				fxFlex="min(60%, 40rem)"
 				fxLayoutGap="10px"
-				fxLayoutAlign="center center"
+				fxLayoutAlign="flex-end center"
 				fxFlex.lt-md="100%"
-				fxLayoutAlign.lt-md="flex-start center"
+				fxLayoutAlign.lt-md="center center"
 			>
 				<tempus-search-box
 					fxFlex="50%"
@@ -31,14 +31,27 @@
 					[control]="$any(manageResourcesForm).get('search')"
 				>
 				</tempus-search-box>
-				<tempus-button
-					fxFlex="min(50%, 10rem)"
-					fxFlex.lt-md="50%"
-					(buttonClick)="filter()"
-					[buttonType]="ButtonType.FILTER"
-					[color]="'accent'"
-				></tempus-button>
+				<tempus-filter-resources
+					fxFlex="30%"
+					(clearFilterEvent)="filterEvent('clearTableEvent')"
+					(filterTableEvent)="filterEvent('filterTableEvent')"
+					[filterForm]="$any(manageResourcesForm).get('filterForm')"
+				></tempus-filter-resources>
 			</div>
+		</div>
+		<div id="filterChips">
+			<mat-chip-list>
+				<tempus-chip
+					*ngFor="let chip of chipList"
+					class="chipItem"
+					[removable]="false"
+					typography="mat-body"
+					content="{{ chip }}"
+					typography="mat-body"
+					content="one Fish"
+				>
+				</tempus-chip>
+			</mat-chip-list>
 		</div>
 		<div id="tableContainer">
 			<tempus-table
