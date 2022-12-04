@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/no-extraneous-dependencies
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { ResourceEntity, UserEntity, ViewEntity } from '@tempus/api/shared/entity';
@@ -11,6 +12,7 @@ import { NotFoundException } from '@nestjs/common';
 import { EmailService } from '@tempus/api/shared/feature-email';
 import { UserService } from '../../services';
 import { createUserEntity, dbUser, jwtPayload, userEntity } from '../mocks/user.mock';
+import { businessOwnerJwtPayload } from '../mocks/link.mock';
 
 // mock depdencies
 const mockUserRepository = createMock<Repository<UserEntity>>();
@@ -167,7 +169,7 @@ describe('UserService', () => {
 		it('should successfully delete a user', async () => {
 			mockUserRepository.findOne.mockResolvedValue(dbUser);
 			mockUserRepository.remove.mockResolvedValue(dbUser);
-			await userService.deleteUser(dbUser.id);
+			await userService.deleteUser(businessOwnerJwtPayload, dbUser.id);
 			expect(mockUserRepository.findOne).toBeCalledWith(4);
 			expect(mockUserRepository.remove).toBeCalledWith({ ...dbUser });
 		});
