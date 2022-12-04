@@ -5,8 +5,6 @@
 		"rejectedTooltip": "Changes to this view have been rejected",
 		"rejectedDialogHeading": "Please modify your view with the following changes:",
 		"downloadDialog": {
-			"title": "Download Started",
-			"confirmText": "Okay",
 			"message": "Download in progress!"
 		},
 		"deleteViewModal": {

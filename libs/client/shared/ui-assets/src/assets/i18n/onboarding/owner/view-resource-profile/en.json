@@ -65,8 +65,6 @@
 			"confirmText": "CLOSE"
 		},
 		"downloadDialog": {
-            "title": "Download Started",
-            "confirmText": "Okay",
             "message": "Download in progress!"
         }
 	}

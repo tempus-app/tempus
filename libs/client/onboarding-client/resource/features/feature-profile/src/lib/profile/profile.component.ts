@@ -286,22 +286,11 @@ export class ProfileComponent implements OnInit, OnDestroy {
 					link.click();
 				}
 			});
-
 		this.translateService
 			.get(`${this.profilePrefix}downloadDialog`)
 			.pipe(take(1))
 			.subscribe(data => {
-				this.modalService.open(
-					{
-						title: data['title'],
-						confirmText: data['confirmText'],
-						message: data['message'],
-						modalType: ModalType.INFO,
-						closable: true,
-						id: 'info',
-					},
-					CustomModalType.INFO,
-				);
+				this.snackbar.open(data['message']);
 			});
 	}
 
