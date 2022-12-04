@@ -93,12 +93,15 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 						header: data['client'],
 						cell: (element: Record<string, any>) => `${element['client']}`,
 					},
-					{
+				];
+
+				if (isValidRole(this.roles, [RoleType.BUSINESS_OWNER])) {
+					this.tableColumns.push({
 						columnDef: 'delete',
 						header: data['delete'],
 						cell: (element: Record<string, any>) => `${element['delete']}`,
-					},
-				];
+					});
+				}
 			});
 		this.translateService
 			.get(`${this.prefix}main.approvalTooltip`)
@@ -414,15 +417,18 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 						columnsWithIcon: ['resource'],
 						columnsWithUrl: ['resource'],
 						columnsWithChips: [],
-						columnsWithButtonIcon: ['delete'],
+						columnsWithButtonIcon: [],
 					};
 					if (resProjClientData.reviewNeeded) {
 						tableItem.icon = { val: 'error', class: 'priorityIcon', tooltip: 'Awaiting approval' };
 					}
-					tableItem.buttonIcon = {
-						icon: 'delete',
-						color: 'warn',
-					};
+					if (isValidRole(this.roles, [RoleType.BUSINESS_OWNER])) {
+						tableItem.columnsWithButtonIcon = ['delete'];
+						tableItem.buttonIcon = {
+							icon: 'delete',
+							color: 'warn',
+						};
+					}
 					let activeProjExists = false;
 
 					// Resource with atleast one project
