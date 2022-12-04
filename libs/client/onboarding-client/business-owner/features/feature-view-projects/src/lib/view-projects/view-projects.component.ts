@@ -250,7 +250,21 @@ export class ViewProjectsComponent implements OnInit {
 					this.modalService.confirmDisabled()?.next(true);
 				}
 			});
+
+		this.modalService
+			.closed()
+			.pipe(take(1))
+			.subscribe(() => {
+				this.resetModalData();
+			});
 	};
+
+	resetModalData() {
+		this.updateProjectStatusForm = this.fb.group({
+			project: ['', Validators.required],
+			status: ['', Validators.required],
+		});
+	}
 
 	tablePaginationEvent(pageEvent: PageEvent) {
 		if (pageEvent.pageSize !== this.pageSize) {
