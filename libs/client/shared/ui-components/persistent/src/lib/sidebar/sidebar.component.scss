@@ -68,7 +68,7 @@ mat-button-toggle {
 	justify-content: center !important;
 }
 
-#icon {
+.icon {
 	width: 4em;
 	height: 4em;
 	border-radius: 100%;
@@ -78,6 +78,10 @@ mat-button-toggle {
 	display: flex;
 	justify-content: center;
 	align-items: center;
+
+	&__resource {
+		background-color: abs.$primary-500;
+	}
 }
 
 #initials {
@@ -89,7 +93,7 @@ mat-button-toggle {
 
 #email {
 	font-size: 0.85em;
-	margin: 0.5em;
+	margin: 0;
 	word-break: break-all;
 }
 
@@ -98,6 +102,16 @@ p,
 #role {
 	color: abs.$primary-800;
 	text-align: center;
+}
+
+.role_type {
+	color: abs.$primary-800;
+	background-color: abs.$accent-100;
+	margin: 1.5em;
+	font-weight: 900;
+	padding: 0.5em 1em;
+	border-radius: 10px;
+	font-size: 0.8em;
 }
 
 h3 {
@@ -113,7 +127,7 @@ h3 {
 h2 {
 	font-size: 1.25em !important;
 	color: abs.$primary-800;
-	margin: 0.5em;
+	margin: 0.5em 0.5em 0 0.5em;
 	text-align: center;
 }
 

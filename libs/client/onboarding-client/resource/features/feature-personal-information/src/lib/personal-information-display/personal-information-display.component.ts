@@ -6,7 +6,10 @@ import { ButtonType } from '@tempus/client/shared/ui-components/presentational';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ICreateLocationDto, IUpdateResourceDto } from '@tempus/shared-domain';
 import { TempusResourceState, updateUserInfo } from '@tempus/client/onboarding-client/resource/data-access';
-import { OnboardingClientResourceService } from '@tempus/client/onboarding-client/shared/data-access';
+import {
+	OnboardingClientResourceService,
+	SessionStorageKey,
+} from '@tempus/client/onboarding-client/shared/data-access';
 
 @Component({
 	selector: 'tempus-personal-information-display',
@@ -106,10 +109,14 @@ export class PersonalInformationDisplayComponent implements OnInit {
 			province: this.personalInfoForm.get('state')?.value,
 			country: this.personalInfoForm.get('country')?.value,
 		};
+		const firstName = this.personalInfoForm.get('firstName')?.value;
+		const lastName = this.personalInfoForm.get('lastName')?.value;
+		sessionStorage.setItem(SessionStorageKey.TEMPUS_FIRST_NAME, firstName);
+		sessionStorage.setItem(SessionStorageKey.TEMPUS_LAST_NAME, lastName);
 		return {
 			id: this.userId,
-			firstName: this.personalInfoForm.get('firstName')?.value,
-			lastName: this.personalInfoForm.get('lastName')?.value,
+			firstName,
+			lastName,
 			email: this.personalInfoForm.get('email')?.value,
 			location: locationsDto,
 			phoneNumber: this.personalInfoForm.get('phoneNumber')?.value,

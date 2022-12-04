@@ -4,7 +4,7 @@
 .page-title {
 	color: abs.$primary-800;
 }
- 
+
 #page-container {
 	margin: 2%;
 }
@@ -21,9 +21,15 @@
 }
 
 .normal-font {
-	font-weight: normal
+	font-weight: normal;
 }
 
 tempus-card {
 	width: 100%;
+}
+
+.empty-state {
+	margin: 2em;
+	text-align: center;
+	@include abs.h3($color: abs.$primary-700);
 }

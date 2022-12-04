@@ -115,6 +115,8 @@ export class ResourceProfileContentComponent implements OnInit, OnChanges {
 
 	isRevision = false;
 
+	dataLoaded = false;
+
 	viewResourceProfilePrefx = 'viewResourceProfile.';
 
 	viewResourceProfileForm = this.fb.group({
@@ -183,6 +185,7 @@ export class ResourceProfileContentComponent implements OnInit, OnChanges {
 				return !viewExists;
 			});
 			this.loadView(currentViewId || latestView.id, uniqueViewNames);
+			this.dataLoaded = true;
 		});
 	}
 

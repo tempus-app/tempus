@@ -1,7 +1,22 @@
 import { ApproveViewDto, CreateViewDto } from '@tempus/api/shared/dto';
 import { UserEntity, ViewEntity } from '@tempus/api/shared/entity';
-import { RevisionType, RoleType, ViewType } from '@tempus/shared-domain';
+import { JwtPayload, RevisionType, RoleType, ViewType } from '@tempus/shared-domain';
 import { resourceEntity } from './resource.mock';
+
+
+export const supervisorJwtPayload: JwtPayload = {
+  email: 'test@email.com',
+  iat: 123456,
+  exp: 123456,
+  roles: [RoleType.SUPERVISOR]
+}
+
+export const businessOwnerJwtPayload: JwtPayload = {
+  email: 'test@email.com',
+  iat: 123456,
+  exp: 123456,
+  roles: [RoleType.BUSINESS_OWNER]
+}
 
 export const viewEntity: ViewEntity = {
 	id: 3,

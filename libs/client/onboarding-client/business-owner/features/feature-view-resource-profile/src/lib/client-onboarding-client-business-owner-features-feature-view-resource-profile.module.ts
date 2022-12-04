@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { ClientSharedUiComponentsPersistentModule } from '@tempus/client/shared/ui-components/persistent';
 import { ClientSharedUiComponentsInputModule } from '@tempus/client/shared/ui-components/input';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDialogModule } from '@angular/material/dialog';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -32,6 +33,7 @@ function createTranslateLoader(http: HttpClient) {
 		ClientSharedUiComponentsPersistentModule,
 		ClientSharedUiComponentsInputModule,
 		MatDialogModule,
+		MatTooltipModule,
 		FormsModule,
 		ClientSharedUiComponentsModalModule,
 		ReactiveFormsModule,
