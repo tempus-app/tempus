@@ -15,6 +15,7 @@
 		(closeEditViewClicked)="closeEditView()"
 	></tempus-edit-view-form>
 	<tempus-resource-profile-content
+		*ngIf="!editViewEnabled"
 		[firstName]="resourceFirstName"
 		[lastName]="resourceLastName"
 		[calEmail]="calEmail"

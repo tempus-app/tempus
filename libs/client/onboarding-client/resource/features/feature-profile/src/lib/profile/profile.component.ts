@@ -1,12 +1,14 @@
+/* eslint-disable @typescript-eslint/dot-notation */
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import {
 	OnboardingClientResourceService,
 	OnboardingClientState,
+	OnboardingClientViewsService,
 	selectLoggedInUserId,
 	selectLoggedInUserNameEmail,
 } from '@tempus/client/onboarding-client/shared/data-access';
-import { Subject, take, takeUntil } from 'rxjs';
-import { ButtonType } from '@tempus/client/shared/ui-components/presentational';
+import { catchError, of, Subject, take, takeUntil } from 'rxjs';
+import { ButtonType, SnackbarService } from '@tempus/client/shared/ui-components/presentational';
 import {
 	ICreateExperienceDto,
 	ICreateEducationDto,
@@ -27,6 +29,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { sortViewsByLatestUpdated } from '@tempus/client/shared/util';
 import { Store } from '@ngrx/store';
 import { ActivatedRoute, Router } from '@angular/router';
+import { CustomModalType, ModalService, ModalType } from '@tempus/client/shared/ui-components/modal';
 
 @Component({
 	selector: 'tempus-profile',
@@ -44,9 +47,12 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
 	constructor(
 		private resourceService: OnboardingClientResourceService,
+		private viewsService: OnboardingClientViewsService,
 		private translateService: TranslateService,
 		private sharedStore: Store<OnboardingClientState>,
 		private resourceStore: Store<TempusResourceState>,
+		private modalService: ModalService,
+		private snackbar: SnackbarService,
 		private router: Router,
 		private route: ActivatedRoute,
 	) {
@@ -104,6 +110,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
 	editViewEnabled = false;
 
+	isPrimaryView = false;
+
 	ngOnInit(): void {
 		this.sharedStore
 			.select(selectLoggedInUserId)
@@ -135,33 +143,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
 		this.resourceStore.dispatch(
 			getAllViewsByResourceId({ resourceId: this.userId, pageSize: this.pageSize, pageNum: this.pageNum }),
 		);
-
-		// display latest primary view
-		// this.resourceStore
-		// 	.select(selectResourceViews)
-		// 	.pipe(takeUntil(this.destroyed$))
-		// 	.subscribe(data => {
-		// 		let filteredAndSortedViews = data?.views?.filter(view => view.viewType === ViewType.PRIMARY) || [];
-		// 		filteredAndSortedViews = sortViewsByLatestUpdated(filteredAndSortedViews);
-
-		// 		const latestView = filteredAndSortedViews[0];
-		// 		console.log(latestView);
-		// 		this.currentViewId = latestView.id;
-		// 		this.certifications = latestView.certifications;
-		// 		this.educations = latestView.educations;
-		// 		this.educationsSummary = latestView.educationsSummary;
-		// 		this.workExperiences = latestView.experiences;
-		// 		this.experiencesSummary = latestView.experiencesSummary;
-		// 		this.profileSummary = latestView.profileSummary;
-		// 		this.skills = latestView.skills.map(skill => skill.skill.name);
-		// 		this.skillsSummary = latestView.skillsSummary;
-		// 		this.isRejected = latestView.revisionType === RevisionType.REJECTED;
-		// 		this.isPendingApproval = latestView.revisionType === RevisionType.PENDING;
-		// 		this.rejectionComments = latestView.revision?.comment ? latestView.revision.comment : '';
-
-		// 		this.dataLoaded = true;
-		// 	});
-
 		this.resourceService.getResourceInformation().subscribe(resData => {
 			this.userId = resData.id;
 			this.fullName = `${resData.firstName} ${resData.lastName}`;
@@ -207,6 +188,79 @@ export class ProfileComponent implements OnInit, OnDestroy {
 		this.isRejected = view.revisionType === RevisionType.REJECTED;
 		this.isPendingApproval = view.revisionType === RevisionType.PENDING;
 		this.rejectionComments = view.revision?.comment ? view.revision.comment : '';
+		this.isPrimaryView = view.viewType === ViewType.PRIMARY;
+	}
+
+	deleteView() {
+		this.translateService
+			.get([`onboardingResourceProfile.deleteViewModal`])
+			.pipe(take(1))
+			.subscribe(data => {
+				this.translateService
+					.get(`onboardingResourceProfile.deleteViewModal.title`, {
+						viewName: this.viewName,
+					})
+					.subscribe(modalTitle => {
+						const dialogText = data[`onboardingResourceProfile.deleteViewModal`];
+						this.modalService.open(
+							{
+								title: modalTitle,
+								closeText: dialogText.closeText,
+								confirmText: dialogText.confirmText,
+								message: dialogText.message,
+								closable: true,
+								id: 'submit',
+								modalType: ModalType.WARNING,
+							},
+							CustomModalType.INFO,
+						);
+					});
+			});
+
+		this.modalService.confirmEventSubject.pipe(take(1)).subscribe(() => {
+			this.modalService.close();
+
+			this.viewsService
+				.deleteView(this.currentViewId)
+				.pipe(catchError(error => of(error)))
+				.subscribe(error => {
+					if (error) {
+						this.openDeleteViewErrorModal(error.message);
+					} else {
+						this.modalService.confirmEventSubject.unsubscribe();
+						this.translateService.get(`onboardingResourceProfile.deleteViewSuccess`).subscribe(message => {
+							this.snackbar.open(message);
+						});
+						this.router.navigate(['../'], { relativeTo: this.route }).then(() => {
+							window.location.reload();
+						});
+					}
+				});
+
+			this.modalService.close();
+		});
+	}
+
+	openDeleteViewErrorModal(error: string) {
+		this.translateService
+			.get(`onboardingResourceProfile.deleteViewErrorModal.confirmText`)
+			.pipe(take(1))
+			.subscribe(confirm => {
+				this.modalService.open(
+					{
+						title: error,
+						confirmText: confirm,
+						closable: true,
+						id: 'error',
+						modalType: ModalType.ERROR,
+					},
+					CustomModalType.INFO,
+				);
+			});
+
+		this.modalService.confirmEventSubject.pipe(takeUntil(this.destroyed$)).subscribe(() => {
+			this.modalService.close();
+		});
 	}
 
 	openEditView() {
@@ -219,7 +273,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
 	downloadProfile() {
 		// Taken from https://stackoverflow.com/questions/52154874/angular-6-downloading-file-from-rest-api
-		this.resourceStore.dispatch(downloadProfileByViewId({ viewId: this.currentViewId }));
 		this.resourceStore
 			.select(selectDownloadProfile)
 			.pipe(takeUntil(this.destroyed$))
@@ -232,6 +285,12 @@ export class ProfileComponent implements OnInit, OnDestroy {
 					link.download = `${this.fullName}-${this.viewName}`;
 					link.click();
 				}
+			});
+		this.translateService
+			.get(`${this.profilePrefix}downloadDialog`)
+			.pipe(take(1))
+			.subscribe(data => {
+				this.snackbar.open(data['message']);
 			});
 	}
 

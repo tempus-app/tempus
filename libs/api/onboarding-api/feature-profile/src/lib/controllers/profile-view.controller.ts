@@ -139,7 +139,7 @@ export class ProfileViewController {
 
 	@UseGuards(JwtAuthGuard, ViewsGuard)
 	@Delete('/:viewId')
-	async deleteView(@Param('viewId') viewId: number): Promise<void> {
-		await this.viewSerivce.deleteView(viewId);
+	async deleteView(@Param('viewId') viewId: number, @Request() req): Promise<void> {
+		await this.viewSerivce.deleteView(req.user, viewId);
 	}
 }

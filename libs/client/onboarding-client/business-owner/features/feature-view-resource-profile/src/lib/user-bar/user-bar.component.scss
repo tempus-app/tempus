@@ -2,7 +2,6 @@
 
 .user-bar-container {
 	padding-top: 1em;
-	background: abs.$primary-200;
 }
 
 tempus-dropdown {
@@ -13,7 +12,7 @@ tempus-button {
 	width: 100%;
 }
 
-mat-icon {
-	padding: 1em;
-	color: red;
+.approval-icon {
+	padding: 0.5em 1em;
+	color: #eb534c;
 }

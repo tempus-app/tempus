@@ -36,11 +36,13 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
 	email = '';
 
+	role = '';
+
 	SidebarTab = SidebarTab;
 
-	initials = '';
+	RoleType = RoleType;
 
-  roleToDisplay: string = "";
+	initials = '';
 
 	isVisible = true;
 
@@ -108,16 +110,12 @@ export class SidebarComponent implements OnInit, OnDestroy {
 			.subscribe(token => {
 				const { roles } = decodeJwt(token || '');
 
+				// eslint-disable-next-line prefer-destructuring
+				this.role = roles[0];
+
 				if (roles.includes(RoleType.BUSINESS_OWNER) || roles.includes(RoleType.SUPERVISOR)) {
 					this.tabs = [SidebarTab.MANAGE_RESOURCES, SidebarTab.PENDING_APPROVALS, SidebarTab.PROJECTS];
-          if (roles.includes(RoleType.BUSINESS_OWNER)) {
-            this.roleToDisplay = RoleType.BUSINESS_OWNER;
-          } else {
-            this.roleToDisplay = RoleType.SUPERVISOR;
-          }
 				} else if (roles.includes(RoleType.AVAILABLE_RESOURCE) || roles.includes(RoleType.ASSIGNED_RESOURCE)) {
-          this.roleToDisplay = RoleType.ASSIGNED_RESOURCE;
-          this.roleToDisplay = this.roleToDisplay.split("_")[1];
 					this.tabs = [
 						SidebarTab.PRIMARY_VIEW,
 						SidebarTab.MY_VIEWS,
@@ -125,8 +123,6 @@ export class SidebarComponent implements OnInit, OnDestroy {
 						SidebarTab.PERSONAL_INFORMATION,
 					];
 				}
-
-        this.roleToDisplay = this.roleToDisplay.replace("_", " ");
 			});
 
 		this.store
@@ -141,6 +137,19 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
 		this.getInitials();
 		this.isVisible = true;
+	}
+
+	formatRole(): string {
+		switch (this.role) {
+			case RoleType.BUSINESS_OWNER:
+				return 'Admin';
+			case RoleType.SUPERVISOR:
+				return 'Supervisor';
+			case RoleType.ASSIGNED_RESOURCE:
+			case RoleType.AVAILABLE_RESOURCE:
+			default:
+				return 'Resource';
+		}
 	}
 
 	setPlaceholders() {

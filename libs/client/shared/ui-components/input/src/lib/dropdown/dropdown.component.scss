@@ -16,6 +16,10 @@ input {
 	}
 }
 
+::ng-deep #text-area > div > div.mat-form-field-flex.ng-tns-c62-1 > div {
+	border-top: 0;
+}
+
 ::ng-deep .secondary .mat-form-field-wrapper .mat-form-field-flex {
 	@include c.tempus-form(white);
 	+ .mat-form-field-underline {
@@ -24,6 +28,8 @@ input {
 }
 
 ::ng-deep .mat-form-field-wrapper {
+	padding-bottom: 0.5em;
+
 	& .mat-select {
 		@include abs.body-1();
 	}
