@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { MailerService } from '@nestjs-modules/mailer';
-import { LinkEntity, PasswordResetEntity } from '@tempus/api/shared/entity';
+import { LinkEntity, PasswordResetEntity, UserEntity } from '@tempus/api/shared/entity';
 import { ConfigService } from '@nestjs/config';
 import { RoleType } from '@tempus/shared-domain';
 
@@ -10,11 +10,11 @@ export class EmailService {
 
 	async sendInvitationEmail(link: LinkEntity): Promise<void> {
 		let template = 'invitationLink';
-    if (link.userType === RoleType.SUPERVISOR) {
-      template = 'invitationLinkSupervisor';
-    } else if (link.userType === RoleType.BUSINESS_OWNER) {
-      template = 'invitationLinkBusinessOwner';
-    }
+		if (link.userType === RoleType.SUPERVISOR) {
+			template = 'invitationLinkSupervisor';
+		} else if (link.userType === RoleType.BUSINESS_OWNER) {
+			template = 'invitationLinkBusinessOwner';
+		}
 		await this.mailerService.sendMail({
 			to: link.email, // list of receivers
 			subject: 'Complete your Profile for CAL & Associates',
@@ -56,6 +56,19 @@ export class EmailService {
 					cid: 'CalLogo:imgID', // same cid value as in the html img src
 				},
 			], */
+		});
+	}
+
+	async sendDeletedAccountEmail(user: UserEntity): Promise<void> {
+		const template = 'accountDeleted';
+
+		await this.mailerService.sendMail({
+			to: user.email, // list of receivers
+			subject: 'Account on Tempus Deleted',
+			template,
+			context: {
+				name: `${user.firstName} ${user.lastName}`,
+			},
 		});
 	}
 }

@@ -12,6 +12,7 @@ import {
 	IUserProjClientDto,
 	Resource,
 	Revision,
+	RoleType,
 	View,
 } from '@tempus/shared-domain';
 import { catchError, Observable } from 'rxjs';
@@ -63,12 +64,23 @@ export class OnboardingClientResourceService {
 		page: number;
 		pageSize: number;
 		filter: string;
+		roleType?: RoleType[];
+		country?: string;
+		province?: string;
 	}): Observable<{ userProjClientData: IUserProjClientDto[]; totalItems: number }> {
-		const { page, pageSize, filter } = paginationData;
+		const { page, pageSize, filter, roleType, country, province } = paginationData;
+		let url = `${this.url}/user/resProjects?page=${page}&pageSize=${pageSize}&filter=${filter}`;
+		if (roleType && roleType.length > 0) {
+			url = `${url}&roleType=${roleType.join()}`;
+		}
+		if (country) {
+			url = `${url}&country=${country}`;
+			if (province) {
+				url = `${url}&province=${province}`;
+			}
+		}
 		return this.http
-			.get<{ userProjClientData: IUserProjClientDto[]; totalItems: number }>(
-				`${this.url}/user/resProjects?page=${page}&pageSize=${pageSize}&filter=${filter}`,
-			)
+			.get<{ userProjClientData: IUserProjClientDto[]; totalItems: number }>(url)
 			.pipe(catchError(handleError));
 	}
 
@@ -133,5 +145,9 @@ export class OnboardingClientResourceService {
 		return this.http
 			.post<ApproveViewDto>(`${this.url}/profile-view/approve/${id}`, { comment, approval })
 			.pipe(catchError(handleError));
+	}
+
+	public deleteResource(resourceId: number): Observable<Resource> {
+		return this.http.delete<Resource>(`${this.url}/user/${resourceId}`).pipe(catchError(handleError));
 	}
 }

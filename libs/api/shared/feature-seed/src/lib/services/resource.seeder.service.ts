@@ -84,6 +84,12 @@ export class ResourceSeederService {
 	 * @returns locationEntity
 	 */
 	private static createLocation() {
+		if (Math.floor(Math.random() * 10) % 2 === 0) {
+			faker.setLocale('en_CA');
+			return new CreateLocationDto(faker.address.city(), faker.address.state(), 'Canada');
+		}
+
+		faker.setLocale('en_US');
 		return new CreateLocationDto(faker.address.city(), faker.address.state(), 'United States');
 	}
 

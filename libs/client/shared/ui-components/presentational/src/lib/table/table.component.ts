@@ -23,6 +23,8 @@ import { TableDataModel } from './table-data.model';
 export class TableComponent<T> implements OnInit, OnChanges, AfterViewInit {
 	@Output() paginatorEvent = new EventEmitter<PageEvent>();
 
+	@Output() buttonClickedEvent: EventEmitter<T> = new EventEmitter();
+
 	@ViewChild(MatPaginator, { read: true })
 	paginator!: MatPaginator;
 
@@ -42,9 +44,6 @@ export class TableComponent<T> implements OnInit, OnChanges, AfterViewInit {
 	displayedColumns: Array<string> = [];
 
 	dataSource: MatTableDataSource<TableDataModel> = new MatTableDataSource();
-
-	// eslint-disable-next-line @typescript-eslint/no-empty-function
-	constructor() {}
 
 	ngOnInit(): void {
 		this.displayedColumns = this.tableColumns.map(c => c.columnDef);
@@ -67,4 +66,8 @@ export class TableComponent<T> implements OnInit, OnChanges, AfterViewInit {
 			this.displayedColumns = this.tableColumns.map(c => c.columnDef);
 		}
 	}
+
+	buttonClick = (event: T) => {
+		this.buttonClickedEvent.emit(event);
+	};
 }

@@ -20,7 +20,7 @@ import {
 	StatusType,
 	ViewType,
 } from '@tempus/shared-domain';
-import { In, Repository } from 'typeorm';
+import { FindConditions, In, Repository } from 'typeorm';
 import { genSalt, hash } from 'bcrypt';
 import { ProjectEntity, ProjectResourceEntity, ResourceEntity } from '@tempus/api/shared/entity';
 import { CreateResourceDto, ResourceBasicDto, UpdateResourceDto, UserProjectClientDto } from '@tempus/api/shared/dto';
@@ -187,38 +187,45 @@ export class ResourceService {
 		page: number,
 		pageSize: number,
 		filter: string,
+		roleType?: RoleType[],
+		country?: string,
+		province?: string,
 	): Promise<{ userProjClientData: UserProjectClientDto[]; totalItems: number }> {
 		let resourcesAndCount: [ResourceEntity[], number] = [[], 0];
+
+		const whereClause: FindConditions<ResourceEntity> = {};
+
 		if (filter !== '') {
 			const projResources = await this.getProjResourcesMatchingFilter(filter);
 			const resMatchingFilterIds = Array.from(new Set(projResources.map(projRes => projRes.resource.id)));
-			resourcesAndCount = await this.resourceRepository.findAndCount({
-				relations: [
-					'projectResources',
-					'projectResources.project',
-					'views',
-					'projectResources.project.client',
-					'views.revision',
-				],
-				take: Number(pageSize),
-				skip: Number(page) * Number(pageSize),
-				where: {
-					id: In(resMatchingFilterIds),
-				},
-			});
-		} else {
-			resourcesAndCount = await this.resourceRepository.findAndCount({
-				relations: [
-					'projectResources',
-					'projectResources.project',
-					'views',
-					'projectResources.project.client',
-					'views.revision',
-				],
-				take: Number(pageSize),
-				skip: Number(page) * Number(pageSize),
-			});
+			whereClause.id = In(resMatchingFilterIds);
 		}
+		if (roleType && roleType.length > 0) {
+			const roleQuery = roleType.map(role => [role]);
+			whereClause.roles = In(roleQuery);
+		}
+
+		if (country) {
+			whereClause.location = { country };
+			if (province) {
+				// only search by province if country is present
+				whereClause.location = { ...whereClause.location, province };
+			}
+		}
+
+		resourcesAndCount = await this.resourceRepository.findAndCount({
+			relations: [
+				'projectResources',
+				'projectResources.project',
+				'views',
+				'projectResources.project.client',
+				'views.revision',
+				'location',
+			],
+			take: Number(pageSize),
+			skip: Number(page) * Number(pageSize),
+			where: whereClause,
+		});
 
 		const resources = resourcesAndCount[0];
 		const countOfItems = resourcesAndCount[1];
@@ -248,7 +255,15 @@ export class ResourceService {
 					projects: clientProjsMap[clientName],
 				} as ProjectClientData;
 			});
-			return new UserProjectClientDto(res.id, res.firstName, res.lastName, res.email, revNeeded, projClientData);
+			return new UserProjectClientDto(
+				res.id,
+				res.firstName,
+				res.lastName,
+				res.email,
+				revNeeded,
+				projClientData,
+				`${res.location.province}, ${res.location.country}`,
+			);
 		});
 
 		return { userProjClientData: userProjectInfo, totalItems: countOfItems };

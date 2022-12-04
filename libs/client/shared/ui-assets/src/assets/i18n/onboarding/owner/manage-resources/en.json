@@ -9,9 +9,16 @@
 				"project": "Project",
 				"client": "Client",
 				"assigned": "Assigned",
-				"unassigned": "Unassigned"
+				"unassigned": "Unassigned",
+				"location": "Location"
 			},
 			"approvalTooltip": "Awaiting approval"
+		},
+		"filter": {
+			"availabilityHeader": "Availability",
+			"assignedResource": "Assigned",
+			"availableResource": "Unassigned",
+			"locationHeader": "Location"
 		},
 		"modal": {
 			"clientLabel": "Client",
@@ -43,6 +50,12 @@
 				"confirmText": "Assign",
 				"closeText": "Cancel",
 				"noProjError": "No Available Project, select a different client"
+			},
+			"confirmDeleteModal": {
+				"title": "Delete {{resourceName}}'s account?",
+				"closeText": "Cancel",
+				"confirmText": "Delete",
+				"message": "This action cannot be undone."
 			}
 		}
 	}

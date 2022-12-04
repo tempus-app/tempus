@@ -32,10 +32,9 @@ export class LinkService {
 	}
 
 	async createLink(token: JwtPayload, link: LinkEntity, projectId: number, sendEmail = true): Promise<Link> {
-
-    if (link.userType !== RoleType.SUPERVISOR && !token.roles.includes(RoleType.BUSINESS_OWNER)) {
-      throw new ForbiddenException('Forbidden. Supervisor cannot invite non supervisors.');
-    }
+		if (link.userType !== RoleType.SUPERVISOR && !token.roles.includes(RoleType.BUSINESS_OWNER)) {
+			throw new ForbiddenException('Forbidden. Supervisor cannot invite non supervisors.');
+		}
 
 		const uniqueToken = uuidv4();
 		let expiryDate = new Date(link.expiry);

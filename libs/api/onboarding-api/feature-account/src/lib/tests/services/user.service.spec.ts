@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/no-extraneous-dependencies
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { ResourceEntity, UserEntity, ViewEntity } from '@tempus/api/shared/entity';
@@ -8,8 +9,10 @@ import { CommonService } from '@tempus/api/shared/feature-common';
 import { UpdateUserDto } from '@tempus/api/shared/dto';
 import { NotFoundException } from '@nestjs/common';
 // eslint-disable-next-line @nrwl/nx/enforce-module-boundaries
+import { EmailService } from '@tempus/api/shared/feature-email';
 import { UserService } from '../../services';
 import { createUserEntity, dbUser, jwtPayload, userEntity } from '../mocks/user.mock';
+import { businessOwnerJwtPayload } from '../mocks/link.mock';
 
 // mock depdencies
 const mockUserRepository = createMock<Repository<UserEntity>>();
@@ -32,6 +35,9 @@ jest.mock('typeorm', () => {
 		getManager: () => ({ transaction: transactionMock }),
 	};
 });
+const mockEmailService = {
+	sendDeletedAccountEmail: jest.fn(),
+};
 
 describe('UserService', () => {
 	let moduleRef: TestingModule;
@@ -44,6 +50,10 @@ describe('UserService', () => {
 				UserService,
 				ConfigService,
 				CommonService,
+				{
+					provide: EmailService,
+					useValue: mockEmailService,
+				},
 				{
 					provide: getRepositoryToken(UserEntity),
 					useValue: mockUserRepository,
@@ -159,7 +169,7 @@ describe('UserService', () => {
 		it('should successfully delete a user', async () => {
 			mockUserRepository.findOne.mockResolvedValue(dbUser);
 			mockUserRepository.remove.mockResolvedValue(dbUser);
-			await userService.deleteUser(dbUser.id);
+			await userService.deleteUser(businessOwnerJwtPayload, dbUser.id);
 			expect(mockUserRepository.findOne).toBeCalledWith(4);
 			expect(mockUserRepository.remove).toBeCalledWith({ ...dbUser });
 		});

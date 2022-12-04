@@ -14,6 +14,7 @@ import {
 	StreamableFile,
 	Res,
 	Query,
+	ParseArrayPipe,
 } from '@nestjs/common';
 import { AzureAccount, Resource, RoleType, User } from '@tempus/shared-domain';
 // eslint-disable-next-line @nrwl/nx/enforce-module-boundaries
@@ -71,8 +72,11 @@ export class UserController {
 		@Query('page') page: number,
 		@Query('pageSize') pageSize: number,
 		@Query('filter') filter: string,
+		@Query('country') country?: string,
+		@Query('province') province?: string,
+		@Query('roleType', new ParseArrayPipe({ items: String, separator: ',', optional: true })) roleType?: RoleType[],
 	): Promise<{ userProjClientData: UserProjectClientDto[]; totalItems: number }> {
-		return this.resourceService.getAllResourceProjectInfo(page, pageSize, filter);
+		return this.resourceService.getAllResourceProjectInfo(page, pageSize, filter, roleType, country, province);
 	}
 
 	@UseGuards(JwtAuthGuard, RolesGuard)
@@ -165,7 +169,7 @@ export class UserController {
 	// delete User or Resource
 	@UseGuards(JwtAuthGuard, PermissionGuard)
 	@Delete(':userId')
-	async deleteUser(@Param('userId') userId: number): Promise<void> {
-		return this.userService.deleteUser(userId);
+	async deleteUser(@Param('userId') userId: number, @Request() req): Promise<void> {
+		return this.userService.deleteUser(req.user, userId);
 	}
 }
