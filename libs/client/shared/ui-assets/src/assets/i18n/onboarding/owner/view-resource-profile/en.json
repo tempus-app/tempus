@@ -63,6 +63,9 @@
 			"title": "Revision Approved!",
 			"message": "You have approved the revision",
 			"confirmText": "CLOSE"
-		}
+		},
+		"downloadDialog": {
+            "message": "Download in progress!"
+        }
 	}
 }

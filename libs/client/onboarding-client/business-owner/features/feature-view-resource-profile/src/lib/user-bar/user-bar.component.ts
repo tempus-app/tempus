@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/dot-notation */
 import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
 import { LoadView, ProjectResource, RoleType, ViewNames } from '@tempus/shared-domain';
 import {
@@ -6,10 +7,10 @@ import {
 } from '@tempus/client/onboarding-client/shared/data-access';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder } from '@angular/forms';
-import { ButtonType } from '@tempus/client/shared/ui-components/presentational';
-import { CustomModalType, ModalService, ModalType } from '@tempus/client/shared/ui-components/modal';
-import { catchError, of, Subject, take, takeUntil } from 'rxjs';
+import { ButtonType, SnackbarService } from '@tempus/client/shared/ui-components/presentational';
+import { ModalService, ModalType, CustomModalType } from '@tempus/client/shared/ui-components/modal';
 import { TranslateService } from '@ngx-translate/core';
+import { catchError, of, Subject, take, takeUntil } from 'rxjs';
 import { isValidRole } from '@tempus/client/shared/util';
 
 @Component({
@@ -61,7 +62,13 @@ export class UserBarComponent implements OnChanges {
 		private translateService: TranslateService,
 		private fb: FormBuilder,
 		private router: Router,
-	) {}
+		private snackbar: SnackbarService,
+	) {
+		const { currentLang } = translateService;
+		// eslint-disable-next-line no-param-reassign
+		translateService.currentLang = '';
+		translateService.use(currentLang);
+	}
 
 	destroyed$ = new Subject<void>();
 
@@ -88,6 +95,12 @@ export class UserBarComponent implements OnChanges {
 			link.download = `${this.resourceName}-${this.viewNames[index]}`;
 			link.click();
 		});
+		this.translateService
+			.get(`${this.viewResourceProfilePrefx}downloadDialog`)
+			.pipe(take(1))
+			.subscribe(data => {
+				this.snackbar.open(data['message']);
+			});
 	}
 
 	deleteView() {
