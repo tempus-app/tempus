@@ -1,9 +1,16 @@
 import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
 import { LoadView, ProjectResource, ViewNames } from '@tempus/shared-domain';
-import { OnboardingClientResourceService } from '@tempus/client/onboarding-client/shared/data-access';
+import {
+	downloadProfileByViewId,
+	OnboardingClientResourceService,
+	OnboardingClientState,
+	selectDownloadProfile,
+} from '@tempus/client/onboarding-client/shared/data-access';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder } from '@angular/forms';
 import { ButtonType } from '@tempus/client/shared/ui-components/presentational';
+import { Store } from '@ngrx/store';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
 	selector: 'tempus-user-bar',
@@ -36,6 +43,8 @@ export class UserBarComponent implements OnChanges {
 
 	viewResourceProfilePrefx = 'viewResourceProfile.';
 
+	destroyed$ = new Subject<void>();
+
 	@Output() newViewSelected = new EventEmitter<number>();
 
 	@Output() editViewSelected = new EventEmitter();
@@ -45,6 +54,7 @@ export class UserBarComponent implements OnChanges {
 		private resourceService: OnboardingClientResourceService,
 		private fb: FormBuilder,
 		private router: Router,
+		private sharedStore: Store<OnboardingClientState>,
 	) {}
 
 	ngOnChanges(): void {
@@ -62,14 +72,27 @@ export class UserBarComponent implements OnChanges {
 
 	downloadProfile() {
 		// Taken from https://stackoverflow.com/questions/52154874/angular-6-downloading-file-from-rest-api
-		this.resourceService.downloadProfile(this.currentViewID).subscribe(data => {
-			const downloadURL = window.URL.createObjectURL(data);
-			const link = document.createElement('a');
-			link.href = downloadURL;
-			const index = this.viewIDs.indexOf(this.currentViewID);
-			link.download = `${this.resourceName}-${this.viewNames[index]}`;
-			link.click();
-		});
+		this.sharedStore.dispatch(downloadProfileByViewId({ viewId: this.currentViewID }));
+
+		this.sharedStore
+			.select(selectDownloadProfile)
+			.pipe(takeUntil(this.destroyed$))
+			.subscribe(data => {
+				const downloadURL = window.URL.createObjectURL(data);
+				const link = document.createElement('a');
+				link.href = downloadURL;
+				const index = this.viewIDs.indexOf(this.currentViewID);
+				link.download = `${this.resourceName}-${this.viewNames[index]}`;
+				link.click();
+			});
+		// this.resourceService.downloadProfile(this.currentViewID).subscribe(data => {
+		// 	const downloadURL = window.URL.createObjectURL(data);
+		// 	const link = document.createElement('a');
+		// 	link.href = downloadURL;
+		// 	const index = this.viewIDs.indexOf(this.currentViewID);
+		// 	link.download = `${this.resourceName}-${this.viewNames[index]}`;
+		// 	link.click();
+		// });
 	}
 
 	onClick(optionSelected: string): void {

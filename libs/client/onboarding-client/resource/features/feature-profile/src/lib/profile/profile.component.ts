@@ -1,11 +1,15 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import {
 	getResourceInformation,
+	getResourceInformationById,
+	getViewById,
 	OnboardingClientResourceService,
 	OnboardingClientState,
 	selectResourceDetails,
+	selectResourceViews,
+	selectView,
 } from '@tempus/client/onboarding-client/shared/data-access';
-import { Subject, take, takeUntil } from 'rxjs';
+import { skip, Subject, take, takeUntil } from 'rxjs';
 import { ButtonType } from '@tempus/client/shared/ui-components/presentational';
 import {
 	ICreateExperienceDto,
@@ -21,7 +25,6 @@ import {
 	getResourceOriginalResumeById,
 	selectDownloadProfile,
 	selectResourceOriginalResume,
-	TempusResourceState,
 } from '@tempus/client/onboarding-client/resource/data-access';
 import { TranslateService } from '@ngx-translate/core';
 import { sortViewsByLatestUpdated } from '@tempus/client/shared/util';
@@ -43,10 +46,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
 	totalViews = 0;
 
 	constructor(
-		private resourceService: OnboardingClientResourceService,
 		private translateService: TranslateService,
 		private sharedStore: Store<OnboardingClientState>,
-		private resourceStore: Store<TempusResourceState>,
 		private router: Router,
 		private route: ActivatedRoute,
 	) {
@@ -105,33 +106,25 @@ export class ProfileComponent implements OnInit, OnDestroy {
 	editViewEnabled = false;
 
 	ngOnInit(): void {
+		this.sharedStore.dispatch(getResourceInformation());
 		this.sharedStore
 			.select(selectResourceDetails)
 			.pipe(take(1))
 			.subscribe(data => {
-				if (data) {
-					this.userId = data.userId;
-					this.firstName = data.firstName || '';
-					this.lastName = data.lastName || '';
-				} else {
-					this.sharedStore.dispatch(getResourceInformation());
-				}
+				this.userId = data.userId;
+				this.firstName = data.firstName || '';
+				this.lastName = data.lastName || '';
 			});
 
-		this.resourceStore
+		this.sharedStore.dispatch(getResourceOriginalResumeById({ resourceId: this.userId }));
+		this.sharedStore
 			.select(selectResourceOriginalResume)
 			.pipe(takeUntil(this.destroyed$))
 			.subscribe(blob => {
 				if (blob) {
 					this.resume = new File([blob], 'original-resume.pdf');
-				} else {
-					this.resourceStore.dispatch(getResourceOriginalResumeById({ resourceId: this.userId }));
 				}
 			});
-
-		this.resourceStore.dispatch(
-			getAllViewsByResourceId({ resourceId: this.userId, pageSize: this.pageSize, pageNum: this.pageNum }),
-		);
 
 		// display latest primary view
 		// this.resourceStore
@@ -161,11 +154,17 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
 		const viewId = parseInt(this.route.snapshot.paramMap.get('id') || '0', 10);
 		if (viewId) {
-			this.resourceService.getViewById(viewId).subscribe(view => {
-				this.pageTitle = view.type;
-				this.loadView(view);
-				this.dataLoaded = true;
-			});
+			this.sharedStore.dispatch(getViewById({ viewId }));
+			this.sharedStore
+				.select(selectView)
+				.pipe(takeUntil(this.destroyed$))
+				.subscribe(resourceView => {
+					if (resourceView) {
+						this.pageTitle = resourceView?.type || '';
+						this.loadView(resourceView);
+						this.dataLoaded = true;
+					}
+				});
 		} else {
 			// Display Primary view
 			this.translateService
@@ -175,43 +174,64 @@ export class ProfileComponent implements OnInit, OnDestroy {
 					this.pageTitle = data;
 				});
 
-			this.resourceService.getResourceProfileViews(this.userId).subscribe(data => {
-				let filteredAndSortedViews = data.views?.filter(view => view.viewType === ViewType.PRIMARY);
-				filteredAndSortedViews = sortViewsByLatestUpdated(filteredAndSortedViews);
-				this.loadView(filteredAndSortedViews[0]);
-				this.dataLoaded = true;
-			});
+			this.sharedStore.dispatch(
+				getAllViewsByResourceId({ resourceId: this.userId, pageSize: this.pageSize, pageNum: this.pageNum }),
+			);
+			this.sharedStore
+				.select(selectResourceViews)
+				.pipe(takeUntil(this.destroyed$))
+				.subscribe(data => {
+					let filteredAndSortedViews = data.views?.filter(view => view.viewType === ViewType.PRIMARY);
+					filteredAndSortedViews = sortViewsByLatestUpdated(filteredAndSortedViews);
+					this.loadView(filteredAndSortedViews[0]);
+					this.dataLoaded = true;
+				});
+
+			// this.resourceService.getResourceProfileViews(this.userId).subscribe(data => {
+			// 	let filteredAndSortedViews = data.views?.filter(view => view.viewType === ViewType.PRIMARY);
+			// 	filteredAndSortedViews = sortViewsByLatestUpdated(filteredAndSortedViews);
+			// 	this.loadView(filteredAndSortedViews[0]);
+			// 	this.dataLoaded = true;
+			// });
 		}
 
-		this.resourceService.getResourceInformation().subscribe(resData => {
-			this.userId = resData.id;
-			this.fullName = `${resData.firstName} ${resData.lastName}`;
+		this.sharedStore.dispatch(getResourceInformationById({ resourceId: this.userId }));
+		this.sharedStore
+			.select(selectResourceDetails)
+			.pipe(skip(1), takeUntil(this.destroyed$))
+			.subscribe(data => {
+				this.userId = data.userId;
+				this.fullName = `${data.firstName} ${data.lastName}`;
+			});
+		// this.resourceService.getResourceInformation().subscribe(resData => {
+		// 	this.userId = resData.id;
+		// 	this.fullName = `${resData.firstName} ${resData.lastName}`;
 
-			// Use viewId from route
-			// const viewId = parseInt(this.route.snapshot.paramMap.get('id') || '0', 10);
-			// if (viewId) {
-			// 	this.resourceService.getViewById(viewId).subscribe(view => {
-			// 		this.pageTitle = view.type;
-			// 		this.loadView(view);
-			// 		this.dataLoaded = true;
-			// 	});
-			// } else {
-			// 	// Display Primary view
-			// 	this.translateService
-			// 		.get('onboardingResourceProfile.myProfile')
-			// 		.pipe(take(1))
-			// 		.subscribe(data => {
-			// 			this.pageTitle = data;
-			// 		});
+		// Use viewId from route
+		// const viewId = parseInt(this.route.snapshot.paramMap.get('id') || '0', 10);
+		// if (viewId) {
+		// 	this.resourceService.getViewById(viewId).subscribe(view => {
+		// 		this.pageTitle = view.type;
+		// 		this.loadView(view);
+		// 		this.dataLoaded = true;
+		// 	});
+		// } else {
+		// 	// Display Primary view
+		// 	this.translateService
+		// 		.get('onboardingResourceProfile.myProfile')
+		// 		.pipe(take(1))
+		// 		.subscribe(data => {
+		// 			this.pageTitle = data;
+		// 		});
 
-			// 	this.resourceService.getResourceProfileViews(this.userId).subscribe(data => {
-			// 		let filteredAndSortedViews = data.views?.filter(view => view.viewType === ViewType.PRIMARY);
-			// 		filteredAndSortedViews = sortViewsByLatestUpdated(filteredAndSortedViews);
-			// 		this.loadView(filteredAndSortedViews[0]);
-			// 		this.dataLoaded = true;
-			// 	});
-			// }
-		});
+		// 	this.resourceService.getResourceProfileViews(this.userId).subscribe(data => {
+		// 		let filteredAndSortedViews = data.views?.filter(view => view.viewType === ViewType.PRIMARY);
+		// 		filteredAndSortedViews = sortViewsByLatestUpdated(filteredAndSortedViews);
+		// 		this.loadView(filteredAndSortedViews[0]);
+		// 		this.dataLoaded = true;
+		// 	});
+		// }
+		// });
 	}
 
 	loadView(view: View) {
@@ -240,8 +260,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
 	downloadProfile() {
 		// Taken from https://stackoverflow.com/questions/52154874/angular-6-downloading-file-from-rest-api
-		this.resourceStore.dispatch(downloadProfileByViewId({ viewId: this.currentViewId }));
-		this.resourceStore
+		this.sharedStore.dispatch(downloadProfileByViewId({ viewId: this.currentViewId }));
+		this.sharedStore
 			.select(selectDownloadProfile)
 			.pipe(takeUntil(this.destroyed$))
 			.subscribe(data => {

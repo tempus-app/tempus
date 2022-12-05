@@ -1,5 +1,6 @@
 import { createReducer, on } from '@ngrx/store';
-import { ProjectResource, View } from '@tempus/shared-domain';
+import { ApproveViewDto } from '@tempus/api/shared/dto';
+import { ProjectResource, Revision, View } from '@tempus/shared-domain';
 import { AsyncRequestState } from '../../enum';
 import * as ResourceActions from './resource.actions';
 
@@ -11,7 +12,9 @@ export interface ResourceState {
 	lastName: string | null;
 	email: string | null;
 	phoneNumber: string | null;
-	views: View[] | null;
+	views: View[] | [];
+	view: View | null;
+	revision: Revision | null;
 	resume: Blob | null;
 	totalViewsData: number;
 	city: string | null;
@@ -20,7 +23,8 @@ export interface ResourceState {
 	linkedInLink: string | null;
 	githubLink: string | null;
 	otherLink: string | null;
-	projectResources: ProjectResource[] | null;
+	projectResources: ProjectResource[] | [];
+	approveOrDeny: ApproveViewDto | null;
 	error: Error | null;
 }
 
@@ -30,7 +34,9 @@ export const initialState: ResourceState = {
 	lastName: null,
 	email: null,
 	phoneNumber: null,
-	views: null,
+	views: [],
+	view: null,
+	revision: null,
 	resume: null,
 	totalViewsData: 0,
 	city: null,
@@ -39,7 +45,8 @@ export const initialState: ResourceState = {
 	linkedInLink: null,
 	githubLink: null,
 	otherLink: null,
-	projectResources: null,
+	projectResources: [],
+	approveOrDeny: null,
 	error: null,
 };
 
@@ -139,6 +146,19 @@ export const resourceReducer = createReducer(
 		status: AsyncRequestState.ERROR,
 		error,
 	})),
+	// getViewById
+	on(ResourceActions.getViewById, state => ({ ...state, status: AsyncRequestState.LOADING })),
+	on(ResourceActions.getViewByIdSuccess, (state, { view }) => ({
+		...state,
+		view,
+		status: AsyncRequestState.SUCCESS,
+		error: null,
+	})),
+	on(ResourceActions.getViewByIdFailure, (state, { error }) => ({
+		...state,
+		error,
+		status: AsyncRequestState.ERROR,
+	})),
 	// getAllViewsByResourceId
 	on(ResourceActions.getAllViewsByResourceId, state => ({ ...state, status: AsyncRequestState.LOADING })),
 	on(ResourceActions.getAllViewsByResourceIdSuccess, (state, { views, totalViews }) => ({
@@ -152,6 +172,28 @@ export const resourceReducer = createReducer(
 		...state,
 		error,
 		status: AsyncRequestState.ERROR,
+	})),
+	// editResourceView
+	on(ResourceActions.editResourceView, state => ({ ...state, status: AsyncRequestState.LOADING })),
+	on(ResourceActions.editResourceViewSuccess, (state, { revision }) => ({
+		...state,
+		revision,
+		status: AsyncRequestState.SUCCESS,
+	})),
+	on(ResourceActions.editResourceViewFailure, (state, { error }) => ({
+		...state,
+		error,
+	})),
+	// createResourceView
+	on(ResourceActions.createResourceView, state => ({ ...state, status: AsyncRequestState.LOADING })),
+	on(ResourceActions.createResourceViewSuccess, (state, { view }) => ({
+		...state,
+		view,
+		status: AsyncRequestState.SUCCESS,
+	})),
+	on(ResourceActions.createResourceViewFailure, (state, { error }) => ({
+		...state,
+		error,
 	})),
 	// getResourceOriginalResumeById
 	on(ResourceActions.getResourceOriginalResumeById, state => ({ ...state, status: AsyncRequestState.LOADING })),
@@ -172,6 +214,17 @@ export const resourceReducer = createReducer(
 		status: AsyncRequestState.SUCCESS,
 	})),
 	on(ResourceActions.downloadProfileByViewIdFailure, (state, { error }) => ({
+		...state,
+		error,
+	})),
+	// approveOrDenyView
+	on(ResourceActions.approveOrDenyRevision, state => ({ ...state, status: AsyncRequestState.LOADING })),
+	on(ResourceActions.approveOrDenyRevisionSuccess, (state, { approveOrDeny }) => ({
+		...state,
+		approveOrDeny,
+		status: AsyncRequestState.SUCCESS,
+	})),
+	on(ResourceActions.approveOrDenyRevisionFailure, (state, { error }) => ({
 		...state,
 		error,
 	})),

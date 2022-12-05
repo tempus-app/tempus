@@ -10,7 +10,7 @@ export interface ResourceState {
 	lastName: string | null;
 	email: string | null;
 	views: View[] | null;
-	// resume: Blob | null;
+	resume: Blob | null;
 	totalViewsData: number;
 	error: Error | null;
 }
@@ -20,7 +20,7 @@ export const initialState: ResourceState = {
 	lastName: null,
 	email: null,
 	views: null,
-	// resume: null,
+	resume: null,
 	totalViewsData: 0,
 	error: null,
 };

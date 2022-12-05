@@ -9,6 +9,11 @@ import {
 	OnboardingClientViewsService,
 } from '../../services';
 import {
+	approveOrDenyRevision,
+	approveOrDenyRevisionSuccess,
+	createResourceView,
+	createResourceViewFailure,
+	createResourceViewSuccess,
 	getAllViewsByResourceId,
 	getResourceInformation,
 	getResourceInformationById,
@@ -20,14 +25,21 @@ import {
 	updateUserInfoSuccess,
 } from './resource.actions';
 import {
+	approveOrDenyRevisionFailure,
 	downloadProfileByViewId,
 	downloadProfileByViewIdFailure,
 	downloadProfileByViewIdSuccess,
+	editResourceView,
+	editResourceViewFailure,
+	editResourceViewSuccess,
 	getAllViewsByResourceIdFailure,
 	getAllViewsByResourceIdSuccess,
 	getResourceInformationByIdFailure,
 	getResourceInformationSuccess,
 	getResourceOriginalResumeByIdSuccess,
+	getViewById,
+	getViewByIdFailure,
+	getViewByIdSuccess,
 } from '.';
 import { OnboardingClientState } from '../onboardingClient.state';
 
@@ -112,6 +124,20 @@ export class ResourceEffects {
 		),
 	);
 
+	getViewById$ = createEffect(() =>
+		this.actions$.pipe(
+			ofType(getViewById),
+			switchMap(data =>
+				this.viewsService.getViewById(data.viewId).pipe(
+					map(res => {
+						return getViewByIdSuccess({ view: res });
+					}),
+					catchError(error => of(getViewByIdFailure({ error }))),
+				),
+			),
+		),
+	);
+
 	getAllViews$ = createEffect(() =>
 		this.actions$.pipe(
 			ofType(getAllViewsByResourceId),
@@ -121,6 +147,34 @@ export class ResourceEffects {
 						return getAllViewsByResourceIdSuccess({ views: res.views, totalViews: res.totalViews });
 					}),
 					catchError(error => of(getAllViewsByResourceIdFailure({ error }))),
+				),
+			),
+		),
+	);
+
+	editResourceView$ = createEffect(() =>
+		this.actions$.pipe(
+			ofType(editResourceView),
+			switchMap(data =>
+				this.viewsService.editResourceView(data.viewId, data.newView).pipe(
+					map(res => {
+						return editResourceViewSuccess({ revision: res });
+					}),
+					catchError(error => of(editResourceViewFailure({ error }))),
+				),
+			),
+		),
+	);
+
+	createResourceView$ = createEffect(() =>
+		this.actions$.pipe(
+			ofType(createResourceView),
+			switchMap(data =>
+				this.viewsService.createSecondaryView(data.resourceId, data.newView).pipe(
+					map(res => {
+						return createResourceViewSuccess({ view: res });
+					}),
+					catchError(error => of(createResourceViewFailure({ error }))),
 				),
 			),
 		),
@@ -149,6 +203,20 @@ export class ResourceEffects {
 						return downloadProfileByViewIdSuccess({ resume: res });
 					}),
 					catchError(error => of(downloadProfileByViewIdFailure({ error }))),
+				),
+			),
+		),
+	);
+
+	approveOrDeny$ = createEffect(() =>
+		this.actions$.pipe(
+			ofType(approveOrDenyRevision),
+			switchMap(data =>
+				this.viewsService.approveOrDenyRevision(data.viewId, data.comment, data.approval).pipe(
+					map(res => {
+						return approveOrDenyRevisionSuccess({ approveOrDeny: res });
+					}),
+					catchError(error => of(approveOrDenyRevisionFailure({ error }))),
 				),
 			),
 		),

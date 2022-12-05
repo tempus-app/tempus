@@ -6,9 +6,13 @@ import {
 	OnboardingClientState,
 	getResourceInformationById,
 	selectResourceDetails,
+	selectView,
+	getViewById,
+	selectRevision,
+	editResourceView,
 } from '@tempus/client/onboarding-client/shared/data-access';
 import { LoadView, ProjectResource } from '@tempus/shared-domain';
-import { skip, Subject, take, takeUntil } from 'rxjs';
+import { skip, Subject, takeUntil } from 'rxjs';
 import {
 	BusinessOwnerState,
 	getOriginalResume,
@@ -86,12 +90,23 @@ export class ResourceProfileComponent implements OnInit, OnDestroy {
 		this.changeDetector.detectChanges();
 		const viewId = parseInt(this.route.snapshot.queryParamMap.get('viewId') || '0', 10);
 		if (viewId) {
-			this.resourceService
-				.getViewById(viewId)
-				.pipe(take(1))
+			this.sharedStore
+				.select(selectView)
+				.pipe(takeUntil(this.$destroyed))
 				.subscribe(view => {
-					this.newViewForm.setFormDataFromView(view);
+					if (view) {
+						this.newViewForm.setFormDataFromView(view);
+					} else {
+						this.sharedStore.dispatch(getViewById({ viewId }));
+					}
 				});
+
+			// this.resourceService
+			// 	.getViewById(viewId)
+			// 	.pipe(take(1))
+			// 	.subscribe(view => {
+			// 		this.newViewForm.setFormDataFromView(view);
+			// 	});
 		}
 	}
 
@@ -103,12 +118,23 @@ export class ResourceProfileComponent implements OnInit, OnDestroy {
 	submitChanges() {
 		const viewId = parseInt(this.route.snapshot.queryParamMap.get('viewId') || '0', 10);
 		const newView = this.newViewForm.generateNewView();
-		this.resourceService
-			.editResourceView(viewId, newView)
-			.pipe(take(1))
-			.subscribe(view => {
-				this.router.navigate([], { queryParams: { viewId: view.id } }).then(() => window.location.reload());
+		this.sharedStore.dispatch(editResourceView({ viewId, newView }));
+		this.sharedStore
+			.select(selectRevision)
+			.pipe(skip(1), takeUntil(this.$destroyed))
+			.subscribe(revision => {
+				if (revision) {
+					this.router
+						.navigate([], { queryParams: { viewId: revision.id } })
+						.then(() => window.location.reload());
+				}
 			});
+		// this.resourceService
+		// 	.editResourceView(viewId, newView)
+		// 	.pipe(take(1))
+		// 	.subscribe(view => {
+		// 		this.router.navigate([], { queryParams: { viewId: view.id } }).then(() => window.location.reload());
+		// 	});
 		this.closeEditView();
 	}
 

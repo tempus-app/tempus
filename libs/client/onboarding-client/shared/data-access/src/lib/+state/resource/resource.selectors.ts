@@ -29,10 +29,16 @@ export const selectResourceBasicDetails = createSelector(selectState, (state: Re
 	return { firstName: state.firstName, lastName: state.lastName, email: state.email };
 });
 
+export const selectView = createSelector(selectState, (state: ResourceState) => state.view);
+
 export const selectResourceViews = createSelector(selectState, (state: ResourceState) => {
 	return { views: state.views, totalViews: state.totalViewsData };
 });
 
+export const selectRevision = createSelector(selectState, (state: ResourceState) => state.revision);
+
 export const selectResourceOriginalResume = createSelector(selectState, (state: ResourceState) => state.resume);
+
+export const selectApproveOrDeny = createSelector(selectState, (state: ResourceState) => state.approveOrDeny);
 
 export const selectDownloadProfile = createSelector(selectState, (state: ResourceState) => state.resume);
