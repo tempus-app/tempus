@@ -162,7 +162,7 @@ export class ResourceService {
 		return projects;
 	}
 
-	async getProjResourcesMatchingFilter(filter: string): Promise<ProjectResourceEntity[] | ResourceEntity[]> {
+	async getProjResourcesMatchingFilter(filter: string): Promise<ResourceEntity[]> {
 		const projWithFilter = await this.getProjectWithMatchingFilter(filter);
 		const projIds = projWithFilter.map(proj => proj.id);
 
@@ -182,18 +182,16 @@ export class ResourceService {
 			)
 			.getMany();
 
+		const resources = projResourcesMatchingFilter.map(projRes => projRes.resource);
 		// maybe searching for an unassigned resource
-		if (projResourcesMatchingFilter.length === 0) {
-			const unassignedResourceFilter = await this.resourceRepository
-				.createQueryBuilder('resource')
-				.where(`CONCAT("resource"."firstName", ' ', "resource"."lastName") like :query`, {
-					query: `%${filter}%`,
-				})
-				.getMany();
+		const unassignedResourceFilter = await this.resourceRepository
+			.createQueryBuilder('resource')
+			.where(`CONCAT("resource"."firstName", ' ', "resource"."lastName") like :query`, {
+				query: `%${filter}%`,
+			})
+			.getMany();
 
-			return unassignedResourceFilter;
-		}
-		return projResourcesMatchingFilter;
+		return [...resources, ...unassignedResourceFilter];
 	}
 
 	async getAllResourceProjectInfo(
@@ -210,13 +208,8 @@ export class ResourceService {
 		if (filter !== '') {
 			const projResources = await this.getProjResourcesMatchingFilter(filter);
 
-			if (projResources[0] instanceof ProjectResourceEntity) {
-				const resMatchingFilterIds = Array.from(new Set(projResources.map(projRes => projRes.resource.id)));
-				whereClause.id = In(resMatchingFilterIds);
-			} else {
-				const resMatchingFilterIds = Array.from(new Set(projResources.map(resource => resource.id)));
-				whereClause.id = In(resMatchingFilterIds);
-			}
+			const resMatchingFilterIds = Array.from(new Set(projResources.map(resource => resource.id)));
+			whereClause.id = In(resMatchingFilterIds);
 		}
 		if (roleType && roleType.length > 0) {
 			const roleQuery = roleType.map(role => [role]);
