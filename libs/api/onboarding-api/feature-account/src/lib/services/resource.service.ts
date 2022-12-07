@@ -162,7 +162,7 @@ export class ResourceService {
 		return projects;
 	}
 
-	async getProjResourcesMatchingFilter(filter: string): Promise<ProjectResourceEntity[]> {
+	async getProjResourcesMatchingFilter(filter: string): Promise<ProjectResourceEntity[] | ResourceEntity[]> {
 		const projWithFilter = await this.getProjectWithMatchingFilter(filter);
 		const projIds = projWithFilter.map(proj => proj.id);
 
@@ -171,6 +171,7 @@ export class ResourceService {
 		if (projIds.length === 0) {
 			projIds.push(-999);
 		}
+
 		const projResourcesMatchingFilter = await this.projectResourceRepository
 			.createQueryBuilder('projRes')
 			.leftJoinAndSelect('projRes.project', 'project')
@@ -180,6 +181,18 @@ export class ResourceService {
 				{ query: `%${filter}%`, projIds },
 			)
 			.getMany();
+
+		// maybe searching for an unassigned resource
+		if (projResourcesMatchingFilter.length === 0) {
+			const unassignedResourceFilter = await this.resourceRepository
+				.createQueryBuilder('resource')
+				.where(`CONCAT("resource"."firstName", ' ', "resource"."lastName") like :query`, {
+					query: `%${filter}%`,
+				})
+				.getMany();
+
+			return unassignedResourceFilter;
+		}
 		return projResourcesMatchingFilter;
 	}
 
@@ -194,11 +207,16 @@ export class ResourceService {
 		let resourcesAndCount: [ResourceEntity[], number] = [[], 0];
 
 		const whereClause: FindConditions<ResourceEntity> = {};
-
 		if (filter !== '') {
 			const projResources = await this.getProjResourcesMatchingFilter(filter);
-			const resMatchingFilterIds = Array.from(new Set(projResources.map(projRes => projRes.resource.id)));
-			whereClause.id = In(resMatchingFilterIds);
+
+			if (projResources[0] instanceof ProjectResourceEntity) {
+				const resMatchingFilterIds = Array.from(new Set(projResources.map(projRes => projRes.resource.id)));
+				whereClause.id = In(resMatchingFilterIds);
+			} else {
+				const resMatchingFilterIds = Array.from(new Set(projResources.map(resource => resource.id)));
+				whereClause.id = In(resMatchingFilterIds);
+			}
 		}
 		if (roleType && roleType.length > 0) {
 			const roleQuery = roleType.map(role => [role]);

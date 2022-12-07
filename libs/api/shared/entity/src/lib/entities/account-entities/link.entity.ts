@@ -40,7 +40,7 @@ export class LinkEntity implements Link {
 	@Column()
 	lastName: string;
 
-	@Column({ unique: true })
+	@Column()
 	email: string;
 
 	@Column()
