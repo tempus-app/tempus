@@ -19,11 +19,11 @@ export class LinkService {
 
 	async createLinkAndSendEmail(fullLink: LinkEntity, sendEmail: boolean) {
 		return getManager().transaction(async manager => {
-			const oldRequests = await manager.getRepository(LinkEntity).find({
+			const oldInvites = await manager.getRepository(LinkEntity).find({
 				where: { email: fullLink.email },
 			});
-			// if the user repeatedly sends reset reuqests, we want the last one to be valid
-			oldRequests.forEach(async request => {
+			// if the user repeatedly sends invite reuqests, we want the last one to be valid
+			oldInvites.forEach(async request => {
 				await manager.getRepository(LinkEntity).save({ ...request, status: StatusType.INACTIVE });
 			});
 			const createdLink = await manager.getRepository(LinkEntity).save(fullLink);

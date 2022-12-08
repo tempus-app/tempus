@@ -48,12 +48,11 @@ export class EmailService {
 				name: `${passwordResetDetails.user.firstName} ${passwordResetDetails.user.lastName}`,
 				expiry: new Date(passwordResetDetails.expiry).toLocaleDateString(),
 			},
-			// TODO: uncomment me when the next version of nestmailer is released
 			attachments: [
 				{
-					filename: 'placeholder.png',
-					path: path.resolve(`${__dirname}/assets/images/`),
-					cid: 'CalLogo:imgID', // same cid value as in the html img src
+					filename: 'CAL-Logo.png',
+					path: path.resolve(`${__dirname}/assets/images/CAL-Logo.png`),
+					cid: 'CAL-Logo', // same cid value as in the html img src
 				},
 			],
 		});
@@ -69,6 +68,13 @@ export class EmailService {
 			context: {
 				name: `${user.firstName} ${user.lastName}`,
 			},
+			attachments: [
+				{
+					filename: 'CAL-Logo.png',
+					path: path.resolve(`${__dirname}/assets/images/CAL-Logo.png`),
+					cid: 'CAL-Logo', // same cid value as in the html img src
+				},
+			],
 		});
 	}
 }

@@ -171,7 +171,6 @@ export class ResourceService {
 		if (projIds.length === 0) {
 			projIds.push(-999);
 		}
-
 		const projResourcesMatchingFilter = await this.projectResourceRepository
 			.createQueryBuilder('projRes')
 			.leftJoinAndSelect('projRes.project', 'project')
@@ -207,7 +206,6 @@ export class ResourceService {
 		const whereClause: FindConditions<ResourceEntity> = {};
 		if (filter !== '') {
 			const projResources = await this.getProjResourcesMatchingFilter(filter);
-
 			const resMatchingFilterIds = Array.from(new Set(projResources.map(resource => resource.id)));
 			whereClause.id = In(resMatchingFilterIds);
 		}
