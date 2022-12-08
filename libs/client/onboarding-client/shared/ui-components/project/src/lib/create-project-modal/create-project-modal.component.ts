@@ -29,7 +29,7 @@ export class CreateProjectModalComponent implements OnInit {
 	prefix = 'modal.newProjectModal.';
 
 	statusOptions = [
-		{ val: 'Not Started', id: 'not_started' },
+		{ val: 'Not Started', id: 'Not Started' },
 		{ val: 'Active', id: 'active' },
 		{ val: 'Completed', id: 'completed' },
 	];
