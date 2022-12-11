@@ -11,6 +11,7 @@ export interface ResourceState {
 	firstName: string | null;
 	lastName: string | null;
 	email: string | null;
+	calEmail: string | null;
 	phoneNumber: string | null;
 	views: View[] | [];
 	view: View | null;
@@ -33,6 +34,7 @@ export const initialState: ResourceState = {
 	firstName: null,
 	lastName: null,
 	email: null,
+	calEmail: null,
 	phoneNumber: null,
 	views: [],
 	view: null,
@@ -63,6 +65,7 @@ export const resourceReducer = createReducer(
 				firstName,
 				lastName,
 				email,
+				calEmail,
 				city,
 				province,
 				country,
@@ -78,6 +81,7 @@ export const resourceReducer = createReducer(
 			firstName,
 			lastName,
 			email,
+			calEmail,
 			city,
 			province,
 			country,
@@ -103,6 +107,7 @@ export const resourceReducer = createReducer(
 				firstName,
 				lastName,
 				email,
+				calEmail,
 				city,
 				province,
 				country,
@@ -117,6 +122,7 @@ export const resourceReducer = createReducer(
 			firstName,
 			lastName,
 			email,
+			calEmail,
 			city,
 			province,
 			country,

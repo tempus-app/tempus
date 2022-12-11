@@ -10,10 +10,11 @@ export const loginSuccess = createAction(
 	props<{
 		accessToken: string;
 		refreshToken: string;
+		// loggedInUserId: number;
 		firstName: string;
 		lastName: string;
 		email: string;
-    roles: RoleType[];
+		roles: RoleType[];
 	}>(),
 );
 export const loginFailure = createAction('[Onboarding Client Auth Api] Login Failure', props<{ error: Error }>());

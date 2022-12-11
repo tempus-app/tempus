@@ -14,6 +14,7 @@ export const selectResourceDetails = createSelector(selectState, (state: Resourc
 		firstName: state.firstName,
 		lastName: state.lastName,
 		email: state.email,
+		calEmail: state.calEmail,
 		phoneNumber: state.phoneNumber,
 		city: state.city,
 		province: state.province,

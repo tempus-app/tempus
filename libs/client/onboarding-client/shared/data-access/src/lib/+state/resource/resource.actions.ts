@@ -11,6 +11,7 @@ export const getResourceInformationSuccess = createAction(
 		firstName: string;
 		lastName: string;
 		email: string;
+		calEmail: string;
 		phoneNumber: string;
 		city: string;
 		province: string;
@@ -38,6 +39,7 @@ export const getResourceInformationByIdSuccess = createAction(
 		firstName: string;
 		lastName: string;
 		email: string;
+		calEmail: string;
 		phoneNumber: string;
 		city: string;
 		province: string;
