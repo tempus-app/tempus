@@ -61,4 +61,10 @@ export class OnboardingClientViewsService {
 			.post<ApproveViewDto>(`${this.url}/profile-view/approve/${id}`, { comment, approval })
 			.pipe(catchError(handleError));
 	}
+
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	public deleteView(viewId: number): Observable<any> {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		return this.http.delete<any>(`${this.url}/${viewId}`).pipe(catchError(handleError));
+	}
 }

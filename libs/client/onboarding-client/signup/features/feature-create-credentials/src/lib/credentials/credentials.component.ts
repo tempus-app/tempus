@@ -64,7 +64,7 @@ export class CredentialsComponent implements OnInit, OnDestroy {
 		modalConfirmText: '',
 	};
 
-	supervisorCreationModal: {
+	adminCreationModal: {
 		successModal: {
 			title: string;
 			confirmText: string;
@@ -103,8 +103,8 @@ export class CredentialsComponent implements OnInit, OnDestroy {
 		translateService.get('onboardingSignupCredentials.main.linkErrors').subscribe(data => {
 			this.linkErrors = data;
 		});
-		translateService.get('onboardingSignupCredentials.main.supervisorCreationModal').subscribe(data => {
-			this.supervisorCreationModal = data;
+		translateService.get('onboardingSignupCredentials.main.adminCreationModal').subscribe(data => {
+			this.adminCreationModal = data;
 		});
 	}
 
@@ -152,7 +152,7 @@ export class CredentialsComponent implements OnInit, OnDestroy {
 				if (reqStatusData.status === AsyncRequestState.LOADING) {
 					this.loading = true;
 				} else if (reqStatusData.status === AsyncRequestState.SUCCESS) {
-					this.openDialog(this.supervisorCreationModal.successModal, 'successModal');
+					this.openDialog(this.adminCreationModal.successModal, 'successModal');
 					this.loading = false;
 					this.$destroyed.next();
 					this.$destroyed.complete();
@@ -160,7 +160,7 @@ export class CredentialsComponent implements OnInit, OnDestroy {
 					this.store.dispatch(resetCreateResourceState());
 				} else if (reqStatusData.status === AsyncRequestState.ERROR) {
 					this.loading = false;
-					this.openDialog(this.supervisorCreationModal.errorModal, 'errorModal');
+					this.openDialog(this.adminCreationModal.errorModal, 'errorModal');
 				} else {
 					this.loading = false;
 				}

@@ -160,6 +160,7 @@ export class MyViewsComponent implements OnInit, OnDestroy {
 						columnsWithUrl: ['type'],
 						columnsWithIcon: [],
 						columnsWithChips: ['status'],
+						columnsWithButtonIcon: [],
 					});
 				});
 			});

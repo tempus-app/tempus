@@ -396,10 +396,33 @@ describe('ProjectService', () => {
 		});
 	});
 
-	describe('Complete Project', () => {
+	describe('Update Project Status', () => {
 		beforeEach(() => {
 			mockResourceService.getResourceInfo.mockResolvedValue(resourceEntityMock);
 		});
+
+    it('set project to active', async () => {
+			mockProjectRepository.findOne.mockResolvedValue(projectEntityMock);
+
+			await projectService.updateProjStatus(projectEntityMock.id, ProjectStatus.ACTIVE);
+
+			expect(mockProjectRepository.findOne).toBeCalledWith(projectEntityMock.id, {
+				relations: [
+					'client',
+					'clientRepresentative',
+					'projectResources',
+					'projectResources.resource',
+					'projectResources.project',
+				],
+			});
+
+			expect(mockProjectRepository.save).toBeCalledWith({
+				...projectEntityMock,
+				startDate: dateToday,
+				status: ProjectStatus.ACTIVE,
+			});
+		});
+
 		it('update status, end date, and set end date for all resources', async () => {
 			mockProjectRepository.findOne.mockResolvedValue({
 				...projectEntityMock,
@@ -414,7 +437,7 @@ describe('ProjectService', () => {
 			mockProjectResourceRepository.find.mockResolvedValueOnce([{ ...projectResourceEntityMock }]);
 			mockProjectResourceRepository.find.mockResolvedValueOnce([projectResourceEntityTwoMock]);
 
-			await projectService.completeProject(projectEntityMock.id);
+			await projectService.updateProjStatus(projectEntityMock.id, ProjectStatus.COMPLETED);
 
 			expect(mockProjectRepository.findOne).toBeCalledWith(projectEntityMock.id, {
 				relations: [
@@ -459,7 +482,7 @@ describe('ProjectService', () => {
 
 			mockProjectResourceRepository.find.mockResolvedValueOnce([{ ...projectResourceEntityMock }]);
 
-			await projectService.completeProject(projectEntityMock.id);
+			await projectService.updateProjStatus(projectEntityMock.id, ProjectStatus.COMPLETED);
 
 			expect(mockProjectRepository.findOne).toBeCalledWith(projectEntityMock.id, {
 				relations: [

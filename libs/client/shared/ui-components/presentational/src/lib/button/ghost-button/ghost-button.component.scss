@@ -4,7 +4,7 @@
 .ghost-button {
 	&__button {
 		@include abs.body-2();
-		border-radius: 1em;
+		border-radius: 10px;
 		border: abs.$primary-600 solid 2px;
 		background: none;
 		padding: 0.5em 1em;
@@ -27,5 +27,33 @@
 		display: flex;
 		flex-direction: row;
 		gap: 0.5rem;
+	}
+}
+
+.red {
+	color: #eb534c;
+	font-size: 1em;
+	border: none;
+
+	&:hover {
+		background-color: #f5e5e3;
+	}
+}
+
+.green {
+	color: #5aa147;
+	border: none;
+
+	&:hover {
+		background-color: #e2f3dc;
+	}
+}
+
+.yellow {
+	color: rgb(175, 124, 30);
+	border: none;
+
+	&:hover {
+		background-color: rgb(249, 246, 201);
 	}
 }

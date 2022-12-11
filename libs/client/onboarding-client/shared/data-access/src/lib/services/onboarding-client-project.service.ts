@@ -8,6 +8,7 @@ import {
 	ICreateClientDto,
 	ICreateProjectDto,
 	Project,
+  ProjectStatus,
 } from '@tempus/shared-domain';
 import { catchError, Observable } from 'rxjs';
 import { handleError } from './errorHandler';
@@ -39,6 +40,15 @@ export class OnboardingClientProjectService {
 		const { page, pageSize } = paginationData;
 		return this.http
 			.get<{ projectData: Project[]; totalItems: number }>(`${this.projectURL}?page=${page}&pageSize=${pageSize}`)
+			.pipe(catchError(handleError));
+	}
+
+  public updateProjectStatus(
+		projId: number,
+		status: ProjectStatus,
+	): Observable<Project> {
+		return this.http
+			.patch<Project>(`${this.projectURL}/${projId}/updateStatus?status=${status}`, {})
 			.pipe(catchError(handleError));
 	}
 

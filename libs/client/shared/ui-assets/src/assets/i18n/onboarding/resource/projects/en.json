@@ -1,0 +1,12 @@
+{
+	"title": "My Projects",
+	"emptyState": "You have not been assigned to any projects.",
+	"projectCard": {
+		"assigned": "Assigned on",
+		"client": "Client",
+		"project": "Project",
+		"position": "Position",
+		"endDate": "End date at",
+		"projectStatus": "Project Status"
+	}
+}

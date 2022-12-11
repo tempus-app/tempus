@@ -1,0 +1,18 @@
+<div class="account-creation-modal">
+	<div class="account-creation-modal__container">
+		<div class="account-creation-modal__headline">{{ prefix + 'headline' | translate }}</div>
+		<div>{{ prefix + 'accountCreated' | translate }}</div>
+		<div class="account-creation-modal__body">
+			{{ prefix + 'tempPassword' | translate }}<b>{{ calEmail }}</b
+			>{{ prefix + 'is' | translate }}
+		</div>
+		<div class="account-creation-modal__password">{{ tempPassword }}</div>
+		<div class="account-creation-modal__warning">
+			<span class="material-icons account-creation-modal__warning__icon">error</span>
+			<div class="account-creation-modal__warning__text">
+				{{ prefix + 'copyPassword' | translate }}
+			</div>
+		</div>
+		<div>{{ prefix + 'newPassword' | translate }}</div>
+	</div>
+</div>

@@ -7,9 +7,6 @@ export class CreateExperienceDto implements ICreateExperienceDto {
 	title: string;
 
 	@ApiProperty()
-	summary: string;
-
-	@ApiProperty()
 	description: string[];
 
 	@ApiProperty()
@@ -26,7 +23,6 @@ export class CreateExperienceDto implements ICreateExperienceDto {
 
 	constructor(
 		title: string,
-		summary: string,
 		description: string[],
 		company: string,
 		startDate: Date,
@@ -34,7 +30,6 @@ export class CreateExperienceDto implements ICreateExperienceDto {
 		location: CreateLocationDto,
 	) {
 		this.title = title;
-		this.summary = summary;
 		this.description = description;
 		this.company = company;
 		this.startDate = startDate;

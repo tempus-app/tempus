@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { map, Observable, of, Subject, take } from 'rxjs';
+import { Router } from '@angular/router';
+import { finalize, map, Observable, of, Subject, take } from 'rxjs';
 
 import { ContentModalComponent } from '../content-modal/content-modal.component';
 import { InfoModalComponent } from '../info-modal/info-modal.component';
@@ -9,7 +10,7 @@ import { CustomModalType } from './custom-modal-type.enum';
 
 @Injectable()
 export class ModalService {
-	constructor(private dialog: MatDialog) {}
+	constructor(private dialog: MatDialog, private router: Router) {}
 
 	dialogRef: MatDialogRef<InfoModalComponent | ContentModalComponent> | undefined;
 
@@ -17,41 +18,55 @@ export class ModalService {
 
 	public open(options: Modal, type: CustomModalType) {
 		if (type === CustomModalType.INFO) {
-			this.dialogRef = this.dialog.open(InfoModalComponent, {
-				data: {
-					title: options.title,
-					message: options.message,
-					closeText: options.closeText,
-					confirmText: options.confirmText,
-					modalType: options.modalType,
-					closable: options.closable,
-					id: options.id,
-				},
-				panelClass: 'responsive-modal',
-				autoFocus: false,
-				disableClose: !options.closable,
+			if (!this.dialogRef) {
+				this.dialogRef = this.dialog.open(InfoModalComponent, {
+					data: {
+						title: options.title,
+						message: options.message,
+						closeText: options.closeText,
+						confirmText: options.confirmText,
+						modalType: options.modalType,
+						closable: options.closable,
+						id: options.id,
+					},
+					panelClass: 'responsive-modal',
+					autoFocus: false,
+					disableClose: !options.closable,
+					closeOnNavigation: true,
+				});
+			}
+
+			this.router.events.subscribe(() => {
+				this.dialogRef?.close();
 			});
 		} else {
 			const contentModalOptions = options as ContentModal;
-			this.dialogRef = this.dialog.open(ContentModalComponent, {
-				data: {
-					title: contentModalOptions.title,
-					confirmText: contentModalOptions.confirmText,
-					closeText: contentModalOptions.closeText,
-					template: contentModalOptions.template,
-					closable: contentModalOptions.closable,
-					subtitle: contentModalOptions.subtitle,
-					id: contentModalOptions.id,
-				},
-				panelClass: 'responsive-modal',
-				autoFocus: false,
-				disableClose: !options.closable,
+			if (!this.dialogRef) {
+				this.dialogRef = this.dialog.open(ContentModalComponent, {
+					data: {
+						title: contentModalOptions.title,
+						confirmText: contentModalOptions.confirmText,
+						closeText: contentModalOptions.closeText,
+						template: contentModalOptions.template,
+						closable: contentModalOptions.closable,
+						subtitle: contentModalOptions.subtitle,
+						id: contentModalOptions.id,
+					},
+					panelClass: 'responsive-modal',
+					autoFocus: false,
+					disableClose: !options.closable,
+					closeOnNavigation: true,
+				});
+			}
+			this.router.events.subscribe(() => {
+				this.dialogRef?.close();
 			});
 		}
 	}
 
 	public close() {
 		this.dialogRef?.componentInstance.close(true);
+		this.dialogRef = undefined; // reset it
 	}
 
 	public confirmDisabled() {
@@ -68,6 +83,9 @@ export class ModalService {
 				take(1),
 				map(res => {
 					return res;
+				}),
+				finalize(() => {
+					this.dialogRef = undefined;
 				}),
 			);
 		}

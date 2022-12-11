@@ -10,4 +10,5 @@ export interface IUserProjClientDto {
 	projectClients: Array<ProjectClientData>;
 	id: number;
 	reviewNeeded: boolean;
+	location: string;
 }

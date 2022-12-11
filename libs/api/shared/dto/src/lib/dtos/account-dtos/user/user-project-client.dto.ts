@@ -13,6 +13,8 @@ export class UserProjectClientDto implements IUserProjClientDto {
 
 	reviewNeeded: boolean;
 
+	location: string;
+
 	constructor(
 		id: number,
 		firstName: string,
@@ -20,6 +22,7 @@ export class UserProjectClientDto implements IUserProjClientDto {
 		email: string,
 		reviewNeeded: boolean,
 		projectClients: ProjectClientData[],
+		location: string,
 	) {
 		this.firstName = firstName;
 		this.id = id;
@@ -27,5 +30,6 @@ export class UserProjectClientDto implements IUserProjClientDto {
 		this.lastName = lastName;
 		this.reviewNeeded = reviewNeeded;
 		this.projectClients = projectClients;
+		this.location = location;
 	}
 }

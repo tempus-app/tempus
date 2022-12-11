@@ -1,0 +1,35 @@
+@use 'abstracts/helper' as abs;
+@use 'components/helper' as cmp;
+
+.page-title {
+	color: abs.$primary-800;
+}
+
+#page-container {
+	margin: 2%;
+}
+#title-container {
+	@include cmp.info-title(100%, 0);
+}
+.section-header {
+	border-bottom: 1px solid abs.$primary-400;
+}
+
+.section-container {
+	padding: 1em;
+	width: 85%;
+}
+
+.normal-font {
+	font-weight: normal;
+}
+
+tempus-card {
+	width: 100%;
+}
+
+.empty-state {
+	margin: 2em;
+	text-align: center;
+	@include abs.h3($color: abs.$primary-700);
+}

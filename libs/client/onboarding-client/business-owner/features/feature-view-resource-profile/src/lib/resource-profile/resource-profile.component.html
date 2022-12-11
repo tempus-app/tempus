@@ -7,6 +7,7 @@
 		[resourceEmail]="resourceEmail"
 		[resourceId]="resourceId"
 		[projectResources]="projectResources"
+    [roles]="roles"
 	></tempus-user-bar>
 	<tempus-edit-view-form
 		*ngIf="editViewEnabled"
@@ -14,8 +15,10 @@
 		(closeEditViewClicked)="closeEditView()"
 	></tempus-edit-view-form>
 	<tempus-resource-profile-content
+		*ngIf="!editViewEnabled"
 		[firstName]="resourceFirstName"
 		[lastName]="resourceLastName"
+		[calEmail]="calEmail"
 		[country]="country"
 		[state]="state"
 		[city]="city"

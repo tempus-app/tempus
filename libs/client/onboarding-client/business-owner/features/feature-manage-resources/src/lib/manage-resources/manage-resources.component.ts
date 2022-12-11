@@ -6,6 +6,7 @@ import { Store } from '@ngrx/store';
 import {
 	BusinessOwnerState,
 	createLink,
+	deleteResource,
 	getAllClients,
 	getAllResourceInfoBasic,
 	getAllResProjInfo,
@@ -15,6 +16,7 @@ import {
 	selectAsyncStatus,
 	selectClientData,
 	selectCreatedProjectData,
+	selectedDeleteResource,
 	selectProjectAssigned,
 	selectResourceBasicData,
 	selectResProjClientData,
@@ -35,11 +37,14 @@ import { Router } from '@angular/router';
 import { PageEvent } from '@angular/material/paginator';
 import { TranslateService } from '@ngx-translate/core';
 import { FormBuilder, Validators, FormControl } from '@angular/forms';
+import { isValidRole } from '@tempus/client/shared/util';
+import { MatExpansionPanel } from '@angular/material/expansion';
 
 @Component({
 	selector: 'tempus-manage-resources',
 	templateUrl: './manage-resources.component.html',
 	styleUrls: ['./manage-resources.component.scss'],
+	viewProviders: [MatExpansionPanel],
 })
 export class ManageResourcesComponent implements OnInit, OnDestroy {
 	constructor(
@@ -69,6 +74,11 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 							`<div class="demarginizedCell">${element['resource']}<p id="resource" class="mat-caption">(${element['email']})</p></div>`,
 					},
 					{
+						columnDef: 'location',
+						header: data['location'],
+						cell: (element: Record<string, any>) => `${element['location']}`,
+					},
+					{
 						columnDef: 'assignment',
 						header: data['assignment'],
 						cell: (element: Record<string, any>) => `${element['assignment']}`,
@@ -84,6 +94,14 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 						cell: (element: Record<string, any>) => `${element['client']}`,
 					},
 				];
+
+				if (isValidRole(this.roles, [RoleType.BUSINESS_OWNER])) {
+					this.tableColumns.push({
+						columnDef: 'delete',
+						header: data['delete'],
+						cell: (element: Record<string, any>) => `${element['delete']}`,
+					});
+				}
 			});
 		this.translateService
 			.get(`${this.prefix}main.approvalTooltip`)
@@ -105,6 +123,8 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 
 	$createProjectModalClosedEvent = new Subject<void>();
 
+	$deleteResourceConfirmedEvent = new Subject<void>();
+
 	ButtonType = ButtonType;
 
 	InputType = InputType;
@@ -112,6 +132,8 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 	loading = false;
 
 	projectModalOpen = false;
+
+	chipList: string[] = [];
 
 	currentProjects: { val: string; id: number }[] = [];
 
@@ -129,7 +151,16 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 
 	resProjClientTableDataFiltered: ProjectManagmenetTableData[] = [];
 
-	tablePagination: { page: number; pageSize: number; filter: string } = {
+	RoleType = RoleType;
+
+	tablePagination: {
+		page: number;
+		pageSize: number;
+		filter: string;
+		roleType?: RoleType[];
+		country?: string;
+		province?: string;
+	} = {
 		page: 0,
 		pageSize: 10,
 		filter: '',
@@ -139,11 +170,15 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 
 	email = '';
 
+	roles: RoleType[] = [];
+
 	assigned = '';
 
 	unassigned = '';
 
 	awaitingApproval = '';
+
+	deleteResourceId: number | null = null;
 
 	@ViewChild('inviteTemplate')
 	inviteModal!: TemplateRef<unknown>;
@@ -167,6 +202,9 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 		if (roleType === RoleType.SUPERVISOR) {
 			return 'Supervisor';
 		}
+		if (roleType === RoleType.BUSINESS_OWNER) {
+			return 'Business Owner';
+		}
 		return '';
 	};
 
@@ -177,18 +215,26 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 		if (roleType === 'Supervisor') {
 			return RoleType.SUPERVISOR;
 		}
+		if (roleType === 'Business Owner') {
+			return RoleType.BUSINESS_OWNER;
+		}
 		return RoleType.USER;
 	};
 
-	inviteTypeOptions: string[] = [
-		this.roleTypeEnumToString(RoleType.AVAILABLE_RESOURCE),
-		this.roleTypeEnumToString(RoleType.SUPERVISOR),
-	];
+	isValidRole = isValidRole;
+
+	inviteTypeOptions: string[] = [this.roleTypeEnumToString(RoleType.SUPERVISOR)];
 
 	manageResourcesForm = this.fb.group({
 		search: [''],
+		filterForm: this.fb.group({
+			assignedResource: [false],
+			availableResource: [false],
+			country: [''],
+			province: [''],
+		}),
 		invite: this.fb.group({
-			inviteType: [this.roleTypeEnumToString(RoleType.AVAILABLE_RESOURCE), Validators.required],
+			inviteType: [this.roleTypeEnumToString(RoleType.SUPERVISOR), Validators.required],
 			firstName: ['', Validators.required],
 			lastName: ['', Validators.required],
 			emailAddress: ['', [Validators.required, Validators.email]],
@@ -218,7 +264,7 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 			],
 		}),
 		createProject: this.fb.group({
-			client: ['', Validators.required],
+			client: [null, Validators.required],
 			clientName: [''],
 			clientRepresentative: [''],
 			clientRepFirstName: ['', Validators.required],
@@ -238,6 +284,10 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 				this.$inviteModalClosedEvent.next();
 			} else if (modalId === 'newProjectModal') {
 				this.$createProjectModalClosedEvent.next();
+			} else if (modalId === 'deleteAccount') {
+				if (this.deleteResourceId) {
+					this.businessOwnerStore.dispatch(deleteResource({ resourceId: this.deleteResourceId }));
+				}
 			} else if (modalId === 'error') {
 				this.businessOwnerStore.dispatch(resetAsyncStatusState());
 			}
@@ -252,6 +302,7 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 					asyncStatus.error &&
 					asyncStatus.error.name !== ErorType.INTERCEPTOR
 				) {
+					this.modalService.close(); // close other modals
 					this.openErrorModal(asyncStatus.error.message);
 				}
 			});
@@ -306,6 +357,15 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 				}
 			});
 
+		this.businessOwnerStore
+			.select(selectedDeleteResource)
+			.pipe(takeUntil(this.$destroyed))
+			.subscribe(deletedResource => {
+				if (deletedResource) {
+					this.businessOwnerStore.dispatch(getAllResProjInfo(this.tablePagination));
+				}
+			});
+
 		// Get logged in users username and email
 		this.sharedStore
 			.select(selectLoggedInUserNameEmail)
@@ -313,6 +373,14 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 			.subscribe(data => {
 				this.name = `${data.firstName} ${data.lastName}`;
 				this.email = data.email || '';
+				this.roles = data.roles;
+				if (this.roles.includes(RoleType.BUSINESS_OWNER)) {
+					this.inviteTypeOptions = [
+						this.roleTypeEnumToString(RoleType.AVAILABLE_RESOURCE),
+						this.roleTypeEnumToString(RoleType.SUPERVISOR),
+						this.roleTypeEnumToString(RoleType.BUSINESS_OWNER),
+					];
+				}
 			});
 
 		// Getting the most recent created project data to then refresh all client info
@@ -337,9 +405,11 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 					const tableItem: ProjectManagmenetTableData = {
 						resource: `${resProjClientData.firstName} ${resProjClientData.lastName}`,
 						resourceId: resProjClientData.id,
+						delete: '',
 						assignment: this.unassigned,
 						email: `${resProjClientData.email}`,
 						url: `../view-resources/${resProjClientData.id}`,
+						location: resProjClientData.location,
 						project: '-',
 						client: '-',
 						allProjects: [],
@@ -347,10 +417,19 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 						columnsWithIcon: ['resource'],
 						columnsWithUrl: ['resource'],
 						columnsWithChips: [],
+						columnsWithButtonIcon: [],
 					};
 					if (resProjClientData.reviewNeeded) {
 						tableItem.icon = { val: 'error', class: 'priorityIcon', tooltip: 'Awaiting approval' };
 					}
+					if (isValidRole(this.roles, [RoleType.BUSINESS_OWNER])) {
+						tableItem.columnsWithButtonIcon = ['delete'];
+						tableItem.buttonIcon = {
+							icon: 'delete',
+							color: 'warn',
+						};
+					}
+					let activeProjExists = false;
 
 					// Resource with atleast one project
 					if (resProjClientData.projectClients.length > 0) {
@@ -366,6 +445,9 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 							allProjUnderClient.forEach(proj => {
 								allProj.push(proj);
 							});
+							if (!activeProjExists) {
+								activeProjExists = projClientData.projects.some(proj => proj.isCurrent);
+							}
 						});
 						const allClient = resProjClientData.projectClients.map(projClient => projClient.client);
 						const moreThanOneProj = Array.from(new Set(allProj)).length > 1;
@@ -383,7 +465,7 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 
 						tableItem.project = `${firstProj}${moreThanOneProj ? '...' : ''}`;
 						tableItem.client = `${firstClient}${moreThanOneClient ? '...' : ''}`;
-						tableItem.assignment = this.assigned;
+						tableItem.assignment = activeProjExists ? this.assigned : this.unassigned;
 						tableItem.allClients = allClient;
 						tableItem.allProjects = allProj;
 					}
@@ -411,6 +493,31 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 		return this.manageResourcesForm.get('invite')?.get('inviteType')?.value;
 	}
 
+	deleteEvent(event: ProjectManagmenetTableData) {
+		this.translateService
+			.get(`${this.prefix}modal.confirmDeleteModal`)
+			.pipe(take(1))
+			.subscribe(data => {
+				this.translateService
+					.get(`${this.prefix}modal.confirmDeleteModal.title`, { resourceName: event.resource })
+					.subscribe((title: string) => {
+						this.modalService.open(
+							{
+								title,
+								closeText: data['closeText'],
+								confirmText: data['confirmText'],
+								message: data['message'],
+								modalType: ModalType.WARNING,
+								closable: true,
+								id: 'deleteAccount',
+							},
+							CustomModalType.INFO,
+						);
+					});
+			});
+		this.deleteResourceId = event.resourceId;
+	}
+
 	// Projects should be those that are under the client and not already assigned to the resource
 	updateProjects = (clientId?: string) => {
 		const id = parseInt(clientId || '0', 10);
@@ -426,6 +533,8 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 					};
 				}) || [];
 	};
+
+	deleteResource() {}
 
 	invite() {
 		this.translateService
@@ -473,8 +582,10 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 					if (inviteType === RoleType.AVAILABLE_RESOURCE) {
 						(createLinkDto.projectId = this.manageResourcesForm.get('invite')?.get('project')?.value),
 							(createLinkDto.userType = RoleType.AVAILABLE_RESOURCE);
-					} else {
+					} else if (inviteType === RoleType.SUPERVISOR) {
 						createLinkDto.userType = RoleType.SUPERVISOR;
+					} else {
+						createLinkDto.userType = RoleType.BUSINESS_OWNER;
 					}
 					this.businessOwnerStore.dispatch(
 						createLink({
@@ -516,8 +627,50 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 		this.manageResourcesForm.get('invite')?.reset();
 	};
 
-	filter() {
-		// TODO
+	filterEvent(event: string) {
+		if (event === 'filterTableEvent') {
+			this.chipList = [];
+			const filterForm = this.manageResourcesForm.get('filterForm');
+
+			if (filterForm?.get('assignedResource')?.value) {
+				this.chipList.push('Assigned');
+			}
+			if (filterForm?.get('availableResource')?.value) {
+				this.chipList.push('Unassigned');
+			}
+			if (filterForm?.get('country')?.value) {
+				this.chipList.push(filterForm?.get('country')?.value);
+			}
+			if (filterForm?.get('province')?.value) {
+				this.chipList.push(filterForm?.get('province')?.value);
+			}
+			const roleType = [];
+			if (filterForm?.get('assignedResource')?.value) {
+				roleType.push(RoleType.ASSIGNED_RESOURCE);
+			}
+			if (filterForm?.get('availableResource')?.value) {
+				roleType.push(RoleType.AVAILABLE_RESOURCE);
+			}
+
+			this.tablePagination = {
+				page: 0,
+				pageSize: this.tablePagination.pageSize,
+				filter: this.tablePagination.filter,
+				country: filterForm?.get('country')?.value,
+				province: filterForm?.get('province')?.value,
+				roleType: roleType || null,
+			};
+		} else if (event === 'clearTableEvent') {
+			this.chipList = [];
+
+			this.tablePagination = {
+				page: 0,
+				pageSize: this.tablePagination.pageSize,
+				filter: this.tablePagination.filter,
+			};
+		}
+
+		this.businessOwnerStore.dispatch(getAllResProjInfo(this.tablePagination)); // TODO
 	}
 
 	tablePaginationEvent(pageEvent: PageEvent) {
@@ -533,7 +686,17 @@ export class ManageResourcesComponent implements OnInit, OnDestroy {
 		this.businessOwnerStore.dispatch(getAllResProjInfo(this.tablePagination));
 	}
 
+	resetFilterForm() {
+		const filterForm = this.manageResourcesForm.get('filterForm');
+		filterForm?.get('assignedResource')?.setValue(false);
+		filterForm?.get('availableResource')?.setValue(false);
+		filterForm?.get('country')?.setValue('');
+		filterForm?.get('province')?.setValue('');
+	}
+
 	search(searchTerm: string) {
+		this.chipList = [];
+		this.resetFilterForm();
 		this.tablePagination = {
 			page: 0,
 			pageSize: this.tablePagination.pageSize,

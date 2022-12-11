@@ -15,6 +15,8 @@ export interface ICreateResourceDto extends ICreateUserDto {
 
 	phoneNumber: string;
 
+	calEmail: string;
+
 	title: string;
 
 	linkedInLink: string;

@@ -1,9 +1,10 @@
 /* eslint-disable class-methods-use-this */
 import { HttpClient } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
-import { AppConfig, AuthDto, TokensDto } from '@tempus/shared-domain';
+import { AppConfig, AuthDto, ResetPasswordDto, TokensDto } from '@tempus/shared-domain';
 import { catchError, Observable, tap } from 'rxjs';
 import { APP_CONFIG } from '@tempus/app-config';
+import { decodeJwt } from '@tempus/client/shared/util';
 import { SessionStorageKey } from '../enum';
 import { handleError } from './errorHandler';
 
@@ -16,12 +17,14 @@ export class OnboardingClientAuthService {
 	public login(password: string, email: string): Observable<AuthDto> {
 		return this.http.post<AuthDto>(`${this.url}/login`, { password, email }).pipe(
 			tap(data => {
+				const { roles } = decodeJwt(data.accessToken || '');
 				this.setUserDataInSessionStorage(
 					data.accessToken,
 					data.refreshToken,
 					data.user.firstName,
 					data.user.lastName,
 					data.user.email,
+					roles,
 				);
 			}),
 			catchError(handleError),
@@ -60,9 +63,19 @@ export class OnboardingClientAuthService {
 		};
 	}
 
+	public forgotPassword(email: string): Observable<void> {
+		return this.http.post<void>(`${this.url}/forgot-password?email=${email}`, {}).pipe(catchError(handleError));
+	}
+
+	public resetPassword(resetPasswordDto: ResetPasswordDto): Observable<void> {
+		return this.http.post<void>(`${this.url}/reset-password`, resetPasswordDto).pipe(catchError(handleError));
+	}
+
 	public updateAccessAndRefreshTokenInStorage(accessToken: string, refreshToken: string) {
+		const { roles } = decodeJwt(accessToken || '');
 		sessionStorage.setItem(SessionStorageKey.TEMPUS_ACCESS_TOKEN, accessToken);
 		sessionStorage.setItem(SessionStorageKey.TEMPUS_REFRESH_TOKEN, refreshToken);
+		sessionStorage.setItem(SessionStorageKey.TEMPUS_ROLES, JSON.stringify(roles));
 	}
 
 	public setUserDataInSessionStorage(
@@ -71,12 +84,14 @@ export class OnboardingClientAuthService {
 		firstName: string,
 		lastName: string,
 		email: string,
+		roles: string[],
 	) {
 		sessionStorage.setItem(SessionStorageKey.TEMPUS_ACCESS_TOKEN, accessToken);
 		sessionStorage.setItem(SessionStorageKey.TEMPUS_REFRESH_TOKEN, refreshToken);
 		sessionStorage.setItem(SessionStorageKey.TEMPUS_FIRST_NAME, firstName);
 		sessionStorage.setItem(SessionStorageKey.TEMPUS_LAST_NAME, lastName);
 		sessionStorage.setItem(SessionStorageKey.TEMPUS_EMAIL, email);
+		sessionStorage.setItem(SessionStorageKey.TEMPUS_ROLES, JSON.stringify(roles));
 	}
 
 	public logout() {
@@ -89,5 +104,6 @@ export class OnboardingClientAuthService {
 		sessionStorage.removeItem(SessionStorageKey.TEMPUS_LAST_NAME);
 		sessionStorage.removeItem(SessionStorageKey.TEMPUS_EMAIL);
 		sessionStorage.removeItem(SessionStorageKey.TEMPUS_REFRESH_TOKEN);
+		sessionStorage.removeItem(SessionStorageKey.TEMPUS_ROLES);
 	}
 }

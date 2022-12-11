@@ -12,13 +12,16 @@ export const selectAccessRefreshToken = createSelector(selectAuth, (state: AuthS
 	accessToken: state.accessToken,
 	refreshToken: state.refreshToken,
 }));
-
-export const selectLoginStatus = createSelector(selectAuth, (state: AuthState) => {
+// export const selectLoggedInUserId = createSelector(selectAuth, (state: AuthState) => state.loggedInUserId);
+export const selectAuthStatus = createSelector(selectAuth, (state: AuthState) => {
 	return {
 		status: state.status,
 		error: state.error,
 	};
 });
 export const selectLoggedInUserNameEmail = createSelector(selectAuth, (state: AuthState) => {
-	return { firstName: state.firstName, lastName: state.lastName, email: state.email };
+	return { firstName: state.firstName, lastName: state.lastName, email: state.email, roles: state.roles };
+});
+export const selectLoggedInRoles = createSelector(selectAuth, (state: AuthState) => {
+	return { roles: state.roles };
 });

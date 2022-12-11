@@ -34,6 +34,7 @@ export class CommonService {
 					'location',
 					'projectResources',
 					'projectResources.project',
+					'projectResources.project.client',
 					'projectResources.resource',
 					'views',
 					'experiences',

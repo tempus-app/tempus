@@ -343,7 +343,7 @@ describe('AuthService', () => {
 				error = e;
 			}
 			expect(error).toBeInstanceOf(Error);
-			expect(error.message).toBe('Invalid token provided');
+			expect(error.message).toBe('Reset link has expired');
 			expect(mockPasswordResetRepository.save).toBeCalledWith({
 				...passwordResetMock,
 				expiry: new Date('2000-08-16'),
@@ -363,11 +363,7 @@ describe('AuthService', () => {
 				error = e;
 			}
 			expect(error).toBeInstanceOf(Error);
-			expect(error.message).toBe('Invalid token provided');
-			expect(mockPasswordResetRepository.save).toBeCalledWith({
-				...passwordResetMock,
-				status: PasswordResetStatus.INVALID,
-			});
+			expect(error.message).toBe('Invalid reset link');
 		});
 	});
 

@@ -3,7 +3,17 @@
 		"myProfile": "My Profile",
 		"pendingApprovalTooltip": "This view is awaiting approval",
 		"rejectedTooltip": "Changes to this view have been rejected",
-		"rejectedDialogHeading": "Please modify your view with the following changes:"
+		"rejectedDialogHeading": "Please modify your view with the following changes:",
+		"downloadDialog": {
+			"message": "Download in progress!"
+		},
+		"deleteViewModal": {
+			"title": "Delete {{viewName}}?",
+			"message": "Are you sure you want to permanently delete this view?",
+			"confirmText": "Yes, delete",
+			"closeText": "Cancel"
+		},
+		"deleteViewSuccess": "View deleted."
 	},
 	"onboardingResourceEditProfile": {
 		"modal": {

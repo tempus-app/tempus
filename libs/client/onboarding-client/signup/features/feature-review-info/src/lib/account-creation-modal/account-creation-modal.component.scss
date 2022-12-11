@@ -1,0 +1,62 @@
+@use 'abstracts/helper' as abs;
+
+.account-creation-modal {
+	text-align: center;
+	color: abs.$primary-900;
+
+	&__container {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		padding: 1em 0;
+	}
+
+	&__headline {
+		font-size: 1.2em;
+		font-weight: 500;
+		margin-bottom: 0.5em;
+	}
+
+	&__body {
+		margin-bottom: 1em;
+	}
+
+	&__password {
+		background-color: abs.$primary-100;
+		margin-bottom: 1em;
+		width: auto;
+		text-align: center;
+		padding: 1em 6em;
+		font-size: 1em;
+		font-weight: 600;
+		border-radius: 0.5em;
+	}
+
+	&__warning {
+		display: flex;
+		flex-direction: row;
+
+		&__icon {
+			color: #f1d74d;
+			scale: 0.75;
+		}
+
+		&__text {
+			font-size: 0.8em;
+			font-weight: bold;
+			color: #8e7c18;
+			align-self: center;
+		}
+		margin-bottom: 1em;
+	}
+
+	&__success {
+		&__icon {
+			scale: 4;
+			color: #66b95f;
+			margin: 1.5em;
+			align-content: center;
+			width: 24px;
+		}
+	}
+}

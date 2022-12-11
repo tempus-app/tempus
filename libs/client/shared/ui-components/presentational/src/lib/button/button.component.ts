@@ -27,6 +27,7 @@ export class ButtonComponent implements OnInit {
 		[ButtonType.INVITE]: '',
 		[ButtonType.DOWNLOAD_VIEW]: '',
 		[ButtonType.CREATE_NEW_VIEW]: '',
+		[ButtonType.UPDATE_STATUS]: '',
 	};
 
 	constructor(private translateService: TranslateService) {}
@@ -38,33 +39,40 @@ export class ButtonComponent implements OnInit {
 			this.buttonTypeLabels.filter = data.filter;
 			this.buttonTypeLabels.invite = data.invite;
 			this.buttonTypeLabels.edit = data.edit;
+			this.buttonTypeLabels['update status'] = data.updateStatus;
 
 			this.label = this.buttonType !== undefined ? this.buttonTypeLabels[this.buttonType] : this.label;
 			// eslint-disable-next-line default-case
-			switch (this.buttonType) {
-				case ButtonType.EDIT: {
-					this.icon = 'edit';
-					break;
-				}
-				case ButtonType.FILTER: {
-					this.icon = 'filter_alt';
-					break;
-				}
-				case ButtonType.INVITE: {
-					this.icon = 'mail_outline';
-					break;
-				}
-				case ButtonType.DOWNLOAD_VIEW: {
-					this.icon = 'cloud_download';
-					break;
-				}
-				case ButtonType.CREATE_NEW_VIEW: {
-					this.icon = 'add';
-					break;
-				}
-				default: {
-					this.icon = '';
-					break;
+			if (this.buttonType) {
+				switch (this.buttonType) {
+					case ButtonType.EDIT: {
+						this.icon = 'edit';
+						break;
+					}
+					case ButtonType.FILTER: {
+						this.icon = 'filter_alt';
+						break;
+					}
+					case ButtonType.INVITE: {
+						this.icon = 'mail_outline';
+						break;
+					}
+					case ButtonType.DOWNLOAD_VIEW: {
+						this.icon = 'download';
+						break;
+					}
+					case ButtonType.CREATE_NEW_VIEW: {
+						this.icon = 'add';
+						break;
+					}
+					case ButtonType.UPDATE_STATUS: {
+						this.icon = 'update';
+						break;
+					}
+					default: {
+						this.icon = '';
+						break;
+					}
 				}
 			}
 		});

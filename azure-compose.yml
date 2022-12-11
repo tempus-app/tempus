@@ -1,29 +1,33 @@
 version: '3.1'
 
 services:
-  onboarding-api:
-    image: tempusottawa/tempus:latest
-    build:
-      context: .
-    environment:
-      - DB_HOST=${DB_HOST}
-      - DB_PORT=5432
-      - PORT=80
-      - NODE_ENV=production
-      - DB_USERNAME=${DB_USERNAME}
-      - DB_PASSWORD=${DB_PASSWORD}
-      - DB_NAME=${DB_NAME}
-      - CHROMIUM_PATH=/usr/bin/chromium-browser
-      - JWT_ACCESS_SECRET=${JWT_ACCESS_SECRET}
-      - JWT_REFRESH_SECRET=${JWT_REFRESH_SECRET}
-      - SALT_SECRET=${SALT_SECRET}
-      - API_URL=${API_URL}
-      - EMAIL_HOST=${EMAIL_HOST}
-      - EMAIL_PORT=${EMAIL_PORT}
-      - EMAIL_USERNAME=${EMAIL_USERNAME}
-      - EMAIL_PASSWORD=${EMAIL_PASSWORD}
-      - EMAIL_ADDRESS=${EMAIL_ADDRESS}
+    onboarding-api:
+        image: tempusottawa/tempus:latest
+        build:
+            context: .
+        environment:
+            - DB_HOST=${DB_HOST}
+            - DB_PORT=5432
+            - PORT=80
+            - NODE_ENV=production
+            - DB_USERNAME=${DB_USERNAME}
+            - DB_PASSWORD=${DB_PASSWORD}
+            - DB_NAME=${DB_NAME}
+            - CHROMIUM_PATH=/usr/bin/chromium-browser
+            - JWT_ACCESS_SECRET=${JWT_ACCESS_SECRET}
+            - JWT_REFRESH_SECRET=${JWT_REFRESH_SECRET}
+            - SALT_SECRET=${SALT_SECRET}
+            - API_URL=${API_URL}
+            - CLIENT_ID=${CLIENT_ID}
+            - CLIENT_SECRET=${CLIENT_SECRET}
+            - TENANT_ID=${TENANT_ID}
+            - AZURE_DOMAIN=${AZURE_DOMAIN}
+            - EMAIL_HOST=${EMAIL_HOST}
+            - EMAIL_PORT=${EMAIL_PORT}
+            - EMAIL_USERNAME=${EMAIL_USERNAME}
+            - EMAIL_PASSWORD=${EMAIL_PASSWORD}
+            - EMAIL_ADDRESS=${EMAIL_ADDRESS}
 
-    ports:
-      - 80:80
-    working_dir: /src
+        ports:
+            - 80:80
+        working_dir: /src

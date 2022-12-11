@@ -75,7 +75,7 @@ export class WorkExperienceComponent implements OnInit {
 			workExperience.get('country')?.patchValue(this.workExperiences[i].location.country);
 			workExperience.get('state')?.patchValue(this.workExperiences[i].location.province);
 			workExperience.get('city')?.patchValue(this.workExperiences[i].location.city);
-			workExperience.get('description')?.patchValue(this.workExperiences[i].description);
+			workExperience.get('description')?.patchValue(this.workExperiences[i].description.join());
 			workExperience.get('startDate')?.patchValue(formatDateToISO(this.workExperiences[i].startDate));
 			workExperience.get('endDate')?.patchValue(formatDateToISO(this.workExperiences[i].endDate));
 

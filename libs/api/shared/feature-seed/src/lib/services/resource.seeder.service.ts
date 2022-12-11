@@ -84,6 +84,12 @@ export class ResourceSeederService {
 	 * @returns locationEntity
 	 */
 	private static createLocation() {
+		if (Math.floor(Math.random() * 10) % 2 === 0) {
+			faker.setLocale('en_CA');
+			return new CreateLocationDto(faker.address.city(), faker.address.state(), 'Canada');
+		}
+
+		faker.setLocale('en_US');
 		return new CreateLocationDto(faker.address.city(), faker.address.state(), 'United States');
 	}
 
@@ -165,8 +171,7 @@ export class ResourceSeederService {
 			experiences.push(
 				new CreateExperienceDto(
 					faker.name.jobTitle(),
-					faker.lorem.sentences(7),
-					ResourceSeederService.generateParagraph(),
+					faker.lorem.sentences(7, ',').split(','),
 					faker.company.companyName(),
 					date.startDate,
 					date.endDate,
@@ -206,6 +211,7 @@ export class ResourceSeederService {
 			password,
 			[role],
 			faker.phone.phoneNumber(),
+			undefined,
 			faker.name.jobTitle(),
 			faker.internet.url(),
 			faker.internet.url(),

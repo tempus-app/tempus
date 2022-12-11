@@ -8,13 +8,22 @@ import {
 	IResourceBasicDto,
 	IUserProjClientDto,
 	Project,
+	ProjectStatus,
 	RevisionType,
+	RoleType,
 	View,
 } from '@tempus/shared-domain';
 
 export const getAllResProjInfo = createAction(
 	'[Onboarding Client Manage Resources Page] Get All Resources Project Info',
-	props<{ pageSize: number; page: number; filter: string }>(),
+	props<{
+		pageSize: number;
+		page: number;
+		filter: string;
+		roleType?: RoleType[];
+		country?: string;
+		province?: string;
+	}>(),
 );
 export const getAllResProjInfoSuccess = createAction(
 	'[Onboarding Client Resource API] Get All Resources Project Success',
@@ -106,6 +115,16 @@ export const getAllProjectInfoFailure = createAction(
 	props<{ error: Error }>(),
 );
 
+export const updateProjStatus = createAction(
+	'[Onboarding Client Project API] Update Project Status',
+	props<{ projId: number; status: ProjectStatus }>(),
+);
+export const updateProjStatusSuccess = createAction('[Onboarding Client Project API] Update Project Status Success');
+export const updateProjStatusFailure = createAction(
+	'[Onboarding Client Project API]  Update Project Status Failure',
+	props<{ error: Error }>(),
+);
+
 export const createResourceProjectAssignment = createAction(
 	'[Onboarding Client Manage Resources Page] Create Resource Project Assignment',
 	props<{ resourceId: number; projectId: number; assignProjectDto: IAssignProjectDto }>(),
@@ -143,5 +162,20 @@ export const getAllViewsByStatusSuccess = createAction(
 
 export const getAllViewsByStatusFailure = createAction(
 	'[Onboarding Profile Views API] Get All Views By Status Failure',
+	props<{ error: Error }>(),
+);
+
+export const deleteResource = createAction(
+	'[Onboarding Client Resource API] Delete Resource',
+	props<{ resourceId: number }>(),
+);
+
+export const deleteResourceSuccess = createAction(
+	'[Onboarding Client Resource API] Delete Resource Success',
+	props<{ resourceId: number }>(),
+);
+
+export const deleteResourceFailure = createAction(
+	'[Onboarding Client Resource API] Delete Resource Failure',
 	props<{ error: Error }>(),
 );

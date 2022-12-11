@@ -52,7 +52,13 @@ export class InterceptorService implements HttpInterceptor {
 
 	intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
 		// Any endpoints which are not expected to involve access tokens should be added to omitted endpoints
-		const omitEndpoints = ['auth/login', './assets', 'onboarding/link', 'python-api/parse'];
+		const omitEndpoints = [
+			'auth/login',
+			'auth/forgot-password',
+			'auth/reset-password',
+			'./assets',
+			'python-api/parse',
+		];
 		omitEndpoints.forEach(endpoint => {
 			if (req.url.includes(endpoint)) {
 				this.skipInterceptor = true;
@@ -62,8 +68,18 @@ export class InterceptorService implements HttpInterceptor {
 			this.skipInterceptor = true;
 		}
 
+    // Link info retrieved by users signing up to the app
+    if (req.method === 'GET' && req.url.includes('onboarding/link')) {
+			this.skipInterceptor = true;
+		}
+
 		// Saving resume does not need access token
 		if (req.method === 'PATCH' && req.url.includes('resume')) {
+			this.skipInterceptor = true;
+		}
+
+		// Creating Azure account is done anonymously
+		if (req.method === 'POST' && req.url.includes('onboarding/user/azureAccount')) {
 			this.skipInterceptor = true;
 		}
 
@@ -88,7 +104,10 @@ export class InterceptorService implements HttpInterceptor {
 												switchMap((tokenDto: TokensDto) => {
 													// update store with new tokens
 													this.sharedStore.dispatch(
-														refreshSuccess({ accessToken: tokenDto.accessToken, refreshToken: tokenDto.refreshToken }),
+														refreshSuccess({
+															accessToken: tokenDto.accessToken,
+															refreshToken: tokenDto.refreshToken,
+														}),
 													);
 													this.refreshTokenSubject.next(tokenDto);
 													this.isRefreshing = false;

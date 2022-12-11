@@ -6,6 +6,7 @@ import * as ProjectManagementActions from './resProjClientManagement.actions';
 export const PROJECT_MANAGE_FEATURE_KEY = 'resProjClientManagement';
 
 export interface ResourceProjectClientManagementState {
+	deletedResource: number | null;
 	createdProject: null | Project;
 	error: Error | null;
 	status: AsyncRequestState;
@@ -20,10 +21,12 @@ export interface ResourceProjectClientManagementState {
 	totalViewsData: number;
 	projects: Project[];
 	projectsTotalItems: number;
+	projStatusUpdated: boolean;
 }
 
 export const initialState: ResourceProjectClientManagementState = {
 	error: null,
+	deletedResource: null,
 	status: AsyncRequestState.IDLE,
 	projAssigned: false,
 	projResClientData: [],
@@ -37,6 +40,7 @@ export const initialState: ResourceProjectClientManagementState = {
 	totalViewsData: 0,
 	projects: [],
 	projectsTotalItems: 0,
+	projStatusUpdated: false,
 };
 
 export const projectManagementReducer = createReducer(
@@ -48,6 +52,11 @@ export const projectManagementReducer = createReducer(
 		...state,
 		status: AsyncRequestState.LOADING,
 		projAssigned: false,
+	})),
+	on(ProjectManagementActions.updateProjStatus, state => ({
+		...state,
+		projStatusUpdated: false,
+		status: AsyncRequestState.LOADING,
 	})),
 	on(ProjectManagementActions.createLink, state => ({ ...state, status: AsyncRequestState.LOADING })),
 	on(ProjectManagementActions.createClient, state => ({ ...state, status: AsyncRequestState.LOADING })),
@@ -69,6 +78,11 @@ export const projectManagementReducer = createReducer(
 		status: AsyncRequestState.ERROR,
 	})),
 	on(ProjectManagementActions.getAllResProjInfoFailure, (state, { error }) => ({
+		...state,
+		error,
+		status: AsyncRequestState.ERROR,
+	})),
+	on(ProjectManagementActions.updateProjStatusFailure, (state, { error }) => ({
 		...state,
 		error,
 		status: AsyncRequestState.ERROR,
@@ -124,6 +138,12 @@ export const projectManagementReducer = createReducer(
 		projResClientData,
 		status: AsyncRequestState.SUCCESS,
 		projResClientDataTotalItems: totalItems,
+		error: null,
+	})),
+	on(ProjectManagementActions.updateProjStatusSuccess, state => ({
+		...state,
+		projStatusUpdated: true,
+		status: AsyncRequestState.SUCCESS,
 		error: null,
 	})),
 	on(ProjectManagementActions.createLinkSuccess, state => ({
@@ -191,6 +211,19 @@ export const projectManagementReducer = createReducer(
 		error: null,
 	})),
 	on(ProjectManagementActions.getAllProjectInfoFailure, (state, { error }) => ({
+		...state,
+		error,
+		status: AsyncRequestState.ERROR,
+	})),
+
+	on(ProjectManagementActions.deleteResource, state => ({ ...state, status: AsyncRequestState.LOADING })),
+	on(ProjectManagementActions.deleteResourceSuccess, (state, { resourceId }) => ({
+		...state,
+		status: AsyncRequestState.SUCCESS,
+		error: null,
+		deletedResource: resourceId,
+	})),
+	on(ProjectManagementActions.deleteResourceFailure, (state, { error }) => ({
 		...state,
 		error,
 		status: AsyncRequestState.ERROR,

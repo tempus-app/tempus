@@ -1,7 +1,7 @@
 <div fxLayout="column" class="modal-container">
 	<div fxLayout="column" fxLayoutAlign="end end">
 		<div *ngIf="data.closable">
-			<button mat-icon-button aria-label="close dialog" mat-dialog-close>
+			<button mat-icon-button aria-label="close dialog" mat-dialog-close (click)="selectClose()">
 				<mat-icon class="close-icon" inline>close</mat-icon>
 			</button>
 		</div>
@@ -20,6 +20,7 @@
 	</div>
 	<div mat-dialog-actions fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="end end">
 		<tempus-button
+			matDialogClose
 			*ngIf="data.closable && data.closeText"
 			color="grey"
 			[label]="data.closeText"
@@ -28,7 +29,7 @@
 		<tempus-button
 			class="dialog-button"
 			color="primary"
-      id="info-modal-submit-button"
+			id="info-modal-submit-button"
 			[disabled]="$confirmDisabled | async"
 			(buttonClick)="selectConfirm()"
 			[label]="data.confirmText"

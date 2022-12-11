@@ -141,16 +141,34 @@ export class ResourceProjectClientManagementEffects {
 		),
 	);
 
+	updateProjectStatus$ = createEffect(() =>
+		this.actions$.pipe(
+			ofType(ProjManagementActions.updateProjStatus),
+			switchMap(data =>
+				this.projectService.updateProjectStatus(data.projId, data.status).pipe(
+					map(_ => {
+						return ProjManagementActions.updateProjStatusSuccess();
+					}),
+					catchError(error => of(ProjManagementActions.updateProjStatusFailure({ error }))),
+				),
+			),
+		),
+	);
+
 	assignResourceToProject$ = createEffect(() =>
 		this.actions$.pipe(
 			ofType(ProjManagementActions.createResourceProjectAssignment),
 			switchMap(data =>
-				this.projectService.assignResourceToProject(data.projectId, data.resourceId, data.assignProjectDto).pipe(
-					map(() => {
-						return ProjManagementActions.createResourceProjectAssignmentSuccess();
-					}),
-					catchError(error => of(ProjManagementActions.createResourceProjectAssignmentFailure({ error }))),
-				),
+				this.projectService
+					.assignResourceToProject(data.projectId, data.resourceId, data.assignProjectDto)
+					.pipe(
+						map(() => {
+							return ProjManagementActions.createResourceProjectAssignmentSuccess();
+						}),
+						catchError(error =>
+							of(ProjManagementActions.createResourceProjectAssignmentFailure({ error })),
+						),
+					),
 			),
 		),
 	);
@@ -167,6 +185,20 @@ export class ResourceProjectClientManagementEffects {
 						});
 					}),
 					catchError(error => of(ProjManagementActions.getAllViewsByStatusFailure({ error }))),
+				),
+			),
+		),
+	);
+
+	deleteResource$ = createEffect(() =>
+		this.actions$.pipe(
+			ofType(ProjManagementActions.deleteResource),
+			switchMap(data =>
+				this.resourceService.deleteResource(data.resourceId).pipe(
+					map(() => {
+						return ProjManagementActions.deleteResourceSuccess({ resourceId: data.resourceId });
+					}),
+					catchError(error => of(ProjManagementActions.deleteResourceFailure({ error }))),
 				),
 			),
 		),

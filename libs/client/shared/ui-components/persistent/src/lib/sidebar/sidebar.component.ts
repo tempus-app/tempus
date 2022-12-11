@@ -36,7 +36,11 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
 	email = '';
 
+	role = '';
+
 	SidebarTab = SidebarTab;
+
+	RoleType = RoleType;
 
 	initials = '';
 
@@ -85,6 +89,11 @@ export class SidebarComponent implements OnInit, OnDestroy {
 			route: '/resource/personal-information',
 			base: true,
 		},
+		{
+			tab: SidebarTab.MY_PROJECTS,
+			route: '/resource/my-projects',
+			base: true,
+		},
 	];
 
 	ngOnInit(): void {
@@ -100,6 +109,9 @@ export class SidebarComponent implements OnInit, OnDestroy {
 			.pipe(takeUntil(this.destroyed$))
 			.subscribe(token => {
 				const { roles } = decodeJwt(token || '');
+
+				// eslint-disable-next-line prefer-destructuring
+				this.role = roles[0];
 
 				if (roles.includes(RoleType.BUSINESS_OWNER) || roles.includes(RoleType.SUPERVISOR)) {
 					this.tabs = [SidebarTab.MANAGE_RESOURCES, SidebarTab.PENDING_APPROVALS, SidebarTab.PROJECTS];
@@ -125,6 +137,19 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
 		this.getInitials();
 		this.isVisible = true;
+	}
+
+	formatRole(): string {
+		switch (this.role) {
+			case RoleType.BUSINESS_OWNER:
+				return 'Admin';
+			case RoleType.SUPERVISOR:
+				return 'Supervisor';
+			case RoleType.ASSIGNED_RESOURCE:
+			case RoleType.AVAILABLE_RESOURCE:
+			default:
+				return 'Resource';
+		}
 	}
 
 	setPlaceholders() {

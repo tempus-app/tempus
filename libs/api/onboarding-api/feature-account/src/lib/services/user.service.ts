@@ -1,12 +1,13 @@
-import { Resource, User } from '@tempus/shared-domain';
+import { Resource, RoleType, User } from '@tempus/shared-domain';
 import { ForbiddenException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ConfigService } from '@nestjs/config';
-import { Repository } from 'typeorm';
+import { getManager, Repository } from 'typeorm';
 import { genSalt, hash } from 'bcrypt';
 import { UserEntity } from '@tempus/api/shared/entity';
 import { CreateUserDto, JwtPayload, UpdateUserDto } from '@tempus/api/shared/dto';
 import { CommonService } from '@tempus/api/shared/feature-common';
+import { EmailService } from '@tempus/api/shared/feature-email';
 
 @Injectable()
 export class UserService {
@@ -14,6 +15,7 @@ export class UserService {
 		@InjectRepository(UserEntity)
 		private userRepository: Repository<UserEntity>,
 		private configService: ConfigService,
+		private emailService: EmailService,
 		private commonService: CommonService,
 	) {}
 
@@ -65,12 +67,22 @@ export class UserService {
 		return users;
 	}
 
-	async deleteUser(userId: number): Promise<void> {
+	async deleteUser(token: JwtPayload, userId: number): Promise<void> {
+		if (token.roles.includes(RoleType.SUPERVISOR) && !token.roles.includes(RoleType.BUSINESS_OWNER)) {
+			throw new ForbiddenException('Forbidden. Supervisors cannot delete accounts');
+		}
 		const userEntity = await this.userRepository.findOne(userId);
 		if (userEntity === undefined) {
 			throw new NotFoundException(`Could not find user with id ${userId}`);
 		}
-		await this.userRepository.remove(userEntity);
+		return getManager().transaction(async manager => {
+			await manager.getRepository(UserEntity).remove(userEntity);
+			try {
+				await this.emailService.sendDeletedAccountEmail(userEntity);
+			} catch (err) {
+				throw new Error('Email unable to be sent.');
+			}
+		});
 	}
 
 	private async hashPassword(password: string): Promise<string> {

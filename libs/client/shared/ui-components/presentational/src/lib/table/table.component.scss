@@ -47,3 +47,21 @@
 	color: #031927;
 	font-size: 0.93rem;
 }
+
+.mat-icon-button .mat-button-wrapper {
+	display: flex;
+	justify-content: center;
+}
+
+.mat-icon-button {
+	line-height: unset;
+}
+
+.buttonIcon {
+	font-size: inherit !important;
+	height: inherit !important;
+	line-height: inherit !important;
+	width: inherit;
+	margin-right: 0 !important;
+	margin-left: 0 !important;
+}

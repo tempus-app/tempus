@@ -89,17 +89,18 @@ export class SignUpComponent implements OnInit {
 				);
 				this.router.navigate(['../uploadresume'], { relativeTo: this.route });
 			} else {
-				const newSupervisor = {
+        const roleType = this.linkData.userType;
+				const newAdminUser = {
 					firstName: this.linkData.firstName,
 					lastName: this.linkData.lastName,
 					email: this.linkData.email,
 					password: this.formGroup.get('password')?.value,
-					roles: [RoleType.SUPERVISOR],
+					roles: [roleType],
 					linkId: this.linkData.id,
 				} as ICreateResourceDto;
 				this.store.dispatch(
 					createResource({
-						createResourceDto: newSupervisor,
+						createResourceDto: newAdminUser,
 					}),
 				);
 			}

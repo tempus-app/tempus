@@ -72,6 +72,9 @@ export class ResourceProfileContentComponent implements OnInit, OnChanges {
 	email = '';
 
 	@Input()
+	calEmail = '';
+
+	@Input()
 	phoneNumber = '';
 
 	@Input()
@@ -122,6 +125,8 @@ export class ResourceProfileContentComponent implements OnInit, OnChanges {
 	viewName = '';
 
 	isRevision = false;
+
+	dataLoaded = false;
 
 	viewResourceProfilePrefx = 'viewResourceProfile.';
 
@@ -195,6 +200,7 @@ export class ResourceProfileContentComponent implements OnInit, OnChanges {
 					return !viewExists;
 				});
 				this.loadView(currentViewId || latestView.id, uniqueViewNames);
+				this.dataLoaded = true;
 			});
 
 		// this.resourceService.getResourceProfileViews(id).subscribe(data => {

@@ -10,9 +10,10 @@ import {
 	getViewById,
 	selectRevision,
 	editResourceView,
+	selectLoggedInUserNameEmail,
 } from '@tempus/client/onboarding-client/shared/data-access';
-import { LoadView, ProjectResource } from '@tempus/shared-domain';
-import { skip, Subject, takeUntil } from 'rxjs';
+import { LoadView, ProjectResource, RoleType } from '@tempus/shared-domain';
+import { skip, take, Subject, takeUntil } from 'rxjs';
 import {
 	BusinessOwnerState,
 	getOriginalResume,
@@ -51,6 +52,8 @@ export class ResourceProfileComponent implements OnInit, OnDestroy {
 
 	email = '';
 
+	calEmail = '';
+
 	country = '';
 
 	state = '';
@@ -76,6 +79,8 @@ export class ResourceProfileComponent implements OnInit, OnDestroy {
 	projectResources: ProjectResource[] = [];
 
 	isPrimaryView = false;
+
+	roles: RoleType[] = [];
 
 	childRevisionLoaded(loadedView: LoadView) {
 		this.loadedView = loadedView;
@@ -148,6 +153,7 @@ export class ResourceProfileComponent implements OnInit, OnDestroy {
 			.subscribe(data => {
 				this.resourceFirstName = data.firstName || '';
 				this.resourceLastName = data.lastName || '';
+				this.calEmail = data.calEmail ? data.calEmail : '';
 				this.city = data.city || '';
 				this.state = data.province || '';
 				this.country = data.country || '';
@@ -173,6 +179,13 @@ export class ResourceProfileComponent implements OnInit, OnDestroy {
 		// 	this.projectResources = resourceInfo.projectResources;
 		// });
 		this.businessOwnerStore.dispatch(getOriginalResume({ resourceId: this.resourceId }));
+
+		this.sharedStore
+			.select(selectLoggedInUserNameEmail)
+			.pipe(take(1))
+			.subscribe(data => {
+				this.roles = data.roles;
+			});
 
 		this.businessOwnerStore
 			.select(selectOriginalResume)

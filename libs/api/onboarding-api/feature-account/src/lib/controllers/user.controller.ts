@@ -14,8 +14,9 @@ import {
 	StreamableFile,
 	Res,
 	Query,
+	ParseArrayPipe,
 } from '@nestjs/common';
-import { Resource, RoleType, User } from '@tempus/shared-domain';
+import { AzureAccount, Resource, RoleType, User } from '@tempus/shared-domain';
 // eslint-disable-next-line @nrwl/nx/enforce-module-boundaries
 import { JwtAuthGuard, Roles, RolesGuard, PermissionGuard } from '@tempus/api/shared/feature-auth';
 import { ApiTags } from '@nestjs/swagger';
@@ -33,11 +34,16 @@ import { Express, Response } from 'express';
 import { Multer } from 'multer'; // hack to use mutler
 import { ResourceService } from '../services/resource.service';
 import { UserService } from '../services/user.service';
+import { GraphService } from '../services/graph.service';
 
 @ApiTags('User')
 @Controller('user')
 export class UserController {
-	constructor(private userService: UserService, private resourceService: ResourceService) {}
+	constructor(
+		private userService: UserService,
+		private resourceService: ResourceService,
+		private graphService: GraphService,
+	) {}
 
 	@UseGuards(JwtAuthGuard, RolesGuard)
 	@Roles(RoleType.BUSINESS_OWNER, RoleType.SUPERVISOR)
@@ -66,8 +72,11 @@ export class UserController {
 		@Query('page') page: number,
 		@Query('pageSize') pageSize: number,
 		@Query('filter') filter: string,
+		@Query('country') country?: string,
+		@Query('province') province?: string,
+		@Query('roleType', new ParseArrayPipe({ items: String, separator: ',', optional: true })) roleType?: RoleType[],
 	): Promise<{ userProjClientData: UserProjectClientDto[]; totalItems: number }> {
-		return this.resourceService.getAllResourceProjectInfo(page, pageSize, filter);
+		return this.resourceService.getAllResourceProjectInfo(page, pageSize, filter, roleType, country, province);
 	}
 
 	@UseGuards(JwtAuthGuard, RolesGuard)
@@ -111,6 +120,20 @@ export class UserController {
 		return this.resourceService.createResource(user);
 	}
 
+	// creates Azure AD account for resource
+	@Post('/azureAccount/:resourceId')
+	async createResourceAzureAccount(@Param('resourceId') resourceId: number): Promise<AzureAccount> {
+		return this.graphService.createUser(resourceId);
+	}
+
+	// deletes Azure AD account for resource
+	@UseGuards(JwtAuthGuard, RolesGuard)
+	@Roles(RoleType.BUSINESS_OWNER)
+	@Delete('/azureAccount/:resourceId')
+	async deleteResourceAzureAccount(@Param('resourceId') resourceId: number): Promise<void> {
+		return this.graphService.deleteUser(resourceId);
+	}
+
 	@Patch(':resourceId/resume')
 	@UseInterceptors(FileInterceptor('resume'))
 	async saveResume(
@@ -146,7 +169,7 @@ export class UserController {
 	// delete User or Resource
 	@UseGuards(JwtAuthGuard, PermissionGuard)
 	@Delete(':userId')
-	async deleteUser(@Param('userId') userId: number): Promise<void> {
-		return this.userService.deleteUser(userId);
+	async deleteUser(@Param('userId') userId: number, @Request() req): Promise<void> {
+		return this.userService.deleteUser(req.user, userId);
 	}
 }

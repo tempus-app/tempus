@@ -63,7 +63,7 @@ export class LinkEntity implements Link {
 	})
 	userType: RoleType;
 
-	@OneToOne(() => UserEntity)
+	@OneToOne(() => UserEntity, { onDelete: 'CASCADE' })
 	@JoinColumn()
 	user?: UserEntity;
 

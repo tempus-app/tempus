@@ -13,6 +13,7 @@ import {
 	OnboardingClientState,
 	selectResourceDetails,
 	selectResourceOriginalResume,
+	SessionStorageKey,
 } from '@tempus/client/onboarding-client/shared/data-access';
 import { Subject, takeUntil } from 'rxjs';
 
@@ -33,6 +34,8 @@ export class PersonalInformationDisplayComponent implements OnInit {
 	lastName = '';
 
 	fullName = '';
+
+	calEmail = '';
 
 	email = '';
 
@@ -88,6 +91,7 @@ export class PersonalInformationDisplayComponent implements OnInit {
 				this.country = data.country || '';
 				this.phoneNumber = data.phoneNumber || '';
 				this.email = data.email || '';
+				this.calEmail = data.calEmail || '';
 				this.linkedInLink = data.linkedInLink || '';
 				this.githubLink = data.githubLink || '';
 				this.otherLink = data.otherLink || '';
@@ -128,10 +132,14 @@ export class PersonalInformationDisplayComponent implements OnInit {
 			province: this.personalInfoForm.get('state')?.value,
 			country: this.personalInfoForm.get('country')?.value,
 		};
+		const firstName = this.personalInfoForm.get('firstName')?.value;
+		const lastName = this.personalInfoForm.get('lastName')?.value;
+		sessionStorage.setItem(SessionStorageKey.TEMPUS_FIRST_NAME, firstName);
+		sessionStorage.setItem(SessionStorageKey.TEMPUS_LAST_NAME, lastName);
 		return {
 			id: this.userId,
-			firstName: this.personalInfoForm.get('firstName')?.value,
-			lastName: this.personalInfoForm.get('lastName')?.value,
+			firstName,
+			lastName,
 			email: this.personalInfoForm.get('email')?.value,
 			location: locationsDto,
 			phoneNumber: this.personalInfoForm.get('phoneNumber')?.value,

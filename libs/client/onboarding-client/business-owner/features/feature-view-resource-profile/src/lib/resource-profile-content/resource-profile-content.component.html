@@ -1,116 +1,139 @@
 <ng-container>
-	<div fxLayout="column" fxLayoutGap="30px">
-		<div fxFlex></div>
-		<div fxFlex fxLayoutAlign="center start">
-			<h2 class="mat-h2 section-header">{{ firstName }} {{ lastName }}</h2>
-		</div>
-		<div fxFlex *ngIf="projectResources.length">
-			<div fxFlex="5"></div>
-			<div fxFlex="90" fxLayout="column">
-				<div class="mat-h3 card-title">{{ viewResourceProfilePrefx + 'project.title' | translate }}</div>
-				<tempus-project [projectResources]="projectResources"></tempus-project>
-			</div>
-			<div fxFlex="5"></div>
-		</div>
-		<div fxFlex>
-			<div fxFlex="5"></div>
-			<div fxFlex="90" fxLayout="column" fxLayoutGap="30px">
-				<div class="mat-h3 card-title">{{ viewResourceProfilePrefx + 'personal.title' | translate }}</div>
-				<tempus-resource-display-personal-information
-					[firstName]="firstName"
-					[lastName]="lastName"
-					[country]="country"
-					[state]="state"
-					[city]="city"
-					[phoneNumber]="phoneNumber"
-					[email]="email"
-					[resume]="resume"
-					[linkedInLink]="linkedInLink"
-					[githubLink]="githubLink"
-					[otherLink]="otherLink"
-					[profileSummary]="profileSummary"
-				></tempus-resource-display-personal-information>
-			</div>
-			<div fxFlex="5"></div>
-		</div>
-		<div *ngIf="viewName !== ''" fxLayout="column" fxLayoutGap="30px">
-			<div fxFlex>
-				<div fxFlex="5"></div>
-				<div class="info-title">
-					<div class="mat-h3 card-title">{{ viewResourceProfilePrefx + 'workExperience.title' | translate }}</div>
-					<tempus-resource-display-work-experience
-						[experiencesSummary]="experiencesSummary"
-						[workExperiences]="workExperiences"
-					></tempus-resource-display-work-experience>
-				</div>
-				<div fxFlex="5"></div>
-			</div>
-			<div fxFlex>
-				<div fxFlex="5"></div>
-				<div class="info-title">
-					<div class="mat-h3 card-title">{{ viewResourceProfilePrefx + 'educationAndTraining.title' | translate }}</div>
-					<tempus-resource-display-education [educationsSummary]="educationsSummary" [educations]="educations">
-					</tempus-resource-display-education>
-				</div>
-				<div fxFlex="5"></div>
-			</div>
+    <div fxLayout="column" fxLayoutGap="30px" *ngIf="dataLoaded">
+        <div fxFlex></div>
+        <div fxFlex fxLayoutAlign="center start">
+            <h2 class="mat-h2 section-header">{{ firstName }} {{ lastName }}</h2>
+        </div>
+        <div fxFlex *ngIf="projectResources.length">
+            <div fxFlex="5"></div>
+            <div fxFlex="90" fxLayout="column">
+                <div class="mat-h3 card-title">{{ viewResourceProfilePrefx + 'project.title' | translate }}</div>
+                <tempus-project [projectResources]="projectResources"></tempus-project>
+            </div>
+            <div fxFlex="5"></div>
+        </div>
+        <div fxFlex>
+            <div fxFlex="5"></div>
+            <div fxFlex="90" fxLayout="column" fxLayoutGap="30px">
+                <div class="mat-h3 card-title">{{ viewResourceProfilePrefx + 'personal.title' | translate }}</div>
+                <tempus-resource-display-personal-information
+                    [firstName]="firstName"
+                    [lastName]="lastName"
+                    [calEmail]="calEmail"
+                    [country]="country"
+                    [state]="state"
+                    [city]="city"
+                    [phoneNumber]="phoneNumber"
+                    [email]="email"
+                    [resume]="resume"
+                    [linkedInLink]="linkedInLink"
+                    [githubLink]="githubLink"
+                    [otherLink]="otherLink"
+                    [profileSummary]="profileSummary"
+                ></tempus-resource-display-personal-information>
+            </div>
+            <div fxFlex="5"></div>
+        </div>
+        <div *ngIf="viewName !== ''" fxLayout="column" fxLayoutGap="30px">
+            <div fxFlex>
+                <div fxFlex="5"></div>
+                <div class="info-title">
+                    <div class="mat-h3 card-title">
+                        {{ viewResourceProfilePrefx + 'workExperience.title' | translate }}
+                    </div>
+                    <tempus-resource-display-work-experience
+                        [experiencesSummary]="experiencesSummary"
+                        [workExperiences]="workExperiences"
+                    ></tempus-resource-display-work-experience>
+                </div>
+                <div fxFlex="5"></div>
+            </div>
+            <div fxFlex>
+                <div fxFlex="5"></div>
+                <div class="info-title">
+                    <div class="mat-h3 card-title">
+                        {{ viewResourceProfilePrefx + 'educationAndTraining.title' | translate }}
+                    </div>
+                    <tempus-resource-display-education
+                        [educationsSummary]="educationsSummary"
+                        [educations]="educations"
+                    >
+                    </tempus-resource-display-education>
+                </div>
+                <div fxFlex="5"></div>
+            </div>
 
-			<div fxFlex>
-				<div fxFlex="5"></div>
-				<div class="info-title">
-					<div class="mat-h3 card-title">{{ viewResourceProfilePrefx + 'certifications.title' | translate }}</div>
-					<tempus-resource-display-certifications [certifications]="certifications">
-					</tempus-resource-display-certifications>
-				</div>
-				<div fxFlex="5"></div>
-			</div>
+            <div fxFlex>
+                <div fxFlex="5"></div>
+                <div class="info-title">
+                    <div class="mat-h3 card-title">
+                        {{ viewResourceProfilePrefx + 'certifications.title' | translate }}
+                    </div>
+                    <tempus-resource-display-certifications [certifications]="certifications">
+                    </tempus-resource-display-certifications>
+                </div>
+                <div fxFlex="5"></div>
+            </div>
 
-			<div fxFlex>
-				<div fxFlex="5"></div>
-				<div fxFlex="90">
-					<div class="mat-h3 card-title">{{ viewResourceProfilePrefx + 'skills.title' | translate }}</div>
-					<tempus-resource-display-skills [skills]="skills" [skillsSummary]="skillsSummary">
-					</tempus-resource-display-skills>
-				</div>
-				<div fxFlex="5"></div>
-			</div>
-		</div>
+            <div fxFlex>
+                <div fxFlex="5"></div>
+                <div fxFlex="90">
+                    <div class="mat-h3 card-title">{{ viewResourceProfilePrefx + 'skills.title' | translate }}</div>
+                    <tempus-resource-display-skills [skills]="skills" [skillsSummary]="skillsSummary">
+                    </tempus-resource-display-skills>
+                </div>
+                <div fxFlex="5"></div>
+            </div>
+        </div>
 
-		<div
-			fxFlex
-			class="button-container"
-			fxLayout.gt-sm="row"
-			fxLayout.lt-md="column"
-			fxLayoutGap="20px"
-			fxLayoutAlign="end center"
-			*ngIf="isRevision"
-		>
-			<button mat-raised-button color="warn" id="reject-view-button" (click)="openRejectionDialog()">
-				{{ viewResourceProfilePrefx + 'buttons.rejectButton.title' | translate }}
-			</button>
-			<button mat-raised-button color="success" id="approve-view-button" (click)="openConfirmationDialog()">
-				{{ viewResourceProfilePrefx + 'buttons.approveButton.title' | translate }}
-			</button>
-		</div>
-		<div fxFlex></div>
-	</div>
+        <div
+            fxFlex
+            class="button-container"
+            fxLayout.gt-sm="row"
+            fxLayout.lt-md="column"
+            fxLayoutGap="20px"
+            fxLayoutAlign="center center"
+            *ngIf="isRevision"
+        >
+            <tempus-button
+                id="reject-view-button"
+                class="reject-button"
+                color="warn"
+                icon="close"
+                label="{{ viewResourceProfilePrefx + 'buttons.rejectButton.title' | translate }}"
+                (click)="openRejectionDialog()"
+            ></tempus-button>
+            <tempus-button
+                id="approve-view-button"
+                class="approve-button"
+                icon="done"
+                label="{{ viewResourceProfilePrefx + 'buttons.approveButton.title' | translate }}"
+                (click)="openConfirmationDialog()"
+            ></tempus-button>
+        </div>
+        <div fxFlex></div>
+    </div>
 
-	<ng-template #modalID>
-		<div>
-			<p>{{ viewResourceProfilePrefx + 'rejectDialog.helpText' | translate }}</p>
-			<tempus-text-area id="reject-revision-message-textarea" [control]="$any(viewResourceProfileForm).get('rejectionComments')"></tempus-text-area>
-		</div>
-		<div class="error-container">
-			<mat-error
-				class="mat-body-2"
-				*ngIf="
-					$any(viewResourceProfileForm).get('rejectionComments').invalid &&
-					($any(viewResourceProfileForm).get('rejectionComments').touched ||
-						$any(viewResourceProfileForm).get('rejectionComments').dirty)
-				"
-			>
-				{{ viewResourceProfilePrefx + 'rejectDialog.errorMessage' | translate }}
-			</mat-error>
-		</div>
-	</ng-template>
+    <ng-template #modalID>
+        <div>
+            <p>{{ viewResourceProfilePrefx + 'rejectDialog.helpText' | translate }}</p>
+            <tempus-text-area
+                id="reject-revision-message-textarea"
+                [control]="$any(viewResourceProfileForm).get('rejectionComments')"
+            ></tempus-text-area>
+        </div>
+        <div class="error-container">
+            <mat-error
+                class="mat-body-2"
+                *ngIf="
+                    $any(viewResourceProfileForm).get('rejectionComments').invalid &&
+                    ($any(viewResourceProfileForm).get('rejectionComments').touched ||
+                        $any(viewResourceProfileForm).get('rejectionComments').dirty)
+                "
+            >
+                {{ viewResourceProfilePrefx + 'rejectDialog.errorMessage' | translate }}
+            </mat-error>
+        </div>
+    </ng-template>
+    <tempus-spinner [showSpinner]="!dataLoaded"></tempus-spinner>
 </ng-container>

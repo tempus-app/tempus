@@ -1,9 +1,10 @@
 {
 	"viewResourceProfile": {
-        "project": {
+		"pendingApprovalTooltip": "This view requires your approval",
+		"project": {
 			"title": "Projects"
 		},
-        "personal": {
+		"personal": {
 			"title": "Personal"
 		},
 		"workExperience": {
@@ -18,35 +19,53 @@
 		"skills": {
 			"title": "Skills"
 		},
-        "buttons": {
-            "approveButton": {
-                "title": "ACCEPT CHANGES"
-            },
-            "rejectButton": {
-                "title": "REJECT CHANGES"
-            },
-            "assignButton": {
-                "title": "ASSIGN"
-            },
-            "createNewViewButton": {
-                "title": "CREATE NEW VIEW"
-            },        
-            "downloadProfile": {
-                "title": "DOWNLOAD PROFILE"
-            }
-        },
-        "rejectDialog": {
-            "title": "Enter Comments",
-            "helpText": "Enter your comments here so the user can improve on their resume and submit a better revision.",
-            "closeText": "CANCEL",
-            "confirmText": "SUBMIT",
-            "errorMessage": "Please enter a comment."
-        },
-        "confirmationDialog": {
-            "title": "Revision Approved!",
-            "message": "You have approved the revision",
-            "confirmText": "CLOSE"
+		"buttons": {
+			"approveButton": {
+				"title": "ACCEPT CHANGES"
+			},
+			"rejectButton": {
+				"title": "REJECT CHANGES"
+			},
+			"assignButton": {
+				"title": "ASSIGN"
+			},
+			"createNewViewButton": {
+				"title": "Create a new view"
+			},
+			"deleteViewButton": {
+				"title": "Delete view"
+			},
+			"editViewButton": {
+				"title": "Edit view"
+			},
+			"downloadProfile": {
+				"title": "DOWNLOAD"
+			}
+		},
+		"deleteViewModal": {
+			"title": "Delete {{viewName}}?",
+			"message": "Are you sure you want to permanently delete this view?",
+			"confirmText": "Yes, delete",
+			"closeText": "Cancel"
+		},
+		"deleteViewSuccess": "View deleted.",
+		"deleteViewErrorModal": {
+			"confirmText": "OK"
+		},
+		"rejectDialog": {
+			"title": "Enter Comments",
+			"helpText": "Enter your comments here so the user can improve on their resume and submit a better revision.",
+			"closeText": "CANCEL",
+			"confirmText": "SUBMIT",
+			"errorMessage": "Please enter a comment."
+		},
+		"confirmationDialog": {
+			"title": "Revision Approved!",
+			"message": "You have approved the revision",
+			"confirmText": "CLOSE"
+		},
+		"downloadDialog": {
+            "message": "Download in progress!"
         }
-
 	}
 }
