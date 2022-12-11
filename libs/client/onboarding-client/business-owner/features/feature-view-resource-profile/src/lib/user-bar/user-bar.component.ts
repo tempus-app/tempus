@@ -78,12 +78,14 @@ export class UserBarComponent implements OnChanges {
 			.select(selectDownloadProfile)
 			.pipe(takeUntil(this.destroyed$))
 			.subscribe(data => {
-				const downloadURL = window.URL.createObjectURL(data);
-				const link = document.createElement('a');
-				link.href = downloadURL;
-				const index = this.viewIDs.indexOf(this.currentViewID);
-				link.download = `${this.resourceName}-${this.viewNames[index]}`;
-				link.click();
+				if (data) {
+					const downloadURL = window.URL.createObjectURL(data);
+					const link = document.createElement('a');
+					link.href = downloadURL;
+					const index = this.viewIDs.indexOf(this.currentViewID);
+					link.download = `${this.resourceName}-${this.viewNames[index]}`;
+					link.click();
+				}
 			});
 		// this.resourceService.downloadProfile(this.currentViewID).subscribe(data => {
 		// 	const downloadURL = window.URL.createObjectURL(data);
