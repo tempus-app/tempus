@@ -28,12 +28,20 @@
 				<div class="mat-body-2">{{ 'sidenav.tabs.' + tab | translate }}</div>
 			</mat-button-toggle>
 			<mat-button-toggle
+				id="timesheet-button"
+				value="{{ SidebarTab.TIMESHEET }}"
+				(click)="navigate(SidebarTab.TIMESHEET)"
+			>
+				<div class="mat-body-2">{{ 'sidenav.timesheet' | translate }}</div>
+			</mat-button-toggle>
+			<mat-button-toggle
 				id="report-button"
 				value="{{ SidebarTab.REPORT_BUGS }}"
 				(click)="navigate(SidebarTab.REPORT_BUGS)"
 			>
 				<div class="mat-body-2">{{ 'sidenav.reportBugs' | translate }}</div>
 			</mat-button-toggle>
+
 			<mat-button-toggle id="logout" value="{{ SidebarTab.LOGOUT }}" (click)="navigate(SidebarTab.LOGOUT)">
 				<div id="logout-container">
 					<mat-icon>settings</mat-icon>

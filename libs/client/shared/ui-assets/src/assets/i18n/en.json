@@ -10,6 +10,7 @@
 		"namePlaceholder": "Placeholder Name",
 		"emailPlaceholder": "Placeholder Email",
 		"reportBugs": "Report Bugs",
+		"timesheet": "Timesheet",
 		"tabs": {
 			"manageResources": "Manage Resources",
 			"pendingApprovals": "Pending Approvals",
