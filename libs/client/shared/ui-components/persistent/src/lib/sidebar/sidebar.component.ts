@@ -94,6 +94,11 @@ export class SidebarComponent implements OnInit, OnDestroy {
 			route: '/resource/my-projects',
 			base: true,
 		},
+		{
+			tab: SidebarTab.TIMESHEET,
+			route: '/resource/timesheet',
+			base: true,
+		},
 	];
 
 	ngOnInit(): void {
@@ -121,6 +126,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
 						SidebarTab.MY_VIEWS,
 						SidebarTab.MY_PROJECTS,
 						SidebarTab.PERSONAL_INFORMATION,
+						SidebarTab.TIMESHEET,
 					];
 				}
 			});

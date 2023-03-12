@@ -8,4 +8,5 @@ export enum SidebarTab {
 	MY_PROJECTS = 'myProjects',
 	PERSONAL_INFORMATION = 'personalInformation',
 	PROJECTS = 'projects',
+	TIMESHEET = 'timesheet',
 }
