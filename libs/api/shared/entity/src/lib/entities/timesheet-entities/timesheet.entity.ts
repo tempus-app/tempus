@@ -6,7 +6,7 @@ import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 export class TimesheetEntity implements Timesheet {
 	constructor(
 		id?: number,
-		daysWorked?: string[],
+		daysWorked?: string,
 		totalHoursWorked?: number,
 		comments?: string,
 		projects?: string,
@@ -26,7 +26,7 @@ export class TimesheetEntity implements Timesheet {
 	id: number;
 
 	@Column({ nullable: true })
-	daysWorked: string[];
+	daysWorked: string;
 
 	@Column({ nullable: true })
 	totalHoursWorked: number;
