@@ -1,6 +1,6 @@
 export interface Timesheet {
 	id: number;
-	daysWorked: string[];
+	daysWorked: string;
 	totalHoursWorked: number;
 	comments: string;
 	projects: string;
