@@ -7,6 +7,9 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ClientSharedUiComponentsModalModule } from '@tempus/client/shared/ui-components/modal';
 import { ClientSharedUiComponentsPersistentModule } from '@tempus/client/shared/ui-components/persistent';
 import { ClientSharedUiComponentsPresentationalModule } from '@tempus/client/shared/ui-components/presentational';
@@ -37,6 +40,10 @@ function createTranslateLoader(http: HttpClient) {
 		ClientSharedInputResourceInformationModule,
 		ClientSharedPresentationalResourceDisplayModule,
 		OnboardingClientSharedFeatureEditViewFormModule,
+		MatNativeDateModule,
+        MatDatepickerModule,
+		FormsModule,
+		ReactiveFormsModule,
 		RouterModule.forChild([
 			{
 				path: '',
