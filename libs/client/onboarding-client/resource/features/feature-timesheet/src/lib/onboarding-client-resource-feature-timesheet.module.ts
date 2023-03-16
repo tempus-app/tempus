@@ -21,6 +21,7 @@ import { HttpClient } from '@angular/common/http';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { OnboardingClientSharedFeatureEditViewFormModule } from '@tempus/onboarding-client/shared/feature-edit-view-form';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatTableModule } from '@angular/material/table';
 
 function createTranslateLoader(http: HttpClient) {
 	return new TranslateHttpLoader(http, './assets/i18n/onboarding/resource/timesheet/', '.json');
@@ -30,6 +31,7 @@ function createTranslateLoader(http: HttpClient) {
 	imports: [CommonModule, MatIconModule,
 		MatDialogModule,
 		MatTooltipModule,
+		MatTableModule,
 		MatSlideToggleModule,
 		FlexLayoutModule,
 		MatFormFieldModule,

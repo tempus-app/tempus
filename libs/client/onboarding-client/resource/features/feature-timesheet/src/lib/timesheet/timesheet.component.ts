@@ -35,6 +35,24 @@ export class WeekSelectionStrategy implements MatDateRangeSelectionStrategy<stri
   }
 }
 
+const ELEMENT_DATA: TableOfContents[] = [
+  {position: 1, project: 'Project 1', sunday: '', monday: '7.5', tuesday: '', wednesday: '', thursday: '7.5', friday: '7.5', saturday: '', total: 22.5},
+  {position: 2, project: 'Project 2', sunday: '', monday: '', tuesday: '7.5', wednesday: '7.5', thursday: '', friday: '', saturday: '', total: 15}
+];
+
+export interface TableOfContents {
+  position: number;
+  project: string;
+  total: number;
+  sunday: string;
+  monday: string;
+  tuesday: string;
+  wednesday: string;
+  thursday: string;
+  friday: string;
+  saturday: string;
+}
+
 @Component({
   selector: 'tempus-timesheet',
   templateUrl: './timesheet.component.html',
@@ -49,6 +67,9 @@ export class WeekSelectionStrategy implements MatDateRangeSelectionStrategy<stri
 export class TimesheetComponent implements OnInit {
 
   constructor() { }
+
+  displayedColumns: string[] = ['position', 'project', 'sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'total'];
+  dataSource = ELEMENT_DATA;
 
   ngOnInit(): void {
     
