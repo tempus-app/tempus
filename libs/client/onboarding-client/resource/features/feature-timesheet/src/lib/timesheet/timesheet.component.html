@@ -1,1 +1,12 @@
-<p>timesheet works!</p>
+<h2 class="mat-h2 page-title">Timesheet</h2>
+
+<!-- Week picker -->
+<mat-form-field appearance="outline">
+    <mat-date-range-input [rangePicker]="picker">
+      <input matStartDate>
+      <input matEndDate>
+    </mat-date-range-input>
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-date-range-picker #picker></mat-date-range-picker>
+</mat-form-field>
+
