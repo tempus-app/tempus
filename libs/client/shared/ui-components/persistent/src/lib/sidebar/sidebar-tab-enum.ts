@@ -9,4 +9,5 @@ export enum SidebarTab {
 	PERSONAL_INFORMATION = 'personalInformation',
 	PROJECTS = 'projects',
 	TIMESHEET = 'timesheet',
+	TIMESHEET_APPROVALS = 'timesheetApprovals',
 }

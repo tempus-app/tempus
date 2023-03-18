@@ -18,7 +18,8 @@
 			"myProjects": "My Projects",
 			"personalInformation": "Personal Information",
 			"projects": "Projects",
-			"timesheet": "Timesheet"
+			"timesheet": "Timesheet",
+			"timesheetApprovals": "Timesheet Approvals"
 		}
 	},
 	"button": {

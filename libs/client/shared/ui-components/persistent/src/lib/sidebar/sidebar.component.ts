@@ -99,6 +99,11 @@ export class SidebarComponent implements OnInit, OnDestroy {
 			route: '/resource/timesheet',
 			base: true,
 		},
+		{
+			tab: SidebarTab.TIMESHEET_APPROVALS,
+			route: '/owner/timesheet-approvals',
+			base: true,
+		},
 	];
 
 	ngOnInit(): void {
@@ -119,7 +124,12 @@ export class SidebarComponent implements OnInit, OnDestroy {
 				this.role = roles[0];
 
 				if (roles.includes(RoleType.BUSINESS_OWNER) || roles.includes(RoleType.SUPERVISOR)) {
-					this.tabs = [SidebarTab.MANAGE_RESOURCES, SidebarTab.PENDING_APPROVALS, SidebarTab.PROJECTS];
+					this.tabs = [
+						SidebarTab.MANAGE_RESOURCES,
+						SidebarTab.PENDING_APPROVALS,
+						SidebarTab.PROJECTS,
+						SidebarTab.TIMESHEET_APPROVALS,
+					];
 				} else if (roles.includes(RoleType.AVAILABLE_RESOURCE) || roles.includes(RoleType.ASSIGNED_RESOURCE)) {
 					this.tabs = [
 						SidebarTab.PRIMARY_VIEW,

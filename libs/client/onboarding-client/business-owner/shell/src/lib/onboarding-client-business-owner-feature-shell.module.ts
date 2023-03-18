@@ -51,7 +51,7 @@ const routes: Routes = [
 					).then(m => m.ClientOnboardingClientBusinessOwnerFeaturesFeatureViewResourceProfileModule),
 			},
 			{
-				path: 'view-timesheet-approvals',
+				path: 'timesheet-approvals',
 				canLoad: [AuthGuard],
 				canActivate: [AuthGuard],
 				loadChildren: () =>
