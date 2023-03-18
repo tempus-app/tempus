@@ -1,6 +1,7 @@
 import { Component, Injectable, OnInit } from '@angular/core';
 import { DateAdapter } from '@angular/material/core';
 import { DateRange, MatDateRangeSelectionStrategy, MAT_DATE_RANGE_SELECTION_STRATEGY } from '@angular/material/datepicker';
+import { TranslateService } from '@ngx-translate/core';
 
 @Injectable()
 export class WeekSelectionStrategy implements MatDateRangeSelectionStrategy<string> {
@@ -56,7 +57,7 @@ export interface TableOfContents {
 @Component({
   selector: 'tempus-timesheet',
   templateUrl: './timesheet.component.html',
-  styleUrls: ['./timesheet.component.css'],
+  styleUrls: ['./timesheet.component.scss'],
   providers: [
     {
       provide: MAT_DATE_RANGE_SELECTION_STRATEGY,
@@ -65,8 +66,13 @@ export interface TableOfContents {
   ]
 })
 export class TimesheetComponent implements OnInit {
+  prefix = 'onboardingResourceTimesheet';
 
-  constructor() { }
+  constructor(private translateService: TranslateService) {
+    const { currentLang } = translateService;
+		translateService.currentLang = '';
+		translateService.use(currentLang);
+   }
 
   displayedColumns: string[] = ['position', 'project', 'sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'total'];
   dataSource = ELEMENT_DATA;
