@@ -8,7 +8,7 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { ViewTimesheetApprovalsComponent } from './view-timesheet-approvals/view-timesheet-approvals.component';
 
 function createTranslateLoader(http: HttpClient) {
-	return new TranslateHttpLoader(http, './assets/i18n/onboarding/owner/view-pending-approvals/', '.json');
+	return new TranslateHttpLoader(http, './assets/i18n/onboarding/owner/view-timesheet-approvals/', '.json');
 }
 
 @NgModule({
