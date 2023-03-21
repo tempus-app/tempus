@@ -34,6 +34,7 @@ function createTranslateLoader(http: HttpClient) {
 		MatTableModule,
 		MatSlideToggleModule,
 		FlexLayoutModule,
+		CommonModule,
 		MatFormFieldModule,
 		ClientSharedUiComponentsModalModule,
 		ClientSharedUiComponentsPersistentModule,

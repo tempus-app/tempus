@@ -1,4 +1,4 @@
-import { Component, Injectable, OnInit } from '@angular/core';
+import { Component, Injectable, OnInit, VERSION } from '@angular/core';
 import { DateAdapter } from '@angular/material/core';
 import { DateRange, MatDateRangeSelectionStrategy, MAT_DATE_RANGE_SELECTION_STRATEGY } from '@angular/material/datepicker';
 import { TranslateService } from '@ngx-translate/core';
@@ -76,6 +76,11 @@ export class TimesheetComponent implements OnInit {
 
   displayedColumns: string[] = ['position', 'project', 'sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'total'];
   dataSource = ELEMENT_DATA;
+
+  //created dummy data for days of the week in table
+  version = VERSION.full;
+  formatsDateTest: string[] = ['fullDate'];
+  dateNow: Date = new Date();
 
   ngOnInit(): void {
     

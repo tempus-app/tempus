@@ -40,7 +40,11 @@
   
     <!-- Monday Column -->
     <ng-container matColumnDef="monday">
-      <th mat-header-cell *matHeaderCellDef> Monday </th>
+      <th mat-header-cell *matHeaderCellDef>
+        <tr *ngFor="let format of formatsDateTest">
+          <td>{{ dateNow | date: format }}</td>
+        </tr>
+      </th>
       <td mat-cell *matCellDef="let element"> {{element.monday}} </td>
     </ng-container>
 
