@@ -5,6 +5,7 @@ import { ClientSharedUiComponentsPresentationalModule } from '@tempus/client/sha
 import { HttpClient } from '@angular/common/http';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { MatTableModule } from '@angular/material/table';
 import { ViewTimesheetApprovalsComponent } from './view-timesheet-approvals/view-timesheet-approvals.component';
 
 function createTranslateLoader(http: HttpClient) {
@@ -31,6 +32,7 @@ function createTranslateLoader(http: HttpClient) {
 			isolate: false,
 			extend: true,
 		}),
+		MatTableModule,
 	],
 	declarations: [ViewTimesheetApprovalsComponent],
 })
