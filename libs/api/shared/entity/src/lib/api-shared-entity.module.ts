@@ -19,7 +19,6 @@ import {
 	ProjectResourceEntity,
 	PasswordResetEntity,
 	CalendarEntity,
-	ReportEntity,
 	RevisedTimesheetEntity,
 	TimesheetEntity,
 } from './entities';
@@ -44,7 +43,6 @@ import {
 			ProjectResourceEntity,
 			PasswordResetEntity,
 			CalendarEntity,
-			ReportEntity,
 			RevisedTimesheetEntity,
 			TimesheetEntity,
 		]),

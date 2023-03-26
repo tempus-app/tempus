@@ -1,4 +1,4 @@
-import { CreateTimesheetDto, UpdateTimesheetDto } from '@tempus/api/shared/dto';
+import { CreateTimesheetDto } from '@tempus/api/shared/dto';
 import { Timesheet } from '@tempus/shared-domain';
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
@@ -43,11 +43,12 @@ export class TimesheetEntity implements Timesheet {
 	@Column({ nullable: true })
 	billed: boolean;
 
-	public static fromDto(dto: CreateTimesheetDto | UpdateTimesheetDto): TimesheetEntity {
+	public static fromDto(dto: CreateTimesheetDto): TimesheetEntity {
 		if (dto == null) return new TimesheetEntity();
-		const id = dto instanceof CreateTimesheetDto ? undefined : dto.id;
+		/* const id = dto instanceof CreateTimesheetDto ? undefined : dto.id;
+		 */
 		return new TimesheetEntity(
-			id,
+			dto.id,
 			dto.daysWorked,
 			dto.totalHoursWorked,
 			dto.comments,

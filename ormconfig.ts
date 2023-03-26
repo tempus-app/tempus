@@ -19,7 +19,6 @@ import {
 	CalendarEntity,
 	TimesheetEntity,
 	RevisedTimesheetEntity,
-	ReportEntity,
 } from '@tempus/api/shared/entity';
 
 const config: PostgresConnectionOptions = {
@@ -49,7 +48,6 @@ const config: PostgresConnectionOptions = {
 		CalendarEntity,
 		TimesheetEntity,
 		RevisedTimesheetEntity,
-		ReportEntity,
 	],
 	synchronize: false,
 	migrations: [`${__dirname}/dist/apps/onboarding-api/migrations/**/*.ts`],
