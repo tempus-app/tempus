@@ -7,9 +7,9 @@ export class ApprovalEntity implements Approval {
 	constructor(
 		id?: number,
 		timesheetWeek?: string,
-		submittedBy?: number,
+		submittedBy?: string,
 		submissionDate?: string,
-		time?: number,
+		time?: string,
 		project?: string,
 	) {
 		this.id = id;
@@ -27,13 +27,13 @@ export class ApprovalEntity implements Approval {
 	timesheetWeek?: string;
 
 	@Column({ nullable: true })
-	submittedBy?: number;
+	submittedBy?: string;
 
 	@Column({ nullable: true })
 	submissionDate?: string;
 
 	@Column({ nullable: true })
-	time?: number;
+	time?: string;
 
 	@Column({ nullable: true })
 	project?: string;

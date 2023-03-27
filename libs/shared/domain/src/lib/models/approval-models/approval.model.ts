@@ -1,8 +1,8 @@
 export interface Approval {
 	id: number;
 	timesheetWeek?: string;
-	submittedBy?: number;
+	submittedBy?: string;
 	submissionDate?: string;
-	time?: number;
+	time?: string;
 	project?: string;
 }

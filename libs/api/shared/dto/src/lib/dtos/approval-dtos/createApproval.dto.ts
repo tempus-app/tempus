@@ -9,13 +9,13 @@ export class CreateApprovalDto implements ICreateApprovalDto {
 	timesheetWeek?: string;
 
 	@ApiProperty()
-	submittedBy?: number;
+	submittedBy?: string;
 
 	@ApiProperty()
 	submissionDate?: string;
 
 	@ApiProperty()
-	time?: number;
+	time?: string;
 
 	@ApiProperty()
 	project?: string;
@@ -23,9 +23,9 @@ export class CreateApprovalDto implements ICreateApprovalDto {
 	constructor(
 		id?: number,
 		timesheetWeek?: string,
-		submittedBy?: number,
+		submittedBy?: string,
 		submissionDate?: string,
-		time?: number,
+		time?: string,
 		project?: string,
 	) {
 		this.id = id;
