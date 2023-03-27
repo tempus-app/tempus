@@ -21,6 +21,7 @@ import {
 	CalendarEntity,
 	RevisedTimesheetEntity,
 	TimesheetEntity,
+	ApprovalEntity,
 } from './entities';
 
 @Module({
@@ -45,6 +46,7 @@ import {
 			CalendarEntity,
 			RevisedTimesheetEntity,
 			TimesheetEntity,
+			ApprovalEntity,
 		]),
 	],
 	controllers: [],
