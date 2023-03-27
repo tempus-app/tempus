@@ -6,27 +6,27 @@ export class CreateApprovalDto implements ICreateApprovalDto {
 	id: number;
 
 	@ApiProperty()
-	timesheetWeek?: string;
+	timesheetWeek: string;
 
 	@ApiProperty()
-	submittedBy?: string;
+	submittedBy: string;
 
 	@ApiProperty()
-	submissionDate?: string;
+	submissionDate: string;
 
 	@ApiProperty()
-	time?: string;
+	time: string;
 
 	@ApiProperty()
-	project?: string;
+	project: string;
 
 	constructor(
-		id?: number,
-		timesheetWeek?: string,
-		submittedBy?: string,
-		submissionDate?: string,
-		time?: string,
-		project?: string,
+		id: number,
+		timesheetWeek: string,
+		submittedBy: string,
+		submissionDate: string,
+		time: string,
+		project: string,
 	) {
 		this.id = id;
 		this.timesheetWeek = timesheetWeek;
