@@ -49,7 +49,7 @@ const config: PostgresConnectionOptions = {
 		TimesheetEntity,
 		RevisedTimesheetEntity,
 	],
-	synchronize: false,
+	synchronize: true,
 	migrations: [`${__dirname}/dist/apps/onboarding-api/migrations/**/*.ts`],
 	migrationsRun: true,
 	cli: {
