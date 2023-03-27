@@ -1,6 +1,6 @@
 import { CreateApprovalDto } from '@tempus/api/shared/dto';
 import { Approval } from '@tempus/shared-domain';
-import { Entity, Column, PrimaryGeneratedColumn, Timestamp } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class ApprovalEntity implements Approval {
@@ -9,7 +9,7 @@ export class ApprovalEntity implements Approval {
 		timesheetWeek?: string,
 		submittedBy?: number,
 		submissionDate?: string,
-		time?: Timestamp,
+		time?: number,
 		project?: string,
 	) {
 		this.id = id;
@@ -33,7 +33,7 @@ export class ApprovalEntity implements Approval {
 	submissionDate?: string;
 
 	@Column({ nullable: true })
-	time?: Timestamp;
+	time?: number;
 
 	@Column({ nullable: true })
 	project?: string;

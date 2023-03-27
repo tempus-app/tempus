@@ -1,6 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { ICreateApprovalDto } from '@tempus/shared-domain';
-import { Timestamp } from 'typeorm';
 
 export class CreateApprovalDto implements ICreateApprovalDto {
 	@ApiProperty()
@@ -16,7 +15,7 @@ export class CreateApprovalDto implements ICreateApprovalDto {
 	submissionDate?: string;
 
 	@ApiProperty()
-	time?: Timestamp;
+	time?: number;
 
 	@ApiProperty()
 	project?: string;
@@ -26,7 +25,7 @@ export class CreateApprovalDto implements ICreateApprovalDto {
 		timesheetWeek?: string,
 		submittedBy?: number,
 		submissionDate?: string,
-		time?: Timestamp,
+		time?: number,
 		project?: string,
 	) {
 		this.id = id;
