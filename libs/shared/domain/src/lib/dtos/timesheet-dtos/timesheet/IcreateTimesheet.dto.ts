@@ -1,9 +1,11 @@
 export interface ICreateTimesheetDto {
-	id: number;
-	daysWorked: string;
-	totalHoursWorked: number;
-	comments: string;
-	projects: string;
-	audited: boolean;
-	billed: boolean;
+	id?: number;
+	weekStartDate?: Date;
+	weekEndDate?: Date;
+	approvedBySupervisor?: boolean;
+	approvedByClient?: boolean;
+	supervisorComment?: string;
+	clientRepresentativeComment?: string;
+	audited?: boolean;
+	billed?: boolean;
 }

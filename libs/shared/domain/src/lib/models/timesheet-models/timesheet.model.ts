@@ -1,12 +1,15 @@
+// import { TimesheetEntryEntity } from 'libs/api/shared/entity/src/lib/entities/timesheet-entities/timesheet-entry.entity';
 // import { Resource } from '../account-models';
 
 export interface Timesheet {
 	id: number;
-	daysWorked: string;
-	totalHoursWorked: number;
-	comments: string;
-	projects: string;
+	weekStartDate: Date;
+	weekEndDate: Date;
+	approvedBySupervisor: boolean;
+	approvedByClient: boolean;
+	supervisorComment: string;
+	clientRepresentativeComment: string;
 	audited: boolean;
 	billed: boolean;
-	// resource: Resource;
+	// timesheetEntry: TimesheetEntryEntity[];
 }
