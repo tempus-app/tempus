@@ -5,7 +5,7 @@ import { LocationEntity } from '../common-entities';
 import { CertificationEntity, EducationEntity, ExperienceEntity, SkillEntity, ViewEntity } from '../profile-entities';
 import { ProjectResourceEntity } from '../project-entities';
 import { UserEntity } from './user.entity';
-import { TimesheetEntity } from '../timesheet-entities/timesheet.entity';
+// import { TimesheetEntity } from '../timesheet-entities/timesheet.entity';
 
 @ChildEntity()
 export class ResourceEntity extends UserEntity implements Resource {
@@ -30,24 +30,24 @@ export class ResourceEntity extends UserEntity implements Resource {
 		password?: string,
 		roles?: RoleType[],
 		resume?: Uint8Array,
-		timesheets?: TimesheetEntity[],
+		// timesheets?: TimesheetEntity[],
 	) {
 		super(id, firstName, lastName, email, password, roles);
-		this.calEmail = calEmail ?? '';
-		this.phoneNumber = phoneNumber ?? '';
-		this.title = title ?? '';
-		this.location = location ?? new LocationEntity();
-		this.projectResources = projectResources ?? [];
-		this.views = views ?? [];
-		this.experiences = experiences ?? [];
-		this.educations = educations ?? [];
-		this.skills = skills ?? [];
-		this.certifications = certifications ?? [];
-		this.linkedInLink = linkedInLink ?? '';
-		this.githubLink = githubLink ?? '';
-		this.otherLink = otherLink ?? '';
-		this.resume = resume ?? new Uint8Array();
-		this.timesheets = timesheets ?? [];
+		this.calEmail = calEmail;
+		this.phoneNumber = phoneNumber;
+		this.title = title;
+		this.location = location;
+		this.projectResources = projectResources;
+		this.views = views;
+		this.experiences = experiences;
+		this.educations = educations;
+		this.skills = skills;
+		this.certifications = certifications;
+		this.linkedInLink = linkedInLink;
+		this.githubLink = githubLink;
+		this.otherLink = otherLink;
+		this.resume = resume;
+		// this.timesheets = timesheets ?? [];
 	}
 
 	@Column({ nullable: true })
@@ -92,8 +92,8 @@ export class ResourceEntity extends UserEntity implements Resource {
 	@OneToMany(() => CertificationEntity, certification => certification.resource, { cascade: ['insert', 'update'] })
 	certifications: CertificationEntity[];
 
-	@OneToMany(() => TimesheetEntity, timesheet => timesheet.resource, { cascade: ['insert', 'update'] })
-	timesheets: TimesheetEntity[];
+	// @OneToMany(() => TimesheetEntity, timesheet => timesheet.resource, { cascade: ['insert', 'update'] })
+	// timesheets: TimesheetEntity[];
 
 	public static override fromDto(dto: CreateResourceDto): ResourceEntity {
 		if (dto == null) return new ResourceEntity();

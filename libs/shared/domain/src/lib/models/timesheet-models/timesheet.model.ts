@@ -1,4 +1,4 @@
-import { Resource } from '../account-models';
+// import { Resource } from '../account-models';
 
 export interface Timesheet {
 	id: number;
@@ -8,5 +8,5 @@ export interface Timesheet {
 	projects: string;
 	audited: boolean;
 	billed: boolean;
-	resource: Resource;
+	// resource: Resource;
 }
