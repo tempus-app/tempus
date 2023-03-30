@@ -1,6 +1,7 @@
 import { CreateTimesheetDto } from '@tempus/api/shared/dto';
 import { Timesheet } from '@tempus/shared-domain';
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+// import { ResourceEntity } from '../account-entities';
 
 @Entity()
 export class TimesheetEntity implements Timesheet {
@@ -20,6 +21,7 @@ export class TimesheetEntity implements Timesheet {
 		this.projects = projects;
 		this.audited = audited;
 		this.billed = billed;
+		// this.resource = resource ?? new ResourceEntity();
 	}
 
 	@PrimaryGeneratedColumn()
@@ -42,6 +44,9 @@ export class TimesheetEntity implements Timesheet {
 
 	@Column({ nullable: true })
 	billed: boolean;
+
+	// @ManyToOne(() => ResourceEntity, resource => resource.timesheets, { cascade: ['insert', 'update'] })
+	// resource: ResourceEntity;
 
 	public static fromDto(dto: CreateTimesheetDto): TimesheetEntity {
 		if (dto == null) return new TimesheetEntity();
