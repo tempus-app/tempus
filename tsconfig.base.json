@@ -15,6 +15,7 @@
 		"skipDefaultLibCheck": true,
 		"baseUrl": ".",
 		"paths": {
+			"@tempus/api/onboarding-api/feature-approval": ["libs/api/onboarding-api/feature-approval/src/index.ts"],
 			"@tempus/api/shared/api-assets": ["libs/api/shared/api-assets/src/index.ts"],
 			"@tempus/api/shared/dto": ["libs/api/shared/dto/src/index.ts"],
 			"@tempus/api/shared/entity": ["libs/api/shared/entity/src/index.ts"],

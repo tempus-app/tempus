@@ -1,6 +1,7 @@
 {
 	"version": 2,
 	"projects": {
+		"api-onboarding-api-feature-approval": "libs/api/onboarding-api/feature-approval",
 		"api-shared-api-assets": "libs/api/shared/api-assets",
 		"api-shared-dto": "libs/api/shared/dto",
 		"api-shared-entity": "libs/api/shared/entity",

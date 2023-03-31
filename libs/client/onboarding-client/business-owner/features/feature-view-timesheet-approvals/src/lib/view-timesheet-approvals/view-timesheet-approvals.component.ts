@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
+import { HttpClient } from '@angular/common/http';
 
 export interface ApprovalData {
 	timesheetWeek: string;
@@ -26,17 +27,20 @@ const ELEMENT_DATA: ApprovalData[] = [
 export class ViewTimesheetApprovalsComponent implements OnInit {
 	prefix = 'onboardingOwnerViewTimesheetApprovals';
 
-	dataSource = ELEMENT_DATA;
+	// dataSource = ELEMENT_DATA;
+	dataSource: ApprovalData[] = [];
 
 	displayedColumns: string[] = ['timesheetWeek', 'submittedBy', 'submissionDate', 'time', 'project'];
 
-	constructor(private translateService: TranslateService) {
+	constructor(private translateService: TranslateService, private http: HttpClient) {
 		const { currentLang } = translateService;
 		translateService.currentLang = '';
 		translateService.use(currentLang);
 	}
 
 	ngOnInit(): void {
-
-  }
+		this.http.get('http://localhost:5000/approval').subscribe(data => {
+			this.dataSource = data as ApprovalData[];
+		});
+	}
 }
