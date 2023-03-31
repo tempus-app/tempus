@@ -18,6 +18,7 @@ import {
 	PasswordResetEntity,
 	CalendarEntity,
 	TimesheetEntity,
+	TimesheetEntryEntity,
 	RevisedTimesheetEntity,
 	ApprovalEntity,
 } from '@tempus/api/shared/entity';
@@ -48,6 +49,7 @@ const config: PostgresConnectionOptions = {
 		PasswordResetEntity,
 		CalendarEntity,
 		TimesheetEntity,
+		TimesheetEntryEntity,
 		RevisedTimesheetEntity,
 		ApprovalEntity,
 	],

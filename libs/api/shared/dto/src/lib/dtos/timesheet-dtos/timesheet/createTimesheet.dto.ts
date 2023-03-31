@@ -3,41 +3,55 @@ import { ICreateTimesheetDto } from '@tempus/shared-domain';
 
 export class CreateTimesheetDto implements ICreateTimesheetDto {
 	@ApiProperty()
-	id: number;
+	id?: number;
 
 	@ApiProperty()
-	daysWorked: string;
+	weekStartDate?: Date;
 
 	@ApiProperty()
-	totalHoursWorked: number;
+	weekEndDate?: Date;
 
 	@ApiProperty()
-	comments: string;
+	approvedBySupervisor?: boolean;
 
 	@ApiProperty()
-	projects: string;
+	approvedByClient?: boolean;
 
 	@ApiProperty()
-	audited: boolean;
+	supervisorComment?: string;
 
 	@ApiProperty()
-	billed: boolean;
+	clientRepresentativeComment?: string;
+
+	@ApiProperty()
+	audited?: boolean;
+
+	@ApiProperty()
+	billed?: boolean;
 
 	constructor(
-		id: number,
-		daysWorked: string,
-		totalHoursWorked: number,
-		comments: string,
-		projects: string,
-		audited: boolean,
-		billed: boolean,
+		id?: number,
+		weekStartDate?: Date,
+		weekEndDate?: Date,
+		approvedBySupervisor?: boolean,
+		approvedByClient?: boolean,
+		supervisorComment?: string,
+		clientRepresentativeComment?: string,
+		audited?: boolean,
+		billed?: boolean,
+		// resource?: ResourceEntity,
+		// timesheetEntry?: TimesheetEntryEntity[],
 	) {
 		this.id = id;
-		this.daysWorked = daysWorked;
-		this.totalHoursWorked = totalHoursWorked;
-		this.comments = comments;
-		this.projects = projects;
+		this.weekStartDate = weekStartDate;
+		this.weekEndDate = weekEndDate;
+		this.approvedBySupervisor = approvedBySupervisor;
+		this.approvedByClient = approvedByClient;
+		this.supervisorComment = supervisorComment;
+		this.clientRepresentativeComment = clientRepresentativeComment;
 		this.audited = audited;
 		this.billed = billed;
+		// this.resource = resource;
+		// this.timesheetEntry = timesheetEntry;
 	}
 }
