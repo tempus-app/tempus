@@ -1,6 +1,6 @@
-import { Component, Injectable, OnInit, VERSION } from '@angular/core';
+import { Component, Injectable, Input, OnInit, VERSION } from '@angular/core';
 import { DateAdapter } from '@angular/material/core';
-import { DateRange, MatDateRangeSelectionStrategy, MAT_DATE_RANGE_SELECTION_STRATEGY } from '@angular/material/datepicker';
+import { DateRange, MatDateRangePicker, MatDateRangeSelectionStrategy, MAT_DATE_RANGE_SELECTION_STRATEGY } from '@angular/material/datepicker';
 import { TranslateService } from '@ngx-translate/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ButtonType, Column, MyViewsTableData } from '@tempus/client/shared/ui-components/presentational';
@@ -68,7 +68,11 @@ export interface TableOfContents {
   ]
 })
 export class TimesheetComponent implements OnInit {
+  @Input() from !: Date;
+  @Input() thru !: Date;
   prefix = 'onboardingResourceTimesheet';
+  startDate2 = "";
+  endDate2 = "";
 
   constructor(private translateService: TranslateService,
     private router: Router,
@@ -77,6 +81,26 @@ export class TimesheetComponent implements OnInit {
 		translateService.currentLang = '';
 		translateService.use(currentLang);
    }
+
+   changed(picker: MatDateRangePicker<any>) {
+    console.log("changed");
+    console.log(this.from);
+    console.log(this.thru);
+    let startDate: Date = new Date(this.from);
+    let startDate_string: string = startDate.toLocaleString();
+    let endDate: Date = new Date(this.thru);
+    let endDate_string: string = endDate.toLocaleString();
+    this.startDate2 = startDate_string;
+    this.endDate2 = endDate_string;
+    //let new_StartDate: Date = new Date(this.from);
+    //let startDate: string = new_StartDate.toLocaleString();
+  }
+  
+  /*
+  startDate: Date = new Date(this.from);
+  startDate_string: string = this.startDate.toLocaleString();
+  endDate: Date = new Date(this.thru);
+  endDate_string: string = this.endDate.toLocaleString();*/
 
   displayedColumns: string[] = ['position', 'project', 'sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'total'];
   dataSource = ELEMENT_DATA;
