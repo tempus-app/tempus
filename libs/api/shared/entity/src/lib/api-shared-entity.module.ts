@@ -18,6 +18,11 @@ import {
 	ClientRepresentativeEntity,
 	ProjectResourceEntity,
 	PasswordResetEntity,
+	CalendarEntity,
+	RevisedTimesheetEntity,
+	TimesheetEntity,
+	TimesheetEntryEntity,
+	ApprovalEntity,
 } from './entities';
 
 @Module({
@@ -39,6 +44,11 @@ import {
 			ClientRepresentativeEntity,
 			ProjectResourceEntity,
 			PasswordResetEntity,
+			CalendarEntity,
+			RevisedTimesheetEntity,
+			TimesheetEntity,
+			TimesheetEntryEntity,
+			ApprovalEntity,
 		]),
 	],
 	controllers: [],

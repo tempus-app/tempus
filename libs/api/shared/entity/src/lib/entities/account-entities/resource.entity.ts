@@ -29,6 +29,7 @@ export class ResourceEntity extends UserEntity implements Resource {
 		password?: string,
 		roles?: RoleType[],
 		resume?: Uint8Array,
+		// timesheets?: TimesheetEntity[],
 	) {
 		super(id, firstName, lastName, email, password, roles);
 		this.calEmail = calEmail;
