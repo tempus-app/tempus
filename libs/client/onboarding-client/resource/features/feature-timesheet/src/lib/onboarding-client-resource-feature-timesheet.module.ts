@@ -22,6 +22,8 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { OnboardingClientSharedFeatureEditViewFormModule } from '@tempus/onboarding-client/shared/feature-edit-view-form';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatTableModule } from '@angular/material/table';
+import { CreateNewTimesheetComponent } from './create-new-timesheet/create-new-timesheet.component';
+import { ClientOnboardingClientSharedFeaturesFeatureEditViewTimesheetModule } from '@tempus/client/onboarding-client/shared/features/feature-edit-view-timesheet';
 
 function createTranslateLoader(http: HttpClient) {
 	return new TranslateHttpLoader(http, './assets/i18n/onboarding/resource/timesheet/', '.json');
@@ -43,6 +45,7 @@ function createTranslateLoader(http: HttpClient) {
 		ClientSharedInputResourceInformationModule,
 		ClientSharedPresentationalResourceDisplayModule,
 		OnboardingClientSharedFeatureEditViewFormModule,
+		ClientOnboardingClientSharedFeaturesFeatureEditViewTimesheetModule,
 		MatNativeDateModule,
         MatDatepickerModule,
 		FormsModule,
@@ -52,6 +55,11 @@ function createTranslateLoader(http: HttpClient) {
 				path: '',
 				pathMatch: 'full',
 				component: TimesheetComponent,
+			},
+			{
+				path: 'new',
+				pathMatch: 'full',
+				component: CreateNewTimesheetComponent,
 			},
 		]),
 		TranslateModule.forChild({
@@ -64,7 +72,8 @@ function createTranslateLoader(http: HttpClient) {
 			extend: true,
 		}),],
 	declarations: [
-   TimesheetComponent
+   TimesheetComponent,
+   CreateNewTimesheetComponent
 	],
 })
 export class OnboardingClientResourceFeatureTimesheetModule {}

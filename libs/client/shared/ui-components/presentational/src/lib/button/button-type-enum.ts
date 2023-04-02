@@ -4,5 +4,6 @@ export enum ButtonType {
 	EDIT = 'edit',
 	DOWNLOAD_VIEW = 'download view',
 	CREATE_NEW_VIEW = 'create new view',
-  UPDATE_STATUS = 'update status',
+	CREATE_NEW_TIMESHEET = 'create new timesheet',
+	UPDATE_STATUS = 'update status',
 }

@@ -1,6 +1,13 @@
 <div fxLayout="column" id="page-container">
   <div id="title-container">
       <h2 class="mat-h2 page-title">{{ prefix + '.main.title' | translate }}</h2>
+      <div id="button-container">
+        <tempus-button
+            (buttonClick)="navigateToCreateNewView()"
+            [buttonType]="ButtonType.CREATE_NEW_TIMESHEET"
+            color="accent"
+        ></tempus-button>
+    </div>
   </div>
   <br>
   <div id="button-container">

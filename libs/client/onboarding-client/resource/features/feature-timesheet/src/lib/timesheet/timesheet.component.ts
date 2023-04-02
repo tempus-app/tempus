@@ -2,6 +2,8 @@ import { Component, Injectable, OnInit, VERSION } from '@angular/core';
 import { DateAdapter } from '@angular/material/core';
 import { DateRange, MatDateRangeSelectionStrategy, MAT_DATE_RANGE_SELECTION_STRATEGY } from '@angular/material/datepicker';
 import { TranslateService } from '@ngx-translate/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ButtonType, Column, MyViewsTableData } from '@tempus/client/shared/ui-components/presentational';
 
 @Injectable()
 export class WeekSelectionStrategy implements MatDateRangeSelectionStrategy<string> {
@@ -68,7 +70,9 @@ export interface TableOfContents {
 export class TimesheetComponent implements OnInit {
   prefix = 'onboardingResourceTimesheet';
 
-  constructor(private translateService: TranslateService) {
+  constructor(private translateService: TranslateService,
+    private router: Router,
+		private route: ActivatedRoute,) {
     const { currentLang } = translateService;
 		translateService.currentLang = '';
 		translateService.use(currentLang);
@@ -82,8 +86,14 @@ export class TimesheetComponent implements OnInit {
   formatsDateTest: string[] = ['fullDate'];
   dateNow: Date = new Date();
 
+  ButtonType = ButtonType;
+
   ngOnInit(): void {
     
   }
+
+  navigateToCreateNewView() {
+		this.router.navigate(['./new'], { relativeTo: this.route });
+	}
 
 }
