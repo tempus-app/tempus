@@ -40,9 +40,12 @@ export class EditViewTimesheetComponent implements OnDestroy {
 	@Output()
 	submitClicked = new EventEmitter();
 
-	ngOnDestroy(): void {
-		throw new Error('Method not implemented.');
-	}
+	destroyed$ = new Subject<void>();
 
 	ngOnInit(): void {}
+
+	ngOnDestroy(): void {
+		this.destroyed$.next();
+		this.destroyed$.complete();
+	}
 }
