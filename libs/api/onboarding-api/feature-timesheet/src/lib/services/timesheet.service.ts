@@ -4,7 +4,6 @@ import { TimesheetEntity } from '@tempus/api/shared/entity';
 import { Repository } from 'typeorm';
 import { Timesheet } from '@tempus/shared-domain';
 import { CreateTimesheetDto } from '@tempus/api/shared/dto';
-// import {UpdateTimesheetDto } from '@tempus/api/shared/dto';
 
 @Injectable()
 export class TimesheetService {
@@ -19,8 +18,11 @@ export class TimesheetService {
 		return timesheetEntity;
 	}
 
-	async getAllTimesheetsforUser(userId: number): Promise<Timesheet[]> {
-		const timesheets = await this.timesheetRepository.find(userId);
+	async getAllTimesheetsforUser(resourceId: number): Promise<Timesheet[]> {
+		const timesheets = await this.timesheetRepository.find({
+			where: { resource: { id: resourceId } },
+			relations: ['resource'],
+		});
 
 		return timesheets;
 	}
@@ -32,12 +34,7 @@ export class TimesheetService {
 
 	/* async updateTimesheet(updateTimesheetDto: UpdateTimesheetDto): Promise<Timesheet> {
 			const timesheetEntity = await this.getTimesheet(updateTimesheetDto.id);
-	
-			for (const [key, val] of Object.entries(updateTimesheetDto)){
-				if (!val) {
-					delete updateTimesheetDto[key];
-				}
-			}
+			for (const [key, val] of Object.entries(updateTimesheetDto)) if (!val) delete updateTimesheetDto[key];
 			Object.assign(timesheetEntity, updateTimesheetDto);
 			return this.timesheetRepository.save(timesheetEntity);
 		} */
