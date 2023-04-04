@@ -6,6 +6,7 @@ import {
 	ICreateCertificationDto,
 	ICreateEducationDto,
 } from '../../profile-dtos';
+import { ICreateTimesheetDto } from '../../timesheet-dtos';
 import { ICreateUserDto } from './IcreateUser.dto';
 
 export interface ICreateResourceDto extends ICreateUserDto {
@@ -34,6 +35,8 @@ export interface ICreateResourceDto extends ICreateUserDto {
 	skills: ICreateSkillDto[];
 
 	certifications: ICreateCertificationDto[];
+
+	timesheets: ICreateTimesheetDto[];
 
 	skillsSummary: string;
 

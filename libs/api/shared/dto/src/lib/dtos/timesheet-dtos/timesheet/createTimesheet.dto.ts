@@ -1,9 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { ICreateTimesheetDto } from '@tempus/shared-domain';
+import { CreateTimesheetEntryDto } from '../timesheet-entry/createTimesheetEntry.dto';
 
 export class CreateTimesheetDto implements ICreateTimesheetDto {
-	@ApiProperty()
-	id?: number;
 
 	@ApiProperty()
 	weekStartDate?: Date;
@@ -29,8 +28,10 @@ export class CreateTimesheetDto implements ICreateTimesheetDto {
 	@ApiProperty()
 	billed?: boolean;
 
+	@ApiProperty()
+	timesheetEntries?: CreateTimesheetEntryDto[];
+
 	constructor(
-		id?: number,
 		weekStartDate?: Date,
 		weekEndDate?: Date,
 		approvedBySupervisor?: boolean,
@@ -39,10 +40,8 @@ export class CreateTimesheetDto implements ICreateTimesheetDto {
 		clientRepresentativeComment?: string,
 		audited?: boolean,
 		billed?: boolean,
-		// resource?: ResourceEntity,
-		// timesheetEntry?: TimesheetEntryEntity[],
+		timesheetEntries?: CreateTimesheetEntryDto[],
 	) {
-		this.id = id;
 		this.weekStartDate = weekStartDate;
 		this.weekEndDate = weekEndDate;
 		this.approvedBySupervisor = approvedBySupervisor;
@@ -51,7 +50,6 @@ export class CreateTimesheetDto implements ICreateTimesheetDto {
 		this.clientRepresentativeComment = clientRepresentativeComment;
 		this.audited = audited;
 		this.billed = billed;
-		// this.resource = resource;
-		// this.timesheetEntry = timesheetEntry;
+		this.timesheetEntries = timesheetEntries;
 	}
 }

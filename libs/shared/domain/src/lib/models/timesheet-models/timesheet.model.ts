@@ -1,5 +1,5 @@
-// import { TimesheetEntryEntity } from 'libs/api/shared/entity/src/lib/entities/timesheet-entities/timesheet-entry.entity';
-// import { Resource } from '../account-models';
+import { Resource } from '..';
+import { TimesheetEntry } from './timesheet-entry.model';
 
 export interface Timesheet {
 	id: number;
@@ -11,5 +11,6 @@ export interface Timesheet {
 	clientRepresentativeComment: string;
 	audited: boolean;
 	billed: boolean;
-	// timesheetEntry: TimesheetEntryEntity[];
+	timesheetEntries: TimesheetEntry[];
+	resource: Resource;
 }

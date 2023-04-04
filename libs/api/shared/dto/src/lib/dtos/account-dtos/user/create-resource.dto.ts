@@ -6,6 +6,7 @@ import { CreateExperienceDto } from '../../profile-dtos/experience/createExperie
 import { CreateSkillDto } from '../../profile-dtos/skill/createSkill.dto';
 import { CreateLocationDto } from '../../common-dtos/createLocation.dto';
 import { CreateUserDto } from './create-user.dto';
+import { CreateTimesheetDto } from '../../timesheet-dtos/timesheet/createTimesheet.dto';
 
 export class CreateResourceDto extends CreateUserDto implements ICreateResourceDto {
 	@ApiProperty()
@@ -48,6 +49,9 @@ export class CreateResourceDto extends CreateUserDto implements ICreateResourceD
 	certifications: CreateCertificationDto[];
 
 	@ApiProperty()
+	timesheets: CreateTimesheetDto[];
+
+	@ApiProperty()
 	skillsSummary: string;
 
 	@ApiProperty()
@@ -76,6 +80,7 @@ export class CreateResourceDto extends CreateUserDto implements ICreateResourceD
 		educations: CreateEducationDto[],
 		skills: CreateSkillDto[],
 		certifications: CreateCertificationDto[],
+		timesheets: CreateTimesheetDto[],
 		experiencesSummary: string,
 		profileSummary: string,
 		educationsSummary: string,
@@ -92,6 +97,7 @@ export class CreateResourceDto extends CreateUserDto implements ICreateResourceD
 		this.educations = educations;
 		this.skills = skills;
 		this.certifications = certifications;
+		this.timesheets = timesheets;
 		this.experiencesSummary = experiencesSummary;
 		this.educationsSummary = educationsSummary;
 		this.profileSummary = profileSummary;

@@ -5,6 +5,7 @@ import { LocationEntity } from '../common-entities';
 import { CertificationEntity, EducationEntity, ExperienceEntity, SkillEntity, ViewEntity } from '../profile-entities';
 import { ProjectResourceEntity } from '../project-entities';
 import { UserEntity } from './user.entity';
+import { TimesheetEntity } from '../timesheet-entities';
 
 @ChildEntity()
 export class ResourceEntity extends UserEntity implements Resource {
@@ -23,13 +24,13 @@ export class ResourceEntity extends UserEntity implements Resource {
 		educations?: EducationEntity[],
 		skills?: SkillEntity[],
 		certifications?: CertificationEntity[],
+		timesheets?: TimesheetEntity[],
 		firstName?: string,
 		lastName?: string,
 		email?: string,
 		password?: string,
 		roles?: RoleType[],
 		resume?: Uint8Array,
-		// timesheets?: TimesheetEntity[],
 	) {
 		super(id, firstName, lastName, email, password, roles);
 		this.calEmail = calEmail;
@@ -42,6 +43,7 @@ export class ResourceEntity extends UserEntity implements Resource {
 		this.educations = educations;
 		this.skills = skills;
 		this.certifications = certifications;
+		this.timesheets = timesheets;
 		this.linkedInLink = linkedInLink;
 		this.githubLink = githubLink;
 		this.otherLink = otherLink;
@@ -90,6 +92,9 @@ export class ResourceEntity extends UserEntity implements Resource {
 	@OneToMany(() => CertificationEntity, certification => certification.resource, { cascade: ['insert', 'update'] })
 	certifications: CertificationEntity[];
 
+	@OneToMany(() => TimesheetEntity, timesheet => timesheet.resource, { cascade: ['insert', 'update'] })
+	timesheets: TimesheetEntity[];
+
 	public static override fromDto(dto: CreateResourceDto): ResourceEntity {
 		if (dto == null) return new ResourceEntity();
 		return new ResourceEntity(
@@ -107,6 +112,7 @@ export class ResourceEntity extends UserEntity implements Resource {
 			dto.educations?.map(education => EducationEntity.fromDto(education)),
 			dto.skills?.map(skill => SkillEntity.fromDto(skill)),
 			dto.certifications?.map(certification => CertificationEntity.fromDto(certification)),
+			dto.timesheets?.map(timesheet => TimesheetEntity.fromDto(timesheet)),
 			dto.firstName,
 			dto.lastName,
 			dto.email,

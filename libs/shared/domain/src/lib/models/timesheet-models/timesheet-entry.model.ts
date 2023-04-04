@@ -1,5 +1,4 @@
-// import { TimesheetEntity } from '@tempus/api/shared/entity';
-// import { Resource } from '../account-models';
+import { Timesheet } from './timesheet.model';
 
 export interface TimesheetEntry {
 	id: number;
@@ -7,5 +6,5 @@ export interface TimesheetEntry {
 	hoursWorked: number;
 	startTime: number;
 	endTime: number;
-	// timesheetID: TimesheetEntity;
+	timesheet: Timesheet;
 }
