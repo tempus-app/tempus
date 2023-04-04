@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { TimesheetEntity } from '@tempus/api/shared/entity';
 import { Repository } from 'typeorm';
 import { Timesheet } from '@tempus/shared-domain';
-import { CreateTimesheetDto } from '@tempus/api/shared/dto';
+import { CreateTimesheetDto, UpdateTimesheetDto } from '@tempus/api/shared/dto';
 
 @Injectable()
 export class TimesheetService {
@@ -38,6 +38,19 @@ export class TimesheetService {
 			Object.assign(timesheetEntity, updateTimesheetDto);
 			return this.timesheetRepository.save(timesheetEntity);
 		} */
+
+	async updateTimesheet(updateTimesheetDto: UpdateTimesheetDto): Promise<Timesheet> {
+		const timesheetEntity = await this.getTimesheet(updateTimesheetDto.id);
+		const updatedTimesheetEntryDto = { ...updateTimesheetDto };
+		Object.keys(updatedTimesheetEntryDto).forEach(key => {
+			const val = updatedTimesheetEntryDto[key];
+			if (!val) {
+				delete updatedTimesheetEntryDto[key];
+			}
+		});
+		Object.assign(timesheetEntity, updatedTimesheetEntryDto);
+		return this.timesheetRepository.save(timesheetEntity);
+	}
 
 	async deleteTimesheet(timesheetId: number) {
 		const timesheetEntity = await this.getTimesheet(timesheetId);
