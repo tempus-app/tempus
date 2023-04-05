@@ -16,6 +16,11 @@ import {
 	ClientRepresentativeEntity,
 	ProjectResourceEntity,
 	PasswordResetEntity,
+	CalendarEntity,
+	TimesheetEntity,
+	TimesheetEntryEntity,
+	RevisedTimesheetEntity,
+	ApprovalEntity,
 } from '@tempus/api/shared/entity';
 
 const config: PostgresConnectionOptions = {
@@ -42,8 +47,13 @@ const config: PostgresConnectionOptions = {
 		ClientRepresentativeEntity,
 		ProjectResourceEntity,
 		PasswordResetEntity,
+		CalendarEntity,
+		TimesheetEntity,
+		TimesheetEntryEntity,
+		RevisedTimesheetEntity,
+		ApprovalEntity,
 	],
-	synchronize: false,
+	synchronize: true,
 	migrations: [`${__dirname}/dist/apps/onboarding-api/migrations/**/*.ts`],
 	migrationsRun: true,
 	cli: {

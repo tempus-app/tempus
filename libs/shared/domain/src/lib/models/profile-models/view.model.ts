@@ -20,6 +20,7 @@ export interface View {
 	experiences: Experience[];
 	educations: Education[];
 	certifications: Certification[];
+	//timesheets: Timesheet[];
 	resource: Resource;
 	viewType: ViewType;
 	revisionType?: RevisionType;
