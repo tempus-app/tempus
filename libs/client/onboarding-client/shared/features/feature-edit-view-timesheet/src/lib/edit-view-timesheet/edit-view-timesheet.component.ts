@@ -19,6 +19,7 @@ import { UserType } from '@tempus/client/shared/ui-components/persistent';
 import { TranslateService } from '@ngx-translate/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { splitStringIntoBulletPoints } from '@tempus/client/shared/util';
+import { ProjectResource } from '@tempus/shared-domain';
 
 @Injectable()
 export class WeekSelectionStrategy implements MatDateRangeSelectionStrategy<string> {
@@ -95,13 +96,21 @@ export class EditViewTimesheetComponent implements OnDestroy {
 
 	prefix = 'onboardingResourceTimesheet';
 
-	startDate2 = ""; //sunday
-	endDate2 = ""; //saturday
-	startDatePlusOne2 = ""; //monday
-	startDatePlusTwo2 = ""; //tuesday
-	startDatePlusThree2 = ""; //wednesday
-	startDatePlusFour2 = ""; //thursday
-	startDatePlusFive2 = ""; //friday
+	startDate2 = ''; // sunday
+
+	endDate2 = ''; // saturday
+
+	startDatePlusOne2 = ''; // monday
+
+	startDatePlusTwo2 = ''; // tuesday
+
+	startDatePlusThree2 = ''; // wednesday
+
+	startDatePlusFour2 = ''; // thursday
+
+	startDatePlusFive2 = ''; // friday
+
+	projectOptions: { id: number; val: string }[] = [];
 
 	constructor(
 		private fb: FormBuilder,
@@ -121,40 +130,40 @@ export class EditViewTimesheetComponent implements OnDestroy {
 		console.log('changed');
 		console.log(this.from);
 		console.log(this.thru);
-		//Sunday
+		// Sunday
 		const startDate: Date = new Date(this.from);
 		const startDate_string: string = startDate.toLocaleString();
-		//Saturday
+		// Saturday
 		const endDate: Date = new Date(this.thru);
 		const endDate_string: string = endDate.toLocaleString();
-		//Monday
-		let startDatePlusOne = startDate.setDate(startDate.getDate() + 1);
-		let startDatePlusOne2 = new Date(startDatePlusOne);
-		let startDatePlusOne_string: string = startDatePlusOne2.toLocaleString();
-		//Tuesday
-		let startDatePlusTwo = startDate.setDate(startDate.getDate() + 1);
-		let startDatePlusTwo2 = new Date(startDatePlusTwo);
-		let startDatePlusTwo_string: string = startDatePlusTwo2.toLocaleString();
-		//Wednesday
-		let startDatePlusThree = startDate.setDate(startDate.getDate() + 1);
-		let startDatePlusThree2 = new Date(startDatePlusThree);
-		let startDatePlusThree_string: string = startDatePlusThree2.toLocaleString();
-		//Thursday
-		let startDatePlusFour = startDate.setDate(startDate.getDate() + 1);
-		let startDatePlusFour2 = new Date(startDatePlusFour);
-		let startDatePlusFour_string: string = startDatePlusFour2.toLocaleString();
-		//Friday
-		let startDatePlusFive = startDate.setDate(startDate.getDate() + 1);
-		let startDatePlusFive2 = new Date(startDatePlusFive);
-		let startDatePlusFive_string: string = startDatePlusFive2.toLocaleString();
-		//returning days values to string
-		this.startDate2 = startDate_string; //sunday
-		this.endDate2 = endDate_string; //saturday
-		this.startDatePlusOne2 = startDatePlusOne_string; //monday
-		this.startDatePlusTwo2 = startDatePlusTwo_string; //tuesday
-		this.startDatePlusThree2 = startDatePlusThree_string; //wednesday
-		this.startDatePlusFour2 = startDatePlusFour_string; //thursday
-		this.startDatePlusFive2 = startDatePlusFive_string; //friday
+		// Monday
+		const startDatePlusOne = startDate.setDate(startDate.getDate() + 1);
+		const startDatePlusOne2 = new Date(startDatePlusOne);
+		const startDatePlusOne_string: string = startDatePlusOne2.toLocaleString();
+		// Tuesday
+		const startDatePlusTwo = startDate.setDate(startDate.getDate() + 1);
+		const startDatePlusTwo2 = new Date(startDatePlusTwo);
+		const startDatePlusTwo_string: string = startDatePlusTwo2.toLocaleString();
+		// Wednesday
+		const startDatePlusThree = startDate.setDate(startDate.getDate() + 1);
+		const startDatePlusThree2 = new Date(startDatePlusThree);
+		const startDatePlusThree_string: string = startDatePlusThree2.toLocaleString();
+		// Thursday
+		const startDatePlusFour = startDate.setDate(startDate.getDate() + 1);
+		const startDatePlusFour2 = new Date(startDatePlusFour);
+		const startDatePlusFour_string: string = startDatePlusFour2.toLocaleString();
+		// Friday
+		const startDatePlusFive = startDate.setDate(startDate.getDate() + 1);
+		const startDatePlusFive2 = new Date(startDatePlusFive);
+		const startDatePlusFive_string: string = startDatePlusFive2.toLocaleString();
+		// returning days values to string
+		this.startDate2 = startDate_string; // sunday
+		this.endDate2 = endDate_string; // saturday
+		this.startDatePlusOne2 = startDatePlusOne_string; // monday
+		this.startDatePlusTwo2 = startDatePlusTwo_string; // tuesday
+		this.startDatePlusThree2 = startDatePlusThree_string; // wednesday
+		this.startDatePlusFour2 = startDatePlusFour_string; // thursday
+		this.startDatePlusFive2 = startDatePlusFive_string; // friday
 	}
 
 	/*
@@ -195,7 +204,13 @@ export class EditViewTimesheetComponent implements OnDestroy {
 
 	destroyed$ = new Subject<void>();
 
-	ngOnInit(): void {}
+	ngOnInit(): void {
+		this.resourceService.getResourceInformation().subscribe(data => {
+			this.projectOptions = data.projectResources.map(proj => {
+				return { id: proj.id, val: proj.project.name };
+			});
+		});
+	}
 
 	ngOnDestroy(): void {
 		this.destroyed$.next();
