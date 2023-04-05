@@ -43,11 +43,12 @@
 
 
 <ng-template #approvalDialogTemplate let-data="data" let-dialogRef="dialogRef">
-  <h2 mat-dialog-title>Timesheet Approval
-		<button mat-icon-button class="close-button" (click)="dialogRef.close()">
+  <h2 mat-dialog-title>
+    Timesheet Approval
+    <button mat-icon-button class="close-button" (click)="dialogRef.close()">
       <mat-icon>close</mat-icon>
     </button>
-	</h2>
+  </h2>
   <mat-dialog-content>
     <p>
       Submitted by: {{ data.submittedBy }}<br />
@@ -56,12 +57,31 @@
       Time: {{ data.time }}<br />
       Project: {{ data.project }}
     </p>
-    <mat-form-field>
-      <textarea matInput placeholder="Comment" [(ngModel)]="comment"></textarea>
-    </mat-form-field>
+    <div fxLayout="column" class="input-fields">
+      <div>
+        <mat-label>Name:</mat-label>
+        <mat-form-field appearance="outline">
+          <input matInput [(ngModel)]="name" />
+        </mat-form-field>
+      </div>
+      <div>
+        <mat-label>Project:</mat-label>
+        <mat-form-field appearance="outline">
+          <input matInput [(ngModel)]="project" />
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="comment-section">
+      <mat-form-field appearance="outline">
+        <mat-label>Comment</mat-label>
+        <textarea matInput [(ngModel)]="comment" placeholder="Comment"></textarea>
+      </mat-form-field>
+    </div>
   </mat-dialog-content>
   <mat-dialog-actions>
-		<button mat-button>Approve</button>
-		<button mat-button>Reject</button>
-	</mat-dialog-actions>
+    <button mat-button class="approve-button">Approve</button>
+    <button mat-button class="reject-button">Reject</button>
+  </mat-dialog-actions>
 </ng-template>
+
+

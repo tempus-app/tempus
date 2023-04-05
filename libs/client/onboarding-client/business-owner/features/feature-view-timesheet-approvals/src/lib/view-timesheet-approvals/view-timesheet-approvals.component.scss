@@ -1,5 +1,7 @@
 @use 'abstracts/helper' as abs;
 @use 'components/helper' as cmp;
+@import '~@angular/material/prebuilt-themes/indigo-pink.css';
+
 
 .page-title {
 	color: abs.$primary-800;
@@ -33,3 +35,45 @@
 	background-color: #f5f5f5;
 	cursor: pointer;
 }
+
+.blue-header {
+  background-color: #F1F6FA;
+  color: #ffffff;
+
+  .header-cell {
+    background-color: inherit;
+    color: inherit;
+  }
+}
+
+.approve-button {
+  background-color: #28a745;
+  color: #ffffff;
+  border-radius: 4px;
+  padding: 8px 16px;
+  &:hover {
+    background-color: #218838;
+  }
+}
+
+.reject-button {
+  background-color: #dc3545;
+  color: #ffffff;
+  border-radius: 4px;
+  padding: 8px 16px;
+  &:hover {
+    background-color: #c82333;
+  }
+}
+
+.calendar-container {
+  margin-bottom: 1rem;
+}
+
+/* Add this rule to your CSS */
+.mat-dialog-container {
+  display: flex;
+  justify-content: center;
+	align-items: center;
+}
+

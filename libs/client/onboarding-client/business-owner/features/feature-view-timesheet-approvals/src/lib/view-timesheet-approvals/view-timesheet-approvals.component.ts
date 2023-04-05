@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatDialog } from '@angular/material/dialog';
+// import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 
 export interface ApprovalData {
 	timesheetWeek: string;
@@ -28,6 +29,11 @@ const ELEMENT_DATA: ApprovalData[] = [
 	styleUrls: ['./view-timesheet-approvals.component.scss'],
 })
 export class ViewTimesheetApprovalsComponent implements OnInit {
+	name: string | undefined;
+
+	project: string | undefined;
+
+	// selectedDate: Date | null = null;
 	prefix = 'onboardingOwnerViewTimesheetApprovals';
 
 	// dataSource = ELEMENT_DATA;
@@ -58,4 +64,9 @@ export class ViewTimesheetApprovalsComponent implements OnInit {
 			data: row,
 		});
 	}
+
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	// onDateChange(event: any) {
+	// 	this.selectedDate = event.value;
+	// }
 }
