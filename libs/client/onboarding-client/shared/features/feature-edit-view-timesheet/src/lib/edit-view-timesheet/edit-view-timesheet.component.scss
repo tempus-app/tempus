@@ -45,3 +45,11 @@ table {
 	gap: 0.5em;
 	height: 100% !important;
 }
+
+::ng-deep {
+	.secondary .mat-form-field-wrapper {
+	width: 6em;
+	padding:0.8rem
+	}
+
+}
