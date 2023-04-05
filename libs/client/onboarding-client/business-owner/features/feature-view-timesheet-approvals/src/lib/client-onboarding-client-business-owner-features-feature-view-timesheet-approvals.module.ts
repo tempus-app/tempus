@@ -6,7 +6,14 @@ import { HttpClient } from '@angular/common/http';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { MatTableModule } from '@angular/material/table';
+import { MatPaginatorModule } from '@angular/material/paginator';
 import { ViewTimesheetApprovalsComponent } from './view-timesheet-approvals/view-timesheet-approvals.component';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon'; // Add this line
+
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 function createTranslateLoader(http: HttpClient) {
 	return new TranslateHttpLoader(http, './assets/i18n/onboarding/owner/view-timesheet-approvals/', '.json');
@@ -16,6 +23,9 @@ function createTranslateLoader(http: HttpClient) {
 	imports: [
 		CommonModule,
 		ClientSharedUiComponentsPresentationalModule,
+		MatPaginatorModule,
+		MatDialogModule,
+		MatButtonModule,
 		RouterModule.forChild([
 			{
 				path: '',
@@ -33,6 +43,10 @@ function createTranslateLoader(http: HttpClient) {
 			extend: true,
 		}),
 		MatTableModule,
+		MatIconModule,
+		MatFormFieldModule,
+		FormsModule,
+		ReactiveFormsModule,
 	],
 	declarations: [ViewTimesheetApprovalsComponent],
 })

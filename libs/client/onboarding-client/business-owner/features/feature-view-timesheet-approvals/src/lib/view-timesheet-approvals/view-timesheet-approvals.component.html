@@ -35,6 +35,33 @@
         </ng-container>
 
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="openDialog(row, approvalDialogTemplate)"></tr>
     </table>
+
+		<mat-paginator [pageSizeOptions]="[6]" showFirstLastButtons></mat-paginator>
 </div>
+
+
+<ng-template #approvalDialogTemplate let-data="data" let-dialogRef="dialogRef">
+  <h2 mat-dialog-title>Timesheet Approval
+		<button mat-icon-button class="close-button" (click)="dialogRef.close()">
+      <mat-icon>close</mat-icon>
+    </button>
+	</h2>
+  <mat-dialog-content>
+    <p>
+      Submitted by: {{ data.submittedBy }}<br />
+      Timesheet week: {{ data.timesheetWeek }}<br />
+      Submission date: {{ data.submissionDate }}<br />
+      Time: {{ data.time }}<br />
+      Project: {{ data.project }}
+    </p>
+    <mat-form-field>
+      <textarea matInput placeholder="Comment" [(ngModel)]="comment"></textarea>
+    </mat-form-field>
+  </mat-dialog-content>
+  <mat-dialog-actions>
+		<button mat-button>Approve</button>
+		<button mat-button>Reject</button>
+	</mat-dialog-actions>
+</ng-template>

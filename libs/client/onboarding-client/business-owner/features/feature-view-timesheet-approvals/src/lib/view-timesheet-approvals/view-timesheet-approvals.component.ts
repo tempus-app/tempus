@@ -1,6 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { HttpClient } from '@angular/common/http';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatDialog } from '@angular/material/dialog';
 
 export interface ApprovalData {
 	timesheetWeek: string;
@@ -28,11 +31,15 @@ export class ViewTimesheetApprovalsComponent implements OnInit {
 	prefix = 'onboardingOwnerViewTimesheetApprovals';
 
 	// dataSource = ELEMENT_DATA;
-	dataSource: ApprovalData[] = [];
+	dataSource = new MatTableDataSource<ApprovalData>([]);
+
+	@ViewChild(MatPaginator) paginator!: MatPaginator;
 
 	displayedColumns: string[] = ['timesheetWeek', 'submittedBy', 'submissionDate', 'time', 'project'];
 
-	constructor(private translateService: TranslateService, private http: HttpClient) {
+	comment = '';
+
+	constructor(private translateService: TranslateService, private http: HttpClient, private dialog: MatDialog) {
 		const { currentLang } = translateService;
 		translateService.currentLang = '';
 		translateService.use(currentLang);
@@ -40,7 +47,15 @@ export class ViewTimesheetApprovalsComponent implements OnInit {
 
 	ngOnInit(): void {
 		this.http.get('http://localhost:5000/approval').subscribe(data => {
-			this.dataSource = data as ApprovalData[];
+			this.dataSource.data = data as ApprovalData[];
+			this.dataSource.paginator = this.paginator;
+		});
+	}
+
+	openDialog(row: ApprovalData, templateRef: TemplateRef<unknown>): void {
+		const dialogRef = this.dialog.open(templateRef, {
+			width: '400px',
+			data: row,
 		});
 	}
 }
