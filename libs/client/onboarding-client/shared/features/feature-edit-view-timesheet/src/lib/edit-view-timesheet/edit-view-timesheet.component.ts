@@ -252,6 +252,35 @@ export class EditViewTimesheetComponent implements OnDestroy {
 				day: 'numeric',
 			}),
 		);
+
+		const postData = {
+			dateRange: `${this.from.toLocaleString('en-US', {
+				month: 'long',
+				year: 'numeric',
+				day: 'numeric',
+			})} - ${this.thru.toLocaleString('en-US', {
+				month: 'long',
+				year: 'numeric',
+				day: 'numeric',
+			})}`,
+			nameOfUser: this.nameOfUser,
+			currentDate: new Date(Date.now()).toLocaleString('fr-CA', {
+				month: 'numeric',
+				year: 'numeric',
+				day: 'numeric',
+			}),
+			totalHours: this.totalHours.value,
+			selectedProject: this.selectedProject.value,
+		};
+
+		this.http.post('http://localhost:5000/approval', postData).subscribe({
+			next: response => {
+				console.log('Data submitted successfully', response);
+			},
+			error: error => {
+				console.log('Error submitting data', error);
+			},
+		});
 	}
 
 	ngOnInit(): void {
