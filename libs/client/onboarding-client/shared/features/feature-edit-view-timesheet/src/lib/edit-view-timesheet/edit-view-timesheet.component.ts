@@ -1,6 +1,7 @@
 /* eslint-disable max-classes-per-file */
 import { Component, EventEmitter, OnDestroy, Output, Injectable, Input, OnInit, VERSION } from '@angular/core';
 import { DateAdapter } from '@angular/material/core';
+import { HttpClient } from '@angular/common/http';
 import {
 	DateRange,
 	MatDateRangePicker,
@@ -96,6 +97,8 @@ export class EditViewTimesheetComponent implements OnDestroy {
 
 	prefix = 'onboardingResourceTimesheet';
 
+	editViewFormPrefix = 'onboardingClient.editViewForm.';
+
 	startDate2 = ''; // sunday
 
 	endDate2 = ''; // saturday
@@ -110,7 +113,13 @@ export class EditViewTimesheetComponent implements OnDestroy {
 
 	startDatePlusFive2 = ''; // friday
 
-	projectOptions: { id: number; val: string }[] = [];
+	projectOptions: string[] = [];
+
+	nameOfUser = '';
+
+	selectedProject = new FormControl('', Validators.required);
+
+	totalHours = new FormControl('', Validators.required);
 
 	constructor(
 		private fb: FormBuilder,
@@ -119,6 +128,7 @@ export class EditViewTimesheetComponent implements OnDestroy {
 		private router: Router,
 		private route: ActivatedRoute,
 		private translateService: TranslateService,
+		private http: HttpClient,
 	) {
 		const { currentLang } = translateService;
 		// eslint-disable-next-line no-param-reassign
@@ -127,9 +137,11 @@ export class EditViewTimesheetComponent implements OnDestroy {
 	}
 
 	changed(picker: MatDateRangePicker<any>) {
-		console.log('changed');
-		console.log(this.from);
-		console.log(this.thru);
+		// console.log('changed');
+		// console.log(
+		// 	this.from.toLocaleString('en-US', { weekday: 'long', month: 'long', year: 'numeric', day: 'numeric' }),
+		// );
+		// console.log(this.thru);
 		// Sunday
 		const startDate: Date = new Date(this.from);
 		const startDate_string: string = startDate.toLocaleString();
@@ -204,11 +216,50 @@ export class EditViewTimesheetComponent implements OnDestroy {
 
 	destroyed$ = new Subject<void>();
 
+	calculateTotalHours(arg: any) {
+		console.log(`change${arg}`);
+	}
+
+	isValid() {
+		return true;
+	}
+
+	closeEditView() {
+		this.closeEditViewClicked.emit();
+	}
+
+	submitChanges() {
+		this.submitClicked.emit();
+		console.log(this.totalHours.value);
+		console.log(this.selectedProject.value);
+		console.log(this.nameOfUser);
+		console.log(
+			`${this.from.toLocaleString('en-US', {
+				month: 'long',
+				year: 'numeric',
+				day: 'numeric',
+			})} - ${this.thru.toLocaleString('en-US', {
+				month: 'long',
+				year: 'numeric',
+				day: 'numeric',
+			})}`,
+		);
+
+		console.log(
+			new Date(Date.now()).toLocaleString('fr-CA', {
+				month: 'numeric',
+				year: 'numeric',
+				day: 'numeric',
+			}),
+		);
+	}
+
 	ngOnInit(): void {
 		this.resourceService.getResourceInformation().subscribe(data => {
 			this.projectOptions = data.projectResources.map(proj => {
-				return { id: proj.id, val: proj.project.name };
+				return proj.project.name;
 			});
+			this.nameOfUser = `${data.firstName} ${data.lastName}`;
 		});
 	}
 

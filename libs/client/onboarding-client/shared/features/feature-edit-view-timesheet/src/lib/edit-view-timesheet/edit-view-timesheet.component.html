@@ -41,7 +41,8 @@
               <td mat-cell *matCellDef="let element"> 
                 <tempus-dropdown
                 id="project-options"
-                [optionsWithId]="projectOptions"
+                [options]="projectOptions"
+                [control]="$any(selectedProject)"
               ></tempus-dropdown> </td>
             </ng-container>
           
@@ -49,13 +50,16 @@
             <ng-container matColumnDef="sunday"id="proj">
               <th mat-header-cell *matHeaderCellDef> {{startDate2 | date: 'fullDate'}} </th>
               <td mat-cell *matCellDef="let element" > 
-                <tempus-text-input></tempus-text-input> </td>
+                <tempus-text-input
+                ngDefaultControl
+                (ngModelChange)="calculateTotalHours($event)"
+                ></tempus-text-input> </td>
             </ng-container>
           
             <!-- Monday Column -->
             <ng-container matColumnDef="monday">
               <th mat-header-cell *matHeaderCellDef> {{startDatePlusOne2 | date: 'fullDate'}} </th>
-              <td mat-cell *matCellDef="let element"> <tempus-text-input></tempus-text-input> </td>
+              <td mat-cell *matCellDef="let element"> <tempus-text-input ></tempus-text-input> </td>
             </ng-container>
         
             <!-- Tuesday Column -->
@@ -91,11 +95,36 @@
             <!-- Total Column -->
             <ng-container matColumnDef="total">
                 <th mat-header-cell *matHeaderCellDef> Total </th>
-                <td mat-cell *matCellDef="let element"> <tempus-text-input></tempus-text-input> </td>
+                <td mat-cell *matCellDef="let element"> 
+                  <tempus-text-input [control]="$any(totalHours)">
+                  </tempus-text-input> 
+                </td>
             </ng-container>
           
             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
             <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
           </table>
+    </div>
+
+    <div id="button-container2">
+      <div class = "submitAndCancel">
+      <tempus-button
+        label="{{ editViewFormPrefix + 'buttons.cancel.label' | translate }}"
+        color="accent"
+        (buttonClick)="closeEditView()"
+        matTooltip="{{ editViewFormPrefix + 'buttons.cancel.tooltip' | translate }}"
+        matTooltipClass="tooltip"
+      ></tempus-button>
+
+      <tempus-button
+        [disabled]="!isValid()"
+        label="{{ editViewFormPrefix + 'buttons.submit.label' | translate }}"
+        color="accent"
+        (buttonClick)="submitChanges()"
+        matTooltip="{{ editViewFormPrefix + 'buttons.submit.tooltip' | translate }}"
+        matTooltipClass="tooltip"
+        id="submit-profile-button"
+      ></tempus-button>
+    </div>
     </div>
 </ng-container>
