@@ -61,18 +61,6 @@ const ELEMENT_DATA: TableOfContents[] = [
 		saturday: '',
 		total: 22.5,
 	},
-	{
-		position: 2,
-		project: 'Project 2',
-		sunday: '',
-		monday: '',
-		tuesday: '7.5',
-		wednesday: '7.5',
-		thursday: '',
-		friday: '',
-		saturday: '',
-		total: 15,
-	},
 ];
 
 export interface TableOfContents {
@@ -107,9 +95,13 @@ export class EditViewTimesheetComponent implements OnDestroy {
 
 	prefix = 'onboardingResourceTimesheet';
 
-	startDate2 = '';
-
-	endDate2 = '';
+	startDate2 = ""; //sunday
+	endDate2 = ""; //saturday
+	startDatePlusOne2 = ""; //monday
+	startDatePlusTwo2 = ""; //tuesday
+	startDatePlusThree2 = ""; //wednesday
+	startDatePlusFour2 = ""; //thursday
+	startDatePlusFive2 = ""; //friday
 
 	constructor(
 		private fb: FormBuilder,
@@ -129,14 +121,40 @@ export class EditViewTimesheetComponent implements OnDestroy {
 		console.log('changed');
 		console.log(this.from);
 		console.log(this.thru);
+		//Sunday
 		const startDate: Date = new Date(this.from);
 		const startDate_string: string = startDate.toLocaleString();
+		//Saturday
 		const endDate: Date = new Date(this.thru);
 		const endDate_string: string = endDate.toLocaleString();
-		this.startDate2 = startDate_string;
-		this.endDate2 = endDate_string;
-		// let new_StartDate: Date = new Date(this.from);
-		// let startDate: string = new_StartDate.toLocaleString();
+		//Monday
+		let startDatePlusOne = startDate.setDate(startDate.getDate() + 1);
+		let startDatePlusOne2 = new Date(startDatePlusOne);
+		let startDatePlusOne_string: string = startDatePlusOne2.toLocaleString();
+		//Tuesday
+		let startDatePlusTwo = startDate.setDate(startDate.getDate() + 1);
+		let startDatePlusTwo2 = new Date(startDatePlusTwo);
+		let startDatePlusTwo_string: string = startDatePlusTwo2.toLocaleString();
+		//Wednesday
+		let startDatePlusThree = startDate.setDate(startDate.getDate() + 1);
+		let startDatePlusThree2 = new Date(startDatePlusThree);
+		let startDatePlusThree_string: string = startDatePlusThree2.toLocaleString();
+		//Thursday
+		let startDatePlusFour = startDate.setDate(startDate.getDate() + 1);
+		let startDatePlusFour2 = new Date(startDatePlusFour);
+		let startDatePlusFour_string: string = startDatePlusFour2.toLocaleString();
+		//Friday
+		let startDatePlusFive = startDate.setDate(startDate.getDate() + 1);
+		let startDatePlusFive2 = new Date(startDatePlusFive);
+		let startDatePlusFive_string: string = startDatePlusFive2.toLocaleString();
+		//returning days values to string
+		this.startDate2 = startDate_string; //sunday
+		this.endDate2 = endDate_string; //saturday
+		this.startDatePlusOne2 = startDatePlusOne_string; //monday
+		this.startDatePlusTwo2 = startDatePlusTwo_string; //tuesday
+		this.startDatePlusThree2 = startDatePlusThree_string; //wednesday
+		this.startDatePlusFour2 = startDatePlusFour_string; //thursday
+		this.startDatePlusFive2 = startDatePlusFive_string; //friday
 	}
 
 	/*

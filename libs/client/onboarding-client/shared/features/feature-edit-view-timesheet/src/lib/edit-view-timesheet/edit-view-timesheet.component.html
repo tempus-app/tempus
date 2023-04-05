@@ -49,31 +49,31 @@
           
             <!-- Monday Column -->
             <ng-container matColumnDef="monday">
-              <th mat-header-cell *matHeaderCellDef> Monday </th>
+              <th mat-header-cell *matHeaderCellDef> {{startDatePlusOne2 | date: 'fullDate'}} </th>
               <td mat-cell *matCellDef="let element"> {{element.monday}} </td>
             </ng-container>
         
             <!-- Tuesday Column -->
             <ng-container matColumnDef="tuesday">
-                <th mat-header-cell *matHeaderCellDef> Tuesday </th>
+              <th mat-header-cell *matHeaderCellDef> {{startDatePlusTwo2 | date: 'fullDate'}} </th>
                 <td mat-cell *matCellDef="let element"> {{element.tuesday}} </td>
             </ng-container>
         
               <!-- Wednesday Column -->
               <ng-container matColumnDef="wednesday">
-                <th mat-header-cell *matHeaderCellDef> Wednesday </th>
+                <th mat-header-cell *matHeaderCellDef> {{startDatePlusThree2 | date: 'fullDate'}} </th>
                 <td mat-cell *matCellDef="let element"> {{element.wednesday}} </td>
             </ng-container>
         
             <!-- Thursday Column -->
             <ng-container matColumnDef="thursday">
-                <th mat-header-cell *matHeaderCellDef> Thursday </th>
+              <th mat-header-cell *matHeaderCellDef> {{startDatePlusFour2 | date: 'fullDate'}} </th>
                 <td mat-cell *matCellDef="let element"> {{element.thursday}} </td>
             </ng-container>
         
             <!-- Friday Column -->
             <ng-container matColumnDef="friday">
-                <th mat-header-cell *matHeaderCellDef> Friday </th>
+              <th mat-header-cell *matHeaderCellDef> {{startDatePlusFive2 | date: 'fullDate'}} </th>
                 <td mat-cell *matCellDef="let element"> {{element.friday}} </td>
             </ng-container>
         
