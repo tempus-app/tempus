@@ -23,6 +23,25 @@ export const SampleView: View = {
 			resource: null,
 		},
 	],
+	/*timesheets: [
+		{
+			id: 1,
+			weekStartDate: new Date('2023/04/02'),
+			weekEndDate: new Date('2023/04/08'),
+			resource: null,
+			approvedBySupervisor: false,
+			approvedByClient: false,
+			supervisorComment: "nice",
+			clientRepresentativeComment: "noice",
+			audited: false,
+			billed: false,
+			timesheetEntries: [
+				new TimesheetEntryEntity(
+				),
+				
+			],
+		}
+	],*/
 	skills: [
 		{
 			id: 1,

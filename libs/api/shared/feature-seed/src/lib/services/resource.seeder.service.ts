@@ -221,6 +221,7 @@ export class ResourceSeederService {
 			ResourceSeederService.createEducation(),
 			ResourceSeederService.generateSkills(),
 			ResourceSeederService.createCertifications(),
+			undefined,
 			faker.lorem.sentences(7),
 			faker.lorem.sentences(7),
 			faker.lorem.sentences(7),

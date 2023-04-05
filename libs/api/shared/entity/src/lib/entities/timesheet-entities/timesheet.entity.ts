@@ -1,7 +1,8 @@
 import { CreateTimesheetDto } from '@tempus/api/shared/dto';
 import { Timesheet } from '@tempus/shared-domain';
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany, ManyToOne } from 'typeorm';
 import { TimesheetEntryEntity } from './timesheet-entry.entity';
+import { ResourceEntity } from '../account-entities';
 
 @Entity()
 export class TimesheetEntity implements Timesheet {
@@ -15,7 +16,8 @@ export class TimesheetEntity implements Timesheet {
 		clientRepresentativeComment?: string,
 		audited?: boolean,
 		billed?: boolean,
-		timesheetEntry?: TimesheetEntryEntity[],
+		timesheetEntries?: TimesheetEntryEntity[],
+		resource? : ResourceEntity,
 	) {
 		this.id = id;
 		this.weekStartDate = weekStartDate;
@@ -26,7 +28,8 @@ export class TimesheetEntity implements Timesheet {
 		this.clientRepresentativeComment = clientRepresentativeComment;
 		this.audited = audited;
 		this.billed = billed;
-		this.timesheetEntry = timesheetEntry;
+		this.timesheetEntries = timesheetEntries;
+		this.resource = resource;
 	}
 
 	@PrimaryGeneratedColumn()
@@ -56,15 +59,20 @@ export class TimesheetEntity implements Timesheet {
 	@Column({ nullable: true })
 	billed: boolean;
 
-	@OneToMany(() => TimesheetEntryEntity, timesheetEntry => timesheetEntry.timesheetID)
-	timesheetEntry: TimesheetEntryEntity[];
+	@OneToMany(() => TimesheetEntryEntity, timesheetEntry => timesheetEntry.timesheet, {
+		cascade: ['insert', 'update']
+	})
+	timesheetEntries: TimesheetEntryEntity[];
+
+	@ManyToOne(() => ResourceEntity, resource => resource.timesheets, {
+		onDelete: 'CASCADE',
+	})
+	resource: ResourceEntity;
 
 	public static fromDto(dto: CreateTimesheetDto): TimesheetEntity {
 		if (dto == null) return new TimesheetEntity();
-		/* const id = dto instanceof CreateTimesheetDto ? undefined : dto.id;
-		 */
 		return new TimesheetEntity(
-			dto.id,
+			undefined,
 			dto.weekStartDate,
 			dto.weekEndDate,
 			dto.approvedBySupervisor,
@@ -73,7 +81,7 @@ export class TimesheetEntity implements Timesheet {
 			dto.supervisorComment,
 			dto.audited,
 			dto.billed,
-			// dto.timesheetEntry,
+			dto.timesheetEntries?.map(timesheetEntry => TimesheetEntryEntity.fromDto(timesheetEntry)),
 		);
 	}
 }
