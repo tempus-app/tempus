@@ -2,8 +2,8 @@ import { CreateTimesheetDto } from '@tempus/api/shared/dto';
 import { Timesheet, TimesheetRevisionType } from '@tempus/shared-domain';
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany, ManyToOne } from 'typeorm';
 import { TimesheetEntryEntity } from './timesheet-entry.entity';
-import { ResourceEntity } from '../account-entities';
-import { ProjectEntity } from '../project-entities';
+import { ResourceEntity, UserEntity } from '../account-entities';
+import { ClientRepresentativeEntity, ProjectEntity } from '../project-entities';
 
 @Entity()
 export class TimesheetEntity implements Timesheet {
@@ -20,6 +20,7 @@ export class TimesheetEntity implements Timesheet {
 		timesheetEntries?: TimesheetEntryEntity[],
 		resource?: ResourceEntity,
 		project?: ProjectEntity,
+		supervisor?: ClientRepresentativeEntity,
 		status?: TimesheetRevisionType,
 	) {
 		this.id = id;
@@ -34,6 +35,7 @@ export class TimesheetEntity implements Timesheet {
 		this.timesheetEntries = timesheetEntries;
 		this.resource = resource;
 		this.project = project;
+		this.supervisor = supervisor;
 		this.status = status;
 	}
 
@@ -83,6 +85,9 @@ export class TimesheetEntity implements Timesheet {
 
 	@ManyToOne(() => ProjectEntity, project => project.timesheets)
 	project: ProjectEntity;
+
+	@ManyToOne(() => ClientRepresentativeEntity, supervisor => supervisor.timesheets)
+	supervisor: ClientRepresentativeEntity;
 
 	@Column({ nullable: true })
 	dateModified?: Date;
