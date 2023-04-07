@@ -15,6 +15,7 @@
 		"skipDefaultLibCheck": true,
 		"baseUrl": ".",
 		"paths": {
+			"@tempus/api/onboarding-api/feature-approval": ["libs/api/onboarding-api/feature-approval/src/index.ts"],
 			"@tempus/api/onboarding-api/feature-timesheet": ["libs/api/onboarding-api/feature-timesheet/src/index.ts"],
 			"@tempus/api/shared/api-assets": ["libs/api/shared/api-assets/src/index.ts"],
 			"@tempus/api/shared/dto": ["libs/api/shared/dto/src/index.ts"],
@@ -39,8 +40,14 @@
 			"@tempus/client/onboarding-client/business-owner/features/feature-view-resource-profile": [
 				"libs/client/onboarding-client/business-owner/features/feature-view-resource-profile/src/index.ts"
 			],
+			"@tempus/client/onboarding-client/business-owner/features/feature-view-timesheet-approvals": [
+				"libs/client/onboarding-client/business-owner/features/feature-view-timesheet-approvals/src/index.ts"
+			],
 			"@tempus/client/onboarding-client/resource/data-access": [
 				"libs/client/onboarding-client/resource/data-access/src/index.ts"
+			],
+			"@tempus/client/onboarding-client/resource/features/feature-timesheet": [
+				"libs/client/onboarding-client/resource/features/feature-timesheet/src/index.ts"
 			],
 			"@tempus/client/onboarding-client/shared/data-access": [
 				"libs/client/onboarding-client/shared/data-access/src/index.ts"
