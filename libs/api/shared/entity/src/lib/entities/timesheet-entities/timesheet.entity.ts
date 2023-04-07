@@ -1,8 +1,9 @@
 import { CreateTimesheetDto } from '@tempus/api/shared/dto';
-import { Timesheet } from '@tempus/shared-domain';
+import { Timesheet, TimesheetRevisionType } from '@tempus/shared-domain';
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany, ManyToOne } from 'typeorm';
 import { TimesheetEntryEntity } from './timesheet-entry.entity';
 import { ResourceEntity } from '../account-entities';
+import { ProjectEntity } from '../project-entities';
 
 @Entity()
 export class TimesheetEntity implements Timesheet {
@@ -17,7 +18,9 @@ export class TimesheetEntity implements Timesheet {
 		audited?: boolean,
 		billed?: boolean,
 		timesheetEntries?: TimesheetEntryEntity[],
-		resource? : ResourceEntity,
+		resource?: ResourceEntity,
+		project?: ProjectEntity,
+		status?: TimesheetRevisionType,
 	) {
 		this.id = id;
 		this.weekStartDate = weekStartDate;
@@ -30,6 +33,8 @@ export class TimesheetEntity implements Timesheet {
 		this.billed = billed;
 		this.timesheetEntries = timesheetEntries;
 		this.resource = resource;
+		this.project = project;
+		this.status = status;
 	}
 
 	@PrimaryGeneratedColumn()
@@ -59,8 +64,15 @@ export class TimesheetEntity implements Timesheet {
 	@Column({ nullable: true })
 	billed: boolean;
 
+	@Column({
+		type: 'enum',
+		enum: TimesheetRevisionType,
+		default: [TimesheetRevisionType.NEW],
+	})
+	status: TimesheetRevisionType;
+
 	@OneToMany(() => TimesheetEntryEntity, timesheetEntry => timesheetEntry.timesheet, {
-		cascade: ['insert', 'update']
+		cascade: ['insert', 'update'],
 	})
 	timesheetEntries: TimesheetEntryEntity[];
 
@@ -68,6 +80,12 @@ export class TimesheetEntity implements Timesheet {
 		onDelete: 'CASCADE',
 	})
 	resource: ResourceEntity;
+
+	@ManyToOne(() => ProjectEntity, project => project.timesheets)
+	project: ProjectEntity;
+
+	@Column({ nullable: true })
+	dateModified?: Date;
 
 	public static fromDto(dto: CreateTimesheetDto): TimesheetEntity {
 		if (dto == null) return new TimesheetEntity();
