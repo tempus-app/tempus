@@ -52,6 +52,9 @@
 			"@tempus/client/onboarding-client/shared/data-access": [
 				"libs/client/onboarding-client/shared/data-access/src/index.ts"
 			],
+			"@tempus/client/onboarding-client/shared/features/feature-edit-view-timesheet": [
+				"libs/client/onboarding-client/shared/features/feature-edit-view-timesheet/src/index.ts"
+			],
 			"@tempus/client/onboarding-client/shared/guards": [
 				"libs/client/onboarding-client/shared/guards/src/index.ts"
 			],

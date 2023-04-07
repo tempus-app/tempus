@@ -29,7 +29,7 @@
 ### Button: tempus-button
 
 - wrapper around material UI button, with predefined style options for convenience:
-  - `buttonType`: ButtonType [FILTER, EDIT, INVITE, CREATE_NEW_VIEW, DOWNLOAD_VIEW, UPDATE_PROJECT]
+  - `buttonType`: ButtonType [FILTER, EDIT, INVITE, CREATE_NEW_VIEW, CREATE_NEW_TIMESHEET, DOWNLOAD_VIEW, UPDATE_PROJECT]
   - `color`: [primary, accent, warn]
   - `label`: button label string
   - `icon`: mat-icon name
