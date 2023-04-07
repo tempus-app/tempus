@@ -21,6 +21,7 @@ export class ViewEntity implements View {
 		experiences?: ExperienceEntity[],
 		educations?: EducationEntity[],
 		certifications?: CertificationEntity[],
+		//timesheets?: TimesheetEntity[],
 		resource?: ResourceEntity,
 		viewType?: ViewType,
 		revisionType?: RevisionType,
@@ -36,6 +37,7 @@ export class ViewEntity implements View {
 		this.experiences = experiences;
 		this.educations = educations;
 		this.certifications = certifications;
+		//this.timesheets = timesheets;
 		this.resource = resource;
 		this.viewType = viewType;
 		this.revisionType = revisionType;

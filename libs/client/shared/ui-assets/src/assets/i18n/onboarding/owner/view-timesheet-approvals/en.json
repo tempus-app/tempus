@@ -1,0 +1,10 @@
+{
+	"onboardingOwnerViewTimesheetApprovals": {
+		"main": {
+			"title": "Timesheet Approvals",
+			"tableHeaders": {
+			},
+			"noPendingApprovals": "No Pending Approvals"
+		}
+	}
+}

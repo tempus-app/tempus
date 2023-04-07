@@ -15,6 +15,8 @@
 		"skipDefaultLibCheck": true,
 		"baseUrl": ".",
 		"paths": {
+			"@tempus/api/onboarding-api/feature-approval": ["libs/api/onboarding-api/feature-approval/src/index.ts"],
+			"@tempus/api/onboarding-api/feature-timesheet": ["libs/api/onboarding-api/feature-timesheet/src/index.ts"],
 			"@tempus/api/shared/api-assets": ["libs/api/shared/api-assets/src/index.ts"],
 			"@tempus/api/shared/dto": ["libs/api/shared/dto/src/index.ts"],
 			"@tempus/api/shared/entity": ["libs/api/shared/entity/src/index.ts"],
@@ -38,17 +40,17 @@
 			"@tempus/client/onboarding-client/business-owner/features/feature-view-resource-profile": [
 				"libs/client/onboarding-client/business-owner/features/feature-view-resource-profile/src/index.ts"
 			],
+			"@tempus/client/onboarding-client/business-owner/features/feature-view-timesheet-approvals": [
+				"libs/client/onboarding-client/business-owner/features/feature-view-timesheet-approvals/src/index.ts"
+			],
 			"@tempus/client/onboarding-client/resource/data-access": [
 				"libs/client/onboarding-client/resource/data-access/src/index.ts"
 			],
-			"@tempus/onboarding-client/resource/feature-my-projects": [
-				"libs/client/onboarding-client/resource/features/feature-my-projects/src/index.ts"
+			"@tempus/client/onboarding-client/resource/features/feature-timesheet": [
+				"libs/client/onboarding-client/resource/features/feature-timesheet/src/index.ts"
 			],
 			"@tempus/client/onboarding-client/shared/data-access": [
 				"libs/client/onboarding-client/shared/data-access/src/index.ts"
-			],
-			"@tempus/onboarding-client/shared/feature-reset-password": [
-				"libs/client/onboarding-client/shared/features/feature-reset-password/src/index.ts"
 			],
 			"@tempus/client/onboarding-client/shared/guards": [
 				"libs/client/onboarding-client/shared/guards/src/index.ts"
@@ -96,6 +98,9 @@
 			"@tempus/onboarding-client/business-owner/view-pending-approvals": [
 				"libs/client/onboarding-client/business-owner/features/view-pending-approvals/src/index.ts"
 			],
+			"@tempus/onboarding-client/resource/feature-my-projects": [
+				"libs/client/onboarding-client/resource/features/feature-my-projects/src/index.ts"
+			],
 			"@tempus/onboarding-client/resource/feature-personal-information": [
 				"libs/client/onboarding-client/resource/features/feature-personal-information/src/index.ts"
 			],
@@ -111,6 +116,9 @@
 			],
 			"@tempus/onboarding-client/shared/feature-forgot-password": [
 				"libs/client/onboarding-client/shared/features/feature-forgot-password/src/index.ts"
+			],
+			"@tempus/onboarding-client/shared/feature-reset-password": [
+				"libs/client/onboarding-client/shared/features/feature-reset-password/src/index.ts"
 			],
 			"@tempus/onboarding-client/shared/feature-sign-in": [
 				"libs/client/onboarding-client/shared/features/feature-sign-in/src/index.ts"

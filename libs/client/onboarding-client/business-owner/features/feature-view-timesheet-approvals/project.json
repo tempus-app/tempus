@@ -1,0 +1,28 @@
+{
+	"projectType": "library",
+	"root": "libs/client/onboarding-client/business-owner/features/feature-view-timesheet-approvals",
+	"sourceRoot": "libs/client/onboarding-client/business-owner/features/feature-view-timesheet-approvals/src",
+	"prefix": "tempus",
+	"targets": {
+		"test": {
+			"executor": "@nrwl/jest:jest",
+			"outputs": [
+				"coverage/libs/client/onboarding-client/business-owner/features/feature-view-timesheet-approvals"
+			],
+			"options": {
+				"jestConfig": "libs/client/onboarding-client/business-owner/features/feature-view-timesheet-approvals/jest.config.js",
+				"passWithNoTests": true
+			}
+		},
+		"lint": {
+			"executor": "@nrwl/linter:eslint",
+			"options": {
+				"lintFilePatterns": [
+					"libs/client/onboarding-client/business-owner/features/feature-view-timesheet-approvals/src/**/*.ts",
+					"libs/client/onboarding-client/business-owner/features/feature-view-timesheet-approvals/src/**/*.html"
+				]
+			}
+		}
+	},
+	"tags": []
+}
