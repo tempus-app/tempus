@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { TimesheetComponent } from './timesheet/timesheet.component';
-import { RouterModule } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -16,27 +15,18 @@ import { ClientSharedUiComponentsPresentationalModule } from '@tempus/client/sha
 import { ClientSharedUiComponentsInputModule } from '@tempus/client/shared/ui-components/input';
 import { ClientSharedInputResourceInformationModule } from '@tempus/client/onboarding-client/shared/ui-components/input/resource-information';
 import { ClientSharedPresentationalResourceDisplayModule } from '@tempus/client/onboarding-client/shared/ui-components/presentational/resource-display';
-import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import { HttpClient } from '@angular/common/http';
-import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-import { OnboardingClientSharedFeatureEditViewFormModule } from '@tempus/onboarding-client/shared/feature-edit-view-form';
+import { TranslateModule } from '@ngx-translate/core';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatTableModule } from '@angular/material/table';
-import { CreateNewTimesheetComponent } from './create-new-timesheet/create-new-timesheet.component';
-import { ClientOnboardingClientSharedFeaturesFeatureEditViewTimesheetModule } from '@tempus/client/onboarding-client/shared/features/feature-edit-view-timesheet';
-
-function createTranslateLoader(http: HttpClient) {
-	return new TranslateHttpLoader(http, './assets/i18n/onboarding/resource/timesheet/', '.json');
-}
+import { EditViewTimesheetComponent } from './edit-view-timesheet/edit-view-timesheet.component';
 
 @NgModule({
-	imports: [CommonModule, MatIconModule,
-		MatDialogModule,
+	imports: [
+		CommonModule,
+		MatIconModule,
 		MatTooltipModule,
-		MatTableModule,
 		MatSlideToggleModule,
 		FlexLayoutModule,
-		CommonModule,
 		MatFormFieldModule,
 		ClientSharedUiComponentsModalModule,
 		ClientSharedUiComponentsPersistentModule,
@@ -44,36 +34,18 @@ function createTranslateLoader(http: HttpClient) {
 		ClientSharedUiComponentsPresentationalModule,
 		ClientSharedInputResourceInformationModule,
 		ClientSharedPresentationalResourceDisplayModule,
-		OnboardingClientSharedFeatureEditViewFormModule,
-		ClientOnboardingClientSharedFeaturesFeatureEditViewTimesheetModule,
+		MatDatepickerModule,
 		MatNativeDateModule,
-        MatDatepickerModule,
 		FormsModule,
 		ReactiveFormsModule,
-		RouterModule.forChild([
-			{
-				path: '',
-				pathMatch: 'full',
-				component: TimesheetComponent,
-			},
-			{
-				path: 'new',
-				pathMatch: 'full',
-				component: CreateNewTimesheetComponent,
-			},
-		]),
+		MatDialogModule,
+		MatTableModule,
 		TranslateModule.forChild({
-			loader: {
-				provide: TranslateLoader,
-				useFactory: createTranslateLoader,
-				deps: [HttpClient],
-			},
 			isolate: false,
 			extend: true,
-		}),],
-	declarations: [
-   TimesheetComponent,
-   CreateNewTimesheetComponent
+		}),
 	],
+	declarations: [EditViewTimesheetComponent],
+	exports: [EditViewTimesheetComponent],
 })
-export class OnboardingClientResourceFeatureTimesheetModule {}
+export class ClientOnboardingClientSharedFeaturesFeatureEditViewTimesheetModule {}

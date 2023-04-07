@@ -27,6 +27,7 @@ export class ButtonComponent implements OnInit {
 		[ButtonType.INVITE]: '',
 		[ButtonType.DOWNLOAD_VIEW]: '',
 		[ButtonType.CREATE_NEW_VIEW]: '',
+		[ButtonType.CREATE_NEW_TIMESHEET]: '',
 		[ButtonType.UPDATE_STATUS]: '',
 	};
 
@@ -35,6 +36,7 @@ export class ButtonComponent implements OnInit {
 	setButtonType() {
 		this.translateService.get('button').subscribe(data => {
 			this.buttonTypeLabels['create new view'] = data.createNewView;
+			this.buttonTypeLabels['create new timesheet'] = data.createNewTimesheet;
 			this.buttonTypeLabels['download view'] = data.edit;
 			this.buttonTypeLabels.filter = data.filter;
 			this.buttonTypeLabels.invite = data.invite;
@@ -62,6 +64,10 @@ export class ButtonComponent implements OnInit {
 						break;
 					}
 					case ButtonType.CREATE_NEW_VIEW: {
+						this.icon = 'add';
+						break;
+					}
+					case ButtonType.CREATE_NEW_TIMESHEET: {
 						this.icon = 'add';
 						break;
 					}

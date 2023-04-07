@@ -29,6 +29,7 @@
 		"edit": "edit",
 		"downloadView": "download view",
 		"createNewView": "new view",
+		"createNewTimesheet": "new timesheet",
 		"updateStatus": "update status"
 	},
 	"stepper": {
