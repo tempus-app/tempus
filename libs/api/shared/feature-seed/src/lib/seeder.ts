@@ -1,12 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { createObjectCsvWriter as createCsvWriter } from 'csv-writer';
 import { writeFile } from 'fs/promises';
+import { ApprovalEntity } from '@tempus/api/shared/entity';
+import { getRepository } from 'typeorm';
 import { CommandLineArgsOptions } from './commandLineArgs.type';
 import { ClientSeederService } from './services/client.seeder.service';
 import { LinkSeederService } from './services/link.seeder.service';
 import { ProjectSeederService } from './services/project.seeder.service';
 import { ResourceSeederService } from './services/resource.seeder.service';
 import { UserSeederService } from './services/user.seeder.service';
+
 /**
  * provider to seed database
  */
@@ -56,6 +59,15 @@ export class SeederService {
 			projects,
 			availableResources.splice(0, args.resources / 2),
 		);
+		for (let i = 0; i < 10; i++) {
+			const approval = new ApprovalEntity();
+			approval.timesheetWeek = `week${i + 1}`;
+			approval.submittedBy = `John Doe ${i + 1}`;
+			approval.submissionDate = `2022-03-${i + 1}`;
+			approval.time = `${8 - i} hours`;
+			approval.project = `Project ${i + 1}`;
+			await getRepository(ApprovalEntity).save(approval);
+		}
 		const allUsers = users.concat(availableResources).concat(assignedResources).concat(supervisors);
 		SeederService.writeToJson(allUsers);
 		await SeederService.writeToCSV(allUsers);

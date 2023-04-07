@@ -58,6 +58,7 @@ export class ResourceService {
 				educationsSummary: resource.educationsSummary,
 				educations: createdResource.educations,
 				certifications: createdResource.certifications,
+			//	timesheets: createdResource.timesheets,
 				experiencesSummary: resource.experiencesSummary,
 				experiences: createdResource.experiences,
 				skillsSummary: resource.skillsSummary,
@@ -104,6 +105,7 @@ export class ResourceService {
 				'educations',
 				'skills',
 				'certifications',
+				'timesheets',
 				'location',
 				'projectResources',
 				'projectResources.project',
@@ -292,7 +294,7 @@ export class ResourceService {
 		// sortBy?: string,
 
 		const resources = await this.resourceRepository.find({
-			relations: ['projects', 'experiences', 'educations', 'skills', 'certifications', 'views', 'location'],
+			relations: ['projects', 'experiences', 'educations', 'skills', 'certifications', 'timesheets', 'views', 'location'],
 		});
 
 		return resources;

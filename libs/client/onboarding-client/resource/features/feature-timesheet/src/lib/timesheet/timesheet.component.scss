@@ -1,0 +1,20 @@
+@use 'abstracts/helper' as abs;
+@use 'components/helper' as cmp;
+
+.page-title {
+	color: abs.$primary-800;
+}
+
+#page-container {
+	margin: 2%;
+}
+#title-container {
+	@include cmp.info-title(100%, 0);
+}
+#table-container {
+	margin-top: 3%;
+}
+
+table {
+    width: 100%;
+}

@@ -6,9 +6,7 @@
 	"targets": {
 		"test": {
 			"executor": "@nrwl/jest:jest",
-			"outputs": [
-				"coverage/libs/client/onboarding-client/resource/features/feature-my-projects"
-			],
+			"outputs": ["coverage/libs/client/onboarding-client/resource/features/feature-my-projects"],
 			"options": {
 				"jestConfig": "libs/client/onboarding-client/resource/features/feature-my-projects/jest.config.js",
 				"passWithNoTests": true

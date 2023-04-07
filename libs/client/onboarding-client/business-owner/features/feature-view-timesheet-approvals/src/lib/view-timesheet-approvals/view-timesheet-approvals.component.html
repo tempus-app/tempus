@@ -1,0 +1,87 @@
+<div fxLayout="column" id="page-container">
+    <div id="title-container">
+        <h2 class="mat-h2 page-title">{{ prefix + '.main.title' | translate }}</h2>
+    </div>
+		<br>
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 approvals-table">
+        <!-- Timesheet Week Column -->
+        <ng-container matColumnDef="timesheetWeek">
+            <th mat-header-cell *matHeaderCellDef class="header-cell"> Timesheet Week </th>
+            <td mat-cell *matCellDef="let element"> {{element.timesheetWeek}} </td>
+        </ng-container>
+
+        <!-- Submitted By Column -->
+        <ng-container matColumnDef="submittedBy">
+            <th mat-header-cell *matHeaderCellDef class="header-cell"> Submitted By </th>
+            <td mat-cell *matCellDef="let element"> {{element.submittedBy}} </td>
+        </ng-container>
+
+        <!-- Submission Date Column -->
+        <ng-container matColumnDef="submissionDate">
+            <th mat-header-cell *matHeaderCellDef class="header-cell"> Submission Date </th>
+            <td mat-cell *matCellDef="let element"> {{element.submissionDate}} </td>
+        </ng-container>
+
+        <!-- Time Column -->
+        <ng-container matColumnDef="time">
+            <th mat-header-cell *matHeaderCellDef class="header-cell"> Time </th>
+            <td mat-cell *matCellDef="let element"> {{element.time}} </td>
+        </ng-container>
+
+        <!-- Project Column -->
+        <ng-container matColumnDef="project">
+            <th mat-header-cell *matHeaderCellDef class="header-cell"> Project </th>
+            <td mat-cell *matCellDef="let element"> {{element.project}} </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="openDialog(row, approvalDialogTemplate)"></tr>
+    </table>
+
+		<mat-paginator [pageSizeOptions]="[6]" showFirstLastButtons></mat-paginator>
+</div>
+
+
+<ng-template #approvalDialogTemplate let-data="data" let-dialogRef="dialogRef">
+  <h2 mat-dialog-title>
+    Timesheet Approval
+    <button mat-icon-button class="close-button" (click)="dialogRef.close()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </h2>
+  <mat-dialog-content>
+    <p>
+      Submitted by: {{ data.submittedBy }}<br />
+      Timesheet week: {{ data.timesheetWeek }}<br />
+      Submission date: {{ data.submissionDate }}<br />
+      Time: {{ data.time }}<br />
+      Project: {{ data.project }}
+    </p>
+    <div fxLayout="column" class="input-fields">
+      <div>
+        <mat-label>Name:</mat-label>
+        <mat-form-field appearance="outline">
+          <input matInput [(ngModel)]="name" />
+        </mat-form-field>
+      </div>
+      <div>
+        <mat-label>Project:</mat-label>
+        <mat-form-field appearance="outline">
+          <input matInput [(ngModel)]="project" />
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="comment-section">
+      <mat-form-field appearance="outline">
+        <mat-label>Comment</mat-label>
+        <textarea matInput [(ngModel)]="comment" placeholder="Comment"></textarea>
+      </mat-form-field>
+    </div>
+  </mat-dialog-content>
+  <mat-dialog-actions>
+    <button mat-button class="approve-button">Approve</button>
+    <button mat-button class="reject-button">Reject</button>
+  </mat-dialog-actions>
+</ng-template>
+
+
