@@ -1,5 +1,6 @@
 export enum TimesheetRevisionType {
+	NEW = 'NEW',
 	APPROVED = 'APPROVED',
-	PENDING = 'NEW',
+	SUBMITTED = 'SUBMITTED',
 	REJECTED = 'REJECTED',
 }

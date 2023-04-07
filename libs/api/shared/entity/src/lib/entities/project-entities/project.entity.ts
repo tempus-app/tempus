@@ -4,6 +4,7 @@ import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToMany } from 'ty
 import { ClientEntity } from './client.entity';
 import { ClientRepresentativeEntity } from './clientRepresentative.entity';
 import { ProjectResourceEntity } from './projectResource.entity';
+import { TimesheetEntity } from '../timesheet-entities';
 
 @Entity()
 export class ProjectEntity implements Project {
@@ -13,6 +14,7 @@ export class ProjectEntity implements Project {
 		startDate?: Date,
 		client?: ClientEntity,
 		projectResources?: ProjectResourceEntity[],
+		timesheets?: TimesheetEntity[],
 		clientRepresentative?: ClientRepresentativeEntity,
 		status?: ProjectStatus,
 		endDate?: Date,
@@ -22,6 +24,7 @@ export class ProjectEntity implements Project {
 		this.startDate = startDate;
 		this.client = client;
 		this.projectResources = projectResources;
+		this.timesheets = timesheets;
 		this.clientRepresentative = clientRepresentative;
 		this.status = status;
 		this.endDate = endDate;
@@ -45,6 +48,9 @@ export class ProjectEntity implements Project {
 	@OneToMany(() => ProjectResourceEntity, projectResources => projectResources.project)
 	projectResources: ProjectResourceEntity[];
 
+	@OneToMany(() => TimesheetEntity, timesheet => timesheet.resource, { cascade: ['insert', 'update'] })
+	timesheets: TimesheetEntity[];
+
 	@ManyToOne(() => ClientRepresentativeEntity, clientRepresentative => clientRepresentative.projects)
 	clientRepresentative: ClientRepresentativeEntity;
 
@@ -57,6 +63,6 @@ export class ProjectEntity implements Project {
 
 	public static fromDto(dto: CreateProjectDto): ProjectEntity {
 		if (dto == null) return new ProjectEntity();
-		return new ProjectEntity(null, dto.name, dto.startDate, null, null, null, dto.status);
+		return new ProjectEntity(null, dto.name, dto.startDate, null, null, null, null, dto.status);
 	}
 }
