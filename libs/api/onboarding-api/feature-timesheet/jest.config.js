@@ -1,5 +1,5 @@
 module.exports = {
-	displayName: 'api-onboarding-api-feature-timesheet',
+	displayName: 'timesheet',
 	preset: '../../../../jest.preset.js',
 	globals: {
 		'ts-jest': {
@@ -11,5 +11,5 @@ module.exports = {
 		'^.+\\.[tj]sx?$': 'ts-jest',
 	},
 	moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
-	coverageDirectory: '../../../../coverage/libs/api/onboarding-api/feature-timesheet',
+	coverageDirectory: '../../../../coverage/libs/timesheet',
 };

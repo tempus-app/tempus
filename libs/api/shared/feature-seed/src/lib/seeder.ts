@@ -9,6 +9,7 @@ import { LinkSeederService } from './services/link.seeder.service';
 import { ProjectSeederService } from './services/project.seeder.service';
 import { ResourceSeederService } from './services/resource.seeder.service';
 import { UserSeederService } from './services/user.seeder.service';
+import { TimesheetSeederService } from './services/timsheet.seeder.service';
 
 /**
  * provider to seed database
@@ -27,15 +28,16 @@ export class SeederService {
 		private userSeederService: UserSeederService,
 		private resourceSeedService: ResourceSeederService,
 		private linkSeederService: LinkSeederService,
+		private timesheetSeederService: TimesheetSeederService,
 	) {}
 
 	/**
 	 * drops all entities in the tempus repository
 	 */
 	async clear() {
+		await this.timesheetSeederService.clear();
 		await this.linkSeederService.clear();
 		await this.resourceSeedService.clear();
-
 		await this.resourceSeedService.clear();
 		await this.projectSeederService.clear();
 		await this.clientSeederService.clear();
@@ -54,22 +56,15 @@ export class SeederService {
 		const users = await this.userSeederService.seedBusinessOwner(args.businessOwners);
 		const supervisors = await this.userSeederService.seedSupervisor(args.supervisors);
 		const links = await this.linkSeederService.seed(supervisors[0], projects, args.resources);
+		
 		const availableResources = await this.resourceSeedService.seedResources(links);
 		const assignedResources = await this.projectSeederService.seedAssignedResources(
 			projects,
 			availableResources.splice(0, args.resources / 2),
 		);
-		for (let i = 0; i < 10; i++) {
-			const approval = new ApprovalEntity();
-			approval.timesheetWeek = `week${i + 1}`;
-			approval.submittedBy = `John Doe ${i + 1}`;
-			approval.submissionDate = `2022-03-${i + 1}`;
-			approval.time = `${8 - i} hours`;
-			approval.project = `Project ${i + 1}`;
-			await getRepository(ApprovalEntity).save(approval);
-		}
+		const timesheets = await this.timesheetSeederService.seedTimesheets(supervisors, assignedResources, projects);
 		const allUsers = users.concat(availableResources).concat(assignedResources).concat(supervisors);
-		SeederService.writeToJson(allUsers);
+		//SeederService.writeToJson(allUsers);
 		await SeederService.writeToCSV(allUsers);
 	}
 
@@ -87,8 +82,8 @@ export class SeederService {
 		await csvWriter.writeRecords(users);
 	}
 
-	private static writeToJson(users) {
+	/*private static writeToJson(users) {
 		const json = JSON.stringify(users, ['firstName', 'lastName', 'email', 'password', 'roles']);
 		writeFile('./utils/json/user-accounts.json', json, 'utf8');
-	}
+	}*/
 }

@@ -48,7 +48,7 @@ export class ProjectEntity implements Project {
 	@OneToMany(() => ProjectResourceEntity, projectResources => projectResources.project)
 	projectResources: ProjectResourceEntity[];
 
-	@OneToMany(() => TimesheetEntity, timesheet => timesheet.resource, { cascade: ['insert', 'update'] })
+	@OneToMany(() => TimesheetEntity, timesheet => timesheet.resource)
 	timesheets: TimesheetEntity[];
 
 	@ManyToOne(() => ClientRepresentativeEntity, clientRepresentative => clientRepresentative.projects)

@@ -60,6 +60,12 @@ export class UserService {
 		return userEntity;
 	}
 
+	async getUserbyId(id: number): Promise<User> {
+		const userEntity = await this.userRepository.findOne(id);
+		if (!userEntity) throw new NotFoundException(`Could not find user with id ${id}`);
+		return userEntity;
+	}
+
 	// TODO: filtering
 	async getAllUsers(): Promise<User[]> {
 		const users = await this.userRepository.find();

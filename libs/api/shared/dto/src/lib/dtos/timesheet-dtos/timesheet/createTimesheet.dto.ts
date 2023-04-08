@@ -5,6 +5,15 @@ import { CreateTimesheetEntryDto } from '../timesheet-entry/createTimesheetEntry
 export class CreateTimesheetDto implements ICreateTimesheetDto {
 
 	@ApiProperty()
+	supervisorId?: number;
+
+	@ApiProperty()
+	resourceId?: number;
+
+	@ApiProperty()
+	projectId?: number;
+
+	@ApiProperty()
 	weekStartDate?: Date;
 
 	@ApiProperty()
@@ -32,6 +41,9 @@ export class CreateTimesheetDto implements ICreateTimesheetDto {
 	timesheetEntries?: CreateTimesheetEntryDto[];
 
 	constructor(
+		supervisorId? : number,
+		resourceId?: number,
+		projectId?: number,
 		weekStartDate?: Date,
 		weekEndDate?: Date,
 		approvedBySupervisor?: boolean,
@@ -42,6 +54,9 @@ export class CreateTimesheetDto implements ICreateTimesheetDto {
 		billed?: boolean,
 		timesheetEntries?: CreateTimesheetEntryDto[],
 	) {
+		this.supervisorId = supervisorId;
+		this.resourceId = resourceId;
+		this.projectId = projectId;
 		this.weekStartDate = weekStartDate;
 		this.weekEndDate = weekEndDate;
 		this.approvedBySupervisor = approvedBySupervisor;

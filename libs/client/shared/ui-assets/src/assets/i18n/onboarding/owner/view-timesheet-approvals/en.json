@@ -1,8 +1,14 @@
 {
-	"onboardingOwnerViewTimesheetApprovals": {
+	"onboardingSupervisorTimesheets": {
 		"main": {
 			"title": "Timesheet Approvals",
 			"tableHeaders": {
+				"startDate": "Start Date",
+				"endDate": "End Date",
+				"resourceName": "Full Name",
+				"totalTime": "Total hours",
+				"projectName": "Project",
+				"status": "Status"
 			},
 			"noPendingApprovals": "No Pending Approvals"
 		}
