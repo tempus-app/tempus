@@ -23,7 +23,7 @@ export class TimesheetController {
 	}
 
 	@UseGuards(JwtAuthGuard)
-	@Get('/:supervisorId')
+	@Get('supervisor-timesheets/:supervisorId')
 	async getTimesheetsForSupervisor(
 		@Param('supervisorId') supervisorId: number,
    	 	@Query('page') page: number,

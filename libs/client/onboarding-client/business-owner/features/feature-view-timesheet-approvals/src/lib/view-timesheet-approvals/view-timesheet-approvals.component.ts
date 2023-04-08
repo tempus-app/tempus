@@ -47,6 +47,16 @@ export class ViewTimesheetApprovalsComponent implements OnInit, OnDestroy {
 			.subscribe(data => {
 				this.tableColumns = [
 					{
+						columnDef: 'resourceName',
+						header: data.resourceName,
+						cell: (element: Record<string, unknown>) => `${element['resourceName']}`,
+					},
+					{
+						columnDef: 'projectName',
+						header: data.projectName,
+						cell: (element: Record<string, unknown>) => `${element['projectName']}`,
+					},
+					{
 						columnDef: 'startDate',
 						header: data.startDate,
 						cell: (element: Record<string, unknown>) => `${element['startDate']}`,
@@ -57,19 +67,9 @@ export class ViewTimesheetApprovalsComponent implements OnInit, OnDestroy {
 						cell: (element: Record<string, unknown>) => `${element['endDate']}`,
 					},
 					{
-						columnDef: 'resourceName',
-						header: data.resourceName,
-						cell: (element: Record<string, unknown>) => `${element['resourceName']}`,
-					},
-					{
 						columnDef: 'totalTime',
 						header: data.totalTime,
 						cell: (element: Record<string, unknown>) => `${element['totalTime']}`,
-					},
-					{
-						columnDef: 'projectName',
-						header: data.projectName,
-						cell: (element: Record<string, unknown>) => `${element['projectName']}`,
 					},
 					{
 						columnDef: 'status',
@@ -119,21 +119,21 @@ export class ViewTimesheetApprovalsComponent implements OnInit, OnDestroy {
 				data.timesheets.forEach(timesheet => {
 					const startDate = new Date(timesheet.weekStartDate).toISOString().slice(0, 10);
 					const endDate = new Date(timesheet.weekEndDate).toISOString().slice(0, 10);
-					const status = timesheet.status.toString() === 'not_started' ? 'Not Started' : timesheet.status;
+					const status = timesheet.status.toString();
 					this.timesheetsTableData.push({
+						resourceName : `${timesheet.resource.firstName} ${timesheet.resource.lastName}`,
+						projectName :  timesheet.project.name,
 						startDate : startDate,
 						endDate : endDate,
-						resourceName : `${timesheet.resource.firstName} ${timesheet.resource.lastName}`,
 						totalTime : 30,
-						projectName :  timesheet.project.name,
 						status : status,
 						columnsWithIcon: [],
 						columnsWithUrl: [],
-						columnsWithChips: [],
+						columnsWithChips: ['status'],
 						columnsWithButtonIcon: [],
 					})
 				})
-				console.log(this.timesheetsTableData);
+				console.log(this.timesheetsTableData); 
 			})
 
 			

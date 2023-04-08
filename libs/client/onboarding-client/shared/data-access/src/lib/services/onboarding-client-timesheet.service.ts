@@ -21,7 +21,7 @@ export class OnboardingClientTimesheetsService {
 
         return this.http
          .get<{ timesheets: Timesheet[]; totalTimesheets: number }>(
-            `${this.timesheetURL}/${supervisorId}?page=${page}&pageSize=${pageSize}`,
+            `${this.timesheetURL}/supervisor-timesheets/${supervisorId}?page=${page}&pageSize=${pageSize}`,
             {
             }, 
         )
