@@ -49,3 +49,12 @@ export interface ViewProjects extends TableDataModel {
 	clientReprFullName: string;
 	clientReprEmail: string;
 }
+
+export interface MyTimesheetsTableData extends TableDataModel {
+	startDate: string;
+	endDate: string;
+	resourceName: string;
+	totalTime: number;
+	projectName: string;
+	status: string;
+}

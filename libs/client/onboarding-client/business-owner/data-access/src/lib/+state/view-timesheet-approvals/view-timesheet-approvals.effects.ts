@@ -5,7 +5,7 @@ import { Store } from '@ngrx/store';
 import { Injectable } from '@angular/core';
 import { BusinessOwnerState } from '..';
 import { OnboardingClientTimesheetsService } from '@tempus/client/onboarding-client/shared/data-access';
-import { getAllTimesheetsBySupervisorId, getAllTimesheetsBySupervisorIdSuccess, getAllTimesheetsBySupervisorIdFailure } from './timesheet.actions';
+import { getAllTimesheetsBySupervisorId, getAllTimesheetsBySupervisorIdSuccess, getAllTimesheetsBySupervisorIdFailure } from './view-timesheet-approvals.actions';
 
 @Injectable()
 export class TimesheetEffects {

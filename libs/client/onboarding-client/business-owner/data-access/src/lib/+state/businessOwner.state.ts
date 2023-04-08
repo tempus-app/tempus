@@ -5,7 +5,7 @@ import {
 	PROJECT_MANAGE_FEATURE_KEY,
 } from './resProjClientManagement/resProjClientManagement.reducers';
 import { RESOURCE_VIEW_FEATURE_KEY, viewReducer, ViewState } from './viewResources/viewResource.reducers';
-import { TIMESHEET_MANAGE_FEATURE_KEY, TimesheetState, timesheetReducer } from './Timesheet/timesheet.reducers';
+import { TIMESHEET_MANAGE_FEATURE_KEY, TimesheetState, timesheetReducer } from './view-timesheet-approvals/view-timesheet-approvals.reducers';
 
 export const BUSINESS_OWNER_FEATURE_KEY = 'business_owner';
 

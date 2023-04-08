@@ -1,6 +1,6 @@
 import { createReducer, on } from '@ngrx/store';
 import { AsyncRequestState } from '@tempus/client/onboarding-client/shared/data-access';
-import * as TimesheetActions from './timesheet.actions';
+import * as TimesheetActions from './view-timesheet-approvals.actions';
 import { Timesheet } from '@tempus/shared-domain';
 
 
