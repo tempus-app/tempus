@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { CreateTimesheetDto } from "@tempus/api/shared/dto";
-import { ResourceEntity, TimesheetEntity, UserEntity } from "@tempus/api/shared/entity";
+import { ProjectEntity, ResourceEntity, TimesheetEntity, UserEntity } from "@tempus/api/shared/entity";
 import { Repository } from "typeorm";
 import { TimesheetService } from '@tempus/onboarding-api/feature-timesheet';
 
@@ -21,13 +21,14 @@ export class TimesheetSeederService {
 	}
 
 
-    async seedTimesheets(supervisors: UserEntity[], resources: ResourceEntity[]) : Promise<TimesheetEntity[]> {
+    async seedTimesheets(supervisors: UserEntity[], resources: ResourceEntity[], projects: ProjectEntity[]) : Promise<TimesheetEntity[]> {
 
         const createdTimesheets: TimesheetEntity[] = [];
         for (let i = 0; i < 8; i++) {
             const createTimesheet: CreateTimesheetDto = new CreateTimesheetDto(
-                supervisors[i % 2].id,
-                resources[i % 2].id,
+                supervisors[getRandomInt(0, supervisors.length - 1)].id,
+                resources[getRandomInt(0, resources.length - 1)].id,
+                projects[getRandomInt(0, projects.length - 1)].id,
                 new Date(2023, 3, 2),
                 new Date(2023, 3, 8),
                 false,
@@ -38,7 +39,6 @@ export class TimesheetSeederService {
                 false,
                 null,
             )
-
             const timesheet = await this.timesheetService.createTimesheet(createTimesheet);
             createdTimesheets.push(timesheet);
         }
@@ -46,3 +46,7 @@ export class TimesheetSeederService {
         return createdTimesheets;
     }
 }
+
+function getRandomInt(min: number, max: number): number {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }

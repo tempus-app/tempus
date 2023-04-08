@@ -19,12 +19,9 @@ export class OnboardingClientTimesheetsService {
         pageSize: number,
     ): Observable<{ timesheets: Timesheet[]; totalTimesheets: number }> {
 
-        console.log(supervisorId);
-        console.log(page);
-        console.log(pageSize);
         return this.http
          .get<{ timesheets: Timesheet[]; totalTimesheets: number }>(
-            `${this.timesheetURL}/timesheets?supervisorId=${supervisorId}&page=${page}&pageSize=${pageSize}`,
+            `${this.timesheetURL}/${supervisorId}?page=${page}&pageSize=${pageSize}`,
             {
             }, 
         )

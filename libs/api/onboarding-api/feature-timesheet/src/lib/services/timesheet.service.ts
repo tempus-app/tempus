@@ -5,6 +5,7 @@ import { Repository } from 'typeorm';
 import { Timesheet, TimesheetRevisionType } from '@tempus/shared-domain';
 import { ApproveTimesheetDto, CreateTimesheetDto, UpdateTimesheetDto } from '@tempus/api/shared/dto';
 import { ResourceService, UserService } from '@tempus/onboarding-api/feature-account';
+import { ProjectService } from '@tempus/onboarding-api/feature-project';
 
 @Injectable()
 export class TimesheetService {
@@ -13,6 +14,7 @@ export class TimesheetService {
 		private timesheetRepository: Repository<TimesheetEntity>,
 		private userService: UserService,
 		private resourceService: ResourceService,
+		private projectService: ProjectService,
 	) {}
 
 	async getTimesheet(timesheetId: number): Promise<Timesheet> {
@@ -51,7 +53,7 @@ export class TimesheetService {
 	async getAllTimesheetsBySupervisorId(supervisorId: number, page: number, pageSize: number){
 		const timesheetsAndCount = await this.timesheetRepository.findAndCount({
 			where: { supervisor: { id: supervisorId } },
-			relations: ['supervisor'],
+			relations: ['supervisor','project', 'resource'],
 			take: Number(pageSize),
 			skip: Number(page) * Number(pageSize),
 		});
@@ -101,11 +103,13 @@ export class TimesheetService {
 	async createTimesheet(timesheet: CreateTimesheetDto): Promise<Timesheet> {
 		const timesheetEntity = TimesheetEntity.fromDto(timesheet);
 		const supervisorEntity = await this.userService.getUserbyId(timesheet.supervisorId);
+		const projectEntity = await this.projectService.getProjectInfo(timesheet.projectId);
 		const resourceEntity = await this.resourceService.getResourceInfo(timesheet.resourceId);
 		timesheetEntity.status = TimesheetRevisionType.NEW;
 		timesheetEntity.dateModified = new Date(Date.now());
 		timesheetEntity.supervisor = supervisorEntity;
 		timesheetEntity.resource = resourceEntity;
+		timesheetEntity.project = projectEntity;
 		return this.timesheetRepository.save(timesheetEntity);
 	}
 

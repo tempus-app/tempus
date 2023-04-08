@@ -10,11 +10,11 @@ import { TimesheetService } from '../services/timesheet.service';
 export class TimesheetController {
 	constructor(private timesheetService: TimesheetService) {}
 
-	@UseGuards(JwtAuthGuard)
+	/*@UseGuards(JwtAuthGuard)
 	@Get('/:timesheetId')
 	async getTimesheet(@Param('timesheetId') timesheetId: number) {
 		return this.timesheetService.getTimesheet(timesheetId);
-	}
+	}*/
 
 	@UseGuards(JwtAuthGuard)
 	@Get('')
@@ -23,14 +23,14 @@ export class TimesheetController {
 	}
 
 	@UseGuards(JwtAuthGuard)
-	@Get('timesheets')
+	@Get('/:supervisorId')
 	async getTimesheetsForSupervisor(
-		@Query('supervisorId', ParseIntPipe) supervisorId: number,
-   	 	@Query('page', ParseIntPipe) page: number,
-    	@Query('pageSize', ParseIntPipe) pageSize: number,
-		): Promise< {timesheets: Timesheet[]; totalTimesheets: number }> {
-
-		return this.timesheetService.getAllTimesheetsBySupervisorId(supervisorId, page, pageSize);
+		@Param('supervisorId') supervisorId: number,
+   	 	@Query('page') page: number,
+    	@Query('pageSize') pageSize: number,
+	): Promise< {timesheets: Timesheet[]; totalTimesheets: number }> {
+			const timesheetsAndCount = await this.timesheetService.getAllTimesheetsBySupervisorId(supervisorId, page, pageSize);
+			return timesheetsAndCount;
 	}
 
 	@UseGuards(JwtAuthGuard)

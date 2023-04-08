@@ -96,10 +96,6 @@ export class ViewTimesheetApprovalsComponent implements OnInit, OnDestroy {
 
 	ngOnInit(): void {
 
-		this.businessownerStore.dispatch(
-			getAllTimesheetsBySupervisorId({ supervisorId: 177, pageSize: this.pageSize, pageNum: this.pageNum }),
-		); 
-
 		this.sharedStore
 			.select(selectLoggedInUserId)
 			.pipe(take(1))
@@ -109,6 +105,10 @@ export class ViewTimesheetApprovalsComponent implements OnInit, OnDestroy {
 				}
 			});
 
+		this.businessownerStore.dispatch(
+			getAllTimesheetsBySupervisorId({ supervisorId: this.userId, pageSize: this.pageSize, pageNum: this.pageNum }),
+		); 
+
 		this.businessownerStore
 			.select(selectSupervisorTimesheets)
 			.pipe(takeUntil(this.$destroyed))
@@ -117,7 +117,6 @@ export class ViewTimesheetApprovalsComponent implements OnInit, OnDestroy {
 				this.totalTimesheets = data.totalTimesheets;
 				console.log(data.totalTimesheets);
 				data.timesheets.forEach(timesheet => {
-					console.log("entered loop");
 					const startDate = new Date(timesheet.weekStartDate).toISOString().slice(0, 10);
 					const endDate = new Date(timesheet.weekEndDate).toISOString().slice(0, 10);
 					const status = timesheet.status.toString() === 'not_started' ? 'Not Started' : timesheet.status;
@@ -126,7 +125,7 @@ export class ViewTimesheetApprovalsComponent implements OnInit, OnDestroy {
 						endDate : endDate,
 						resourceName : `${timesheet.resource.firstName} ${timesheet.resource.lastName}`,
 						totalTime : 30,
-						projectName : timesheet.project.name,
+						projectName :  timesheet.project.name,
 						status : status,
 						columnsWithIcon: [],
 						columnsWithUrl: [],
@@ -134,6 +133,7 @@ export class ViewTimesheetApprovalsComponent implements OnInit, OnDestroy {
 						columnsWithButtonIcon: [],
 					})
 				})
+				console.log(this.timesheetsTableData);
 			})
 
 			
