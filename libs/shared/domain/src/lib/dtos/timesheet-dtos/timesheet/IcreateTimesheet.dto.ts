@@ -2,6 +2,7 @@ import { ICreateTimesheetEntryDto } from "../timesheet-entry";
 
 export interface ICreateTimesheetDto {
 
+	supervisorId?: number;
 	weekStartDate?: Date;
 	weekEndDate?: Date;
 	approvedBySupervisor?: boolean;

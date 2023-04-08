@@ -1,3 +1,4 @@
+import { Timesheet } from '..';
 import { RoleType } from '../../enums';
 
 export interface User {
@@ -14,4 +15,6 @@ export interface User {
 	refreshToken: string;
 
 	roles: RoleType[];
+
+	supervisedTimesheets: Timesheet[];
 }

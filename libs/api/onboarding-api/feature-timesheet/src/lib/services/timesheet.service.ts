@@ -4,12 +4,15 @@ import { TimesheetEntity } from '@tempus/api/shared/entity';
 import { Repository } from 'typeorm';
 import { Timesheet, TimesheetRevisionType } from '@tempus/shared-domain';
 import { ApproveTimesheetDto, CreateTimesheetDto, UpdateTimesheetDto } from '@tempus/api/shared/dto';
+import { ResourceService, UserService } from '@tempus/onboarding-api/feature-account';
 
 @Injectable()
 export class TimesheetService {
 	constructor(
 		@InjectRepository(TimesheetEntity)
 		private timesheetRepository: Repository<TimesheetEntity>,
+		private userService: UserService,
+		private resourceService: ResourceService,
 	) {}
 
 	async getTimesheet(timesheetId: number): Promise<Timesheet> {
@@ -86,8 +89,12 @@ export class TimesheetService {
 
 	async createTimesheet(timesheet: CreateTimesheetDto): Promise<Timesheet> {
 		const timesheetEntity = TimesheetEntity.fromDto(timesheet);
+		const supervisorEntity = await this.userService.getUserbyId(timesheet.supervisorId);
+		const resourceEntity = await this.resourceService.getResourceInfo(timesheet.resourceId);
 		timesheetEntity.status = TimesheetRevisionType.NEW;
 		timesheetEntity.dateModified = new Date(Date.now());
+		timesheetEntity.supervisor = supervisorEntity;
+		timesheetEntity.resource = resourceEntity;
 		return this.timesheetRepository.save(timesheetEntity);
 	}
 

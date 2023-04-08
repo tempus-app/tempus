@@ -1,6 +1,5 @@
 import { Project } from './project.model';
 import { Client } from './client.model';
-import { Timesheet } from '..';
 
 export interface ClientRepresentative {
 	id: number;
@@ -9,5 +8,4 @@ export interface ClientRepresentative {
 	email: string;
 	client: Client;
 	projects: Project[];
-	timesheets: Timesheet[];
 }

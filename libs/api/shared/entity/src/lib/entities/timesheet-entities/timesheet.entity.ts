@@ -20,7 +20,7 @@ export class TimesheetEntity implements Timesheet {
 		timesheetEntries?: TimesheetEntryEntity[],
 		resource?: ResourceEntity,
 		project?: ProjectEntity,
-		supervisor?: ClientRepresentativeEntity,
+		supervisor?: UserEntity,
 		status?: TimesheetRevisionType,
 	) {
 		this.id = id;
@@ -86,8 +86,8 @@ export class TimesheetEntity implements Timesheet {
 	@ManyToOne(() => ProjectEntity, project => project.timesheets)
 	project: ProjectEntity;
 
-	@ManyToOne(() => ClientRepresentativeEntity, supervisor => supervisor.timesheets)
-	supervisor: ClientRepresentativeEntity;
+	@ManyToOne(() => UserEntity, supervisor => supervisor.supervisedTimesheets)
+	supervisor: UserEntity;
 
 	@Column({ nullable: true })
 	dateModified?: Date;

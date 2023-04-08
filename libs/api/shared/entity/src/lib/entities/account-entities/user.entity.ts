@@ -1,6 +1,7 @@
 import { CreateUserDto, UpdateUserDto } from '@tempus/api/shared/dto';
 import { RoleType, User } from '@tempus/shared-domain';
-import { Entity, Column, PrimaryGeneratedColumn, TableInheritance } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, TableInheritance, OneToMany } from 'typeorm';
+import { TimesheetEntity } from '../timesheet-entities';
 
 @Entity()
 @TableInheritance({ column: { type: 'varchar', name: 'user_type' } })
@@ -12,6 +13,7 @@ export class UserEntity implements User {
 		email?: string,
 		password?: string,
 		roles?: RoleType[],
+		supervisedTimesheets?: TimesheetEntity[],
 	) {
 		this.id = id;
 		this.firstName = firstName;
@@ -19,6 +21,7 @@ export class UserEntity implements User {
 		this.email = email;
 		this.password = password;
 		this.roles = roles;
+		this.supervisedTimesheets = supervisedTimesheets;
 	}
 
 	@PrimaryGeneratedColumn()
@@ -46,6 +49,9 @@ export class UserEntity implements User {
 		default: [RoleType.USER],
 	})
 	roles: RoleType[];
+
+	@OneToMany(() => TimesheetEntity, timesheet => timesheet.supervisor)
+	supervisedTimesheets: TimesheetEntity[];
 
 	public static fromDto(dto: CreateUserDto | UpdateUserDto): UserEntity {
 		if (dto == null) return new UserEntity();
