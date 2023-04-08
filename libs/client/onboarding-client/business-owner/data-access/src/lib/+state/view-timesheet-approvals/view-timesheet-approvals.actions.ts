@@ -1,7 +1,6 @@
 import { createAction, props } from '@ngrx/store';
 import { Timesheet } from '@tempus/shared-domain';
 
-// get all views by resource id
 export const getAllTimesheetsBySupervisorId = createAction(
 	'[Onboarding Client Timesheets API] Get All Timesheets By Supervisor Id',
 	props<{ supervisorId: number; pageNum: number; pageSize: number }>(),

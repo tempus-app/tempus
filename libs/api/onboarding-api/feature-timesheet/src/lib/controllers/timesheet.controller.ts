@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Query, UseGuards } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from '@tempus/api/shared/feature-auth';
 import { Timesheet } from '@tempus/shared-domain';
@@ -20,6 +20,17 @@ export class TimesheetController {
 	@Get('')
 	async getTimesheetsForUser(@Param('userId') userId: number): Promise<Timesheet[]> {
 		return this.timesheetService.getAllTimesheetsforUser(userId);
+	}
+
+	@UseGuards(JwtAuthGuard)
+	@Get('timesheets')
+	async getTimesheetsForSupervisor(
+		@Query('supervisorId', ParseIntPipe) supervisorId: number,
+   	 	@Query('page', ParseIntPipe) page: number,
+    	@Query('pageSize', ParseIntPipe) pageSize: number,
+		): Promise< {timesheets: Timesheet[]; totalTimesheets: number }> {
+
+		return this.timesheetService.getAllTimesheetsBySupervisorId(supervisorId, page, pageSize);
 	}
 
 	@UseGuards(JwtAuthGuard)

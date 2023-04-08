@@ -7,6 +7,12 @@ export const selectState = createSelector(
 	(state: BusinessOwnerState) => state[TIMESHEET_MANAGE_FEATURE_KEY],
 );
 
-export const selectSupervisorTimesheets = createSelector(selectState, (state: TimesheetState) => {
-	return { timesheets: state.timesheets, totalTimesheets: state.totalTimesheetsData };
-});
+export const selectSupervisorTimesheets = createSelector(
+	selectState, 
+	(state: TimesheetState) => {
+		return { 
+			timesheets: state.timesheets, 
+			totalTimesheets: state.totalTimesheetsData 
+		};
+	},
+);

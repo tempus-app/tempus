@@ -7,21 +7,24 @@ import { Timesheet } from '@tempus/shared-domain';
 export const TIMESHEET_MANAGE_FEATURE_KEY = 'timesheet';
 
 export interface TimesheetState {
-    timesheets: Timesheet[] | null;
+    timesheets: Timesheet[];
 	totalTimesheetsData: number;
 }
 
 export const initialState: TimesheetState = {
-    timesheets: null,
+    timesheets: [],
 	totalTimesheetsData: 0,
 };
 
 export const timesheetReducer = createReducer(
     initialState,
 	on(TimesheetActions.getAllTimesheetsBySupervisorId, state => ({ ...state, status: AsyncRequestState.LOADING })),
-	on(TimesheetActions.getAllTimesheetsBySupervisorIdSuccess, (state, { timesheets }) => ({
+	on(TimesheetActions.getAllTimesheetsBySupervisorIdSuccess, (state, { timesheets, totalTimesheets }) => ({
 		...state,
 		timesheets,
+		totalTimesheetsData : totalTimesheets,
+		status: AsyncRequestState.SUCCESS,
+		error: null,
 	})),
 	on(TimesheetActions.getAllTimesheetsBySupervisorIdFailure, (state, { error }) => ({
 		...state,

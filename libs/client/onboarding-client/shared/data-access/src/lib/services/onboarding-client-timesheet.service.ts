@@ -10,8 +10,6 @@ import { handleError } from './errorHandler';
 @Injectable({ providedIn: 'root' })
 export class OnboardingClientTimesheetsService {
     constructor(private http: HttpClient, @Inject(APP_CONFIG) private appConfig: AppConfig) {}
-    url = `${this.appConfig.apiUrl}/onboarding/profile-view`;
-
 
     timesheetURL = `${this.appConfig.apiUrl}/onboarding/timesheet`;
 
@@ -20,10 +18,15 @@ export class OnboardingClientTimesheetsService {
         page: number,
         pageSize: number,
     ): Observable<{ timesheets: Timesheet[]; totalTimesheets: number }> {
+
+        console.log(supervisorId);
+        console.log(page);
+        console.log(pageSize);
         return this.http
          .get<{ timesheets: Timesheet[]; totalTimesheets: number }>(
-            `${this.url}/${supervisorId}?page=${page}&pageSize=${pageSize}`,
-            {},
+            `${this.timesheetURL}/timesheets?supervisorId=${supervisorId}&page=${page}&pageSize=${pageSize}`,
+            {
+            }, 
         )
         .pipe(catchError(handleError));
     }

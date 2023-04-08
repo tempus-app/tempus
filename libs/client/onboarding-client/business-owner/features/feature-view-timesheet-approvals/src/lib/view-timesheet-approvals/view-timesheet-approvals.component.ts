@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/dot-notation */
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { TranslateService } from '@ngx-translate/core';
@@ -30,7 +29,7 @@ export class ViewTimesheetApprovalsComponent implements OnInit, OnDestroy {
 
 	pageNum = 0;
 
-	pageSize = 5;
+	pageSize = 10;
 
 	totalTimesheets = 0;
 
@@ -96,6 +95,11 @@ export class ViewTimesheetApprovalsComponent implements OnInit, OnDestroy {
 	ButtonType = ButtonType;
 
 	ngOnInit(): void {
+
+		this.businessownerStore.dispatch(
+			getAllTimesheetsBySupervisorId({ supervisorId: 177, pageSize: this.pageSize, pageNum: this.pageNum }),
+		); 
+
 		this.sharedStore
 			.select(selectLoggedInUserId)
 			.pipe(take(1))
@@ -104,17 +108,6 @@ export class ViewTimesheetApprovalsComponent implements OnInit, OnDestroy {
 					this.userId = data;
 				}
 			});
-		this.sharedStore
-			.select(selectLoggedInUserNameEmail)
-			.pipe(take(1))
-			.subscribe(data => {
-				this.firstName = data.firstName || '';
-				this.lastName = data.lastName || '';
-			});
-
-		this.businessownerStore.dispatch(
-			getAllTimesheetsBySupervisorId({ supervisorId: this.userId, pageSize: this.pageSize, pageNum: this.pageNum }),
-		);
 
 		this.businessownerStore
 			.select(selectSupervisorTimesheets)
@@ -122,7 +115,9 @@ export class ViewTimesheetApprovalsComponent implements OnInit, OnDestroy {
 			.subscribe(data => {
 				this.timesheetsTableData = [];
 				this.totalTimesheets = data.totalTimesheets;
-				data.timesheets?.forEach(timesheet => {
+				console.log(data.totalTimesheets);
+				data.timesheets.forEach(timesheet => {
+					console.log("entered loop");
 					const startDate = new Date(timesheet.weekStartDate).toISOString().slice(0, 10);
 					const endDate = new Date(timesheet.weekEndDate).toISOString().slice(0, 10);
 					const status = timesheet.status.toString() === 'not_started' ? 'Not Started' : timesheet.status;
@@ -140,6 +135,8 @@ export class ViewTimesheetApprovalsComponent implements OnInit, OnDestroy {
 					})
 				})
 			})
+
+			
 
 	}
 
