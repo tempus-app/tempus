@@ -1,4 +1,4 @@
-import { Project, Resource } from '..';
+import { Project, Resource, User } from '..';
 import { TimesheetRevisionType } from '../../enums/timesheetRevisionType';
 import { TimesheetEntry } from './timesheet-entry.model';
 
@@ -15,6 +15,7 @@ export interface Timesheet {
 	timesheetEntries: TimesheetEntry[];
 	resource: Resource;
 	project: Project;
+	supervisor: User;
 	status: TimesheetRevisionType;
 	dateModified?: Date;
 }

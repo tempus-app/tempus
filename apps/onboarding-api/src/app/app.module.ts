@@ -4,6 +4,7 @@ import { AccountModule } from '@tempus/onboarding-api/feature-account';
 import { ProfileModule } from '@tempus/onboarding-api/feature-profile';
 import { EmailModule } from '@tempus/api/shared/feature-email';
 import { ProjectModule } from '@tempus/onboarding-api/feature-project';
+import { TimesheetModule } from '@tempus/onboarding-api/feature-timesheet';
 import { PdfgeneratorModule } from '@tempus/api/shared/feature-pdfgenerator';
 import { AuthModule } from '@tempus/api/shared/feature-auth';
 import { ServeStaticModule } from '@nestjs/serve-static';
@@ -25,6 +26,7 @@ import { AppController } from './app.controller';
 		AccountModule,
 		ProfileModule,
 		ProjectModule,
+		TimesheetModule,
 		EmailModule,
 		PdfgeneratorModule,
 		AuthModule,
