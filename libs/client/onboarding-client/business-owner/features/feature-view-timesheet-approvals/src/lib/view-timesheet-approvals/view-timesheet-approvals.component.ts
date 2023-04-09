@@ -115,7 +115,6 @@ export class ViewTimesheetApprovalsComponent implements OnInit, OnDestroy {
 			.subscribe(data => {
 				this.timesheetsTableData = [];
 				this.totalTimesheets = data.totalTimesheets;
-				console.log(data.totalTimesheets);
 				data.timesheets.forEach(timesheet => {
 					const startDate = new Date(timesheet.weekStartDate).toISOString().slice(0, 10);
 					const endDate = new Date(timesheet.weekEndDate).toISOString().slice(0, 10);
@@ -132,8 +131,7 @@ export class ViewTimesheetApprovalsComponent implements OnInit, OnDestroy {
 						columnsWithChips: ['status'],
 						columnsWithButtonIcon: [],
 					})
-				})
-				console.log(this.timesheetsTableData); 
+				}) 
 			})
 
 			

@@ -4,7 +4,7 @@ import { map, catchError } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 import { Injectable } from '@angular/core';
 import { OnboardingClientTimesheetsService } from '@tempus/client/onboarding-client/shared/data-access';
-import { ResourceState } from '..';
+import { TempusResourceState } from '..';
 import {
 	getAllTimesheetsByResourceId,
 	getAllTimesheetsByResourceIdSuccess,
@@ -15,7 +15,7 @@ import {
 export class TimesheetEffects {
 	constructor(
 		private readonly actions$: Actions,
-		private store: Store<ResourceState>,
+		private store: Store<TempusResourceState>,
 		private timesheetService: OnboardingClientTimesheetsService,
 	) {}
 
