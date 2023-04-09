@@ -9,4 +9,12 @@
         ></tempus-button>
     </div>
   </div>
-  <br>
+  <div id="table-container">
+    <tempus-table
+        (paginatorEvent)="tablePaginationEvent($event)"
+        [page]="pageNum"
+        [totalItems]="totalTimesheets"
+        [tableColumns]="tableColumns"
+        [tableData]="timesheetsTableData"
+    ></tempus-table>
+</div>

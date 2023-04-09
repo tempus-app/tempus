@@ -10,27 +10,36 @@ import { TimesheetService } from '../services/timesheet.service';
 export class TimesheetController {
 	constructor(private timesheetService: TimesheetService) {}
 
-	/*@UseGuards(JwtAuthGuard)
+	/* @UseGuards(JwtAuthGuard)
 	@Get('/:timesheetId')
 	async getTimesheet(@Param('timesheetId') timesheetId: number) {
 		return this.timesheetService.getTimesheet(timesheetId);
-	}*/
+	} */
 
 	@UseGuards(JwtAuthGuard)
-	@Get('')
-	async getTimesheetsForUser(@Param('userId') userId: number): Promise<Timesheet[]> {
-		return this.timesheetService.getAllTimesheetsforUser(userId);
+	@Get('resource-timesheets/:resourceId')
+	async getTimesheetsForResource(
+		@Param('resourceId') resourceId: number,
+		@Query('page') page: number,
+		@Query('pageSize') pageSize: number,
+	): Promise<{ timesheets: Timesheet[]; totalTimesheets: number }> {
+		const timesheetsAndCount = await this.timesheetService.getAllTimesheetsByResourceId(resourceId, page, pageSize);
+		return timesheetsAndCount;
 	}
 
 	@UseGuards(JwtAuthGuard)
 	@Get('supervisor-timesheets/:supervisorId')
 	async getTimesheetsForSupervisor(
 		@Param('supervisorId') supervisorId: number,
-   	 	@Query('page') page: number,
-    	@Query('pageSize') pageSize: number,
-	): Promise< {timesheets: Timesheet[]; totalTimesheets: number }> {
-			const timesheetsAndCount = await this.timesheetService.getAllTimesheetsBySupervisorId(supervisorId, page, pageSize);
-			return timesheetsAndCount;
+		@Query('page') page: number,
+		@Query('pageSize') pageSize: number,
+	): Promise<{ timesheets: Timesheet[]; totalTimesheets: number }> {
+		const timesheetsAndCount = await this.timesheetService.getAllTimesheetsBySupervisorId(
+			supervisorId,
+			page,
+			pageSize,
+		);
+		return timesheetsAndCount;
 	}
 
 	@UseGuards(JwtAuthGuard)

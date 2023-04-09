@@ -50,15 +50,26 @@ export class TimesheetService {
 		return timesheets;
 	}
 
-	async getAllTimesheetsBySupervisorId(supervisorId: number, page: number, pageSize: number){
+	async getAllTimesheetsByResourceId(resourceId: number, page: number, pageSize: number) {
 		const timesheetsAndCount = await this.timesheetRepository.findAndCount({
-			where: { supervisor: { id: supervisorId } },
-			relations: ['supervisor','project', 'resource'],
+			where: { resource: { id: resourceId } },
+			relations: ['supervisor', 'project', 'resource'],
 			take: Number(pageSize),
 			skip: Number(page) * Number(pageSize),
 		});
 
-		return {timesheets : timesheetsAndCount[0], totalTimesheets: timesheetsAndCount[1]};
+		return { timesheets: timesheetsAndCount[0], totalTimesheets: timesheetsAndCount[1] };
+	}
+
+	async getAllTimesheetsBySupervisorId(supervisorId: number, page: number, pageSize: number) {
+		const timesheetsAndCount = await this.timesheetRepository.findAndCount({
+			where: { supervisor: { id: supervisorId } },
+			relations: ['supervisor', 'project', 'resource'],
+			take: Number(pageSize),
+			skip: Number(page) * Number(pageSize),
+		});
+
+		return { timesheets: timesheetsAndCount[0], totalTimesheets: timesheetsAndCount[1] };
 	}
 
 	async getAllSubmittedTimesheetsforProject(projectId: number): Promise<Timesheet[]> {
