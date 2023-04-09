@@ -1,4 +1,4 @@
-import { Component, Injectable, Input, OnInit, VERSION } from '@angular/core';
+import { Component, Injectable, Input, OnDestroy, OnInit, VERSION } from '@angular/core';
 import { DateAdapter } from '@angular/material/core';
 import { DateRange, MatDateRangePicker, MatDateRangeSelectionStrategy, MAT_DATE_RANGE_SELECTION_STRATEGY } from '@angular/material/datepicker';
 import { TranslateService } from '@ngx-translate/core';
@@ -17,9 +17,9 @@ import { PageEvent } from '@angular/material/paginator';
   styleUrls: ['./timesheet.component.scss'],
   providers: [
     OnboardingClientTimesheetsService
-  ]
+  ],
 })
-export class TimesheetComponent implements OnInit {
+export class TimesheetComponent implements OnInit, OnDestroy {
   @Input() from !: Date;
   @Input() thru !: Date;
   prefix = 'onboardingResourceTimesheet';
@@ -32,16 +32,17 @@ export class TimesheetComponent implements OnInit {
 
 	totalTimesheets = 0;
 
-  constructor(private translateService: TranslateService,
+  constructor(
+	private translateService: TranslateService,
     private router: Router,
-		private route: ActivatedRoute,
+	private route: ActivatedRoute,
     private resourceStore: Store<TempusResourceState>,
     private sharedStore: Store<OnboardingClientState>,
     ) {
-    const { currentLang } = translateService;
+  		const { currentLang } = translateService;
 		translateService.currentLang = '';
 		translateService.use(currentLang);
-    this.translateService
+   		this.translateService
 			.get(`${this.prefix}.main.tableHeaders`)
 			.pipe(take(1))
 			.subscribe(data => {
@@ -97,6 +98,7 @@ export class TimesheetComponent implements OnInit {
 
 
   ngOnInit(): void {
+
     this.sharedStore
 			.select(selectLoggedInUserId)
 			.pipe(take(1))
@@ -116,7 +118,9 @@ export class TimesheetComponent implements OnInit {
 			.subscribe(data => {
 				this.timesheetsTableData = [];
 				this.totalTimesheets = data.totalTimesheets;
-				console.log(data.totalTimesheets);
+
+				console.log(this.totalTimesheets);
+				console.log(data.timesheets);
 				data.timesheets.forEach(timesheet => {
 					const startDate = new Date(timesheet.weekStartDate).toISOString().slice(0, 10);
 					const endDate = new Date(timesheet.weekEndDate).toISOString().slice(0, 10);
@@ -134,7 +138,6 @@ export class TimesheetComponent implements OnInit {
 						columnsWithButtonIcon: [],
 					})
 				})
-				console.log(this.timesheetsTableData); 
 			})
     
   }
