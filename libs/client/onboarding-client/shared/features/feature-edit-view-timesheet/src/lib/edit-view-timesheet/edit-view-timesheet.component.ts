@@ -23,6 +23,7 @@ import { splitStringIntoBulletPoints } from '@tempus/client/shared/util';
 import { ProjectResource } from '@tempus/shared-domain';
 
 @Injectable()
+// Class for the week selection strategy
 export class WeekSelectionStrategy implements MatDateRangeSelectionStrategy<string> {
 	constructor(private _dateAdapter: DateAdapter<string>) {}
 
@@ -136,12 +137,15 @@ export class EditViewTimesheetComponent implements OnDestroy {
 		translateService.use(currentLang);
 	}
 
+	// After a date range is selected this function is executed
 	changed(picker: MatDateRangePicker<any>) {
 		// console.log('changed');
 		// console.log(
 		// 	this.from.toLocaleString('en-US', { weekday: 'long', month: 'long', year: 'numeric', day: 'numeric' }),
 		// );
 		// console.log(this.thru);
+
+		// Dynamically display the dates in each of the timesheet table columns
 		// Sunday
 		const startDate: Date = new Date(this.from);
 		const startDate_string: string = startDate.toLocaleString();
@@ -184,6 +188,7 @@ export class EditViewTimesheetComponent implements OnDestroy {
   endDate: Date = new Date(this.thru);
   endDate_string: string = this.endDate.toLocaleString(); */
 
+	// Columns for the timesheet table
 	displayedColumns: string[] = [
 		'position',
 		'project',
@@ -228,6 +233,7 @@ export class EditViewTimesheetComponent implements OnDestroy {
 		this.closeEditViewClicked.emit();
 	}
 
+	// After the submit button is clicked this function is executed
 	submitChanges() {
 		this.submitClicked.emit();
 		console.log(this.totalHours.value);
@@ -252,38 +258,10 @@ export class EditViewTimesheetComponent implements OnDestroy {
 				day: 'numeric',
 			}),
 		);
-
-		const postData = {
-			dateRange: `${this.from.toLocaleString('en-US', {
-				month: 'long',
-				year: 'numeric',
-				day: 'numeric',
-			})} - ${this.thru.toLocaleString('en-US', {
-				month: 'long',
-				year: 'numeric',
-				day: 'numeric',
-			})}`,
-			nameOfUser: this.nameOfUser,
-			currentDate: new Date(Date.now()).toLocaleString('fr-CA', {
-				month: 'numeric',
-				year: 'numeric',
-				day: 'numeric',
-			}),
-			totalHours: this.totalHours.value,
-			selectedProject: this.selectedProject.value,
-		};
-
-		this.http.post('http://localhost:5000/approval', postData).subscribe({
-			next: response => {
-				console.log('Data submitted successfully', response);
-			},
-			error: error => {
-				console.log('Error submitting data', error);
-			},
-		});
 	}
 
 	ngOnInit(): void {
+		// Obtain the names of the projects the resource is assigned and the name of the resource
 		this.resourceService.getResourceInformation().subscribe(data => {
 			this.projectOptions = data.projectResources.map(proj => {
 				return proj.project.name;

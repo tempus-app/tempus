@@ -11,6 +11,23 @@
 				"status": "Status"
 			},
 			"noPendingApprovals": "No Pending Approvals"
+		},
+		"createTimesheetModal": {
+			"title": "Create timesheet",
+			"subtitle": "Please input the start date, end date and the project name",
+			"closeText": "Cancel",
+			"confirmText": "Create",
+			"startDate": "Select a start date...",
+			"endDate": "Select a end date...",
+			"project": "Select a project..."
+		  },
+		  "dates": {
+			"startPlaceholder": "Start Date",
+			"endPlaceholder": "End Date",
+			"validStartDateErr": "Please enter a valid start date.",
+			"validEndDateErr": "Please enter a valid end date.",
+			"startBeforeEndErr": "Please make sure the start date is before the end date.",
+			"present": "Present"
 		}
 	}
 }
