@@ -99,7 +99,7 @@ export class TimesheetComponent implements OnInit, OnDestroy {
 	startDate: ['', Validators.required],
 	endDate: ['', Validators.required],
 	project: ['', Validators.required],
-});
+} ,{ validator: validateEndDateAfterStartDate });
    
 
    $destroyed = new Subject<void>();
@@ -269,4 +269,17 @@ export class TimesheetComponent implements OnInit, OnDestroy {
 		this.router.navigate(['./new'], { relativeTo: this.route });
 	}
 
+
+}
+
+
+function validateEndDateAfterStartDate(control: FormGroup) {
+	const startDate = control.get('startDate')?.value;
+	const endDate = control.get('endDate')?.value;
+  
+	if (endDate && startDate && endDate < startDate) {
+	  control.get('endDate')?.setErrors({ dateMismatch: true });
+	} else {
+	  control.get('endDate')?.setErrors(null);
+	}
 }
