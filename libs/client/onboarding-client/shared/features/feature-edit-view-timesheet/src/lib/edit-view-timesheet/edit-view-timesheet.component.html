@@ -50,46 +50,77 @@
             <ng-container matColumnDef="sunday"id="proj">
               <th mat-header-cell *matHeaderCellDef> {{startDate2 | date: 'fullDate'}} </th>
               <td mat-cell *matCellDef="let element" > 
+                <br> Hours 
                 <tempus-text-input
                 ngDefaultControl
                 (ngModelChange)="calculateTotalHours($event)"
-                ></tempus-text-input> </td>
+                ></tempus-text-input>
+                Comments 
+                <tempus-text-input></tempus-text-input> </td>
             </ng-container>
           
             <!-- Monday Column -->
             <ng-container matColumnDef="monday">
               <th mat-header-cell *matHeaderCellDef> {{startDatePlusOne2 | date: 'fullDate'}} </th>
-              <td mat-cell *matCellDef="let element"> <tempus-text-input ></tempus-text-input> </td>
+              <td mat-cell *matCellDef="let element"> 
+                <br> Hours 
+                <tempus-text-input ></tempus-text-input>
+                Comments 
+                <tempus-text-input></tempus-text-input> 
+              </td>
             </ng-container>
         
             <!-- Tuesday Column -->
             <ng-container matColumnDef="tuesday">
               <th mat-header-cell *matHeaderCellDef> {{startDatePlusTwo2 | date: 'fullDate'}} </th>
-                <td mat-cell *matCellDef="let element"> <tempus-text-input></tempus-text-input> </td>
+                <td mat-cell *matCellDef="let element"> 
+                  <br> Hours 
+                  <tempus-text-input></tempus-text-input> 
+                  Comments 
+                  <tempus-text-input></tempus-text-input></td>
             </ng-container>
         
               <!-- Wednesday Column -->
               <ng-container matColumnDef="wednesday">
                 <th mat-header-cell *matHeaderCellDef> {{startDatePlusThree2 | date: 'fullDate'}} </th>
-                <td mat-cell *matCellDef="let element"> <tempus-text-input></tempus-text-input> </td>
+                <td mat-cell *matCellDef="let element"> 
+                  <br> Hours 
+                  <tempus-text-input></tempus-text-input>
+                  Comments 
+                  <tempus-text-input></tempus-text-input> </td>
             </ng-container>
         
             <!-- Thursday Column -->
             <ng-container matColumnDef="thursday">
               <th mat-header-cell *matHeaderCellDef> {{startDatePlusFour2 | date: 'fullDate'}} </th>
-                <td mat-cell *matCellDef="let element"> <tempus-text-input></tempus-text-input> </td>
+                <td mat-cell *matCellDef="let element"> 
+                  <br> Hours 
+                  <tempus-text-input></tempus-text-input>
+                  Comments 
+                  <tempus-text-input ></tempus-text-input> 
+                </td>
             </ng-container>
         
             <!-- Friday Column -->
             <ng-container matColumnDef="friday">
               <th mat-header-cell *matHeaderCellDef> {{startDatePlusFive2 | date: 'fullDate'}} </th>
-                <td mat-cell *matCellDef="let element"> <tempus-text-input></tempus-text-input> </td>
+                <td mat-cell *matCellDef="let element"> 
+                  <br> Hours 
+                  <tempus-text-input></tempus-text-input>
+                  Comments 
+                  <tempus-text-input ></tempus-text-input> 
+                </td>
             </ng-container>
         
             <!-- Saturday Column -->
             <ng-container matColumnDef="saturday">
                 <th mat-header-cell *matHeaderCellDef> {{endDate2 | date: 'fullDate'}} </th>
-                <td mat-cell *matCellDef="let element"> <tempus-text-input></tempus-text-input> </td>
+                <td mat-cell *matCellDef="let element"> 
+                  <br> Hours 
+                  <tempus-text-input></tempus-text-input>
+                  Comments 
+                  <tempus-text-input ></tempus-text-input> 
+                </td>
             </ng-container>
         
             <!-- Total Column -->
