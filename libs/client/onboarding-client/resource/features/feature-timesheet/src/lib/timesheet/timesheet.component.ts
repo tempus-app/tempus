@@ -170,8 +170,9 @@ export class TimesheetComponent implements OnInit, OnDestroy {
 						endDate : endDate,
 						totalTime : 0,
 						status : status,
+						url: `../timesheet/new`,
 						columnsWithIcon: [],
-						columnsWithUrl: [],
+						columnsWithUrl: ['resourceName'],
 						columnsWithChips: ['status'],
 						columnsWithButtonIcon: [],
 					})
