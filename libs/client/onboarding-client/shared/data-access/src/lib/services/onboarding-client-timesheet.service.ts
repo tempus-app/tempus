@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
 import { APP_CONFIG } from '@tempus/app-config';
-import { AppConfig, RevisionType, Timesheet, View } from '@tempus/shared-domain';
+import { AppConfig, ICreateTimesheetDto, RevisionType, Timesheet, View } from '@tempus/shared-domain';
 import { catchError, Observable } from 'rxjs';
 import { handleError } from './errorHandler';
 
@@ -35,5 +35,9 @@ export class OnboardingClientTimesheetsService {
 				{},
 			)
 			.pipe(catchError(handleError));
+	}
+
+	public createTimesheet(createTimesheetDto: ICreateTimesheetDto): Observable<Timesheet> {
+		return this.http.post<Timesheet>(`${this.timesheetURL}/`, createTimesheetDto).pipe(catchError(handleError));
 	}
 }

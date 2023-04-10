@@ -4,14 +4,13 @@ import { DateRange, MatDateRangePicker, MatDateRangeSelectionStrategy, MAT_DATE_
 import { TranslateService } from '@ngx-translate/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ButtonType, Column, MyTimesheetsTableData, MyViewsTableData } from '@tempus/client/shared/ui-components/presentational';
-import { TempusResourceState, selectResourceTimesheets, getAllTimesheetsByResourceId } from '@tempus/client/onboarding-client/resource/data-access';
+import { TempusResourceState, selectResourceTimesheets, getAllTimesheetsByResourceId, createTimesheet } from '@tempus/client/onboarding-client/resource/data-access';
 import { Store } from '@ngrx/store';
 import { OnboardingClientResourceService, OnboardingClientState, OnboardingClientTimesheetsService, selectLoggedInUserId } from '@tempus/client/onboarding-client/shared/data-access';
 import { Subject, finalize, take, takeUntil } from 'rxjs';
 import { PageEvent } from '@angular/material/paginator';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CustomModalType, ModalService, ModalType } from '@tempus/client/shared/ui-components/modal';
-import { selectAllProjects } from '@tempus/client/onboarding-client/business-owner/data-access';
 import { InputType } from '@tempus/client/shared/ui-components/input';
 
 
@@ -52,7 +51,7 @@ export class TimesheetComponent implements OnInit, OnDestroy {
 		private fb: FormBuilder,
 		private modalService: ModalService,
 		private resourceService: OnboardingClientResourceService,
-		) {
+				) {
 			const { currentLang } = translateService;
 			translateService.currentLang = '';
 			translateService.use(currentLang);
@@ -96,7 +95,7 @@ export class TimesheetComponent implements OnInit, OnDestroy {
    		}
 
    // Create timesheet form builder group
-   createTimesheetForm = this.fb.group({
+   createTimesheetForm: FormGroup = this.fb.group({
 	startDate: ['', Validators.required],
 	endDate: ['', Validators.required],
 	project: ['', Validators.required],
@@ -126,7 +125,7 @@ export class TimesheetComponent implements OnInit, OnDestroy {
 
 	this.resourceService.getResourceInformation().subscribe(data => {
 		this.projectOptions = data.projectResources.map(proj => {
-			return { id: proj.id, val: proj.project.name };
+			return { id: proj.project.id, val: proj.project.name };
 		});
 		this.nameOfUser = `${data.firstName} ${data.lastName}`;
 	});
@@ -169,7 +168,7 @@ export class TimesheetComponent implements OnInit, OnDestroy {
 						projectName :  timesheet.project.name,
 						startDate : startDate,
 						endDate : endDate,
-						totalTime : 30,
+						totalTime : 0,
 						status : status,
 						columnsWithIcon: [],
 						columnsWithUrl: [],
@@ -178,7 +177,6 @@ export class TimesheetComponent implements OnInit, OnDestroy {
 					})
 				})
 			})
-    
   }
 
   ngOnDestroy(): void {
@@ -223,11 +221,23 @@ export class TimesheetComponent implements OnInit, OnDestroy {
 			.pipe(
 				takeUntil(this.$createTimesheetModalClosedEvent),
 				finalize(() => {
-					const startDate: string = this.createTimesheetForm.get('startDate')?.value;
-					const endDate: string = this.createTimesheetForm.get('endDate')?.value;
-					const project: number = this.createTimesheetForm.get('project')?.value;
+					const createTimesheetDto = {
+					supervisorId: undefined,
+					projectId: this.createTimesheetForm.get('project')?.value,
+					resourceId : this.userId,
+					weekStartDate: this.createTimesheetForm.get('startDate')?.value,
+					weekEndDate: this.createTimesheetForm.get('endDate')?.value,
+					approvedBySupervisor: false,
+					approvedByClient: false,
+					supervisorComment: "",
+					clientRepresentativeComment: "",
+					audited: false,
+					billed: false,
+					}
+					this.resourceStore.dispatch(createTimesheet({ createTimesheetDto }));
+
 					this.createTimesheetForm.reset();
-					// this.businessOwnerStore.dispatch(updateProjStatus({ projId: project, status }));
+					window.location.reload();
 				}),
 			)
 			.subscribe(() => {

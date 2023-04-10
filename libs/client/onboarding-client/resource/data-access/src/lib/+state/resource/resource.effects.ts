@@ -7,8 +7,12 @@ import {
 	OnboardingClientAuthService,
 	OnboardingClientResourceService,
 	OnboardingClientViewsService,
+	OnboardingClientTimesheetsService,
 } from '@tempus/client/onboarding-client/shared/data-access';
 import {
+	createTimesheet,
+	createTimesheetFailure,
+	createTimesheetSuccess,
 	getAllViewsByResourceId,
 	getResourceOriginalResumeById,
 	getResourceProjects,
@@ -36,6 +40,7 @@ export class ResourceEffects {
 		private authService: OnboardingClientAuthService,
 		private resourceService: OnboardingClientResourceService,
 		private viewsService: OnboardingClientViewsService,
+		private timesheetService: OnboardingClientTimesheetsService,
 	) {}
 
 	getResourceProjects$ = createEffect(() =>
@@ -107,6 +112,20 @@ export class ResourceEffects {
 						return downloadProfileByViewIdSuccess({ resume: res });
 					}),
 					catchError(error => of(downloadProfileByViewIdFailure({ error }))),
+				),
+			),
+		),
+	);
+
+	createTimesheet$ = createEffect(() =>
+		this.actions$.pipe(
+			ofType(createTimesheet),
+			switchMap(data =>
+				this.timesheetService.createTimesheet(data.createTimesheetDto).pipe(
+					map(createdTimesheet => {
+						return createTimesheetSuccess({ timesheet: createdTimesheet });
+					}),
+					catchError(error => of(createTimesheetFailure({ error }))),
 				),
 			),
 		),

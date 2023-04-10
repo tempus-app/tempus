@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { TimesheetEntity } from '@tempus/api/shared/entity';
+import { TimesheetEntity, UserEntity } from '@tempus/api/shared/entity';
 import { Repository } from 'typeorm';
 import { Timesheet, TimesheetRevisionType } from '@tempus/shared-domain';
 import { ApproveTimesheetDto, CreateTimesheetDto, UpdateTimesheetDto } from '@tempus/api/shared/dto';
@@ -113,7 +113,9 @@ export class TimesheetService {
 
 	async createTimesheet(timesheet: CreateTimesheetDto): Promise<Timesheet> {
 		const timesheetEntity = TimesheetEntity.fromDto(timesheet);
-		const supervisorEntity = await this.userService.getUserbyId(timesheet.supervisorId);
+		let supervisorEntity : UserEntity = null;
+		if(timesheet.supervisorId != undefined)
+			supervisorEntity = await this.userService.getUserbyId(timesheet.supervisorId);
 		const projectEntity = await this.projectService.getProjectInfo(timesheet.projectId);
 		const resourceEntity = await this.resourceService.getResourceInfo(timesheet.resourceId);
 		timesheetEntity.status = TimesheetRevisionType.NEW;

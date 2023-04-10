@@ -25,11 +25,12 @@
     <div fxLayout="column">
       <tempus-text-input
 				id="start-date"
-									[inputType]="InputType.DATE"
-									placeholder="{{ prefix + '.dates.startPlaceholder' | translate }}"
-									cssClass="secondary"
-									[control]="$any(createTimesheetForm).get('startDate')"
-								></tempus-text-input>
+        [inputType]="InputType.DATE"
+        placeholder="{{ prefix + '.dates.startPlaceholder' | translate }}"
+        cssClass="secondary"
+        [control]="$any(createTimesheetForm).get('startDate')"
+      >
+      </tempus-text-input>
       <tempus-text-input
         id="end-date"
         [inputType]="InputType.DATE"
