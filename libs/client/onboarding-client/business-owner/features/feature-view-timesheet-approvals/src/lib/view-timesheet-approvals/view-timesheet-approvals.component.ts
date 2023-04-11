@@ -142,11 +142,11 @@ export class ViewTimesheetApprovalsComponent implements OnInit, OnDestroy {
 			.subscribe(data => {
 				this.timesheetsTableData = [];
 				this.totalTimesheets = data.totalTimesheets;
-				console.log(data.totalTimesheets);
 				data.timesheets.forEach(timesheet => {
 					const startDate = new Date(timesheet.weekStartDate).toISOString().slice(0, 10);
 					const endDate = new Date(timesheet.weekEndDate).toISOString().slice(0, 10);
 					const status = timesheet.status.toString();
+
 					if(status != "NEW"){
 						this.timesheetsTableData.push({
 							resourceName : `${timesheet.resource.firstName} ${timesheet.resource.lastName}`,
