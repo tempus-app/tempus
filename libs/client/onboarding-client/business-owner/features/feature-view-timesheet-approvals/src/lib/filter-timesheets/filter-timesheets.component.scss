@@ -1,0 +1,25 @@
+@use 'components/helper' as c;
+@use 'abstracts/helper' as abs;
+
+ul {
+	list-style-type: none;
+	margin-top: 4px;
+	padding-left: 0px;
+	margin-bottom: 0px;
+}
+
+.filter-dropdown {
+	box-shadow: none;
+	border: none;
+}
+
+.filterControl {
+	margin: 15px;
+}
+
+.listItem {
+	padding-bottom: 10px;
+}
+.availabilityPanel {
+	padding-bottom: 0px;
+}

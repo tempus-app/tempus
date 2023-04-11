@@ -1,0 +1,55 @@
+<tempus-button
+	fxFlex="100%"
+	[buttonType]="ButtonType.FILTER"
+	[color]="'accent'"
+	[matMenuTriggerFor]="menu"
+></tempus-button>
+<mat-menu #menu="matMenu" fxFlex="min(50%, 10rem)" fxFlex.lt-md="50%">
+	<div (click)="$event.stopPropagation()">
+		<mat-expansion-panel class="filter-dropdown">
+			<mat-expansion-panel-header>
+				<mat-panel-title class="mat-body-2">
+					{{ prefix + 'filter.statusHeader' | translate }}
+				</mat-panel-title>
+			</mat-expansion-panel-header>
+			<div class="statusPanel">
+				<ul>
+					<li>
+						<mat-checkbox
+							class="listItem"
+							id="status"
+							[value]="TimesheetRevisionType.PENDING"
+							[formControl]="$any(filterForm).get('pendingTimesheet')"
+						>
+							<span class="mat-body-2">{{ prefix + 'filter.pendingTimesheet' | translate }}</span>
+						</mat-checkbox>
+					</li>
+					<li>
+						<mat-checkbox
+							class="listItem mat-body-2"
+							id="status"
+							[value]="TimesheetRevisionType.APPROVED"
+							[formControl]="$any(filterForm).get('approvedTimesheet')"
+						>
+							<span class="mat-body-2">{{ prefix + 'filter.approvedTimesheet' | translate }}</span>
+						</mat-checkbox>
+					</li>
+					<li>
+						<mat-checkbox
+							class="listItem"
+							id="status"
+							[value]="TimesheetRevisionType.NEW"
+							[formControl]="$any(filterForm).get('rejectedTimesheet')"
+						>
+							<span class="mat-body-2">{{ prefix + 'filter.rejectedTimesheet' | translate }}</span>
+						</mat-checkbox>
+					</li>
+				</ul>
+			</div>
+		</mat-expansion-panel>
+	</div>
+	<div (click)="$event.stopPropagation()" fxFlex fxLayoutGap="10" class="filterControl">
+		<tempus-button fxFlex="50%" [label]="'clear'" color="grey" (buttonClick)="selectClearFilter()"></tempus-button>
+		<tempus-button fxFlex="50%" [label]="'apply'" [color]="'accent'" (buttonClick)="selectFilter()"></tempus-button>
+	</div>
+</mat-menu>

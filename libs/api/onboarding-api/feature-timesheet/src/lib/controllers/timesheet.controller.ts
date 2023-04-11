@@ -2,7 +2,7 @@ import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Query,
 import { ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from '@tempus/api/shared/feature-auth';
 import { Timesheet } from '@tempus/shared-domain';
-import { CreateTimesheetDto, UpdateTimesheetDto } from '@tempus/api/shared/dto';
+import { ApproveTimesheetDto, CreateTimesheetDto, UpdateTimesheetDto } from '@tempus/api/shared/dto';
 import { TimesheetService } from '../services/timesheet.service';
 
 @ApiTags('Timesheet')
@@ -46,6 +46,15 @@ export class TimesheetController {
 	@Post('/')
 	async createTimesheet(@Body() timesheet: CreateTimesheetDto): Promise<Timesheet> {
 		return this.timesheetService.createTimesheet(timesheet);
+	}
+
+	@UseGuards(JwtAuthGuard)
+	@Patch('/approve/:timesheetId')
+	async updateTimesheetStatus(
+		@Param('timesheetId') timesheetId: number,
+		@Body() approveTimesheetDto: ApproveTimesheetDto,
+	) : Promise<Timesheet> {
+		return this.timesheetService.approveOrRejectTimesheet(timesheetId, approveTimesheetDto);
 	}
 
 	@UseGuards(JwtAuthGuard)

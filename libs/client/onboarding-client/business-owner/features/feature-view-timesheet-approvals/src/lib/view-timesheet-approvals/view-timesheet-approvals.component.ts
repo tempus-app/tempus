@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { TranslateService } from '@ngx-translate/core';
 import {
@@ -8,13 +8,20 @@ import {
 	selectLoggedInUserNameEmail,
 } from '@tempus/client/onboarding-client/shared/data-access';
 import { ButtonType, Column, MyTimesheetsTableData } from '@tempus/client/shared/ui-components/presentational';
-import { Subject, take, takeUntil } from 'rxjs';
+import { Subject, take, takeUntil, finalize } from 'rxjs';
 import {
 	getAllTimesheetsBySupervisorId,
 	BusinessOwnerState,
 	selectSupervisorTimesheets,
+	updateTimesheetStatusAsSupervisor,
 } from '@tempus/client/onboarding-client/business-owner/data-access';
 import { PageEvent } from '@angular/material/paginator';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { CustomModalType, ModalService, ModalType } from '@tempus/client/shared/ui-components/modal';
+import { InputType } from '@tempus/client/shared/ui-components/input';
+import { TimesheetRevisionType } from '@tempus/shared-domain';
+
+
 
 @Component({
 	selector: 'tempus-view-timesheet-approvals',
@@ -33,10 +40,19 @@ export class ViewTimesheetApprovalsComponent implements OnInit, OnDestroy {
 
 	totalTimesheets = 0;
 
+	InputType = InputType;
+
+	@ViewChild('approveTimesheetModal')
+	approveTimesheetModal!: TemplateRef<unknown>;
+
+	$approveTimesheetModalClosedEvent = new Subject<void>();
+
 	constructor(
 		private businessownerStore: Store<BusinessOwnerState>,
 		private translateService: TranslateService,
 		private sharedStore: Store<OnboardingClientState>,
+		private fb: FormBuilder,
+		private modalService: ModalService,
 	) {
 		const { currentLang } = translateService;
 		translateService.currentLang = '';
@@ -80,6 +96,10 @@ export class ViewTimesheetApprovalsComponent implements OnInit, OnDestroy {
 			});
 	}
 
+	approveTimesheetForm: FormGroup = this.fb.group({
+		comment: [''],
+	});
+
 	$destroyed = new Subject<void>();
 
 	timesheetsTableData: MyTimesheetsTableData[] = [];
@@ -105,6 +125,13 @@ export class ViewTimesheetApprovalsComponent implements OnInit, OnDestroy {
 				}
 			});
 
+			this.modalService.confirmEventSubject.pipe(takeUntil(this.$destroyed)).subscribe(modalId => {
+				this.modalService.close();
+				if (modalId === 'approveTimesheetModal') {
+					this.$approveTimesheetModalClosedEvent.next();
+				}
+			});
+
 		this.businessownerStore.dispatch(
 			getAllTimesheetsBySupervisorId({ supervisorId: this.userId, pageSize: this.pageSize, pageNum: this.pageNum }),
 		); 
@@ -119,23 +146,25 @@ export class ViewTimesheetApprovalsComponent implements OnInit, OnDestroy {
 					const startDate = new Date(timesheet.weekStartDate).toISOString().slice(0, 10);
 					const endDate = new Date(timesheet.weekEndDate).toISOString().slice(0, 10);
 					const status = timesheet.status.toString();
-					this.timesheetsTableData.push({
-						resourceName : `${timesheet.resource.firstName} ${timesheet.resource.lastName}`,
-						projectName :  timesheet.project.name,
-						startDate : startDate,
-						endDate : endDate,
-						totalTime : 30,
-						status : status,
-						columnsWithIcon: [],
-						columnsWithUrl: [],
-						columnsWithChips: ['status'],
-						columnsWithButtonIcon: [],
-					})
-				}) 
+
+					if(status != "NEW"){
+						this.timesheetsTableData.push({
+							resourceName : `${timesheet.resource.firstName} ${timesheet.resource.lastName}`,
+							projectName :  timesheet.project.name,
+							startDate : startDate,
+							endDate : endDate,
+							totalTime : 30,
+							status : status,
+							timesheetId : timesheet.id,
+							columnsWithIcon: [],
+							columnsWithUrl: [],
+							columnsWithChips: ['status'],
+							columnsWithButtonIcon: [],
+						})
+					}
+				})
+				console.log(this.timesheetsTableData); 
 			})
-
-			
-
 	}
 
 	ngOnDestroy(): void {
@@ -154,4 +183,72 @@ export class ViewTimesheetApprovalsComponent implements OnInit, OnDestroy {
 			getAllTimesheetsBySupervisorId({ supervisorId: this.userId, pageSize: this.pageSize, pageNum: this.pageNum }),
 		);
 	}
+
+	handleRowClick(event: MouseEvent): void {
+		const rowElement = (event.target as HTMLElement).closest('tr');
+		if (rowElement) {
+		  const rowIndex = rowElement.rowIndex - 1;
+		  const rowData = this.timesheetsTableData[rowIndex];
+
+
+		  this.translateService
+			.get(`${this.prefix}.approveTimesheetModal`)
+			.pipe(take(1))
+			.subscribe(data => {
+				this.modalService.open(
+					{
+						title: data.title,
+						id: 'approveTimesheetModal',
+						closable: true,
+						confirmText: data.confirmText,
+						modalType: ModalType.INFO,
+						//closeText: data.closeText,
+						template: this.approveTimesheetModal,
+						subtitle: data.subtitle,
+					},
+					CustomModalType.CONTENT,
+				);
+			});
+		this.modalService.confirmDisabled()?.next(true);
+		this.approveTimesheetForm?.valueChanges
+			.pipe(
+				takeUntil(this.$approveTimesheetModalClosedEvent),
+				finalize(() => {
+					const approveTimesheetDto = {
+					approval: true,
+					comment: this.approveTimesheetForm.get('comment')?.value,
+					}
+					this.businessownerStore.dispatch(updateTimesheetStatusAsSupervisor({timesheetId: rowData.timesheetId ,approveTimesheetDto: approveTimesheetDto}));
+					window.location.reload();
+				}),
+			)
+			.subscribe(() => {
+				if (this.approveTimesheetForm.valid) {
+					this.modalService.confirmDisabled()?.next(false);
+				} else {
+					this.modalService.confirmDisabled()?.next(true);
+				}
+			});
+
+		this.modalService
+			.closed()
+			.pipe(take(1))
+			.subscribe(() => {
+				this.resetModalData();
+			});
+		}
+	  }
+
+	  // Reset modal data
+	resetModalData() {
+		this.approveTimesheetForm = this.fb.group({
+			comment: ['']
+		});
+
+	}
+
+	rejectTimesheet(){}
+
+	approveTimesheet(){}
+
 }
