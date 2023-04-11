@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { TimesheetEntity } from '@tempus/api/shared/entity';
+import { TimesheetEntity, UserEntity } from '@tempus/api/shared/entity';
 import { Repository } from 'typeorm';
 import { Timesheet, TimesheetRevisionType } from '@tempus/shared-domain';
 import { ApproveTimesheetDto, CreateTimesheetDto, UpdateTimesheetDto } from '@tempus/api/shared/dto';
@@ -50,15 +50,26 @@ export class TimesheetService {
 		return timesheets;
 	}
 
-	async getAllTimesheetsBySupervisorId(supervisorId: number, page: number, pageSize: number){
+	async getAllTimesheetsByResourceId(resourceId: number, page: number, pageSize: number) {
 		const timesheetsAndCount = await this.timesheetRepository.findAndCount({
-			where: { supervisor: { id: supervisorId } },
-			relations: ['supervisor','project', 'resource'],
+			where: { resource: { id: resourceId } },
+			relations: ['supervisor', 'project', 'resource'],
 			take: Number(pageSize),
 			skip: Number(page) * Number(pageSize),
 		});
 
-		return {timesheets : timesheetsAndCount[0], totalTimesheets: timesheetsAndCount[1]};
+		return { timesheets: timesheetsAndCount[0], totalTimesheets: timesheetsAndCount[1] };
+	}
+
+	async getAllTimesheetsBySupervisorId(supervisorId: number, page: number, pageSize: number) {
+		const timesheetsAndCount = await this.timesheetRepository.findAndCount({
+			where: { supervisor: { id: supervisorId } },
+			relations: ['supervisor', 'project', 'resource'],
+			take: Number(pageSize),
+			skip: Number(page) * Number(pageSize),
+		});
+
+		return { timesheets: timesheetsAndCount[0], totalTimesheets: timesheetsAndCount[1] };
 	}
 
 	async getAllSubmittedTimesheetsforProject(projectId: number): Promise<Timesheet[]> {
@@ -87,6 +98,7 @@ export class TimesheetService {
 		if (!timesheetEntity) throw new NotFoundException(`Could not find timesheet with id ${timesheetId}`);
 
 		if (approval === true) {
+			timesheetEntity.approvedBySupervisor = true;
 			timesheetEntity.status = TimesheetRevisionType.APPROVED;
 			timesheetEntity.dateModified = new Date(Date.now());
 			timesheetEntity.supervisorComment = comment;
@@ -102,7 +114,9 @@ export class TimesheetService {
 
 	async createTimesheet(timesheet: CreateTimesheetDto): Promise<Timesheet> {
 		const timesheetEntity = TimesheetEntity.fromDto(timesheet);
-		const supervisorEntity = await this.userService.getUserbyId(timesheet.supervisorId);
+		let supervisorEntity : UserEntity = null;
+		if(timesheet.supervisorId != undefined)
+			supervisorEntity = await this.userService.getUserbyId(timesheet.supervisorId);
 		const projectEntity = await this.projectService.getProjectInfo(timesheet.projectId);
 		const resourceEntity = await this.resourceService.getResourceInfo(timesheet.resourceId);
 		timesheetEntity.status = TimesheetRevisionType.NEW;

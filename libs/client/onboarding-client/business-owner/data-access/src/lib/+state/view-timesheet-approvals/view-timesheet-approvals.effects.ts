@@ -5,7 +5,7 @@ import { Store } from '@ngrx/store';
 import { Injectable } from '@angular/core';
 import { BusinessOwnerState } from '..';
 import { OnboardingClientTimesheetsService } from '@tempus/client/onboarding-client/shared/data-access';
-import { getAllTimesheetsBySupervisorId, getAllTimesheetsBySupervisorIdSuccess, getAllTimesheetsBySupervisorIdFailure } from './view-timesheet-approvals.actions';
+import { getAllTimesheetsBySupervisorId, getAllTimesheetsBySupervisorIdSuccess, getAllTimesheetsBySupervisorIdFailure, updateTimesheetStatusAsSupervisor, updateTimesheetStatusAsSupervisorSuccess, updateTimesheetStatusAsSupervisorFailure } from './view-timesheet-approvals.actions';
 
 @Injectable()
 export class TimesheetEffects {
@@ -27,5 +27,19 @@ export class TimesheetEffects {
                 ),
             ),
         ),
+    );
+
+    updateTimesheetStatus$ = createEffect(() => 
+      this.actions$.pipe(
+        ofType(updateTimesheetStatusAsSupervisor),
+        switchMap(data =>
+            this.timesheetService.updateTimesheetStatusAsSupervisor(data.timesheetId, data.approveTimesheetDto).pipe(
+                map(_ => {
+                    return updateTimesheetStatusAsSupervisorSuccess();
+                }),
+                catchError(error => of(updateTimesheetStatusAsSupervisorFailure({ error }))),
+            ),
+        ),
+     ),
     );
 }

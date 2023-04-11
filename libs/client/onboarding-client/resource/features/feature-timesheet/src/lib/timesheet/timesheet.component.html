@@ -3,10 +3,47 @@
       <h2 class="mat-h2 page-title">{{ prefix + '.main.title' | translate }}</h2>
       <div id="button-container">
         <tempus-button
-            (buttonClick)="navigateToCreateNewView()"
+            (buttonClick)="createTimesheet()"
             [buttonType]="ButtonType.CREATE_NEW_TIMESHEET"
             color="accent"
         ></tempus-button>
     </div>
   </div>
-  <br>
+  <div id="table-container">
+    <tempus-table
+        (paginatorEvent)="tablePaginationEvent($event)"
+        [page]="pageNum"
+        [totalItems]="totalTimesheets"
+        [tableColumns]="tableColumns"
+        [tableData]="timesheetsTableData"
+    ></tempus-table>
+</div>
+
+<!-- Create timesheet modal -->
+<ng-template #createTimesheetModal>
+  <tempus-card style="margin-top: 1rem">
+    <div fxLayout="column">
+      <tempus-text-input
+				id="start-date"
+        [inputType]="InputType.DATE"
+        placeholder="{{ prefix + '.dates.startPlaceholder' | translate }}"
+        cssClass="secondary"
+        [control]="$any(createTimesheetForm).get('startDate')"
+      >
+      </tempus-text-input>
+      <tempus-text-input
+        id="end-date"
+        [inputType]="InputType.DATE"
+        placeholder="{{ prefix + '.dates.endPlaceholder' | translate }}"
+        cssClass="secondary"
+        [control]="$any(createTimesheetForm).get('endDate')"
+      ></tempus-text-input>
+      <tempus-dropdown
+            id="project-options"
+            [label]="prefix + '.createTimesheetModal.project' | translate"
+            [optionsWithId]="projectOptions"
+            [control]="$any(createTimesheetForm).get('project')">
+      </tempus-dropdown>
+    </div>
+  </tempus-card>
+</ng-template>
