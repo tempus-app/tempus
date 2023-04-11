@@ -66,6 +66,15 @@ const routes: Routes = [
 						m => m.OnboardingClientResourceFeatureTimesheetModule,
 					),
 			},
+			{
+				path: 'timesheet/:id',
+				canLoad: [AuthGuard],
+				canActivate: [AuthGuard],
+				loadChildren: () =>
+					import('@tempus/client/onboarding-client/resource/features/feature-timesheet').then(
+						m => m.OnboardingClientResourceFeatureTimesheetModule,
+					),
+			},
 		],
 	},
 ];

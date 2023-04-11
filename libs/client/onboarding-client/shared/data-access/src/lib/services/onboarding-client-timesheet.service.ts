@@ -11,6 +11,10 @@ export class OnboardingClientTimesheetsService {
 
 	timesheetURL = `${this.appConfig.apiUrl}/onboarding/timesheet`;
 
+	public getTimesheetById( timesheetId: number): Observable<Timesheet> {
+		return this.http.get<Timesheet>(`${this.timesheetURL}/${timesheetId}`).pipe(catchError(handleError));
+	}
+
 	public getTimesheetsBySupervisorId(
 		supervisorId: number,
 		page: number,
