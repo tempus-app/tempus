@@ -15,6 +15,23 @@ export const getResourceProjectsFailure = createAction(
 	props<{ error: Error }>(),
 );
 
+export const getResourceTimesheetbyId = createAction(
+	'[Onboarding Client Resource Timesheet Api] Get Resource Timesheet',
+	props<{ timesheetId: number }>(),
+	);
+
+export const getResourceTimesheetbyIdSuccess = createAction(
+	'[Onboarding Client Resource Timesheet Api] Get Resource Timesheet',
+	props<{
+		timesheet: Timesheet;
+	}>(),
+	);
+
+export const getResourceTimesheetbyIdFailure = createAction(
+	'[Onboarding Client Resource Timesheet Api] Get Resource Timesheet',
+	props<{ error: Error }>(),
+	);
+
 export const updateUserInfo = createAction(
 	'[Onboarding Client Api] Update Info',
 	props<{

@@ -18,6 +18,9 @@ import {
 	getResourceProjects,
 	getResourceProjectsFailure,
 	getResourceProjectsSuccess,
+	getResourceTimesheetbyId,
+	getResourceTimesheetbyIdSuccess,
+	getResourceTimesheetbyIdFailure,
 	updateInfoFailure,
 	updateUserInfo,
 	updateUserInfoSuccess,
@@ -56,6 +59,20 @@ export class ResourceEffects {
 			),
 		),
 	);
+
+	getResourceTimesheet$ = createEffect(() =>
+		this.actions$.pipe(
+			ofType(getResourceTimesheetbyId),
+			switchMap(action =>
+				this.timesheetService.getTimesheetById(action.timesheetId).pipe(
+					map(timesheet => {
+						return getResourceTimesheetbyIdSuccess({ timesheet: timesheet });
+					}),
+					catchError(error => of(getResourceTimesheetbyIdFailure({ error }))),
+				),
+			),
+		),
+	)
 
 	updateInfo$ = createEffect(() =>
 		this.actions$.pipe(

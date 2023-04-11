@@ -57,7 +57,7 @@ function createTranslateLoader(http: HttpClient) {
 				component: TimesheetComponent,
 			},
 			{
-				path: 'new',
+				path: 'edit/:id',
 				pathMatch: 'full',
 				component: CreateNewTimesheetComponent,
 			},

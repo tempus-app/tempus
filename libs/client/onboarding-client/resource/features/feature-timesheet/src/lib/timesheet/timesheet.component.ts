@@ -171,7 +171,7 @@ export class TimesheetComponent implements OnInit, OnDestroy {
 						totalTime : 0,
 						status : status,
             timesheetId: timesheet.id,
-						url: `../timesheet/new`,
+						url: `../timesheet/edit/${timesheet.id}`,
 						columnsWithIcon: [],
 						columnsWithUrl: ['resourceName'],
 						columnsWithChips: ['status'],
@@ -267,8 +267,8 @@ export class TimesheetComponent implements OnInit, OnDestroy {
 		});
 	}
 
-  navigateToCreateNewView() {
-		this.router.navigate(['./new'], { relativeTo: this.route });
+  navigateToCreateNewTimesheet() {
+		this.router.navigate(['./edit/0'], { relativeTo: this.route });
 	}
 
 

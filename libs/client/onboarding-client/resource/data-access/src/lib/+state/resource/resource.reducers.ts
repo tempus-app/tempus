@@ -14,6 +14,7 @@ export interface ResourceState {
 	totalViewsData: number;
 	projectResources: ProjectResource[];
 	createdTimesheet: null | Timesheet;
+	timesheet: null | Timesheet;
 }
 
 export const initialState: ResourceState = {
@@ -25,6 +26,7 @@ export const initialState: ResourceState = {
 	totalViewsData: 0,
 	projectResources: [],
 	createdTimesheet: null,
+	timesheet: null,
 };
 
 export const resourceReducer = createReducer(
@@ -35,6 +37,16 @@ export const resourceReducer = createReducer(
 		projectResources,
 	})),
 	on(ResourceActions.getResourceProjectsFailure, (state, { error }) => ({
+		...state,
+		status: AsyncRequestState.ERROR,
+		error,
+	})),
+	on(ResourceActions.getResourceTimesheetbyId, state => ({ ...state, status: AsyncRequestState.LOADING })),
+	on(ResourceActions.getResourceTimesheetbyIdSuccess, (state, { timesheet }) => ({
+		...state,
+		timesheet,
+	})),
+	on(ResourceActions.getResourceTimesheetbyIdFailure, (state, { error }) => ({
 		...state,
 		status: AsyncRequestState.ERROR,
 		error,

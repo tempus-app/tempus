@@ -10,11 +10,11 @@ import { TimesheetService } from '../services/timesheet.service';
 export class TimesheetController {
 	constructor(private timesheetService: TimesheetService) {}
 
-	/* @UseGuards(JwtAuthGuard)
+	@UseGuards(JwtAuthGuard)
 	@Get('/:timesheetId')
 	async getTimesheet(@Param('timesheetId') timesheetId: number) {
 		return this.timesheetService.getTimesheet(timesheetId);
-	} */
+	}
 
 	@UseGuards(JwtAuthGuard)
 	@Get('resource-timesheets/:resourceId')

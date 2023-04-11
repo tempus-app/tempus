@@ -19,6 +19,9 @@ export const selectResourceViews = createSelector(selectState, (state: ResourceS
 	return { views: state.views, totalViews: state.totalViewsData };
 });
 
+export const selectResourceTimesheet = createSelector(selectState, (state: ResourceState) => {
+	return { timesheet: state.timesheet };
+});
 export const selectResourceOriginalResume = createSelector(selectState, (state: ResourceState) => state.resume);
 
 export const selectDownloadProfile = createSelector(selectState, (state: ResourceState) => state.resume);
