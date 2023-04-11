@@ -11,6 +11,13 @@
 				"status": "Status"
 			},
 			"noPendingApprovals": "No Pending Approvals"
-		}
+		},
+		"approveTimesheetModal": {
+			"title": "Timesheet approval",
+			"subtitle": "Review the timesheet and approve or reject it",
+			"closeText": "Reject",
+			"confirmText": "Approve",
+			"supervisorComment": "Comments"
+		  }
 	}
 }

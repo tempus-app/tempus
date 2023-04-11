@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { IUpdateResourceDto, ProjectResource, View } from '@tempus/shared-domain';
+import { ICreateTimesheetDto, IUpdateResourceDto, ProjectResource, Timesheet, View } from '@tempus/shared-domain';
 
 export const getResourceProjects = createAction('[Onboarding Client Resource Project Api] Get Resource Projects');
 
@@ -81,5 +81,18 @@ export const downloadProfileByViewIdSuccess = createAction(
 
 export const downloadProfileByViewIdFailure = createAction(
 	'[Onboarding Client Profile Views API] Download Profile By View Id Failure',
+	props<{ error: Error }>(),
+);
+
+export const createTimesheet = createAction(
+	'[Onboarding Client Timesheet API] Create Timesheet',
+	props<{ createTimesheetDto: ICreateTimesheetDto }>(),
+);
+export const createTimesheetSuccess = createAction(
+	'[Onboarding Client Timesheet API] Create Timesheet Success',
+	props<{ timesheet: Timesheet }>(),
+);
+export const createTimesheetFailure = createAction(
+	'[Onboarding Client Timesheet API] Create Timesheet Failure',
 	props<{ error: Error }>(),
 );

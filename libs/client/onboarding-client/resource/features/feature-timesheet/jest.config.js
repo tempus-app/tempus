@@ -1,5 +1,5 @@
 module.exports = {
-	displayName: 'client-onboarding-client-resource-features-feature-timesheet-test',
+	displayName: 'client-onboarding-client-resource-features-feature-timesheet',
 	preset: '../../../../../../../jest.preset.js',
 	setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
 	globals: {
@@ -9,7 +9,7 @@ module.exports = {
 		},
 	},
 	coverageDirectory:
-		'../../../../../../../coverage/libs/client/onboarding-client/resource/features/feature-timesheet/test',
+		'../../../../../../../coverage/libs/client/onboarding-client/resource/features/feature-timesheet',
 	transform: {
 		'^.+\\.(ts|mjs|js|html)$': 'jest-preset-angular',
 	},

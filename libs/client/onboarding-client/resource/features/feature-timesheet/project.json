@@ -1,14 +1,14 @@
 {
 	"projectType": "library",
-	"root": "libs/client/onboarding-client/resource/features/feature-timesheet/test",
-	"sourceRoot": "libs/client/onboarding-client/resource/features/feature-timesheet/test/src",
+	"root": "libs/client/onboarding-client/resource/features/feature-timesheet",
+	"sourceRoot": "libs/client/onboarding-client/resource/features/feature-timesheet/src",
 	"prefix": "tempus",
 	"targets": {
 		"test": {
 			"executor": "@nrwl/jest:jest",
-			"outputs": ["coverage/libs/client/onboarding-client/resource/features/feature-timesheet/test"],
+			"outputs": ["coverage/libs/client/onboarding-client/resource/features/feature-timesheet"],
 			"options": {
-				"jestConfig": "libs/client/onboarding-client/resource/features/feature-timesheet/test/jest.config.js",
+				"jestConfig": "libs/client/onboarding-client/resource/features/feature-timesheet/jest.config.js",
 				"passWithNoTests": true
 			}
 		},
@@ -16,8 +16,8 @@
 			"executor": "@nrwl/linter:eslint",
 			"options": {
 				"lintFilePatterns": [
-					"libs/client/onboarding-client/resource/features/feature-timesheet/test/src/**/*.ts",
-					"libs/client/onboarding-client/resource/features/feature-timesheet/test/src/**/*.html"
+					"libs/client/onboarding-client/resource/features/feature-timesheet/src/**/*.ts",
+					"libs/client/onboarding-client/resource/features/feature-timesheet/src/**/*.html"
 				]
 			}
 		}

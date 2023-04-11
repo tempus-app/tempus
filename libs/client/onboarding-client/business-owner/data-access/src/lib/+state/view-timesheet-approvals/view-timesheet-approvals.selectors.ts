@@ -16,3 +16,10 @@ export const selectSupervisorTimesheets = createSelector(
 		};
 	},
 );
+
+export const selectTimesheetStatusUpdated = createSelector(
+	selectState,
+	(state: TimesheetState) => {
+		return state.timesheetStatusUpdated;
+	},
+);
