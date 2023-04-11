@@ -20,3 +20,8 @@
 	flex-direction: row;
 	gap: 0.5em;
 }
+
+.table-row:hover {
+	background-color: #b1b0b0 !important;
+	cursor: pointer;
+  }

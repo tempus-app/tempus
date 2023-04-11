@@ -9,11 +9,13 @@ export const TIMESHEET_MANAGE_FEATURE_KEY = 'timesheet';
 export interface TimesheetState {
     timesheets: Timesheet[];
 	totalTimesheetsData: number;
+	timesheetStatusUpdated: boolean;
 }
 
 export const initialState: TimesheetState = {
     timesheets: [],
 	totalTimesheetsData: 0,
+	timesheetStatusUpdated: false,
 };
 
 export const timesheetReducer = createReducer(
@@ -30,6 +32,22 @@ export const timesheetReducer = createReducer(
 		...state,
 		status: AsyncRequestState.ERROR,
 		error,
+	})),
+	on(TimesheetActions.updateTimesheetStatusAsSupervisor, state => ({
+		...state,
+		timesheetStatusUpdated: false,
+		status: AsyncRequestState.LOADING,
+	})),
+	on(TimesheetActions.updateTimesheetStatusAsSupervisorFailure, (state, { error }) => ({
+		...state,
+		error,
+		status: AsyncRequestState.ERROR,
+	})),
+	on(TimesheetActions.updateTimesheetStatusAsSupervisorSuccess, state => ({
+		...state,
+		timesheetStatusUpdated: true,
+		status: AsyncRequestState.SUCCESS,
+		error: null,
 	})),
 
 

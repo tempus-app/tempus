@@ -57,4 +57,5 @@ export interface MyTimesheetsTableData extends TableDataModel {
 	totalTime: number;
 	projectName: string;
 	status: string;
+	timesheetId: number;
 }

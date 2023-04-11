@@ -98,6 +98,7 @@ export class TimesheetService {
 		if (!timesheetEntity) throw new NotFoundException(`Could not find timesheet with id ${timesheetId}`);
 
 		if (approval === true) {
+			timesheetEntity.approvedBySupervisor = true;
 			timesheetEntity.status = TimesheetRevisionType.APPROVED;
 			timesheetEntity.dateModified = new Date(Date.now());
 			timesheetEntity.supervisorComment = comment;
