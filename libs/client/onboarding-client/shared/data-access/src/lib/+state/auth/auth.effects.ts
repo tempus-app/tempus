@@ -4,6 +4,8 @@ import { map, catchError } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import { decodeJwt } from '@tempus/client/shared/util';
+import { RoleType } from '@tempus/shared-domain';
 import { OnboardingClientState } from '../onboardingClient.state';
 import {
 	forgotPassword,
@@ -20,8 +22,6 @@ import {
 	resetPasswordSuccess,
 } from './auth.actions';
 import { OnboardingClientAuthService, OnboardingClientResourceService } from '../../services';
-import { decodeJwt } from '@tempus/client/shared/util';
-import { RoleType } from '@tempus/shared-domain';
 
 @Injectable()
 export class AuthEffects {
@@ -39,16 +39,16 @@ export class AuthEffects {
 			switchMap(action =>
 				this.authService.login(action.password, action.email).pipe(
 					map(data => {
-            const { roles } = decodeJwt(data.accessToken);
-            const rolesTyped: RoleType[] = roles.map(role => RoleType[role as keyof typeof RoleType]);
+						const { roles } = decodeJwt(data.accessToken);
+						const rolesTyped: RoleType[] = roles.map(role => RoleType[role as keyof typeof RoleType]);
 						return loginSuccess({
+							// loggedInUserId: data.loggedInUserId,
 							accessToken: data.accessToken,
 							refreshToken: data.refreshToken,
-							loggedInUserId: data.user.id,
 							firstName: data.user.firstName,
 							lastName: data.user.lastName,
 							email: data.user.email,
-              roles: rolesTyped
+							roles: rolesTyped,
 						});
 					}),
 					catchError(error => of(loginFailure({ error }))),
@@ -62,8 +62,7 @@ export class AuthEffects {
 			ofType(logout),
 			switchMap(options =>
 				this.authService.logout().pipe(
-					// eslint-disable-next-line @typescript-eslint/no-unused-vars
-					map(_ => {
+					map(() => {
 						this.authService.resetSessionStorage();
 						if (options.redirect) {
 							this.router.navigateByUrl('/signin');

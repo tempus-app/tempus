@@ -7,9 +7,15 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { ICreateLocationDto, IUpdateResourceDto } from '@tempus/shared-domain';
 import { TempusResourceState, updateUserInfo } from '@tempus/client/onboarding-client/resource/data-access';
 import {
+	getResourceInformation,
+	getResourceOriginalResumeById,
 	OnboardingClientResourceService,
+	OnboardingClientState,
+	selectResourceDetails,
+	selectResourceOriginalResume,
 	SessionStorageKey,
 } from '@tempus/client/onboarding-client/shared/data-access';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
 	selector: 'tempus-personal-information-display',
@@ -17,6 +23,8 @@ import {
 	styleUrls: ['./personal-information-display.component.scss'],
 })
 export class PersonalInformationDisplayComponent implements OnInit {
+	$destroyed = new Subject<void>();
+
 	UserType = UserType;
 
 	userId = 0;
@@ -60,6 +68,7 @@ export class PersonalInformationDisplayComponent implements OnInit {
 		private translateService: TranslateService,
 		private fb: FormBuilder,
 		private store: Store<TempusResourceState>,
+		private sharedStore: Store<OnboardingClientState>,
 	) {
 		const { currentLang } = translateService;
 		// eslint-disable-next-line no-param-reassign
@@ -68,27 +77,41 @@ export class PersonalInformationDisplayComponent implements OnInit {
 	}
 
 	ngOnInit(): void {
-		this.resourceService.getResourceInformation().subscribe(resData => {
-			this.userId = resData.id;
-			this.firstName = resData.firstName;
-			this.lastName = resData.lastName;
-			this.email = resData.email;
-			this.city = resData.location.city;
-			this.state = resData.location.province;
-			this.country = resData.location.country;
-			this.phoneNumber = resData.phoneNumber;
-			this.email = resData.email;
-			this.calEmail = resData.calEmail;
-			this.phoneNumber = resData.phoneNumber;
-			this.linkedInLink = resData.linkedInLink;
-			this.githubLink = resData.githubLink;
-			this.otherLink = resData.otherLink;
-			this.fullName = `${resData.firstName} ${resData.lastName}`;
-		});
+		this.sharedStore.dispatch(getResourceInformation());
 
-		this.resourceService.getResourceOriginalResumeById(this.userId).subscribe(resumeBlob => {
-			this.resume = new File([resumeBlob], 'original-resume.pdf');
-		});
+		this.sharedStore
+			.select(selectResourceDetails)
+			.pipe(takeUntil(this.$destroyed))
+			.subscribe(data => {
+				this.userId = data.userId;
+				this.firstName = data.firstName || '';
+				this.lastName = data.lastName || '';
+				this.city = data.city || '';
+				this.state = data.province || '';
+				this.country = data.country || '';
+				this.phoneNumber = data.phoneNumber || '';
+				this.email = data.email || '';
+				this.calEmail = data.calEmail || '';
+				this.linkedInLink = data.linkedInLink || '';
+				this.githubLink = data.githubLink || '';
+				this.otherLink = data.otherLink || '';
+				this.fullName = `${data.firstName} ${data.lastName}`;
+			});
+
+		this.sharedStore.dispatch(getResourceOriginalResumeById({ resourceId: this.userId }));
+
+		this.sharedStore
+			.select(selectResourceOriginalResume)
+			.pipe(takeUntil(this.$destroyed))
+			.subscribe(blob => {
+				if (blob) {
+					this.resume = new File([blob], 'original-resume.pdf');
+				}
+			});
+
+		// this.resourceService.getResourceOriginalResumeById(this.userId).subscribe(resumeBlob => {
+		// 	this.resume = new File([resumeBlob], 'original-resume.pdf');
+		// });
 	}
 
 	loadPersonalInfo(eventData: FormGroup) {

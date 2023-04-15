@@ -1,7 +1,17 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Store } from '@ngrx/store';
 import { TranslateService } from '@ngx-translate/core';
-import { OnboardingClientResourceService } from '@tempus/client/onboarding-client/shared/data-access';
+import {
+	createResourceView,
+	getAllViewsByResourceId,
+	getResourceInformation,
+	OnboardingClientResourceService,
+	OnboardingClientState,
+	selectResourceDetails,
+	selectResourceViews,
+	selectView,
+} from '@tempus/client/onboarding-client/shared/data-access';
 import { CustomModalType, ModalService, ModalType } from '@tempus/client/shared/ui-components/modal';
 import { EditViewFormComponent } from '@tempus/onboarding-client/shared/feature-edit-view-form';
 import { RevisionType, ViewType } from '@tempus/shared-domain';
@@ -20,6 +30,7 @@ export class CreateNewViewComponent implements OnInit, OnDestroy {
 		public modalService: ModalService,
 		private resourceService: OnboardingClientResourceService,
 		private translateService: TranslateService,
+		private sharedStore: Store<OnboardingClientState>,
 	) {
 		const { currentLang } = translateService;
 		// eslint-disable-next-line no-param-reassign
@@ -34,13 +45,21 @@ export class CreateNewViewComponent implements OnInit, OnDestroy {
 	destroyed$ = new Subject<void>();
 
 	ngOnInit(): void {
-		this.resourceService
-			.getResourceInformation()
+		this.sharedStore.dispatch(getResourceInformation());
+		this.sharedStore
+			.select(selectResourceDetails)
 			.pipe(take(1))
 			.subscribe(resData => {
-				this.userId = resData.id;
-				this.resourceService
-					.getResourceProfileViews(this.userId)
+				this.userId = resData.userId;
+				this.sharedStore.dispatch(
+					getAllViewsByResourceId({
+						resourceId: this.userId,
+						pageSize: 1000,
+						pageNum: 0,
+					}),
+				);
+				this.sharedStore
+					.select(selectResourceViews)
 					.pipe(takeUntil(this.destroyed$))
 					.subscribe(data => {
 						const approvedPrimaryView = data.views?.find(
@@ -52,6 +71,25 @@ export class CreateNewViewComponent implements OnInit, OnDestroy {
 						}
 					});
 			});
+
+		// this.resourceService
+		// 	.getResourceInformation()
+		// 	.pipe(take(1))
+		// 	.subscribe(resData => {
+		// 		this.userId = resData.id;
+		// 		this.resourceService
+		// 			.getResourceProfileViews(this.userId)
+		// 			.pipe(takeUntil(this.destroyed$))
+		// 			.subscribe(data => {
+		// 				const approvedPrimaryView = data.views?.find(
+		// 					view => view.revisionType === RevisionType.APPROVED && view.viewType === ViewType.PRIMARY,
+		// 				);
+		// 				if (approvedPrimaryView) {
+		// 					this.newViewForm.setFormDataFromView(approvedPrimaryView);
+		// 					this.newViewForm.enableViewNameField();
+		// 				}
+		// 			});
+		// 	});
 	}
 
 	submitChanges() {
@@ -62,14 +100,24 @@ export class CreateNewViewComponent implements OnInit, OnDestroy {
 
 	createNewView() {
 		const newView = this.newViewForm.generateNewView();
-		this.resourceService
-			.createSecondaryView(this.userId, newView)
-			.pipe(take(1))
-			.subscribe(view => {
-				this.router.navigate(['../', view.id], {
+		this.sharedStore.dispatch(createResourceView({ resourceId: this.userId, newView }));
+		this.sharedStore
+			.select(selectView)
+			.pipe(takeUntil(this.destroyed$))
+			.subscribe(resourceView => {
+				this.router.navigate(['../', resourceView?.id], {
 					relativeTo: this.route,
 				});
 			});
+
+		// this.resourceService
+		// 	.createSecondaryView(this.userId, newView)
+		// 	.pipe(take(1))
+		// 	.subscribe(view => {
+		// 		this.router.navigate(['../', view.id], {
+		// 			relativeTo: this.route,
+		// 		});
+		// 	});
 	}
 
 	openSubmitConfirmation() {

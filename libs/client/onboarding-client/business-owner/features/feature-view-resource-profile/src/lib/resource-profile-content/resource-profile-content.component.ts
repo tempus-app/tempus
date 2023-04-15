@@ -21,13 +21,22 @@ import {
 	ProjectResource,
 	ViewType,
 } from '@tempus/shared-domain';
-import { OnboardingClientResourceService } from '@tempus/client/onboarding-client/shared/data-access';
+import {
+	approveOrDenyRevision,
+	getAllViewsByResourceId,
+	getViewById,
+	OnboardingClientResourceService,
+	OnboardingClientState,
+	selectResourceViews,
+	selectView,
+} from '@tempus/client/onboarding-client/shared/data-access';
 import { ModalService, CustomModalType, ModalType } from '@tempus/client/shared/ui-components/modal';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, Validators } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
-import { take } from 'rxjs';
+import { Subject, take, takeUntil } from 'rxjs';
 import { sortViewsByLatestUpdated } from '@tempus/client/shared/util';
+import { Store } from '@ngrx/store';
 
 @Component({
 	selector: 'tempus-resource-profile-content',
@@ -41,8 +50,8 @@ export class ResourceProfileContentComponent implements OnInit, OnChanges {
 		private route: ActivatedRoute,
 		private fb: FormBuilder,
 		public modalService: ModalService,
-		private resourceService: OnboardingClientResourceService,
 		private translateService: TranslateService,
+		private sharedStore: Store<OnboardingClientState>,
 	) {
 		const { currentLang } = translateService;
 		// eslint-disable-next-line no-param-reassign
@@ -95,6 +104,8 @@ export class ResourceProfileContentComponent implements OnInit, OnChanges {
 	@Input()
 	projectResources: ProjectResource[] = [];
 
+	$destroyed = new Subject<void>();
+
 	experiencesSummary = '';
 
 	educationsSummary = '';
@@ -139,87 +150,174 @@ export class ResourceProfileContentComponent implements OnInit, OnChanges {
 
 	ngOnInit() {
 		const id = parseInt(this.route.snapshot.paramMap.get('id') || '0', 10);
-		this.resourceService.getResourceProfileViews(id).subscribe(data => {
-			this.viewID = data.views[0].id;
+		this.sharedStore.dispatch(getAllViewsByResourceId({ resourceId: id, pageNum: 0, pageSize: 1000 }));
+		this.sharedStore
+			.select(selectResourceViews)
+			.pipe(takeUntil(this.$destroyed))
+			.subscribe(data => {
+				this.viewID = data?.views[0].id;
 
-			// Load view that needs approval
-			const sortedViews = sortViewsByLatestUpdated(data.views);
-			let latestView = sortedViews[0];
+				// Load view that needs approval
+				const sortedViews = sortViewsByLatestUpdated(data?.views);
+				let latestView = sortedViews[0];
 
-			// If no approvals, display approved Primary view
-			if (latestView.revisionType !== RevisionType.PENDING) {
-				const approvedViews = sortedViews.filter(
-					view => view.viewType === ViewType.PRIMARY && view.revisionType === RevisionType.APPROVED,
-				);
-				const [view] = approvedViews;
-				latestView = view;
-			}
-			// if param is passed, we load the id
-			const currentViewId = parseInt(this.route.snapshot.queryParamMap.get('viewId') || '0', 10);
-			// if param is not passed, we load the latest id and set viewId to that param
-			if (!currentViewId) {
-				this.router.navigate([], {
-					relativeTo: this.route,
-					queryParams: { viewId: latestView.id },
-					replaceUrl: true,
-				});
-			}
-
-			const set = new Set();
-			const uniqueViewNames = sortedViews.filter(item => {
-				const viewExists = set.has(item.type);
-				// Filter out rejected views
-				if (item.revisionType === RevisionType.REJECTED) {
-					return false;
+				// If no approvals, display approved Primary view
+				if (latestView.revisionType !== RevisionType.PENDING) {
+					const approvedViews = sortedViews.filter(
+						view => view.viewType === ViewType.PRIMARY && view.revisionType === RevisionType.APPROVED,
+					);
+					const [view] = approvedViews;
+					latestView = view;
+				}
+				// if param is passed, we load the id
+				const currentViewId = parseInt(this.route.snapshot.queryParamMap.get('viewId') || '0', 10);
+				// if param is not passed, we load the latest id and set viewId to that param
+				if (!currentViewId) {
+					this.router.navigate([], {
+						relativeTo: this.route,
+						queryParams: { viewId: latestView.id },
+						replaceUrl: true,
+					});
 				}
 
-				// Filter out views that have been renamed
-				if (item.revision) {
-					const latestViews = sortViewsByLatestUpdated(item.revision.views);
-					if (latestViews[0].type !== item.type) {
+				const set = new Set();
+				const uniqueViewNames = sortedViews.filter(item => {
+					const viewExists = set.has(item.type);
+					// Filter out rejected views
+					if (item.revisionType === RevisionType.REJECTED) {
 						return false;
 					}
-				}
 
-				set.add(item.type);
-				return !viewExists;
+					// Filter out views that have been renamed
+					if (item.revision) {
+						const latestViews = sortViewsByLatestUpdated(item.revision.views);
+						if (latestViews[0].type !== item.type) {
+							return false;
+						}
+					}
+
+					set.add(item.type);
+					return !viewExists;
+				});
+				this.loadView(currentViewId || latestView.id, uniqueViewNames);
+				this.dataLoaded = true;
 			});
-			this.loadView(currentViewId || latestView.id, uniqueViewNames);
-			this.dataLoaded = true;
-		});
+
+		// this.resourceService.getResourceProfileViews(id).subscribe(data => {
+		// 	this.viewID = data.views[0].id;
+
+		// 	// Load view that needs approval
+		// 	const sortedViews = sortViewsByLatestUpdated(data.views);
+		// 	let latestView = sortedViews[0];
+
+		// 	// If no approvals, display approved Primary view
+		// 	if (latestView.revisionType !== RevisionType.PENDING) {
+		// 		const approvedViews = sortedViews.filter(
+		// 			view => view.viewType === ViewType.PRIMARY && view.revisionType === RevisionType.APPROVED,
+		// 		);
+		// 		const [view] = approvedViews;
+		// 		latestView = view;
+		// 	}
+		// 	// if param is passed, we load the id
+		// 	const currentViewId = parseInt(this.route.snapshot.queryParamMap.get('viewId') || '0', 10);
+		// 	// if param is not passed, we load the latest id and set viewId to that param
+		// 	if (!currentViewId) {
+		// 		this.router.navigate([], {
+		// 			relativeTo: this.route,
+		// 			queryParams: { viewId: latestView.id },
+		// 			replaceUrl: true,
+		// 		});
+		// 	}
+
+		// 	const set = new Set();
+		// 	const uniqueViewNames = sortedViews.filter(item => {
+		// 		const viewExists = set.has(item.type);
+		// 		// Filter out rejected views
+		// 		if (item.revisionType === RevisionType.REJECTED) {
+		// 			return false;
+		// 		}
+
+		// 		// Filter out views that have been renamed
+		// 		if (item.revision) {
+		// 			const latestViews = sortViewsByLatestUpdated(item.revision.views);
+		// 			if (latestViews[0].type !== item.type) {
+		// 				return false;
+		// 			}
+		// 		}
+
+		// 		set.add(item.type);
+		// 		return !viewExists;
+		// 	});
+		// 	this.loadView(currentViewId || latestView.id, uniqueViewNames);
+		// });
 	}
 
 	loadView(viewID: number, profileViews?: ViewNames[]) {
 		this.viewID = viewID;
-		this.resourceService.getViewById(viewID).subscribe(resourceView => {
-			this.certifications = resourceView.certifications;
-			this.educations = resourceView.educations;
-			this.educationsSummary = resourceView.educationsSummary;
-			this.workExperiences = resourceView.experiences;
-			this.experiencesSummary = resourceView.experiencesSummary;
-			this.profileSummary = resourceView.profileSummary;
-			this.skills = resourceView.skills.map((skill: Skill) => skill.skill.name);
-			this.skillsSummary = resourceView.skillsSummary;
-			this.viewName = resourceView.type;
+		this.sharedStore.dispatch(getViewById({ viewId: this.viewID }));
+		this.sharedStore
+			.select(selectView)
+			.pipe(takeUntil(this.$destroyed))
+			.subscribe(resourceView => {
+				if (resourceView) {
+					this.certifications = resourceView.certifications;
+					this.educations = resourceView.educations;
+					this.educationsSummary = resourceView.educationsSummary;
+					this.workExperiences = resourceView.experiences;
+					this.experiencesSummary = resourceView.experiencesSummary;
+					this.profileSummary = resourceView.profileSummary;
+					this.skills = resourceView.skills.map((skill: Skill) => skill.skill.name);
+					this.skillsSummary = resourceView.skillsSummary;
+					this.viewName = resourceView.type;
 
-			if (resourceView.revisionType === RevisionType.PENDING) {
-				this.isRevision = true;
-			} else {
-				this.isRevision = false;
-			}
-			if (profileViews) {
-				this.revisionViewLoaded.emit({
-					isRevision: this.isRevision,
-					currentViewName: this.viewName,
-					resourceViews: profileViews,
-				});
-			} else {
-				this.revisionViewLoaded.emit({
-					isRevision: this.isRevision,
-					currentViewName: this.viewName,
-				});
-			}
-		});
+					if (resourceView.revisionType === RevisionType.PENDING) {
+						this.isRevision = true;
+					} else {
+						this.isRevision = false;
+					}
+					if (profileViews) {
+						this.revisionViewLoaded.emit({
+							isRevision: this.isRevision,
+							currentViewName: this.viewName,
+							resourceViews: profileViews,
+						});
+					} else {
+						this.revisionViewLoaded.emit({
+							isRevision: this.isRevision,
+							currentViewName: this.viewName,
+						});
+					}
+				}
+			});
+		// this.resourceService.getViewById(viewID).subscribe(resourceView => {
+		// 	this.certifications = resourceView.certifications;
+		// 	this.educations = resourceView.educations;
+		// 	this.educationsSummary = resourceView.educationsSummary;
+		// 	this.workExperiences = resourceView.experiences;
+		// 	this.experiencesSummary = resourceView.experiencesSummary;
+		// 	this.profileSummary = resourceView.profileSummary;
+		// 	this.skills = resourceView.skills.map((skill: Skill) => skill.skill.name);
+		// 	this.skillsSummary = resourceView.skillsSummary;
+		// 	this.viewName = resourceView.type;
+
+		// 	if (resourceView.revisionType === RevisionType.PENDING) {
+		// 		this.isRevision = true;
+		// 	} else {
+		// 		this.isRevision = false;
+		// 	}
+		// 	if (profileViews) {
+		// 		this.revisionViewLoaded.emit({
+		// 			isRevision: this.isRevision,
+		// 			currentViewName: this.viewName,
+		// 			resourceViews: profileViews,
+		// 		});
+		// 	} else {
+		// 		this.revisionViewLoaded.emit({
+		// 			isRevision: this.isRevision,
+		// 			currentViewName: this.viewName,
+		// 		});
+		// 	}
+		// });
 	}
 
 	openRejectionDialog() {
@@ -243,14 +341,22 @@ export class ResourceProfileContentComponent implements OnInit, OnChanges {
 
 		this.modalService.confirmEventSubject.subscribe(() => {
 			this.modalService.close();
-			this.resourceService
-				.approveOrDenyRevision(
-					this.viewID,
+			this.sharedStore.dispatch(
+				approveOrDenyRevision({
+					viewId: this.viewID,
 					// eslint-disable-next-line @typescript-eslint/dot-notation
-					this.viewResourceProfileForm.controls['rejectionComments'].value,
-					false,
-				)
-				.subscribe();
+					comment: this.viewResourceProfileForm.controls['rejectionComments'].value,
+					approval: false,
+				}),
+			);
+			// this.resourceService
+			// 	.approveOrDenyRevision(
+			// 		this.viewID,
+			// 		// eslint-disable-next-line @typescript-eslint/dot-notation
+			// 		this.viewResourceProfileForm.controls['rejectionComments'].value,
+			// 		false,
+			// 	)
+			// 	.subscribe();
 			this.modalService.confirmEventSubject.unsubscribe();
 			this.router.navigate(['../../manage-resources'], { relativeTo: this.route }).then(() => {
 				window.location.reload();
@@ -279,7 +385,15 @@ export class ResourceProfileContentComponent implements OnInit, OnChanges {
 
 		this.modalService.confirmEventSubject.subscribe(() => {
 			this.modalService.close();
-			this.resourceService.approveOrDenyRevision(this.viewID, '', true).subscribe();
+			this.sharedStore.dispatch(
+				approveOrDenyRevision({
+					viewId: this.viewID,
+					// eslint-disable-next-line @typescript-eslint/dot-notation
+					comment: '',
+					approval: true,
+				}),
+			);
+			// this.resourceService.approveOrDenyRevision(this.viewID, '', true).subscribe();
 			this.modalService.confirmEventSubject.unsubscribe();
 			this.router.navigate(['../../manage-resources'], { relativeTo: this.route }).then(() => {
 				window.location.reload();

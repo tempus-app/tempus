@@ -12,6 +12,7 @@ export interface ResourceState {
 	views: View[] | null;
 	resume: Blob | null;
 	totalViewsData: number;
+	error: Error | null;
 	projectResources: ProjectResource[];
 }
 
@@ -22,6 +23,7 @@ export const initialState: ResourceState = {
 	views: null,
 	resume: null,
 	totalViewsData: 0,
+	error: null,
 	projectResources: [],
 };
 
@@ -62,24 +64,24 @@ export const resourceReducer = createReducer(
 		error,
 		status: AsyncRequestState.ERROR,
 	})),
-	on(ResourceActions.getResourceOriginalResumeById, state => ({ ...state, status: AsyncRequestState.LOADING })),
-	on(ResourceActions.getResourceOriginalResumeByIdSuccess, (state, { resume }) => ({
-		...state,
-		resume,
-		status: AsyncRequestState.SUCCESS,
-	})),
-	on(ResourceActions.getResourceOriginalResumeByIdFailure, (state, { error }) => ({
-		...state,
-		error,
-	})),
-	on(ResourceActions.downloadProfileByViewId, state => ({ ...state, status: AsyncRequestState.LOADING })),
-	on(ResourceActions.downloadProfileByViewIdSuccess, (state, { resume }) => ({
-		...state,
-		resume,
-		status: AsyncRequestState.SUCCESS,
-	})),
-	on(ResourceActions.downloadProfileByViewIdFailure, (state, { error }) => ({
-		...state,
-		error,
-	})),
+	// on(ResourceActions.getResourceOriginalResumeById, state => ({ ...state, status: AsyncRequestState.LOADING })),
+	// on(ResourceActions.getResourceOriginalResumeByIdSuccess, (state, { resume }) => ({
+	// 	...state,
+	// 	resume,
+	// 	status: AsyncRequestState.SUCCESS,
+	// })),
+	// on(ResourceActions.getResourceOriginalResumeByIdFailure, (state, { error }) => ({
+	// 	...state,
+	// 	error,
+	// })),
+	// on(ResourceActions.downloadProfileByViewId, state => ({ ...state, status: AsyncRequestState.LOADING })),
+	// on(ResourceActions.downloadProfileByViewIdSuccess, (state, { resume }) => ({
+	// 	...state,
+	// 	resume,
+	// 	status: AsyncRequestState.SUCCESS,
+	// })),
+	// on(ResourceActions.downloadProfileByViewIdFailure, (state, { error }) => ({
+	// 	...state,
+	// 	error,
+	// })),
 );

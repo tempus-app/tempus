@@ -107,6 +107,7 @@ export class OnboardingClientResourceService {
 	}
 
 	// TODO: look into moving to views service
+	// DELETE
 	public getViewById(viewId: number): Observable<View> {
 		return this.http.get<View>(`${this.url}/profile-view/view/${viewId}`).pipe(catchError(handleError));
 	}
@@ -118,12 +119,14 @@ export class OnboardingClientResourceService {
 			.pipe(catchError(handleError));
 	}
 
+	// DELETE
 	public createSecondaryView(resourceId: number, newView: ICreateViewDto): Observable<View> {
 		return this.http
 			.post<View>(`${this.url}/profile-view/${resourceId}/new-view`, newView)
 			.pipe(catchError(handleError));
 	}
 
+	// DELETE
 	public editResourceView(viewId: number, newView: ICreateViewDto): Observable<Revision> {
 		return this.http.patch<Revision>(`${this.url}/profile-view/${viewId}`, newView).pipe(catchError(handleError));
 	}
@@ -141,6 +144,7 @@ export class OnboardingClientResourceService {
 		return this.http.get<Blob>(`${this.url}/profile-view/download-resume/${viewId}`, httpOptions);
 	}
 
+	// DELETE
 	public approveOrDenyRevision(id: number, comment: string, approval: boolean): Observable<ApproveViewDto> {
 		return this.http
 			.post<ApproveViewDto>(`${this.url}/profile-view/approve/${id}`, { comment, approval })

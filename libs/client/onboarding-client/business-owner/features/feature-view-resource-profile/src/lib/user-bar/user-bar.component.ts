@@ -1,16 +1,19 @@
 /* eslint-disable @typescript-eslint/dot-notation */
 import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
-import { LoadView, ProjectResource, RoleType, ViewNames } from '@tempus/shared-domain';
 import {
-	OnboardingClientResourceService,
+	downloadProfileByViewId,
+	OnboardingClientState,
 	OnboardingClientViewsService,
+	selectDownloadProfile,
 } from '@tempus/client/onboarding-client/shared/data-access';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder } from '@angular/forms';
+import { Store } from '@ngrx/store';
+import { catchError, of, Subject, take, takeUntil } from 'rxjs';
+import { LoadView, ProjectResource, RoleType, ViewNames } from '@tempus/shared-domain';
 import { ButtonType, SnackbarService } from '@tempus/client/shared/ui-components/presentational';
 import { ModalService, ModalType, CustomModalType } from '@tempus/client/shared/ui-components/modal';
 import { TranslateService } from '@ngx-translate/core';
-import { catchError, of, Subject, take, takeUntil } from 'rxjs';
 import { isValidRole } from '@tempus/client/shared/util';
 
 @Component({
@@ -46,6 +49,8 @@ export class UserBarComponent implements OnChanges {
 
 	viewResourceProfilePrefx = 'viewResourceProfile.';
 
+	destroyed$ = new Subject<void>();
+	// eslint-disable-next-line @typescript-eslint/lines-between-class-members
 	isValidRole = isValidRole;
 
 	roleType = RoleType;
@@ -56,12 +61,12 @@ export class UserBarComponent implements OnChanges {
 
 	constructor(
 		private route: ActivatedRoute,
-		private resourceService: OnboardingClientResourceService,
-		private viewsService: OnboardingClientViewsService,
 		private modalService: ModalService,
 		private translateService: TranslateService,
+		private viewsService: OnboardingClientViewsService,
 		private fb: FormBuilder,
 		private router: Router,
+		private sharedStore: Store<OnboardingClientState>,
 		private snackbar: SnackbarService,
 	) {
 		const { currentLang } = translateService;
@@ -69,8 +74,6 @@ export class UserBarComponent implements OnChanges {
 		translateService.currentLang = '';
 		translateService.use(currentLang);
 	}
-
-	destroyed$ = new Subject<void>();
 
 	ngOnChanges(): void {
 		if (this.loadedView.resourceViews) {
@@ -87,14 +90,29 @@ export class UserBarComponent implements OnChanges {
 
 	downloadProfile() {
 		// Taken from https://stackoverflow.com/questions/52154874/angular-6-downloading-file-from-rest-api
-		this.resourceService.downloadProfile(this.currentViewID).subscribe(data => {
-			const downloadURL = window.URL.createObjectURL(data);
-			const link = document.createElement('a');
-			link.href = downloadURL;
-			const index = this.viewIDs.indexOf(this.currentViewID);
-			link.download = `${this.resourceName}-${this.viewNames[index]}`;
-			link.click();
-		});
+		this.sharedStore.dispatch(downloadProfileByViewId({ viewId: this.currentViewID }));
+
+		this.sharedStore
+			.select(selectDownloadProfile)
+			.pipe(takeUntil(this.destroyed$))
+			.subscribe(data => {
+				if (data) {
+					const downloadURL = window.URL.createObjectURL(data);
+					const link = document.createElement('a');
+					link.href = downloadURL;
+					const index = this.viewIDs.indexOf(this.currentViewID);
+					link.download = `${this.resourceName}-${this.viewNames[index]}`;
+					link.click();
+				}
+			});
+		// this.resourceService.downloadProfile(this.currentViewID).subscribe(data => {
+		// 	const downloadURL = window.URL.createObjectURL(data);
+		// 	const link = document.createElement('a');
+		// 	link.href = downloadURL;
+		// 	const index = this.viewIDs.indexOf(this.currentViewID);
+		// 	link.download = `${this.resourceName}-${this.viewNames[index]}`;
+		// 	link.click();
+		// });
 		this.translateService
 			.get(`${this.viewResourceProfilePrefx}downloadDialog`)
 			.pipe(take(1))
@@ -132,6 +150,7 @@ export class UserBarComponent implements OnChanges {
 		this.modalService.confirmEventSubject.pipe(take(1)).subscribe(() => {
 			this.modalService.close();
 
+			// convert to store
 			this.viewsService
 				.deleteView(this.currentViewID)
 				.pipe(catchError(error => of(error)))

@@ -12,16 +12,16 @@ import {
 	selectProjStatusUpdated,
 	updateProjStatus,
 } from '@tempus/client/onboarding-client/business-owner/data-access';
-import { Column, ViewProjects, ButtonType } from '@tempus/client/shared/ui-components/presentational';
-import { take, Subject, takeUntil, finalize, skip } from 'rxjs';
-import { CustomModalType, ModalService, ModalType } from '@tempus/client/shared/ui-components/modal';
-import { FormBuilder, Validators } from '@angular/forms';
-import { ErorType, ProjectStatus, RoleType } from '@tempus/shared-domain';
 import {
 	AsyncRequestState,
 	OnboardingClientState,
 	selectLoggedInUserNameEmail,
 } from '@tempus/client/onboarding-client/shared/data-access';
+import { Column, ViewProjects, ButtonType } from '@tempus/client/shared/ui-components/presentational';
+import { take, Subject, takeUntil, finalize, skip } from 'rxjs';
+import { CustomModalType, ModalService, ModalType } from '@tempus/client/shared/ui-components/modal';
+import { FormBuilder, Validators } from '@angular/forms';
+import { ErorType, ProjectStatus, RoleType } from '@tempus/shared-domain';
 import { isValidRole } from '@tempus/client/shared/util';
 
 @Component({
@@ -192,6 +192,7 @@ export class ViewProjectsComponent implements OnInit {
 			});
 	}
 
+	// eslint-disable-next-line @typescript-eslint/member-ordering
 	isValidRole = isValidRole;
 
 	openErrorModal = (errorMessage: string) => {

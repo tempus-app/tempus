@@ -9,11 +9,11 @@ export const AUTH_FEATURE_KEY = 'auth';
 export interface AuthState {
 	accessToken: string | null;
 	refreshToken: string | null;
-	loggedInUserId: number | null;
 	firstName: string | null;
 	lastName: string | null;
+	// loggedInUserId: number | null;
 	email: string | null;
-  roles: RoleType[];
+	roles: RoleType[];
 	error: Error | null;
 	status: AsyncRequestState;
 }
@@ -21,27 +21,27 @@ export interface AuthState {
 export const initialState: AuthState = {
 	accessToken: null,
 	refreshToken: null,
-	loggedInUserId: null,
 	error: null,
 	firstName: null,
 	lastName: null,
+	// loggedInUserId: null,
 	email: null,
-  roles: [],
+	roles: [],
 	status: AsyncRequestState.IDLE,
 };
 
 export const authReducer = createReducer(
 	initialState,
 	on(AuthActions.login, state => ({ ...state, status: AsyncRequestState.LOADING })),
-	on(AuthActions.loginSuccess, (state, { accessToken, refreshToken, loggedInUserId, firstName, lastName, email, roles }) => ({
+	on(AuthActions.loginSuccess, (state, { accessToken, refreshToken, firstName, lastName, email, roles }) => ({
 		...state,
 		accessToken,
 		refreshToken,
-		loggedInUserId,
+		// loggedInUserId,
 		firstName,
 		lastName,
 		email,
-    roles,
+		roles,
 		status: AsyncRequestState.SUCCESS,
 		error: null,
 	})),
