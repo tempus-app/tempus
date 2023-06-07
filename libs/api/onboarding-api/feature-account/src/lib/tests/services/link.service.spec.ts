@@ -184,19 +184,6 @@ describe('LinkService', () => {
 			expect(mockLinkRepository.save).not.toBeCalled();
 		});
 
-		it('should throw an error if link email already exists', async () => {
-			let error;
-			mockLinkRepository.findOne.mockResolvedValue(createLinkEntity);
-			try {
-				await linkService.createLink(businessOwnerJwtPayload, createLinkEntity, 1);
-			} catch (e) {
-				error = e;
-			}
-			expect(error).toBeInstanceOf(BadRequestException);
-			expect(error.message).toBe('Link for email test@email.com already exists');
-			expect(mockLinkRepository.save).not.toBeCalled();
-		});
-
 		it('should only email the link if saving is successful', async () => {
 			mockLinkRepository.save.mockRejectedValue(new Error('db constraint'));
 			mockLinkRepository.findOne.mockResolvedValue(undefined);

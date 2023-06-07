@@ -50,7 +50,7 @@
 		"@azure/identity": "^3.1.1",
 		"@golevelup/ts-jest": "^0.3.2",
 		"@microsoft/microsoft-graph-client": "^3.0.4",
-		"@nestjs-modules/mailer": "^1.6.1",
+		"@nestjs-modules/mailer": "^1.7",
 		"@nestjs/common": "^8.0.0",
 		"@nestjs/config": "^1.2.1",
 		"@nestjs/core": "^8.0.0",
