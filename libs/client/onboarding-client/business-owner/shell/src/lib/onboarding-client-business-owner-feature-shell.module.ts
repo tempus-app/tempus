@@ -59,6 +59,14 @@ const routes: Routes = [
 						'@tempus/client/onboarding-client/business-owner/features/feature-view-timesheet-approvals'
 					).then(m => m.ClientOnboardingClientBusinessOwnerFeaturesFeatureViewTimesheetApprovalsModule),
 			},
+			{
+				path: 'cost-billing-reports',
+				canActivate: [AuthGuard],
+				loadChildren: () =>
+					import('@tempus/client/onboarding-client/business-owner/features/cost-billing-reports').then(
+						m => m.ClientOnboardingClientBusinessOwnerFeaturesCostBillingReportsModule,
+					),
+			},
 		],
 	},
 ];

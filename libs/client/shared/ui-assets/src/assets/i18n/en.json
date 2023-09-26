@@ -19,7 +19,8 @@
 			"personalInformation": "Personal Information",
 			"projects": "Projects",
 			"timesheet": "Timesheets",
-			"timesheetApprovals": "Timesheet Approvals"
+			"timesheetApprovals": "Timesheet Approvals",
+			"costBillingReports": "Cost and Billing Reports"
 		}
 	},
 	"button": {
