@@ -38,7 +38,25 @@ export class CreateTimesheetDto implements ICreateTimesheetDto {
 	billed?: boolean;
 
 	@ApiProperty()
-	timesheetEntries?: CreateTimesheetEntryDto[];
+	mondayHours?:number;
+
+	@ApiProperty()
+	tuesdayHours?:number;
+	
+	@ApiProperty()
+	wednesdayHours?:number;
+
+	@ApiProperty()
+	thursdayHours?:number;
+
+	@ApiProperty()
+	fridayHours?:number;
+
+	@ApiProperty()
+	saturdayHours?:number;
+
+	@ApiProperty()
+	sundayHours?:number;
 
 	constructor(
 		supervisorId? : number,
@@ -52,7 +70,13 @@ export class CreateTimesheetDto implements ICreateTimesheetDto {
 		clientRepresentativeComment?: string,
 		audited?: boolean,
 		billed?: boolean,
-		timesheetEntries?: CreateTimesheetEntryDto[],
+		mondayHours?:number,
+		tuesdayHours?:number,
+		wednesdayHours?:number,
+		thursdayHours?:number,
+		fridayHours?:number,
+		saturdayHours?:number,
+		sundayHours?:number,
 	) {
 		this.supervisorId = supervisorId;
 		this.resourceId = resourceId;
@@ -65,6 +89,12 @@ export class CreateTimesheetDto implements ICreateTimesheetDto {
 		this.clientRepresentativeComment = clientRepresentativeComment;
 		this.audited = audited;
 		this.billed = billed;
-		this.timesheetEntries = timesheetEntries;
+		this.mondayHours = mondayHours
+		this.tuesdayHours = tuesdayHours
+		this.wednesdayHours = wednesdayHours
+		this.thursdayHours = thursdayHours
+		this.fridayHours = fridayHours
+		this.saturdayHours = saturdayHours
+		this.sundayHours = sundayHours
 	}
 }

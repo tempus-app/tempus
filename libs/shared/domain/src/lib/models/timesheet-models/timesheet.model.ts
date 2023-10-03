@@ -12,7 +12,13 @@ export interface Timesheet {
 	clientRepresentativeComment: string;
 	audited: boolean;
 	billed: boolean;
-	timesheetEntries: TimesheetEntry[];
+	mondayHours:number;
+	tuesdayHours:number;
+	wednesdayHours:number;
+	thursdayHours:number;
+	fridayHours:number;
+	saturdayHours:number;
+	sundayHours:number;
 	resource: Resource;
 	project: Project;
 	supervisor: User;

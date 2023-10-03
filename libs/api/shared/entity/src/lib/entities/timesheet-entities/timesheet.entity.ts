@@ -17,7 +17,13 @@ export class TimesheetEntity implements Timesheet {
 		clientRepresentativeComment?: string,
 		audited?: boolean,
 		billed?: boolean,
-		timesheetEntries?: TimesheetEntryEntity[],
+		mondayHours?:number,
+		tuesdayHours?:number,
+		wednesdayHours?:number,
+		thursdayHours?:number,
+		fridayHours?:number,
+		saturdayHours?:number,
+		sundayHours?:number,
 		resource?: ResourceEntity,
 		project?: ProjectEntity,
 		supervisor?: UserEntity,
@@ -32,7 +38,13 @@ export class TimesheetEntity implements Timesheet {
 		this.clientRepresentativeComment = clientRepresentativeComment;
 		this.audited = audited;
 		this.billed = billed;
-		this.timesheetEntries = timesheetEntries;
+		this.mondayHours = mondayHours
+		this.tuesdayHours = tuesdayHours
+		this.wednesdayHours = wednesdayHours
+		this.thursdayHours = thursdayHours
+		this.fridayHours = fridayHours
+		this.saturdayHours = saturdayHours
+		this.sundayHours = sundayHours
 		this.resource = resource;
 		this.project = project;
 		this.supervisor = supervisor;
@@ -73,10 +85,26 @@ export class TimesheetEntity implements Timesheet {
 	})
 	status: TimesheetRevisionType;
 
-	@OneToMany(() => TimesheetEntryEntity, timesheetEntry => timesheetEntry.timesheet, {
-		cascade: ['insert', 'update'],
-	})
-	timesheetEntries: TimesheetEntryEntity[];
+	@Column({nullable: true})
+	mondayHours: number;
+
+	@Column({nullable: true})
+	tuesdayHours:number;
+
+	@Column({nullable: true})
+	wednesdayHours:number;
+
+	@Column({nullable: true})
+	thursdayHours:number;
+
+	@Column({nullable: true})
+	fridayHours:number;
+
+	@Column({nullable: true})
+	saturdayHours:number;
+
+	@Column({nullable: true})
+	sundayHours:number;
 
 	@ManyToOne(() => ResourceEntity, resource => resource.timesheets, {
 		onDelete: 'CASCADE',
@@ -104,7 +132,13 @@ export class TimesheetEntity implements Timesheet {
 			dto.supervisorComment,
 			dto.audited,
 			dto.billed,
-			dto.timesheetEntries?.map(timesheetEntry => TimesheetEntryEntity.fromDto(timesheetEntry)),
+			dto.mondayHours,
+			dto.tuesdayHours,
+			dto.wednesdayHours,
+			dto.thursdayHours,
+			dto.fridayHours,
+			dto.saturdayHours,
+			dto.sundayHours,
 		);
 	}
 }
