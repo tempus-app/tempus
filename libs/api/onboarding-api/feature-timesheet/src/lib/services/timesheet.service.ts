@@ -129,14 +129,15 @@ export class TimesheetService {
 
 	async updateTimesheet(updateTimesheetDto: UpdateTimesheetDto): Promise<Timesheet> {
 		const timesheetEntity = await this.getTimesheet(updateTimesheetDto.id);
-		const updatedTimesheetEntryDto = { ...updateTimesheetDto };
+		/*const updatedTimesheetEntryDto = { ...updateTimesheetDto };
 		Object.keys(updatedTimesheetEntryDto).forEach(key => {
 			const val = updatedTimesheetEntryDto[key];
 			if (!val) {
 				delete updatedTimesheetEntryDto[key];
 			}
-		});
-		Object.assign(timesheetEntity, updatedTimesheetEntryDto);
+		});*/
+		for (const [key, val] of Object.entries(updateTimesheetDto)) if (!val) delete updateTimesheetDto[key];
+		Object.assign(timesheetEntity, updateTimesheetDto);
 		return this.timesheetRepository.save(timesheetEntity);
 	}
 

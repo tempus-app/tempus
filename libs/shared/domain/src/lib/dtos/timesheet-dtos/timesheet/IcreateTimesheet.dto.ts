@@ -13,5 +13,11 @@ export interface ICreateTimesheetDto {
 	clientRepresentativeComment?: string;
 	audited?: boolean;
 	billed?: boolean;
-	timesheetEntries?: ICreateTimesheetEntryDto[];
+	mondayHours?:number;
+	tuesdayHours?:number;
+	wednesdayHours?:number;
+	thursdayHours?:number;
+	fridayHours?:number;
+	saturdayHours?:number;
+	sundayHours?:number;
 }

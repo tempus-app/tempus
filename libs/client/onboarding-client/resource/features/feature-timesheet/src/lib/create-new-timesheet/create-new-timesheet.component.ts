@@ -74,7 +74,7 @@ export class CreateNewTimesheetComponent implements OnInit {
 
       this.timesheetId = timesheet.id;
       this.userId = timesheet.resource.id;
-      this.timesheetEntries = timesheet.timesheetEntries;
+      //this.timesheetEntries = timesheet.timesheetEntries;
       this.projectId = timesheet.project.id;
       this.supervisor = timesheet.supervisor;
       this.startDate = timesheet.weekStartDate;
