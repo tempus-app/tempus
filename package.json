@@ -6,6 +6,7 @@
 		"ng": "nx",
 		"start:onboarding-api": "nx serve onboarding-api",
 		"start:client": "nx serve onboarding-client",
+		"dev": "docker compose up -d postgres && nx run-many --target=serve --all --parallel",
 		"start:onboarding-api:prod": "node ./dist/apps/onboarding-api/main.js",
 		"build:client:prod": "nx run onboarding-client:build:production --outputPath dist/apps/onboarding-api/onboarding-client/",
 		"build:onboarding-api": "nx build onboarding-api --production",
