@@ -16,6 +16,7 @@ import { WorkExperienceComponent } from './work-experience/work-experience.compo
 import { EducationComponent } from './education/education.component';
 import { CertificationsComponent } from './certifications/certifications.component';
 import { SkillsComponent } from './skills/skills.component';
+import { TimesheetComponent } from './timesheet/timesheet.component';
 
 @NgModule({
 	imports: [
@@ -41,6 +42,7 @@ import { SkillsComponent } from './skills/skills.component';
 		EducationComponent,
 		CertificationsComponent,
 		SkillsComponent,
+  TimesheetComponent,
 	],
 	exports: [
 		PersonalInformationComponent,
