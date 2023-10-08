@@ -12,6 +12,7 @@ import { EducationComponent } from './education/education.component';
 import { CertificationsComponent } from './certifications/certifications.component';
 import { SkillsComponent } from './skills/skills.component';
 import { ProjectComponent } from './project/project.component';
+import { TimesheetComponent } from './timesheet/timesheet.component';
 
 @NgModule({
 	imports: [
@@ -33,6 +34,7 @@ import { ProjectComponent } from './project/project.component';
 		CertificationsComponent,
 		SkillsComponent,
 		ProjectComponent,
+  TimesheetComponent,
 	],
 	exports: [
 		PersonalInformationComponent,
