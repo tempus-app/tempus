@@ -4,3 +4,4 @@ export * from './common-models';
 export * from './profile-models';
 export * from './project-models';
 export * from './timesheet-models';
+export * from './report-models';

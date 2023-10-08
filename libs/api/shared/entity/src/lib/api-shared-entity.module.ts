@@ -4,6 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import {
 	LinkEntity,
 	ResourceEntity,
+	ReportEntity,
 	UserEntity,
 	LocationEntity,
 	CertificationEntity,
@@ -30,6 +31,7 @@ import {
 		TypeOrmModule.forFeature([
 			LinkEntity,
 			ResourceEntity,
+			ReportEntity,
 			UserEntity,
 			LocationEntity,
 			CertificationEntity,
