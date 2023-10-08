@@ -32,6 +32,9 @@
 			"@tempus/client/onboarding-client/business-owner/features/cost-billing-reports": [
 				"libs/client/onboarding-client/business-owner/features/cost-billing-reports/src/index.ts"
 			],
+			"@tempus/client/onboarding-client/business-owner/features/cost-reports": [
+				"libs/client/onboarding-client/business-owner/features/cost-reports/src/index.ts"
+			],
 			"@tempus/client/onboarding-client/business-owner/features/feature-view-pending-approvals": [
 				"libs/client/onboarding-client/business-owner/features/feature-view-pending-approvals/src/index.ts"
 			],

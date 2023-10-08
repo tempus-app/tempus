@@ -20,7 +20,8 @@
 			"projects": "Projects",
 			"timesheet": "Timesheets",
 			"timesheetApprovals": "Timesheet Approvals",
-			"costBillingReports": "Cost and Billing Reports"
+			"costBillingReports": "Cost and Billing Reports",
+			"costReports": "Cost Reports"
 		}
 	},
 	"button": {
