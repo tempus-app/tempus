@@ -1,9 +1,8 @@
-import { ICreateTimesheetEntryDto } from "../timesheet-entry";
+import { ICreateTimesheetEntryDto } from '../timesheet-entry';
 
 export interface ICreateTimesheetDto {
-
 	projectId?: number;
-	resourceId?:number;
+	resourceId?: number;
 	supervisorId?: number;
 	weekStartDate?: Date;
 	weekEndDate?: Date;

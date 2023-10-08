@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-dupe-class-members */
 import { Report } from '@tempus/shared-domain';
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 import { CreateReportDto } from '@tempus/api/shared/dto';
@@ -5,60 +6,73 @@ import { CreateReportDto } from '@tempus/api/shared/dto';
 @Entity()
 export class ReportEntity implements Report {
 	constructor(
-		id: number,
-		name: string,
-		title: string,
+		reportId: number,
 		clientName: string,
-		workType: string,
+		projectName: string,
+		userName: string,
+		taskName: string,
+		month: string,
+		position: string,
 		hoursWorked: number,
 		costRate: number,
+		totalCost: number,
+		totalBilling: number,
 		billingRate: number,
 	) {
-		this.id = id;
-		this.name = name;
-		this.title = title;
+		this.reportId = reportId;
 		this.clientName = clientName;
-		this.workType = workType;
+		this.projectName = projectName;
+		this.userName = userName;
+		this.taskName = taskName;
+		this.month = month;
+		this.position = position;
 		this.hoursWorked = hoursWorked;
 		this.costRate = costRate;
+		this.totalCost = totalCost;
+		this.totalBilling = totalBilling;
 		this.billingRate = billingRate;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-dupe-class-members
 	@PrimaryGeneratedColumn()
-	id: number;
+	reportId?: number;
 
-	@Column({ nullable: true })
-	name: string;
+	@Column()
+	clientName?: string;
 
-	@Column({ nullable: true })
-	title: string;
+	@Column()
+	projectName?: string;
 
-	@Column({ nullable: true })
-	clientName: string;
+	@Column()
+	userName?: string;
 
-	@Column({ nullable: true })
-	workType: string;
+	@Column()
+	taskName?: string;
 
-	@Column({ nullable: true })
-	hoursWorked: number;
+	@Column()
+	month?: string;
 
-	@Column({ nullable: true })
-	costRate: number;
+	@Column()
+	position?: string;
 
-	@Column({ nullable: true })
-	billingRate: number;
+	@Column()
+	hoursWorked?: number;
+
+	@Column()
+	costRate?: number;
+
+	@Column()
+	totalCost?: number;
+
+	@Column()
+	totalBilling?: number;
+
+	@Column()
+	billingRate?: number;
 
 	public static fromDto(dto: CreateReportDto): ReportEntity {
-		if (dto == null) return new ReportEntity();
-		return new ReportEntity(
-			dto.id,
-			dto.name,
-			dto.title,
-			dto.clientName,
-			dto.workType,
-			dto.hoursWorked,
-			dto.costRate,
-			dto.billingRate,
-		);
+		if (dto == null)
+			return new ReportEntity(null, null, null, null, null, null, null, null, null, null, null, null);
+		return new ReportEntity(null, null, null, null, null, null, null, null, null, null, null, null);
 	}
 }
