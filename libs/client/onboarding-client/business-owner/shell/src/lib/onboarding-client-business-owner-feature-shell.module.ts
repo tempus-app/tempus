@@ -60,11 +60,12 @@ const routes: Routes = [
 					).then(m => m.ClientOnboardingClientBusinessOwnerFeaturesFeatureViewTimesheetApprovalsModule),
 			},
 			{
-				path: 'cost-billing-reports',
+				path: 'cost-reports',
+				canLoad: [AuthGuard],
 				canActivate: [AuthGuard],
 				loadChildren: () =>
-					import('@tempus/client/onboarding-client/business-owner/features/cost-billing-reports').then(
-						m => m.ClientOnboardingClientBusinessOwnerFeaturesCostBillingReportsModule,
+					import('@tempus/client/onboarding-client/business-owner/features/cost-reports').then(
+						m => m.ClientOnboardingClientBusinessOwnerFeaturesCostReportsModule,
 					),
 			},
 		],
