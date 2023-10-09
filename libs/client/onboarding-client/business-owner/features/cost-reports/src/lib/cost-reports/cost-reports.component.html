@@ -1,1 +1,15 @@
-<p>cost-reports works!</p>
+<!-- cost-reports.component.html -->
+<div fxLayout="column" id="page-container">
+	<div id="title-container">
+			<h2 class="mat-h2 page-title">Cost Reports</h2>
+	</div>
+	<div id="table-container">
+			<tempus-table
+					[page]="pageNum"
+					[totalItems]="totalCostReports"
+					[tableColumns]="tableColumns"
+					[tableData]="costReportsTableData"
+					(paginatorEvent)="tablePaginationEvent($event)">
+			</tempus-table>
+	</div>
+</div>
