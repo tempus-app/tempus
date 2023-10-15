@@ -35,6 +35,12 @@ export class WeekSelectionStrategy implements MatDateRangeSelectionStrategy<stri
 		return this._createWeekRange(activeDate);
 	}
 
+	// Function to restrict the input to numeric characters
+	restrictToNumeric(event: any) {
+		const inputElement: HTMLInputElement = event.target;
+		inputElement.value = inputElement.value.replace(/[^0-9]/g, '');
+	}
+
 	private _createWeekRange(date: string | null): DateRange<string> {
 		if (date) {
 			const theDate = new Date(date);
@@ -56,20 +62,20 @@ const ELEMENT_DATA: TableOfContents[] = [
 		position: 1,
 		project: 'Project 1',
 		sunday: '',
-		monday: '7.5',
+		monday: '',
 		tuesday: '',
 		wednesday: '',
-		thursday: '7.5',
-		friday: '7.5',
+		thursday: '',
+		friday: '',
 		saturday: '',
-		total: 22.5,
+		total: '',
 	},
 ];
 
 export interface TableOfContents {
 	position: number;
 	project: string;
-	total: number;
+	total: string;
 	sunday: string;
 	monday: string;
 	tuesday: string;
@@ -122,6 +128,26 @@ export class EditViewTimesheetComponent implements OnDestroy {
 
 	totalHours = new FormControl('', Validators.required);
 
+	//form: FormGroup; // initialize form
+
+	// Function to restrict input to numeric characters for a specific input field
+	restrictInputToNumeric(event: any, min: number, max: number) {
+		const inputElement: HTMLInputElement = event.target;
+		let numericValue = +inputElement.value; // Convert the input value to a number
+		if (isNaN(numericValue)) {
+			numericValue = 0; // Set to a default value if not a number
+		}
+
+		// Ensure the value is within the specified range
+		if (numericValue < min) {
+			numericValue = min;
+		} else if (numericValue > max) {
+			numericValue = max;
+		}
+
+		inputElement.value = numericValue.toString(); // Update the input value
+	}
+
 	constructor(
 		private fb: FormBuilder,
 		private resourceService: OnboardingClientResourceService,
@@ -132,18 +158,12 @@ export class EditViewTimesheetComponent implements OnDestroy {
 		private http: HttpClient,
 	) {
 		const { currentLang } = translateService;
-		// eslint-disable-next-line no-param-reassign
 		translateService.currentLang = '';
 		translateService.use(currentLang);
 	}
 
 	// After a date range is selected this function is executed
 	changed(picker: MatDateRangePicker<any>) {
-		// console.log('changed');
-		// console.log(
-		// 	this.from.toLocaleString('en-US', { weekday: 'long', month: 'long', year: 'numeric', day: 'numeric' }),
-		// );
-		// console.log(this.thru);
 
 		// Dynamically display the dates in each of the timesheet table columns
 		// Sunday
@@ -182,11 +202,6 @@ export class EditViewTimesheetComponent implements OnDestroy {
 		this.startDatePlusFive2 = startDatePlusFive_string; // friday
 	}
 
-	/*
-  startDate: Date = new Date(this.from);
-  startDate_string: string = this.startDate.toLocaleString();
-  endDate: Date = new Date(this.thru);
-  endDate_string: string = this.endDate.toLocaleString(); */
 
 	// Columns for the timesheet table
 	displayedColumns: string[] = [
