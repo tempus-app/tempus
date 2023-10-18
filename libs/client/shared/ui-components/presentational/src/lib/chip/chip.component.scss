@@ -32,14 +32,19 @@
 }
 
 #approved {
-	background-color:#7ab769;
+	background-color: #7ab769;
 }
 
 #pending {
-	background-color:#fbe56d;
+	background-color: #fbe56d;
 	color: black;
 }
 
 #rejected {
-	background-color:#eb534c;
+	background-color: #eb534c;
+}
+
+#submitted {
+	background-color: #fbe56d;
+	color: black;
 }

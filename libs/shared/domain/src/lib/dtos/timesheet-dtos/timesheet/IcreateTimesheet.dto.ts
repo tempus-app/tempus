@@ -1,9 +1,8 @@
-import { ICreateTimesheetEntryDto } from "../timesheet-entry";
+import { ICreateTimesheetEntryDto } from '../timesheet-entry';
 
 export interface ICreateTimesheetDto {
-
 	projectId?: number;
-	resourceId?:number;
+	resourceId?: number;
 	supervisorId?: number;
 	weekStartDate?: Date;
 	weekEndDate?: Date;
@@ -13,11 +12,11 @@ export interface ICreateTimesheetDto {
 	clientRepresentativeComment?: string;
 	audited?: boolean;
 	billed?: boolean;
-	mondayHours?:number;
-	tuesdayHours?:number;
-	wednesdayHours?:number;
-	thursdayHours?:number;
-	fridayHours?:number;
-	saturdayHours?:number;
-	sundayHours?:number;
+	mondayHours?: number;
+	tuesdayHours?: number;
+	wednesdayHours?: number;
+	thursdayHours?: number;
+	fridayHours?: number;
+	saturdayHours?: number;
+	sundayHours?: number;
 }

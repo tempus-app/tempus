@@ -24,6 +24,8 @@ import { Subject, finalize, take, takeUntil } from 'rxjs';
 import { PageEvent } from '@angular/material/paginator';
 import { FormBuilder } from '@angular/forms';
 import { InputType } from '@tempus/client/shared/ui-components/input';
+import { time } from 'console';
+import { TimesheetRevisionType } from '@tempus/shared-domain';
 
 @Component({
 	selector: 'tempus-timesheet',
@@ -64,25 +66,21 @@ export class TimesheetComponent implements OnInit, OnDestroy {
 			.subscribe(data => {
 				this.tableColumns = [
 					{
-						columnDef: 'resourceName',
-						header: data.resourceName,
-						cell: (element: Record<string, unknown>) => `${element['resourceName']}`,
+						columnDef: 'timesheetWeek',
+						header: data.timesheetWeek,
+						cell: (element: Record<string, unknown>) => `${element['timesheetWeek']}`,
+					},
+					{
+						columnDef: 'dateModified',
+						header: data.dateModified,
+						cell: (element: Record<string, unknown>) => `${element['dateModified']}`,
 					},
 					{
 						columnDef: 'projectName',
 						header: data.projectName,
 						cell: (element: Record<string, unknown>) => `${element['projectName']}`,
 					},
-					{
-						columnDef: 'startDate',
-						header: data.startDate,
-						cell: (element: Record<string, unknown>) => `${element['startDate']}`,
-					},
-					{
-						columnDef: 'endDate',
-						header: data.endDate,
-						cell: (element: Record<string, unknown>) => `${element['endDate']}`,
-					},
+
 					{
 						columnDef: 'totalTime',
 						header: data.totalTime,
@@ -142,21 +140,51 @@ export class TimesheetComponent implements OnInit, OnDestroy {
 			.subscribe(data => {
 				this.timesheetsTableData = [];
 				this.totalTimesheets = data.totalTimesheets;
-				data.timesheets.forEach(timesheet => {
-					const startDate = new Date(timesheet.weekStartDate).toISOString().slice(0, 10);
-					const endDate = new Date(timesheet.weekEndDate).toISOString().slice(0, 10);
+
+				data.timesheets?.forEach(timesheet => {
+					const startDate = new Date(timesheet.weekStartDate).toLocaleString('en-US', {
+						day: 'numeric',
+						month: 'long',
+						year: 'numeric',
+					});
+					const endDate = new Date(timesheet.weekEndDate).toLocaleString('en-US', {
+						day: 'numeric',
+						month: 'long',
+						year: 'numeric',
+					});
+
+					const timesheetWeek = `${startDate} - ${endDate}`;
+
+					let dateModified = '-';
+					if (timesheet.dateModified) {
+						dateModified = new Date(timesheet.dateModified).toLocaleString('en-US', {
+							day: 'numeric',
+							month: 'long',
+							year: 'numeric',
+						});
+						console.log(dateModified);
+					}
+					const totalTime =
+						timesheet.sundayHours +
+						timesheet.mondayHours +
+						timesheet.tuesdayHours +
+						timesheet.wednesdayHours +
+						timesheet.thursdayHours +
+						timesheet.fridayHours +
+						timesheet.saturdayHours;
+
 					const status = timesheet.status.toString();
+
 					this.timesheetsTableData.push({
-						resourceName: `${timesheet.resource.firstName} ${timesheet.resource.lastName}`,
+						timesheetWeek: timesheetWeek,
+						dateModified: dateModified,
 						projectName: timesheet.project.name,
-						startDate: startDate,
-						endDate: endDate,
-						totalTime: 0,
+						totalTime: totalTime,
 						status: status,
 						timesheetId: timesheet.id,
-						url: `../timesheet/edit/${timesheet.id}`,
+						url: `../timesheet/${timesheet.id}`,
 						columnsWithIcon: [],
-						columnsWithUrl: ['resourceName'],
+						columnsWithUrl: ['timesheetWeek'],
 						columnsWithChips: ['status'],
 						columnsWithButtonIcon: [],
 					});

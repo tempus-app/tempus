@@ -3,31 +3,29 @@
 		"main": {
 			"title": "Timesheets",
 			"tableHeaders": {
-				"startDate": "Start Date",
-				"endDate": "End Date",
-				"resourceName": "Full Name",
+				"timesheetWeek": "Timesheet Week",
+				"dateModified": "Date Modified",
 				"totalTime": "Total hours",
 				"projectName": "Project",
 				"status": "Status"
 			},
 			"noPendingApprovals": "No Pending Approvals"
 		},
-		"createTimesheetModal": {
-			"title": "Create timesheet",
-			"subtitle": "Please input the start date, end date and the project name",
-			"closeText": "Cancel",
-			"confirmText": "Create",
-			"startDate": "Select a start date...",
-			"endDate": "Select a end date...",
-			"project": "Select a project..."
-		  },
-		  "dates": {
+		"dates": {
 			"startPlaceholder": "Start Date",
 			"endPlaceholder": "End Date",
 			"validStartDateErr": "Please enter a valid start date.",
 			"validEndDateErr": "Please enter a valid end date.",
 			"startBeforeEndErr": "Please make sure the start date is before the end date.",
 			"present": "Present"
+		}
+	},
+	"onboardingResourceCreateNewTimesheet": {
+		"submitModal": {
+			"title": "Create timesheet?",
+			"message": "Your new timesheet will be sent to CAL for approval.",
+			"closeText": "Cancel",
+			"confirmText": "Submit"
 		}
 	}
 }

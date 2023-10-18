@@ -114,12 +114,12 @@ export class TimesheetService {
 
 	async createTimesheet(timesheet: CreateTimesheetDto): Promise<Timesheet> {
 		const timesheetEntity = TimesheetEntity.fromDto(timesheet);
-		let supervisorEntity : UserEntity = null;
-		if(timesheet.supervisorId != undefined)
+		let supervisorEntity: UserEntity = null;
+		if (timesheet.supervisorId != undefined)
 			supervisorEntity = await this.userService.getUserbyId(timesheet.supervisorId);
 		const projectEntity = await this.projectService.getProjectInfo(timesheet.projectId);
 		const resourceEntity = await this.resourceService.getResourceInfo(timesheet.resourceId);
-		timesheetEntity.status = TimesheetRevisionType.NEW;
+		timesheetEntity.status = TimesheetRevisionType.SUBMITTED;
 		timesheetEntity.dateModified = new Date(Date.now());
 		timesheetEntity.supervisor = supervisorEntity;
 		timesheetEntity.resource = resourceEntity;
@@ -129,13 +129,13 @@ export class TimesheetService {
 
 	async updateTimesheet(updateTimesheetDto: UpdateTimesheetDto): Promise<Timesheet> {
 		const timesheetEntity = await this.getTimesheet(updateTimesheetDto.id);
-		/*const updatedTimesheetEntryDto = { ...updateTimesheetDto };
+		/* const updatedTimesheetEntryDto = { ...updateTimesheetDto };
 		Object.keys(updatedTimesheetEntryDto).forEach(key => {
 			const val = updatedTimesheetEntryDto[key];
 			if (!val) {
 				delete updatedTimesheetEntryDto[key];
 			}
-		});*/
+		}); */
 		for (const [key, val] of Object.entries(updateTimesheetDto)) if (!val) delete updateTimesheetDto[key];
 		Object.assign(timesheetEntity, updateTimesheetDto);
 		return this.timesheetRepository.save(timesheetEntity);
