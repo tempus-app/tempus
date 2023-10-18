@@ -51,9 +51,8 @@ export interface ViewProjects extends TableDataModel {
 }
 
 export interface MyTimesheetsTableData extends TableDataModel {
-	startDate: string;
-	endDate: string;
-	resourceName: string;
+	timesheetWeek: string;
+	dateModified: string;
 	totalTime: number;
 	projectName: string;
 	status: string;

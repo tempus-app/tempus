@@ -15,12 +15,6 @@
 	margin-top: 3%;
 }
 
-table {
-    width: 100%;
-	border: 1px dashed abs.$primary-300;
- 	background-color: #fcfeff;
-}
-
 // #page-container {
 // 	margin: 2% auto;
 // 	border: 1px dashed abs.$primary-300;
@@ -50,15 +44,9 @@ table {
 
 ::ng-deep {
 	.secondary .mat-form-field-wrapper {
-	width: 6em;
-	padding:0.8rem
-}
-
-}
-
-tempus-text-input {
-	text-align: center;
-	width: 50%;
+		width: 6em;
+		padding: 0.8rem;
+	}
 }
 
 .submitAndCancel {
