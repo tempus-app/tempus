@@ -6,5 +6,5 @@ export interface TimesheetEntry {
 	hoursWorked: number;
 	startTime: number;
 	endTime: number;
-	timesheet: Timesheet;
+	//timesheet: Timesheet;
 }

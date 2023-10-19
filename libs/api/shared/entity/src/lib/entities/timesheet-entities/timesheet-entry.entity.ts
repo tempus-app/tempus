@@ -18,7 +18,7 @@ export class TimesheetEntryEntity implements TimesheetEntry {
 		this.hoursWorked = hoursWorked;
 		this.startTime = startTime;
 		this.endTime = endTime;
-		this.timesheet = timesheet;
+		//this.timesheet = timesheet;
 	}
 
 	@PrimaryGeneratedColumn()
@@ -36,10 +36,10 @@ export class TimesheetEntryEntity implements TimesheetEntry {
 	@Column({ nullable: true })
 	endTime: number;
 
-	@ManyToOne(() => TimesheetEntity, timesheet => timesheet.timesheetEntries, {
+	/*@ManyToOne(() => TimesheetEntity, timesheet => timesheet.timesheetEntries, {
 		onDelete: 'CASCADE',
 	})
-	timesheet: TimesheetEntity;
+	timesheet: TimesheetEntity;*/
 
 	public static fromDto(dto: CreateTimesheetEntryDto): TimesheetEntryEntity {
 		if (dto == null) return new TimesheetEntryEntity();

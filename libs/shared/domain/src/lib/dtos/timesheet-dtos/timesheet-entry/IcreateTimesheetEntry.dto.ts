@@ -6,5 +6,5 @@ export interface ICreateTimesheetEntryDto {
     hoursWorked?: number;
     startTime?: number;
     endTime?: number;
-    timesheet?: ICreateTimesheetDto;
+   // timesheet?: ICreateTimesheetDto;
 }

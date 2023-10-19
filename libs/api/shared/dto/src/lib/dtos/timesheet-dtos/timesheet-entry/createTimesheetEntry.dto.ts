@@ -16,20 +16,20 @@ export class CreateTimesheetEntryDto implements ICreateTimesheetEntryDto {
 	@ApiProperty()
 	endTime?: number;
 
-	@ApiProperty()
-    timesheet?: CreateTimesheetDto;
+	//@ApiProperty()
+    //timesheet?: CreateTimesheetDto;
 
 	constructor(
 		date?: Date,
 		hoursWorked?: number,
 		startTime?: number,
 		endTime?: number,
-		timesheet?: CreateTimesheetDto,
+		//timesheet?: CreateTimesheetDto,
 	) {
 		this.date = date;
         this.hoursWorked = hoursWorked;
         this.startTime = startTime;
         this.endTime = endTime;
-        this.timesheet = timesheet;
+       // this.timesheet = timesheet;
 	}
 }
