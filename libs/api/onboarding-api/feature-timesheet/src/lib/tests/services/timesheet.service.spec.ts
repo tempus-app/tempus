@@ -232,6 +232,20 @@ describe('TimesheetService', () => {
 			expect(mockTimesheetRepository.findOne).toBeCalledWith(dbTimesheet.id);
 			expect(mockTimesheetRepository.remove).toBeCalledWith({ ...dbTimesheet });
         });
+
+        it('should fail to delete timesheet since it has been billed', async () => {
+            mockTimesheetRepository.findOne.mockResolvedValue(billedTimesheetEntityMock);
+			//mockTimesheetRepository.remove.mockResolvedValue(dbTimesheet);
+			let error;
+            try{
+                await timesheetService.deleteTimesheet(billedTimesheetEntityMock.id);
+            } catch (e) {
+                error = e;
+            }
+            expect(mockTimesheetRepository.remove).not.toBeCalled();
+            expect(error.message).toBe(`Cannot delete a timesheet that has been billed`);
+			expect(error).toBeInstanceOf(ForbiddenException);
+        });
     });
 
 });

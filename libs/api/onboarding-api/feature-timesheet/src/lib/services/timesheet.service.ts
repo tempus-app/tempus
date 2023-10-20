@@ -164,6 +164,10 @@ export class TimesheetService {
 
 	async deleteTimesheet(timesheetId: number) {
 		const timesheetEntity = await this.getTimesheet(timesheetId);
+		if(timesheetEntity.billed)
+		{
+			throw new ForbiddenException('Cannot delete a timesheet that has been billed');
+		}
 		await this.timesheetRepository.remove(timesheetEntity);
 	}
 }
