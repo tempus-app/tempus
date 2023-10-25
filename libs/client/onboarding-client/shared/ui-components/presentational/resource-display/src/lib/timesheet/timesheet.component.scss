@@ -1,0 +1,23 @@
+@use 'abstracts/helper' as abs;
+@use 'components/helper' as cmp;
+
+table {
+	width: 100%;
+	border: 1px dashed abs.$primary-300;
+	background-color: #fcfeff;
+}
+
+tempus-text-input {
+	text-align: center;
+	width: 50%;
+}
+
+table.mat-table {
+	th.mat-header-cell {
+		@include abs.body-1($color: abs.$primary-800);
+	}
+
+	td.mat-cell {
+		@include abs.body-1($color: abs.$primary-800);
+	}
+}
