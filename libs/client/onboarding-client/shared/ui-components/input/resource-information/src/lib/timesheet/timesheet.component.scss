@@ -11,3 +11,13 @@ tempus-text-input {
 	text-align: center;
 	width: 50%;
 }
+
+table.mat-table {
+	th.mat-header-cell {
+		@include abs.body-1($color: abs.$primary-800);
+	}
+
+	td.mat-cell {
+		@include abs.body-1($color: abs.$primary-800);
+	}
+}
