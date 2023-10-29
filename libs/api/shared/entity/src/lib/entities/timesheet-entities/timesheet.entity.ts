@@ -13,6 +13,7 @@ export class TimesheetEntity implements Timesheet {
 		weekEndDate?: Date,
 		approvedBySupervisor?: boolean,
 		approvedByClient?: boolean,
+		resourceComment?: string,
 		supervisorComment?: string,
 		clientRepresentativeComment?: string,
 		audited?: boolean,
@@ -34,6 +35,7 @@ export class TimesheetEntity implements Timesheet {
 		this.weekEndDate = weekEndDate;
 		this.approvedBySupervisor = approvedBySupervisor;
 		this.approvedByClient = approvedByClient;
+		this.resourceComment = resourceComment;
 		this.supervisorComment = supervisorComment;
 		this.clientRepresentativeComment = clientRepresentativeComment;
 		this.audited = audited;
@@ -65,6 +67,9 @@ export class TimesheetEntity implements Timesheet {
 
 	@Column({ nullable: true })
 	approvedByClient: boolean;
+
+	@Column({ nullable: true })
+	resourceComment: string;
 
 	@Column({ nullable: true })
 	supervisorComment: string;
@@ -128,8 +133,9 @@ export class TimesheetEntity implements Timesheet {
 			dto.weekEndDate,
 			dto.approvedBySupervisor,
 			dto.approvedByClient,
-			dto.clientRepresentativeComment,
+			dto.resourceComment,
 			dto.supervisorComment,
+			dto.clientRepresentativeComment,
 			dto.audited,
 			dto.billed,
 			dto.mondayHours,
