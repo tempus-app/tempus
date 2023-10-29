@@ -18,7 +18,13 @@ export class TimesheetService {
 	) {}
 
 	async getTimesheet(timesheetId: number): Promise<Timesheet> {
-		const timesheetEntity = await this.timesheetRepository.findOne(timesheetId);
+		const timesheetEntity = await this.timesheetRepository.findOne(timesheetId, {
+			relations: [
+				'resource',
+				'project',
+				'supervisor'
+			],
+		});
 		if (!timesheetEntity) throw new NotFoundException(`Could not find timesheet with id ${timesheetId}`);
 		return timesheetEntity;
 	}
