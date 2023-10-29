@@ -4,6 +4,7 @@ import { JwtAuthGuard } from '@tempus/api/shared/feature-auth';
 import { Timesheet } from '@tempus/shared-domain';
 import { ApproveTimesheetDto, CreateTimesheetDto, UpdateTimesheetDto } from '@tempus/api/shared/dto';
 import { TimesheetService } from '../services/timesheet.service';
+import { Time } from '@faker-js/faker/time';
 
 @ApiTags('Timesheet')
 @Controller('timesheet')
@@ -12,8 +13,9 @@ export class TimesheetController {
 
 	@UseGuards(JwtAuthGuard)
 	@Get('/:timesheetId')
-	async getTimesheet(@Param('timesheetId') timesheetId: number) {
-		return this.timesheetService.getTimesheet(timesheetId);
+	async getTimesheet(@Param('timesheetId') timesheetId: number) :Promise<Timesheet> {
+		const timesheet = await this.timesheetService.getTimesheet(timesheetId);
+		return timesheet;
 	}
 
 	@UseGuards(JwtAuthGuard)
