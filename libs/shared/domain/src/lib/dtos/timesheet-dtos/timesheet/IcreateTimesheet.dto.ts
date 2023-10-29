@@ -8,6 +8,7 @@ export interface ICreateTimesheetDto {
 	weekEndDate?: Date;
 	approvedBySupervisor?: boolean;
 	approvedByClient?: boolean;
+	resourceComment?: string;
 	supervisorComment?: string;
 	clientRepresentativeComment?: string;
 	audited?: boolean;

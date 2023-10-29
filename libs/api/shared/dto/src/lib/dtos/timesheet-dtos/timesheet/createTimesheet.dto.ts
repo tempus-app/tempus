@@ -26,6 +26,9 @@ export class CreateTimesheetDto implements ICreateTimesheetDto {
 	approvedByClient?: boolean;
 
 	@ApiProperty()
+	resourceComment?: string;
+
+	@ApiProperty()
 	supervisorComment?: string;
 
 	@ApiProperty()
