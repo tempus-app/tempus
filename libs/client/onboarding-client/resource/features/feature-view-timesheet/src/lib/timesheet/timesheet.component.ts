@@ -117,6 +117,7 @@ export class TimesheetComponent implements OnInit {
 		weekEndDate: new Date(),
 		approvedBySupervisor: false,
 		approvedByClient: false,
+		resourceComment: '',
 		supervisorComment: '',
 		clientRepresentativeComment: '',
 		audited: false,
@@ -170,23 +171,23 @@ export class TimesheetComponent implements OnInit {
 					year: 'numeric',
 				});
 
+				this.projectName = timesheet.project.name;
+
 				this.timesheetWeek = `${startDate} - ${endDate}`;
 				this.loadTimesheet(timesheet);
 				this.dataLoaded = true;
 			});
-
-			// const project = resData.projectResources.find(proj => proj.id === this.timesheet.projectId);
-			// console.log(this.timesheet.projectId);
 		});
 	}
 
 	loadTimesheet(timesheet: Timesheet) {
-		this.timesheet.projectId = timesheet.project?.id;
-		// this.timesheet.resourceId = timesheet.resource.id;
+		this.timesheet.projectId = timesheet.project.id;
+		this.timesheet.resourceId = timesheet.resource.id;
 		this.timesheet.weekStartDate = timesheet.weekStartDate;
 		this.timesheet.weekEndDate = timesheet.weekEndDate;
 		this.timesheet.approvedBySupervisor = timesheet.approvedBySupervisor;
 		this.timesheet.approvedByClient = timesheet.approvedByClient;
+		this.timesheet.resourceComment = timesheet.resourceComment;
 		this.timesheet.supervisorComment = timesheet.supervisorComment;
 		this.timesheet.clientRepresentativeComment = timesheet.clientRepresentativeComment;
 		this.timesheet.audited = timesheet.audited;

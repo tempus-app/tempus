@@ -56,6 +56,7 @@ export class TimesheetComponent {
 		weekEndDate: new Date(),
 		approvedBySupervisor: false,
 		approvedByClient: false,
+		resourceComment: '',
 		supervisorComment: '',
 		clientRepresentativeComment: '',
 		audited: false,
@@ -71,25 +72,19 @@ export class TimesheetComponent {
 
 	@Input() projectName = '';
 
-	@Input() from!: Date;
+	sundayDate = ''; // sunday
 
-	@Input() thru!: Date;
+	saturdayDate = ''; // saturday
 
-	startDate2 = ''; // sunday
+	mondayDate = ''; // monday
 
-	endDate2 = ''; // saturday
+	tuesdayDate = ''; // tuesday
 
-	startDatePlusOne2 = ''; // monday
+	wednesdayDate = ''; // wednesday
 
-	startDatePlusTwo2 = ''; // tuesday
+	thursdayDate = ''; // thursday
 
-	startDatePlusThree2 = ''; // wednesday
-
-	startDatePlusFour2 = ''; // thursday
-
-	startDatePlusFive2 = ''; // friday
-
-	changed(picker: MatDateRangePicker<any>) {}
+	fridayDate = ''; // friday
 
 	// Columns for the timesheet table
 	displayedColumns: string[] = [
@@ -107,16 +102,43 @@ export class TimesheetComponent {
 
 	dataSource = ELEMENT_DATA;
 
-	projectSelected = new FormControl(this.projectName);
-
-	totalHours =
-		this.timesheet.mondayHours! +
-		this.timesheet.tuesdayHours! +
-		this.timesheet.wednesdayHours! +
-		this.timesheet.thursdayHours! +
-		this.timesheet.fridayHours! +
-		this.timesheet.saturdayHours! +
-		this.timesheet.sundayHours!;
+	totalHours = 0; // Total hours
 
 	constructor(private resourceService: OnboardingClientResourceService) {}
+
+	ngOnInit() {
+		// Set column names for each day of the week in the date range
+
+		// Get start date and end date and store in variables
+		const startDateRange = this.timesheet.weekStartDate!;
+		const endDateRange = this.timesheet.weekEndDate!;
+
+		// Variable for current date
+		let currentDate = new Date(startDateRange);
+
+		// Set all the column variable names
+		this.sundayDate = currentDate.toLocaleString();
+		currentDate.setDate(currentDate.getDate() + 1);
+		this.mondayDate = currentDate.toLocaleString();
+		currentDate.setDate(currentDate.getDate() + 1);
+		this.tuesdayDate = currentDate.toLocaleString();
+		currentDate.setDate(currentDate.getDate() + 1);
+		this.wednesdayDate = currentDate.toLocaleString();
+		currentDate.setDate(currentDate.getDate() + 1);
+		this.thursdayDate = currentDate.toLocaleString();
+		currentDate.setDate(currentDate.getDate() + 1);
+		this.fridayDate = currentDate.toLocaleString();
+		currentDate.setDate(currentDate.getDate() + 1);
+		this.saturdayDate = currentDate.toLocaleString();
+
+		// Calculate the total hours
+		this.totalHours =
+			(this.timesheet.mondayHours ?? 0) +
+			(this.timesheet.tuesdayHours ?? 0) +
+			(this.timesheet.wednesdayHours ?? 0) +
+			(this.timesheet.thursdayHours ?? 0) +
+			(this.timesheet.fridayHours ?? 0) +
+			(this.timesheet.saturdayHours ?? 0) +
+			(this.timesheet.sundayHours ?? 0);
+	}
 }
