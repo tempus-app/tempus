@@ -38,6 +38,9 @@
 			<h3 class="mat-h3">{{ profilePrefix + 'rejectedDialogHeading' | translate }}</h3>
 			<p class="mat-body-1" *ngIf="supervisorComment !== ''">{{ supervisorComment }}</p>
 		</div>
-		<tempus-resource-display-timesheet [timesheet]="timesheet"></tempus-resource-display-timesheet>
+		<tempus-resource-display-timesheet
+			[timesheet]="timesheet"
+			[projectName]="projectName"
+		></tempus-resource-display-timesheet>
 	</div>
 </ng-container>
