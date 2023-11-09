@@ -1,5 +1,3 @@
-import { ICreateTimesheetEntryDto } from '../timesheet-entry';
-
 export interface ICreateTimesheetDto {
 	projectId?: number;
 	resourceId?: number;

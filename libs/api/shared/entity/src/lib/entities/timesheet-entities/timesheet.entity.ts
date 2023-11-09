@@ -1,7 +1,6 @@
 import { CreateTimesheetDto } from '@tempus/api/shared/dto';
 import { Timesheet, TimesheetRevisionType } from '@tempus/shared-domain';
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany, ManyToOne } from 'typeorm';
-import { TimesheetEntryEntity } from './timesheet-entry.entity';
 import { ResourceEntity, UserEntity } from '../account-entities';
 import { ClientRepresentativeEntity, ProjectEntity } from '../project-entities';
 
