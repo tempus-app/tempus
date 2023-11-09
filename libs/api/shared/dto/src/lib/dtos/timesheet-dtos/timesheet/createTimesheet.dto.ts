@@ -1,6 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { ICreateTimesheetDto } from '@tempus/shared-domain';
-import { CreateTimesheetEntryDto } from '../timesheet-entry/createTimesheetEntry.dto';
 
 export class CreateTimesheetDto implements ICreateTimesheetDto {
 

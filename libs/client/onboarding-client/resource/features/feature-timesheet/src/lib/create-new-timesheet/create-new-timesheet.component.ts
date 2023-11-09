@@ -11,7 +11,6 @@ import { CustomModalType, ModalService, ModalType } from '@tempus/client/shared/
 import { EditViewTimesheetComponent } from 'libs/client/onboarding-client/shared/features/feature-edit-view-timesheet/src/lib/edit-view-timesheet/edit-view-timesheet.component';
 import {
 	ICreateProjectDto,
-	ICreateTimesheetEntryDto,
 	ICreateUserDto,
 	Project,
 	RevisionType,

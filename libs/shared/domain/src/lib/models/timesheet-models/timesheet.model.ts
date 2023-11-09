@@ -1,6 +1,5 @@
 import { Project, Resource, User } from '..';
 import { TimesheetRevisionType } from '../../enums/timesheetRevisionType';
-import { TimesheetEntry } from './timesheet-entry.model';
 
 export interface Timesheet {
 	id: number;
