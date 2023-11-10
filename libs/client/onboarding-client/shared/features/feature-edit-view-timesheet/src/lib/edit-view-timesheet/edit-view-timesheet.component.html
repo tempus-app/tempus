@@ -3,7 +3,7 @@
 		<div id="title-container" fxLayout="row" fxLayoutGap="0.5em">
 			<div fxLayout="column" fxFlex>
 				<div id="my-profile-container" fxFlex>
-					<h2 class="mat-h2 page-title">Create Timesheet</h2>
+					<h2 class="mat-h2 page-title">{{ editViewTimesheetPrefix + 'title' | translate }}</h2>
 				</div>
 			</div>
 		</div>
@@ -15,19 +15,19 @@
 		<div id="button-container2">
 			<div class="submitAndCancel">
 				<tempus-button
-					label="{{ editViewFormPrefix + 'buttons.cancel.label' | translate }}"
+					label="{{ editViewTimesheetPrefix + 'buttons.cancel.label' | translate }}"
 					color="accent"
 					(buttonClick)="closeEditView()"
-					matTooltip="{{ editViewFormPrefix + 'buttons.cancel.tooltip' | translate }}"
+					matTooltip="{{ editViewTimesheetPrefix + 'buttons.cancel.tooltip' | translate }}"
 					matTooltipClass="tooltip"
 				></tempus-button>
 
 				<tempus-button
 					[disabled]="!isValid()"
-					label="{{ editViewFormPrefix + 'buttons.submit.label' | translate }}"
+					label="{{ editViewTimesheetPrefix + 'buttons.submit.label' | translate }}"
 					color="accent"
 					(buttonClick)="submitChanges()"
-					matTooltip="{{ editViewFormPrefix + 'buttons.submit.tooltip' | translate }}"
+					matTooltip="{{ editViewTimesheetPrefix + 'buttons.submit.tooltip' | translate }}"
 					matTooltipClass="tooltip"
 					id="submit-profile-button"
 				></tempus-button>

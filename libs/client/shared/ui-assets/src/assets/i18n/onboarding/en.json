@@ -85,6 +85,19 @@
 				}
 			}
 		},
+		"editViewTimesheet": {
+			"title": "Create Timesheet",
+			"buttons": {
+				"cancel": {
+					"label": "Cancel",
+					"tooltip": "Discard changes"
+				},
+				"submit": {
+					"label": "Submit",
+					"tooltip": "Submit changes for approval"
+				}
+			}
+		},
 		"presentational": {
 			"noInfoSection": "No information has been entered for this section",
 			"personalInfo": {
@@ -172,7 +185,7 @@
 				"companyErr": "Please enter a company name",
 				"descriptionErr": "Please enter a description.",
 				"descriptionPlaceholder": "Description",
-        "descriptionCaption": "*Please enter description using bullet points (asterisks)"
+				"descriptionCaption": "*Please enter description using bullet points (asterisks)"
 			},
 			"personalInfo": {
 				"title": "Personal Information",
@@ -192,6 +205,12 @@
 					"otherLinkPlaceholder": "Other",
 					"invalidUrlErr": "Please enter a valid URL."
 				}
+			},
+			"timesheet": {
+				"project": "Project",
+				"comments": "Comments",
+				"hours": "Hours",
+				"total": "Total"
 			}
 		}
 	}

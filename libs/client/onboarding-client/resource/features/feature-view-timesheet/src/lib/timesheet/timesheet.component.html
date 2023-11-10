@@ -11,7 +11,7 @@
 					*ngIf="!approvedByClient || !approvedBySupervisor"
 					id="error-icon"
 					class="material-icons"
-					matTooltip="{{ profilePrefix + 'pendingApprovalTooltip' | translate }}"
+					matTooltip="{{ timesheetPrefix + 'pendingApprovalTooltip' | translate }}"
 					matTooltipClass="tooltip"
 					>error</span
 				>
@@ -19,7 +19,7 @@
 					*ngIf="status === TimesheetRevisionType.REJECTED"
 					id="reject-icon"
 					class="material-icons"
-					matTooltip="{{ profilePrefix + 'rejectedTooltip' | translate }}"
+					matTooltip="{{ timesheetPrefix + 'rejectedTooltip' | translate }}"
 					matTooltipClass="tooltip"
 					>cancel</span
 				>
@@ -35,7 +35,7 @@
 			</div>
 		</div>
 		<div *ngIf="status === TimesheetRevisionType.REJECTED" id="rejection-dialog">
-			<h3 class="mat-h3">{{ profilePrefix + 'rejectedDialogHeading' | translate }}</h3>
+			<h3 class="mat-h3">{{ timesheetPrefix + 'rejectedDialogHeading' | translate }}</h3>
 			<p class="mat-body-1" *ngIf="supervisorComment !== ''">{{ supervisorComment }}</p>
 		</div>
 		<tempus-resource-display-timesheet

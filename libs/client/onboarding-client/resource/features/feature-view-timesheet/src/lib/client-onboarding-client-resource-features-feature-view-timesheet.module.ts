@@ -21,7 +21,7 @@ import { TimesheetComponent } from './timesheet/timesheet.component';
 import { EditTimesheetComponent } from './edit-timesheet/edit-timesheet.component';
 
 function createTranslateLoader(http: HttpClient) {
-	return new TranslateHttpLoader(http, './assets/i18n/onboarding/resource/profile/', '.json');
+	return new TranslateHttpLoader(http, './assets/i18n/onboarding/resource/view-timesheet/', '.json');
 }
 
 @NgModule({

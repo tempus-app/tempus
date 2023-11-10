@@ -103,7 +103,7 @@ export class TimesheetComponent implements OnInit {
 
 	destroyed$ = new Subject<void>();
 
-	profilePrefix = 'onboardingResourceProfile.';
+	timesheetPrefix = 'onboardingResourceViewTimesheet.';
 
 	ButtonType = ButtonType;
 

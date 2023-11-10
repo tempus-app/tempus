@@ -116,7 +116,7 @@ export class TimesheetComponent {
 		// Variable for current date
 		let currentDate = new Date(startDateRange);
 
-		// Set all the column variable names
+		// Set all the column variables
 		this.sundayDate = currentDate.toLocaleString();
 		currentDate.setDate(currentDate.getDate() + 1);
 		this.mondayDate = currentDate.toLocaleString();

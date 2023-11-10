@@ -26,7 +26,7 @@ export class EditViewTimesheetComponent implements OnDestroy {
 
 	prefix = 'onboardingResourceTimesheet';
 
-	editViewFormPrefix = 'onboardingClient.editViewForm.';
+	editViewTimesheetPrefix = 'onboardingClient.editViewTimesheet.';
 
 	constructor(
 		private fb: FormBuilder,
