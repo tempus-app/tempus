@@ -18,10 +18,14 @@ export class TimesheetService {
 	) {}
 
 	async getTimesheet(timesheetId: number): Promise<Timesheet> {
-		const timesheetEntity = await this.timesheetRepository.findOne(timesheetId);
-		if (!timesheetEntity){
-			throw new NotFoundException(`Could not find timesheet with id ${timesheetId}`);
-		}
+		const timesheetEntity = await this.timesheetRepository.findOne(timesheetId, {
+			relations: [
+				'resource',
+				'project',
+				'supervisor'
+			],
+		});
+		if (!timesheetEntity) throw new NotFoundException(`Could not find timesheet with id ${timesheetId}`);
 		return timesheetEntity;
 	}
 
@@ -133,7 +137,7 @@ export class TimesheetService {
 			supervisorEntity = await this.userService.getUserbyId(timesheet.supervisorId);
 		const projectEntity = await this.projectService.getProjectInfo(timesheet.projectId);
 		const resourceEntity = await this.resourceService.getResourceInfo(timesheet.resourceId);
-		timesheetEntity.status = TimesheetRevisionType.NEW;
+		timesheetEntity.status = TimesheetRevisionType.SUBMITTED;
 		timesheetEntity.dateModified = new Date(Date.now());
 		timesheetEntity.supervisor = supervisorEntity;
 		timesheetEntity.resource = resourceEntity;
@@ -143,7 +147,7 @@ export class TimesheetService {
 
 	async updateTimesheet(updateTimesheetDto: UpdateTimesheetDto): Promise<Timesheet> {
 		const timesheetEntity = await this.getTimesheet(updateTimesheetDto.id);
-		/*const updatedTimesheetEntryDto = { ...updateTimesheetDto };
+		/* const updatedTimesheetEntryDto = { ...updateTimesheetDto };
 		Object.keys(updatedTimesheetEntryDto).forEach(key => {
 			const val = updatedTimesheetEntryDto[key];
 			if (!val) {

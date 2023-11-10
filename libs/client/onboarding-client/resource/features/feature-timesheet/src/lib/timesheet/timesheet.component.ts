@@ -1,46 +1,52 @@
 import { Component, Injectable, Input, OnDestroy, OnInit, TemplateRef, VERSION, ViewChild } from '@angular/core';
-import { DateAdapter } from '@angular/material/core';
-import { DateRange, MatDateRangePicker, MatDateRangeSelectionStrategy, MAT_DATE_RANGE_SELECTION_STRATEGY } from '@angular/material/datepicker';
 import { TranslateService } from '@ngx-translate/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ButtonType, Column, MyTimesheetsTableData, MyViewsTableData } from '@tempus/client/shared/ui-components/presentational';
-import { TempusResourceState, selectResourceTimesheets, getAllTimesheetsByResourceId, createTimesheet } from '@tempus/client/onboarding-client/resource/data-access';
+import {
+	ButtonType,
+	Column,
+	MyTimesheetsTableData,
+	MyViewsTableData,
+} from '@tempus/client/shared/ui-components/presentational';
+import {
+	TempusResourceState,
+	selectResourceTimesheets,
+	getAllTimesheetsByResourceId,
+	createTimesheet,
+} from '@tempus/client/onboarding-client/resource/data-access';
 import { Store } from '@ngrx/store';
-import { OnboardingClientResourceService, OnboardingClientState, OnboardingClientTimesheetsService, selectLoggedInUserId } from '@tempus/client/onboarding-client/shared/data-access';
+import {
+	OnboardingClientResourceService,
+	OnboardingClientState,
+	OnboardingClientTimesheetsService,
+	selectLoggedInUserId,
+} from '@tempus/client/onboarding-client/shared/data-access';
 import { Subject, finalize, take, takeUntil } from 'rxjs';
 import { PageEvent } from '@angular/material/paginator';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { CustomModalType, ModalService, ModalType } from '@tempus/client/shared/ui-components/modal';
+import { FormBuilder } from '@angular/forms';
 import { InputType } from '@tempus/client/shared/ui-components/input';
-
+import { time } from 'console';
+import { TimesheetRevisionType } from '@tempus/shared-domain';
 
 @Component({
-  selector: 'tempus-timesheet',
-  templateUrl: './timesheet.component.html',
-  styleUrls: ['./timesheet.component.scss'],
-  providers: [
-    OnboardingClientTimesheetsService
-  ],
+	selector: 'tempus-timesheet',
+	templateUrl: './timesheet.component.html',
+	styleUrls: ['./timesheet.component.scss'],
+	providers: [OnboardingClientTimesheetsService],
 })
 export class TimesheetComponent implements OnInit, OnDestroy {
-  	@Input() from !: Date;
-  	@Input() thru !: Date;
-  	prefix = 'onboardingResourceTimesheet';
+	@Input() from!: Date;
+	@Input() thru!: Date;
+	prefix = 'onboardingResourceTimesheet';
 
-  	InputType = InputType;
+	InputType = InputType;
 
-  	tableColumns: Array<Column> = [];
+	tableColumns: Array<Column> = [];
 
 	pageNum = 0;
 
 	pageSize = 10;
 
 	totalTimesheets = 0;
-
-	@ViewChild('createTimesheetModal')
-	createTimesheetModal!: TemplateRef<unknown>;
-
-	$createTimesheetModalClosedEvent = new Subject<void>();
 
 	constructor(
 		private translateService: TranslateService,
@@ -49,88 +55,73 @@ export class TimesheetComponent implements OnInit, OnDestroy {
 		private resourceStore: Store<TempusResourceState>,
 		private sharedStore: Store<OnboardingClientState>,
 		private fb: FormBuilder,
-		private modalService: ModalService,
 		private resourceService: OnboardingClientResourceService,
-				) {
-			const { currentLang } = translateService;
-			translateService.currentLang = '';
-			translateService.use(currentLang);
-			this.translateService
-				.get(`${this.prefix}.main.tableHeaders`)
-				.pipe(take(1))
-				.subscribe(data => {
-					this.tableColumns = [
-						{
-							columnDef: 'resourceName',
-							header: data.resourceName,
-							cell: (element: Record<string, unknown>) => `${element['resourceName']}`,
-						},
-						{
-							columnDef: 'projectName',
-							header: data.projectName,
-							cell: (element: Record<string, unknown>) => `${element['projectName']}`,
-						},
-						{
-							columnDef: 'startDate',
-							header: data.startDate,
-							cell: (element: Record<string, unknown>) => `${element['startDate']}`,
-						},
-						{
-							columnDef: 'endDate',
-							header: data.endDate,
-							cell: (element: Record<string, unknown>) => `${element['endDate']}`,
-						},
-						{
-							columnDef: 'totalTime',
-							header: data.totalTime,
-							cell: (element: Record<string, unknown>) => `${element['totalTime']}`,
-						},
-						{
-							columnDef: 'status',
-							header: data.status,
-							cell: (element: Record<string, unknown>) => `${element['status']}`,
-						},
-					];
-				});
-   		}
+	) {
+		const { currentLang } = translateService;
+		translateService.currentLang = '';
+		translateService.use(currentLang);
+		this.translateService
+			.get(`${this.prefix}.main.tableHeaders`)
+			.pipe(take(1))
+			.subscribe(data => {
+				this.tableColumns = [
+					{
+						columnDef: 'timesheetWeek',
+						header: data.timesheetWeek,
+						cell: (element: Record<string, unknown>) => `${element['timesheetWeek']}`,
+					},
+					{
+						columnDef: 'dateModified',
+						header: data.dateModified,
+						cell: (element: Record<string, unknown>) => `${element['dateModified']}`,
+					},
+					{
+						columnDef: 'projectName',
+						header: data.projectName,
+						cell: (element: Record<string, unknown>) => `${element['projectName']}`,
+					},
 
-   // Create timesheet form builder group
-   createTimesheetForm: FormGroup = this.fb.group({
-	startDate: ['', Validators.required],
-	endDate: ['', Validators.required],
-	project: ['', Validators.required],
-} ,{ validator: validateEndDateAfterStartDate });
-   
+					{
+						columnDef: 'totalTime',
+						header: data.totalTime,
+						cell: (element: Record<string, unknown>) => `${element['totalTime']}`,
+					},
+					{
+						columnDef: 'status',
+						header: data.status,
+						cell: (element: Record<string, unknown>) => `${element['status']}`,
+					},
+				];
+			});
+	}
 
-   $destroyed = new Subject<void>();
+	$destroyed = new Subject<void>();
 
-   timesheetsTableData: MyTimesheetsTableData[] = [];
- 
-   userId = 0;
- 
-   firstName = '';
- 
-   lastName = '';
- 
-   fullName = '';
- 
-   ButtonType = ButtonType;
+	timesheetsTableData: MyTimesheetsTableData[] = [];
 
-   projectOptions: { id: number; val: string }[] = [];
+	userId = 0;
 
-   nameOfUser = '';
+	firstName = '';
 
+	lastName = '';
 
-   ngOnInit(): void {
+	fullName = '';
 
-	this.resourceService.getResourceInformation().subscribe(data => {
-		this.projectOptions = data.projectResources.map(proj => {
-			return { id: proj.project.id, val: proj.project.name };
+	ButtonType = ButtonType;
+
+	projectOptions: { id: number; val: string }[] = [];
+
+	nameOfUser = '';
+
+	ngOnInit(): void {
+		this.resourceService.getResourceInformation().subscribe(data => {
+			this.projectOptions = data.projectResources.map(proj => {
+				return { id: proj.project.id, val: proj.project.name };
+			});
+			this.nameOfUser = `${data.firstName} ${data.lastName}`;
 		});
-		this.nameOfUser = `${data.firstName} ${data.lastName}`;
-	});
 
-    this.sharedStore
+		this.sharedStore
 			.select(selectLoggedInUserId)
 			.pipe(take(1))
 			.subscribe(data => {
@@ -143,13 +134,6 @@ export class TimesheetComponent implements OnInit, OnDestroy {
 			getAllTimesheetsByResourceId({ resourceId: this.userId, pageSize: this.pageSize, pageNum: this.pageNum }),
 		);
 
-		this.modalService.confirmEventSubject.pipe(takeUntil(this.$destroyed)).subscribe(modalId => {
-			this.modalService.close();
-			if (modalId === 'createTimesheetModal') {
-				this.$createTimesheetModalClosedEvent.next();
-			}
-		});
-
 		this.resourceStore
 			.select(selectResourceTimesheets)
 			.pipe(takeUntil(this.$destroyed))
@@ -157,36 +141,63 @@ export class TimesheetComponent implements OnInit, OnDestroy {
 				this.timesheetsTableData = [];
 				this.totalTimesheets = data.totalTimesheets;
 
-				console.log(this.totalTimesheets);
-				console.log(data.timesheets);
-				data.timesheets.forEach(timesheet => {
-					const startDate = new Date(timesheet.weekStartDate).toISOString().slice(0, 10);
-					const endDate = new Date(timesheet.weekEndDate).toISOString().slice(0, 10);
+				data.timesheets?.forEach(timesheet => {
+					const startDate = new Date(timesheet.weekStartDate).toLocaleString('en-US', {
+						day: 'numeric',
+						month: 'long',
+						year: 'numeric',
+					});
+					const endDate = new Date(timesheet.weekEndDate).toLocaleString('en-US', {
+						day: 'numeric',
+						month: 'long',
+						year: 'numeric',
+					});
+
+					const timesheetWeek = `${startDate} - ${endDate}`;
+
+					let dateModified = '-';
+					if (timesheet.dateModified) {
+						dateModified = new Date(timesheet.dateModified).toLocaleString('en-US', {
+							day: 'numeric',
+							month: 'long',
+							year: 'numeric',
+						});
+						console.log(dateModified);
+					}
+					const totalTime =
+						timesheet.sundayHours +
+						timesheet.mondayHours +
+						timesheet.tuesdayHours +
+						timesheet.wednesdayHours +
+						timesheet.thursdayHours +
+						timesheet.fridayHours +
+						timesheet.saturdayHours;
+
 					const status = timesheet.status.toString();
+
 					this.timesheetsTableData.push({
-						resourceName : `${timesheet.resource.firstName} ${timesheet.resource.lastName}`,
-						projectName :  timesheet.project.name,
-						startDate : startDate,
-						endDate : endDate,
-						totalTime : 0,
-						status : status,
-            timesheetId: timesheet.id,
-						url: `../timesheet/edit/${timesheet.id}`,
+						timesheetWeek: timesheetWeek,
+						dateModified: dateModified,
+						projectName: timesheet.project.name,
+						totalTime: totalTime,
+						status: status,
+						timesheetId: timesheet.id,
+						url: `../timesheet/${timesheet.id}`,
 						columnsWithIcon: [],
-						columnsWithUrl: ['resourceName'],
+						columnsWithUrl: ['timesheetWeek'],
 						columnsWithChips: ['status'],
 						columnsWithButtonIcon: [],
-					})
-				})
-			})
-  }
+					});
+				});
+			});
+	}
 
-  ngOnDestroy(): void {
+	ngOnDestroy(): void {
 		this.$destroyed.next();
 		this.$destroyed.complete();
 	}
 
-  tablePaginationEvent(pageEvent: PageEvent) {
+	tablePaginationEvent(pageEvent: PageEvent) {
 		if (pageEvent.pageSize !== this.pageSize) {
 			this.pageSize = pageEvent.pageSize;
 			this.pageNum = 0;
@@ -198,90 +209,7 @@ export class TimesheetComponent implements OnInit, OnDestroy {
 		);
 	}
 
-	// After clicking the create timesheet button the create timesheet modal is opened
-	createTimesheet = () => {
-		this.translateService
-			.get(`${this.prefix}.createTimesheetModal`)
-			.pipe(take(1))
-			.subscribe(data => {
-				this.modalService.open(
-					{
-						title: data.title,
-						id: 'createTimesheetModal',
-						closable: true,
-						confirmText: data.confirmText,
-						modalType: ModalType.INFO,
-						closeText: data.closeText,
-						template: this.createTimesheetModal,
-						subtitle: data.subtitle,
-					},
-					CustomModalType.CONTENT,
-				);
-			});
-		this.modalService.confirmDisabled()?.next(true);
-		this.createTimesheetForm?.valueChanges
-			.pipe(
-				takeUntil(this.$createTimesheetModalClosedEvent),
-				finalize(() => {
-					const createTimesheetDto = {
-					supervisorId: undefined,
-					projectId: this.createTimesheetForm.get('project')?.value,
-					resourceId : this.userId,
-					weekStartDate: this.createTimesheetForm.get('startDate')?.value,
-					weekEndDate: this.createTimesheetForm.get('endDate')?.value,
-					approvedBySupervisor: false,
-					approvedByClient: false,
-					supervisorComment: "",
-					clientRepresentativeComment: "",
-					audited: false,
-					billed: false,
-					}
-					this.resourceStore.dispatch(createTimesheet({ createTimesheetDto }));
-
-					this.createTimesheetForm.reset();
-					window.location.reload();
-				}),
-			)
-			.subscribe(() => {
-				if (this.createTimesheetForm.valid) {
-					this.modalService.confirmDisabled()?.next(false);
-				} else {
-					this.modalService.confirmDisabled()?.next(true);
-				}
-			});
-
-		this.modalService
-			.closed()
-			.pipe(take(1))
-			.subscribe(() => {
-				this.resetModalData();
-			});
-	};
-
-	// Reset modal data
-	resetModalData() {
-		this.createTimesheetForm = this.fb.group({
-			startDate: ['', Validators.required],
-			endDate: ['', Validators.required],
-			project: ['', Validators.required],
-		});
-	}
-
-  navigateToCreateNewTimesheet() {
-		this.router.navigate(['./edit/0'], { relativeTo: this.route });
-	}
-
-
-}
-
-
-function validateEndDateAfterStartDate(control: FormGroup) {
-	const startDate = control.get('startDate')?.value;
-	const endDate = control.get('endDate')?.value;
-  
-	if (endDate && startDate && endDate < startDate) {
-	  control.get('endDate')?.setErrors({ dateMismatch: true });
-	} else {
-	  control.get('endDate')?.setErrors(null);
+	navigateToCreateNewTimesheet() {
+		this.router.navigate(['./new'], { relativeTo: this.route });
 	}
 }

@@ -1,0 +1,24 @@
+{
+	"onboardingResourceViewTimesheet": {
+		"pendingApprovalTooltip": "This timesheet is awaiting approval",
+		"rejectedTooltip": "Changes to this timesheet have been rejected",
+		"rejectedDialogHeading": "Please modify your timesheet with the following changes:",
+		"deleteTimesheetModal": {
+			"title": "Delete {{timesheetName}}?",
+			"message": "Are you sure you want to permanently delete this timesheet?",
+			"confirmText": "Yes, delete",
+			"closeText": "Cancel"
+		},
+		"deleteTimesheetSuccess": "Timesheet deleted."
+	},
+	"onboardingResourceEditTimesheet": {
+		"modal": {
+			"submitModal": {
+				"title": "Submit changes?",
+				"message": "Your changes to this timesheet will be sent to CAL for approval.",
+				"closeText": "Cancel",
+				"confirmText": "Submit"
+			}
+		}
+	}
+}

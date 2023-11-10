@@ -1,151 +1,36 @@
 <ng-container>
-    <div id="page-container" fxLayout="column" fxLayoutGap="20px">
+	<div id="page-container" fxLayout="column" fxLayoutGap="20px">
 		<div id="title-container" fxLayout="row" fxLayoutGap="0.5em">
 			<div fxLayout="column" fxFlex>
 				<div id="my-profile-container" fxFlex>
-                    <h2
-	
-						class="mat-h2 page-title"
-					>
-						Week #
-					</h2>
-                </div>
-            </div>  
-        </div>
-        <div id="button-container">
-            <!-- Week picker -->
-            <mat-form-field appearance="outline">
-              <mat-date-range-input [rangePicker]="picker">
-                <input [(ngModel)]="this.from" matStartDate placeholder="Start date">
-                <input [(ngModel)]="this.thru" matEndDate placeholder="End date">
-              </mat-date-range-input>
-              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-              <mat-date-range-picker #picker (closed)="changed(picker)"></mat-date-range-picker>
-          </mat-form-field>
-         </div>
-        
-        <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
-        
-            <!--- Note that these columns can be defined in any order.
-                  The actual rendered columns are set as a property on the row definition" -->
-          
-            <!-- Position Column -->
-            <ng-container matColumnDef="position">
-              <th mat-header-cell *matHeaderCellDef> # </th>
-              <td mat-cell *matCellDef="let element"> {{element.position}} </td>
-            </ng-container>
-          
-            <!-- Project Column -->
-            <ng-container matColumnDef="project">
-              <th mat-header-cell *matHeaderCellDef> Project </th>
-              <td mat-cell *matCellDef="let element"> 
-                <tempus-dropdown
-                id="project-options"
-                [options]="projectOptions"
-                [control]="$any(selectedProject)"
-              ></tempus-dropdown> </td>
-            </ng-container>
-          
-            <!-- Sunday Column -->
-            <ng-container matColumnDef="sunday"id="proj">
-              <th mat-header-cell *matHeaderCellDef> {{startDate2 | date: 'fullDate'}} </th>
-              <td mat-cell *matCellDef="let element" > 
-                <br> Hours 
-                <tempus-text-input
-                ngDefaultControl
-                (ngModelChange)="calculateTotalHours($event)"
-                ></tempus-text-input>
-                </td>
-            </ng-container>
-          
-            <!-- Monday Column -->
-            <ng-container matColumnDef="monday">
-              <th mat-header-cell *matHeaderCellDef> {{startDatePlusOne2 | date: 'fullDate'}} </th>
-              <td mat-cell *matCellDef="let element"> 
-                <br> Hours 
-                <tempus-text-input ></tempus-text-input>
-                
-              </td>
-            </ng-container>
-        
-            <!-- Tuesday Column -->
-            <ng-container matColumnDef="tuesday">
-              <th mat-header-cell *matHeaderCellDef> {{startDatePlusTwo2 | date: 'fullDate'}} </th>
-                <td mat-cell *matCellDef="let element"> 
-                  <br> Hours 
-                  <tempus-text-input></tempus-text-input> 
-                 
-            </ng-container>
-        
-              <!-- Wednesday Column -->
-              <ng-container matColumnDef="wednesday">
-                <th mat-header-cell *matHeaderCellDef> {{startDatePlusThree2 | date: 'fullDate'}} </th>
-                <td mat-cell *matCellDef="let element"> 
-                  <br> Hours 
-                  <tempus-text-input></tempus-text-input>
-                
-            </ng-container>
-        
-            <!-- Thursday Column -->
-            <ng-container matColumnDef="thursday">
-              <th mat-header-cell *matHeaderCellDef> {{startDatePlusFour2 | date: 'fullDate'}} </th>
-                <td mat-cell *matCellDef="let element"> 
-                  <br> Hours 
-                  <tempus-text-input></tempus-text-input>
-                </td>
-            </ng-container>
-        
-            <!-- Friday Column -->
-            <ng-container matColumnDef="friday">
-              <th mat-header-cell *matHeaderCellDef> {{startDatePlusFive2 | date: 'fullDate'}} </th>
-                <td mat-cell *matCellDef="let element"> 
-                  <br> Hours 
-                  <tempus-text-input></tempus-text-input>
-                </td>
-            </ng-container>
-        
-            <!-- Saturday Column -->
-            <ng-container matColumnDef="saturday">
-                <th mat-header-cell *matHeaderCellDef> {{endDate2 | date: 'fullDate'}} </th>
-                <td mat-cell *matCellDef="let element"> 
-                  <br> Hours 
-                  <tempus-text-input></tempus-text-input>
-                </td>
-            </ng-container>
-        
-            <!-- Total Column -->
-            <ng-container matColumnDef="total">
-                <th mat-header-cell *matHeaderCellDef> Total </th>
-                <td mat-cell *matCellDef="let element"> 
-                  <tempus-text-input [control]="$any(totalHours)">
-                  </tempus-text-input> 
-                </td>
-            </ng-container>
-          
-            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-          </table>
-    </div>
+					<h2 class="mat-h2 page-title">{{ editViewTimesheetPrefix + 'title' | translate }}</h2>
+				</div>
+			</div>
+		</div>
 
-    <div id="button-container2">
-      <div class = "submitAndCancel">
-      <tempus-button
-        label="{{ editViewFormPrefix + 'buttons.cancel.label' | translate }}"
-        color="accent"
-        (buttonClick)="closeEditView()"
-        matTooltip="{{ editViewFormPrefix + 'buttons.cancel.tooltip' | translate }}"
-        matTooltipClass="tooltip"
-      ></tempus-button>
+		<!-- Timesheet component -->
+		<tempus-resource-info-timesheet (formGroup)="loadTimesheet($event)"></tempus-resource-info-timesheet>
 
-      <tempus-button
-        [disabled]="!isValid()"
-        label="{{ editViewFormPrefix + 'buttons.submit.label' | translate }}"
-        color="accent"
-        (buttonClick)="submitChanges()"
-        matTooltip="{{ editViewFormPrefix + 'buttons.submit.tooltip' | translate }}"
-        matTooltipClass="tooltip"
-        id="submit-profile-button"
-      ></tempus-button>
-    </div>
-    </div>
-</ng-container>
+		<!-- Submit and cancel buttons -->
+		<div id="button-container2">
+			<div class="submitAndCancel">
+				<tempus-button
+					label="{{ editViewTimesheetPrefix + 'buttons.cancel.label' | translate }}"
+					color="accent"
+					(buttonClick)="closeEditView()"
+					matTooltip="{{ editViewTimesheetPrefix + 'buttons.cancel.tooltip' | translate }}"
+					matTooltipClass="tooltip"
+				></tempus-button>
+
+				<tempus-button
+					[disabled]="!isValid()"
+					label="{{ editViewTimesheetPrefix + 'buttons.submit.label' | translate }}"
+					color="accent"
+					(buttonClick)="submitChanges()"
+					matTooltip="{{ editViewTimesheetPrefix + 'buttons.submit.tooltip' | translate }}"
+					matTooltipClass="tooltip"
+					id="submit-profile-button"
+				></tempus-button>
+			</div>
+		</div></div
+></ng-container>
