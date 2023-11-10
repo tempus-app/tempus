@@ -8,6 +8,7 @@ export const businessOwnerEntity: UserEntity = {
 	email: 'j.doe@gmail.com',
 	password: 'password',
 	refreshToken: null,
+	supervisedTimesheets: null,
 	roles: [RoleType.BUSINESS_OWNER],
 };
 
@@ -32,6 +33,8 @@ export const resourceEntity: ResourceEntity = {
 		country: 'USA',
 	},
 	projectResources: null,
+	timesheets:null,
+	supervisedTimesheets:null,
 	views: null,
 	experiences: null,
 	educations: null,
@@ -48,6 +51,8 @@ export const badUserEntity: ResourceEntity = {
 	calEmail: '',
 	password: 'bad_password',
 	refreshToken: null,
+	timesheets:null,
+	supervisedTimesheets:null,
 	roles: [],
 	phoneNumber: '614-244-2343',
 	linkedInLink: 'https://link.com',

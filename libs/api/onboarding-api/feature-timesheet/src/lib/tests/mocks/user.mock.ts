@@ -1,12 +1,12 @@
 import { UserEntity } from '@tempus/api/shared/entity';
 import { RoleType, User, JwtPayload } from '@tempus/shared-domain';
 
-export const userEntity: User = {
+export const supervisorEntityMock: User = {
 	firstName: 'john',
 	lastName: 'doe',
 	email: 'test@email.com',
 	id: 4,
-	roles: [RoleType.BUSINESS_OWNER],
+	roles: [RoleType.SUPERVISOR],
 	password: null,
 	refreshToken: null,
 	supervisedTimesheets:[],
