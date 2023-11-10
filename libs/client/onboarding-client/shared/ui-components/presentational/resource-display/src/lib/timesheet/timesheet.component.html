@@ -2,8 +2,18 @@
 	<!-- Week picker -->
 	<mat-form-field appearance="outline">
 		<mat-date-range-input [rangePicker]="picker">
-			<input [disabled]="true" [(ngModel)]="timesheet.weekStartDate" matStartDate placeholder="Start date" />
-			<input [disabled]="true" [(ngModel)]="timesheet.weekEndDate" matEndDate placeholder="End date" />
+			<input
+				[disabled]="true"
+				[(ngModel)]="timesheet.weekStartDate"
+				matStartDate
+				placeholder="{{ 'onboardingClient.input.common.dates.startPlaceholder' | translate }}"
+			/>
+			<input
+				[disabled]="true"
+				[(ngModel)]="timesheet.weekEndDate"
+				matEndDate
+				placeholder="{{ 'onboardingClient.input.common.dates.endPlaceholder' | translate }}"
+			/>
 		</mat-date-range-input>
 		<mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
 		<mat-date-range-picker #picker></mat-date-range-picker>
@@ -11,7 +21,7 @@
 </div>
 
 <!-- Timesheet table -->
-<table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+<table mat-table [dataSource]="dataSource" class="mat-elevation-z8 tempusTable">
 	<!-- Position Column -->
 	<ng-container matColumnDef="position">
 		<th mat-header-cell *matHeaderCellDef>#</th>
@@ -20,11 +30,11 @@
 
 	<!-- Project Column -->
 	<ng-container matColumnDef="project">
-		<th mat-header-cell *matHeaderCellDef>Project</th>
+		<th mat-header-cell *matHeaderCellDef>{{ 'onboardingClient.input.timesheet.project' | translate }}</th>
 		<td mat-cell *matCellDef="let element">
 			<p>{{ projectName }}</p>
 			<br />
-			<b>Comments:</b>
+			<b>{{ 'onboardingClient.input.timesheet.comments' | translate }}</b>
 			<p>{{ timesheet.resourceComment }}</p>
 		</td>
 	</ng-container>
@@ -34,7 +44,7 @@
 		<th mat-header-cell *matHeaderCellDef>{{ sundayDate | date: 'fullDate' }}</th>
 		<td mat-cell *matCellDef="let element">
 			<br />
-			Hours
+			{{ 'onboardingClient.input.timesheet.hours' | translate }}
 			<p>{{ timesheet.sundayHours }}</p>
 		</td>
 	</ng-container>
@@ -44,7 +54,7 @@
 		<th mat-header-cell *matHeaderCellDef>{{ mondayDate | date: 'fullDate' }}</th>
 		<td mat-cell *matCellDef="let element">
 			<br />
-			Hours
+			{{ 'onboardingClient.input.timesheet.hours' | translate }}
 			<p>{{ timesheet.mondayHours }}</p>
 		</td>
 	</ng-container>
@@ -54,7 +64,7 @@
 		<th mat-header-cell *matHeaderCellDef>{{ tuesdayDate | date: 'fullDate' }}</th>
 		<td mat-cell *matCellDef="let element">
 			<br />
-			Hours
+			{{ 'onboardingClient.input.timesheet.hours' | translate }}
 			<p>{{ timesheet.tuesdayHours }}</p>
 		</td></ng-container
 	>
@@ -64,7 +74,7 @@
 		<th mat-header-cell *matHeaderCellDef>{{ wednesdayDate | date: 'fullDate' }}</th>
 		<td mat-cell *matCellDef="let element">
 			<br />
-			Hours
+			{{ 'onboardingClient.input.timesheet.hours' | translate }}
 			<p>{{ timesheet.wednesdayHours }}</p>
 		</td></ng-container
 	>
@@ -74,7 +84,7 @@
 		<th mat-header-cell *matHeaderCellDef>{{ thursdayDate | date: 'fullDate' }}</th>
 		<td mat-cell *matCellDef="let element">
 			<br />
-			Hours
+			{{ 'onboardingClient.input.timesheet.hours' | translate }}
 			<p>{{ timesheet.thursdayHours }}</p>
 		</td>
 	</ng-container>
@@ -84,7 +94,7 @@
 		<th mat-header-cell *matHeaderCellDef>{{ fridayDate | date: 'fullDate' }}</th>
 		<td mat-cell *matCellDef="let element">
 			<br />
-			Hours
+			{{ 'onboardingClient.input.timesheet.hours' | translate }}
 			<p>{{ timesheet.fridayHours }}</p>
 		</td>
 	</ng-container>
@@ -94,14 +104,14 @@
 		<th mat-header-cell *matHeaderCellDef>{{ saturdayDate | date: 'fullDate' }}</th>
 		<td mat-cell *matCellDef="let element">
 			<br />
-			Hours
+			{{ 'onboardingClient.input.timesheet.hours' | translate }}
 			<p>{{ timesheet.saturdayHours }}</p>
 		</td>
 	</ng-container>
 
 	<!-- Total Column -->
 	<ng-container matColumnDef="total">
-		<th mat-header-cell *matHeaderCellDef>Total</th>
+		<th mat-header-cell *matHeaderCellDef>{{ 'onboardingClient.input.timesheet.total' | translate }}</th>
 		<td mat-cell *matCellDef="let element">
 			<p>{{ totalHours }}</p>
 		</td>

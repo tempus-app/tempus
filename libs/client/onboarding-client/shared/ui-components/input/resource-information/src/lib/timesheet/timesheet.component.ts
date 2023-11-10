@@ -196,6 +196,12 @@ export class TimesheetComponent implements OnInit {
 	// Today's date
 	dateNow: Date = new Date();
 
+	// Common prefix
+	commonPrefix = 'onboardingClient.input.common.';
+
+	// Timesheet prefix
+	timesheetPrefix = 'onboardingClient.input.timesheet.';
+
 	// ---------------------------------------------------------------------------
 
 	InputType = InputType;

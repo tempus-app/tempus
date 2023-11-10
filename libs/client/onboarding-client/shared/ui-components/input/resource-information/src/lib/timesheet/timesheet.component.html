@@ -6,13 +6,13 @@
 				[(ngModel)]="this.from"
 				[formControl]="$any(timesheetForm).get('startDate')"
 				matStartDate
-				placeholder="Start date"
+				placeholder="{{ commonPrefix + 'dates.startPlaceholder' | translate }}"
 			/>
 			<input
 				[(ngModel)]="this.thru"
 				[formControl]="$any(timesheetForm).get('endDate')"
 				matEndDate
-				placeholder="End date"
+				placeholder="{{ commonPrefix + 'dates.endPlaceholder' | translate }}"
 			/>
 		</mat-date-range-input>
 		<mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
@@ -21,24 +21,30 @@
 </div>
 
 <!-- Timesheet table -->
-<table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+<table mat-table [dataSource]="dataSource" class="mat-elevation-z8 tempusTable">
 	<!-- Position Column -->
-	<ng-container matColumnDef="position">
+	<ng-container matColumnDef="position" class="column-position">
 		<th mat-header-cell *matHeaderCellDef>#</th>
 		<td mat-cell *matCellDef="let element">{{ element.position }}</td>
 	</ng-container>
 
 	<!-- Project Column -->
 	<ng-container matColumnDef="project">
-		<th mat-header-cell *matHeaderCellDef>Project</th>
+		<th mat-header-cell *matHeaderCellDef>{{ timesheetPrefix + 'project' | translate }}</th>
 		<td mat-cell *matCellDef="let element">
-			<tempus-dropdown
-				id="project-options"
-				[optionsWithId]="projectOptions"
-				[control]="$any(timesheetForm).get('project')"
-			></tempus-dropdown>
+			<span class="projectContainer">
+				<br />
+				<tempus-dropdown
+					id="project-options"
+					[optionsWithId]="projectOptions"
+					[control]="$any(timesheetForm).get('project')"
+				></tempus-dropdown>
 
-			<tempus-text-area [control]="$any(timesheetForm).get('comments')"></tempus-text-area>
+				<tempus-text-area
+					[control]="$any(timesheetForm).get('comments')"
+					placeholder="{{ timesheetPrefix + 'comments' | translate }}"
+				></tempus-text-area>
+			</span>
 		</td>
 	</ng-container>
 
@@ -46,13 +52,15 @@
 	<ng-container matColumnDef="sunday" id="proj">
 		<th mat-header-cell *matHeaderCellDef>{{ startDate2 | date: 'fullDate' }}</th>
 		<td mat-cell *matCellDef="let element">
-			<br />
-			Hours
-			<tempus-text-input
-				ngDefaultControl
-				(input)="restrictInputToNumeric($event, 0, 24)"
-				[control]="$any(timesheetForm).get('sunday')"
-			></tempus-text-input>
+			<span class="cellContainer">
+				<br />
+				{{ timesheetPrefix + 'hours' | translate }}
+				<tempus-text-input
+					ngDefaultControl
+					(input)="restrictInputToNumeric($event, 0, 24)"
+					[control]="$any(timesheetForm).get('sunday')"
+				></tempus-text-input>
+			</span>
 		</td>
 	</ng-container>
 
@@ -60,12 +68,15 @@
 	<ng-container matColumnDef="monday">
 		<th mat-header-cell *matHeaderCellDef>{{ startDatePlusOne2 | date: 'fullDate' }}</th>
 		<td mat-cell *matCellDef="let element">
-			<br />
-			Hours
-			<tempus-text-input
-				(input)="restrictInputToNumeric($event, 0, 24)"
-				[control]="$any(timesheetForm).get('monday')"
-			></tempus-text-input>
+			<span class="cellContainer">
+				<br />
+				{{ timesheetPrefix + 'hours' | translate }}
+				<tempus-text-input
+					class="table-input"
+					(input)="restrictInputToNumeric($event, 0, 24)"
+					[control]="$any(timesheetForm).get('monday')"
+				></tempus-text-input>
+			</span>
 		</td>
 	</ng-container>
 
@@ -73,36 +84,45 @@
 	<ng-container matColumnDef="tuesday">
 		<th mat-header-cell *matHeaderCellDef>{{ startDatePlusTwo2 | date: 'fullDate' }}</th>
 		<td mat-cell *matCellDef="let element">
-			<br />
-			Hours
-			<tempus-text-input
-				(input)="restrictInputToNumeric($event, 0, 24)"
-				[control]="$any(timesheetForm).get('tuesday')"
-			></tempus-text-input></td
+			<span class="cellContainer">
+				<br />
+				{{ timesheetPrefix + 'hours' | translate }}
+				<tempus-text-input
+					class="table-input"
+					(input)="restrictInputToNumeric($event, 0, 24)"
+					[control]="$any(timesheetForm).get('tuesday')"
+				></tempus-text-input>
+			</span></td
 	></ng-container>
 
 	<!-- Wednesday Column -->
 	<ng-container matColumnDef="wednesday">
 		<th mat-header-cell *matHeaderCellDef>{{ startDatePlusThree2 | date: 'fullDate' }}</th>
 		<td mat-cell *matCellDef="let element">
-			<br />
-			Hours
-			<tempus-text-input
-				(input)="restrictInputToNumeric($event, 0, 24)"
-				[control]="$any(timesheetForm).get('wednesday')"
-			></tempus-text-input></td
+			<span class="cellContainer">
+				<br />
+				{{ timesheetPrefix + 'hours' | translate }}
+				<tempus-text-input
+					class="table-input"
+					(input)="restrictInputToNumeric($event, 0, 24)"
+					[control]="$any(timesheetForm).get('wednesday')"
+				></tempus-text-input>
+			</span></td
 	></ng-container>
 
 	<!-- Thursday Column -->
 	<ng-container matColumnDef="thursday">
 		<th mat-header-cell *matHeaderCellDef>{{ startDatePlusFour2 | date: 'fullDate' }}</th>
 		<td mat-cell *matCellDef="let element">
-			<br />
-			Hours
-			<tempus-text-input
-				(input)="restrictInputToNumeric($event, 0, 24)"
-				[control]="$any(timesheetForm).get('thursday')"
-			></tempus-text-input>
+			<span class="cellContainer">
+				<br />
+				{{ timesheetPrefix + 'hours' | translate }}
+				<tempus-text-input
+					class="table-input"
+					(input)="restrictInputToNumeric($event, 0, 24)"
+					[control]="$any(timesheetForm).get('thursday')"
+				></tempus-text-input>
+			</span>
 		</td>
 	</ng-container>
 
@@ -110,12 +130,15 @@
 	<ng-container matColumnDef="friday">
 		<th mat-header-cell *matHeaderCellDef>{{ startDatePlusFive2 | date: 'fullDate' }}</th>
 		<td mat-cell *matCellDef="let element">
-			<br />
-			Hours
-			<tempus-text-input
-				(input)="restrictInputToNumeric($event, 0, 24)"
-				[control]="$any(timesheetForm).get('friday')"
-			></tempus-text-input>
+			<span class="cellContainer">
+				<br />
+				{{ timesheetPrefix + 'hours' | translate }}
+				<tempus-text-input
+					class="table-input"
+					(input)="restrictInputToNumeric($event, 0, 24)"
+					[control]="$any(timesheetForm).get('friday')"
+				></tempus-text-input>
+			</span>
 		</td>
 	</ng-container>
 
@@ -123,20 +146,26 @@
 	<ng-container matColumnDef="saturday">
 		<th mat-header-cell *matHeaderCellDef>{{ endDate2 | date: 'fullDate' }}</th>
 		<td mat-cell *matCellDef="let element">
-			<br />
-			Hours
-			<tempus-text-input
-				(input)="restrictInputToNumeric($event, 0, 24)"
-				[control]="$any(timesheetForm).get('saturday')"
-			></tempus-text-input>
+			<span class="cellContainer">
+				<br />
+				{{ timesheetPrefix + 'hours' | translate }}
+				<tempus-text-input
+					class="table-input"
+					(input)="restrictInputToNumeric($event, 0, 24)"
+					[control]="$any(timesheetForm).get('saturday')"
+				></tempus-text-input>
+			</span>
 		</td>
 	</ng-container>
 
 	<!-- Total Column -->
 	<ng-container matColumnDef="total">
-		<th mat-header-cell *matHeaderCellDef>Total</th>
+		<th mat-header-cell *matHeaderCellDef>{{ timesheetPrefix + 'total' | translate }}</th>
 		<td mat-cell *matCellDef="let element">
-			<tempus-text-input (input)="restrictInputToNumeric($event, 0, 168)"> </tempus-text-input>
+			<span class="cellContainer">
+				<tempus-text-input class="table-input" (input)="restrictInputToNumeric($event, 0, 168)">
+				</tempus-text-input>
+			</span>
 		</td>
 	</ng-container>
 
