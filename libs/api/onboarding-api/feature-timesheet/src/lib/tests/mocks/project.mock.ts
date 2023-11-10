@@ -1,8 +1,6 @@
 import { AssignProjectDto, CreateProjectDto, UpdateProjectDto } from '@tempus/api/shared/dto';
 import { ProjectEntity } from '@tempus/api/shared/entity';
 import { ProjectStatus } from '@tempus/shared-domain';
-import { clientEntityMock } from './client.mock';
-import { clientRepresentativeMock } from './clientRepresentative.mock';
 
 export const createProjectMock = new CreateProjectDto(
 	2,
@@ -15,9 +13,6 @@ export const createProjectMock = new CreateProjectDto(
 	ProjectStatus.NOT_STARTED,
 
 );
-
-export const updateProjectDtoMock = new UpdateProjectDto(3);
-updateProjectDtoMock.status = ProjectStatus.ACTIVE;
 
 export const createProjectMockClientRepresentativeDetails = new CreateProjectDto(
 	2,
@@ -36,10 +31,9 @@ export const projectEntityMock: ProjectEntity = {
 	startDate: new Date('2022-01-04'),
 	endDate: undefined,
 	status: ProjectStatus.NOT_STARTED,
-	client: clientEntityMock,
-	clientRepresentative: clientRepresentativeMock,
+	client: null,
+	clientRepresentative: null,
 	projectResources: null,
 	timesheets: null,
 };
 
-export const assignProjectDetailsMock = new AssignProjectDto('UX Developer', new Date('2022-01-13'));
