@@ -157,6 +157,14 @@ export class SidebarComponent implements OnInit, OnDestroy {
 						SidebarTab.PERSONAL_INFORMATION,
 						SidebarTab.TIMESHEET,
 					];
+				} else {
+					this.tabs = [
+						SidebarTab.PRIMARY_VIEW,
+						SidebarTab.MY_VIEWS,
+						SidebarTab.MY_PROJECTS,
+						SidebarTab.PERSONAL_INFORMATION,
+						SidebarTab.TIMESHEET,
+					];
 				}
 			});
 

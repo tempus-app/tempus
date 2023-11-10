@@ -11,6 +11,7 @@ import { ProjectSeederService } from './services/project.seeder.service';
 import { ResourceSeederService } from './services/resource.seeder.service';
 import { UserSeederService } from './services/user.seeder.service';
 import { TimesheetSeederService } from './services/timsheet.seeder.service';
+import { ReportSeederService } from './services/report.seeder.service';
 /**
  * Module to seed database data
  *  @module
@@ -25,6 +26,7 @@ import { TimesheetSeederService } from './services/timsheet.seeder.service';
 		ResourceSeederService,
 		LinkSeederService,
 		TimesheetSeederService,
+		ReportSeederService,
 	],
 	exports: [SeederService],
 })

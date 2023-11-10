@@ -10,6 +10,7 @@ import { ProjectSeederService } from './services/project.seeder.service';
 import { ResourceSeederService } from './services/resource.seeder.service';
 import { UserSeederService } from './services/user.seeder.service';
 import { TimesheetSeederService } from './services/timsheet.seeder.service';
+import { ReportSeederService } from './services/report.seeder.service';
 
 /**
  * provider to seed database
@@ -29,6 +30,7 @@ export class SeederService {
 		private resourceSeedService: ResourceSeederService,
 		private linkSeederService: LinkSeederService,
 		private timesheetSeederService: TimesheetSeederService,
+		private reportSeederService: ReportSeederService,
 	) {}
 
 	/**
@@ -56,14 +58,20 @@ export class SeederService {
 		const users = await this.userSeederService.seedBusinessOwner(args.businessOwners);
 		const supervisors = await this.userSeederService.seedSupervisor(args.supervisors);
 		const links = await this.linkSeederService.seed(supervisors[0], projects, args.resources);
-		
+		const businessOwners = await this.userSeederService.seedBusinessOwner(args.businessOwners);
+		// ... within the seeding logic ...
+		const clientUsers = await this.userSeederService.seedClients(args.clientCount);
+		const reports = await this.reportSeederService.seedReports(args.reports);
+		console.log(reports);
+		// ... rest of the logic ...
+
 		const availableResources = await this.resourceSeedService.seedResources(links);
 		const assignedResources = await this.projectSeederService.seedAssignedResources(
 			projects,
 			availableResources.splice(0, args.resources / 2),
 		);
 		const timesheets = await this.timesheetSeederService.seedTimesheets(supervisors, assignedResources, projects);
-		const allUsers = users.concat(availableResources).concat(assignedResources).concat(supervisors);
+		const allUsers = businessOwners.concat(supervisors).concat(clientUsers);
 		//SeederService.writeToJson(allUsers);
 		await SeederService.writeToCSV(allUsers);
 	}

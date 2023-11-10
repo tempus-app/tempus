@@ -3,12 +3,14 @@ import { ForbiddenException, Injectable, InternalServerErrorException, NotFoundE
 import { InjectRepository } from '@nestjs/typeorm';
 import { ConfigService } from '@nestjs/config';
 import { getManager, Repository } from 'typeorm';
-import { genSalt, hash } from 'bcrypt';
+import * as bcrypt from 'bcrypt';
+import { hash, genSalt } from 'bcrypt';
 import { UserEntity } from '@tempus/api/shared/entity';
 import { CreateUserDto, JwtPayload, UpdateUserDto } from '@tempus/api/shared/dto';
 import { CommonService } from '@tempus/api/shared/feature-common';
 import { EmailService } from '@tempus/api/shared/feature-email';
 
+const saltRounds = 10;
 @Injectable()
 export class UserService {
 	constructor(
@@ -21,7 +23,7 @@ export class UserService {
 
 	async createUser(user: CreateUserDto): Promise<User> {
 		const userEntity = UserEntity.fromDto(user);
-		userEntity.password = await this.hashPassword(userEntity.password);
+		userEntity.password = await bcrypt.hash(userEntity.password, saltRounds);
 		if ((await this.userRepository.findOne({ email: userEntity.email })) !== undefined) {
 			throw new ForbiddenException('Cannot create a user that already exists');
 		}
@@ -98,5 +100,9 @@ export class UserService {
 		} catch (e) {
 			throw new InternalServerErrorException(e);
 		}
+	}
+
+	async findByEmail(email: string): Promise<UserEntity | undefined> {
+		return this.userRepository.findOne({ where: { email } });
 	}
 }
