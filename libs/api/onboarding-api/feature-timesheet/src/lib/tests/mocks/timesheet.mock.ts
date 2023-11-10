@@ -30,7 +30,7 @@ export const updateTimesheetMock = new UpdateTimesheetDto(3);
 
 export const createTimesheetEntity = new TimesheetEntity(
     3, new Date('2023-10-10'), new Date('2023-10-10'),false,
-    false,"","",false,false,
+    false,"","","",false,false,
     0,0,0,0,0,0,0,
     resourceEntityMock,projectEntityMock,supervisorEntityMock,TimesheetRevisionType.NEW,
 );
@@ -41,6 +41,7 @@ export const timesheetEntityMock: TimesheetEntity = {
     weekEndDate: new Date('2023-10-10'),
     approvedBySupervisor: false,
     approvedByClient: false,
+    resourceComment: "",
     supervisorComment: "",
     clientRepresentativeComment: "",
     audited: false,
@@ -60,7 +61,7 @@ export const timesheetEntityMock: TimesheetEntity = {
 
 export const dbTimesheet = new TimesheetEntity(
     3, new Date('2023-10-10'), new Date('2023-10-10'),false,
-    false,"","",false,false,
+    false,"","","",false,false,
     0,0,0,0,0,0,0,
     resourceEntityMock,projectEntityMock,supervisorEntityMock,TimesheetRevisionType.NEW,
 );
@@ -72,6 +73,7 @@ export const submittedTimesheetEntityMock: TimesheetEntity = {
     weekEndDate: new Date('2023-10-20'),
     approvedBySupervisor: false,
     approvedByClient: false,
+    resourceComment: "",
     supervisorComment: "",
     clientRepresentativeComment: "",
     audited: false,
@@ -104,6 +106,7 @@ export const billedTimesheetEntityMock: TimesheetEntity = {
     weekEndDate: new Date('2023-10-29'),
     approvedBySupervisor: true,
     approvedByClient: true,
+    resourceComment: "",
     supervisorComment: "",
     clientRepresentativeComment: "",
     audited: true,

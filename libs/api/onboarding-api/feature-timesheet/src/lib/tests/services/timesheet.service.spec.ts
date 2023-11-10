@@ -99,7 +99,7 @@ describe('TimesheetService', () => {
             } catch(e){
                 error = e;
             }
-            expect(mockTimesheetRepository.findOne).toBeCalledWith(100);
+            expect(mockTimesheetRepository.findOne).toBeCalledWith(100, {"relations": ["resource", "project", "supervisor"]});
             expect(error).toBeInstanceOf(NotFoundException);
 			expect(error.message).toEqual('Timesheet does not exist');
         });
@@ -229,7 +229,7 @@ describe('TimesheetService', () => {
             mockTimesheetRepository.findOne.mockResolvedValue(dbTimesheet);
 			mockTimesheetRepository.remove.mockResolvedValue(dbTimesheet);
 			await timesheetService.deleteTimesheet(dbTimesheet.id);
-			expect(mockTimesheetRepository.findOne).toBeCalledWith(dbTimesheet.id);
+			expect(mockTimesheetRepository.findOne).toBeCalledWith(dbTimesheet.id, {"relations": ["resource", "project", "supervisor"]});
 			expect(mockTimesheetRepository.remove).toBeCalledWith({ ...dbTimesheet });
         });
 
