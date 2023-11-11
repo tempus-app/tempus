@@ -26,4 +26,8 @@ export class ReportService {
 			throw error; // rethrow the error to handle it in the calling service
 		}
 	}
+
+	async findAll(): Promise<ReportEntity[]> {
+		return this.reportRepository.find();
+	}
 }

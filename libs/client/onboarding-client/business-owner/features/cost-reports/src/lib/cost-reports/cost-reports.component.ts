@@ -1,6 +1,7 @@
 // cost-reports.component.ts
 import { Component, OnInit } from '@angular/core';
 import { Column, TableDataModel } from '@tempus/client/shared/ui-components/presentational';
+import { ReportService } from './report.service';
 
 export interface CostReport {
 	clientName: string;
@@ -25,28 +26,9 @@ export interface CostReportsTableData extends TableDataModel, CostReport {
 	styleUrls: ['./cost-reports.component.scss'],
 })
 export class CostReportsComponent implements OnInit {
+	costReportsTableData: CostReportsTableData[] = [];
 	pageNum = 1;
 	totalCostReports = 1;
-
-	// Using the extended interface
-	costReportsTableData: CostReportsTableData[] = [
-		{
-			clientName: 'Client A',
-			projectName: 'Project X',
-			userName: 'User 1',
-			taskName: 'Task Alpha',
-			month: 'January',
-			position: 'Developer',
-			hoursWorked: 160,
-			costRate: 30,
-			totalCost: 4800,
-			columnsWithIcon: [],
-			columnsWithUrl: [],
-			columnsWithChips: [],
-			columnsWithButtonIcon: [],
-		},
-		// ... Add more sample data as needed ...
-	];
 
 	// Ensure tableColumns is of type Column[]
 	tableColumns: Column[] = [
@@ -91,13 +73,26 @@ export class CostReportsComponent implements OnInit {
 			header: 'Total Cost',
 			cell: (element: CostReportsTableData) => `${element.totalCost}`,
 		},
-
 	];
 
-	constructor() {}
-
+	constructor(private reportService: ReportService) {}
 	ngOnInit(): void {
-		// Implement additional logic as required
+		this.loadReports();
+	}
+
+	loadReports(): void {
+		this.reportService.getReports().subscribe({
+			next: data => {
+				this.costReportsTableData = data.map(report => ({
+					...report,
+					columnsWithIcon: [],
+					columnsWithUrl: [],
+					columnsWithChips: [],
+					columnsWithButtonIcon: [],
+				}));
+			},
+			error: err => console.error('Error fetching reports', err),
+		});
 	}
 
 	tablePaginationEvent(event: any): void {
