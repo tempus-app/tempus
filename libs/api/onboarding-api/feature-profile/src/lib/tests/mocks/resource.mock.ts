@@ -22,4 +22,6 @@ export const resourceEntity: ResourceEntity = {
 	refreshToken: '',
 	roles: [],
 	resume: undefined,
+	timesheets:[],
+	supervisedTimesheets:[],
 };

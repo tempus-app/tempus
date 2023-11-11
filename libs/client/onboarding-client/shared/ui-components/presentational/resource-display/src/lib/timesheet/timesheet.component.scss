@@ -1,0 +1,19 @@
+@use 'abstracts/helper' as abs;
+@use 'components/helper' as cmp;
+
+.tempusTable {
+	width: 100%;
+	box-shadow: none;
+
+	th {
+		@include abs.h3($color: abs.$primary-800);
+		font-size: 1em;
+		font-weight: 900;
+		background-color: abs.$primary-100;
+	}
+	td {
+		@include abs.h3($color: abs.$primary-800);
+		font-size: 1em;
+		font-weight: 900;
+	}
+}

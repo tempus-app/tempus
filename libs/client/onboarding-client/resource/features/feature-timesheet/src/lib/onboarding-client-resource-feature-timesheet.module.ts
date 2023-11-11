@@ -30,7 +30,9 @@ function createTranslateLoader(http: HttpClient) {
 }
 
 @NgModule({
-	imports: [CommonModule, MatIconModule,
+	imports: [
+		CommonModule,
+		MatIconModule,
 		MatDialogModule,
 		MatTooltipModule,
 		MatTableModule,
@@ -47,7 +49,7 @@ function createTranslateLoader(http: HttpClient) {
 		OnboardingClientSharedFeatureEditViewFormModule,
 		ClientOnboardingClientSharedFeaturesFeatureEditViewTimesheetModule,
 		MatNativeDateModule,
-        MatDatepickerModule,
+		MatDatepickerModule,
 		FormsModule,
 		ReactiveFormsModule,
 		RouterModule.forChild([
@@ -57,7 +59,7 @@ function createTranslateLoader(http: HttpClient) {
 				component: TimesheetComponent,
 			},
 			{
-				path: 'edit/:id',
+				path: 'new',
 				pathMatch: 'full',
 				component: CreateNewTimesheetComponent,
 			},
@@ -70,10 +72,8 @@ function createTranslateLoader(http: HttpClient) {
 			},
 			isolate: false,
 			extend: true,
-		}),],
-	declarations: [
-   TimesheetComponent,
-   CreateNewTimesheetComponent
+		}),
 	],
+	declarations: [TimesheetComponent, CreateNewTimesheetComponent],
 })
 export class OnboardingClientResourceFeatureTimesheetModule {}

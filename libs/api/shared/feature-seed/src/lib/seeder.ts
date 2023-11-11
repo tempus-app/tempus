@@ -72,7 +72,9 @@ export class SeederService {
 		);
 		const timesheets = await this.timesheetSeederService.seedTimesheets(supervisors, assignedResources, projects);
 		const allUsers = businessOwners.concat(supervisors).concat(clientUsers);
-		//SeederService.writeToJson(allUsers);
+		//		const allUsers = users.concat(availableResources).concat(assignedResources).concat(supervisors);
+
+		////SeederService.writeToJson(allUsers);
 		await SeederService.writeToCSV(allUsers);
 	}
 

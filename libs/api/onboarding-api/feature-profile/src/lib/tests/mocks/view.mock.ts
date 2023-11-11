@@ -80,6 +80,7 @@ export const resourceUserEntity: UserEntity = {
 	password: 'password',
 	refreshToken: 'token',
 	roles: [RoleType.AVAILABLE_RESOURCE],
+	supervisedTimesheets: [],
 };
 export const businessOwnerUserEntity: UserEntity = {
 	id: 4,
@@ -89,6 +90,7 @@ export const businessOwnerUserEntity: UserEntity = {
 	password: 'password',
 	refreshToken: 'token',
 	roles: [RoleType.BUSINESS_OWNER],
+	supervisedTimesheets : [],
 };
 export const supervisorUserEntity: UserEntity = {
 	id: 5,
@@ -98,6 +100,7 @@ export const supervisorUserEntity: UserEntity = {
 	password: 'password',
 	refreshToken: 'token',
 	roles: [RoleType.SUPERVISOR],
+	supervisedTimesheets : [],
 };
 
 export const newViewDto: CreateViewDto = {
