@@ -6,6 +6,7 @@ import {
 	OnboardingClientState,
 	selectLoggedInUserId,
 	selectLoggedInUserNameEmail,
+	OnboardingClientResourceService,
 } from '@tempus/client/onboarding-client/shared/data-access';
 import { ButtonType, Column, MyTimesheetsTableData } from '@tempus/client/shared/ui-components/presentational';
 import { Subject, take, takeUntil, finalize } from 'rxjs';
@@ -51,6 +52,7 @@ export class ViewTimesheetApprovalsComponent implements OnInit, OnDestroy {
 		private sharedStore: Store<OnboardingClientState>,
 		private fb: FormBuilder,
 		private modalService: ModalService,
+		private resourceService: OnboardingClientResourceService,
 	) {
 		const { currentLang } = translateService;
 		translateService.currentLang = '';
@@ -61,15 +63,21 @@ export class ViewTimesheetApprovalsComponent implements OnInit, OnDestroy {
 			.subscribe(data => {
 				this.tableColumns = [
 					{
-						columnDef: 'projectName',
-						header: data.projectName,
-						cell: (element: Record<string, unknown>) => `${element.projectName}`,
-					},
-					{
 						columnDef: 'timesheetWeek',
 						header: data.timesheetWeek,
 						cell: (element: Record<string, unknown>) => `${element.timesheetWeek}`,
 					},
+					{
+						columnDef: 'dateModified',
+						header: data.dateModified,
+						cell: (element: Record<string, unknown>) => `${element.dateModified}`,
+					},
+					{
+						columnDef: 'projectName',
+						header: data.projectName,
+						cell: (element: Record<string, unknown>) => `${element.projectName}`,
+					},
+
 					{
 						columnDef: 'totalTime',
 						header: data.totalTime,
@@ -133,6 +141,7 @@ export class ViewTimesheetApprovalsComponent implements OnInit, OnDestroy {
 			.subscribe(data => {
 				this.timesheetsTableData = [];
 				this.totalTimesheets = data.totalTimesheets;
+
 				data.timesheets.forEach(timesheet => {
 					const startDate = new Date(timesheet.weekStartDate).toLocaleString('en-US', {
 						day: 'numeric',
@@ -143,6 +152,11 @@ export class ViewTimesheetApprovalsComponent implements OnInit, OnDestroy {
 						day: 'numeric',
 						month: 'long',
 						year: 'numeric',
+					});
+
+					this.resourceService.getResourceInformationById(timesheet.resource.id).subscribe(resourceInfo => {
+						this.firstName = resourceInfo.firstName;
+						this.lastName = resourceInfo.lastName;
 					});
 
 					const timesheetWeek = `${startDate} - ${endDate}`;
@@ -167,22 +181,20 @@ export class ViewTimesheetApprovalsComponent implements OnInit, OnDestroy {
 
 					const status = timesheet.status.toString();
 
-					if (status != 'NEW') {
-						this.timesheetsTableData.push({
-							timesheetWeek,
-							dateModified,
-							projectName: timesheet.project.name,
-							totalTime,
-							status,
-							timesheetId: timesheet.id,
-							columnsWithIcon: [],
-							columnsWithUrl: [],
-							columnsWithChips: ['status'],
-							columnsWithButtonIcon: [],
-						});
-					}
+					this.timesheetsTableData.push({
+						timesheetWeek,
+						dateModified,
+						projectName: timesheet.project.name,
+						totalTime,
+						status,
+						timesheetId: timesheet.id,
+						url: `../timesheet-approvals/${timesheet.id}`,
+						columnsWithIcon: [],
+						columnsWithUrl: ['timesheetWeek'],
+						columnsWithChips: ['status'],
+						columnsWithButtonIcon: [],
+					});
 				});
-				console.log(this.timesheetsTableData);
 			});
 	}
 
@@ -207,64 +219,64 @@ export class ViewTimesheetApprovalsComponent implements OnInit, OnDestroy {
 		);
 	}
 
-	handleRowClick(event: MouseEvent): void {
-		const rowElement = (event.target as HTMLElement).closest('tr');
-		if (rowElement) {
-			const rowIndex = rowElement.rowIndex - 1;
-			const rowData = this.timesheetsTableData[rowIndex];
+	// handleRowClick(event: MouseEvent): void {
+	// 	const rowElement = (event.target as HTMLElement).closest('tr');
+	// 	if (rowElement) {
+	// 		const rowIndex = rowElement.rowIndex - 1;
+	// 		const rowData = this.timesheetsTableData[rowIndex];
 
-			this.translateService
-				.get(`${this.prefix}.approveTimesheetModal`)
-				.pipe(take(1))
-				.subscribe(data => {
-					this.modalService.open(
-						{
-							title: data.title,
-							id: 'approveTimesheetModal',
-							closable: true,
-							confirmText: data.confirmText,
-							modalType: ModalType.INFO,
-							// closeText: data.closeText,
-							template: this.approveTimesheetModal,
-							subtitle: data.subtitle,
-						},
-						CustomModalType.CONTENT,
-					);
-				});
-			this.modalService.confirmDisabled()?.next(true);
-			this.approveTimesheetForm?.valueChanges
-				.pipe(
-					takeUntil(this.$approveTimesheetModalClosedEvent),
-					finalize(() => {
-						const approveTimesheetDto = {
-							approval: true,
-							comment: this.approveTimesheetForm.get('comment')?.value,
-						};
-						this.businessownerStore.dispatch(
-							updateTimesheetStatusAsSupervisor({
-								timesheetId: rowData.timesheetId,
-								approveTimesheetDto,
-							}),
-						);
-						window.location.reload();
-					}),
-				)
-				.subscribe(() => {
-					if (this.approveTimesheetForm.valid) {
-						this.modalService.confirmDisabled()?.next(false);
-					} else {
-						this.modalService.confirmDisabled()?.next(true);
-					}
-				});
+	// 		this.translateService
+	// 			.get(`${this.prefix}.approveTimesheetModal`)
+	// 			.pipe(take(1))
+	// 			.subscribe(data => {
+	// 				this.modalService.open(
+	// 					{
+	// 						title: data.title,
+	// 						id: 'approveTimesheetModal',
+	// 						closable: true,
+	// 						confirmText: data.confirmText,
+	// 						modalType: ModalType.INFO,
+	// 						// closeText: data.closeText,
+	// 						template: this.approveTimesheetModal,
+	// 						subtitle: data.subtitle,
+	// 					},
+	// 					CustomModalType.CONTENT,
+	// 				);
+	// 			});
+	// 		this.modalService.confirmDisabled()?.next(true);
+	// 		this.approveTimesheetForm?.valueChanges
+	// 			.pipe(
+	// 				takeUntil(this.$approveTimesheetModalClosedEvent),
+	// 				finalize(() => {
+	// 					const approveTimesheetDto = {
+	// 						approval: true,
+	// 						comment: this.approveTimesheetForm.get('comment')?.value,
+	// 					};
+	// 					this.businessownerStore.dispatch(
+	// 						updateTimesheetStatusAsSupervisor({
+	// 							timesheetId: rowData.timesheetId,
+	// 							approveTimesheetDto,
+	// 						}),
+	// 					);
+	// 					window.location.reload();
+	// 				}),
+	// 			)
+	// 			.subscribe(() => {
+	// 				if (this.approveTimesheetForm.valid) {
+	// 					this.modalService.confirmDisabled()?.next(false);
+	// 				} else {
+	// 					this.modalService.confirmDisabled()?.next(true);
+	// 				}
+	// 			});
 
-			this.modalService
-				.closed()
-				.pipe(take(1))
-				.subscribe(() => {
-					this.resetModalData();
-				});
-		}
-	}
+	// 		this.modalService
+	// 			.closed()
+	// 			.pipe(take(1))
+	// 			.subscribe(() => {
+	// 				this.resetModalData();
+	// 			});
+	// 	}
+	// }
 
 	// Reset modal data
 	resetModalData() {

@@ -3,9 +3,8 @@
 		"main": {
 			"title": "Timesheet Approvals",
 			"tableHeaders": {
-				"startDate": "Start Date",
-				"endDate": "End Date",
-				"resourceName": "Full Name",
+				"timesheetWeek": "Timesheet Week",
+				"dateModified": "Date Modified",
 				"totalTime": "Total hours",
 				"projectName": "Project",
 				"status": "Status"
@@ -18,6 +17,6 @@
 			"closeText": "Reject",
 			"confirmText": "Approve",
 			"supervisorComment": "Comments"
-		  }
+		}
 	}
 }
