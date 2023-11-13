@@ -1,34 +1,32 @@
 <div fxLayout="column" id="page-container">
-  <div>
-      <div id="title-container">
-          <h2 class="mat-h2 page-title">{{ prefix + '.main.title' | translate }}</h2>
-      </div>
-  </div>
-  <div id="table-container">
-      <tempus-table
-          (paginatorEvent)="tablePaginationEvent($event)"
-          [page]="pageNum"
-          [totalItems]="totalTimesheets"
-          [tableColumns]="tableColumns"
-          [tableData]="timesheetsTableData"
-          (click)="handleRowClick($event)"
-          class="table-row"
-      ></tempus-table>
-  </div>
+	<div>
+		<div id="title-container">
+			<h2 class="mat-h2 page-title">{{ prefix + '.main.title' | translate }}</h2>
+		</div>
+	</div>
+	<div id="table-container">
+		<tempus-table
+			(paginatorEvent)="tablePaginationEvent($event)"
+			[page]="pageNum"
+			[totalItems]="totalTimesheets"
+			[tableColumns]="tableColumns"
+			[tableData]="timesheetsTableData"
+		></tempus-table>
+	</div>
 </div>
 
 <!-- Approve timesheet modal -->
 <ng-template #approveTimesheetModal>
-    <tempus-card style="margin-top: 1rem">
-      <div fxLayout="column">
-        <tempus-text-input
-            id="supervisor-comment"
-            [inputType]="InputType.TEXT"
-            placeholder="{{ prefix + '.approveTimesheetModal.supervisorComment' | translate }}"
-            cssClass="secondary"
-            [control]="$any(approveTimesheetForm).get('comment')"
-        >
-        </tempus-text-input>
-      </div>
-    </tempus-card>
-  </ng-template>
+	<tempus-card style="margin-top: 1rem">
+		<div fxLayout="column">
+			<tempus-text-input
+				id="supervisor-comment"
+				[inputType]="InputType.TEXT"
+				placeholder="{{ prefix + '.approveTimesheetModal.supervisorComment' | translate }}"
+				cssClass="secondary"
+				[control]="$any(approveTimesheetForm).get('comment')"
+			>
+			</tempus-text-input>
+		</div>
+	</tempus-card>
+</ng-template>

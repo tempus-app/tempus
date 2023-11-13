@@ -129,6 +129,7 @@ export class ResourceProfileContentComponent implements OnInit, OnChanges {
 	@Output() revisionViewLoaded = new EventEmitter<LoadView>();
 
 	ngOnChanges(changes: SimpleChanges): void {
+		console.log('happend');
 		// eslint-disable-next-line @typescript-eslint/dot-notation
 		if (changes['viewID'] && changes['viewID'].currentValue !== 0) {
 			// eslint-disable-next-line @typescript-eslint/dot-notation

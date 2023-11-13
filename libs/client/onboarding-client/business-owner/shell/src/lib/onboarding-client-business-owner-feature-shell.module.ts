@@ -59,6 +59,15 @@ const routes: Routes = [
 						'@tempus/client/onboarding-client/business-owner/features/feature-view-timesheet-approvals'
 					).then(m => m.ClientOnboardingClientBusinessOwnerFeaturesFeatureViewTimesheetApprovalsModule),
 			},
+			{
+				path: 'timesheet-approvals/:id',
+				canLoad: [AuthGuard],
+				canActivate: [AuthGuard],
+				loadChildren: () =>
+					import('@tempus/client/onboarding-client/business-owner/features/feature-view-timesheet').then(
+						m => m.ClientOnboardingClientBusinessOwnerFeaturesFeatureViewTimesheetModule,
+					),
+			},
 		],
 	},
 ];
