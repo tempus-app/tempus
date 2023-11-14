@@ -115,11 +115,14 @@ export class TimesheetService {
 			const toReturn = await this.timesheetRepository.save(timesheetEntity);
 			return toReturn;
 		}
-		timesheetEntity.status = TimesheetRevisionType.REJECTED;
-		timesheetEntity.dateModified = new Date(Date.now());
-		timesheetEntity.supervisorComment = comment;
-		const toReturn = await this.timesheetRepository.save(timesheetEntity);
-		return toReturn;
+			else if (approval === false) {
+			timesheetEntity.status = TimesheetRevisionType.REJECTED;
+			timesheetEntity.dateModified = new Date(Date.now());
+			timesheetEntity.supervisorComment = comment;
+			const toReturn = await this.timesheetRepository.save(timesheetEntity);
+			return toReturn;
+		}
+		return;
 	}
 
 	async createTimesheet(timesheet: CreateTimesheetDto): Promise<Timesheet> {
