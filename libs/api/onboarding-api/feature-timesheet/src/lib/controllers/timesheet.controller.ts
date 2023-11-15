@@ -61,7 +61,7 @@ export class TimesheetController {
 	}
 
 	@UseGuards(JwtAuthGuard)
-	@Patch('/:timesheetId')
+	@Patch('/')
 	async editTimesheet(@Body() updateTimesheetDto: UpdateTimesheetDto): Promise<Timesheet> {
 		return this.timesheetService.updateTimesheet(updateTimesheetDto);
 	}

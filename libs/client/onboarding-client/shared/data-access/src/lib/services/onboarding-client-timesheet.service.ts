@@ -1,9 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
 import { APP_CONFIG } from '@tempus/app-config';
-import { AppConfig, IApproveTimesheetDto, ICreateTimesheetDto, RevisionType, Timesheet, View } from '@tempus/shared-domain';
+import { AppConfig, IApproveTimesheetDto, ICreateTimesheetDto, IUpdateTimesheetDto, RevisionType, Timesheet, View } from '@tempus/shared-domain';
 import { catchError, Observable } from 'rxjs';
 import { handleError } from './errorHandler';
+import { UpdateTimesheetDto } from '@tempus/api/shared/dto';
 
 @Injectable({ providedIn: 'root' })
 export class OnboardingClientTimesheetsService {
@@ -43,6 +44,10 @@ export class OnboardingClientTimesheetsService {
 
 	public createTimesheet(createTimesheetDto: ICreateTimesheetDto): Observable<Timesheet> {
 		return this.http.post<Timesheet>(`${this.timesheetURL}/`, createTimesheetDto).pipe(catchError(handleError));
+	}
+
+	public editTimesheet(updatedTimesheet: UpdateTimesheetDto): Observable<Timesheet> {
+		return this.http.patch<Timesheet>(`${this.timesheetURL}/`, updatedTimesheet).pipe(catchError(handleError));
 	}
 
 	public updateTimesheetStatusAsSupervisor(

@@ -147,16 +147,9 @@ export class TimesheetService {
 
 	async updateTimesheet(updateTimesheetDto: UpdateTimesheetDto): Promise<Timesheet> {
 		const timesheetEntity = await this.getTimesheet(updateTimesheetDto.id);
-		/* const updatedTimesheetEntryDto = { ...updateTimesheetDto };
-		Object.keys(updatedTimesheetEntryDto).forEach(key => {
-			const val = updatedTimesheetEntryDto[key];
-			if (!val) {
-				delete updatedTimesheetEntryDto[key];
-			}
-		}); */
 
 		if (timesheetEntity === undefined) {
-			throw new NotFoundException(`Could not find timesheet with id ${updateTimesheetDto}`);
+			throw new NotFoundException(`Could not find timesheet with id ${updateTimesheetDto.id}`);
 		}
 		if (timesheetEntity.billed) {
 			throw new ForbiddenException("This timesheet has already been billed and can't be modified");
