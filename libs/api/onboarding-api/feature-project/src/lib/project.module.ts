@@ -5,13 +5,12 @@ import { AccountModule } from '@tempus/onboarding-api/feature-account';
 import { ClientController } from './controllers/client.controller';
 import { ClientRepresentativeController } from './controllers/clientRepresentative.controller';
 import { ProjectController } from './controllers/project.controller';
-import { ReportsController } from './controllers/reports.controller'; // Import ReportsController
-import { ClientService, ProjectService, ClientRepresentativeService, ReportService } from './services'; // Import ReportService
+import { ClientService, ProjectService, ClientRepresentativeService } from './services';
 
 @Module({
 	imports: [ApiSharedEntityModule, AccountModule, CommonModule],
-	controllers: [ClientController, ProjectController, ClientRepresentativeController, ReportsController], // Add ReportsController
-	providers: [ClientService, ProjectService, ClientRepresentativeService, ReportService], // Add ReportService
-	exports: [ClientService, ProjectService, ClientRepresentativeService, ReportService], // ReportService can be exported if needed elsewhere
+	controllers: [ClientController, ProjectController, ClientRepresentativeController ], 
+	providers: [ClientService, ProjectService, ClientRepresentativeService ], 
+	exports: [ClientService, ProjectService, ClientRepresentativeService], 
 })
 export class ProjectModule {}

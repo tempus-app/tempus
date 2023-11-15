@@ -30,6 +30,7 @@
 		"onboarding-api-feature-profile": "libs/api/onboarding-api/feature-profile",
 		"onboarding-api-feature-project": "libs/api/onboarding-api/feature-project",
 		"onboarding-api-feature-timesheet": "libs/api/onboarding-api/feature-timesheet",
+		"onboarding-api-feature-report": "libs/api/onboarding-api/feature-report",
 		"onboarding-client": "apps/onboarding-client",
 		"onboarding-client-business-owner-data-access": "libs/client/onboarding-client/business-owner/data-access",
 		"onboarding-client-business-owner-feature-manage-resources": "libs/client/onboarding-client/business-owner/features/feature-manage-resources",

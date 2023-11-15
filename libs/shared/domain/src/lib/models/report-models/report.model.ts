@@ -3,9 +3,7 @@ export interface Report {
 	clientName?: string;
 	projectName?: string;
 	userName?: string;
-	taskName?: string;
 	month?: string;
-	position?: string;
 	hoursWorked?: number;
 	costRate?: number;
 	totalCost?: number;
