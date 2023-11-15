@@ -31,7 +31,7 @@
 
 		<ng-template #modalID>
 			<div>
-				<p>{{ viewResourceProfilePrefx + 'rejectDialog.helpText' | translate }}</p>
+				<p>{{ viewTimesheetPrefx + 'rejectDialog.helpText' | translate }}</p>
 				<tempus-text-area
 					id="reject-revision-message-textarea"
 					[control]="$any(approveTimesheetForm).get('rejectionComments')"
@@ -46,7 +46,7 @@
 							$any(approveTimesheetForm).get('rejectionComments').dirty)
 					"
 				>
-					{{ viewResourceProfilePrefx + 'rejectDialog.errorMessage' | translate }}
+					{{ viewTimesheetPrefx + 'rejectDialog.errorMessage' | translate }}
 				</mat-error>
 			</div>
 		</ng-template>
