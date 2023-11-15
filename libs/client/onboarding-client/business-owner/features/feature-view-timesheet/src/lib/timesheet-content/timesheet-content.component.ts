@@ -12,7 +12,7 @@ import { Store } from '@ngrx/store';
 import { CustomModalType, ModalService, ModalType } from '@tempus/client/shared/ui-components/modal';
 import { TempusResourceState } from '@tempus/client/onboarding-client/resource/data-access';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import {
 	getAllTimesheetsBySupervisorId,
 	BusinessOwnerState,
@@ -104,7 +104,7 @@ export class TimesheetContentComponent implements OnInit {
 
 	isRevision = false;
 
-	viewResourceProfilePrefx = 'viewResourceProfile.';
+	viewTimesheetPrefx = 'viewTimesheet.';
 
 	@ViewChild('approveTimesheetModal')
 	approveTimesheetModal!: TemplateRef<unknown>;
@@ -134,7 +134,7 @@ export class TimesheetContentComponent implements OnInit {
 	};
 
 	approveTimesheetForm: FormGroup = this.fb.group({
-		rejectionComments: [''],
+		rejectionComments: ['', Validators.required],
 	});
 
 	$destroyed = new Subject<void>();
@@ -201,10 +201,10 @@ export class TimesheetContentComponent implements OnInit {
 
 	openRejectionDialog() {
 		this.translateService
-			.get(['viewResourceProfile.rejectDialog'])
+			.get(['viewTimesheet.rejectDialog'])
 			.pipe(take(1))
 			.subscribe(data => {
-				const rejectionDialogText = data['viewResourceProfile.rejectDialog'];
+				const rejectionDialogText = data['viewTimesheet.rejectDialog'];
 				this.modalService.open(
 					{
 						title: rejectionDialogText.title,
@@ -220,15 +220,15 @@ export class TimesheetContentComponent implements OnInit {
 
 		this.modalService.confirmEventSubject.subscribe(() => {
 			this.modalService.close();
+
+			console.log(this.approveTimesheetForm.get('rejectionComments')?.value);
 			const approveTimesheetDto = {
 				approval: false,
-				comment: this.approveTimesheetForm.get('comments')?.value,
+				comment: this.approveTimesheetForm.get('rejectionComments')?.value,
 			};
-			this.businessownerStore.dispatch(
-				updateTimesheetStatusAsSupervisor({
-					timesheetId: parseInt(this.route.snapshot.paramMap.get('id') || '0', 10),
-					approveTimesheetDto,
-				}),
+			this.timesheetService.updateTimesheetStatusAsSupervisor(
+				parseInt(this.route.snapshot.paramMap.get('id') || '0', 10),
+				approveTimesheetDto,
 			);
 			this.modalService.confirmEventSubject.unsubscribe();
 			this.router.navigate(['../../timesheet-approvals'], { relativeTo: this.route }).then(() => {
@@ -239,10 +239,10 @@ export class TimesheetContentComponent implements OnInit {
 
 	openConfirmationDialog() {
 		this.translateService
-			.get(['viewResourceProfile.confirmationDialog'])
+			.get(['viewTimesheet.confirmationDialog'])
 			.pipe(take(1))
 			.subscribe(data => {
-				const confirmationDialogText = data['viewResourceProfile.confirmationDialog'];
+				const confirmationDialogText = data['viewTimesheet.confirmationDialog'];
 				this.modalService.open(
 					{
 						title: confirmationDialogText.title,
@@ -260,7 +260,7 @@ export class TimesheetContentComponent implements OnInit {
 			this.modalService.close();
 			const approveTimesheetDto = {
 				approval: true,
-				comment: this.approveTimesheetForm.get('comments')?.value,
+				comment: this.approveTimesheetForm.get('rejectionComments')?.value,
 			};
 			this.businessownerStore.dispatch(
 				updateTimesheetStatusAsSupervisor({

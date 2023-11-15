@@ -8,7 +8,11 @@ import {
 	selectLoggedInUserNameEmail,
 	OnboardingClientResourceService,
 } from '@tempus/client/onboarding-client/shared/data-access';
-import { ButtonType, Column, MyTimesheetsTableData } from '@tempus/client/shared/ui-components/presentational';
+import {
+	ButtonType,
+	Column,
+	PendingTimesheetApprovalsTableData,
+} from '@tempus/client/shared/ui-components/presentational';
 import { Subject, take, takeUntil, finalize } from 'rxjs';
 import {
 	getAllTimesheetsBySupervisorId,
@@ -68,6 +72,11 @@ export class ViewTimesheetApprovalsComponent implements OnInit, OnDestroy {
 						cell: (element: Record<string, unknown>) => `${element.timesheetWeek}`,
 					},
 					{
+						columnDef: 'submittedBy',
+						header: data.submittedBy,
+						cell: (element: Record<string, unknown>) => `${element.submittedBy}`,
+					},
+					{
 						columnDef: 'dateModified',
 						header: data.dateModified,
 						cell: (element: Record<string, unknown>) => `${element.dateModified}`,
@@ -98,7 +107,7 @@ export class ViewTimesheetApprovalsComponent implements OnInit, OnDestroy {
 
 	$destroyed = new Subject<void>();
 
-	timesheetsTableData: MyTimesheetsTableData[] = [];
+	timesheetsTableData: PendingTimesheetApprovalsTableData[] = [];
 
 	userId = 0;
 
@@ -159,6 +168,8 @@ export class ViewTimesheetApprovalsComponent implements OnInit, OnDestroy {
 						this.lastName = resourceInfo.lastName;
 					});
 
+					const submittedBy = `${this.firstName} - ${this.lastName}`;
+
 					const timesheetWeek = `${startDate} - ${endDate}`;
 
 					let dateModified = '-';
@@ -183,6 +194,7 @@ export class ViewTimesheetApprovalsComponent implements OnInit, OnDestroy {
 
 					this.timesheetsTableData.push({
 						timesheetWeek,
+						submittedBy,
 						dateModified,
 						projectName: timesheet.project.name,
 						totalTime,

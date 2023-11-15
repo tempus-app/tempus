@@ -58,3 +58,13 @@ export interface MyTimesheetsTableData extends TableDataModel {
 	status: string;
 	timesheetId: number;
 }
+
+export interface PendingTimesheetApprovalsTableData extends TableDataModel {
+	timesheetWeek: string;
+	submittedBy: string;
+	dateModified: string;
+	totalTime: number;
+	projectName: string;
+	status: string;
+	timesheetId: number;
+}

@@ -20,7 +20,7 @@ import { TimesheetContentComponent } from './timesheet-content/timesheet-content
 import { TimesheetComponent } from './timesheet/timesheet.component';
 
 function createTranslateLoader(http: HttpClient) {
-	return new TranslateHttpLoader(http, './assets/i18n/onboarding/owner/view-resource-profile/', '.json');
+	return new TranslateHttpLoader(http, './assets/i18n/onboarding/owner/view-timesheet-approvals/', '.json');
 }
 
 @NgModule({
