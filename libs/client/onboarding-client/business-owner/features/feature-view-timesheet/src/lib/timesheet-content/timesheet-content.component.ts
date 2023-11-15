@@ -219,18 +219,22 @@ export class TimesheetContentComponent implements OnInit {
 			});
 
 		this.modalService.confirmEventSubject.subscribe(() => {
-			this.modalService.close();
+			
 
 			console.log(this.approveTimesheetForm.get('rejectionComments')?.value);
 			const approveTimesheetDto = {
 				approval: false,
 				comment: this.approveTimesheetForm.get('rejectionComments')?.value,
 			};
-			this.timesheetService.updateTimesheetStatusAsSupervisor(
-				parseInt(this.route.snapshot.paramMap.get('id') || '0', 10),
-				approveTimesheetDto,
+
+			this.businessownerStore.dispatch(
+				updateTimesheetStatusAsSupervisor({
+					timesheetId: parseInt(this.route.snapshot.paramMap.get('id') || '0', 10),
+					approveTimesheetDto,
+				}),
 			);
 			this.modalService.confirmEventSubject.unsubscribe();
+			this.modalService.close();
 			this.router.navigate(['../../timesheet-approvals'], { relativeTo: this.route }).then(() => {
 				window.location.reload();
 			});
@@ -257,7 +261,7 @@ export class TimesheetContentComponent implements OnInit {
 			});
 
 		this.modalService.confirmEventSubject.subscribe(() => {
-			this.modalService.close();
+			
 			const approveTimesheetDto = {
 				approval: true,
 				comment: this.approveTimesheetForm.get('rejectionComments')?.value,
@@ -269,6 +273,7 @@ export class TimesheetContentComponent implements OnInit {
 				}),
 			);
 			this.modalService.confirmEventSubject.unsubscribe();
+			this.modalService.close();
 			this.router.navigate(['../../timesheet-approvals'], { relativeTo: this.route }).then(() => {
 				window.location.reload();
 			});
