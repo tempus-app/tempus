@@ -1,15 +1,19 @@
-<!-- cost-reports.component.html -->
 <div fxLayout="column" id="page-container">
-	<div id="title-container">
-			<h2 class="mat-h2 page-title">Cost Reports</h2>
+	<div>
+		<div id="title-container">
+			<h2 class="mat-h2 page-title">Reports</h2>
+		</div>
 	</div>
-	<div id="table-container">
-			<tempus-table
-					[page]="pageNum"
-					[totalItems]="totalCostReports"
-					[tableColumns]="tableColumns"
-					[tableData]="costReportsTableData"
-					(paginatorEvent)="tablePaginationEvent($event)">
-			</tempus-table>
-	</div>
+  <div fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="start center">
+    <div fxLayout="column" *ngFor="let dropdown of dropdowns">
+      <label class="dropdown-label">{{ dropdown.label }}</label>
+      <tempus-dropdown
+        id="dropdown-{{ dropdown.name }}"
+        [label]="dropdown.label"
+        [options]="dropdownOptions[dropdown.name]"
+        (optionSelect)="onDropdownSelect($event, dropdown.name)">
+      </tempus-dropdown>
+    </div>
+  </div>
+	<tempus-button mat-raised-button (buttonClick)="generateDropdowns()" [label]="'Generate Report'" [color]="'primary'"></tempus-button>
 </div>

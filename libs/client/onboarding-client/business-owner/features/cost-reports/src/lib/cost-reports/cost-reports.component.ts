@@ -30,54 +30,85 @@ export class CostReportsComponent implements OnInit {
 	pageNum = 1;
 	totalCostReports = 1;
 
-	// Ensure tableColumns is of type Column[]
-	tableColumns: Column[] = [
-		{ columnDef: 'clientName', header: 'Client Name', cell: (element: CostReportsTableData) => element.clientName },
-		{
-			columnDef: 'projectName',
-			header: 'Project Name',
-			cell: (element: CostReportsTableData) => element.projectName,
-		},
-		{
-			columnDef: 'userName',
-			header: 'User Name',
-			cell: (element: CostReportsTableData) => `${element.userName}`,
-		},
-		{
-			columnDef: 'taskName',
-			header: 'Task Name',
-			cell: (element: CostReportsTableData) => `${element.taskName}`,
-		},
-		{
-			columnDef: 'month',
-			header: 'Month',
-			cell: (element: CostReportsTableData) => `${element.month}`,
-		},
-		{
-			columnDef: 'position',
-			header: 'Position',
-			cell: (element: CostReportsTableData) => `${element.position}`,
-		},
-		{
-			columnDef: 'hoursWorked',
-			header: 'Hours Worked',
-			cell: (element: CostReportsTableData) => `${element.hoursWorked}`,
-		},
-		{
-			columnDef: 'costRate',
-			header: 'Cost Rate',
-			cell: (element: CostReportsTableData) => `${element.costRate}`,
-		},
-		{
-			columnDef: 'totalCost',
-			header: 'Total Cost',
-			cell: (element: CostReportsTableData) => `${element.totalCost}`,
-		},
+	dropdownOptions: { [key: string]: any[] } = {};
+
+	dropdowns = [
+		{ name: 'project', label: 'Project' },
+		{ name: 'user', label: 'User' },
+		{ name: 'client', label: 'Client' },
+		{ name: 'month', label: 'Month' },
+		{ name: 'year', label: 'Year' },
 	];
+
+	// Ensure tableColumns is of type Column[]
+	// tableColumns: Column[] = [
+	// 	{ columnDef: 'clientName', header: 'Client Name', cell: (element: CostReportsTableData) => element.clientName },
+	// 	{
+	// 		columnDef: 'projectName',
+	// 		header: 'Project Name',
+	// 		cell: (element: CostReportsTableData) => element.projectName,
+	// 	},
+	// 	{
+	// 		columnDef: 'userName',
+	// 		header: 'User Name',
+	// 		cell: (element: CostReportsTableData) => `${element.userName}`,
+	// 	},
+	// 	{
+	// 		columnDef: 'taskName',
+	// 		header: 'Task Name',
+	// 		cell: (element: CostReportsTableData) => `${element.taskName}`,
+	// 	},
+	// 	{
+	// 		columnDef: 'month',
+	// 		header: 'Month',
+	// 		cell: (element: CostReportsTableData) => `${element.month}`,
+	// 	},
+	// 	{
+	// 		columnDef: 'position',
+	// 		header: 'Position',
+	// 		cell: (element: CostReportsTableData) => `${element.position}`,
+	// 	},
+	// 	{
+	// 		columnDef: 'hoursWorked',
+	// 		header: 'Hours Worked',
+	// 		cell: (element: CostReportsTableData) => `${element.hoursWorked}`,
+	// 	},
+	// 	{
+	// 		columnDef: 'costRate',
+	// 		header: 'Cost Rate',
+	// 		cell: (element: CostReportsTableData) => `${element.costRate}`,
+	// 	},
+	// 	{
+	// 		columnDef: 'totalCost',
+	// 		header: 'Total Cost',
+	// 		cell: (element: CostReportsTableData) => `${element.totalCost}`,
+	// 	},
+	// ];
 
 	constructor(private reportService: ReportService) {}
 	ngOnInit(): void {
-		this.loadReports();
+		// this.loadReports();
+		this.initializeDropdownOptions();
+	}
+
+	generateDropdowns(): void {
+    console.log('Generate Dropdowns clicked');
+    // Implement the logic as needed
+  }
+
+	initializeDropdownOptions(): void {
+		const dropdownNames = ['project', 'user', 'client', 'month', 'year'];
+		dropdownNames.forEach(name => {
+			this.dropdownOptions[name] = this.generateRandomOptions(); // Assuming this method generates random options
+		});
+	}
+	onDropdownSelect(event: any, dropdownName: string): void {
+		console.log(`Selected option in Dropdown ${dropdownName}:`, event);
+	}
+
+	generateRandomOptions(): any[] {
+		// This is just an example implementation. Adjust it according to your actual requirements.
+		return Array.from({ length: 10 }, (_, i) => `Option ${i + 1}`);
 	}
 
 	loadReports(): void {
