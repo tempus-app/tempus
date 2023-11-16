@@ -199,6 +199,7 @@ export class TimesheetComponent implements OnInit {
 		this.timesheet.fridayHours = timesheet.fridayHours;
 		this.timesheet.saturdayHours = timesheet.saturdayHours;
 		this.timesheet.sundayHours = timesheet.sundayHours;
+		this.status = timesheet.status;
 	}
 
 	openEditTimesheet() {

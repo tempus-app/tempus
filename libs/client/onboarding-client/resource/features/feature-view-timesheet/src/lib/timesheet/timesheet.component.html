@@ -8,7 +8,10 @@
 			<div id="my-profile-container">
 				<h2 class="mat-h2 page-title">{{ timesheetWeek }}</h2>
 				<span
-					*ngIf="!approvedByClient || !approvedBySupervisor"
+					*ngIf="
+						status !== TimesheetRevisionType.REJECTED &&
+						(timesheet.approvedByClient === false || timesheet.approvedBySupervisor === false)
+					"
 					id="error-icon"
 					class="material-icons"
 					matTooltip="{{ timesheetPrefix + 'pendingApprovalTooltip' | translate }}"
@@ -26,7 +29,7 @@
 			</div>
 			<div id="button-container">
 				<tempus-button
-					[disabled]="!approvedByClient || !approvedBySupervisor"
+					[disabled]="status !== TimesheetRevisionType.REJECTED"
 					[buttonType]="ButtonType.EDIT"
 					color="accent"
 					(buttonClick)="openEditTimesheet()"
@@ -36,7 +39,7 @@
 		</div>
 		<div *ngIf="status === TimesheetRevisionType.REJECTED" id="rejection-dialog">
 			<h3 class="mat-h3">{{ timesheetPrefix + 'rejectedDialogHeading' | translate }}</h3>
-			<p class="mat-body-1" *ngIf="supervisorComment !== ''">{{ supervisorComment }}</p>
+			<p class="mat-body-1" *ngIf="timesheet.supervisorComment !== ''">{{ timesheet.supervisorComment }}</p>
 		</div>
 		<tempus-resource-display-timesheet
 			[timesheet]="timesheet"

@@ -156,6 +156,7 @@ export class TimesheetService {
 		}
 		for (const [key, val] of Object.entries(updateTimesheetDto)) if (!val) delete updateTimesheetDto[key];
 		Object.assign(timesheetEntity, updateTimesheetDto);
+		timesheetEntity.status = TimesheetRevisionType.SUBMITTED;
 		return this.timesheetRepository.save(timesheetEntity);
 	}
 

@@ -1,6 +1,16 @@
 /* eslint-disable */
-import { Component, EventEmitter, Input, OnInit, Output, Injectable, VERSION } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+	Component,
+	EventEmitter,
+	Input,
+	OnInit,
+	Output,
+	Injectable,
+	VERSION,
+	SimpleChange,
+	SimpleChanges,
+} from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import {
 	DateRange,
 	MatDateRangePicker,
@@ -11,6 +21,7 @@ import { InputType } from '@tempus/client/shared/ui-components/input';
 import { ICreateTimesheetDto } from '@tempus/shared-domain';
 import { DateAdapter } from '@angular/material/core';
 import { OnboardingClientResourceService } from '@tempus/client/onboarding-client/shared/data-access';
+import { ActivatedRoute } from '@angular/router';
 
 @Injectable()
 
@@ -208,7 +219,29 @@ export class TimesheetComponent implements OnInit {
 
 	numberTimesheetSections: number[] = [0];
 
-	@Input() timesheetsArray: Array<ICreateTimesheetDto> = [];
+	@Input() timesheet: ICreateTimesheetDto = {
+		projectId: 0,
+		resourceId: 0,
+		supervisorId: 0,
+		weekStartDate: new Date(),
+		weekEndDate: new Date(),
+		approvedBySupervisor: false,
+		approvedByClient: false,
+		resourceComment: '',
+		supervisorComment: '',
+		clientRepresentativeComment: '',
+		audited: false,
+		billed: false,
+		mondayHours: 0,
+		tuesdayHours: 0,
+		wednesdayHours: 0,
+		thursdayHours: 0,
+		fridayHours: 0,
+		saturdayHours: 0,
+		sundayHours: 0,
+	};
+
+	@Input() projectName = '';
 
 	@Output() formGroup = new EventEmitter();
 
@@ -217,6 +250,24 @@ export class TimesheetComponent implements OnInit {
 	userId = 0;
 
 	projectOptions: { id: number; val: string }[] = [];
+
+	sundayDate = ''; // sunday
+
+	saturdayDate = ''; // saturday
+
+	mondayDate = ''; // monday
+
+	tuesdayDate = ''; // tuesday
+
+	wednesdayDate = ''; // wednesday
+
+	thursdayDate = ''; // thursday
+
+	fridayDate = ''; // friday
+
+	totalHours = 0; // Total hours
+
+	isLoadingStoreData = false;
 
 	// Create timesheet form builder group
 	timesheetForm: FormGroup = this.fb.group({
@@ -233,7 +284,13 @@ export class TimesheetComponent implements OnInit {
 		saturday: ['', Validators.required],
 	});
 
-	constructor(private fb: FormBuilder, private resourceService: OnboardingClientResourceService) {}
+	totalHoursForm = new FormControl();
+
+	constructor(
+		private fb: FormBuilder,
+		private resourceService: OnboardingClientResourceService,
+		private route: ActivatedRoute,
+	) {}
 
 	ngOnInit(): void {
 		// Obtain the names of the projects the resource is assigned and the name of the resource
@@ -244,7 +301,68 @@ export class TimesheetComponent implements OnInit {
 			this.userId = data.id;
 		});
 
+		if (this.route.snapshot.paramMap.get('id')) {
+			this.loadStoreData();
+		}
+
 		this.formGroup.emit(this.timesheetForm);
+	}
+
+	// Load the store data
+	loadStoreData() {
+		// Set column names for each day of the week in the date range
+
+		// Get start date and end date and store in variables
+		const startDateRange = this.timesheet.weekStartDate!;
+		const endDateRange = this.timesheet.weekEndDate!;
+
+		// Variable for current date
+		let currentDate = new Date(startDateRange);
+
+		// Set all the column variables
+		this.sundayDate = currentDate.toLocaleString();
+		currentDate.setDate(currentDate.getDate() + 1);
+		this.mondayDate = currentDate.toLocaleString();
+		currentDate.setDate(currentDate.getDate() + 1);
+		this.tuesdayDate = currentDate.toLocaleString();
+		currentDate.setDate(currentDate.getDate() + 1);
+		this.wednesdayDate = currentDate.toLocaleString();
+		currentDate.setDate(currentDate.getDate() + 1);
+		this.thursdayDate = currentDate.toLocaleString();
+		currentDate.setDate(currentDate.getDate() + 1);
+		this.fridayDate = currentDate.toLocaleString();
+		currentDate.setDate(currentDate.getDate() + 1);
+		this.saturdayDate = currentDate.toLocaleString();
+
+		// Calculate the total hours
+		this.totalHours =
+			(this.timesheet.mondayHours ?? 0) +
+			(this.timesheet.tuesdayHours ?? 0) +
+			(this.timesheet.wednesdayHours ?? 0) +
+			(this.timesheet.thursdayHours ?? 0) +
+			(this.timesheet.fridayHours ?? 0) +
+			(this.timesheet.saturdayHours ?? 0) +
+			(this.timesheet.sundayHours ?? 0);
+
+		this.from = startDateRange;
+		this.thru = endDateRange;
+		this.timesheetForm.patchValue({
+			startDate: this.timesheet.weekStartDate,
+			endDate: this.timesheet.weekEndDate,
+			project: this.projectName,
+			comments: this.timesheet.resourceComment,
+			sunday: this.timesheet.sundayHours,
+			monday: this.timesheet.mondayHours,
+			tuesday: this.timesheet.tuesdayHours,
+			wednesday: this.timesheet.wednesdayHours,
+			thursday: this.timesheet.thursdayHours,
+			friday: this.timesheet.fridayHours,
+			saturday: this.timesheet.saturdayHours,
+		});
+
+		this.totalHoursForm.setValue(this.totalHours);
+
+		this.isLoadingStoreData = true;
 	}
 
 	// Timesheet form controls
@@ -252,7 +370,4 @@ export class TimesheetComponent implements OnInit {
 		// eslint-disable-next-line @typescript-eslint/dot-notation
 		return this.timesheetForm.controls['timesheets'] as FormGroup;
 	}
-
-	// Load the store data
-	loadStoreData() {}
 }
