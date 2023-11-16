@@ -53,6 +53,9 @@
 			"@tempus/client/onboarding-client/resource/features/feature-timesheet": [
 				"libs/client/onboarding-client/resource/features/feature-timesheet/src/index.ts"
 			],
+			"@tempus/client/onboarding-client/resource/features/feature-view-timesheet": [
+				"libs/client/onboarding-client/resource/features/feature-view-timesheet/src/index.ts"
+			],
 			"@tempus/client/onboarding-client/shared/data-access": [
 				"libs/client/onboarding-client/shared/data-access/src/index.ts"
 			],
@@ -95,6 +98,7 @@
 			"@tempus/onboarding-api/feature-profile": ["libs/api/onboarding-api/feature-profile/src/index.ts"],
 			"@tempus/onboarding-api/feature-project": ["libs/api/onboarding-api/feature-project/src/index.ts"],
 			"@tempus/onboarding-api/feature-timesheet": ["libs/api/onboarding-api/feature-timesheet/src/index.ts"],
+			"@tempus/onboarding-api/feature-report": ["libs/api/onboarding-api/feature-report/src/index.ts"],
 			"@tempus/onboarding-client/business-owner/feature-manage-resources": [
 				"libs/client/onboarding-client/business-owner/features/feature-manage-resources/src/index.ts"
 			],

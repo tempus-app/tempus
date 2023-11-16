@@ -1,7 +1,6 @@
 import { CreateTimesheetDto } from '@tempus/api/shared/dto';
 import { Timesheet, TimesheetRevisionType } from '@tempus/shared-domain';
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany, ManyToOne } from 'typeorm';
-import { TimesheetEntryEntity } from './timesheet-entry.entity';
 import { ResourceEntity, UserEntity } from '../account-entities';
 import { ClientRepresentativeEntity, ProjectEntity } from '../project-entities';
 
@@ -13,11 +12,18 @@ export class TimesheetEntity implements Timesheet {
 		weekEndDate?: Date,
 		approvedBySupervisor?: boolean,
 		approvedByClient?: boolean,
+		resourceComment?: string,
 		supervisorComment?: string,
 		clientRepresentativeComment?: string,
 		audited?: boolean,
 		billed?: boolean,
-		timesheetEntries?: TimesheetEntryEntity[],
+		mondayHours?:number,
+		tuesdayHours?:number,
+		wednesdayHours?:number,
+		thursdayHours?:number,
+		fridayHours?:number,
+		saturdayHours?:number,
+		sundayHours?:number,
 		resource?: ResourceEntity,
 		project?: ProjectEntity,
 		supervisor?: UserEntity,
@@ -28,11 +34,18 @@ export class TimesheetEntity implements Timesheet {
 		this.weekEndDate = weekEndDate;
 		this.approvedBySupervisor = approvedBySupervisor;
 		this.approvedByClient = approvedByClient;
+		this.resourceComment = resourceComment;
 		this.supervisorComment = supervisorComment;
 		this.clientRepresentativeComment = clientRepresentativeComment;
 		this.audited = audited;
 		this.billed = billed;
-		this.timesheetEntries = timesheetEntries;
+		this.mondayHours = mondayHours
+		this.tuesdayHours = tuesdayHours
+		this.wednesdayHours = wednesdayHours
+		this.thursdayHours = thursdayHours
+		this.fridayHours = fridayHours
+		this.saturdayHours = saturdayHours
+		this.sundayHours = sundayHours
 		this.resource = resource;
 		this.project = project;
 		this.supervisor = supervisor;
@@ -55,6 +68,9 @@ export class TimesheetEntity implements Timesheet {
 	approvedByClient: boolean;
 
 	@Column({ nullable: true })
+	resourceComment: string;
+
+	@Column({ nullable: true })
 	supervisorComment: string;
 
 	@Column({ nullable: true })
@@ -73,10 +89,26 @@ export class TimesheetEntity implements Timesheet {
 	})
 	status: TimesheetRevisionType;
 
-	@OneToMany(() => TimesheetEntryEntity, timesheetEntry => timesheetEntry.timesheet, {
-		cascade: ['insert', 'update'],
-	})
-	timesheetEntries: TimesheetEntryEntity[];
+	@Column({nullable: true})
+	mondayHours: number;
+
+	@Column({nullable: true})
+	tuesdayHours:number;
+
+	@Column({nullable: true})
+	wednesdayHours:number;
+
+	@Column({nullable: true})
+	thursdayHours:number;
+
+	@Column({nullable: true})
+	fridayHours:number;
+
+	@Column({nullable: true})
+	saturdayHours:number;
+
+	@Column({nullable: true})
+	sundayHours:number;
 
 	@ManyToOne(() => ResourceEntity, resource => resource.timesheets, {
 		onDelete: 'CASCADE',
@@ -100,11 +132,18 @@ export class TimesheetEntity implements Timesheet {
 			dto.weekEndDate,
 			dto.approvedBySupervisor,
 			dto.approvedByClient,
-			dto.clientRepresentativeComment,
+			dto.resourceComment,
 			dto.supervisorComment,
+			dto.clientRepresentativeComment,
 			dto.audited,
 			dto.billed,
-			dto.timesheetEntries?.map(timesheetEntry => TimesheetEntryEntity.fromDto(timesheetEntry)),
+			dto.mondayHours,
+			dto.tuesdayHours,
+			dto.wednesdayHours,
+			dto.thursdayHours,
+			dto.fridayHours,
+			dto.saturdayHours,
+			dto.sundayHours,
 		);
 	}
 }

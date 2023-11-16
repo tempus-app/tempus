@@ -22,7 +22,6 @@ import {
 	CalendarEntity,
 	RevisedTimesheetEntity,
 	TimesheetEntity,
-	TimesheetEntryEntity,
 	ApprovalEntity,
 } from './entities';
 
@@ -49,7 +48,6 @@ import {
 			CalendarEntity,
 			RevisedTimesheetEntity,
 			TimesheetEntity,
-			TimesheetEntryEntity,
 			ApprovalEntity,
 		]),
 	],

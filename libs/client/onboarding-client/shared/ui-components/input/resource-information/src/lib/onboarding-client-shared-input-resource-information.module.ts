@@ -11,11 +11,16 @@ import { ClientSharedUiComponentsInputModule } from '@tempus/client/shared/ui-co
 import { ClientSharedUiComponentsPresentationalModule } from '@tempus/client/shared/ui-components/presentational';
 import { TranslateModule } from '@ngx-translate/core';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatTableModule } from '@angular/material/table';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PersonalInformationComponent } from './personal-information/personal-information.component';
 import { WorkExperienceComponent } from './work-experience/work-experience.component';
 import { EducationComponent } from './education/education.component';
 import { CertificationsComponent } from './certifications/certifications.component';
 import { SkillsComponent } from './skills/skills.component';
+import { TimesheetComponent } from './timesheet/timesheet.component';
 
 @NgModule({
 	imports: [
@@ -30,6 +35,11 @@ import { SkillsComponent } from './skills/skills.component';
 		MatIconModule,
 		ClientSharedUiComponentsInputModule,
 		ClientSharedUiComponentsPresentationalModule,
+		MatTableModule,
+		MatDatepickerModule,
+		MatNativeDateModule,
+		FormsModule,
+		ReactiveFormsModule,
 		TranslateModule.forChild({
 			isolate: false,
 			extend: true,
@@ -41,6 +51,7 @@ import { SkillsComponent } from './skills/skills.component';
 		EducationComponent,
 		CertificationsComponent,
 		SkillsComponent,
+		TimesheetComponent,
 	],
 	exports: [
 		PersonalInformationComponent,
@@ -48,6 +59,7 @@ import { SkillsComponent } from './skills/skills.component';
 		EducationComponent,
 		CertificationsComponent,
 		SkillsComponent,
+		TimesheetComponent,
 	],
 })
 export class ClientSharedInputResourceInformationModule {}

@@ -13,6 +13,7 @@ export const createProjectMock = new CreateProjectDto(
 	null,
 	null,
 	ProjectStatus.NOT_STARTED,
+
 );
 
 export const updateProjectDtoMock = new UpdateProjectDto(3);
@@ -38,6 +39,7 @@ export const projectEntityMock: ProjectEntity = {
 	client: clientEntityMock,
 	clientRepresentative: clientRepresentativeMock,
 	projectResources: null,
+	timesheets: null,
 };
 
 export const assignProjectDetailsMock = new AssignProjectDto('UX Developer', new Date('2022-01-13'));

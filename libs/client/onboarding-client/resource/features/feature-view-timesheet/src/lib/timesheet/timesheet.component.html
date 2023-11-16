@@ -1,0 +1,46 @@
+<div *ngIf="editTimesheetEnabled">
+	<tempus-edit-timesheet (closeEditViewClicked)="closeEditView()"></tempus-edit-timesheet>
+</div>
+
+<ng-container *ngIf="dataLoaded">
+	<div *ngIf="!editTimesheetEnabled" id="page-container" fxLayout="column" fxLayoutGap="20px">
+		<div id="title-container">
+			<div id="my-profile-container">
+				<h2 class="mat-h2 page-title">{{ timesheetWeek }}</h2>
+				<span
+					*ngIf="!approvedByClient || !approvedBySupervisor"
+					id="error-icon"
+					class="material-icons"
+					matTooltip="{{ timesheetPrefix + 'pendingApprovalTooltip' | translate }}"
+					matTooltipClass="tooltip"
+					>error</span
+				>
+				<span
+					*ngIf="status === TimesheetRevisionType.REJECTED"
+					id="reject-icon"
+					class="material-icons"
+					matTooltip="{{ timesheetPrefix + 'rejectedTooltip' | translate }}"
+					matTooltipClass="tooltip"
+					>cancel</span
+				>
+			</div>
+			<div id="button-container">
+				<tempus-button
+					[disabled]="!approvedByClient || !approvedBySupervisor"
+					[buttonType]="ButtonType.EDIT"
+					color="accent"
+					(buttonClick)="openEditTimesheet()"
+					id="edit-profile-button"
+				></tempus-button>
+			</div>
+		</div>
+		<div *ngIf="status === TimesheetRevisionType.REJECTED" id="rejection-dialog">
+			<h3 class="mat-h3">{{ timesheetPrefix + 'rejectedDialogHeading' | translate }}</h3>
+			<p class="mat-body-1" *ngIf="supervisorComment !== ''">{{ supervisorComment }}</p>
+		</div>
+		<tempus-resource-display-timesheet
+			[timesheet]="timesheet"
+			[projectName]="projectName"
+		></tempus-resource-display-timesheet>
+	</div>
+</ng-container>

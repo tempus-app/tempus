@@ -269,33 +269,42 @@ The first steps are general to both docker & non-docker set up.
 </ul>
 
 
-<h1 id = "motivation">🎯 Motivation & Project Description</h1>
+<h1 id = "motivation">🎯 Project Description and Objectives</h1>
 
-Tempus is an application built for CAL & Associates, an enterprise resource management company, that scouts and hires resources to fulfil their clients (banks etc.) needs. Before Tempus, CAL undertook the manual work of reviewing the resources, building standardized resumes, and handling the onboarding process and project assignment for their resources, losing time.
 
-Tempus aims to smoothen this process by allowing resources to build profiles within the application, and for CAL to invite, manage, review and assign a resource to CAL's Client projects.
+### 💫 Project Description 
+
+Tempus II is a timesheet tracking web application. Resources can submit and track their hours, and projects that require supervisor approval can be tracked as well. Supervisors and Client Representatives must approve timesheets.
+
+This project is built upon the work of a previous team who incorporated features for resources to submit their resumes and go through an approval process.
+
+### 🎯 Objectives
+- Create a timesheet system where users can submit their hours and go through an approval process involving their supervisor and client representative
+  - Timesheet:
+    - Contracted users will submit timesheets that can be used to bill clients
+    - Business owners can generate billing and cost reports
+    - Supervisors and Client Representatives and approve or reject timesheets 
 
 <h2 id = "core">⚙️ Core Features</h2>
 
 
-<h3 id = "phase1">🌗 Phase 1 (Jan-April 2023)</h3>
+<h3 id = "phase1">🌗 Phase 1 (Jan-February 2023)</h3>
 
-- Invite Resource to Application
-- Business Owner + Resource sign up flow
-- Manage Resource View
-- Resource Profile Page - View & Edit Profiles
-- Download Standardized Resumes for Resources
-- Resource Profile Approval Flow
-  - Business Owner can reject/approve profile changes
+- Complete UI Designs
+- Complete Detailed System Requirements 
+- Complete User Stories for all Stakeholders
+- Complete ER Diagram and Database Design
 
-<h3 id = "phase2">🌕 Phase 2 (September-December 2023)</h3>
+<h3 id = "phase2">🌕 Phase 2 (March-April 2023)</h3>
 
-- Resume Parsing on sign up
-- Discover Resources Pages (for business owners)
-  - filter to find clients based on needs
-- Support for multiple Profile Versions (Views)
-- Office 365 Integration (connect to CAL accounts)
-- Mass download of profiles
+- Finish Coding Database Entities, Models, Controllers, etc...
+- Finish Coding UI Pages for Timesheet Submissions and Approvals
+- Connect Database to the UI
+
+<h3 id = "phase2">🌕 Phase 3 (September-December 2023)</h3>
+
+- Add calendary feature to timesheet application
+- Add cost and billing report generation
 
 <h1 id = "contributers">❤️ Contributors</h1>
 
@@ -308,6 +317,8 @@ This project was built by:
 - [Hened Saade](https://github.com/henedsaade)
 
 <h1 id = "project-management">🛣️ Project Management/Project Inital Overview</h1>
+
+The current version of the timesheet feature can be found in the feature-api/timesheet branch. We have not merged it into main as of this moment.
 
 The Project Management for this application is documented in the [Tempus II wiki](https://github.com/tempus-app/Tempus-II-Wiki/wiki)
 
@@ -336,7 +347,6 @@ The Design System, along with the mockups built using figma can be viewed on the
 <img src="./docs/screenshots/assets/docker%20logo.webp" width="150"  style="{text-align:center}">
 
 </p>
-
 <h3 id = "postgres">PostgreSQL</h3>
 
 
@@ -406,6 +416,10 @@ Currently, only backend unit tests are implemented in main. More indepth discuss
 
 <h2 id = "design-decisions-database">Design decisions for the Database</h2>
 
+- Difficulty with ER diagram design
+- Decided to have an entity for the timesheet and a seperate entity for each day of the timesheet period
+  
+
 <h1 id = "installation">🧰 Installation + Running</h1>
 
 
@@ -459,4 +473,5 @@ The first steps are general to both docker & non-docker set up.
 10. After the node modules are installed, you should be ready to run the application using the following commands:
    `npm run start:onboarding-api`: starts the backend
    `npm run start:client`: starts the client
+
 

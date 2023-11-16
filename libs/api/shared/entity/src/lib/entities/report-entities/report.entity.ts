@@ -6,26 +6,22 @@ import { CreateReportDto } from '@tempus/api/shared/dto';
 @Entity()
 export class ReportEntity implements Report {
 	constructor(
-		reportId: number,
-		clientName: string,
-		projectName: string,
-		userName: string,
-		taskName: string,
-		month: string,
-		position: string,
-		hoursWorked: number,
-		costRate: number,
-		totalCost: number,
-		totalBilling: number,
-		billingRate: number,
+		reportId?: number,
+		clientName?: string,
+		projectName?: string,
+		userName?: string,
+		month?: string,
+		hoursWorked?: number,
+		costRate?: number,
+		totalCost?: number,
+		totalBilling?: number,
+		billingRate?: number,
 	) {
 		this.reportId = reportId;
 		this.clientName = clientName;
 		this.projectName = projectName;
 		this.userName = userName;
-		this.taskName = taskName;
 		this.month = month;
-		this.position = position;
 		this.hoursWorked = hoursWorked;
 		this.costRate = costRate;
 		this.totalCost = totalCost;
@@ -37,34 +33,28 @@ export class ReportEntity implements Report {
 	@PrimaryGeneratedColumn()
 	reportId?: number;
 
-	@Column()
+	@Column({ nullable: true })
 	clientName?: string;
 
-	@Column()
+	@Column({ nullable: true })
 	projectName?: string;
 
-	@Column()
+	@Column({ nullable: true })
 	userName?: string;
 
-	@Column()
-	taskName?: string;
-
-	@Column()
+	@Column({ nullable: true })
 	month?: string;
 
-	@Column()
-	position?: string;
-
-	@Column()
+	@Column({ nullable: true })
 	hoursWorked?: number;
 
-	@Column()
+	@Column({ nullable: true })
 	costRate?: number;
 
-	@Column()
+	@Column({ nullable: true })
 	totalCost?: number;
 
-	@Column()
+	@Column({ nullable: true })
 	totalBilling?: number;
 
 	@Column()
@@ -72,7 +62,17 @@ export class ReportEntity implements Report {
 
 	public static fromDto(dto: CreateReportDto): ReportEntity {
 		if (dto == null)
-			return new ReportEntity(null, null, null, null, null, null, null, null, null, null, null, null);
-		return new ReportEntity(null, null, null, null, null, null, null, null, null, null, null, null);
+			return new ReportEntity();
+		return new ReportEntity(
+			undefined, 
+			dto.clientName,
+			dto.projectName,
+			dto.userName,
+			dto.month,
+			dto.hoursWorked,
+			dto.costRate,
+			dto.totalCost,
+			dto.billingRate,
+			dto.totalBilling );
 	}
 }

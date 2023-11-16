@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { TimesheetEntity, UserEntity } from '@tempus/api/shared/entity';
 import { Repository } from 'typeorm';
@@ -18,7 +18,13 @@ export class TimesheetService {
 	) {}
 
 	async getTimesheet(timesheetId: number): Promise<Timesheet> {
-		const timesheetEntity = await this.timesheetRepository.findOne(timesheetId);
+		const timesheetEntity = await this.timesheetRepository.findOne(timesheetId, {
+			relations: [
+				'resource',
+				'project',
+				'supervisor'
+			],
+		});
 		if (!timesheetEntity) throw new NotFoundException(`Could not find timesheet with id ${timesheetId}`);
 		return timesheetEntity;
 	}
@@ -34,7 +40,12 @@ export class TimesheetService {
 
 	async getAllSubmittedTimesheetsforUser(resourceId: number): Promise<Timesheet[]> {
 		const timesheets = await this.timesheetRepository.find({
-			where: { resource: { id: resourceId }, status: TimesheetRevisionType.SUBMITTED },
+			where: { 
+				/*resource: { 
+					id: resourceId 
+				}, */
+				status: TimesheetRevisionType.SUBMITTED
+			},
 			relations: ['resource'],
 		});
 
@@ -74,7 +85,9 @@ export class TimesheetService {
 
 	async getAllSubmittedTimesheetsforProject(projectId: number): Promise<Timesheet[]> {
 		const timesheets = await this.timesheetRepository.find({
-			where: { project: { id: projectId }, status: TimesheetRevisionType.SUBMITTED },
+			where: { 
+				project: { id: projectId }, 
+				status: TimesheetRevisionType.SUBMITTED },
 			relations: ['project'],
 		});
 
@@ -114,12 +127,17 @@ export class TimesheetService {
 
 	async createTimesheet(timesheet: CreateTimesheetDto): Promise<Timesheet> {
 		const timesheetEntity = TimesheetEntity.fromDto(timesheet);
+
+		if((await this.timesheetRepository.findOne({weekStartDate: timesheetEntity.weekStartDate})) !== undefined){
+			throw new ForbiddenException('There already exists a timesheet in that date range');
+		}
+
 		let supervisorEntity : UserEntity = null;
 		if(timesheet.supervisorId != undefined)
 			supervisorEntity = await this.userService.getUserbyId(timesheet.supervisorId);
 		const projectEntity = await this.projectService.getProjectInfo(timesheet.projectId);
 		const resourceEntity = await this.resourceService.getResourceInfo(timesheet.resourceId);
-		timesheetEntity.status = TimesheetRevisionType.NEW;
+		timesheetEntity.status = TimesheetRevisionType.SUBMITTED;
 		timesheetEntity.dateModified = new Date(Date.now());
 		timesheetEntity.supervisor = supervisorEntity;
 		timesheetEntity.resource = resourceEntity;
@@ -129,19 +147,31 @@ export class TimesheetService {
 
 	async updateTimesheet(updateTimesheetDto: UpdateTimesheetDto): Promise<Timesheet> {
 		const timesheetEntity = await this.getTimesheet(updateTimesheetDto.id);
-		const updatedTimesheetEntryDto = { ...updateTimesheetDto };
+		/* const updatedTimesheetEntryDto = { ...updateTimesheetDto };
 		Object.keys(updatedTimesheetEntryDto).forEach(key => {
 			const val = updatedTimesheetEntryDto[key];
 			if (!val) {
 				delete updatedTimesheetEntryDto[key];
 			}
-		});
-		Object.assign(timesheetEntity, updatedTimesheetEntryDto);
+		});*/
+
+		if(timesheetEntity === undefined){
+			throw new NotFoundException(`Could not find timesheet with id ${updateTimesheetDto}`);
+		}
+		if(timesheetEntity.billed){
+			throw new ForbiddenException("This timesheet has already been billed and can't be modified");
+		}
+		for (const [key, val] of Object.entries(updateTimesheetDto)) if (!val) delete updateTimesheetDto[key];
+		Object.assign(timesheetEntity, updateTimesheetDto);
 		return this.timesheetRepository.save(timesheetEntity);
 	}
 
 	async deleteTimesheet(timesheetId: number) {
 		const timesheetEntity = await this.getTimesheet(timesheetId);
+		if(timesheetEntity.billed)
+		{
+			throw new ForbiddenException('Cannot delete a timesheet that has been billed');
+		}
 		await this.timesheetRepository.remove(timesheetEntity);
 	}
 }

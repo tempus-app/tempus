@@ -15,12 +15,6 @@
 	margin-top: 3%;
 }
 
-table {
-    width: 100%;
-	border: 1px dashed abs.$primary-300;
- 	background-color: #fcfeff;
-}
-
 // #page-container {
 // 	margin: 2% auto;
 // 	border: 1px dashed abs.$primary-300;
@@ -30,7 +24,7 @@ table {
 // }
 
 #title-container {
-	@include cmp.info-title(95%, 0);
+	@include cmp.info-title(100%, 0);
 	margin: 2em 0em;
 }
 
@@ -46,14 +40,6 @@ table {
 	flex-direction: row;
 	gap: 0.5em;
 	height: 100% !important;
-}
-
-::ng-deep {
-	.secondary .mat-form-field-wrapper {
-	width: 6em;
-	padding:0.8rem
-	}
-
 }
 
 .submitAndCancel {
