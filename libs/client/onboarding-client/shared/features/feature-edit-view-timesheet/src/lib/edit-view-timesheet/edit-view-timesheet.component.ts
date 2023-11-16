@@ -13,7 +13,7 @@ import { UserType } from '@tempus/client/shared/ui-components/persistent';
 import { TranslateService } from '@ngx-translate/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { splitStringIntoBulletPoints } from '@tempus/client/shared/util';
-import { ICreateTimesheetDto, ProjectResource } from '@tempus/shared-domain';
+import { ICreateTimesheetDto, ProjectResource, Timesheet } from '@tempus/shared-domain';
 
 @Component({
 	selector: 'tempus-edit-view-timesheet',
@@ -27,6 +27,32 @@ export class EditViewTimesheetComponent implements OnDestroy {
 	prefix = 'onboardingResourceTimesheet';
 
 	editViewTimesheetPrefix = 'onboardingClient.editViewTimesheet.';
+
+	dataLoaded = false;
+
+	timesheet: ICreateTimesheetDto = {
+		projectId: 0,
+		resourceId: 0,
+		supervisorId: 0,
+		weekStartDate: new Date(),
+		weekEndDate: new Date(),
+		approvedBySupervisor: false,
+		approvedByClient: false,
+		resourceComment: '',
+		supervisorComment: '',
+		clientRepresentativeComment: '',
+		audited: false,
+		billed: false,
+		mondayHours: 0,
+		tuesdayHours: 0,
+		wednesdayHours: 0,
+		thursdayHours: 0,
+		fridayHours: 0,
+		saturdayHours: 0,
+		sundayHours: 0,
+	};
+
+	currentTimesheetId = 0;
 
 	constructor(
 		private fb: FormBuilder,
@@ -46,7 +72,7 @@ export class EditViewTimesheetComponent implements OnDestroy {
 	ButtonType = ButtonType;
 
 	@Output()
-	closeEditViewClicked = new EventEmitter();
+	closeEditTimesheetClicked = new EventEmitter();
 
 	@Output()
 	submitClicked = new EventEmitter();
@@ -54,6 +80,31 @@ export class EditViewTimesheetComponent implements OnDestroy {
 	userId = 0;
 
 	destroyed$ = new Subject<void>();
+
+	projectName = '';
+
+	timesheetWeek = '';
+
+	setFormDataFromTimesheet(timesheet: Timesheet) {
+		this.currentTimesheetId = timesheet.id;
+		this.timesheet = timesheet;
+		this.projectName = timesheet.project.name;
+
+		const startDate = new Date(timesheet.weekStartDate).toLocaleString('en-US', {
+			day: 'numeric',
+			month: 'long',
+			year: 'numeric',
+		});
+		const endDate = new Date(timesheet.weekEndDate).toLocaleString('en-US', {
+			day: 'numeric',
+			month: 'long',
+			year: 'numeric',
+		});
+
+		this.timesheetWeek = `${startDate} - ${endDate}`;
+
+		this.dataLoaded = true;
+	}
 
 	// Generate new timesheet
 	generateNewTimesheet() {
@@ -97,7 +148,7 @@ export class EditViewTimesheetComponent implements OnDestroy {
 
 	// Close the edit view
 	closeEditView() {
-		this.closeEditViewClicked.emit();
+		this.closeEditTimesheetClicked.emit();
 	}
 
 	// After the submit button is clicked this function is executed
@@ -106,6 +157,12 @@ export class EditViewTimesheetComponent implements OnDestroy {
 	}
 
 	ngOnInit(): void {
+		if (
+			this.route.snapshot.url.length > 0 &&
+			this.route.snapshot.url[this.route.snapshot.url.length - 1].path === 'new'
+		) {
+			this.dataLoaded = true;
+		}
 		this.resourceService.getResourceInformation().subscribe(data => {
 			this.userId = data.id;
 		});
