@@ -104,7 +104,21 @@ export class TimesheetComponent {
 
 	totalHours = 0; // Total hours
 
-	constructor(private resourceService: OnboardingClientResourceService) {}
+	// Create timesheet form builder group
+	timesheetForm: FormGroup = this.fb.group({
+		comments: [''],
+		sunday: [''],
+		monday: [''],
+		tuesday: [''],
+		wednesday: [''],
+		thursday: [''],
+		friday: [''],
+		saturday: [''],
+	});
+
+	totalHoursForm = new FormControl();
+
+	constructor(private resourceService: OnboardingClientResourceService, private fb: FormBuilder) {}
 
 	ngOnInit() {
 		// Set column names for each day of the week in the date range
@@ -140,5 +154,20 @@ export class TimesheetComponent {
 			(this.timesheet.fridayHours ?? 0) +
 			(this.timesheet.saturdayHours ?? 0) +
 			(this.timesheet.sundayHours ?? 0);
+
+		console.log('project name', this.timesheet.resourceComment);
+
+		this.timesheetForm.patchValue({
+			comments: this.timesheet.resourceComment,
+			sunday: this.timesheet.sundayHours,
+			monday: this.timesheet.mondayHours,
+			tuesday: this.timesheet.tuesdayHours,
+			wednesday: this.timesheet.wednesdayHours,
+			thursday: this.timesheet.thursdayHours,
+			friday: this.timesheet.fridayHours,
+			saturday: this.timesheet.saturdayHours,
+		});
+
+		this.totalHoursForm.setValue(this.totalHours);
 	}
 }

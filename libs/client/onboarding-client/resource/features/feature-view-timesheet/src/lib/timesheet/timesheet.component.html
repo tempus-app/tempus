@@ -35,6 +35,13 @@
 					(buttonClick)="openEditTimesheet()"
 					id="edit-profile-button"
 				></tempus-button>
+				<tempus-button
+					*ngIf="!isPendingApproval"
+					label="Delete"
+					color="accent"
+					(buttonClick)="deleteTimesheet()"
+					id="delete-profile-button"
+				></tempus-button>
 			</div>
 		</div>
 		<div *ngIf="status === TimesheetRevisionType.REJECTED" id="rejection-dialog">

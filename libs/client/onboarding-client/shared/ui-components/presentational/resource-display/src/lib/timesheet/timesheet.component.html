@@ -32,10 +32,17 @@
 	<ng-container matColumnDef="project">
 		<th mat-header-cell *matHeaderCellDef>{{ 'onboardingClient.input.timesheet.project' | translate }}</th>
 		<td mat-cell *matCellDef="let element">
-			<p>{{ projectName }}</p>
-			<br />
-			<b>{{ 'onboardingClient.input.timesheet.comments' | translate }}</b>
-			<p>{{ timesheet.resourceComment }}</p>
+			<span class="project">
+				<br />
+				<tempus-dropdown
+					id="project-options"
+					[showLabel]="true"
+					[label]="projectName"
+					[disabled]="true"
+				></tempus-dropdown>
+
+				<tempus-text-area [control]="$any(timesheetForm).get('comments')" [disabled]="true"></tempus-text-area>
+			</span>
 		</td>
 	</ng-container>
 
@@ -43,9 +50,11 @@
 	<ng-container matColumnDef="sunday">
 		<th mat-header-cell *matHeaderCellDef>{{ sundayDate | date: 'fullDate' }}</th>
 		<td mat-cell *matCellDef="let element">
-			<br />
-			{{ 'onboardingClient.input.timesheet.hours' | translate }}
-			<p>{{ timesheet.sundayHours }}</p>
+			<span class="cell">
+				<br />
+				{{ 'onboardingClient.input.timesheet.hours' | translate }}
+				<tempus-text-input [control]="$any(timesheetForm).get('sunday')" [disabled]="true"></tempus-text-input>
+			</span>
 		</td>
 	</ng-container>
 
@@ -53,9 +62,11 @@
 	<ng-container matColumnDef="monday">
 		<th mat-header-cell *matHeaderCellDef>{{ mondayDate | date: 'fullDate' }}</th>
 		<td mat-cell *matCellDef="let element">
-			<br />
-			{{ 'onboardingClient.input.timesheet.hours' | translate }}
-			<p>{{ timesheet.mondayHours }}</p>
+			<span class="cell">
+				<br />
+				{{ 'onboardingClient.input.timesheet.hours' | translate }}
+				<tempus-text-input [control]="$any(timesheetForm).get('monday')" [disabled]="true"></tempus-text-input>
+			</span>
 		</td>
 	</ng-container>
 
@@ -63,29 +74,41 @@
 	<ng-container matColumnDef="tuesday">
 		<th mat-header-cell *matHeaderCellDef>{{ tuesdayDate | date: 'fullDate' }}</th>
 		<td mat-cell *matCellDef="let element">
-			<br />
-			{{ 'onboardingClient.input.timesheet.hours' | translate }}
-			<p>{{ timesheet.tuesdayHours }}</p>
-		</td></ng-container
-	>
+			<span class="cell">
+				<br />
+				{{ 'onboardingClient.input.timesheet.hours' | translate }}
+				<tempus-text-input [control]="$any(timesheetForm).get('tuesday')" [disabled]="true"></tempus-text-input>
+			</span>
+		</td>
+	</ng-container>
 
 	<!-- Wednesday Column -->
 	<ng-container matColumnDef="wednesday">
 		<th mat-header-cell *matHeaderCellDef>{{ wednesdayDate | date: 'fullDate' }}</th>
 		<td mat-cell *matCellDef="let element">
-			<br />
-			{{ 'onboardingClient.input.timesheet.hours' | translate }}
-			<p>{{ timesheet.wednesdayHours }}</p>
-		</td></ng-container
-	>
+			<span class="cell">
+				<br />
+				{{ 'onboardingClient.input.timesheet.hours' | translate }}
+				<tempus-text-input
+					[control]="$any(timesheetForm).get('wednesday')"
+					[disabled]="true"
+				></tempus-text-input>
+			</span>
+		</td>
+	</ng-container>
 
 	<!-- Thursday Column -->
 	<ng-container matColumnDef="thursday">
 		<th mat-header-cell *matHeaderCellDef>{{ thursdayDate | date: 'fullDate' }}</th>
 		<td mat-cell *matCellDef="let element">
-			<br />
-			{{ 'onboardingClient.input.timesheet.hours' | translate }}
-			<p>{{ timesheet.thursdayHours }}</p>
+			<span class="cell">
+				<br />
+				{{ 'onboardingClient.input.timesheet.hours' | translate }}
+				<tempus-text-input
+					[control]="$any(timesheetForm).get('thursday')"
+					[disabled]="true"
+				></tempus-text-input>
+			</span>
 		</td>
 	</ng-container>
 
@@ -93,9 +116,11 @@
 	<ng-container matColumnDef="friday">
 		<th mat-header-cell *matHeaderCellDef>{{ fridayDate | date: 'fullDate' }}</th>
 		<td mat-cell *matCellDef="let element">
-			<br />
-			{{ 'onboardingClient.input.timesheet.hours' | translate }}
-			<p>{{ timesheet.fridayHours }}</p>
+			<span class="cell">
+				<br />
+				{{ 'onboardingClient.input.timesheet.hours' | translate }}
+				<tempus-text-input [control]="$any(timesheetForm).get('friday')" [disabled]="true"></tempus-text-input>
+			</span>
 		</td>
 	</ng-container>
 
@@ -103,9 +128,14 @@
 	<ng-container matColumnDef="saturday">
 		<th mat-header-cell *matHeaderCellDef>{{ saturdayDate | date: 'fullDate' }}</th>
 		<td mat-cell *matCellDef="let element">
-			<br />
-			{{ 'onboardingClient.input.timesheet.hours' | translate }}
-			<p>{{ timesheet.saturdayHours }}</p>
+			<span class="cell">
+				<br />
+				{{ 'onboardingClient.input.timesheet.hours' | translate }}
+				<tempus-text-input
+					[control]="$any(timesheetForm).get('saturday')"
+					[disabled]="true"
+				></tempus-text-input>
+			</span>
 		</td>
 	</ng-container>
 
@@ -113,7 +143,9 @@
 	<ng-container matColumnDef="total">
 		<th mat-header-cell *matHeaderCellDef>{{ 'onboardingClient.input.timesheet.total' | translate }}</th>
 		<td mat-cell *matCellDef="let element">
-			<p>{{ totalHours }}</p>
+			<span class="cell">
+				<tempus-text-input [control]="totalHoursForm" [disabled]="true"> </tempus-text-input>
+			</span>
 		</td>
 	</ng-container>
 
