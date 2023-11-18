@@ -17,3 +17,31 @@
 		font-weight: 900;
 	}
 }
+
+// ::ng-deep .projectContainer tempus-card {
+// 	.mat-card {
+// 		border: 1px solid #91a3ae;
+// 		border-radius: 10px;
+// 		background-color: abs.$primary-100;
+// 		padding: 0.75em 0.75em 0.75em !important;
+// 	}
+
+// 	.content {
+// 		padding: 0 !important;
+// 		text-align: left;
+// 	}
+// }
+
+::ng-deep .cell {
+	.secondary .mat-form-field-wrapper {
+		width: 7em;
+		color: #b7b8b7;
+	}
+}
+
+::ng-deep .project {
+	.secondary .mat-form-field-wrapper {
+		width: 85%;
+		color: #b7b8b7;
+	}
+}

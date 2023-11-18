@@ -4,12 +4,15 @@
 		"rejectedTooltip": "Changes to this timesheet have been rejected",
 		"rejectedDialogHeading": "Please modify your timesheet with the following changes:",
 		"deleteTimesheetModal": {
-			"title": "Delete {{timesheetName}}?",
+			"title": "Delete timesheet?",
 			"message": "Are you sure you want to permanently delete this timesheet?",
 			"confirmText": "Yes, delete",
 			"closeText": "Cancel"
 		},
-		"deleteTimesheetSuccess": "Timesheet deleted."
+		"deleteTimesheetSuccess": "Timesheet deleted.",
+		"deleteTimesheetErrorModal": {
+			"confirmText": "OK"
+		}
 	},
 	"onboardingResourceEditTimesheet": {
 		"modal": {

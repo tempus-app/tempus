@@ -168,7 +168,7 @@ export class ViewTimesheetApprovalsComponent implements OnInit, OnDestroy {
 						this.lastName = resourceInfo.lastName;
 					});
 
-					const submittedBy = `${this.firstName} - ${this.lastName}`;
+					const submittedBy = `${this.firstName}  ${this.lastName}`;
 
 					const timesheetWeek = `${startDate} - ${endDate}`;
 

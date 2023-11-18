@@ -109,6 +109,8 @@ export class TimesheetComponent implements OnInit {
 
 	TimesheetRevisionType = TimesheetRevisionType;
 
+	isPendingApproval = false;
+
 	timesheet: ICreateTimesheetDto = {
 		projectId: 0,
 		resourceId: 0,
@@ -181,6 +183,7 @@ export class TimesheetComponent implements OnInit {
 	}
 
 	loadTimesheet(timesheet: Timesheet) {
+		this.currentTimesheetId = timesheet.id;
 		this.timesheet.projectId = timesheet.project.id;
 		this.timesheet.resourceId = timesheet.resource.id;
 		this.timesheet.weekStartDate = timesheet.weekStartDate;
@@ -200,6 +203,75 @@ export class TimesheetComponent implements OnInit {
 		this.timesheet.saturdayHours = timesheet.saturdayHours;
 		this.timesheet.sundayHours = timesheet.sundayHours;
 		this.status = timesheet.status;
+		this.isPendingApproval = timesheet.status === TimesheetRevisionType.SUBMITTED;
+	}
+
+	deleteTimesheet() {
+		this.translateService
+			.get([`onboardingResourceViewTimesheet.deleteTimesheetModal`])
+			.pipe(take(1))
+			.subscribe(data => {
+				const dialogText = data[`onboardingResourceViewTimesheet.deleteTimesheetModal`];
+				this.modalService.open(
+					{
+						title: dialogText.title,
+						closeText: dialogText.closeText,
+						confirmText: dialogText.confirmText,
+						message: dialogText.message,
+						closable: true,
+						id: 'submit',
+						modalType: ModalType.WARNING,
+					},
+					CustomModalType.INFO,
+				);
+			});
+
+		this.modalService.confirmEventSubject.pipe(take(1)).subscribe(() => {
+			this.modalService.close();
+
+			this.timesheetService
+				.deleteTimesheet(this.currentTimesheetId)
+				.pipe(catchError(error => of(error)))
+				.subscribe(error => {
+					if (error) {
+						this.openDeleteTimesheetErrorModal(error.message);
+					} else {
+						this.modalService.confirmEventSubject.unsubscribe();
+						this.translateService
+							.get(`onboardingResourceViewTimesheet.deleteTimesheetSuccess`)
+							.subscribe(message => {
+								this.snackbar.open(message);
+							});
+						this.router.navigate(['../'], { relativeTo: this.route }).then(() => {
+							window.location.reload();
+						});
+					}
+				});
+
+			this.modalService.close();
+		});
+	}
+
+	openDeleteTimesheetErrorModal(error: string) {
+		this.translateService
+			.get(`onboardingResourceProfile.deleteTimesheetErrorModal.confirmText`)
+			.pipe(take(1))
+			.subscribe(confirm => {
+				this.modalService.open(
+					{
+						title: error,
+						confirmText: confirm,
+						closable: true,
+						id: 'error',
+						modalType: ModalType.ERROR,
+					},
+					CustomModalType.INFO,
+				);
+			});
+
+		this.modalService.confirmEventSubject.pipe(takeUntil(this.destroyed$)).subscribe(() => {
+			this.modalService.close();
+		});
 	}
 
 	openEditTimesheet() {

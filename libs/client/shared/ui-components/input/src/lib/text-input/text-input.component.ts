@@ -19,4 +19,6 @@ export class TextInputComponent {
 	@Input() inputType: InputType = InputType.TEXT;
 
 	@Input() control: FormControl = new FormControl();
+
+	@Input() disabled = false;
 }
