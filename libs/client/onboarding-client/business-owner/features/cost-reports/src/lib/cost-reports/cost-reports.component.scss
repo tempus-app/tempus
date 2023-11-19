@@ -3,6 +3,14 @@
 
 @use 'sass:color';
 
+.generate-button {
+	width: 50%; /* Adjust the width as needed */
+	margin: 20px auto; /* Center the button */
+	display: block; /* Ensure the button is a block-level element */
+	/* Rest of your button styling */
+
+}
+
 .page-title {
 	color: abs.$primary-800;
 }
