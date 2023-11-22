@@ -10,6 +10,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { CreateProjectComponent } from './create-project/create-project.component';
 import { CreateProjectModalComponent } from './create-project-modal/create-project-modal.component';
 import { AssignResourceModalComponent } from './assign-resource-modal/assign-resource-modal.component';
+import { AssignSupervisorModalComponent } from './assign-supervisor-modal/assign-supervisor-modal.component';
 
 @NgModule({
 	imports: [
@@ -25,7 +26,7 @@ import { AssignResourceModalComponent } from './assign-resource-modal/assign-res
 			extend: true,
 		}),
 	],
-	declarations: [CreateProjectComponent, CreateProjectModalComponent, AssignResourceModalComponent],
-	exports: [CreateProjectComponent, CreateProjectModalComponent, AssignResourceModalComponent],
+	declarations: [CreateProjectComponent, CreateProjectModalComponent, AssignResourceModalComponent, AssignSupervisorModalComponent],
+	exports: [CreateProjectComponent, CreateProjectModalComponent, AssignResourceModalComponent, AssignSupervisorModalComponent],
 })
 export class ClientOnboardingSharedProjectModule {}

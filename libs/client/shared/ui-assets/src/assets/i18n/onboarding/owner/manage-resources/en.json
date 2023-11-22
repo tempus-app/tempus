@@ -51,6 +51,10 @@
 				"closeText": "Cancel",
 				"noProjError": "No Available Project, select a different client"
 			},
+			"assignModalS": {
+				"supervisorLabel": "Supervisor",
+				"title": "Assign resource to a supervisor"
+			},
 			"confirmDeleteModal": {
 				"title": "Delete {{resourceName}}'s account?",
 				"closeText": "Cancel",

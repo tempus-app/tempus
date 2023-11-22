@@ -13,9 +13,10 @@ import {
 	Resource,
 	Revision,
 	RoleType,
+	User,
 	View,
 } from '@tempus/shared-domain';
-import { catchError, Observable } from 'rxjs';
+import { catchError, Observable, tap, throwError } from 'rxjs';
 import { handleError } from './errorHandler';
 
 @Injectable({ providedIn: 'root' })
@@ -26,6 +27,10 @@ export class OnboardingClientResourceService {
 
 	public createResource(createResourceDto: ICreateResourceDto): Observable<Resource> {
 		return this.http.post<Resource>(`${this.url}/user/resource`, createResourceDto);
+	}
+
+	public getSupervisors(): Observable<User[]>{
+		return this.http.get<User[]>(`${this.url}/user/supervisors`).pipe(catchError(handleError));
 	}
 
 	public createResourceAzureAccount(resourceId: number): Observable<AzureAccount> {
@@ -133,6 +138,14 @@ export class OnboardingClientResourceService {
 			.patch<Resource>(`${this.url}/user/resource`, updatedPersonalInformation)
 			.pipe(catchError(handleError));
 	}
+
+	public assignSupervisorToResource(resourceId: number, supervisorId: number): Observable<Resource> {
+		const url = `${this.url}/user/assign/${supervisorId}/${resourceId}`;
+		console.log('Requesting the following: ' + url);
+		return this.http.patch<Resource>(`${this.url}/user/assign/${supervisorId}/${resourceId}`, {}).pipe(
+		  catchError(handleError)
+		);
+	  }
 
 	public downloadProfile(viewId: number): Observable<Blob> {
 		const httpOptions = {

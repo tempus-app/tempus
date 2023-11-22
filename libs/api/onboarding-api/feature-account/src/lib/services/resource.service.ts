@@ -330,6 +330,12 @@ export class ResourceService {
 		}
 	}
 
+	async assignSupervisorToResource(supervisorId: number, resourceId: number): Promise<Resource> {
+		const resourceEntity = await this.resourceRepository.findOne(resourceId);
+		resourceEntity.supervisorId = supervisorId;
+		return await this.resourceRepository.save(resourceEntity);
+	}
+
 	public async isNowAvailable(resourceId: number) {
 		const existingResourceEntity = await this.resourceRepository.findOne(resourceId, {
 			relations: ['projectResources'],

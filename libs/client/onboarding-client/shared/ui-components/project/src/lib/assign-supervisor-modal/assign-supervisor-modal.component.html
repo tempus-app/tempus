@@ -1,0 +1,22 @@
+<tempus-button (buttonClick)="assign()" [label]="'Assign Supervisor'" [color]="'accent'"></tempus-button>
+
+<ng-template #assignTemplate>
+	<div fxLayout="column">
+		<div fxLayout="row">
+			<tempus-card class="card" style="margin-top: 1rem">
+				<tempus-dropdown
+					[label]="prefix + '.resourceLabel' | translate"
+					[optionsWithId]="resourceOptions"
+					[control]="$any(assignForm).get('resource')"
+				></tempus-dropdown>
+			</tempus-card>
+		</div>
+		<tempus-card class="card" style="margin-top: 1rem">
+					<tempus-dropdown
+						[label]="prefix + '.supervisorLabel' | translate"
+						[optionsWithId]="currentSupervisors"
+						[control]="$any(assignForm).get('supervisor')"
+					></tempus-dropdown>
+		</tempus-card>
+	</div>
+</ng-template>

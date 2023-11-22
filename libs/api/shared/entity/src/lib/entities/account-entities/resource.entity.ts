@@ -1,5 +1,5 @@
 import { CreateResourceDto } from '@tempus/api/shared/dto';
-import { Resource, RoleType } from '@tempus/shared-domain';
+import { Resource, RoleType, User } from '@tempus/shared-domain';
 import { ChildEntity, Column, OneToMany, OneToOne } from 'typeorm';
 import { LocationEntity } from '../common-entities';
 import { CertificationEntity, EducationEntity, ExperienceEntity, SkillEntity, ViewEntity } from '../profile-entities';
@@ -31,6 +31,7 @@ export class ResourceEntity extends UserEntity implements Resource {
 		password?: string,
 		roles?: RoleType[],
 		resume?: Uint8Array,
+		supervisorId?: number,
 	) {
 		super(id, firstName, lastName, email, password, roles);
 		this.calEmail = calEmail;
@@ -48,6 +49,7 @@ export class ResourceEntity extends UserEntity implements Resource {
 		this.githubLink = githubLink;
 		this.otherLink = otherLink;
 		this.resume = resume;
+		this.supervisorId = supervisorId;
 	}
 
 	@Column({ nullable: true })
@@ -70,6 +72,9 @@ export class ResourceEntity extends UserEntity implements Resource {
 
 	@Column({ nullable: true })
 	title: string;
+
+	@Column({nullable: true})
+	supervisorId?: number;
 
 	@OneToOne(() => LocationEntity, loc => loc.resource, { cascade: ['insert', 'update'], nullable: true })
 	location: LocationEntity;

@@ -63,6 +63,9 @@ export class CreateResourceDto extends CreateUserDto implements ICreateResourceD
 	@ApiProperty()
 	experiencesSummary: string;
 
+	@ApiProperty()
+	supervisorId: number;
+
 	constructor(
 		firstName: string,
 		lastName: string,
@@ -86,6 +89,7 @@ export class CreateResourceDto extends CreateUserDto implements ICreateResourceD
 		educationsSummary: string,
 		skillsSummary: string,
 		linkId: number,
+		supervisorId: number,
 	) {
 		super(firstName, lastName, email, password, roles);
 		this.roles = roles;
@@ -106,5 +110,6 @@ export class CreateResourceDto extends CreateUserDto implements ICreateResourceD
 		this.githubLink = githubLink;
 		this.otherLink = otherLink;
 		this.linkId = linkId;
+		this.supervisorId = supervisorId;
 	}
 }
