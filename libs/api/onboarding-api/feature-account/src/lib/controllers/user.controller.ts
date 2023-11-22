@@ -86,6 +86,12 @@ export class UserController {
 		return this.resourceService.getAllResources();
 	}
 
+	@UseGuards(JwtAuthGuard)
+	@Get('supervisors')
+	async getSupervisors(): Promise<User[]> {
+		return this.userService.getAllSupervisors();
+	}
+
 	@UseGuards(JwtAuthGuard, RolesGuard)
 	@Roles(RoleType.BUSINESS_OWNER, RoleType.SUPERVISOR)
 	@Get('resourcesBasic')
@@ -171,5 +177,16 @@ export class UserController {
 	@Delete(':userId')
 	async deleteUser(@Param('userId') userId: number, @Request() req): Promise<void> {
 		return this.userService.deleteUser(req.user, userId);
+	}
+
+	@Patch('assign/:supervisorId/:resourceId')
+	async assignSupervisorToResource(
+		@Param('resourceId') resourceId: number,
+		@Param('supervisorId') supervisorId: number,	
+		): Promise<Resource> {
+		return this.resourceService.assignSupervisorToResource(
+			supervisorId,
+			resourceId
+		);
 	}
 }
