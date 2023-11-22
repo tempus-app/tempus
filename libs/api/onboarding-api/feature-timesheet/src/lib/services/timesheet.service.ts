@@ -133,10 +133,12 @@ export class TimesheetService {
 		// }
 
 		let supervisorEntity: UserEntity = null;
-		if (timesheet.supervisorId != undefined)
-			supervisorEntity = await this.userService.getUserbyId(timesheet.supervisorId);
+		/*if (timesheet.supervisorId != undefined)
+			supervisorEntity = await this.userService.getUserbyId(timesheet.supervisorId);*/
 		const projectEntity = await this.projectService.getProjectInfo(timesheet.projectId);
 		const resourceEntity = await this.resourceService.getResourceInfo(timesheet.resourceId);
+		if (resourceEntity.supervisorId != undefined || null){
+			supervisorEntity = await this.userService.getUserbyId(resourceEntity.supervisorId);}
 		timesheetEntity.status = TimesheetRevisionType.SUBMITTED;
 		timesheetEntity.dateModified = new Date(Date.now());
 		timesheetEntity.supervisor = supervisorEntity;
