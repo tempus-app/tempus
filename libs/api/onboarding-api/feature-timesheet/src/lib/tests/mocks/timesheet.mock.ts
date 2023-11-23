@@ -56,14 +56,14 @@ export const timesheetEntityMock: TimesheetEntity = {
     resource: resourceEntityMock,
     project: projectEntityMock,
     supervisor: supervisorEntityMock,
-    status: TimesheetRevisionType.NEW,
+    status: TimesheetRevisionType.SUBMITTED,
 }
 
 export const dbTimesheet = new TimesheetEntity(
     3, new Date('2023-10-10'), new Date('2023-10-10'),false,
     false,"","","",false,false,
     0,0,0,0,0,0,0,
-    resourceEntityMock,projectEntityMock,supervisorEntityMock,TimesheetRevisionType.NEW,
+    resourceEntityMock,projectEntityMock,supervisorEntityMock,TimesheetRevisionType.SUBMITTED,
 );
 
 
