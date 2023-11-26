@@ -5,7 +5,7 @@ import { Repository } from 'typeorm';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { faker } from '@faker-js/faker';
 import { CreateReportDto } from '@tempus/api/shared/dto';
-import { ReportService } from '@tempus/onboarding-api/feature-project';
+import { ReportService } from '@tempus/onboarding-api/feature-report';
 
 @Injectable()
 export class ReportSeederService {
@@ -27,13 +27,10 @@ export class ReportSeederService {
 				faker.company.companyName(), // clientName
 				faker.commerce.productName(), // projectName
 				faker.internet.userName(), // userName
-				faker.hacker.verb(), // taskName
-				faker.date.month(), // month
-				faker.name.jobTitle(), // position
+				undefined,
+				undefined,
+				undefined,
 				faker.datatype.number({ min: 1, max: 8 }), // hoursWorked
-				faker.datatype.number({ min: 50, max: 200 }), // costRate
-				faker.datatype.number({ min: 50, max: 200 }),
-				faker.datatype.number({ min: 50, max: 200 }),
 				faker.datatype.number({ min: 100, max: 300 }), // billingRate
 			);
 

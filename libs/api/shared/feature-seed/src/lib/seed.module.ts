@@ -4,6 +4,7 @@ import { CoreModule } from '@tempus/api/shared/feature-core';
 import { AccountModule } from '@tempus/onboarding-api/feature-account';
 import { ProjectModule } from '@tempus/onboarding-api/feature-project';
 import { TimesheetModule } from '@tempus/onboarding-api/feature-timesheet';
+import { ReportService } from '@tempus/onboarding-api/feature-report';
 import { SeederService } from './seeder';
 import { ClientSeederService } from './services/client.seeder.service';
 import { LinkSeederService } from './services/link.seeder.service';
@@ -27,6 +28,7 @@ import { ReportSeederService } from './services/report.seeder.service';
 		LinkSeederService,
 		TimesheetSeederService,
 		ReportSeederService,
+		ReportService,
 	],
 	exports: [SeederService],
 })

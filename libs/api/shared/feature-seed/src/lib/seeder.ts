@@ -3,6 +3,7 @@ import { createObjectCsvWriter as createCsvWriter } from 'csv-writer';
 import { writeFile } from 'fs/promises';
 import { ApprovalEntity } from '@tempus/api/shared/entity';
 import { getRepository } from 'typeorm';
+import * as path from 'path'; // Import path module to resolve the full path
 import { CommandLineArgsOptions } from './commandLineArgs.type';
 import { ClientSeederService } from './services/client.seeder.service';
 import { LinkSeederService } from './services/link.seeder.service';
@@ -48,6 +49,9 @@ export class SeederService {
 	/**
 	 * seeds the database with clients, projects, users, resources etc
 	 * @param args command line args args to specify number
+	 */ /**
+	 * seeds the database with clients, projects, users, resources etc
+	 * @param args command line args args to specify number
 	 */
 	async seed(args: CommandLineArgsOptions) {
 		// eslint-disable-next-line no-plusplus
@@ -58,38 +62,54 @@ export class SeederService {
 		const users = await this.userSeederService.seedBusinessOwner(args.businessOwners);
 		const supervisors = await this.userSeederService.seedSupervisor(args.supervisors);
 		const links = await this.linkSeederService.seed(supervisors[0], projects, args.resources);
-		const businessOwners = await this.userSeederService.seedBusinessOwner(args.businessOwners);
-		// ... within the seeding logic ...
-		const clientUsers = await this.userSeederService.seedClients(args.clientCount);
-		const reports = await this.reportSeederService.seedReports(args.reports);
-		console.log(reports);
-		// ... rest of the logic ...
 
 		const availableResources = await this.resourceSeedService.seedResources(links);
 		const assignedResources = await this.projectSeederService.seedAssignedResources(
 			projects,
 			availableResources.splice(0, args.resources / 2),
 		);
-		const timesheets = await this.timesheetSeederService.seedTimesheets(supervisors, assignedResources, projects);
-		const allUsers = businessOwners.concat(supervisors).concat(clientUsers);
-		//		const allUsers = users.concat(availableResources).concat(assignedResources).concat(supervisors);
-
-		////SeederService.writeToJson(allUsers);
-		await SeederService.writeToCSV(allUsers);
+		let allUsers;
+		try {
+			console.log('Seeding timesheets...');
+			const timesheets = await this.timesheetSeederService.seedTimesheets(
+				supervisors,
+				assignedResources,
+				projects,
+			);
+		} catch (error) {
+			console.error('Error during timesheet seeding:', error);
+		} finally {
+			// Combine all user arrays
+			allUsers = users.concat(availableResources).concat(assignedResources).concat(supervisors);
+			console.log('Writing to CSV...');
+			await SeederService.writeToCSV(allUsers);
+		}
 	}
 
 	private static async writeToCSV(users) {
-		const csvWriter = createCsvWriter({
-			path: './utils/csv/user-accounts.csv',
-			header: [
-				{ id: 'firstName', title: 'First Name' },
-				{ id: 'lastName', title: 'Last Name' },
-				{ id: 'email', title: 'email' },
-				{ id: 'password', title: 'password' },
-				{ id: 'roles', title: 'role' },
-			],
-		});
-		await csvWriter.writeRecords(users);
+		try {
+			// Resolve the full path to make sure the file is being saved where you expect
+			const fullPath = path.resolve('./utils/csv/user-accounts.csv');
+			console.log(`Writing CSV to: ${fullPath}`); // Log the full path
+
+			const csvWriter = createCsvWriter({
+				path: fullPath, // Use the resolved full path
+				header: [
+					{ id: 'firstName', title: 'First Name' },
+					{ id: 'lastName', title: 'Last Name' },
+					{ id: 'email', title: 'email' },
+					{ id: 'password', title: 'password' },
+					{ id: 'roles', title: 'role' },
+				],
+			});
+
+			// Perform the write operation
+			await csvWriter.writeRecords(users);
+			console.log('CSV file was written successfully'); // Log success message
+		} catch (error) {
+			// Log any errors that occur during writing to the CSV
+			console.error('Error writing CSV file:', error);
+		}
 	}
 
 	/*private static writeToJson(users) {
@@ -97,3 +117,42 @@ export class SeederService {
 		writeFile('./utils/json/user-accounts.json', json, 'utf8');
 	}*/
 }
+
+// async seed(args: CommandLineArgsOptions) {
+// 	// eslint-disable-next-line no-plusplus
+// 	if (args.clear) await this.clear();
+
+// 	console.log('Seeding clients...');
+// 	const clients = await this.clientSeederService.seed(args.clients);
+// 	console.log(`Seeded ${clients.length} clients`);
+// 	const projects = await this.projectSeederService.seedProjects(clients, args.projects);
+// 	const users = await this.userSeederService.seedBusinessOwner(args.businessOwners);
+// 	const supervisors = await this.userSeederService.seedSupervisor(args.supervisors);
+// 	const links = await this.linkSeederService.seed(supervisors[0], projects, args.resources);
+// 	const businessOwners = await this.userSeederService.seedBusinessOwner(args.businessOwners);
+// 	// ... within the seeding logic ...
+// 	const clientUsers = await this.userSeederService.seedClients(args.clientCount);
+// 	const reports = await this.reportSeederService.seedReports(args.reports); // ... rest of the logic ...
+
+// 	const availableResources = await this.resourceSeedService.seedResources(links);
+// 	const assignedResources = await this.projectSeederService.seedAssignedResources(
+// 		projects,
+// 		availableResources.splice(0, args.resources / 2),
+// 	);
+// 	let allUsers;
+// 	try {
+// 		console.log('Seeding timesheets...');
+// 		const timesheets = await this.timesheetSeederService.seedTimesheets(
+// 			supervisors,
+// 			assignedResources,
+// 			projects,
+// 		);
+// 	} catch (error) {
+// 		console.error('Error during timesheet seeding:', error);
+// 	} finally {
+// 		// Combine all user arrays
+// 		allUsers = businessOwners.concat(supervisors).concat(clientUsers);
+// 		console.log('Writing to CSV...');
+// 		await SeederService.writeToCSV(allUsers);
+// 	}
+// }
