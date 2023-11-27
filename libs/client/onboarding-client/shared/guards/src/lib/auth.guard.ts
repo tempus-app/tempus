@@ -41,7 +41,8 @@ export class AuthGuard implements CanLoad, CanActivate {
 							!roles.includes(RoleType.ASSIGNED_RESOURCE)) ||
 						(curRoute[1] === 'owner' &&
 							!roles.includes(RoleType.BUSINESS_OWNER) &&
-							!roles.includes(RoleType.SUPERVISOR))
+							!roles.includes(RoleType.SUPERVISOR) &&
+							!roles.includes(RoleType.CLIENT)) // Include CLIENT role for owner route
 					) {
 						return this.backToSigin();
 					}

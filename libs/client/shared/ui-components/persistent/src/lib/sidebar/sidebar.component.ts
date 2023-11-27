@@ -191,7 +191,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
 			case RoleType.ASSIGNED_RESOURCE:
 			case RoleType.AVAILABLE_RESOURCE:
 			default:
-				return 'Resource';
+				return 'Client';
 		}
 	}
 

@@ -105,22 +105,22 @@ export class UserSeederService {
 			]);
 
 			const createdUser = await this.userService.createUser(userDto);
-			const hashedPassword = await bcrypt.hash(plainPassword, saltRounds);
-			createdUser.password = hashedPassword;
+			// const hashedPassword = await bcrypt.hash(plainPassword, saltRounds);
+			// createdUser.password = hashedPassword;
 
-			// Create a ResourceEntity for the client
-			const resourceEntity = new ResourceEntity();
-			resourceEntity.id = createdUser.id; // Use the same ID as UserEntity
-			resourceEntity.email = email;
-			resourceEntity.password = hashedPassword; // Ensure the password is hashed if necessary
-			resourceEntity.roles = [RoleType.CLIENT];
+			// // Create a ResourceEntity for the client
+			// const resourceEntity = new ResourceEntity();
+			// resourceEntity.id = createdUser.id; // Use the same ID as UserEntity
+			// resourceEntity.email = email;
+			// resourceEntity.password = hashedPassword; // Ensure the password is hashed if necessary
+			// resourceEntity.roles = [RoleType.CLIENT];
 			// Set other ResourceEntity properties as needed
 			// ...
 
 			// Save the ResourceEntity
-			await this.resourceRepository.save(resourceEntity);
+			// await this.resourceRepository.save(resourceEntity);
 
-			createdClients.push(createdUser);
+			createdClients.push({ ...createdUser, password: plainPassword });
 		}
 		return createdClients;
 	}
