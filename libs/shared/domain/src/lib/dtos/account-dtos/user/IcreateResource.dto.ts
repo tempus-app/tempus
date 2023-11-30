@@ -45,4 +45,6 @@ export interface ICreateResourceDto extends ICreateUserDto {
 	educationsSummary: string;
 
 	experiencesSummary: string;
+
+	supervisorId: number;
 }

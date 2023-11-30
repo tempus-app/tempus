@@ -1,15 +1,26 @@
 <ng-container>
-	<div id="page-container" fxLayout="column" fxLayoutGap="20px">
+	<div *ngIf="dataLoaded" id="page-container" fxLayout="column" fxLayoutGap="20px">
 		<div id="title-container" fxLayout="row" fxLayoutGap="0.5em">
 			<div fxLayout="column" fxFlex>
 				<div id="my-profile-container" fxFlex>
-					<h2 class="mat-h2 page-title">{{ editViewTimesheetPrefix + 'title' | translate }}</h2>
+					<h2 *ngIf="timesheetWeek === ''; else otherTitle" class="mat-h2 page-title">
+						{{ editViewTimesheetPrefix + 'title' | translate }}
+					</h2>
+					<ng-template #otherTitle
+						><h2 class="mat-h2 page-title">
+							{{ timesheetWeek }}
+						</h2></ng-template
+					>
 				</div>
 			</div>
 		</div>
 
 		<!-- Timesheet component -->
-		<tempus-resource-info-timesheet (formGroup)="loadTimesheet($event)"></tempus-resource-info-timesheet>
+		<tempus-resource-info-timesheet
+			(formGroup)="loadTimesheet($event)"
+			[timesheet]="timesheet"
+			[projectName]="projectName"
+		></tempus-resource-info-timesheet>
 
 		<!-- Submit and cancel buttons -->
 		<div id="button-container2">

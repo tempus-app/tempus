@@ -1,7 +1,7 @@
 import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Query, UseGuards } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { JwtAuthGuard } from '@tempus/api/shared/feature-auth';
-import { Timesheet } from '@tempus/shared-domain';
+import { JwtAuthGuard, Roles, RolesGuard } from '@tempus/api/shared/feature-auth';
+import { RoleType, Timesheet } from '@tempus/shared-domain';
 import { ApproveTimesheetDto, CreateTimesheetDto, UpdateTimesheetDto } from '@tempus/api/shared/dto';
 import { TimesheetService } from '../services/timesheet.service';
 import { Time } from '@faker-js/faker/time';
@@ -50,17 +50,18 @@ export class TimesheetController {
 		return this.timesheetService.createTimesheet(timesheet);
 	}
 
-	@UseGuards(JwtAuthGuard)
+	@UseGuards(JwtAuthGuard, RolesGuard)
+	@Roles(RoleType.BUSINESS_OWNER, RoleType.SUPERVISOR)
 	@Patch('/approve/:timesheetId')
 	async updateTimesheetStatus(
 		@Param('timesheetId') timesheetId: number,
 		@Body() approveTimesheetDto: ApproveTimesheetDto,
 	) : Promise<Timesheet> {
-		return this.timesheetService.approveOrRejectTimesheet(timesheetId, approveTimesheetDto);
+		return await this.timesheetService.approveOrRejectTimesheet(timesheetId, approveTimesheetDto);
 	}
 
 	@UseGuards(JwtAuthGuard)
-	@Patch('/:timesheetId')
+	@Patch('/')
 	async editTimesheet(@Body() updateTimesheetDto: UpdateTimesheetDto): Promise<Timesheet> {
 		return this.timesheetService.updateTimesheet(updateTimesheetDto);
 	}

@@ -75,22 +75,10 @@ export class SeederService {
 			projects,
 			availableResources.splice(0, args.resources / 2),
 		);
-		let allUsers;
-		try {
-			console.log('Seeding timesheets...');
-			const timesheets = await this.timesheetSeederService.seedTimesheets(
-				supervisors,
-				assignedResources,
-				projects,
-			);
-		} catch (error) {
-			console.error('Error during timesheet seeding:', error);
-		} finally {
-			// Combine all user arrays
-			allUsers = businessOwners.concat(availableResources).concat(assignedResources).concat(supervisors).concat(clientUsers);
-			console.log('Writing to CSV...');
-			await SeederService.writeToCSV(allUsers);
-		}
+		//const timesheets = await this.timesheetSeederService.seedTimesheets(supervisors, assignedResources, projects);
+		const allUsers = users.concat(availableResources).concat(assignedResources).concat(supervisors).concat(clients);
+		//SeederService.writeToJson(allUsers);
+		await SeederService.writeToCSV(allUsers);
 	}
 
 	private static async writeToCSV(users) {

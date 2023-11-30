@@ -13,5 +13,7 @@ export class TextAreaComponent {
 
 	@Input() showLabel = false;
 
+	@Input() disabled = false;
+
 	@Input() control: FormControl = new FormControl();
 }

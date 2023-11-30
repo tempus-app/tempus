@@ -2,13 +2,14 @@ import { Resource, RoleType, User } from '@tempus/shared-domain';
 import { ForbiddenException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ConfigService } from '@nestjs/config';
-import { getManager, Repository } from 'typeorm';
+import { Any, getManager, In, Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { hash, genSalt } from 'bcrypt';
 import { UserEntity } from '@tempus/api/shared/entity';
 import { CreateUserDto, JwtPayload, UpdateUserDto } from '@tempus/api/shared/dto';
 import { CommonService } from '@tempus/api/shared/feature-common';
 import { EmailService } from '@tempus/api/shared/feature-email';
+import { ResourceService } from './resource.service';
 
 const saltRounds = 10;
 @Injectable()
@@ -16,6 +17,7 @@ export class UserService {
 	constructor(
 		@InjectRepository(UserEntity)
 		private userRepository: Repository<UserEntity>,
+		private resourceService: ResourceService,
 		private configService: ConfigService,
 		private emailService: EmailService,
 		private commonService: CommonService,
@@ -74,6 +76,27 @@ export class UserService {
 
 		return users;
 	}
+
+	async getAllSupervisors(): Promise<User[]> {
+
+		const users = await this.getAllUsers();
+
+		// Not optimal lol but works
+		const supervisors = users.filter(user =>
+       	 user.roles.includes(RoleType.SUPERVISOR) || user.roles.includes(RoleType.BUSINESS_OWNER)
+    	);
+
+		// IDK WHY THIS ISNT WORKING
+		/*const supervisors = await this.userRepository.find({
+			where: {
+				roles: Any([RoleType.SUPERVISOR] as any[]),
+			},
+		  });**/
+
+
+		return supervisors;
+	}
+
 
 	async deleteUser(token: JwtPayload, userId: number): Promise<void> {
 		if (token.roles.includes(RoleType.SUPERVISOR) && !token.roles.includes(RoleType.BUSINESS_OWNER)) {

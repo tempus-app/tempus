@@ -139,6 +139,7 @@ export class TimesheetComponent implements OnInit, OnDestroy {
 			.pipe(takeUntil(this.$destroyed))
 			.subscribe(data => {
 				this.timesheetsTableData = [];
+				console.log(this.timesheetsTableData);
 				this.totalTimesheets = data.totalTimesheets;
 
 				data.timesheets?.forEach(timesheet => {

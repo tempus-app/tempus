@@ -1,8 +1,17 @@
 import { HttpClient } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
 import { APP_CONFIG } from '@tempus/app-config';
-import { AppConfig, IApproveTimesheetDto, ICreateTimesheetDto, RevisionType, Timesheet, View } from '@tempus/shared-domain';
+import {
+	AppConfig,
+	IApproveTimesheetDto,
+	ICreateTimesheetDto,
+	IUpdateTimesheetDto,
+	RevisionType,
+	Timesheet,
+	View,
+} from '@tempus/shared-domain';
 import { catchError, Observable } from 'rxjs';
+import { UpdateTimesheetDto } from '@tempus/api/shared/dto';
 import { handleError } from './errorHandler';
 
 @Injectable({ providedIn: 'root' })
@@ -11,7 +20,7 @@ export class OnboardingClientTimesheetsService {
 
 	timesheetURL = `${this.appConfig.apiUrl}/onboarding/timesheet`;
 
-	public getTimesheetById( timesheetId: number): Observable<Timesheet> {
+	public getTimesheetById(timesheetId: number): Observable<Timesheet> {
 		return this.http.get<Timesheet>(`${this.timesheetURL}/${timesheetId}`).pipe(catchError(handleError));
 	}
 
@@ -45,15 +54,22 @@ export class OnboardingClientTimesheetsService {
 		return this.http.post<Timesheet>(`${this.timesheetURL}/`, createTimesheetDto).pipe(catchError(handleError));
 	}
 
+	public editTimesheet(updatedTimesheet: UpdateTimesheetDto): Observable<Timesheet> {
+		return this.http.patch<Timesheet>(`${this.timesheetURL}/`, updatedTimesheet).pipe(catchError(handleError));
+	}
+
+	public deleteTimesheet(timesheetId: number): Observable<Timesheet> {
+		return this.http.delete<Timesheet>(`${this.timesheetURL}/${timesheetId}`).pipe(catchError(handleError));
+	}
+
 	public updateTimesheetStatusAsSupervisor(
 		timesheetId: number,
 		approveTimesheetDto: IApproveTimesheetDto,
-	): Observable<{timesheet: Timesheet}>{
-		return this.http
-			.patch<{timesheet: Timesheet}>(
-				`${this.timesheetURL}/approve/${timesheetId}`, approveTimesheetDto,
-				{},
-		)
+	): Observable<{ timesheet: Timesheet }> {
+		return this.http.patch<{ timesheet: Timesheet }>(
+			`${this.timesheetURL}/approve/${timesheetId}`,
+			approveTimesheetDto,
+			{},
+		);
 	}
-	
 }

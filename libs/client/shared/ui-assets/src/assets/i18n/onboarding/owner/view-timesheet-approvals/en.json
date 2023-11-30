@@ -3,9 +3,9 @@
 		"main": {
 			"title": "Timesheet Approvals",
 			"tableHeaders": {
-				"startDate": "Start Date",
-				"endDate": "End Date",
-				"resourceName": "Full Name",
+				"timesheetWeek": "Timesheet Week",
+				"submittedBy": "Submitted By",
+				"dateModified": "Date Modified",
 				"totalTime": "Total hours",
 				"projectName": "Project",
 				"status": "Status"
@@ -18,6 +18,46 @@
 			"closeText": "Reject",
 			"confirmText": "Approve",
 			"supervisorComment": "Comments"
-		  }
+		}
+	},
+
+	"viewTimesheet": {
+		"pendingApprovalTooltip": "This timesheet requires your approval",
+		"buttons": {
+			"approveButton": {
+				"title": "ACCEPT CHANGES"
+			},
+			"rejectButton": {
+				"title": "REJECT CHANGES"
+			},
+			"deleteViewButton": {
+				"title": "Delete timesheet"
+			},
+			"editViewButton": {
+				"title": "Edit timesheet"
+			}
+		},
+		"deleteTimesheetModal": {
+			"title": "Delete {{timesheet}}?",
+			"message": "Are you sure you want to permanently delete this timesheet?",
+			"confirmText": "Yes, delete",
+			"closeText": "Cancel"
+		},
+		"deleteTimesheetSuccess": "Timesheet deleted.",
+		"deleteTimesheetErrorModal": {
+			"confirmText": "OK"
+		},
+		"rejectDialog": {
+			"title": "Enter Comments",
+			"helpText": "Enter your comments here so the user can improve their timesheet and submit a better revision.",
+			"closeText": "CANCEL",
+			"confirmText": "SUBMIT",
+			"errorMessage": "Please enter a comment."
+		},
+		"confirmationDialog": {
+			"title": "Revision Approved!",
+			"message": "You have approved the revision",
+			"confirmText": "CLOSE"
+		}
 	}
 }

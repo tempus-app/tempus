@@ -14,6 +14,7 @@
 		"client-onboarding-client-business-owner-features-cost-billing-reports": "libs/client/onboarding-client/business-owner/features/cost-billing-reports",
 		"client-onboarding-client-business-owner-features-cost-reports": "libs/client/onboarding-client/business-owner/features/cost-reports",
 		"client-onboarding-client-business-owner-features-feature-view-resource-profile": "libs/client/onboarding-client/business-owner/features/feature-view-resource-profile",
+		"client-onboarding-client-business-owner-features-feature-view-timesheet": "libs/client/onboarding-client/business-owner/features/feature-view-timesheet",
 		"client-onboarding-client-business-owner-features-feature-view-timesheet-approvals": "libs/client/onboarding-client/business-owner/features/feature-view-timesheet-approvals",
 		"client-onboarding-client-resource-features-feature-view-timesheet": "libs/client/onboarding-client/resource/features/feature-view-timesheet",
 		"client-onboarding-client-shared-features-feature-edit-view-timesheet": "libs/client/onboarding-client/shared/features/feature-edit-view-timesheet",

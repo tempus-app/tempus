@@ -1,0 +1,54 @@
+<ng-container *ngIf="dataLoaded">
+	<div id="page-container" fxLayout="column" fxLayoutGap="20px">
+		<div id="title-container">
+			<div id="my-profile-container">
+				<h2 class="mat-h2 page-title">{{ timesheetWeek }}</h2>
+			</div>
+		</div>
+		<tempus-resource-display-timesheet
+			[timesheet]="timesheet"
+			[projectName]="projectName"
+		></tempus-resource-display-timesheet>
+		<div id="button-container2" *ngIf="isRevision">
+			<div class="submitAndCancel">
+				<tempus-button
+					id="reject-view-button"
+					class="reject-button"
+					color="warn"
+					icon="close"
+					label="Reject"
+					(click)="openRejectionDialog()"
+				></tempus-button>
+				<tempus-button
+					id="approve-view-button"
+					class="approve-button"
+					icon="done"
+					label="Approve"
+					(click)="openConfirmationDialog()"
+				></tempus-button>
+			</div>
+		</div>
+
+		<ng-template #modalID>
+			<div>
+				<p>{{ viewTimesheetPrefx + 'rejectDialog.helpText' | translate }}</p>
+				<tempus-text-area
+					id="reject-revision-message-textarea"
+					[control]="$any(approveTimesheetForm).get('rejectionComments')"
+				></tempus-text-area>
+			</div>
+			<div class="error-container">
+				<mat-error
+					class="mat-body-2"
+					*ngIf="
+						$any(approveTimesheetForm).get('rejectionComments').invalid &&
+						($any(approveTimesheetForm).get('rejectionComments').touched ||
+							$any(approveTimesheetForm).get('rejectionComments').dirty)
+					"
+				>
+					{{ viewTimesheetPrefx + 'rejectDialog.errorMessage' | translate }}
+				</mat-error>
+			</div>
+		</ng-template>
+	</div>
+</ng-container>
