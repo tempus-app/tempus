@@ -157,6 +157,12 @@ export class SidebarComponent implements OnInit, OnDestroy {
 						SidebarTab.PERSONAL_INFORMATION,
 						SidebarTab.TIMESHEET,
 					];
+					
+				} else if (roles.includes(RoleType.CLIENT)) {
+					this.tabs = [
+						SidebarTab.TIMESHEET_APPROVALS,
+						SidebarTab.COST_REPORTS,
+					];
 				} else {
 					this.tabs = [
 						SidebarTab.PRIMARY_VIEW,

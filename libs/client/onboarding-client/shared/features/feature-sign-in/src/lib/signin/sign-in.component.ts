@@ -79,7 +79,7 @@ export class SignInComponent implements OnInit, OnDestroy {
 					) {
 						this.router.navigate(['../resource'], { relativeTo: this.route });
 					} else if (roles.includes(RoleType.CLIENT)) {
-						this.router.navigate(['../owner'], { relativeTo: this.route });
+						this.router.navigate(['../owner/timesheet-approvals'], { relativeTo: this.route });
 					} else {
 						this.errorMessage = this.noDefinesRolesErr;
 					}

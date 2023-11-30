@@ -1,6 +1,6 @@
 import { Controller, Get, HttpStatus, Param, Query, Res, UseGuards } from "@nestjs/common";
 import { ApiQuery, ApiTags } from "@nestjs/swagger";
-import { ExcelService, ReportService } from "../services";
+import { ReportService } from "../services";
 import { JwtAuthGuard, Roles, RolesGuard } from '@tempus/api/shared/feature-auth';
 import { RoleType } from "@tempus/shared-domain";
 import { Response } from 'express';
@@ -10,7 +10,6 @@ import { Response } from 'express';
 export class ReportController {
 	constructor(
         private reportService: ReportService,
-        private excelService: ExcelService,
     ) {}
 
     @UseGuards(JwtAuthGuard, RolesGuard)
@@ -27,11 +26,11 @@ export class ReportController {
         @Query('projectId') projectId?: number,
     ) : Promise<void> {
         const reportData = await this.reportService.generateReportForResource(resourceId, month, clientId, projectId);
-        const excelBuffer = await this.excelService.exportToExcel(reportData);
+       // const excelBuffer = await this.excelService.exportToExcel(reportData);
 
         res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         res.setHeader('Content-Disposition', 'attachment; filename=custom-report.xlsx');
-        res.send(excelBuffer);
+        //res.send(excelBuffer);
         
         return;
        
@@ -53,11 +52,11 @@ export class ReportController {
         @Query('resourceId') resourceId?: number,
     ) : Promise<void> {
         const reportData = await this.reportService.generateReportForSupervisor(supervsisorId, month, clientId, projectId, resourceId);
-        const excelBuffer = await this.excelService.exportToExcel(reportData);
+       // const excelBuffer = await this.excelService.exportToExcel(reportData);
 
         res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         res.setHeader('Content-Disposition', 'attachment; filename=custom-report.xlsx');
-        res.send(excelBuffer);
+       // res.send(excelBuffer);
         return;
     }
     
