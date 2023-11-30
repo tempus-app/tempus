@@ -67,7 +67,7 @@ export class SeederService {
 		const links = await this.linkSeederService.seed(supervisors[0], projects, args.resources);
 		const businessOwners = await this.userSeederService.seedBusinessOwner(args.businessOwners);
 		// ... within the seeding logic ...
-		const clientUsers = await this.userSeederService.seedClients(args.clientCount);
+		const clientUsers = await this.userSeederService.seedClients(3);
 		const reports = await this.reportSeederService.seedReports(args.reports); // ... rest of the logic ...
 
 		const availableResources = await this.resourceSeedService.seedResources(links);
@@ -87,7 +87,7 @@ export class SeederService {
 			console.error('Error during timesheet seeding:', error);
 		} finally {
 			// Combine all user arrays
-			allUsers = businessOwners.concat(supervisors).concat(clientUsers);
+			allUsers = businessOwners.concat(availableResources).concat(assignedResources).concat(supervisors).concat(clientUsers);
 			console.log('Writing to CSV...');
 			await SeederService.writeToCSV(allUsers);
 		}
