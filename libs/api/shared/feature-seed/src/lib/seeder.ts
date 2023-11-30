@@ -62,7 +62,7 @@ export class SeederService {
 			projects,
 			availableResources.splice(0, args.resources / 2),
 		);
-		const timesheets = await this.timesheetSeederService.seedTimesheets(supervisors, assignedResources, projects);
+		//const timesheets = await this.timesheetSeederService.seedTimesheets(supervisors, assignedResources, projects);
 		const allUsers = users.concat(availableResources).concat(assignedResources).concat(supervisors);
 		//SeederService.writeToJson(allUsers);
 		await SeederService.writeToCSV(allUsers);
