@@ -59,6 +59,5 @@ export class ReportController {
        // res.send(excelBuffer);
         return;
     }
-    
 
 }

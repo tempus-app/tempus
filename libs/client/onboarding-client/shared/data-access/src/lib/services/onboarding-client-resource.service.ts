@@ -5,11 +5,13 @@ import { APP_CONFIG } from '@tempus/app-config';
 import {
 	AppConfig,
 	AzureAccount,
+	Client,
 	ICreateResourceDto,
 	ICreateViewDto,
 	IResourceBasicDto,
 	IUpdateResourceDto,
 	IUserProjClientDto,
+	Project,
 	Resource,
 	Revision,
 	RoleType,
@@ -162,5 +164,37 @@ export class OnboardingClientResourceService {
 
 	public deleteResource(resourceId: number): Observable<Resource> {
 		return this.http.delete<Resource>(`${this.url}/user/${resourceId}`).pipe(catchError(handleError));
+	}
+
+	public getResourceProjects(resourceId: number): Observable<Project[]> {
+		return this.http.get<Project[]>(`${this.url}/user/resource/projects/${resourceId}`).pipe(catchError(handleError));
+	}
+
+	public getResourceClients(resourceId: number): Observable<Client[]> {
+		return this.http.get<Client[]>(`${this.url}/user/resource/clients/${resourceId}`).pipe(catchError(handleError));
+	}
+
+	public getSupervisorProjects(supervisorId: number): Observable<Project[]> {
+		return this.http.get<Project[]>(`${this.url}/user/supervisor/projects/${supervisorId}`).pipe(catchError(handleError));
+	}
+
+	public getSupervisorClients(supervisorId: number): Observable<Client[]> {
+		return this.http.get<Client[]>(`${this.url}/user/supervisor/clients/${supervisorId}`).pipe(catchError(handleError));
+	}
+
+	public getSupervisorResources(supervisorId: number): Observable<Resource[]> {
+		return this.http.get<Resource[]>(`${this.url}/user/supervisor/resources/${supervisorId}`).pipe(catchError(handleError));
+	}
+
+	public getClientProjects(clientId: number): Observable<Project[]> {
+		return this.http.get<Project[]>(`${this.url}/user/clients/projects/${clientId}`).pipe(catchError(handleError));
+	}
+
+	public getClientResources(clientId: number): Observable<Resource[]> {
+		return this.http.get<Resource[]>(`${this.url}/user/clients/resources/${clientId}`).pipe(catchError(handleError));
+	}
+
+	public getAllResources(): Observable<Resource[]> {
+		return this.http.get<Resource[]>(`${this.url}/user/resources`).pipe(catchError(handleError));
 	}
 }
