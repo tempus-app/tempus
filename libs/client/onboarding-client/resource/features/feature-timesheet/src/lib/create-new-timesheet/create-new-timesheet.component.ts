@@ -19,7 +19,7 @@ import {
 	User,
 	ViewType,
 } from '@tempus/shared-domain';
-import { Subject, pipe, take, takeUntil } from 'rxjs';
+import { Subject, forkJoin, pipe, take, takeUntil } from 'rxjs';
 import { Store } from '@ngrx/store';
 
 @Component({
@@ -89,16 +89,15 @@ export class CreateNewTimesheetComponent implements OnInit {
 	}
 
 	createNewTimesheet() {
-		const newTimesheet = this.newTimesheetForm.generateNewTimesheet();
-		this.timesheetService
-			.createTimesheet(newTimesheet)
-			.pipe(take(1))
-			.subscribe(timesheet => {
-				this.router.navigate(['../'], {
-					queryParams: { timesheetId: timesheet.id },
-					relativeTo: this.route,
-				});
+		const newTimesheets = this.newTimesheetForm.generateNewTimesheet();
+
+		const timesheets = newTimesheets.map(item => this.timesheetService.createTimesheet(item));
+
+		forkJoin(timesheets).subscribe(timesheet => {
+			this.router.navigate(['../'], {
+				relativeTo: this.route,
 			});
+		});
 	}
 
 	openSubmitConfirmation() {

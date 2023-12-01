@@ -35,3 +35,24 @@ mat-date-range-input {
 		width: 85%;
 	}
 }
+
+::ng-deep .totalContainer {
+	.secondary .mat-form-field-wrapper {
+		width: 7em;
+	}
+
+	display: flex;
+}
+
+#button-container {
+	display: flex;
+	flex-direction: row;
+	gap: 0.5em;
+	height: 100% !important;
+}
+
+.remove-button {
+	scale: 0.75;
+	box-shadow: 1px 1px 3px 1px rgba(0, 0, 0, 0.1);
+	margin-left: 10%;
+}

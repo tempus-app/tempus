@@ -13,18 +13,9 @@
 					>
 				</div>
 			</div>
-		</div>
 
-		<!-- Timesheet component -->
-		<tempus-resource-info-timesheet
-			(formGroup)="loadTimesheet($event)"
-			[timesheet]="timesheet"
-			[projectName]="projectName"
-		></tempus-resource-info-timesheet>
-
-		<!-- Submit and cancel buttons -->
-		<div id="button-container2">
-			<div class="submitAndCancel">
+			<!-- Submit and cancel buttons -->
+			<div id="button-container">
 				<tempus-button
 					label="{{ editViewTimesheetPrefix + 'buttons.cancel.label' | translate }}"
 					color="accent"
@@ -42,6 +33,27 @@
 					matTooltipClass="tooltip"
 					id="submit-profile-button"
 				></tempus-button>
+
+				<!-- <ng-template #submitEdit>
+					<tempus-button
+						[disabled]="!isEditFormValid()"
+						label="{{ editViewTimesheetPrefix + 'buttons.submit.label' | translate }}"
+						color="accent"
+						(buttonClick)="submitChanges()"
+						matTooltip="{{ editViewTimesheetPrefix + 'buttons.submit.tooltip' | translate }}"
+						matTooltipClass="tooltip"
+						id="submit-profile-button"
+					></tempus-button>
+				</ng-template> -->
 			</div>
-		</div></div
-></ng-container>
+		</div>
+
+		<!-- Timesheet component -->
+		<tempus-resource-info-timesheet
+			(formGroup)="loadTimesheet($event)"
+			(multiTimesheets)="loadTimesheets($event)"
+			[timesheet]="timesheet"
+			[projectName]="projectName"
+		></tempus-resource-info-timesheet>
+	</div>
+</ng-container>

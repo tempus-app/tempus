@@ -22,6 +22,10 @@ import { ICreateTimesheetDto, ProjectResource, Timesheet } from '@tempus/shared-
 	providers: [OnboardingClientResourceService],
 })
 export class EditViewTimesheetComponent implements OnDestroy {
+	// Form group for editing timesheet
+	timesheetForm = this.fb.group({});
+
+	// Form group for new timesheets
 	timesheetsForm = this.fb.group({});
 
 	prefix = 'onboardingResourceTimesheet';
@@ -85,6 +89,8 @@ export class EditViewTimesheetComponent implements OnDestroy {
 
 	timesheetWeek = '';
 
+	isNewTimesheet = false;
+
 	setFormDataFromTimesheet(timesheet: Timesheet) {
 		this.currentTimesheetId = timesheet.id;
 		this.timesheet = timesheet;
@@ -108,41 +114,69 @@ export class EditViewTimesheetComponent implements OnDestroy {
 
 	// Generate new timesheet
 	generateNewTimesheet() {
-		return {
-			projectId: this.timesheetsForm.get('project')?.value,
-			resourceId: this.userId,
-			weekStartDate: this.timesheetsForm.get('startDate')?.value,
-			weekEndDate: this.timesheetsForm.get('endDate')?.value,
-			approvedBySupervisor: false,
-			approvedByClient: false,
-			resourceComment: this.timesheetsForm.get('comments')?.value,
-			supervisorComment: '',
-			clientRepresentativeComment: '',
-			audited: false,
-			billed: false,
-			mondayHours: this.timesheetsForm.get('monday')?.value,
-			tuesdayHours: this.timesheetsForm.get('tuesday')?.value,
-			wednesdayHours: this.timesheetsForm.get('wednesday')?.value,
-			thursdayHours: this.timesheetsForm.get('thursday')?.value,
-			fridayHours: this.timesheetsForm.get('friday')?.value,
-			saturdayHours: this.timesheetsForm.get('saturday')?.value,
-			sundayHours: this.timesheetsForm.get('sunday')?.value,
-		} as ICreateTimesheetDto;
+		const timesheetsArray = this.timesheetsForm.controls.timesheets as FormArray;
+
+		const timesheetsDto: ICreateTimesheetDto[] = [];
+
+		for (let i = 0; i < timesheetsArray?.length; i++) {
+			const timesheet: ICreateTimesheetDto = {
+				projectId: (timesheetsArray?.at(i) as FormGroup).get('project')?.value,
+				resourceId: this.userId,
+				weekStartDate: (timesheetsArray?.at(i) as FormGroup).get('startDate')?.value,
+				weekEndDate: (timesheetsArray?.at(i) as FormGroup).get('endDate')?.value,
+				approvedBySupervisor: false,
+				approvedByClient: false,
+				resourceComment: (timesheetsArray?.at(i) as FormGroup).get('comments')?.value,
+				supervisorComment: '',
+				clientRepresentativeComment: '',
+				audited: false,
+				billed: false,
+				mondayHours: (timesheetsArray?.at(i) as FormGroup).get('monday')?.value,
+				tuesdayHours: (timesheetsArray?.at(i) as FormGroup).get('tuesday')?.value,
+				wednesdayHours: (timesheetsArray?.at(i) as FormGroup).get('wednesday')?.value,
+				thursdayHours: (timesheetsArray?.at(i) as FormGroup).get('thursday')?.value,
+				fridayHours: (timesheetsArray?.at(i) as FormGroup).get('friday')?.value,
+				saturdayHours: (timesheetsArray?.at(i) as FormGroup).get('saturday')?.value,
+				sundayHours: (timesheetsArray?.at(i) as FormGroup).get('sunday')?.value,
+			};
+			timesheetsDto.push(timesheet);
+		}
+
+		return timesheetsDto as ICreateTimesheetDto[];
 	}
 
 	// If it is valid
 	isValid() {
-		return this.timesheetsForm?.valid;
+		if (this.isNewTimesheet) {
+			return this.timesheetsForm?.valid;
+		}
+
+		return this.timesheetForm?.valid;
+	}
+
+	// If edit form is valid
+	isEditFormValid() {
+		return this.timesheetForm?.valid;
 	}
 
 	// Validate form
 	validateForm() {
-		this.timesheetsForm?.markAllAsTouched();
+		if (this.isNewTimesheet) {
+			this.timesheetsForm?.markAllAsTouched();
+			return this.isValid();
+		}
+
+		this.timesheetForm?.markAllAsTouched();
 		return this.isValid();
 	}
 
 	// Load timesheet
 	loadTimesheet(eventData: FormGroup) {
+		this.timesheetForm = eventData;
+	}
+
+	// Load timesheets
+	loadTimesheets(eventData: FormGroup) {
 		this.timesheetsForm = eventData;
 	}
 
@@ -162,6 +196,7 @@ export class EditViewTimesheetComponent implements OnDestroy {
 			this.route.snapshot.url[this.route.snapshot.url.length - 1].path === 'new'
 		) {
 			this.dataLoaded = true;
+			this.isNewTimesheet = true;
 		}
 		this.resourceService.getResourceInformation().subscribe(data => {
 			this.userId = data.id;
