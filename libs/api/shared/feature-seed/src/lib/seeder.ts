@@ -73,7 +73,7 @@ export class SeederService {
 		const links = await this.linkSeederService.seed(supervisors[0], projects, args.resources);
 		const businessOwners = await this.userSeederService.seedBusinessOwner(args.businessOwners);
 		// ... within the seeding logic ...
-		const clientUsers = await this.userSeederService.seedClients(3);
+		const clientUsers = await this.userSeederService.getClients();//this.userSeederService.seedClients(3);
 		const reports = await this.reportSeederService.seedReports(args.reports); // ... rest of the logic ...
 
 		const availableResources = await this.resourceSeedService.seedResources(links);

@@ -147,6 +147,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
 						SidebarTab.PENDING_APPROVALS,
 						SidebarTab.PROJECTS,
 						SidebarTab.TIMESHEET_APPROVALS,
+						SidebarTab.COST_REPORTS,
 						// SidebarTab.COST_BILLING_REPORTS,
 					];
 				} else if (roles.includes(RoleType.AVAILABLE_RESOURCE) || roles.includes(RoleType.ASSIGNED_RESOURCE)) {
@@ -156,6 +157,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
 						SidebarTab.MY_PROJECTS,
 						SidebarTab.PERSONAL_INFORMATION,
 						SidebarTab.TIMESHEET,
+						SidebarTab.COST_REPORTS,
 					];
 					
 				} else if (roles.includes(RoleType.CLIENT)) {

@@ -1,11 +1,11 @@
 import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { TimesheetEntity, UserEntity } from '@tempus/api/shared/entity';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { Timesheet, TimesheetRevisionType } from '@tempus/shared-domain';
 import { ApproveTimesheetDto, CreateTimesheetDto, UpdateTimesheetDto } from '@tempus/api/shared/dto';
 import { ResourceService, UserService } from '@tempus/onboarding-api/feature-account';
-import { ProjectService } from '@tempus/onboarding-api/feature-project';
+import { ClientRepresentativeService, ProjectService } from '@tempus/onboarding-api/feature-project';
 
 @Injectable()
 export class TimesheetService {
@@ -13,6 +13,7 @@ export class TimesheetService {
 		@InjectRepository(TimesheetEntity)
 		private timesheetRepository: Repository<TimesheetEntity>,
 		private userService: UserService,
+		private clientRepService: ClientRepresentativeService,
 		private resourceService: ResourceService,
 		private projectService: ProjectService,
 	) {}
@@ -79,6 +80,24 @@ export class TimesheetService {
 		return { timesheets: timesheetsAndCount[0], totalTimesheets: timesheetsAndCount[1] };
 	}
 
+	async getAllTimesheetsByClientId(clientId: number, page: number, pageSize: number) {
+
+		const clientUser = await this.userService.getUserbyId(clientId);
+		const clientRep = await this.clientRepService.getClientRepresentativeByEmail(clientUser.email);
+		const projects = await this.userService.getClientProjects(clientRep.client.id);
+		const projectIds = projects.map(project => project.id);
+
+
+		const timesheetsAndCount = await this.timesheetRepository.findAndCount({
+			where: { project: In(projectIds) },
+			relations: ['supervisor', 'project', 'resource'],
+			take: Number(pageSize),
+			skip: Number(page) * Number(pageSize),
+		});
+
+		return { timesheets: timesheetsAndCount[0], totalTimesheets: timesheetsAndCount[1] };
+	}
+
 	async getAllSubmittedTimesheetsforProject(projectId: number): Promise<Timesheet[]> {
 		const timesheets = await this.timesheetRepository.find({
 			where: {
@@ -102,7 +121,7 @@ export class TimesheetService {
 		return toReturn;
 	}
 
-	async approveOrRejectTimesheet(timesheetId: number, approveTimesheetDto: ApproveTimesheetDto): Promise<Timesheet> {
+	async approveOrRejectTimesheetSupervisor(timesheetId: number, approveTimesheetDto: ApproveTimesheetDto): Promise<Timesheet> {
 		const { approval, comment } = approveTimesheetDto;
 		const timesheetEntity = await this.timesheetRepository.findOne(timesheetId);
 		if (!timesheetEntity) throw new NotFoundException(`Could not find timesheet with id ${timesheetId}`);
@@ -124,6 +143,30 @@ export class TimesheetService {
 		}
 		return;
 	}
+
+	async approveOrRejectTimesheetClient(timesheetId: number, approveTimesheetDto: ApproveTimesheetDto): Promise<Timesheet> {
+		const { approval, comment } = approveTimesheetDto;
+		const timesheetEntity = await this.timesheetRepository.findOne(timesheetId);
+		if (!timesheetEntity) throw new NotFoundException(`Could not find timesheet with id ${timesheetId}`);
+
+		if (approval === true) {
+			timesheetEntity.approvedByClient = true;
+			timesheetEntity.status = TimesheetRevisionType.APPROVED;
+			timesheetEntity.dateModified = new Date(Date.now());
+			timesheetEntity.clientRepresentativeComment = comment;
+			const toReturn = await this.timesheetRepository.save(timesheetEntity);
+			return toReturn;
+		}
+			else if (approval === false) {
+			timesheetEntity.status = TimesheetRevisionType.REJECTED;
+			timesheetEntity.dateModified = new Date(Date.now());
+			timesheetEntity.clientRepresentativeComment = comment;
+			const toReturn = await this.timesheetRepository.save(timesheetEntity);
+			return toReturn;
+		}
+		return;
+	}
+
 
 	async createTimesheet(timesheet: CreateTimesheetDto): Promise<Timesheet> {
 		const timesheetEntity = TimesheetEntity.fromDto(timesheet);

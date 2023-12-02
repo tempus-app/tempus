@@ -44,6 +44,21 @@ export class TimesheetController {
 		return timesheetsAndCount;
 	}
 
+	//@UseGuards(JwtAuthGuard)
+	@Get('client-timesheets/:clientId')
+	async getTimesheetsForClient(
+		@Param('clientId') clientId: number,
+		@Query('page') page: number,
+		@Query('pageSize') pageSize: number,
+	): Promise<{ timesheets: Timesheet[]; totalTimesheets: number }> {
+		const timesheetsAndCount = await this.timesheetService.getAllTimesheetsByClientId(
+			clientId,
+			page,
+			pageSize,
+		);
+		return timesheetsAndCount;
+	}
+
 	@UseGuards(JwtAuthGuard)
 	@Post('/')
 	async createTimesheet(@Body() timesheet: CreateTimesheetDto): Promise<Timesheet> {
@@ -57,7 +72,17 @@ export class TimesheetController {
 		@Param('timesheetId') timesheetId: number,
 		@Body() approveTimesheetDto: ApproveTimesheetDto,
 	) : Promise<Timesheet> {
-		return await this.timesheetService.approveOrRejectTimesheet(timesheetId, approveTimesheetDto);
+		return await this.timesheetService.approveOrRejectTimesheetSupervisor(timesheetId, approveTimesheetDto);
+	}
+
+	//@UseGuards(JwtAuthGuard, RolesGuard)
+	//@Roles(RoleType.BUSINESS_OWNER, RoleType.SUPERVISOR)
+	@Patch('/approve/client/:timesheetId')
+	async updateTimesheetStatusClient(
+		@Param('timesheetId') timesheetId: number,
+		@Body() approveTimesheetDto: ApproveTimesheetDto,
+	) : Promise<Timesheet> {
+		return await this.timesheetService.approveOrRejectTimesheetClient(timesheetId, approveTimesheetDto);
 	}
 
 	@UseGuards(JwtAuthGuard)
