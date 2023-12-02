@@ -37,6 +37,19 @@ export class OnboardingClientTimesheetsService {
 			.pipe(catchError(handleError));
 	}
 
+	public getTimesheetsByClientId(
+		clientId: number,
+		page: number,
+		pageSize: number,
+	): Observable<{ timesheets: Timesheet[]; totalTimesheets: number }> {
+		return this.http
+			.get<{ timesheets: Timesheet[]; totalTimesheets: number }>(
+				`${this.timesheetURL}/client-timesheets/${clientId}?page=${page}&pageSize=${pageSize}`,
+				{},
+			)
+			.pipe(catchError(handleError));
+	}
+
 	public getTimesheetsByResourceId(
 		resourceId: number,
 		page: number,
@@ -68,6 +81,17 @@ export class OnboardingClientTimesheetsService {
 	): Observable<{ timesheet: Timesheet }> {
 		return this.http.patch<{ timesheet: Timesheet }>(
 			`${this.timesheetURL}/approve/${timesheetId}`,
+			approveTimesheetDto,
+			{},
+		);
+	}
+
+	public updateTimesheetStatusAsClient(
+		timesheetId: number,
+		approveTimesheetDto: IApproveTimesheetDto,
+	): Observable<{ timesheet: Timesheet }> {
+		return this.http.patch<{ timesheet: Timesheet }>(
+			`${this.timesheetURL}/approve/client/${timesheetId}`,
 			approveTimesheetDto,
 			{},
 		);

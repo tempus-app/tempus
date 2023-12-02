@@ -7,6 +7,7 @@ import {
 	OnboardingClientResourceService,
 	OnboardingClientState,
 	OnboardingClientTimesheetsService,
+	selectLoggedInUserId,
 } from '@tempus/client/onboarding-client/shared/data-access';
 import { Store } from '@ngrx/store';
 import { CustomModalType, ModalService, ModalType } from '@tempus/client/shared/ui-components/modal';
@@ -143,6 +144,17 @@ export class TimesheetContentComponent implements OnInit {
 	template!: TemplateRef<unknown>;
 
 	ngOnInit(): void {
+
+		this.sharedStore
+			.select(selectLoggedInUserId)
+			.pipe(take(1))
+			.subscribe(data => {
+				if (data) {
+					this.userId = data;
+				}
+			});
+
+			
 		this.modalService.confirmEventSubject.pipe(takeUntil(this.$destroyed)).subscribe(modalId => {
 			this.modalService.close();
 			if (modalId === 'approveTimesheetModal') {
@@ -192,7 +204,7 @@ export class TimesheetContentComponent implements OnInit {
 		this.timesheet.saturdayHours = timesheet.saturdayHours;
 		this.timesheet.sundayHours = timesheet.sundayHours;
 
-		if (timesheet.status === TimesheetRevisionType.SUBMITTED) {
+		if (timesheet.status === TimesheetRevisionType.SUBMITTED || timesheet.status === TimesheetRevisionType.CLIENTREVIEW) {
 			this.isRevision = true;
 		} else {
 			this.isRevision = false;
@@ -225,6 +237,7 @@ export class TimesheetContentComponent implements OnInit {
 			const approveTimesheetDto = {
 				approval: false,
 				comment: this.approveTimesheetForm.get('rejectionComments')?.value,
+				approverId: this.userId,
 			};
 
 			this.businessownerStore.dispatch(
@@ -265,6 +278,8 @@ export class TimesheetContentComponent implements OnInit {
 			const approveTimesheetDto = {
 				approval: true,
 				comment: this.approveTimesheetForm.get('rejectionComments')?.value,
+				approverId: this.userId,
+
 			};
 			this.businessownerStore.dispatch(
 				updateTimesheetStatusAsSupervisor({
