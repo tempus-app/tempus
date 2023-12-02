@@ -5,10 +5,13 @@ import {
 	OnboardingClientState,
 	selectLoggedInUserId,
 	OnboardingClientResourceService,
+	OnboardingClientProjectService,
 } from '@tempus/client/onboarding-client/shared/data-access';
 import { Store } from '@ngrx/store';
 import { HttpClient } from '@angular/common/http';
 import { ReportService } from './report.service';
+import { FormBuilder, Validators } from '@angular/forms';
+import { Client, Project, Resource } from '@tempus/shared-domain';
 
 export interface CostReport {
 	clientName: string;
@@ -33,15 +36,65 @@ export interface CostReportsTableData extends TableDataModel, CostReport {
 	styleUrls: ['./cost-reports.component.scss'],
 })
 export class CostReportsComponent implements OnInit {
+	constructor(
+		private reportService: ReportService,
+		private store: Store<OnboardingClientState>,
+		private resourceService: OnboardingClientResourceService,
+		private projectService: OnboardingClientProjectService,
+		private http: HttpClient,
+		private fb: FormBuilder,
+	) {}
+	
 	costReportsTableData: CostReportsTableData[] = [];
 
 	pageNum = 1;
 
+	labels = {
+		client: 'Client',
+		project: 'Project',
+		resource: 'Resource',
+		month: 'Month',
+		year: 'Month',
+	};
+
 	totalCostReports = 1;
 
-	supervisorId: number = 0;
+	userId: number = 0;
 
-	dropdownOptions: { [key: string]: any[] } = {};
+	dropdownOptions: { val: string; id: number }[] = [];
+
+	clients: Client[] = [];
+
+	clientOptions: { val: string; id: number }[] = [ {val:'No clients assigned', id:0}];
+
+	projects: Project[] = [];
+
+	projectOptions: { val: string; id: number }[] = [{val:'No projects assigned', id:0}];
+
+	resources: Resource[] = [];
+
+	resourceOptions:  { val: string; id: number }[] = [{val:'No resources assigned', id:0}];
+
+	monthOptions: { val: string; id: number }[] = [
+		{ val: 'January', id: 1 },
+		{ val: 'February', id: 2 },
+		{ val: 'March', id: 3 },
+		{ val: 'April', id: 4 },
+		{ val: 'May', id: 5 },
+		{ val: 'June', id: 6 },
+		{ val: 'July', id: 7 },
+		{ val: 'August', id: 8 },
+		{ val: 'September', id: 9 },
+		{ val: 'October', id: 10 },
+		{ val: 'November', id: 11 },
+		{ val: 'December', id: 12 },
+	  ];
+
+	  yearOptions: { val: string; id: number }[] = Array.from({ length: 8 }, (_, index) => {
+		const year = (new Date().getFullYear()) - index;
+		return { val: year.toString(), id: year };
+	  });
+
 
 	dropdowns = [
 		{ name: 'project', label: 'Project' },
@@ -51,145 +104,120 @@ export class CostReportsComponent implements OnInit {
 		{ name: 'year', label: 'Year' },
 	];
 
-	// Ensure tableColumns is of type Column[]
-	// tableColumns: Column[] = [
-	// 	{ columnDef: 'clientName', header: 'Client Name', cell: (element: CostReportsTableData) => element.clientName },
-	// 	{
-	// 		columnDef: 'projectName',
-	// 		header: 'Project Name',
-	// 		cell: (element: CostReportsTableData) => element.projectName,
-	// 	},
-	// 	{
-	// 		columnDef: 'userName',
-	// 		header: 'User Name',
-	// 		cell: (element: CostReportsTableData) => `${element.userName}`,
-	// 	},
-	// 	{
-	// 		columnDef: 'taskName',
-	// 		header: 'Task Name',
-	// 		cell: (element: CostReportsTableData) => `${element.taskName}`,
-	// 	},
-	// 	{
-	// 		columnDef: 'month',
-	// 		header: 'Month',
-	// 		cell: (element: CostReportsTableData) => `${element.month}`,
-	// 	},
-	// 	{
-	// 		columnDef: 'position',
-	// 		header: 'Position',
-	// 		cell: (element: CostReportsTableData) => `${element.position}`,
-	// 	},
-	// 	{
-	// 		columnDef: 'hoursWorked',
-	// 		header: 'Hours Worked',
-	// 		cell: (element: CostReportsTableData) => `${element.hoursWorked}`,
-	// 	},
-	// 	{
-	// 		columnDef: 'costRate',
-	// 		header: 'Cost Rate',
-	// 		cell: (element: CostReportsTableData) => `${element.costRate}`,
-	// 	},
-	// 	{
-	// 		columnDef: 'totalCost',
-	// 		header: 'Total Cost',
-	// 		cell: (element: CostReportsTableData) => `${element.totalCost}`,
-	// 	},
-	// ];
+	reportForm = this.fb.group({
+		resource: [''],
+		client: [''],
+		project: [''],
+		month: ['', Validators.required],
+		year: ['', Validators.required],
+	});
 
-	constructor(
-		private reportService: ReportService,
-		private store: Store<OnboardingClientState>,
-		private resourceService: OnboardingClientResourceService,
-		private http: HttpClient,
-	) {}
+	buttonDisabled = true;
 
 	ngOnInit(): void {
 		this.store.select(selectLoggedInUserId).subscribe(id => {
 			if (id) {
-				this.supervisorId = id;
-				console.log('Supervisor ID:', id);
-				this.resourceService.getSupervisorProjects(id).subscribe(projects => {
-					console.log('Projects for Supervisor:', projects);
-					// Process the projects data here if needed
-					this.dropdownOptions['project'] = projects.map(p => p.name);
+				this.userId = id;
 
-					// Extract unique months and years from project start dates
-					const months = new Set();
-					const years = new Set();
-					projects.forEach(project => {
-						const startDate = new Date(project.startDate);
-						const month = startDate.toLocaleString('default', { month: 'long' });
-						const year = startDate.getFullYear();
-
-						months.add(month);
-						years.add(year);
-					});
-
-					// Update the dropdown options for months and years
-					this.dropdownOptions['month'] = Array.from(months);
-					this.dropdownOptions['year'] = Array.from(years);
-				});
-				this.resourceService.getSupervisorClients(id).subscribe(clients => {
-					console.log('Clients for Supervisor:', clients);
-					// Process the projects data here if needed
-					this.dropdownOptions['client'] = clients.map(c => c.clientName);
-					// Process the projects data here if needed
-				});
-				this.resourceService.getSupervisorResources(id).subscribe(resources => {
-					console.log('Resources for Supervisor:', resources);
-					// Process the projects data here if needed
-					this.dropdownOptions['user'] = resources.map(r => r.firstName + ' ' + r.lastName);
-					// Process the projects data here if needed
-				});
-				// this.fetchProjectsForSupervisor();
+				this.populateClients(this.userId);
+				this.populateProjects(this.userId);
+				this.populateResources(this.userId);
+				
 			}
 		});
 	}
 
-	// 	fetchProjectsForSupervisor(): void {
-	// 		this.reportService.getSupervisorProjects(this.supervisorId).subscribe(projects => {
-	// 				console.log('Projects for Supervisor:', projects);
-	// 				// Process the projects data here if needed
-	// 		});
-	// }
+	updateProjects = () => {
 
-	generateDropdowns(): void {
-		console.log('Generate Dropdowns clicked');
-		// Implement the logic as needed
-	}
+		const id = this.reportForm.get('client')?.value;
+		if (id == 0){
+			this.populateProjects(this.userId);
+			return;
+		}
+		this.projectService.getClientProjects(id).subscribe(projects => {
+			if(projects){
+				this.projectOptions = projects.map(p => {
+					return {
+						val: p.name,
+						id: p.id,
+					};
+				});
+				this.projectOptions.push({val: ' ', id: 0});
+			}
+		})
+	};
 
-	initializeDropdownOptions(): void {
-		const dropdownNames = ['project', 'user', 'client', 'month', 'year'];
-		dropdownNames.forEach(name => {
-			this.dropdownOptions[name] = this.generateRandomOptions(); // Assuming this method generates random options
-		});
-	}
-	onDropdownSelect(event: any, dropdownName: string): void {
-		console.log(`Selected option in Dropdown ${dropdownName}:`, event);
-	}
-
-	generateRandomOptions(): any[] {
-		// This is just an example implementation. Adjust it according to your actual requirements.
-		return Array.from({ length: 10 }, (_, i) => `Option ${i + 1}`);
+	updateClients = () => {
+		const id = this.reportForm.get('project')?.value;
+		if (id == 0){
+			this.populateClients(this.userId);
+			return;
+		}
+		this.projectService.getProject(id).subscribe(project => {
+			if(project){
+				this.clientOptions = [{val:project.client.clientName, id: project.client.id}]
+				this.clientOptions.push({val: ' ', id: 0});
+				}
+			});
 	}
 
 	loadReports(): void {
-		this.reportService.getReports().subscribe({
-			next: data => {
-				this.costReportsTableData = data.map(report => ({
-					...report,
-					columnsWithIcon: [],
-					columnsWithUrl: [],
-					columnsWithChips: [],
-					columnsWithButtonIcon: [],
-				}));
-			},
-			error: err => console.error('Error fetching reports', err),
+		console.log('hi');
+	}
+
+	populateClients(userId: number){
+		this.resourceService.getSupervisorClients(userId).subscribe(clients => {
+			console.log('Clients for Supervisor:', clients);
+			if(clients){
+				this.clientOptions = clients.map(c => {
+					return {
+						val: c.clientName,
+						id: c.id,
+					};
+				});		
+				this.clientOptions.push({val: ' ', id: 0});
+			}
 		});
 	}
 
-	tablePaginationEvent(event: any): void {
-		// Implement logic for handling pagination events
-		// like fetching the next set of data, etc.
+	populateProjects(userId: number){
+		this.resourceService.getSupervisorProjects(userId).subscribe(projects => {
+			console.log('Projects for Supervisor:', projects);
+			if(projects){
+				this.projectOptions = projects.map(p => {
+					return {
+						val: p.name,
+						id: p.id,
+					};
+				});
+				this.projectOptions.push({val: ' ', id: 0});
+			}
+		});
 	}
+
+	populateResources(userId: number){
+		this.resourceService.getSupervisorResources(userId).subscribe(resources => {
+			console.log('Resources for Supervisor:', resources);
+			if(resources){
+				this.resourceOptions = resources.map(r => {
+					return {
+						val: `${r.firstName} ${r.lastName}`,
+						id: r.id,
+					};
+				});		
+				this.resourceOptions.push({val: ' ', id: 0});
+			}
+		});
+	}
+
+	enableButton(){
+		if(this.reportForm.valid){
+			this.buttonDisabled = false;
+		}
+		else{
+			this.buttonDisabled = true;
+		}
+	}
+
+
 }

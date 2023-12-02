@@ -25,6 +25,12 @@ export class ProjectController {
 		return this.projectService.getAllProjects(page, pageSize);
 	}
 
+	//@UseGuards(JwtAuthGuard)
+	@Get('/client/:clientId')
+	async getClientProjects(@Param('clientId') clientId: number) {
+		return this.projectService.getClientProjects(clientId);
+	}
+
 	@UseGuards(JwtAuthGuard, RolesGuard)
 	@Roles(RoleType.BUSINESS_OWNER)
 	@Post('/')
