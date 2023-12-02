@@ -65,6 +65,5 @@ export class ReportService {
 		const report = this.reportRepository.create(createReportDto);
 		await this.reportRepository.save(report);
 		return report;
-}
-
+	}
 }

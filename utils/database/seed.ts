@@ -35,6 +35,7 @@ const seederArgsInterface: commandLineArgs.OptionDefinition[] = [
 		defaultValue: 5, // default value if not specified
 	},
 ];
+
 async function bootstrap() {
 	const appContext = await NestFactory.createApplicationContext(SeedModule);
 	const logger = appContext.get(Logger);

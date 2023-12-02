@@ -1,9 +1,11 @@
+/* eslint-disable prettier/prettier */
+/* eslint-disable spaced-comment */
 import { Controller, Get, HttpStatus, Param, Query, Res, UseGuards } from "@nestjs/common";
 import { ApiQuery, ApiTags } from "@nestjs/swagger";
-import { ReportService } from "../services";
 import { JwtAuthGuard, Roles, RolesGuard } from '@tempus/api/shared/feature-auth';
 import { RoleType } from "@tempus/shared-domain";
 import { Response } from 'express';
+import { ReportService } from "../services";
 
 @ApiTags('Reports')
 @Controller('report')
@@ -17,7 +19,7 @@ export class ReportController {
     @Get('resource-report/:resourceId')
    /* @ApiQuery({ name: 'month', required: false })
     @ApiQuery({ name: 'clientId', required: false })
-    @ApiQuery({ name: 'projectId', required: false })*/
+    @ApiQuery({ name: 'projectId', required: false }) */
     async getReportForResource(
         @Res() res: Response,
         @Param('resourceId') resourceId: number,
@@ -31,9 +33,9 @@ export class ReportController {
         res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         res.setHeader('Content-Disposition', 'attachment; filename=custom-report.xlsx');
         //res.send(excelBuffer);
+
         
-        return;
-       
+
     }
 
     @UseGuards(JwtAuthGuard, RolesGuard)
@@ -57,8 +59,8 @@ export class ReportController {
         res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         res.setHeader('Content-Disposition', 'attachment; filename=custom-report.xlsx');
        // res.send(excelBuffer);
-        return;
+        
     }
-    
+
 
 }

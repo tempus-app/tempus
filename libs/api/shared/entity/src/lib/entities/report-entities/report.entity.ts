@@ -61,10 +61,9 @@ export class ReportEntity implements Report {
 	billingRate?: number;
 
 	public static fromDto(dto: CreateReportDto): ReportEntity {
-		if (dto == null)
-			return new ReportEntity();
+		if (dto == null) return new ReportEntity();
 		return new ReportEntity(
-			undefined, 
+			undefined,
 			dto.clientName,
 			dto.projectName,
 			dto.userName,
@@ -73,6 +72,7 @@ export class ReportEntity implements Report {
 			dto.costRate,
 			dto.totalCost,
 			dto.billingRate,
-			dto.totalBilling );
+			dto.totalBilling,
+		);
 	}
 }
