@@ -19,6 +19,8 @@ export class OnboardingClientProjectService {
 
 	clientURL = `${this.appConfig.apiUrl}/onboarding/client`;
 
+	clientRepURL = `${this.appConfig.apiUrl}/onboarding/clientRepresentative`;
+
 	projectURL = `${this.appConfig.apiUrl}/onboarding/project`;
 
 	public getClients(): Observable<Client[]> {
@@ -51,6 +53,9 @@ export class OnboardingClientProjectService {
 		return this.http.get<Project[]>(`${this.projectURL}/client/${clientId}`).pipe(catchError(handleError));
 	}
 
+	public getClientByRepresentative(email: string): Observable<Client>{
+		return this.http.get<Client>(`${this.clientRepURL}/${email}`).pipe(catchError(handleError));
+	}
 
   public updateProjectStatus(
 		projId: number,

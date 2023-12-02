@@ -107,6 +107,10 @@ export class OnboardingClientResourceService {
 		return this.http.get<Resource>(`${this.url}/user/${resourceId}`).pipe(catchError(handleError));
 	}
 
+	public getUserInformationById(userId: number): Observable<User> {
+		return this.http.get<User>(`${this.url}/user/info/${userId}`).pipe(catchError(handleError));
+	}
+
 	public getResourceOriginalResumeById(resourceId: number): Observable<Blob> {
 		return this.http
 			.get<Blob>(`${this.url}/user/${resourceId}/resume`, { responseType: 'blob' as 'json' })

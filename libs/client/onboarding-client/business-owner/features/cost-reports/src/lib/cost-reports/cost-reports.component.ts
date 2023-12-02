@@ -6,12 +6,13 @@ import {
 	selectLoggedInUserId,
 	OnboardingClientResourceService,
 	OnboardingClientProjectService,
+	selectLoggedInRoles,
 } from '@tempus/client/onboarding-client/shared/data-access';
 import { Store } from '@ngrx/store';
 import { HttpClient } from '@angular/common/http';
 import { ReportService } from './report.service';
 import { FormBuilder, Validators } from '@angular/forms';
-import { Client, Project, Resource } from '@tempus/shared-domain';
+import { Client, Project, Resource, RoleType } from '@tempus/shared-domain';
 
 export interface CostReport {
 	clientName: string;
@@ -166,48 +167,124 @@ export class CostReportsComponent implements OnInit {
 	}
 
 	populateClients(userId: number){
-		this.resourceService.getSupervisorClients(userId).subscribe(clients => {
-			console.log('Clients for Supervisor:', clients);
-			if(clients){
-				this.clientOptions = clients.map(c => {
-					return {
-						val: c.clientName,
-						id: c.id,
-					};
-				});		
-				this.clientOptions.push({val: ' ', id: 0});
-			}
-		});
+		let role;
+		this.store.select(selectLoggedInRoles).subscribe(roles => {
+			role = roles.roles[0];
+		})
+
+		//The clients assigned to the resource supervised by supervisor
+		if (role == RoleType.SUPERVISOR){
+			this.resourceService.getSupervisorClients(userId).subscribe(clients => {
+				if(clients){
+					this.clientOptions = clients.map(c => {
+						return {
+							val: c.clientName,
+							id: c.id,
+						};
+					});		
+					this.clientOptions.push({val: ' ', id: 0});
+				}
+			});
+		}
+		//All the clients assigned to the resource
+		else if(role == RoleType.ASSIGNED_RESOURCE || role == RoleType.AVAILABLE_RESOURCE){
+			this.resourceService.getResourceClients(userId).subscribe(clients => {
+				if(clients){
+					this.clientOptions = clients.map(c => {
+						return {
+							val: c.clientName,
+							id: c.id,
+						};
+					});		
+					this.clientOptions.push({val: ' ', id: 0});
+				}
+			});
+		}
+		//If client is logged in, client dropdown will only have themselves.
+		else if(role == RoleType.CLIENT){
+			this.resourceService.getUserInformationById(this.userId).subscribe(info => {
+				if(info){
+					this.projectService.getClientByRepresentative(info.email).subscribe(client => {
+						this.clientOptions = [{val:client.clientName, id: client.id}]
+					});
+				}
+			});
+		}
+		else{
+			this.projectService.getClients().subscribe(clients => {
+				if(clients){
+					this.clientOptions = clients.map(c => {
+						return {
+							val: c.clientName,
+							id: c.id,
+						};
+					});		
+					this.clientOptions.push({val: ' ', id: 0});
+				}
+			});
+		}
 	}
 
 	populateProjects(userId: number){
-		this.resourceService.getSupervisorProjects(userId).subscribe(projects => {
-			console.log('Projects for Supervisor:', projects);
-			if(projects){
-				this.projectOptions = projects.map(p => {
-					return {
-						val: p.name,
-						id: p.id,
-					};
-				});
-				this.projectOptions.push({val: ' ', id: 0});
-			}
-		});
+		let role;
+		this.store.select(selectLoggedInRoles).subscribe(roles => {
+			role = roles.roles[0];
+		})
+
+		if (role == RoleType.SUPERVISOR){
+			this.resourceService.getSupervisorProjects(userId).subscribe(projects => {
+				console.log('Projects for Supervisor:', projects);
+				if(projects){
+					this.projectOptions = projects.map(p => {
+						return {
+							val: p.name,
+							id: p.id,
+						};
+					});
+					this.projectOptions.push({val: ' ', id: 0});
+				}
+			});
+		}
+		else if(role == RoleType.ASSIGNED_RESOURCE || role == RoleType.AVAILABLE_RESOURCE){
+
+		}
+		else if(role == RoleType.CLIENT){
+
+		}
+		else{
+
+		}
 	}
 
 	populateResources(userId: number){
-		this.resourceService.getSupervisorResources(userId).subscribe(resources => {
-			console.log('Resources for Supervisor:', resources);
-			if(resources){
-				this.resourceOptions = resources.map(r => {
-					return {
-						val: `${r.firstName} ${r.lastName}`,
-						id: r.id,
-					};
-				});		
-				this.resourceOptions.push({val: ' ', id: 0});
-			}
-		});
+		let role;
+		this.store.select(selectLoggedInRoles).subscribe(roles => {
+			role = roles.roles[0];
+		})
+
+		if (role == RoleType.SUPERVISOR){
+			this.resourceService.getSupervisorResources(userId).subscribe(resources => {
+				console.log('Resources for Supervisor:', resources);
+				if(resources){
+					this.resourceOptions = resources.map(r => {
+						return {
+							val: `${r.firstName} ${r.lastName}`,
+							id: r.id,
+						};
+					});		
+					this.resourceOptions.push({val: ' ', id: 0});
+				}
+			});
+		}
+		else if(role == RoleType.ASSIGNED_RESOURCE || role == RoleType.AVAILABLE_RESOURCE){
+
+		}
+		else if(role == RoleType.CLIENT){
+
+		}
+		else{
+
+		}
 	}
 
 	enableButton(){
@@ -218,6 +295,4 @@ export class CostReportsComponent implements OnInit {
 			this.buttonDisabled = true;
 		}
 	}
-
-
 }

@@ -116,6 +116,12 @@ export class UserController {
 		return user;
 	}
 
+	@Get('/info/:userId')
+	async getUserInfoByID(@Param('userId') userId: number): Promise<User> {
+		const user = await this.userService.getUserbyId(userId);
+		return user;
+	}
+
 	// creates User
 	@Post()
 	async createUser(@Body() user: CreateUserDto): Promise<User> {
