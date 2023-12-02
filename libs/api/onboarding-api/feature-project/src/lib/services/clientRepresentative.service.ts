@@ -3,6 +3,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { ClientRepresentativeEntity } from '@tempus/api/shared/entity';
 import { Repository } from 'typeorm';
 import { ClientService } from './client.service';
+import { UserService } from '@tempus/onboarding-api/feature-account';
+import { RoleType } from '@tempus/shared-domain';
 
 @Injectable()
 export class ClientRepresentativeService {
@@ -10,6 +12,7 @@ export class ClientRepresentativeService {
 		@InjectRepository(ClientRepresentativeEntity)
 		private clientRepresentativeRepository: Repository<ClientRepresentativeEntity>,
 		private clientService: ClientService,
+		private userService: UserService,
 	) {}
 
 	async getClientRepresentativeInfo(clientRepresentativeId: number): Promise<ClientRepresentativeEntity> {
@@ -35,7 +38,19 @@ export class ClientRepresentativeService {
 			throw new BadRequestException(`Client Representative with email ${email} already exists`);
 		}
 
-		return this.clientRepresentativeRepository.save({ firstName, lastName, email, client: clientEntity });
+		const clientRepresentative = await this.clientRepresentativeRepository.save({ firstName, lastName, email, client: clientEntity });
+
+		if(clientRepresentative){
+			this.userService.createUser({
+				firstName: clientRepresentative.firstName,
+				lastName: clientRepresentative.lastName,
+				email: clientRepresentative.email,
+				password: 'IamAClient',
+				roles: [RoleType.CLIENT],
+			});
+		}
+
+		return clientRepresentative;
 	}
 
 	async getRepresentatives(clientId: number): Promise<ClientRepresentativeEntity[]> {

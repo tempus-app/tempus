@@ -39,6 +39,17 @@ export class UserSeederService {
 		return user.password;
 	}
 
+	async getClients(): Promise<UserEntity[]> {
+		
+
+		const users = await this.userService.getAllUsers();
+
+		// Not optimal lol but works
+		const clients = users.filter(user => user.roles.includes(RoleType.CLIENT));
+
+		return clients;
+	}
+
 	/**
 	 * seeds business owners
 	 * @param count number of business owners to create
@@ -90,6 +101,8 @@ export class UserSeederService {
 		}
 		return createdUsers;
 	}
+
+	
 
 	// user.seeder.service.ts// Add this method to seed clients
 	async seedClients(clientCount: number): Promise<UserEntity[]> {
