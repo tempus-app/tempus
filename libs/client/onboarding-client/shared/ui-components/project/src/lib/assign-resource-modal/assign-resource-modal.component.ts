@@ -211,6 +211,8 @@ export class AssignResourceModalComponent implements OnInit, OnChanges {
 					const assignDto: IAssignProjectDto = {
 						title: this.assignForm.get('title')?.value,
 						startDate: this.assignForm.get('startDate')?.value,
+						costRate: 30, //TO DO Get Cost Rate from form
+						billRate: 50, //TO DO Get Bill Rate from form
 					};
 					this.businessOwnerStore.dispatch(
 						createResourceProjectAssignment({

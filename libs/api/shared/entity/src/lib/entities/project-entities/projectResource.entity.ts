@@ -12,6 +12,9 @@ export class ProjectResourceEntity implements ProjectResource {
 		resource?: ResourceEntity,
 		project?: ProjectEntity,
 		title?: string,
+		costRate?: number,
+		billRate?: number,
+
 	) {
 		this.id = id;
 		this.startDate = startDate;
@@ -19,6 +22,8 @@ export class ProjectResourceEntity implements ProjectResource {
 		this.resource = resource;
 		this.project = project;
 		this.title = title;
+		this.costRate = costRate;
+		this.billRate = billRate;
 	}
 
 	@PrimaryGeneratedColumn()
@@ -32,6 +37,12 @@ export class ProjectResourceEntity implements ProjectResource {
 
 	@Column({ nullable: true })
 	title: string;
+
+	@Column({ nullable: true })
+	costRate: number;
+
+	@Column({ nullable: true })
+	billRate: number;
 
 	@ManyToOne(() => ResourceEntity, resource => resource, { primary: true, onDelete: 'CASCADE' })
 	resource: ResourceEntity;

@@ -108,6 +108,8 @@ export class ProjectService {
 			resourceEntity,
 			projectEntity,
 			assignDetails.title,
+			assignDetails.costRate,
+			assignDetails.billRate,
 		);
 
 		// existing project
