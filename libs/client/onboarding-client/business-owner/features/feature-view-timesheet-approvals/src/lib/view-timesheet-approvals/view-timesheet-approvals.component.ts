@@ -7,6 +7,7 @@ import {
 	selectLoggedInUserId,
 	selectLoggedInUserNameEmail,
 	OnboardingClientResourceService,
+	selectLoggedInRoles,
 } from '@tempus/client/onboarding-client/shared/data-access';
 import {
 	ButtonType,
@@ -24,7 +25,7 @@ import { PageEvent } from '@angular/material/paginator';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CustomModalType, ModalService, ModalType } from '@tempus/client/shared/ui-components/modal';
 import { InputType } from '@tempus/client/shared/ui-components/input';
-import { TimesheetRevisionType } from '@tempus/shared-domain';
+import { TimesheetRevisionType, RoleType } from '@tempus/shared-domain';
 
 @Component({
 	selector: 'tempus-view-timesheet-approvals',
@@ -69,33 +70,33 @@ export class ViewTimesheetApprovalsComponent implements OnInit, OnDestroy {
 					{
 						columnDef: 'timesheetWeek',
 						header: data.timesheetWeek,
-						cell: (element: Record<string, unknown>) => `${element.timesheetWeek}`,
+						cell: (element: Record<string, unknown>) => `${element['timesheetWeek']}`,
 					},
 					{
 						columnDef: 'submittedBy',
 						header: data.submittedBy,
-						cell: (element: Record<string, unknown>) => `${element.submittedBy}`,
+						cell: (element: Record<string, unknown>) => `${element['submittedBy']}`,
 					},
 					{
 						columnDef: 'dateModified',
 						header: data.dateModified,
-						cell: (element: Record<string, unknown>) => `${element.dateModified}`,
+						cell: (element: Record<string, unknown>) => `${element['dateModified']}`,
 					},
 					{
 						columnDef: 'projectName',
 						header: data.projectName,
-						cell: (element: Record<string, unknown>) => `${element.projectName}`,
+						cell: (element: Record<string, unknown>) => `${element['projectName']}`,
 					},
 
 					{
 						columnDef: 'totalTime',
 						header: data.totalTime,
-						cell: (element: Record<string, unknown>) => `${element.totalTime}`,
+						cell: (element: Record<string, unknown>) => `${element['totalTime']}`,
 					},
 					{
 						columnDef: 'status',
 						header: data.status,
-						cell: (element: Record<string, unknown>) => `${element.status}`,
+						cell: (element: Record<string, unknown>) => `${element['status']}`,
 					},
 				];
 			});
@@ -110,6 +111,8 @@ export class ViewTimesheetApprovalsComponent implements OnInit, OnDestroy {
 	timesheetsTableData: PendingTimesheetApprovalsTableData[] = [];
 
 	userId = 0;
+
+	userRole = '';
 
 	firstName = '';
 
@@ -129,6 +132,15 @@ export class ViewTimesheetApprovalsComponent implements OnInit, OnDestroy {
 				}
 			});
 
+		/*this.sharedStore
+			.select(selectLoggedInRoles)
+			.pipe(take(1))
+			.subscribe(data => {
+				if (data) {
+					this.userRole = data[0];
+				}
+			});*/
+
 		this.modalService.confirmEventSubject.pipe(takeUntil(this.$destroyed)).subscribe(modalId => {
 			this.modalService.close();
 			if (modalId === 'approveTimesheetModal') {
@@ -136,6 +148,7 @@ export class ViewTimesheetApprovalsComponent implements OnInit, OnDestroy {
 			}
 		});
 
+		
 		this.businessownerStore.dispatch(
 			getAllTimesheetsBySupervisorId({
 				supervisorId: this.userId,
@@ -143,7 +156,7 @@ export class ViewTimesheetApprovalsComponent implements OnInit, OnDestroy {
 				pageNum: this.pageNum,
 			}),
 		);
-
+		
 		this.businessownerStore
 			.select(selectSupervisorTimesheets)
 			.pipe(takeUntil(this.$destroyed))
@@ -163,13 +176,8 @@ export class ViewTimesheetApprovalsComponent implements OnInit, OnDestroy {
 						year: 'numeric',
 					});
 
-					this.resourceService.getResourceInformationById(timesheet.resource.id).subscribe(resourceInfo => {
-						this.firstName = resourceInfo.firstName;
-						this.lastName = resourceInfo.lastName;
-					});
-
-					const submittedBy = `${this.firstName}  ${this.lastName}`;
-
+					const fullName = timesheet.resource.firstName + ' ' + timesheet.resource.lastName;
+					console.log('name '+ fullName);
 					const timesheetWeek = `${startDate} - ${endDate}`;
 
 					let dateModified = '-';
@@ -179,7 +187,6 @@ export class ViewTimesheetApprovalsComponent implements OnInit, OnDestroy {
 							month: 'long',
 							year: 'numeric',
 						});
-						console.log(dateModified);
 					}
 					const totalTime =
 						timesheet.sundayHours +
@@ -194,7 +201,7 @@ export class ViewTimesheetApprovalsComponent implements OnInit, OnDestroy {
 
 					this.timesheetsTableData.push({
 						timesheetWeek,
-						submittedBy,
+						submittedBy: fullName,
 						dateModified,
 						projectName: timesheet.project.name,
 						totalTime,
