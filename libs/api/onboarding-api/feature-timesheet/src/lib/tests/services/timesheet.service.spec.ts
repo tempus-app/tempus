@@ -8,7 +8,7 @@ import { TimesheetService } from '../../services';
 import { createTimesheetMock, timesheetEntityMock, createTimesheetEntity, dbTimesheet, submittedTimesheetEntityMock, approveTimesheetDto, updateTimesheetMock, billedTimesheetEntityMock } from '../mocks/timesheet.mock';
 import { TimesheetRevisionType } from '@tempus/shared-domain';
 import { ResourceService, UserService } from '@tempus/onboarding-api/feature-account';
-import { ProjectService } from '@tempus/onboarding-api/feature-project';
+import { ClientRepresentativeService, ProjectService } from '@tempus/onboarding-api/feature-project';
 
 
 
@@ -17,6 +17,7 @@ const mockTimesheetRepository = createMock<Repository<TimesheetEntity>>();
 const mockResourceService = createMock<ResourceService>();
 const mockProjectService = createMock<ProjectService>();
 const mockUserService = createMock<UserService>();
+const clientRepresentativeService = createMock<ClientRepresentativeService>();
 
 const dateToday = new Date();
 dateToday.setHours(0, 0, 0, 0);
@@ -37,6 +38,10 @@ describe('TimesheetService', () => {
                 {
                     provide: UserService,
                     useValue: mockUserService,
+                },
+                {
+                    provide: ClientRepresentativeService,
+                    useValue: clientRepresentativeService,
                 },
                 {
                     provide: ResourceService,
@@ -173,7 +178,7 @@ describe('TimesheetService', () => {
 
             const approvedTimesheetEntity = submittedTimesheetEntityMock
             mockTimesheetRepository.findOne.mockResolvedValue(submittedTimesheetEntityMock);
-            const res = await timesheetService.approveOrRejectTimesheet(submittedTimesheetEntityMock.id, approveTimesheetDto);
+            const res = await timesheetService.approveOrRejectTimesheetSupervisor(submittedTimesheetEntityMock.id, approveTimesheetDto);
             approvedTimesheetEntity.status = TimesheetRevisionType.APPROVED;
             expect(mockTimesheetRepository.findOne).toHaveBeenCalledWith(submittedTimesheetEntityMock.id);
             expect(mockTimesheetRepository.save).toHaveBeenCalledWith(approvedTimesheetEntity);
@@ -182,7 +187,7 @@ describe('TimesheetService', () => {
         it('should deny timesheet successfully', async () => {
             const rejectedTimesheetEntity = submittedTimesheetEntityMock
             mockTimesheetRepository.findOne.mockResolvedValue(submittedTimesheetEntityMock);
-            const res = await timesheetService.approveOrRejectTimesheet(submittedTimesheetEntityMock.id, approveTimesheetDto);
+            const res = await timesheetService.approveOrRejectTimesheetSupervisor(submittedTimesheetEntityMock.id, approveTimesheetDto);
             rejectedTimesheetEntity.status = TimesheetRevisionType.REJECTED;
             expect(mockTimesheetRepository.findOne).toHaveBeenCalledWith(submittedTimesheetEntityMock.id);
             expect(mockTimesheetRepository.save).toHaveBeenCalledWith(rejectedTimesheetEntity);
