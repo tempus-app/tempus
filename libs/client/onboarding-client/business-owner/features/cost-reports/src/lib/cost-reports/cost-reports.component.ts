@@ -202,14 +202,15 @@ export class CostReportsComponent implements OnInit {
 		}
 		//If client is logged in, client dropdown will only have themselves.
 		else if(role == RoleType.CLIENT){
-			this.resourceService.getUserInformationById(this.userId).subscribe(info => {
+			this.resourceService.getUserInformationById(this.userId).subscribe(info => {	//We get the client rep email
 				if(info){
-					this.projectService.getClientByRepresentative(info.email).subscribe(client => {
+					this.projectService.getClientByRepresentative(info.email).subscribe(client => { //We find the client from client rep email
 						this.clientOptions = [{val:client.clientName, id: client.id}]
 					});
 				}
 			});
 		}
+		//Admin is logged in, display them all
 		else{
 			this.projectService.getClients().subscribe(clients => {
 				if(clients){
@@ -231,6 +232,7 @@ export class CostReportsComponent implements OnInit {
 			role = roles.roles[0];
 		})
 
+		//The projects assigned to the resource supervised by supervisor
 		if (role == RoleType.SUPERVISOR){
 			this.resourceService.getSupervisorProjects(userId).subscribe(projects => {
 				console.log('Projects for Supervisor:', projects);
@@ -245,12 +247,15 @@ export class CostReportsComponent implements OnInit {
 				}
 			});
 		}
+		//All the projects assigned to the resource
 		else if(role == RoleType.ASSIGNED_RESOURCE || role == RoleType.AVAILABLE_RESOURCE){
 
 		}
+		//All the projects under that client
 		else if(role == RoleType.CLIENT){
 
 		}
+		//All the projects
 		else{
 
 		}
@@ -262,6 +267,7 @@ export class CostReportsComponent implements OnInit {
 			role = roles.roles[0];
 		})
 
+		//Reousrces assigned to that supervisor
 		if (role == RoleType.SUPERVISOR){
 			this.resourceService.getSupervisorResources(userId).subscribe(resources => {
 				console.log('Resources for Supervisor:', resources);
@@ -276,12 +282,15 @@ export class CostReportsComponent implements OnInit {
 				}
 			});
 		}
+		//Should only display themselves
 		else if(role == RoleType.ASSIGNED_RESOURCE || role == RoleType.AVAILABLE_RESOURCE){
 
 		}
+		//Resources assigned to their project
 		else if(role == RoleType.CLIENT){
 
 		}
+		//All resources
 		else{
 
 		}
