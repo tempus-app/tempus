@@ -1,6 +1,6 @@
 // cost-reports.component.ts
 import { Component, OnInit } from '@angular/core';
-import { Column, TableDataModel } from '@tempus/client/shared/ui-components/presentational';
+import { TableDataModel } from '@tempus/client/shared/ui-components/presentational';
 import {
 	OnboardingClientState,
 	selectLoggedInUserId,
@@ -10,9 +10,9 @@ import {
 } from '@tempus/client/onboarding-client/shared/data-access';
 import { Store } from '@ngrx/store';
 import { HttpClient } from '@angular/common/http';
-import { ReportService } from './report.service';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Client, Project, Resource, RoleType } from '@tempus/shared-domain';
+import { ReportService } from './report.service';
 
 export interface CostReport {
 	clientName: string;
@@ -32,6 +32,7 @@ export interface CostReportsTableData extends TableDataModel, CostReport {
 }
 
 @Component({
+	// eslint-disable-next-line @angular-eslint/component-selector
 	selector: 'app-cost-reports',
 	templateUrl: './cost-reports.component.html',
 	styleUrls: ['./cost-reports.component.scss'],
@@ -45,7 +46,7 @@ export class CostReportsComponent implements OnInit {
 		private http: HttpClient,
 		private fb: FormBuilder,
 	) {}
-	
+
 	costReportsTableData: CostReportsTableData[] = [];
 
 	pageNum = 1;
@@ -60,21 +61,21 @@ export class CostReportsComponent implements OnInit {
 
 	totalCostReports = 1;
 
-	userId: number = 0;
+	userId = 0;
 
 	dropdownOptions: { val: string; id: number }[] = [];
 
 	clients: Client[] = [];
 
-	clientOptions: { val: string; id: number }[] = [ {val:'No clients assigned', id:0}];
+	clientOptions: { val: string; id: number }[] = [{ val: 'No clients assigned', id: 0 }];
 
 	projects: Project[] = [];
 
-	projectOptions: { val: string; id: number }[] = [{val:'No projects assigned', id:0}];
+	projectOptions: { val: string; id: number }[] = [{ val: 'No projects assigned', id: 0 }];
 
 	resources: Resource[] = [];
 
-	resourceOptions:  { val: string; id: number }[] = [{val:'No resources assigned', id:0}];
+	resourceOptions: { val: string; id: number }[] = [{ val: 'No resources assigned', id: 0 }];
 
 	monthOptions: { val: string; id: number }[] = [
 		{ val: 'January', id: 1 },
@@ -89,13 +90,12 @@ export class CostReportsComponent implements OnInit {
 		{ val: 'October', id: 10 },
 		{ val: 'November', id: 11 },
 		{ val: 'December', id: 12 },
-	  ];
+	];
 
-	  yearOptions: { val: string; id: number }[] = Array.from({ length: 8 }, (_, index) => {
-		const year = (new Date().getFullYear()) - index;
+	yearOptions: { val: string; id: number }[] = Array.from({ length: 8 }, (_, index) => {
+		const year = new Date().getFullYear() - index;
 		return { val: year.toString(), id: year };
-	  });
-
+	});
 
 	dropdowns = [
 		{ name: 'project', label: 'Project' },
@@ -123,184 +123,253 @@ export class CostReportsComponent implements OnInit {
 				this.populateClients(this.userId);
 				this.populateProjects(this.userId);
 				this.populateResources(this.userId);
-				
 			}
 		});
 	}
 
 	updateProjects = () => {
-
 		const id = this.reportForm.get('client')?.value;
-		if (id == 0){
+		if (id === 0) {
 			this.populateProjects(this.userId);
 			return;
 		}
 		this.projectService.getClientProjects(id).subscribe(projects => {
-			if(projects){
+			if (projects) {
 				this.projectOptions = projects.map(p => {
 					return {
 						val: p.name,
 						id: p.id,
 					};
 				});
-				this.projectOptions.push({val: ' ', id: 0});
+				this.projectOptions.push({ val: ' ', id: 0 });
 			}
-		})
+		});
 	};
 
 	updateClients = () => {
 		const id = this.reportForm.get('project')?.value;
-		if (id == 0){
+		if (id === 0) {
 			this.populateClients(this.userId);
 			return;
 		}
 		this.projectService.getProject(id).subscribe(project => {
-			if(project){
-				this.clientOptions = [{val:project.client.clientName, id: project.client.id}]
-				this.clientOptions.push({val: ' ', id: 0});
-				}
-			});
-	}
+			if (project) {
+				this.clientOptions = [{ val: project.client.clientName, id: project.client.id }];
+				this.clientOptions.push({ val: ' ', id: 0 });
+			}
+		});
+	};
 
+	// eslint-disable-next-line class-methods-use-this
 	loadReports(): void {
+		// eslint-disable-next-line no-console
 		console.log('hi');
 	}
 
-	populateClients(userId: number){
+	populateClients(userId: number) {
 		let role;
 		this.store.select(selectLoggedInRoles).subscribe(roles => {
+			// eslint-disable-next-line prefer-destructuring
 			role = roles.roles[0];
-		})
+		});
 
-		//The clients assigned to the resource supervised by supervisor
-		if (role == RoleType.SUPERVISOR){
+		// The clients assigned to the resource supervised by supervisor
+		if (role === RoleType.SUPERVISOR) {
 			this.resourceService.getSupervisorClients(userId).subscribe(clients => {
-				if(clients){
+				if (clients) {
 					this.clientOptions = clients.map(c => {
 						return {
 							val: c.clientName,
 							id: c.id,
 						};
-					});		
-					this.clientOptions.push({val: ' ', id: 0});
+					});
+					this.clientOptions.push({ val: ' ', id: 0 });
 				}
 			});
 		}
-		//All the clients assigned to the resource
-		else if(role == RoleType.ASSIGNED_RESOURCE || role == RoleType.AVAILABLE_RESOURCE){
+		// All the clients assigned to the resource
+		else if (role === RoleType.ASSIGNED_RESOURCE || role === RoleType.AVAILABLE_RESOURCE) {
 			this.resourceService.getResourceClients(userId).subscribe(clients => {
-				if(clients){
+				if (clients) {
 					this.clientOptions = clients.map(c => {
 						return {
 							val: c.clientName,
 							id: c.id,
 						};
-					});		
-					this.clientOptions.push({val: ' ', id: 0});
+					});
+					this.clientOptions.push({ val: ' ', id: 0 });
 				}
 			});
 		}
-		//If client is logged in, client dropdown will only have themselves.
-		else if(role == RoleType.CLIENT){
-			this.resourceService.getUserInformationById(this.userId).subscribe(info => {	//We get the client rep email
-				if(info){
-					this.projectService.getClientByRepresentative(info.email).subscribe(client => { //We find the client from client rep email
-						this.clientOptions = [{val:client.clientName, id: client.id}]
+		// If client is logged in, client dropdown will only have themselves.
+		else if (role === RoleType.CLIENT) {
+			this.resourceService.getUserInformationById(this.userId).subscribe(info => {
+				// We get the client rep email
+				if (info) {
+					this.projectService.getClientByRepresentative(info.email).subscribe(client => {
+						// We find the client from client rep email
+						this.clientOptions = [{ val: client.clientName, id: client.id }];
 					});
 				}
 			});
 		}
-		//Admin is logged in, display them all
-		else{
+		// Admin is logged in, display them all
+		else {
 			this.projectService.getClients().subscribe(clients => {
-				if(clients){
+				if (clients) {
 					this.clientOptions = clients.map(c => {
 						return {
 							val: c.clientName,
 							id: c.id,
 						};
-					});		
-					this.clientOptions.push({val: ' ', id: 0});
+					});
+					this.clientOptions.push({ val: ' ', id: 0 });
 				}
 			});
 		}
 	}
 
-	populateProjects(userId: number){
+	populateProjects(userId: number) {
 		let role;
 		this.store.select(selectLoggedInRoles).subscribe(roles => {
+			// eslint-disable-next-line prefer-destructuring
 			role = roles.roles[0];
-		})
+		});
 
-		//The projects assigned to the resource supervised by supervisor
-		if (role == RoleType.SUPERVISOR){
+		// Assuming you want to fetch the first page with a page size of 10
+		const paginationData = {
+			page: 1,
+			pageSize: 10,
+		};
+
+		// he projects assigned to the resource supervised by supervisor
+		if (role === RoleType.SUPERVISOR) {
 			this.resourceService.getSupervisorProjects(userId).subscribe(projects => {
+				// eslint-disable-next-line no-console
 				console.log('Projects for Supervisor:', projects);
-				if(projects){
+				if (projects) {
 					this.projectOptions = projects.map(p => {
 						return {
 							val: p.name,
 							id: p.id,
 						};
 					});
-					this.projectOptions.push({val: ' ', id: 0});
+					this.projectOptions.push({ val: ' ', id: 0 });
 				}
 			});
 		}
-		//All the projects assigned to the resource
-		else if(role == RoleType.ASSIGNED_RESOURCE || role == RoleType.AVAILABLE_RESOURCE){
-
+		// All the projects assigned to the resource
+		else if (role === RoleType.ASSIGNED_RESOURCE || role === RoleType.AVAILABLE_RESOURCE) {
+			this.resourceService.getResourceProjects(userId).subscribe(projects => {
+				if (projects) {
+					this.projectOptions = projects.map(p => {
+						return {
+							val: p.name,
+							id: p.id,
+						};
+					});
+					this.projectOptions.push({ val: 'All Projects', id: 0 });
+				}
+			});
 		}
-		//All the projects under that client
-		else if(role == RoleType.CLIENT){
 
+		// All the projects under that client
+		else if (role === RoleType.CLIENT) {
+			this.resourceService.getClientProjects(userId).subscribe(projects => {
+				if (projects) {
+					this.projectOptions = projects.map(p => {
+						return {
+							val: p.name,
+							id: p.id,
+						};
+					});
+					this.projectOptions.push({ val: 'All Projects', id: 0 });
+				}
+			});
 		}
-		//All the projects
-		else{
-
+		// All the projects
+		else {
+			this.projectService.getAllProjects(paginationData).subscribe(response => {
+				const projects = response.projectData;
+				if (projects) {
+					this.projectOptions = projects.map(p => {
+						return {
+							val: p.name,
+							id: p.id,
+						};
+					});
+					this.projectOptions.unshift({ val: 'All Projects', id: 0 });
+				}
+			});
 		}
 	}
 
-	populateResources(userId: number){
+	populateResources(userId: number) {
 		let role;
 		this.store.select(selectLoggedInRoles).subscribe(roles => {
+			// eslint-disable-next-line prefer-destructuring
 			role = roles.roles[0];
-		})
+		});
 
-		//Reousrces assigned to that supervisor
-		if (role == RoleType.SUPERVISOR){
+		// Reousrces assigned to that supervisor
+		if (role === RoleType.SUPERVISOR) {
 			this.resourceService.getSupervisorResources(userId).subscribe(resources => {
+				// eslint-disable-next-line no-console
 				console.log('Resources for Supervisor:', resources);
-				if(resources){
+				if (resources) {
 					this.resourceOptions = resources.map(r => {
 						return {
 							val: `${r.firstName} ${r.lastName}`,
 							id: r.id,
 						};
-					});		
-					this.resourceOptions.push({val: ' ', id: 0});
+					});
+					this.resourceOptions.push({ val: ' ', id: 0 });
 				}
 			});
 		}
-		//Should only display themselves
-		else if(role == RoleType.ASSIGNED_RESOURCE || role == RoleType.AVAILABLE_RESOURCE){
-
+		// Should only display themselves
+		else if (role === RoleType.ASSIGNED_RESOURCE || role === RoleType.AVAILABLE_RESOURCE) {
+			this.resourceService.getResourceInformationById(userId).subscribe(resource => {
+				if (resource) {
+					this.resourceOptions = [
+						{
+							val: `${resource.firstName} ${resource.lastName}`,
+							id: resource.id,
+						},
+					];
+				}
+			});
 		}
-		//Resources assigned to their project
-		else if(role == RoleType.CLIENT){
-
+		// Resources assigned to their project
+		else if (role === RoleType.CLIENT) {
+			this.resourceService.getClientResources(userId).subscribe(resources => {
+				if (resources) {
+					this.resourceOptions = resources.map(r => ({
+						val: `${r.firstName} ${r.lastName}`,
+						id: r.id,
+					}));
+					this.resourceOptions.push({ val: ' ', id: 0 });
+				}
+			});
 		}
-		//All resources
-		else{
-
+		// All resources
+		else {
+			this.resourceService.getAllResources().subscribe(resources => {
+				if (resources) {
+					this.resourceOptions = resources.map(r => ({
+						val: `${r.firstName} ${r.lastName}`,
+						id: r.id,
+					}));
+					this.resourceOptions.push({ val: ' ', id: 0 });
+				}
+			});
 		}
 	}
 
-	enableButton(){
-		if(this.reportForm.valid){
+	enableButton() {
+		if (this.reportForm.valid) {
 			this.buttonDisabled = false;
-		}
-		else{
+		} else {
 			this.buttonDisabled = true;
 		}
 	}
