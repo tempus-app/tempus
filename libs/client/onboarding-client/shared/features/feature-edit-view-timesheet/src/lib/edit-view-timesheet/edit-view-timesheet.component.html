@@ -11,14 +11,6 @@
 							{{ timesheetWeek }}
 						</h2></ng-template
 					>
-					<h2 *ngIf="timesheetWeek === ''; else otherTitle" class="mat-h2 page-title">
-						{{ editViewTimesheetPrefix + 'title' | translate }}
-					</h2>
-					<ng-template #otherTitle
-						><h2 class="mat-h2 page-title">
-							{{ timesheetWeek }}
-						</h2></ng-template
-					>
 				</div>
 			</div>
 
@@ -41,18 +33,6 @@
 					matTooltipClass="tooltip"
 					id="submit-profile-button"
 				></tempus-button>
-
-				<!-- <ng-template #submitEdit>
-					<tempus-button
-						[disabled]="!isEditFormValid()"
-						label="{{ editViewTimesheetPrefix + 'buttons.submit.label' | translate }}"
-						color="accent"
-						(buttonClick)="submitChanges()"
-						matTooltip="{{ editViewTimesheetPrefix + 'buttons.submit.tooltip' | translate }}"
-						matTooltipClass="tooltip"
-						id="submit-profile-button"
-					></tempus-button>
-				</ng-template> -->
 			</div>
 		</div>
 

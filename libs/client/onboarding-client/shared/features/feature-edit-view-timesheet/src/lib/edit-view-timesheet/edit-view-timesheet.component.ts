@@ -145,17 +145,35 @@ export class EditViewTimesheetComponent implements OnDestroy {
 		return timesheetsDto as ICreateTimesheetDto[];
 	}
 
+	editTimesheet() {
+		return {
+			projectId: this.timesheetForm.get('project')?.value,
+			resourceId: this.userId,
+			weekStartDate: this.timesheetForm.get('startDate')?.value,
+			weekEndDate: this.timesheetForm.get('endDate')?.value,
+			approvedBySupervisor: false,
+			approvedByClient: false,
+			resourceComment: this.timesheetForm.get('comments')?.value,
+			supervisorComment: '',
+			clientRepresentativeComment: '',
+			audited: false,
+			billed: false,
+			mondayHours: this.timesheetForm.get('monday')?.value,
+			tuesdayHours: this.timesheetForm.get('tuesday')?.value,
+			wednesdayHours: this.timesheetForm.get('wednesday')?.value,
+			thursdayHours: this.timesheetForm.get('thursday')?.value,
+			fridayHours: this.timesheetForm.get('friday')?.value,
+			saturdayHours: this.timesheetForm.get('saturday')?.value,
+			sundayHours: this.timesheetForm.get('sunday')?.value,
+		} as ICreateTimesheetDto;
+	}
+
 	// If it is valid
 	isValid() {
 		if (this.isNewTimesheet) {
 			return this.timesheetsForm?.valid;
 		}
 
-		return this.timesheetForm?.valid;
-	}
-
-	// If edit form is valid
-	isEditFormValid() {
 		return this.timesheetForm?.valid;
 	}
 

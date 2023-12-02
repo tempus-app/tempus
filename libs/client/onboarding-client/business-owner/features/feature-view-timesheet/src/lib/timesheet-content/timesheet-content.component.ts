@@ -1,12 +1,13 @@
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { ICreateTimesheetDto, Timesheet, TimesheetRevisionType } from '@tempus/shared-domain';
-import { Subject, finalize, take, takeUntil } from 'rxjs';
+import { ICreateTimesheetDto, RoleType, Timesheet, TimesheetRevisionType } from '@tempus/shared-domain';
+import { Subject, catchError, finalize, of, take, takeUntil } from 'rxjs';
 import { ButtonType, SnackbarService } from '@tempus/client/shared/ui-components/presentational';
 import { TranslateService } from '@ngx-translate/core';
 import {
 	OnboardingClientResourceService,
 	OnboardingClientState,
 	OnboardingClientTimesheetsService,
+	selectLoggedInRoles,
 } from '@tempus/client/onboarding-client/shared/data-access';
 import { Store } from '@ngrx/store';
 import { CustomModalType, ModalService, ModalType } from '@tempus/client/shared/ui-components/modal';
@@ -19,6 +20,7 @@ import {
 	selectSupervisorTimesheets,
 	updateTimesheetStatusAsSupervisor,
 } from '@tempus/client/onboarding-client/business-owner/data-access';
+import { isValidRole } from '@tempus/client/shared/util';
 
 @Component({
 	selector: 'tempus-timesheet-content',
@@ -111,6 +113,12 @@ export class TimesheetContentComponent implements OnInit {
 
 	$approveTimesheetModalClosedEvent = new Subject<void>();
 
+	isValidRole = isValidRole;
+
+	roles: RoleType[] = [];
+
+	roleType = RoleType;
+
 	timesheet: ICreateTimesheetDto = {
 		projectId: 0,
 		resourceId: 0,
@@ -150,6 +158,15 @@ export class TimesheetContentComponent implements OnInit {
 			}
 		});
 
+		// Get logged in users username and email
+		this.sharedStore
+			.select(selectLoggedInRoles)
+			.pipe(take(1))
+			.subscribe(data => {
+				this.roles = data;
+			});
+
+		console.log(isValidRole(this.roles, [this.roleType.BUSINESS_OWNER]));
 		const timesheetId = parseInt(this.route.snapshot.paramMap.get('id') || '0', 10);
 
 		this.timesheetService.getTimesheetById(timesheetId).subscribe(timesheet => {
@@ -173,6 +190,7 @@ export class TimesheetContentComponent implements OnInit {
 	}
 
 	loadTimesheet(timesheet: Timesheet) {
+		this.currentTimesheetId = timesheet.id;
 		this.timesheet.projectId = timesheet.project.id;
 		this.timesheet.resourceId = timesheet.resource.id;
 		this.timesheet.weekStartDate = timesheet.weekStartDate;
@@ -219,8 +237,6 @@ export class TimesheetContentComponent implements OnInit {
 			});
 
 		this.modalService.confirmEventSubject.subscribe(() => {
-			
-
 			console.log(this.approveTimesheetForm.get('rejectionComments')?.value);
 			const approveTimesheetDto = {
 				approval: false,
@@ -261,7 +277,6 @@ export class TimesheetContentComponent implements OnInit {
 			});
 
 		this.modalService.confirmEventSubject.subscribe(() => {
-			
 			const approveTimesheetDto = {
 				approval: true,
 				comment: this.approveTimesheetForm.get('rejectionComments')?.value,
@@ -285,5 +300,79 @@ export class TimesheetContentComponent implements OnInit {
 		this.approveTimesheetForm = this.fb.group({
 			comment: [''],
 		});
+	}
+
+	deleteTimesheet() {
+		this.translateService
+			.get([`viewTimesheet.deleteTimesheetModal`])
+			.pipe(take(1))
+			.subscribe(data => {
+				const dialogText = data[`viewTimesheet.deleteTimesheetModal`];
+				this.modalService.open(
+					{
+						title: dialogText.title,
+						closeText: dialogText.closeText,
+						confirmText: dialogText.confirmText,
+						message: dialogText.message,
+						closable: true,
+						id: 'submit',
+						modalType: ModalType.WARNING,
+					},
+					CustomModalType.INFO,
+				);
+			});
+
+		this.modalService.confirmEventSubject.pipe(take(1)).subscribe(() => {
+			this.modalService.close();
+
+			this.timesheetService
+				.deleteTimesheet(this.currentTimesheetId)
+				.pipe(catchError(error => of(error)))
+				.subscribe(error => {
+					if (error) {
+						this.openDeleteTimesheetErrorModal(error.message);
+					} else {
+						this.modalService.confirmEventSubject.unsubscribe();
+						this.translateService.get(`viewTimesheet.deleteTimesheetSuccess`).subscribe(message => {
+							this.snackbar.open(message);
+						});
+						this.router.navigate(['../'], { relativeTo: this.route }).then(() => {
+							window.location.reload();
+						});
+					}
+				});
+
+			this.modalService.close();
+		});
+	}
+
+	openDeleteTimesheetErrorModal(error: string) {
+		this.translateService
+			.get(`onboardingResourceProfile.deleteTimesheetErrorModal.confirmText`)
+			.pipe(take(1))
+			.subscribe(confirm => {
+				this.modalService.open(
+					{
+						title: error,
+						confirmText: confirm,
+						closable: true,
+						id: 'error',
+						modalType: ModalType.ERROR,
+					},
+					CustomModalType.INFO,
+				);
+			});
+
+		this.modalService.confirmEventSubject.pipe(takeUntil(this.destroyed$)).subscribe(() => {
+			this.modalService.close();
+		});
+	}
+
+	openEditTimesheet() {
+		this.editTimesheetEnabled = true;
+	}
+
+	closeEditView() {
+		this.editTimesheetEnabled = false;
 	}
 }

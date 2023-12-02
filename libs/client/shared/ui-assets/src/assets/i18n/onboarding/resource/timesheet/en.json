@@ -27,5 +27,15 @@
 			"closeText": "Cancel",
 			"confirmText": "Submit"
 		}
+	},
+	"onboardingResourceEditTimesheet": {
+		"modal": {
+			"submitModal": {
+				"title": "Submit changes?",
+				"message": "Your changes to this timesheet will be sent to CAL for approval.",
+				"closeText": "Cancel",
+				"confirmText": "Submit"
+			}
+		}
 	}
 }

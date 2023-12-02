@@ -20,6 +20,16 @@
 			"supervisorComment": "Comments"
 		}
 	},
+	"onboardingResourceEditTimesheet": {
+		"modal": {
+			"submitModal": {
+				"title": "Submit changes?",
+				"message": "Your changes to this timesheet will be sent to CAL for approval.",
+				"closeText": "Cancel",
+				"confirmText": "Submit"
+			}
+		}
+	},
 
 	"viewTimesheet": {
 		"pendingApprovalTooltip": "This timesheet requires your approval",
@@ -38,7 +48,7 @@
 			}
 		},
 		"deleteTimesheetModal": {
-			"title": "Delete {{timesheet}}?",
+			"title": "Delete timesheet?",
 			"message": "Are you sure you want to permanently delete this timesheet?",
 			"confirmText": "Yes, delete",
 			"closeText": "Cancel"

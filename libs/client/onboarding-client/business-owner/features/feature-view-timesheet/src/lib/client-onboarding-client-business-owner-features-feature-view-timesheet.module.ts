@@ -16,8 +16,10 @@ import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { HttpClient } from '@angular/common/http';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { MatDialogModule } from '@angular/material/dialog';
+import { ClientOnboardingClientSharedFeaturesFeatureEditViewTimesheetModule } from '@tempus/client/onboarding-client/shared/features/feature-edit-view-timesheet';
 import { TimesheetContentComponent } from './timesheet-content/timesheet-content.component';
 import { TimesheetComponent } from './timesheet/timesheet.component';
+import { EditTimesheetComponent } from './edit-timesheet/edit-timesheet.component';
 
 function createTranslateLoader(http: HttpClient) {
 	return new TranslateHttpLoader(http, './assets/i18n/onboarding/owner/view-timesheet-approvals/', '.json');
@@ -38,6 +40,7 @@ function createTranslateLoader(http: HttpClient) {
 		ClientSharedUiComponentsPresentationalModule,
 		ClientSharedInputResourceInformationModule,
 		ClientSharedPresentationalResourceDisplayModule,
+		ClientOnboardingClientSharedFeaturesFeatureEditViewTimesheetModule,
 		RouterModule.forChild([
 			{
 				path: '',
@@ -55,6 +58,6 @@ function createTranslateLoader(http: HttpClient) {
 			extend: true,
 		}),
 	],
-	declarations: [TimesheetContentComponent, TimesheetComponent],
+	declarations: [TimesheetContentComponent, TimesheetComponent, EditTimesheetComponent],
 })
 export class ClientOnboardingClientBusinessOwnerFeaturesFeatureViewTimesheetModule {}
