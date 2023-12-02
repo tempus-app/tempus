@@ -8,8 +8,12 @@ export class ApproveTimesheetDto implements IApproveTimesheetDto {
 	@ApiProperty()
 	approval: boolean;
 
-	constructor(comment: string, approval: boolean) {
+	@ApiProperty()
+	approverId: number;
+
+	constructor(comment: string, approval: boolean, approverId: number) {
 		this.comment = comment;
 		this.approval = approval;
+		this.approverId = approverId;
 	}
 }
