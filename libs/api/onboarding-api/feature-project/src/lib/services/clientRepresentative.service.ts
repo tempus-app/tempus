@@ -17,10 +17,21 @@ export class ClientRepresentativeService {
 
 	async getClientRepresentativeInfo(clientRepresentativeId: number): Promise<ClientRepresentativeEntity> {
 		const clientRepresentative = await this.clientRepresentativeRepository.findOne(clientRepresentativeId, {
-			relations: ['client'],
+			relations: ['client', 'projects'],
 		});
 		if (!clientRepresentative) {
 			throw new NotFoundException(`Could not find client representative with id ${clientRepresentativeId}`);
+		}
+		return clientRepresentative;
+	}
+
+	async getClientRepresentativeByEmail(emailRep: string): Promise<ClientRepresentativeEntity> {
+		const clientRepresentative = await this.clientRepresentativeRepository.findOne({
+			where: {email: emailRep},
+			relations: ['client'],
+		});
+		if (!clientRepresentative) {
+			throw new NotFoundException(`Could not find client representative with email ${emailRep}`);
 		}
 		return clientRepresentative;
 	}
