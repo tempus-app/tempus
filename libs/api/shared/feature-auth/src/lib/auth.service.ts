@@ -6,6 +6,7 @@ import {
 	Injectable,
 	InternalServerErrorException,
 	Logger,
+	UnauthorizedException,
 } from '@nestjs/common';
 import {
 	TokensDto,
@@ -18,7 +19,7 @@ import {
 	ResetPasswordDto,
 } from '@tempus/shared-domain';
 import { JwtService } from '@nestjs/jwt';
-import { compare, genSalt, hash } from 'bcrypt';
+import * as bcrypt from 'bcrypt';
 import { getManager, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PasswordResetEntity, UserEntity } from '@tempus/api/shared/entity';
@@ -151,16 +152,22 @@ export class AuthService {
 	}
 
 	async validateUser(email: string, password: string): Promise<User> {
-		const user = await this.commonService.findByEmail(email);
-		if (user && (await AuthService.compareData(password, user.password))) {
-			return user;
+		const user = await this.userService.findByEmail(email);
+		if (!user) {
+			console.log(`User not found: ${email}`);
+			throw new UnauthorizedException('Incorrect credentials.');
 		}
-		return null;
+		const isMatch = await bcrypt.compare(password, user.password);
+		if (!isMatch) {
+			console.log(`Password mismatch for user: ${email}`);
+			throw new UnauthorizedException('Incorrect credentials.');
+		}
+		return user;
 	}
 
 	private static compareData(data: string, hashedData: string): boolean {
 		try {
-			return compare(data, hashedData);
+			return bcrypt.compare(data, hashedData);
 		} catch (e) {
 			throw new InternalServerErrorException(e);
 		}
@@ -168,13 +175,13 @@ export class AuthService {
 
 	private async updateRefreshTokenHash(user: User, refreshToken: string) {
 		const tokenOwner = user;
-		const salt = await genSalt(this.configService.get('saltSecret'));
+		const salt = await bcrypt.genSalt(this.configService.get('saltSecret'));
 
 		// logging user out by setting their refreshToken to null
 		if (!refreshToken) {
 			tokenOwner.refreshToken = null;
 		} else {
-			const hashedRefreshToken = await hash(refreshToken, salt);
+			const hashedRefreshToken = await bcrypt.hash(refreshToken, salt);
 			tokenOwner.refreshToken = hashedRefreshToken;
 		}
 		await this.userRepository.save(tokenOwner);

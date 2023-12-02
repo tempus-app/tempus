@@ -24,7 +24,7 @@ export class CommonService {
 		if (user === undefined) {
 			throw new NotFoundException(`Could not find user with email ${email}`);
 		}
-		if (user.roles.includes(RoleType.BUSINESS_OWNER) || user.roles.includes(RoleType.SUPERVISOR)) {
+		if (user.roles.includes(RoleType.BUSINESS_OWNER) || user.roles.includes(RoleType.CLIENT) || user.roles.includes(RoleType.SUPERVISOR)) {
 			return user;
 		}
 		const resourceEntity = (
@@ -55,7 +55,7 @@ export class CommonService {
 		if (!userEntity) {
 			throw new NotFoundException(`Could not find user with id ${id}`);
 		}
-		if (userEntity.roles.includes(RoleType.BUSINESS_OWNER) || userEntity.roles.includes(RoleType.SUPERVISOR)) {
+		if (userEntity.roles.includes(RoleType.BUSINESS_OWNER) || userEntity.roles.includes(RoleType.SUPERVISOR) || userEntity.roles.includes(RoleType.CLIENT)) {
 			return userEntity;
 		}
 

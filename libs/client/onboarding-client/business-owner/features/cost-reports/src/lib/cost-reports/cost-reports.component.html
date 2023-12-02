@@ -1,0 +1,19 @@
+<div fxLayout="column" id="page-container">
+	<div>
+		<div id="title-container">
+			<h2 class="mat-h2 page-title">Reports</h2>
+		</div>
+	</div>
+  <div fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="start center">
+    <div fxLayout="column" *ngFor="let dropdown of dropdowns">
+      <label class="dropdown-label">{{ dropdown.label }}</label>
+      <tempus-dropdown
+        id="dropdown-{{ dropdown.name }}"
+        [label]="dropdown.label"
+        [options]="dropdownOptions[dropdown.name]"
+        (optionSelect)="onDropdownSelect($event, dropdown.name)">
+      </tempus-dropdown>
+    </div>
+  </div>
+	<tempus-button class="generate-button" mat-raised-button (buttonClick)="generateDropdowns()" [label]="'Generate Report'" [color]="'primary'"></tempus-button>
+</div>

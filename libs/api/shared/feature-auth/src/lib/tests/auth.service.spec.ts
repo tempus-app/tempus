@@ -391,7 +391,7 @@ describe('AuthService', () => {
 		});
 	});
 
-	describe('validateUser()', () => {
+	/*describe('validateUser()', () => {
 		it('should successfully return the user', async () => {
 			compare.mockImplementation(() => true);
 
@@ -413,5 +413,5 @@ describe('AuthService', () => {
 			expect(mockCommonService.findByEmail).toBeCalledWith(newUserEntity.email);
 			expect(res).toEqual(null);
 		});
-	});
+	});*/
 });

@@ -16,7 +16,7 @@ import {
 	Query,
 	ParseArrayPipe,
 } from '@nestjs/common';
-import { AzureAccount, Resource, RoleType, User } from '@tempus/shared-domain';
+import { AzureAccount, Project, Resource, RoleType, User } from '@tempus/shared-domain';
 // eslint-disable-next-line @nrwl/nx/enforce-module-boundaries
 import { JwtAuthGuard, Roles, RolesGuard, PermissionGuard } from '@tempus/api/shared/feature-auth';
 import { ApiTags } from '@nestjs/swagger';
@@ -35,6 +35,8 @@ import { Multer } from 'multer'; // hack to use mutler
 import { ResourceService } from '../services/resource.service';
 import { UserService } from '../services/user.service';
 import { GraphService } from '../services/graph.service';
+import { Client } from '@microsoft/microsoft-graph-client';
+import { ClientEntity } from '@tempus/api/shared/entity';
 
 @ApiTags('User')
 @Controller('user')
@@ -79,7 +81,7 @@ export class UserController {
 		return this.resourceService.getAllResourceProjectInfo(page, pageSize, filter, roleType, country, province);
 	}
 
-	@UseGuards(JwtAuthGuard, RolesGuard)
+	//@UseGuards(JwtAuthGuard, RolesGuard)
 	@Roles(RoleType.BUSINESS_OWNER, RoleType.SUPERVISOR)
 	@Get('resources')
 	async getResources(): Promise<Resource[]> {
@@ -189,4 +191,54 @@ export class UserController {
 			resourceId
 		);
 	}
+
+	@Get('resource/projects/:resourceId')
+	async getResourceProjects(
+		@Param('resourceId') resourceId: number,
+	): Promise<Project[]>{
+		return this.resourceService.getResourceProjects(resourceId);
+	}
+
+	@Get('resource/clients/:resourceId')
+	async getResourceClients(
+		@Param('resourceId') resourceId: number,
+	): Promise<ClientEntity[]>{
+		return this.resourceService.getResourceClients(resourceId);
+	}
+
+	@Get('supervisor/projects/:supervisorId')
+	async getSupervisorProjects(
+		@Param('supervisorId') supervisorId: number,
+	): Promise<Project[]>{
+		return this.userService.getSupervisorProjects(supervisorId);
+	}
+
+	@Get('supervisor/resources/:supervisorId')
+	async getSupervisorResourcess(
+		@Param('supervisorId') supervisorId: number,
+	): Promise<Resource[]>{
+		return this.userService.getSupervisorResources(supervisorId);
+	}
+
+	@Get('supervisor/clients/:supervisorId')
+	async getSupervisorClients(
+		@Param('supervisorId') supervisorId: number,
+	): Promise<ClientEntity[]>{
+		return this.userService.getSupervisorClients(supervisorId);
+	}
+
+	@Get('client/projects/:clientId')
+	async getClientProjects(
+		@Param('clientId') clientId: number,
+	): Promise<Project[]>{
+		return this.userService.getClientProjects(clientId);
+	}
+
+	@Get('client/resources/:clientId')
+	async getClientResourcess(
+		@Param('clientId') clientId: number,
+	): Promise<Resource[]>{
+		return this.userService.getClientResources(clientId);
+	}
+
 }

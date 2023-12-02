@@ -20,6 +20,7 @@ import {
 	TimesheetEntity,
 	RevisedTimesheetEntity,
 	ApprovalEntity,
+	ReportEntity,
 } from '@tempus/api/shared/entity';
 
 const config: PostgresConnectionOptions = {
@@ -49,6 +50,7 @@ const config: PostgresConnectionOptions = {
 		CalendarEntity,
 		TimesheetEntity,
 		RevisedTimesheetEntity,
+		ReportEntity,
 		ApprovalEntity,
 	],
 	synchronize: true,

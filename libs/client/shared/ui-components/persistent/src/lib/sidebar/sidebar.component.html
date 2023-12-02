@@ -14,7 +14,7 @@
 			</div>
 			<h2 class="mat-h2">{{ fullName }}</h2>
 			<div class="mat-body-2" id="email">{{ email }}</div>
-			<div class="mat-body-2 role_type" *ngIf="role === RoleType.SUPERVISOR || role === RoleType.BUSINESS_OWNER">
+			<div class="mat-body-2 role_type" *ngIf="role === RoleType.SUPERVISOR || role === RoleType.BUSINESS_OWNER || role === RoleType.CLIENT">
 				{{ formatRole() }}
 			</div>
 		</div>

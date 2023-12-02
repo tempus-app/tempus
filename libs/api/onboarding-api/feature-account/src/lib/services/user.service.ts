@@ -1,20 +1,28 @@
-import { Resource, RoleType, User } from '@tempus/shared-domain';
+import { Client, Project, Resource, RoleType, User } from '@tempus/shared-domain';
 import { ForbiddenException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ConfigService } from '@nestjs/config';
 import { Any, getManager, In, Repository } from 'typeorm';
-import { genSalt, hash } from 'bcrypt';
-import { UserEntity } from '@tempus/api/shared/entity';
+import * as bcrypt from 'bcrypt';
+import { hash, genSalt } from 'bcrypt';
+import { ClientEntity, ProjectResourceEntity, ResourceEntity, UserEntity } from '@tempus/api/shared/entity';
 import { CreateUserDto, JwtPayload, UpdateUserDto } from '@tempus/api/shared/dto';
 import { CommonService } from '@tempus/api/shared/feature-common';
 import { EmailService } from '@tempus/api/shared/feature-email';
 import { ResourceService } from './resource.service';
 
+const saltRounds = 10;
 @Injectable()
 export class UserService {
 	constructor(
 		@InjectRepository(UserEntity)
 		private userRepository: Repository<UserEntity>,
+		@InjectRepository(ResourceEntity)
+		private resourceRepository: Repository<ResourceEntity>,
+		@InjectRepository(ProjectResourceEntity)
+		private projectResourceRepository: Repository<ProjectResourceEntity>,
+		@InjectRepository(ClientEntity)
+		private clientRepository: Repository<ClientEntity>,
 		private resourceService: ResourceService,
 		private configService: ConfigService,
 		private emailService: EmailService,
@@ -23,7 +31,7 @@ export class UserService {
 
 	async createUser(user: CreateUserDto): Promise<User> {
 		const userEntity = UserEntity.fromDto(user);
-		userEntity.password = await this.hashPassword(userEntity.password);
+		userEntity.password = await bcrypt.hash(userEntity.password, saltRounds);
 		if ((await this.userRepository.findOne({ email: userEntity.email })) !== undefined) {
 			throw new ForbiddenException('Cannot create a user that already exists');
 		}
@@ -95,6 +103,87 @@ export class UserService {
 		return supervisors;
 	}
 
+	async getSupervisorProjects(supervisorId: number):Promise<Project[]> {
+
+		const resources = await this.getSupervisorResources(supervisorId);
+
+		const resourceIds = resources.map(resource => resource.id);
+
+		const projectResources = await this.projectResourceRepository.find({
+			where: { resource: In(resourceIds)},
+			relations: ['project', 'resource'],
+		});
+		if (projectResources.length === 0) {
+			throw new NotFoundException(
+				`Could not find projects for resource with id ${supervisorId}`,
+			);
+		}
+		const projects = Array.from(new Set(projectResources.map(projRes => projRes.project)));
+
+		const projectsNoDuplicates = projects.filter((obj, index, self) => index === self.findIndex((el) => el['id'] === obj['id']));
+
+		return projectsNoDuplicates;
+	}
+
+	async getSupervisorResources(supervisorId: number):Promise<Resource[]> {
+		
+		const resources = await this.resourceRepository.find({
+			where: {supervisorId: supervisorId}
+		})
+
+		return resources;
+	}
+
+	async getSupervisorClients(supervisorId: number): Promise<Client[]>{
+
+		const resources = await this.getSupervisorResources(supervisorId);
+
+		const resourceIds = resources.map(resource => resource.id);
+
+		const projectResources = await this.projectResourceRepository.find({
+			where: { resource: In(resourceIds)},
+			relations: ['project', 'project.client', 'resource'],
+		});
+		if (projectResources.length === 0) {
+			throw new NotFoundException(
+				`Could not find projects for resource with id ${supervisorId}`,
+			);
+		}
+		const clients = Array.from(new Set(projectResources.map(projRes => projRes.project.client)));
+
+		const clientsNoDuplicates = clients.filter((obj, index, self) => index === self.findIndex((el) => el['id'] === obj['id']));
+
+		return clientsNoDuplicates;
+
+	}
+
+	async getClientProjects(clientId: number):Promise<Project[]> {
+		
+		const clientEntity = await this.clientRepository.findOne(clientId, {
+			relations: ['projects'],
+		});
+		if (!clientEntity) {
+			throw new NotFoundException(`Could not find client with id ${clientId}`);
+		}
+
+		return clientEntity.projects;
+	}
+
+	async getClientResources(clientId: number):Promise<Resource[]> {
+		
+		const projects = await this.getClientProjects(clientId);
+
+		const projectIds = projects.map(project => project.id);
+
+
+		const projectResources = await this.projectResourceRepository.find({
+			where: { project: In(projectIds)},
+			relations: ['project', 'resource'],
+		});
+		const resources = Array.from(new Set(projectResources.map(projRes => projRes.resource)));
+		return resources;
+	}
+
 
 	async deleteUser(token: JwtPayload, userId: number): Promise<void> {
 		if (token.roles.includes(RoleType.SUPERVISOR) && !token.roles.includes(RoleType.BUSINESS_OWNER)) {
@@ -121,5 +210,9 @@ export class UserService {
 		} catch (e) {
 			throw new InternalServerErrorException(e);
 		}
+	}
+
+	async findByEmail(email: string): Promise<UserEntity | undefined> {
+		return this.userRepository.findOne({ where: { email } });
 	}
 }
