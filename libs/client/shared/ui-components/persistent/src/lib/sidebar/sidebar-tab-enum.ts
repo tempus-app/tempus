@@ -10,4 +10,6 @@ export enum SidebarTab {
 	PROJECTS = 'projects',
 	TIMESHEET = 'timesheet',
 	TIMESHEET_APPROVALS = 'timesheetApprovals',
+	COST_BILLING_REPORTS = 'costBillingReports',
+	COST_REPORTS = 'costReports',
 }

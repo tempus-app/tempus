@@ -104,6 +104,16 @@ export class SidebarComponent implements OnInit, OnDestroy {
 			route: '/owner/timesheet-approvals',
 			base: true,
 		},
+		{
+			tab: SidebarTab.COST_BILLING_REPORTS,
+			route: '/owner/cost-billing-reports',
+			base: true,
+		},
+		{
+			tab: SidebarTab.COST_REPORTS,
+			route: '/owner/cost-reports',
+			base: true,
+		},
 	];
 
 	ngOnInit(): void {
@@ -123,14 +133,39 @@ export class SidebarComponent implements OnInit, OnDestroy {
 				// eslint-disable-next-line prefer-destructuring
 				this.role = roles[0];
 
-				if (roles.includes(RoleType.BUSINESS_OWNER) || roles.includes(RoleType.SUPERVISOR)) {
+				if (roles.includes(RoleType.SUPERVISOR)) {
 					this.tabs = [
 						SidebarTab.MANAGE_RESOURCES,
 						SidebarTab.PENDING_APPROVALS,
 						SidebarTab.PROJECTS,
 						SidebarTab.TIMESHEET_APPROVALS,
+						SidebarTab.COST_REPORTS,
+					];
+				} else if (roles.includes(RoleType.BUSINESS_OWNER) || roles.includes(RoleType.SUPERVISOR)) {
+					this.tabs = [
+						SidebarTab.MANAGE_RESOURCES,
+						SidebarTab.PENDING_APPROVALS,
+						SidebarTab.PROJECTS,
+						SidebarTab.TIMESHEET_APPROVALS,
+						SidebarTab.COST_REPORTS,
+						// SidebarTab.COST_BILLING_REPORTS,
 					];
 				} else if (roles.includes(RoleType.AVAILABLE_RESOURCE) || roles.includes(RoleType.ASSIGNED_RESOURCE)) {
+					this.tabs = [
+						SidebarTab.PRIMARY_VIEW,
+						SidebarTab.MY_VIEWS,
+						SidebarTab.MY_PROJECTS,
+						SidebarTab.PERSONAL_INFORMATION,
+						SidebarTab.TIMESHEET,
+						SidebarTab.COST_REPORTS,
+					];
+					
+				} else if (roles.includes(RoleType.CLIENT)) {
+					this.tabs = [
+						SidebarTab.TIMESHEET_APPROVALS,
+						SidebarTab.COST_REPORTS,
+					];
+				} else {
 					this.tabs = [
 						SidebarTab.PRIMARY_VIEW,
 						SidebarTab.MY_VIEWS,
@@ -164,7 +199,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
 			case RoleType.ASSIGNED_RESOURCE:
 			case RoleType.AVAILABLE_RESOURCE:
 			default:
-				return 'Resource';
+				return 'Client';
 		}
 	}
 

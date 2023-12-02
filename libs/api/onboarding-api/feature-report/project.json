@@ -1,0 +1,23 @@
+{
+	"root": "libs/api/onboarding-api/feature-report",
+	"sourceRoot": "libs/api/onboarding-api/feature-report/src",
+	"projectType": "library",
+	"targets": {
+		"lint": {
+			"executor": "@nrwl/linter:eslint",
+			"outputs": ["{options.outputFile}"],
+			"options": {
+				"lintFilePatterns": ["libs/api/onboarding-api/feature-report/**/*.ts"]
+			}
+		},
+		"test": {
+			"executor": "@nrwl/jest:jest",
+			"outputs": ["coverage/libs/api/onboarding-api/feature-report"],
+			"options": {
+				"jestConfig": "libs/api/onboarding-api/feature-report/jest.config.js",
+				"passWithNoTests": true
+			}
+		}
+	},
+	"tags": []
+}

@@ -24,7 +24,18 @@ const seederArgsInterface: commandLineArgs.OptionDefinition[] = [
 		type: Boolean,
 		defaultValue: true,
 	},
+	{
+		name: 'clientCount',
+		type: Number,
+		defaultValue: 5, // default value if not specified
+	},
+	{
+		name: 'reports',
+		type: Number,
+		defaultValue: 5, // default value if not specified
+	},
 ];
+
 async function bootstrap() {
 	const appContext = await NestFactory.createApplicationContext(SeedModule);
 	const logger = appContext.get(Logger);

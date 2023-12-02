@@ -11,6 +11,14 @@
 							{{ timesheetWeek }}
 						</h2></ng-template
 					>
+					<h2 *ngIf="timesheetWeek === ''; else otherTitle" class="mat-h2 page-title">
+						{{ editViewTimesheetPrefix + 'title' | translate }}
+					</h2>
+					<ng-template #otherTitle
+						><h2 class="mat-h2 page-title">
+							{{ timesheetWeek }}
+						</h2></ng-template
+					>
 				</div>
 			</div>
 

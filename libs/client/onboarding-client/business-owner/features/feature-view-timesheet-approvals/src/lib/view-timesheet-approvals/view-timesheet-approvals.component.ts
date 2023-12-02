@@ -177,7 +177,6 @@ export class ViewTimesheetApprovalsComponent implements OnInit, OnDestroy {
 					});
 
 					const fullName = timesheet.resource.firstName + ' ' + timesheet.resource.lastName;
-					console.log('name '+ fullName);
 					const timesheetWeek = `${startDate} - ${endDate}`;
 
 					let dateModified = '-';
