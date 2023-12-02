@@ -55,6 +55,18 @@
 						</mat-error>
 					</div>
 				</div>
+				<tempus-text-input
+					[inputType]="InputType.TEXT"
+					placeholder="Cost Rate / Hour"
+					[control]="$any(assignForm).get('costRate')"
+				></tempus-text-input>
+				<mat-error
+					class="mat-body-2"
+					*ngIf="
+						$any(assignForm).get('costRate').invalid &&
+						($any(assignForm).get('costRate').touched || $any(assignForm).get('costRate').dirty)
+					"
+				></mat-error>
 			</tempus-card>
 		</div>
 		<tempus-card class="card" style="margin-top: 1rem">
@@ -101,6 +113,18 @@
 					</mat-error>
 				</div>
 			</div>
+			<tempus-text-input
+				[inputType]="InputType.TEXT"
+				placeholder="Billing Rate / Hour"
+				[control]="$any(assignForm).get('billRate')"
+			></tempus-text-input>
+			<mat-error
+				class="mat-body-2"
+				*ngIf="
+					$any(assignForm).get('billRate').invalid &&
+					($any(assignForm).get('billRate').touched || $any(assignForm).get('billRate').dirty)
+				"
+			></mat-error>
 		</tempus-card>
 	</div>
 </ng-template>
