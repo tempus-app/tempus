@@ -291,6 +291,8 @@ export class CostReportsComponent implements OnInit {
 		else {
 			this.projectService.getAllProjects(paginationData).subscribe(response => {
 				const projects = response.projectData;
+				// eslint-disable-next-line no-console
+				console.log(projects);
 				if (projects) {
 					this.projectOptions = projects.map(p => {
 						return {
