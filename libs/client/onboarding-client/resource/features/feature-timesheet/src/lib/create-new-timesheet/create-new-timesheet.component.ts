@@ -19,7 +19,7 @@ import {
 	User,
 	ViewType,
 } from '@tempus/shared-domain';
-import { Subject, pipe, take, takeUntil } from 'rxjs';
+import { Subject, forkJoin, pipe, take, takeUntil } from 'rxjs';
 import { Store } from '@ngrx/store';
 
 @Component({
@@ -64,24 +64,6 @@ export class CreateNewTimesheetComponent implements OnInit {
 			});
 	}
 
-	// loadTimesheet(timesheet: Timesheet) {
-	// 	this.timesheetId = timesheet.id;
-	// 	this.userId = timesheet.resource.id;
-	// 	//this.timesheetEntries = timesheet.timesheetEntries;
-	// 	this.projectId = timesheet.project.id;
-	// 	this.supervisor = timesheet.supervisor;
-	// 	this.startDate = timesheet.weekStartDate;
-	// 	this.endDate = timesheet.weekEndDate;
-	// 	this.supervisorApproval = timesheet.approvedBySupervisor;
-	// 	this.clientApproval = timesheet.approvedByClient;
-	// 	this.supervisorComment = timesheet.supervisorComment;
-	// 	this.clientComment = timesheet.clientRepresentativeComment;
-	// 	this.audited = timesheet.audited;
-	// 	this.billed = timesheet.billed;
-	// 	this.status = timesheet.status;
-	// 	this.dateModified = timesheet.dateModified;
-	// }
-
 	submitChanges() {
 		if (this.newTimesheetForm.validateForm()) {
 			this.openSubmitConfirmation();
@@ -89,18 +71,32 @@ export class CreateNewTimesheetComponent implements OnInit {
 	}
 
 	createNewTimesheet() {
-		const newTimesheet = this.newTimesheetForm.generateNewTimesheet();
-		this.timesheetService
-			.createTimesheet(newTimesheet)
-			.pipe(take(1))
-			.subscribe(timesheet => {
-				this.router.navigate(['../'], {
-					queryParams: { timesheetId: timesheet.id },
-					relativeTo: this.route,
-				});
-			});
+		const newTimesheets = this.newTimesheetForm.generateNewTimesheet();
+
+		const timesheets = newTimesheets.map(item => this.timesheetService.createTimesheet(item));
+
+		const error = this.newTimesheetForm.timesheetError;
+
+		// If there is no multiple timesheet with same project error, submit timesheet
+		if (!error) {
+			forkJoin(timesheets).subscribe(
+				timesheet => {
+					this.router.navigate(['../'], {
+						relativeTo: this.route,
+					});
+				},
+				error => {
+					if (error) {
+						this.openTimesheetErrorModal(error.message);
+					}
+				},
+			);
+		}
+
+		return error;
 	}
 
+	// Submission confirmation
 	openSubmitConfirmation() {
 		this.translateService
 			.get([`onboardingResourceCreateNewTimesheet.submitModal`])
@@ -121,8 +117,42 @@ export class CreateNewTimesheetComponent implements OnInit {
 				);
 			});
 
+		this.modalService.confirmEventSubject.pipe(take(1)).subscribe(() => {
+			this.modalService.close();
+			const result = this.createNewTimesheet();
+
+			if (result) {
+				this.translateService
+					.get(`onboardingResourceErrorTimesheet.errorModal`)
+					.pipe(take(1))
+					.subscribe(data => {
+						this.openTimesheetErrorModal(data.message);
+					});
+			}
+		});
+	}
+
+	// Timesheet Error Modal
+	openTimesheetErrorModal(error: string) {
+		this.translateService
+			.get(`onboardingResourceErrorTimesheet.errorModal`)
+			.pipe(take(1))
+			.subscribe(data => {
+				const dialogText = data;
+				this.modalService.open(
+					{
+						title: dialogText.title,
+						confirmText: dialogText.confirmText,
+						message: error,
+						closable: true,
+						id: 'error',
+						modalType: ModalType.ERROR,
+					},
+					CustomModalType.INFO,
+				);
+			});
+
 		this.modalService.confirmEventSubject.pipe(takeUntil(this.destroyed$)).subscribe(() => {
-			this.createNewTimesheet();
 			this.modalService.close();
 		});
 	}

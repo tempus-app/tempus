@@ -1,10 +1,11 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ClientRepresentativeEntity } from '@tempus/api/shared/entity';
+import { ClientEntity, ClientRepresentativeEntity } from '@tempus/api/shared/entity';
 import { Repository } from 'typeorm';
 import { ClientService } from './client.service';
 import { UserService } from '@tempus/onboarding-api/feature-account';
 import { RoleType } from '@tempus/shared-domain';
+import { Client } from '@microsoft/microsoft-graph-client';
 
 @Injectable()
 export class ClientRepresentativeService {
@@ -34,6 +35,12 @@ export class ClientRepresentativeService {
 			throw new NotFoundException(`Could not find client representative with email ${emailRep}`);
 		}
 		return clientRepresentative;
+	}
+	
+	async getClientByRepresentative(email: string): Promise<ClientEntity>{
+		const clientRepresentative = await this.getClientRepresentativeByEmail(email);
+
+		return clientRepresentative.client;
 	}
 
 	async createClientRepresentative(

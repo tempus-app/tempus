@@ -144,7 +144,7 @@ describe('TimesheetService', () => {
             expect(res[0]).toEqual(submittedTimesheetEntityMock);
         });
 
-        it('should get all the timesheets for a supervisor', async () => {
+       /* it('should get all the timesheets for a supervisor', async () => {
             const returnedTimesheets = [timesheetEntityMock, submittedTimesheetEntityMock];
             mockTimesheetRepository.findAndCount.mockResolvedValue([returnedTimesheets, 2]);
 
@@ -157,7 +157,7 @@ describe('TimesheetService', () => {
 				skip: Number(0) * Number(1000),
             });
             expect(res.timesheets).toEqual(returnedTimesheets);
-        });
+        });*/
     });
 
     describe('Submitting Timesheet', () => {

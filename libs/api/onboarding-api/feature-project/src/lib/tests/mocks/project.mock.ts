@@ -42,4 +42,4 @@ export const projectEntityMock: ProjectEntity = {
 	timesheets: null,
 };
 
-export const assignProjectDetailsMock = new AssignProjectDto('UX Developer', new Date('2022-01-13'));
+export const assignProjectDetailsMock = new AssignProjectDto('UX Developer', new Date('2022-01-13'), 30, 50);

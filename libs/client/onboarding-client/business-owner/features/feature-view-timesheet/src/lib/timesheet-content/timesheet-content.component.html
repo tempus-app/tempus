@@ -1,15 +1,40 @@
+<div *ngIf="editTimesheetEnabled">
+	<tempus-edit-timesheet (closeEditViewClicked)="closeEditView()"></tempus-edit-timesheet>
+</div>
+
 <ng-container *ngIf="dataLoaded">
-	<div id="page-container" fxLayout="column" fxLayoutGap="20px">
+	<div *ngIf="!editTimesheetEnabled" id="page-container" fxLayout="column" fxLayoutGap="20px">
 		<div id="title-container">
 			<div id="my-profile-container">
 				<h2 class="mat-h2 page-title">{{ timesheetWeek }}</h2>
+			</div>
+			<div *ngIf="isValidRole(roles, [roleType.BUSINESS_OWNER])" id="button-container">
+				<tempus-ghost-button
+					(click)="openEditTimesheet()"
+					cssClass="yellow"
+					label="Edit timesheet"
+					icon="edit"
+				></tempus-ghost-button>
+				<tempus-ghost-button
+					(click)="deleteTimesheet()"
+					label="Delete timesheet"
+					cssClass="red"
+					icon="delete"
+				></tempus-ghost-button>
 			</div>
 		</div>
 		<tempus-resource-display-timesheet
 			[timesheet]="timesheet"
 			[projectName]="projectName"
 		></tempus-resource-display-timesheet>
-		<div id="button-container2" *ngIf="isRevision">
+		<div
+			id="button-container2"
+			*ngIf="
+				isValidRole(roles, [roleType.BUSINESS_OWNER]) ||
+				(isValidRole(roles, [roleType.SUPERVISOR]) && isRevision) ||
+				(isValidRole(roles, [roleType.CLIENT]) && isRevision)
+			"
+		>
 			<div class="submitAndCancel">
 				<tempus-button
 					id="reject-view-button"

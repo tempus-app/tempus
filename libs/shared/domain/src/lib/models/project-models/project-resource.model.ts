@@ -8,4 +8,6 @@ export interface ProjectResource {
 	resource: Resource;
 	project: Project;
 	title: string;
+	costRate: number;
+	billRate: number;
 }

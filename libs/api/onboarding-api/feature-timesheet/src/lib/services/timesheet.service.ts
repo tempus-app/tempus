@@ -2,7 +2,7 @@ import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/commo
 import { InjectRepository } from '@nestjs/typeorm';
 import { TimesheetEntity, UserEntity } from '@tempus/api/shared/entity';
 import { In, Repository } from 'typeorm';
-import { Timesheet, TimesheetRevisionType } from '@tempus/shared-domain';
+import { RoleType, Timesheet, TimesheetRevisionType } from '@tempus/shared-domain';
 import { ApproveTimesheetDto, CreateTimesheetDto, UpdateTimesheetDto } from '@tempus/api/shared/dto';
 import { ResourceService, UserService } from '@tempus/onboarding-api/feature-account';
 import { ClientRepresentativeService, ProjectService } from '@tempus/onboarding-api/feature-project';
@@ -70,23 +70,34 @@ export class TimesheetService {
 	}
 
 	async getAllTimesheetsBySupervisorId(supervisorId: number, page: number, pageSize: number) {
-		const timesheetsAndCount = await this.timesheetRepository.findAndCount({
-			where: { supervisor: { id: supervisorId } },
-			relations: ['supervisor', 'project', 'resource'],
-			take: Number(pageSize),
-			skip: Number(page) * Number(pageSize),
-		});
+		let timesheetsAndCount;
+		const userRole = (await this.userService.getUserbyId(supervisorId)).roles[0];
+
+		if (userRole == RoleType.SUPERVISOR) {
+			timesheetsAndCount = await this.timesheetRepository.findAndCount({
+				where: { supervisor: { id: supervisorId } },
+				relations: ['supervisor', 'project', 'resource'],
+				take: Number(pageSize),
+				skip: Number(page) * Number(pageSize),
+			});
+		} else if (userRole == RoleType.CLIENT) {
+			return this.getAllTimesheetsByClientId(supervisorId, page, pageSize);
+		} else {
+			timesheetsAndCount = await this.timesheetRepository.findAndCount({
+				relations: ['supervisor', 'project', 'resource'],
+				take: Number(pageSize),
+				skip: Number(page) * Number(pageSize),
+			});
+		}
 
 		return { timesheets: timesheetsAndCount[0], totalTimesheets: timesheetsAndCount[1] };
 	}
 
 	async getAllTimesheetsByClientId(clientId: number, page: number, pageSize: number) {
-
 		const clientUser = await this.userService.getUserbyId(clientId);
 		const clientRep = await this.clientRepService.getClientRepresentativeByEmail(clientUser.email);
-		const projects = await this.userService.getClientProjects(clientRep.client.id);
+		const projects = await this.projectService.getClientProjects(clientRep.client.id);
 		const projectIds = projects.map(project => project.id);
-
 
 		const timesheetsAndCount = await this.timesheetRepository.findAndCount({
 			where: { project: In(projectIds) },
@@ -95,7 +106,11 @@ export class TimesheetService {
 			skip: Number(page) * Number(pageSize),
 		});
 
-		return { timesheets: timesheetsAndCount[0], totalTimesheets: timesheetsAndCount[1] };
+		const filteredTimesheets = timesheetsAndCount[0].filter(
+			timesheet => timesheet.status === TimesheetRevisionType.CLIENTREVIEW,
+		);
+
+		return { timesheets: filteredTimesheets, totalTimesheets: timesheetsAndCount[1] };
 	}
 
 	async getAllSubmittedTimesheetsforProject(projectId: number): Promise<Timesheet[]> {
@@ -121,27 +136,49 @@ export class TimesheetService {
 		return toReturn;
 	}
 
-	async approveOrRejectTimesheetSupervisor(timesheetId: number, approveTimesheetDto: ApproveTimesheetDto): Promise<Timesheet> {
-		const { approval, comment } = approveTimesheetDto;
+	async approveOrRejectTimesheetSupervisor(
+		timesheetId: number,
+		approveTimesheetDto: ApproveTimesheetDto,
+	): Promise<Timesheet> {
+		const { approval, comment, approverId } = approveTimesheetDto;
+		const userRole = (await this.userService.getUserbyId(approverId)).roles[0];
+
 		const timesheetEntity = await this.timesheetRepository.findOne(timesheetId);
 		if (!timesheetEntity) throw new NotFoundException(`Could not find timesheet with id ${timesheetId}`);
 
-		if (approval === true) {
-			timesheetEntity.approvedBySupervisor = true;
-			timesheetEntity.status = TimesheetRevisionType.APPROVED;
-			timesheetEntity.dateModified = new Date(Date.now());
-			timesheetEntity.supervisorComment = comment;
-			const toReturn = await this.timesheetRepository.save(timesheetEntity);
-			return toReturn;
+		if (userRole == RoleType.CLIENT) {
+			if (approval === true) {
+				timesheetEntity.approvedByClient = true;
+				timesheetEntity.status = TimesheetRevisionType.APPROVED;
+				timesheetEntity.dateModified = new Date(Date.now());
+				timesheetEntity.clientRepresentativeComment = comment;
+				const toReturn = await this.timesheetRepository.save(timesheetEntity);
+				return toReturn;
+			}
+			if (approval === false) {
+				timesheetEntity.status = TimesheetRevisionType.REJECTED;
+				timesheetEntity.dateModified = new Date(Date.now());
+				timesheetEntity.clientRepresentativeComment = comment;
+				const toReturn = await this.timesheetRepository.save(timesheetEntity);
+				return toReturn;
+			}
+		} else {
+			if (approval === true) {
+				timesheetEntity.approvedBySupervisor = true;
+				timesheetEntity.status = TimesheetRevisionType.CLIENTREVIEW;
+				timesheetEntity.dateModified = new Date(Date.now());
+				timesheetEntity.supervisorComment = comment;
+				const toReturn = await this.timesheetRepository.save(timesheetEntity);
+				return toReturn;
+			}
+			if (approval === false) {
+				timesheetEntity.status = TimesheetRevisionType.REJECTED;
+				timesheetEntity.dateModified = new Date(Date.now());
+				timesheetEntity.supervisorComment = comment;
+				const toReturn = await this.timesheetRepository.save(timesheetEntity);
+				return toReturn;
+			}
 		}
-			else if (approval === false) {
-			timesheetEntity.status = TimesheetRevisionType.REJECTED;
-			timesheetEntity.dateModified = new Date(Date.now());
-			timesheetEntity.supervisorComment = comment;
-			const toReturn = await this.timesheetRepository.save(timesheetEntity);
-			return toReturn;
-		}
-		return;
 	}
 
 	async approveOrRejectTimesheetClient(timesheetId: number, approveTimesheetDto: ApproveTimesheetDto): Promise<Timesheet> {
@@ -171,17 +208,32 @@ export class TimesheetService {
 	async createTimesheet(timesheet: CreateTimesheetDto): Promise<Timesheet> {
 		const timesheetEntity = TimesheetEntity.fromDto(timesheet);
 
-		// if((await this.timesheetRepository.findOne({weekStartDate: timesheetEntity.weekStartDate})) !== undefined){
-		// 	throw new ForbiddenException('There already exists a timesheet in that date range');
-		// }
-
 		let supervisorEntity: UserEntity = null;
-		/*if (timesheet.supervisorId != undefined)
-			supervisorEntity = await this.userService.getUserbyId(timesheet.supervisorId);*/
+		/* if (timesheet.supervisorId != undefined)
+			supervisorEntity = await this.userService.getUserbyId(timesheet.supervisorId); */
 		const projectEntity = await this.projectService.getProjectInfo(timesheet.projectId);
 		const resourceEntity = await this.resourceService.getResourceInfo(timesheet.resourceId);
-		if (resourceEntity.supervisorId != undefined || null){
-			supervisorEntity = await this.userService.getUserbyId(resourceEntity.supervisorId);}
+		const weekStartDate = new Date(timesheetEntity.weekStartDate);
+		const weekEndDate = new Date(timesheetEntity.weekEndDate);
+
+		// Check if there already exists a timesheet with the same date range and project
+		const existingTimesheet = await this.timesheetRepository.findOne({
+			where: {
+				weekStartDate,
+				weekEndDate,
+				project: projectEntity,
+				resource: resourceEntity,
+			},
+		});
+
+		// Throw a forbidden exception if the timesheet already exists with the same date range and project
+		if (existingTimesheet) {
+			throw new ForbiddenException('There already exists a timesheet in that date range');
+		}
+
+		if (resourceEntity.supervisorId != undefined || null) {
+			supervisorEntity = await this.userService.getUserbyId(resourceEntity.supervisorId);
+		}
 		timesheetEntity.status = TimesheetRevisionType.SUBMITTED;
 		timesheetEntity.dateModified = new Date(Date.now());
 		timesheetEntity.supervisor = supervisorEntity;

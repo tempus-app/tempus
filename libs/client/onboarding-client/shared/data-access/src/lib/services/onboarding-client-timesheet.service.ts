@@ -1,11 +1,15 @@
-import { HttpClient } from '@angular/common/http';
+/* eslint-disable prefer-const */
+/* eslint-disable prettier/prettier */
+import { HttpClient, HttpHeaders, HttpParams, HttpResponse } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
 import { APP_CONFIG } from '@tempus/app-config';
 import {
 	AppConfig,
 	IApproveTimesheetDto,
 	ICreateTimesheetDto,
+	IReportFiltersDto,
 	IUpdateTimesheetDto,
+	Report,
 	RevisionType,
 	Timesheet,
 	View,
@@ -32,6 +36,19 @@ export class OnboardingClientTimesheetsService {
 		return this.http
 			.get<{ timesheets: Timesheet[]; totalTimesheets: number }>(
 				`${this.timesheetURL}/supervisor-timesheets/${supervisorId}?page=${page}&pageSize=${pageSize}`,
+				{},
+			)
+			.pipe(catchError(handleError));
+	}
+
+	public getTimesheetsByClientId(
+		clientId: number,
+		page: number,
+		pageSize: number,
+	): Observable<{ timesheets: Timesheet[]; totalTimesheets: number }> {
+		return this.http
+			.get<{ timesheets: Timesheet[]; totalTimesheets: number }>(
+				`${this.timesheetURL}/client-timesheets/${clientId}?page=${page}&pageSize=${pageSize}`,
 				{},
 			)
 			.pipe(catchError(handleError));
@@ -68,6 +85,28 @@ export class OnboardingClientTimesheetsService {
 	): Observable<{ timesheet: Timesheet }> {
 		return this.http.patch<{ timesheet: Timesheet }>(
 			`${this.timesheetURL}/approve/${timesheetId}`,
+			approveTimesheetDto,
+			{},
+		);
+	}
+
+	public getReport(
+		userId: number,
+		reportFilters: IReportFiltersDto,
+	  ): Observable<Report[]> {
+
+		let url =  `${this.appConfig.apiUrl}/onboarding/report/${userId}?clientId=${reportFilters.clientId}&projectId=${reportFilters.projectId}&resourceId=${reportFilters.resourceId}&month=${reportFilters.month}&year=${reportFilters.year}`;
+		return this.http
+		  .get<Report[]>(url)
+		  .pipe(catchError(handleError));
+	  }
+
+	public updateTimesheetStatusAsClient(
+		timesheetId: number,
+		approveTimesheetDto: IApproveTimesheetDto,
+	): Observable<{ timesheet: Timesheet }> {
+		return this.http.patch<{ timesheet: Timesheet }>(
+			`${this.timesheetURL}/approve/client/${timesheetId}`,
 			approveTimesheetDto,
 			{},
 		);

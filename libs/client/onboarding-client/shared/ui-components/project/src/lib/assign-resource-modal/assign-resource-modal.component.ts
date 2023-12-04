@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/dot-notation */
 import { Component, Input, OnChanges, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { TranslateService } from '@ngx-translate/core';
 import {
@@ -77,6 +77,8 @@ export class AssignResourceModalComponent implements OnInit, OnChanges {
 		project: ['', Validators.required],
 		startDate: ['', Validators.required],
 		title: ['', Validators.required],
+		costRate: ['', [Validators.required, this.isNumber]],
+		billRate: ['', [Validators.required, this.isNumber]],
 	});
 
 	ngOnInit(): void {
@@ -211,6 +213,8 @@ export class AssignResourceModalComponent implements OnInit, OnChanges {
 					const assignDto: IAssignProjectDto = {
 						title: this.assignForm.get('title')?.value,
 						startDate: this.assignForm.get('startDate')?.value,
+						costRate: this.assignForm.get('costRate')?.value,
+						billRate: this.assignForm.get('billRate')?.value,
 					};
 					this.businessOwnerStore.dispatch(
 						createResourceProjectAssignment({
@@ -241,6 +245,15 @@ export class AssignResourceModalComponent implements OnInit, OnChanges {
 				}
 			});
 	}
+
+	isNumber(control: AbstractControl): { [key: string]: any } | null {
+		const input = control.value;
+	  
+		if (input === null || input === undefined || isNaN(input)) {
+		  return { 'isNumber': true };
+		}
+		return null;
+	  }
 }
 
 // need to pass the lists as a prop

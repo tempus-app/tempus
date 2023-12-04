@@ -10,23 +10,28 @@ export class ReportEntity implements Report {
 		clientName?: string,
 		projectName?: string,
 		userName?: string,
-		month?: string,
+		startDate?: string,
+		month?: number,
+		year?: number,
 		hoursWorked?: number,
 		costRate?: number,
 		totalCost?: number,
-		totalBilling?: number,
 		billingRate?: number,
+		totalBilling?: number,
+
 	) {
 		this.reportId = reportId;
 		this.clientName = clientName;
 		this.projectName = projectName;
 		this.userName = userName;
+		this.startDate = startDate;
 		this.month = month;
+		this.year = year;
 		this.hoursWorked = hoursWorked;
 		this.costRate = costRate;
 		this.totalCost = totalCost;
-		this.totalBilling = totalBilling;
 		this.billingRate = billingRate;
+		this.totalBilling = totalBilling;
 	}
 
 	// eslint-disable-next-line @typescript-eslint/no-dupe-class-members
@@ -43,7 +48,13 @@ export class ReportEntity implements Report {
 	userName?: string;
 
 	@Column({ nullable: true })
-	month?: string;
+	startDate?: string;
+
+	@Column({ nullable: true })
+	month?: number;
+
+	@Column({ nullable: true })
+	year?: number;
 
 	@Column({ nullable: true })
 	hoursWorked?: number;
@@ -54,11 +65,12 @@ export class ReportEntity implements Report {
 	@Column({ nullable: true })
 	totalCost?: number;
 
+	@Column()
+	billingRate?: number;
+
 	@Column({ nullable: true })
 	totalBilling?: number;
 
-	@Column()
-	billingRate?: number;
 
 	public static fromDto(dto: CreateReportDto): ReportEntity {
 		if (dto == null) return new ReportEntity();
@@ -67,7 +79,9 @@ export class ReportEntity implements Report {
 			dto.clientName,
 			dto.projectName,
 			dto.userName,
+			dto.startDate,
 			dto.month,
+			dto.year,
 			dto.hoursWorked,
 			dto.costRate,
 			dto.totalCost,

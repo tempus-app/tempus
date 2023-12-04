@@ -36,6 +36,13 @@ export class AuthGuard implements CanLoad, CanActivate {
 
 				if (curRoute) {
 					if (
+						curRoute[1] === 'owner' &&
+						curRoute[2] === 'cost-reports' &&
+						(roles.includes(RoleType.AVAILABLE_RESOURCE) || roles.includes(RoleType.ASSIGNED_RESOURCE))
+					) {
+						return true;
+					}
+					if (
 						(curRoute[1] === 'resource' &&
 							!roles.includes(RoleType.AVAILABLE_RESOURCE) &&
 							!roles.includes(RoleType.ASSIGNED_RESOURCE)) ||

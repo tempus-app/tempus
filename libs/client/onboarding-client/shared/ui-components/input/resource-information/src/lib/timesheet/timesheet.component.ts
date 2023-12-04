@@ -10,7 +10,7 @@ import {
 	SimpleChange,
 	SimpleChanges,
 } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import {
 	DateRange,
 	MatDateRangePicker,
@@ -213,6 +213,11 @@ export class TimesheetComponent implements OnInit {
 	// Timesheet prefix
 	timesheetPrefix = 'onboardingClient.input.timesheet.';
 
+	// Edit and submit timesheet prefix
+	editViewTimesheetPrefix = 'onboardingClient.editViewTimesheet.';
+
+	rowAmount = 1;
+
 	// ---------------------------------------------------------------------------
 
 	InputType = InputType;
@@ -244,6 +249,8 @@ export class TimesheetComponent implements OnInit {
 	@Input() projectName = '';
 
 	@Output() formGroup = new EventEmitter();
+
+	@Output() multiTimesheets = new EventEmitter();
 
 	@Output() formIsValid = new EventEmitter<boolean>();
 
@@ -284,6 +291,24 @@ export class TimesheetComponent implements OnInit {
 		saturday: ['', Validators.required],
 	});
 
+	myInfoForm = this.fb.group({
+		timesheets: this.fb.array([
+			this.fb.group({
+				startDate: ['', Validators.required],
+				endDate: ['', Validators.required],
+				project: ['', Validators.required],
+				comments: ['', Validators.required],
+				sunday: ['', Validators.required],
+				monday: ['', Validators.required],
+				tuesday: ['', Validators.required],
+				wednesday: ['', Validators.required],
+				thursday: ['', Validators.required],
+				friday: ['', Validators.required],
+				saturday: ['', Validators.required],
+			}),
+		]),
+	});
+
 	totalHoursForm = new FormControl();
 
 	constructor(
@@ -303,9 +328,10 @@ export class TimesheetComponent implements OnInit {
 
 		if (this.route.snapshot.paramMap.get('id')) {
 			this.loadStoreData();
+			this.formGroup.emit(this.timesheetForm);
+		} else {
+			this.multiTimesheets.emit(this.myInfoForm);
 		}
-
-		this.formGroup.emit(this.timesheetForm);
 	}
 
 	// Load the store data
@@ -368,6 +394,55 @@ export class TimesheetComponent implements OnInit {
 	// Timesheet form controls
 	get timesheets() {
 		// eslint-disable-next-line @typescript-eslint/dot-notation
-		return this.timesheetForm.controls['timesheets'] as FormGroup;
+		return this.myInfoForm.controls['timesheets'] as FormArray;
+	}
+
+	addRow() {
+		const newTimesheetTableRow = {
+			position: (this.rowAmount += 1),
+			project: '',
+			sunday: '',
+			monday: '',
+			tuesday: '',
+			wednesday: '',
+			thursday: '',
+			friday: '',
+			saturday: '',
+			total: '',
+		};
+
+		if (this.numberTimesheetSections.length === 0) {
+			this.numberTimesheetSections.push(0);
+		} else {
+			const lastElement = this.numberTimesheetSections[this.numberTimesheetSections.length - 1];
+			this.numberTimesheetSections.push(lastElement + 1);
+		}
+
+		const timesheet = this.fb.group({
+			startDate: [this.from, Validators.required],
+			endDate: [this.thru, Validators.required],
+			project: ['', Validators.required],
+			comments: ['', Validators.required],
+			sunday: ['', Validators.required],
+			monday: ['', Validators.required],
+			tuesday: ['', Validators.required],
+			wednesday: ['', Validators.required],
+			thursday: ['', Validators.required],
+			friday: ['', Validators.required],
+			saturday: ['', Validators.required],
+		});
+
+		this.timesheets.push(timesheet);
+
+		console.log(this.timesheets);
+
+		this.dataSource = [...this.dataSource, newTimesheetTableRow];
+	}
+
+	removeTimesheetSection(index: number) {
+		this.numberTimesheetSections.splice(index, 1);
+		this.dataSource.splice(index, 1);
+		this.timesheets.removeAt(index);
+		this.dataSource = [...this.dataSource];
 	}
 }
