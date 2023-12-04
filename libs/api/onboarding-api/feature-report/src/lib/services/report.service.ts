@@ -42,9 +42,10 @@ export class ReportService {
 			});
 	}
 
-	async generateReportForAssignedResource(
+	async generateReportForResource(
 			resourceId: number,
 			month: number,
+			year: number,
 			clientId: number,
 			projectId: number,
 			userRole: string,
@@ -54,6 +55,7 @@ export class ReportService {
 					where: {
 							userName: resourceId,
 							month,
+							year,
 							clientId,
 							projectId,
 					},
@@ -75,6 +77,7 @@ export class ReportService {
     async generateReportForSupervisor(
         supervisorId: number,
         month: number,
+				year: number,
         clientId: number,
         projectId: number,
         resourceId: number,
@@ -84,6 +87,7 @@ export class ReportService {
             where: {
                 supervisorId,
                 month,
+								year,
                 clientId,
                 projectId,
                 // Possibly filter by all resources supervised by the supervisor
@@ -99,6 +103,7 @@ export class ReportService {
     async generateReportForClient(
         clientId: number,
         month: number,
+				year: number,
         projectId: number,
         resourceId: number,
         userRole: RoleType,
@@ -107,6 +112,7 @@ export class ReportService {
             where: {
                 clientId,
                 month,
+								year,
                 projectId,
                 userName: resourceId,
             },
@@ -120,6 +126,7 @@ export class ReportService {
 
     async generateReportForOwner(
         month: number,
+				year: number,
         clientId: number,
         projectId: number,
         resourceId: number,
@@ -128,6 +135,7 @@ export class ReportService {
         const reportData = await this.reportRepository.find({
             where: {
                 month,
+								year,
                 clientId,
                 projectId,
                 userName: resourceId,
