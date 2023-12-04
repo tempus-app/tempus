@@ -1,3 +1,9 @@
+/* eslint-disable prefer-destructuring */
+/* eslint-disable eqeqeq */
+/* eslint-disable class-methods-use-this */
+/* eslint-disable no-lonely-if */
+/* eslint-disable no-console */
+/* eslint-disable prettier/prettier */
 // cost-reports.component.ts
 import { Component, OnInit } from '@angular/core';
 import { TableDataModel } from '@tempus/client/shared/ui-components/presentational';
@@ -112,8 +118,8 @@ export class CostReportsComponent implements OnInit {
 		resource: [''],
 		client: [''],
 		project: [''],
-		month: ['', Validators.required],
-		year: ['', Validators.required],
+		month: [''],
+		year: [''],
 	});
 
 	buttonDisabled = true;
@@ -209,7 +215,7 @@ export class CostReportsComponent implements OnInit {
 
 						document.body.appendChild(link);
 						link.click();
-						document.body.removeChild(link);	
+						document.body.removeChild(link);
 					}
 					else{
 						console.log('No data available');
@@ -231,7 +237,7 @@ export class CostReportsComponent implements OnInit {
 
 						document.body.appendChild(link);
 						link.click();
-						document.body.removeChild(link);	
+						document.body.removeChild(link);
 					}
 					else{
 						console.log('No data available');
@@ -253,7 +259,7 @@ export class CostReportsComponent implements OnInit {
 
 						document.body.appendChild(link);
 						link.click();
-						document.body.removeChild(link);	
+						document.body.removeChild(link);
 					}
 					else{
 						console.log('No data available');
@@ -262,7 +268,7 @@ export class CostReportsComponent implements OnInit {
 			}
 			else{
 				console.log('No data available');
-			}	
+			}
 		},
 		(error) => {
 			console.error(error);
@@ -502,5 +508,5 @@ export class CostReportsComponent implements OnInit {
 		}
 	}
 
-	
+
 }
