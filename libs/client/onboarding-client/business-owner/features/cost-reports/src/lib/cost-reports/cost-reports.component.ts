@@ -12,7 +12,6 @@ import { Store } from '@ngrx/store';
 import { HttpClient } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Client, Project, Resource, RoleType } from '@tempus/shared-domain';
-import { ReportService } from './report.service';
 
 export interface CostReport {
 	clientName: string;
@@ -39,7 +38,6 @@ export interface CostReportsTableData extends TableDataModel, CostReport {
 })
 export class CostReportsComponent implements OnInit {
 	constructor(
-		private reportService: ReportService,
 		private store: Store<OnboardingClientState>,
 		private resourceService: OnboardingClientResourceService,
 		private projectService: OnboardingClientProjectService,
@@ -56,7 +54,7 @@ export class CostReportsComponent implements OnInit {
 		project: 'Project',
 		resource: 'Resource',
 		month: 'Month',
-		year: 'Month',
+		year: 'Year',
 	};
 
 	totalCostReports = 1;
@@ -236,10 +234,9 @@ export class CostReportsComponent implements OnInit {
 			role = roles.roles[0];
 		});
 
-		// Assuming you want to fetch the first page with a page size of 10
 		const paginationData = {
-			page: 1,
-			pageSize: 10,
+			page: 0,
+			pageSize: 50,
 		};
 
 		// he projects assigned to the resource supervised by supervisor
@@ -268,7 +265,7 @@ export class CostReportsComponent implements OnInit {
 							id: p.id,
 						};
 					});
-					this.projectOptions.push({ val: 'All Projects', id: 0 });
+					this.projectOptions.push({ val: ' ', id: 0 });
 				}
 			});
 		}
@@ -283,7 +280,7 @@ export class CostReportsComponent implements OnInit {
 							id: p.id,
 						};
 					});
-					this.projectOptions.push({ val: 'All Projects', id: 0 });
+					this.projectOptions.push({ val: ' ', id: 0 });
 				}
 			});
 		}
@@ -300,7 +297,7 @@ export class CostReportsComponent implements OnInit {
 							id: p.id,
 						};
 					});
-					this.projectOptions.unshift({ val: 'All Projects', id: 0 });
+					this.projectOptions.unshift({ val: ' ', id: 0 });
 				}
 			});
 		}
