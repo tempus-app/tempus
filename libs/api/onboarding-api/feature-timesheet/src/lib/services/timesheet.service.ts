@@ -113,24 +113,6 @@ export class TimesheetService {
 		return { timesheets: filteredTimesheets, totalTimesheets: timesheetsAndCount[1] };
 	}
 
-	async getAllTimesheetsByClientId(clientId: number, page: number, pageSize: number) {
-
-		const clientUser = await this.userService.getUserbyId(clientId);
-		const clientRep = await this.clientRepService.getClientRepresentativeByEmail(clientUser.email);
-		const projects = await this.userService.getClientProjects(clientRep.client.id);
-		const projectIds = projects.map(project => project.id);
-
-
-		const timesheetsAndCount = await this.timesheetRepository.findAndCount({
-			where: { project: In(projectIds) },
-			relations: ['supervisor', 'project', 'resource'],
-			take: Number(pageSize),
-			skip: Number(page) * Number(pageSize),
-		});
-
-		return { timesheets: timesheetsAndCount[0], totalTimesheets: timesheetsAndCount[1] };
-	}
-
 	async getAllSubmittedTimesheetsforProject(projectId: number): Promise<Timesheet[]> {
 		const timesheets = await this.timesheetRepository.find({
 			where: {
@@ -196,31 +178,6 @@ export class TimesheetService {
 				const toReturn = await this.timesheetRepository.save(timesheetEntity);
 				return toReturn;
 			}
-		}
-	}
-
-	async approveOrRejectTimesheetClient(
-		timesheetId: number,
-		approveTimesheetDto: ApproveTimesheetDto,
-	): Promise<Timesheet> {
-		const { approval, comment } = approveTimesheetDto;
-		const timesheetEntity = await this.timesheetRepository.findOne(timesheetId);
-		if (!timesheetEntity) throw new NotFoundException(`Could not find timesheet with id ${timesheetId}`);
-
-		if (approval === true) {
-			timesheetEntity.approvedByClient = true;
-			timesheetEntity.status = TimesheetRevisionType.APPROVED;
-			timesheetEntity.dateModified = new Date(Date.now());
-			timesheetEntity.clientRepresentativeComment = comment;
-			const toReturn = await this.timesheetRepository.save(timesheetEntity);
-			return toReturn;
-		}
-		if (approval === false) {
-			timesheetEntity.status = TimesheetRevisionType.REJECTED;
-			timesheetEntity.dateModified = new Date(Date.now());
-			timesheetEntity.clientRepresentativeComment = comment;
-			const toReturn = await this.timesheetRepository.save(timesheetEntity);
-			return toReturn;
 		}
 	}
 

@@ -185,7 +185,7 @@ export class CostReportsComponent implements OnInit {
 		let role;
 		this.store.select(selectLoggedInRoles).subscribe(roles => {
 			// eslint-disable-next-line prefer-destructuring
-			role = roles.roles[0];
+			role = roles[0];
 		});
 
 		// The clients assigned to the resource supervised by supervisor
@@ -255,7 +255,7 @@ export class CostReportsComponent implements OnInit {
 		let role;
 		this.store.select(selectLoggedInRoles).subscribe(roles => {
 			// eslint-disable-next-line prefer-destructuring
-			role = roles.roles[0];
+			role = roles[0];
 		});
 
 		const paginationData = {
@@ -335,7 +335,7 @@ export class CostReportsComponent implements OnInit {
 		let role;
 		this.store.select(selectLoggedInRoles).subscribe(roles => {
 			// eslint-disable-next-line prefer-destructuring
-			role = roles.roles[0];
+			role = roles[0];
 		});
 
 		// Reousrces assigned to that supervisor
