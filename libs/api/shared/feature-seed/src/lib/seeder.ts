@@ -102,7 +102,7 @@ export class SeederService {
 					clientName: faker.company.companyName(),
 					projectName: faker.commerce.productName(),
 					userName: faker.name.findName(),
-					month: 'January',
+					month: 9,
 					hoursWorked: faker.datatype.number({ min: 30, max: 50 }),
 					costRate: faker.datatype.number({ min: 40, max: 60 }),
 					totalCost: faker.datatype.number({ min: 1500, max: 2500 }),

@@ -18,7 +18,8 @@ export interface CostReport {
 	projectName: string;
 	userName: string;
 	taskName: string;
-	month: string;
+	month: number;
+	year: number;
 	position: string;
 	hoursWorked: number;
 	costRate: number;

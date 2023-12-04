@@ -55,7 +55,7 @@ export class ReportController {
     @UseGuards(JwtAuthGuard, RolesGuard)
     @Roles(RoleType.ASSIGNED_RESOURCE,RoleType.AVAILABLE_RESOURCE)
     @Get('assigned-resource-report/:resourceId')
-    async getReportForAssignedResource(
+    async getReportForResource(
         @Res() res: Response,
         @Param('resourceId') resourceId: number,
         @Query('month') month?: number,
