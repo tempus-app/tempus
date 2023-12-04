@@ -73,7 +73,7 @@ export class SeederService {
 		const links = await this.linkSeederService.seed(supervisors[0], projects, args.resources);
 		const businessOwners = await this.userSeederService.seedBusinessOwner(args.businessOwners);
 		// ... within the seeding logic ...
-		const clientUsers = await this.userSeederService.getClients();//this.userSeederService.seedClients(3);
+		const clientUsers = await this.userSeederService.getClients();// this.userSeederService.seedClients(3);
 		const reports = await this.reportSeederService.seedReports(args.reports); // ... rest of the logic ...
 
 		const availableResources = await this.resourceSeedService.seedResources(links);
@@ -85,37 +85,58 @@ export class SeederService {
 		const allUsers = users.concat(availableResources).concat(assignedResources).concat(supervisors).concat(clientUsers);
 		// SeederService.writeToJson(allUsers);
 		await SeederService.writeToCSV(allUsers);
-		await SeederService.writeDummyReportToCSV();
+		await SeederService.writeDummyReportToCSV(RoleType.CLIENT);
+		await SeederService.writeDummyReportToCSV(RoleType.SUPERVISOR);
+		await SeederService.writeDummyReportToCSV(RoleType.BUSINESS_OWNER);
+		await SeederService.writeDummyReportToCSV(RoleType.ASSIGNED_RESOURCE);
+		await SeederService.writeDummyReportToCSV(RoleType.AVAILABLE_RESOURCE);
 	}
-	private static async writeDummyReportToCSV() {
-    try {
-      const fullPath = path.resolve('./utils/csv/dummy-report.csv');
-      console.log(`Writing Dummy Report CSV to: ${fullPath}`);
+	private static async writeDummyReportToCSV(userType: RoleType) {
+		try {
+			const fullPath = path.resolve(`./utils/csv/dummy-report-${userType.toLowerCase()}.csv`);
+			console.log(`Writing Dummy Report CSV for ${userType} to: ${fullPath}`);
 
-      const dummyReportData: ReportEntity[] = Array.from({ length: 10 }, (_, i) => ({
-        reportId: i + 1,
-        clientName: faker.company.companyName(),
-        projectName: faker.commerce.productName(),
-        userName: faker.name.findName(),
-        month: 'January',
-        hoursWorked: faker.datatype.number({ min: 30, max: 50 }),
-        costRate: faker.datatype.number({ min: 40, max: 60 }),
-        totalCost: faker.datatype.number({ min: 1500, max: 2500 }),
-        totalBilling: faker.datatype.number({ min: 2000, max: 3000 }),
-        billingRate: faker.datatype.number({ min: 70, max: 80 }),
-      }));
+			const dummyReportData: ReportEntity[] = Array.from({ length: 10 }, (_, i) => {
+				const report: ReportEntity = {
+					reportId: i + 1,
+					clientName: faker.company.companyName(),
+					projectName: faker.commerce.productName(),
+					userName: faker.name.findName(),
+					month: 'January',
+					hoursWorked: faker.datatype.number({ min: 30, max: 50 }),
+					costRate: faker.datatype.number({ min: 40, max: 60 }),
+					totalCost: faker.datatype.number({ min: 1500, max: 2500 }),
+					totalBilling: faker.datatype.number({ min: 2000, max: 3000 }),
+					billingRate: faker.datatype.number({ min: 70, max: 80 }),
+				};
 
-      const csvWriter = createCsvWriter({
-        path: fullPath,
-        header: Object.keys(dummyReportData[0]),
-      });
+				// Clean up optional fields based on user type
+				if (userType !== RoleType.BUSINESS_OWNER) {
+					delete report.totalBilling;
+					delete report.billingRate;
+				}
+				if (userType === RoleType.AVAILABLE_RESOURCE) {
+					// Set all fields to null for available resource
+					Object.keys(report).forEach((key) => {
+						report[key] = null;
+					});
+				}
 
-      await csvWriter.writeRecords(dummyReportData.map((record) => record as any));
-      console.log('Dummy Report CSV file was written successfully');
-    } catch (error) {
-      console.error('Error writing Dummy Report CSV file:', error);
-    }
-  }
+				return report;
+			});
+
+			const csvWriter = createCsvWriter({
+				path: fullPath,
+				header: Object.keys(dummyReportData[0]),
+			});
+
+			await csvWriter.writeRecords(dummyReportData.map((record) => record as any));
+			console.log(`Dummy Report CSV file for ${userType} was written successfully`);
+		} catch (error) {
+			console.error(`Error writing Dummy Report CSV file for ${userType}:`, error);
+		}
+	}
+
 
 	private static async writeToCSV(users) {
 		try {

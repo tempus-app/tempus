@@ -54,7 +54,7 @@ export class CostReportsComponent implements OnInit {
 		project: 'Project',
 		resource: 'Resource',
 		month: 'Month',
-		year: 'Year',
+		year: 'Month',
 	};
 
 	totalCostReports = 1;
@@ -103,15 +103,52 @@ export class CostReportsComponent implements OnInit {
 		{ name: 'year', label: 'Year' },
 	];
 
-	reportForm = this.fb.group({
-		resource: [''],
-		client: [''],
-		project: [''],
-		month: ['', Validators.required],
-		year: ['', Validators.required],
-	});
+	// Ensure tableColumns is of type Column[]
+	// tableColumns: Column[] = [
+	// 	{ columnDef: 'clientName', header: 'Client Name', cell: (element: CostReportsTableData) => element.clientName },
+	// 	{
+	// 		columnDef: 'projectName',
+	// 		header: 'Project Name',
+	// 		cell: (element: CostReportsTableData) => element.projectName,
+	// 	},
+	// 	{
+	// 		columnDef: 'userName',
+	// 		header: 'User Name',
+	// 		cell: (element: CostReportsTableData) => `${element.userName}`,
+	// 	},
+	// 	{
+	// 		columnDef: 'taskName',
+	// 		header: 'Task Name',
+	// 		cell: (element: CostReportsTableData) => `${element.taskName}`,
+	// 	},
+	// 	{
+	// 		columnDef: 'month',
+	// 		header: 'Month',
+	// 		cell: (element: CostReportsTableData) => `${element.month}`,
+	// 	},
+	// 	{
+	// 		columnDef: 'position',
+	// 		header: 'Position',
+	// 		cell: (element: CostReportsTableData) => `${element.position}`,
+	// 	},
+	// 	{
+	// 		columnDef: 'hoursWorked',
+	// 		header: 'Hours Worked',
+	// 		cell: (element: CostReportsTableData) => `${element.hoursWorked}`,
+	// 	},
+	// 	{
+	// 		columnDef: 'costRate',
+	// 		header: 'Cost Rate',
+	// 		cell: (element: CostReportsTableData) => `${element.costRate}`,
+	// 	},
+	// 	{
+	// 		columnDef: 'totalCost',
+	// 		header: 'Total Cost',
+	// 		cell: (element: CostReportsTableData) => `${element.totalCost}`,
+	// 	},
+	// ];
 
-	buttonDisabled = true;
+	constructor(private reportService: ReportService) {}
 
 	ngOnInit(): void {
 		this.store.select(selectLoggedInUserId).subscribe(id => {
@@ -125,24 +162,10 @@ export class CostReportsComponent implements OnInit {
 		});
 	}
 
-	updateProjects = () => {
-		const id = this.reportForm.get('client')?.value;
-		if (id === 0) {
-			this.populateProjects(this.userId);
-			return;
-		}
-		this.projectService.getClientProjects(id).subscribe(projects => {
-			if (projects) {
-				this.projectOptions = projects.map(p => {
-					return {
-						val: p.name,
-						id: p.id,
-					};
-				});
-				this.projectOptions.push({ val: ' ', id: 0 });
-			}
-		});
-	};
+	generateDropdowns(): void {
+		console.log('Generate Dropdowns clicked');
+		// Implement the logic as needed
+	}
 
 	updateClients = () => {
 		const id = this.reportForm.get('project')?.value;
@@ -164,67 +187,8 @@ export class CostReportsComponent implements OnInit {
 		console.log('hi');
 	}
 
-	populateClients(userId: number) {
-		let role;
-		this.store.select(selectLoggedInRoles).subscribe(roles => {
-			// eslint-disable-next-line prefer-destructuring
-			role = roles.roles[0];
-		});
-
-		// The clients assigned to the resource supervised by supervisor
-		if (role === RoleType.SUPERVISOR) {
-			this.resourceService.getSupervisorClients(userId).subscribe(clients => {
-				if (clients) {
-					this.clientOptions = clients.map(c => {
-						return {
-							val: c.clientName,
-							id: c.id,
-						};
-					});
-					this.clientOptions.push({ val: ' ', id: 0 });
-				}
-			});
-		}
-		// All the clients assigned to the resource
-		else if (role === RoleType.ASSIGNED_RESOURCE || role === RoleType.AVAILABLE_RESOURCE) {
-			this.resourceService.getResourceClients(userId).subscribe(clients => {
-				if (clients) {
-					this.clientOptions = clients.map(c => {
-						return {
-							val: c.clientName,
-							id: c.id,
-						};
-					});
-					this.clientOptions.push({ val: ' ', id: 0 });
-				}
-			});
-		}
-		// If client is logged in, client dropdown will only have themselves.
-		else if (role === RoleType.CLIENT) {
-			this.resourceService.getUserInformationById(this.userId).subscribe(info => {
-				// We get the client rep email
-				if (info) {
-					this.projectService.getClientByRepresentative(info.email).subscribe(client => {
-						// We find the client from client rep email
-						this.clientOptions = [{ val: client.clientName, id: client.id }];
-					});
-				}
-			});
-		}
-		// Admin is logged in, display them all
-		else {
-			this.projectService.getClients().subscribe(clients => {
-				if (clients) {
-					this.clientOptions = clients.map(c => {
-						return {
-							val: c.clientName,
-							id: c.id,
-						};
-					});
-					this.clientOptions.push({ val: ' ', id: 0 });
-				}
-			});
-		}
+	onDropdownSelect(event: any, dropdownName: string): void {
+		console.log(`Selected option in Dropdown ${dropdownName}:`, event);
 	}
 
 	populateProjects(userId: number) {
