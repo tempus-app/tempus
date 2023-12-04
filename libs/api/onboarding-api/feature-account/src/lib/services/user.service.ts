@@ -111,7 +111,7 @@ export class UserService {
 
 		const projectResources = await this.projectResourceRepository.find({
 			where: { resource: In(resourceIds)},
-			relations: ['project', 'resource'],
+			relations: ['project', 'resource', 'project.client'],
 		});
 		if (projectResources.length === 0) {
 			throw new NotFoundException(

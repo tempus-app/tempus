@@ -54,6 +54,12 @@ export class ProjectService {
 		return { projectData: projects, totalItems: countOfItems };
 	}
 
+	async getClientProjects(clientId: number): Promise<Project[]>{
+
+		const client = await this.clientService.getClient(clientId);
+		return client.projects;
+	}
+
 	async getAllProjectInfo(): Promise<Project[]> {
 		return this.projectRepository.find();
 	}

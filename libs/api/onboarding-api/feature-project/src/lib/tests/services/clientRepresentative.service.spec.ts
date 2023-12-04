@@ -8,9 +8,11 @@ import { Repository } from 'typeorm';
 import { ClientService, ClientRepresentativeService } from '../../services';
 import { clientEntityMock } from '../mocks/client.mock';
 import { clientRepresentativeMock, clientRepresentativeTwoMock } from '../mocks/clientRepresentative.mock';
+import { UserService } from '@tempus/onboarding-api/feature-account';
 
 const mockClientRepresentativeRepository = createMock<Repository<ClientRepresentativeEntity>>();
 const mockClientService = createMock<ClientService>();
+const mockUserService = createMock<UserService>();
 
 describe('ClientRepresentativeService', () => {
 	let moduleRef: TestingModule;
@@ -28,6 +30,10 @@ describe('ClientRepresentativeService', () => {
 					provide: ClientService,
 					useValue: mockClientService,
 				},
+				{
+					provide: UserService,
+					useValue: mockUserService,
+				},
 			],
 		}).compile();
 
@@ -44,7 +50,7 @@ describe('ClientRepresentativeService', () => {
 
 				const res = await clientRepresentativeService.getClientRepresentativeInfo(clientRepresentativeMock.id);
 				expect(mockClientRepresentativeRepository.findOne).toBeCalledWith(clientRepresentativeMock.id, {
-					relations: ['client'],
+					relations: ['client', 'projects'],
 				});
 				expect(res).toEqual({ ...clientRepresentativeMock });
 			});

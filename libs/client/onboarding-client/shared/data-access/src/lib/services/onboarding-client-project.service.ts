@@ -10,7 +10,7 @@ import {
 	Project,
   ProjectStatus,
 } from '@tempus/shared-domain';
-import { catchError, Observable } from 'rxjs';
+import { catchError, Observable, Observer } from 'rxjs';
 import { handleError } from './errorHandler';
 
 @Injectable({ providedIn: 'root' })
@@ -18,6 +18,8 @@ export class OnboardingClientProjectService {
 	constructor(private http: HttpClient, @Inject(APP_CONFIG) private appConfig: AppConfig) {}
 
 	clientURL = `${this.appConfig.apiUrl}/onboarding/client`;
+
+	clientRepURL = `${this.appConfig.apiUrl}/onboarding/clientRepresentative`;
 
 	projectURL = `${this.appConfig.apiUrl}/onboarding/project`;
 
@@ -33,6 +35,10 @@ export class OnboardingClientProjectService {
 		return this.http.post<Project>(`${this.projectURL}/`, createProjectDto).pipe(catchError(handleError));
 	}
 
+	public getProject(projectId: number): Observable<Project>{
+		return this.http.get<Project>(`${this.projectURL}/${projectId}`).pipe(catchError(handleError));
+	}
+
 	public getAllProjects(paginationData: {
 		page: number;
 		pageSize: number;
@@ -41,6 +47,14 @@ export class OnboardingClientProjectService {
 		return this.http
 			.get<{ projectData: Project[]; totalItems: number }>(`${this.projectURL}?page=${page}&pageSize=${pageSize}`)
 			.pipe(catchError(handleError));
+	}
+
+	public getClientProjects(clientId: number): Observable<Project[]>{
+		return this.http.get<Project[]>(`${this.projectURL}/client/${clientId}`).pipe(catchError(handleError));
+	}
+
+	public getClientByRepresentative(email: string): Observable<Client>{
+		return this.http.get<Client>(`${this.clientRepURL}/${email}`).pipe(catchError(handleError));
 	}
 
   public updateProjectStatus(
