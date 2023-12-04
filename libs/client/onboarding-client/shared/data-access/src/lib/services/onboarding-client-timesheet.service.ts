@@ -7,6 +7,7 @@ import {
 	ICreateTimesheetDto,
 	IReportFiltersDto,
 	IUpdateTimesheetDto,
+	Report,
 	RevisionType,
 	Timesheet,
 	View,
@@ -90,14 +91,11 @@ export class OnboardingClientTimesheetsService {
 	public getReport(
 		userId: number,
 		reportFilters: IReportFiltersDto,
-	  ): Observable<Timesheet[]> {
+	  ): Observable<Report[]> {
 
 		let url =  `${this.appConfig.apiUrl}/onboarding/report/${userId}?clientId=${reportFilters.clientId}&projectId=${reportFilters.projectId}&resourceId=${reportFilters.resourceId}&month=${reportFilters.month}&year=${reportFilters.year}`;
-		
-			console.log(url);
-
 		return this.http
-		  .get<Timesheet[]>(url)
+		  .get<Report[]>(url)
 		  .pipe(catchError(handleError));
 	  }
 

@@ -12,7 +12,7 @@ import {
 import { Store } from '@ngrx/store';
 import { HttpClient } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
-import { Client, IReportFiltersDto, Project, Resource, RoleType } from '@tempus/shared-domain';
+import { Client, IReportFiltersDto, Project, Report, Resource, RoleType } from '@tempus/shared-domain';
 
 export interface CostReport {
 	clientName: string;
@@ -63,6 +63,8 @@ export class CostReportsComponent implements OnInit {
 	totalCostReports = 1;
 
 	userId = 0;
+
+	userRole = RoleType.USER;
 
 	dropdownOptions: { val: string; id: number }[] = [];
 
@@ -127,7 +129,9 @@ export class CostReportsComponent implements OnInit {
 			}
 		});
 
-		console.log("CLient id: "+this.reportForm.get('client')?.value);
+		this.store.select(selectLoggedInRoles).subscribe(roles => {
+			this.userRole = roles[0];
+		});
 	}
 
 	updateProjects = () => {
@@ -150,17 +154,19 @@ export class CostReportsComponent implements OnInit {
 	};
 
 	updateClients = () => {
-		const id = this.reportForm.get('project')?.value;
-		if (id === 0) {
-			this.populateClients(this.userId);
-			return;
-		}
-		this.projectService.getProject(id).subscribe(project => {
-			if (project) {
-				this.clientOptions = [{ val: project.client.clientName, id: project.client.id }];
-				this.clientOptions.push({ val: ' ', id: 0 });
+		if(this.userRole != RoleType.CLIENT){
+			const id = this.reportForm.get('project')?.value;
+			if (id === 0) {
+				this.populateClients(this.userId);
+				return;
 			}
-		});
+			this.projectService.getProject(id).subscribe(project => {
+				if (project) {
+					this.clientOptions = [{ val: project.client.clientName, id: project.client.id }];
+					this.clientOptions.push({ val: ' ', id: 0 });
+				}
+			});
+		}
 	};
 
 	// eslint-disable-next-line class-methods-use-this
@@ -174,12 +180,100 @@ export class CostReportsComponent implements OnInit {
 			year: this.reportForm.get('year')?.value,
 		};
 
-		this.timesheetService.getReport(this.userId, reportFilters).subscribe(report => {
-			if(report){
+		const resourceHeaders = ['Client Name', 'Project Name', 'Resource Name', 'Timesheet Week', 'Hours Total', 'Cost Rate', 'Total Cost'];
 
+		const ownerHeaders = ['Client Name', 'Project Name', 'Resource Name', 'Timesheet Week', 'Hours Total', 'Cost Rate', 'Total Cost', 'Bill Rate', 'Total Bill'];
+
+		const clientHeaders = ['Client Name', 'Project Name', 'Resource Name', 'Timesheet Week', 'Hours Total', 'Bill Rate', 'Total Bill'];
+
+
+		this.timesheetService.getReport(this.userId, reportFilters).subscribe(reports => {
+
+			if(reports.length != 0){
+				const csvData = this.convertArrayToCsv(reports);
+				const rows: string[] = csvData.split('\n');
+
+				if(this.userRole == RoleType.SUPERVISOR || this.userRole === RoleType.ASSIGNED_RESOURCE || this.userRole === RoleType.AVAILABLE_RESOURCE){
+					if (rows.length > 0) {
+						const header: string[] = rows[0].split(',');
+
+						for (let i = 0; i < Math.min(header.length, resourceHeaders.length); i++) {
+							header[i] = resourceHeaders[i];
+						}
+						const modifiedCsvData: string = [header.join(','), ...rows.slice(1)].join('\n');
+						const blob = new Blob([modifiedCsvData], { type: 'text/csv' });
+						const link = document.createElement('a');
+
+						link.href = window.URL.createObjectURL(blob);
+						link.download = 'Cost_Report.csv';
+
+						document.body.appendChild(link);
+						link.click();
+						document.body.removeChild(link);	
+					}
+					else{
+						console.log('No data available');
+					}
+				}
+				else if(this.userRole == RoleType.BUSINESS_OWNER){
+					if (rows.length > 0) {
+						const header: string[] = rows[0].split(',');
+
+						for (let i = 0; i < Math.min(header.length, ownerHeaders.length); i++) {
+							header[i] = ownerHeaders[i];
+						}
+						const modifiedCsvData: string = [header.join(','), ...rows.slice(1)].join('\n');
+						const blob = new Blob([modifiedCsvData], { type: 'text/csv' });
+						const link = document.createElement('a');
+
+						link.href = window.URL.createObjectURL(blob);
+						link.download = 'Bill_Cost_Report.csv';
+
+						document.body.appendChild(link);
+						link.click();
+						document.body.removeChild(link);	
+					}
+					else{
+						console.log('No data available');
+					}
+				}
+				else{
+					if (rows.length > 0) {
+						const header: string[] = rows[0].split(',');
+
+						for (let i = 0; i < Math.min(header.length, clientHeaders.length); i++) {
+							header[i] = clientHeaders[i];
+						}
+						const modifiedCsvData: string = [header.join(','), ...rows.slice(1)].join('\n');
+						const blob = new Blob([modifiedCsvData], { type: 'text/csv' });
+						const link = document.createElement('a');
+
+						link.href = window.URL.createObjectURL(blob);
+						link.download = 'Bill_Report.csv';
+
+						document.body.appendChild(link);
+						link.click();
+						document.body.removeChild(link);	
+					}
+					else{
+						console.log('No data available');
+					}
+				}
 			}
+			else{
+				console.log('No data available');
+			}	
+		},
+		(error) => {
+			console.error(error);
 		});
 	}
+
+	private convertArrayToCsv(reports: Report[]): string {
+		const header = Object.keys(reports[0]).join(',');
+		const rows = reports.map((report) => Object.values(report).join(','));
+		return `${header}\n${rows.join('\n')}`;
+	  }
 
 	populateClients(userId: number) {
 		let role;
@@ -407,4 +501,6 @@ export class CostReportsComponent implements OnInit {
 			this.buttonDisabled = true;
 		}
 	}
+
+	
 }
