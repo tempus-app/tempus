@@ -91,6 +91,11 @@
 			"statusErr": "Please enter a status",
 			"projectManagerLabel": "Project Manager",
 			"projectManagerErr": "Please select a Project Manager"
+		},
+		"assignModalResourceSupervisor": {
+			"title": "Assign resource to a supervisor",
+			"resourceLabel": "Resource",
+			"supervisorLabel": "Supervisor"
 		}
 	}
 }

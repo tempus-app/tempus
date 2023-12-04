@@ -9,9 +9,15 @@ export class AssignProjectDto implements IAssignProjectDto {
 
 	@ApiProperty()
 	startDate?: Date;
+	@ApiProperty()
+	costRate?: number;
+	@ApiProperty()
+	billRate?: number;
 
-	constructor(title: string, startDate?: Date) {
+	constructor(title: string, startDate?: Date, costRate?: number, billRate?: number) {
 		this.title = title;
 		this.startDate = startDate;
+		this.costRate = costRate;
+		this.billRate = billRate;
 	}
 }

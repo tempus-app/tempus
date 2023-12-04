@@ -213,6 +213,8 @@ export class CreateProjectComponent implements OnInit, OnDestroy {
 								const assignProjectDto = {
 									startDate,
 									title: 'Project Manager',
+									costRate: 30,
+									billRate: 50,
 								};
 								this.businessOwnerStore.dispatch(
 									createResourceProjectAssignment({

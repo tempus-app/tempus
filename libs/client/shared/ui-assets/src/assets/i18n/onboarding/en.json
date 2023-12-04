@@ -95,6 +95,10 @@
 				"submit": {
 					"label": "Submit",
 					"tooltip": "Submit changes for approval"
+				},
+				"addRow": {
+					"label": "Add row",
+					"tooltip": "Add a new row"
 				}
 			}
 		},

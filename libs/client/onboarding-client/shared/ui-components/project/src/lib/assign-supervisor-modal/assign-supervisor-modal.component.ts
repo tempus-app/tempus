@@ -26,7 +26,7 @@ export class AssignSupervisorModalComponent implements OnInit {
 		private fb: FormBuilder,
 		private translateService: TranslateService,
 		private router: Router,
-    private resourceService: OnboardingClientResourceService,
+		private resourceService: OnboardingClientResourceService,
 	) {}
 
 	@Input()
@@ -38,7 +38,7 @@ export class AssignSupervisorModalComponent implements OnInit {
 
 	@Input() resourceId = 0;
 
-  currentSupervisors: { val: string; id: number }[] = [];
+	currentSupervisors: { val: string; id: number }[] = [];
 
 	commonPrefix = 'onboardingClient.input.common.';
 
@@ -51,7 +51,7 @@ export class AssignSupervisorModalComponent implements OnInit {
 
 	InputType = InputType;
 
-	prefix = 'modal.assignModal';
+	prefix = 'modal.assignModalResourceSupervisor';
 
 	assignForm = this.fb.group({
 		resource: ['', Validators.required],
@@ -59,7 +59,6 @@ export class AssignSupervisorModalComponent implements OnInit {
 	});
 
 	ngOnInit(): void {
-
 		// Getting all resources (basic info i.e firstname, lastname, email, id)
 		this.businessOwnerStore
 			.select(selectResourceBasicData)
@@ -73,16 +72,14 @@ export class AssignSupervisorModalComponent implements OnInit {
 				});
 			});
 
-    this.resourceService
-			.getSupervisors()
-			.subscribe(data => {
-				this.currentSupervisors = data.map(res => {
-					return {
-						val: `${res.firstName} ${res.lastName}`,
-						id: res.id,
-					};
-				});
+		this.resourceService.getSupervisors().subscribe(data => {
+			this.currentSupervisors = data.map(res => {
+				return {
+					val: `${res.firstName} ${res.lastName}`,
+					id: res.id,
+				};
 			});
+		});
 
 		this.modalService.confirmEventSubject.pipe(takeUntil(this.$destroyed)).subscribe(modalId => {
 			this.modalService.close();
@@ -98,7 +95,7 @@ export class AssignSupervisorModalComponent implements OnInit {
 			.pipe(take(1))
 			.subscribe(data => {
 				this.translateService
-					.get('modal.assignModal.title', { resourceName: this.resourceName || 'Resource' })
+					.get('modal.assignModalResourceSupervisor.title')
 					.subscribe((updatedTitle: string) => {
 						this.modalService.open(
 							{
@@ -119,18 +116,19 @@ export class AssignSupervisorModalComponent implements OnInit {
 			.pipe(
 				takeUntil(this.$assignModalClosedEvent),
 				finalize(() => {
-					this.resourceService.assignSupervisorToResource(
-            this.assignForm.get('resource')?.value,
-            this.assignForm.get('supervisor')?.value,
-          )
-          .subscribe(
-            result =>{
-              console.log(result);
-            },
-            error => {
-              console.log(error)
-            }
-          );
+					this.resourceService
+						.assignSupervisorToResource(
+							this.assignForm.get('resource')?.value,
+							this.assignForm.get('supervisor')?.value,
+						)
+						.subscribe(
+							result => {
+								console.log(result);
+							},
+							error => {
+								console.log(error);
+							},
+						);
 				}),
 			)
 			.subscribe(() => {

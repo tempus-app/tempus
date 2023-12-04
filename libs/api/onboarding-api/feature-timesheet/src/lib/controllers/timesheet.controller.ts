@@ -66,7 +66,7 @@ export class TimesheetController {
 	}
 
 	@UseGuards(JwtAuthGuard, RolesGuard)
-	@Roles(RoleType.BUSINESS_OWNER, RoleType.SUPERVISOR)
+	@Roles(RoleType.BUSINESS_OWNER, RoleType.SUPERVISOR, RoleType.CLIENT)
 	@Patch('/approve/:timesheetId')
 	async updateTimesheetStatus(
 		@Param('timesheetId') timesheetId: number,

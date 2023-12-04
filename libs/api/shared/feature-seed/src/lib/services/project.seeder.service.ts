@@ -57,7 +57,7 @@ export class ProjectSeederService {
 	async seedAssignedResources(projects: ProjectEntity[], resources: ResourceEntity[]): Promise<ResourceEntity[]> {
 		const assignedResources: ResourceEntity[] = [];
 		for (let i = 0; i < resources.length; i++) {
-			const assignResourceDto = new AssignProjectDto(faker.name.jobTitle(), faker.date.soon(3));
+			const assignResourceDto = new AssignProjectDto(faker.name.jobTitle(), faker.date.soon(3), 30, 50);
 			await this.projectService.assignResourceToProject(
 				projects[i % projects.length].id,
 				resources[i].id,

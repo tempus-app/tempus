@@ -3,19 +3,40 @@
 	<mat-form-field appearance="outline">
 		<mat-date-range-input [rangePicker]="picker">
 			<input
+				*ngIf="isLoadingStoreData; else startDateNew"
 				[disabled]="isLoadingStoreData"
 				[(ngModel)]="this.from"
 				[formControl]="$any(timesheetForm).get('startDate')"
 				matStartDate
 				placeholder="{{ commonPrefix + 'dates.startPlaceholder' | translate }}"
 			/>
+
+			<ng-template #startDateNew>
+				<input
+					[(ngModel)]="this.from"
+					[formControl]="$any(timesheets.controls[0]).get('startDate')"
+					matStartDate
+					placeholder="{{ commonPrefix + 'dates.startPlaceholder' | translate }}"
+				/>
+			</ng-template>
+
 			<input
+				*ngIf="isLoadingStoreData; else endDateNew"
 				[disabled]="isLoadingStoreData"
 				[(ngModel)]="this.thru"
 				[formControl]="$any(timesheetForm).get('endDate')"
 				matEndDate
 				placeholder="{{ commonPrefix + 'dates.endPlaceholder' | translate }}"
 			/>
+
+			<ng-template #endDateNew>
+				<input
+					[(ngModel)]="this.thru"
+					[formControl]="$any(timesheets.controls[0]).get('endDate')"
+					matEndDate
+					placeholder="{{ commonPrefix + 'dates.endPlaceholder' | translate }}"
+				/>
+			</ng-template>
 		</mat-date-range-input>
 		<mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
 		<mat-date-range-picker #picker (closed)="changed(picker)"></mat-date-range-picker>
@@ -27,16 +48,18 @@
 	<!-- Position Column -->
 	<ng-container matColumnDef="position" class="column-position">
 		<th mat-header-cell *matHeaderCellDef>#</th>
-		<td mat-cell *matCellDef="let element">{{ element.position }}</td>
+		<td mat-cell *matCellDef="let element; let index = index">{{ index + 1 }}</td>
 	</ng-container>
 
 	<!-- Project Column -->
 	<ng-container matColumnDef="project">
 		<th mat-header-cell *matHeaderCellDef>{{ timesheetPrefix + 'project' | translate }}</th>
-		<td mat-cell *matCellDef="let element">
+		<td mat-cell *matCellDef="let element; let index = index">
 			<span class="projectContainer">
 				<br />
+
 				<tempus-dropdown
+					*ngIf="isLoadingStoreData; else projectNew"
 					id="project-options"
 					[optionsWithId]="projectOptions"
 					[control]="$any(timesheetForm).get('project')"
@@ -44,10 +67,28 @@
 					[label]="projectName"
 				></tempus-dropdown>
 
+				<ng-template #projectNew>
+					<tempus-dropdown
+						id="project-options"
+						[optionsWithId]="projectOptions"
+						[control]="$any(timesheets.controls[index]).get('project')"
+						[showLabel]="true"
+						[label]="projectName"
+					></tempus-dropdown>
+				</ng-template>
+
 				<tempus-text-area
+					*ngIf="isLoadingStoreData; else commentsNew"
 					[control]="$any(timesheetForm).get('comments')"
 					placeholder="{{ timesheetPrefix + 'comments' | translate }}"
 				></tempus-text-area>
+
+				<ng-template #commentsNew>
+					<tempus-text-area
+						[control]="$any(timesheets.controls[index]).get('comments')"
+						placeholder="{{ timesheetPrefix + 'comments' | translate }}"
+					></tempus-text-area>
+				</ng-template>
 			</span>
 		</td>
 	</ng-container>
@@ -58,15 +99,26 @@
 			<span *ngIf="!isLoadingStoreData; else column">{{ startDate2 | date: 'fullDate' }}</span>
 			<ng-template #column>{{ sundayDate | date: 'fullDate' }}</ng-template>
 		</th>
-		<td mat-cell *matCellDef="let element">
+		<td mat-cell *matCellDef="let element; let index = index">
 			<span class="cellContainer">
 				<br />
+
 				{{ timesheetPrefix + 'hours' | translate }}
+
 				<tempus-text-input
+					*ngIf="isLoadingStoreData; else sundayNew"
 					ngDefaultControl
 					(input)="restrictInputToNumeric($event, 0, 24)"
 					[control]="$any(timesheetForm).get('sunday')"
 				></tempus-text-input>
+
+				<ng-template #sundayNew>
+					<tempus-text-input
+						ngDefaultControl
+						(input)="restrictInputToNumeric($event, 0, 24)"
+						[control]="$any(timesheets.controls[index]).get('sunday')"
+					></tempus-text-input>
+				</ng-template>
 			</span>
 		</td>
 	</ng-container>
@@ -77,15 +129,26 @@
 			<span *ngIf="!isLoadingStoreData; else column">{{ startDatePlusOne2 | date: 'fullDate' }}</span>
 			<ng-template #column>{{ mondayDate | date: 'fullDate' }}</ng-template>
 		</th>
-		<td mat-cell *matCellDef="let element">
+		<td mat-cell *matCellDef="let element; let index = index">
 			<span class="cellContainer">
 				<br />
+
 				{{ timesheetPrefix + 'hours' | translate }}
+
 				<tempus-text-input
-					class="table-input"
+					*ngIf="isLoadingStoreData; else mondayNew"
+					ngDefaultControl
 					(input)="restrictInputToNumeric($event, 0, 24)"
 					[control]="$any(timesheetForm).get('monday')"
 				></tempus-text-input>
+
+				<ng-template #mondayNew>
+					<tempus-text-input
+						ngDefaultControl
+						(input)="restrictInputToNumeric($event, 0, 24)"
+						[control]="$any(timesheets.controls[index]).get('monday')"
+					></tempus-text-input>
+				</ng-template>
 			</span>
 		</td>
 	</ng-container>
@@ -96,15 +159,25 @@
 			<span *ngIf="!isLoadingStoreData; else column">{{ startDatePlusTwo2 | date: 'fullDate' }}</span>
 			<ng-template #column>{{ tuesdayDate | date: 'fullDate' }}</ng-template>
 		</th>
-		<td mat-cell *matCellDef="let element">
+		<td mat-cell *matCellDef="let element; let index = index">
 			<span class="cellContainer">
 				<br />
 				{{ timesheetPrefix + 'hours' | translate }}
+
 				<tempus-text-input
-					class="table-input"
+					*ngIf="isLoadingStoreData; else tuesdayNew"
+					ngDefaultControl
 					(input)="restrictInputToNumeric($event, 0, 24)"
 					[control]="$any(timesheetForm).get('tuesday')"
 				></tempus-text-input>
+
+				<ng-template #tuesdayNew>
+					<tempus-text-input
+						ngDefaultControl
+						(input)="restrictInputToNumeric($event, 0, 24)"
+						[control]="$any(timesheets.controls[index]).get('tuesday')"
+					></tempus-text-input>
+				</ng-template>
 			</span></td
 	></ng-container>
 
@@ -114,15 +187,26 @@
 			<span *ngIf="!isLoadingStoreData; else column">{{ startDatePlusThree2 | date: 'fullDate' }}</span>
 			<ng-template #column>{{ wednesdayDate | date: 'fullDate' }}</ng-template>
 		</th>
-		<td mat-cell *matCellDef="let element">
+		<td mat-cell *matCellDef="let element; let index = index">
 			<span class="cellContainer">
 				<br />
+
 				{{ timesheetPrefix + 'hours' | translate }}
+
 				<tempus-text-input
-					class="table-input"
+					*ngIf="isLoadingStoreData; else wednesdayNew"
+					ngDefaultControl
 					(input)="restrictInputToNumeric($event, 0, 24)"
 					[control]="$any(timesheetForm).get('wednesday')"
 				></tempus-text-input>
+
+				<ng-template #wednesdayNew>
+					<tempus-text-input
+						ngDefaultControl
+						(input)="restrictInputToNumeric($event, 0, 24)"
+						[control]="$any(timesheets.controls[index]).get('wednesday')"
+					></tempus-text-input>
+				</ng-template>
 			</span></td
 	></ng-container>
 
@@ -132,15 +216,25 @@
 			<span *ngIf="!isLoadingStoreData; else column">{{ startDatePlusFour2 | date: 'fullDate' }}</span>
 			<ng-template #column>{{ thursdayDate | date: 'fullDate' }}</ng-template>
 		</th>
-		<td mat-cell *matCellDef="let element">
+		<td mat-cell *matCellDef="let element; let index = index">
 			<span class="cellContainer">
 				<br />
 				{{ timesheetPrefix + 'hours' | translate }}
+
 				<tempus-text-input
-					class="table-input"
+					*ngIf="isLoadingStoreData; else thursdayNew"
+					ngDefaultControl
 					(input)="restrictInputToNumeric($event, 0, 24)"
 					[control]="$any(timesheetForm).get('thursday')"
 				></tempus-text-input>
+
+				<ng-template #thursdayNew>
+					<tempus-text-input
+						ngDefaultControl
+						(input)="restrictInputToNumeric($event, 0, 24)"
+						[control]="$any(timesheets.controls[index]).get('thursday')"
+					></tempus-text-input>
+				</ng-template>
 			</span>
 		</td>
 	</ng-container>
@@ -151,15 +245,25 @@
 			<span *ngIf="!isLoadingStoreData; else column">{{ startDatePlusFive2 | date: 'fullDate' }}</span>
 			<ng-template #column>{{ fridayDate | date: 'fullDate' }}</ng-template>
 		</th>
-		<td mat-cell *matCellDef="let element">
+		<td mat-cell *matCellDef="let element; let index = index">
 			<span class="cellContainer">
 				<br />
 				{{ timesheetPrefix + 'hours' | translate }}
+
 				<tempus-text-input
-					class="table-input"
+					*ngIf="isLoadingStoreData; else fridayNew"
+					ngDefaultControl
 					(input)="restrictInputToNumeric($event, 0, 24)"
 					[control]="$any(timesheetForm).get('friday')"
 				></tempus-text-input>
+
+				<ng-template #fridayNew>
+					<tempus-text-input
+						ngDefaultControl
+						(input)="restrictInputToNumeric($event, 0, 24)"
+						[control]="$any(timesheets.controls[index]).get('friday')"
+					></tempus-text-input>
+				</ng-template>
 			</span>
 		</td>
 	</ng-container>
@@ -170,15 +274,25 @@
 			<span *ngIf="!isLoadingStoreData; else column">{{ endDate2 | date: 'fullDate' }}</span>
 			<ng-template #column>{{ saturdayDate | date: 'fullDate' }}</ng-template>
 		</th>
-		<td mat-cell *matCellDef="let element">
+		<td mat-cell *matCellDef="let element; let index = index">
 			<span class="cellContainer">
 				<br />
 				{{ timesheetPrefix + 'hours' | translate }}
+
 				<tempus-text-input
-					class="table-input"
+					*ngIf="isLoadingStoreData; else saturdayNew"
+					ngDefaultControl
 					(input)="restrictInputToNumeric($event, 0, 24)"
 					[control]="$any(timesheetForm).get('saturday')"
 				></tempus-text-input>
+
+				<ng-template #saturdayNew>
+					<tempus-text-input
+						ngDefaultControl
+						(input)="restrictInputToNumeric($event, 0, 24)"
+						[control]="$any(timesheets.controls[index]).get('saturday')"
+					></tempus-text-input>
+				</ng-template>
 			</span>
 		</td>
 	</ng-container>
@@ -186,14 +300,24 @@
 	<!-- Total Column -->
 	<ng-container matColumnDef="total">
 		<th mat-header-cell *matHeaderCellDef>{{ timesheetPrefix + 'total' | translate }}</th>
-		<td mat-cell *matCellDef="let element">
-			<span class="cellContainer">
+		<td mat-cell *matCellDef="let element; let index = index">
+			<span class="totalContainer">
 				<tempus-text-input
 					class="table-input"
 					(input)="restrictInputToNumeric($event, 0, 168)"
 					[control]="totalHoursForm"
 				>
 				</tempus-text-input>
+
+				<button
+					*ngIf="index > 0"
+					class="remove-button"
+					mat-mini-fab
+					(click)="removeTimesheetSection(index)"
+					color="primary"
+				>
+					<span class="material-icons">remove</span>
+				</button>
 			</span>
 		</td>
 	</ng-container>
@@ -201,3 +325,17 @@
 	<tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
 	<tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
 </table>
+<br />
+
+<!-- Add row button -->
+<div id="button-container">
+	<tempus-button
+		*ngIf="!isLoadingStoreData"
+		label="{{ editViewTimesheetPrefix + 'buttons.addRow.label' | translate }}"
+		color="accent"
+		(buttonClick)="addRow()"
+		icon="add"
+		matTooltip="{{ editViewTimesheetPrefix + 'buttons.addRow.tooltip' | translate }}"
+		matTooltipClass="tooltip"
+	></tempus-button>
+</div>

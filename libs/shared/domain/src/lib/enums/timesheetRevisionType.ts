@@ -3,4 +3,6 @@ export enum TimesheetRevisionType {
 	APPROVED = 'APPROVED',
 	SUBMITTED = 'SUBMITTED',
 	REJECTED = 'REJECTED',
+	CLIENTREVIEW = 'CLIENT REVIEW'
+
 }
