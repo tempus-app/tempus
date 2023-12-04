@@ -214,13 +214,16 @@ export class TimesheetService {
 			supervisorEntity = await this.userService.getUserbyId(timesheet.supervisorId); */
 		const projectEntity = await this.projectService.getProjectInfo(timesheet.projectId);
 		const resourceEntity = await this.resourceService.getResourceInfo(timesheet.resourceId);
+		const weekStartDate = new Date(timesheetEntity.weekStartDate);
+		const weekEndDate = new Date(timesheetEntity.weekEndDate);
 
 		// Check if there already exists a timesheet with the same date range and project
 		const existingTimesheet = await this.timesheetRepository.findOne({
 			where: {
-				weekStartDate: timesheetEntity.weekStartDate,
-				weekEndDate: timesheetEntity.weekEndDate,
+				weekStartDate,
+				weekEndDate,
 				project: projectEntity,
+				resource: resourceEntity,
 			},
 		});
 
