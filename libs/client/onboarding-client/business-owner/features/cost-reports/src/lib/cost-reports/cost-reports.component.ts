@@ -19,6 +19,7 @@ import { Store } from '@ngrx/store';
 import { HttpClient } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Client, IReportFiltersDto, Project, Report, Resource, RoleType } from '@tempus/shared-domain';
+import { CustomModalType, ModalService, ModalType } from '@tempus/client/shared/ui-components/modal';
 
 export interface CostReport {
 	clientName: string;
@@ -52,6 +53,7 @@ export class CostReportsComponent implements OnInit {
 		private timesheetService: OnboardingClientTimesheetsService,
 		private http: HttpClient,
 		private fb: FormBuilder,
+		private modalService: ModalService,
 	) {}
 
 	costReportsTableData: CostReportsTableData[] = [];
@@ -218,7 +220,7 @@ export class CostReportsComponent implements OnInit {
 						document.body.removeChild(link);
 					}
 					else{
-						console.log('No data available');
+						this.openErrorModal('No data was found. Try changing the parameters or make sure approved timesheets exist for you');
 					}
 				}
 				else if(this.userRole == RoleType.BUSINESS_OWNER){
@@ -240,7 +242,7 @@ export class CostReportsComponent implements OnInit {
 						document.body.removeChild(link);
 					}
 					else{
-						console.log('No data available');
+						this.openErrorModal('No data was found. Try changing the parameters or make sure approved timesheets exist for you');
 					}
 				}
 				else{
@@ -262,12 +264,12 @@ export class CostReportsComponent implements OnInit {
 						document.body.removeChild(link);
 					}
 					else{
-						console.log('No data available');
+						this.openErrorModal('No data was found. Try changing the parameters or make sure approved timesheets exist for you');
 					}
 				}
 			}
 			else{
-				console.log('No data available');
+				this.openErrorModal('No data was found. Try changing the parameters or make sure approved timesheets exist for you');
 			}
 		},
 		(error) => {
@@ -507,6 +509,21 @@ export class CostReportsComponent implements OnInit {
 			this.buttonDisabled = true;
 		}
 	}
+
+	openErrorModal = (errorMessage: string) => {
+		this.modalService.open(
+			{
+				title: 'Error',
+				confirmText: ' ',
+				closeText: 'Okay',
+				message: errorMessage,
+				modalType: ModalType.ERROR,
+				closable: true,
+				id: 'error',
+			},
+			CustomModalType.INFO,
+		);
+	};
 
 
 }
