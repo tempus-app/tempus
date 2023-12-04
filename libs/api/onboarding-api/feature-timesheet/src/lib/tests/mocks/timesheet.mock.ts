@@ -94,10 +94,12 @@ export const submittedTimesheetEntityMock: TimesheetEntity = {
 export const approveTimesheetDto: ApproveTimesheetDto = {
     approval: true,
     comment: "Approving timesheet comment",
+    approverId: 0
 }
 export const RejectTimesheetDto: ApproveTimesheetDto = {
     approval: false,
     comment: "Rejecting timesheet comment",
+    approverId: 0
 }
 
 export const billedTimesheetEntityMock: TimesheetEntity = {
