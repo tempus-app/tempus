@@ -27,7 +27,9 @@ export interface CostReportsTableData extends TableDataModel, CostReport {
 })
 export class CostReportsComponent implements OnInit {
 	costReportsTableData: CostReportsTableData[] = [];
+
 	pageNum = 1;
+
 	totalCostReports = 1;
 
 	dropdownOptions: { [key: string]: any[] } = {};
@@ -86,15 +88,16 @@ export class CostReportsComponent implements OnInit {
 	// ];
 
 	constructor(private reportService: ReportService) {}
+
 	ngOnInit(): void {
 		// this.loadReports();
 		this.initializeDropdownOptions();
 	}
 
 	generateDropdowns(): void {
-    console.log('Generate Dropdowns clicked');
-    // Implement the logic as needed
-  }
+		console.log('Generate Dropdowns clicked');
+		// Implement the logic as needed
+	}
 
 	initializeDropdownOptions(): void {
 		const dropdownNames = ['project', 'user', 'client', 'month', 'year'];
@@ -102,6 +105,7 @@ export class CostReportsComponent implements OnInit {
 			this.dropdownOptions[name] = this.generateRandomOptions(); // Assuming this method generates random options
 		});
 	}
+
 	onDropdownSelect(event: any, dropdownName: string): void {
 		console.log(`Selected option in Dropdown ${dropdownName}:`, event);
 	}
