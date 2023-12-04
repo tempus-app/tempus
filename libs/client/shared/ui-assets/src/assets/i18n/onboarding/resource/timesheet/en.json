@@ -37,5 +37,12 @@
 				"confirmText": "Submit"
 			}
 		}
+	},
+	"onboardingResourceErrorTimesheet": {
+		"errorModal": {
+			"title": "Error with timesheet submission",
+			"message": "Cannot submit multiple timesheets with the same project in the selected date range. Please ensure the project in each row is unique.",
+			"confirmText": "OK"
+		}
 	}
 }

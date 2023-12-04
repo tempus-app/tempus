@@ -91,6 +91,8 @@ export class EditViewTimesheetComponent implements OnDestroy {
 
 	isNewTimesheet = false;
 
+	timesheetError = false;
+
 	setFormDataFromTimesheet(timesheet: Timesheet) {
 		this.currentTimesheetId = timesheet.id;
 		this.timesheet = timesheet;
@@ -118,7 +120,17 @@ export class EditViewTimesheetComponent implements OnDestroy {
 
 		const timesheetsDto: ICreateTimesheetDto[] = [];
 
+		const projects = new Set();
+
 		for (let i = 0; i < timesheetsArray?.length; i++) {
+			const project = (timesheetsArray?.at(i) as FormGroup).get('project')?.value;
+			if (projects.has(project)) {
+				this.timesheetError = true;
+			} else {
+				this.timesheetError = false;
+			}
+
+			projects.add(project);
 			const timesheet: ICreateTimesheetDto = {
 				projectId: (timesheetsArray?.at(i) as FormGroup).get('project')?.value,
 				resourceId: this.userId,
@@ -141,7 +153,6 @@ export class EditViewTimesheetComponent implements OnDestroy {
 			};
 			timesheetsDto.push(timesheet);
 		}
-
 		return timesheetsDto as ICreateTimesheetDto[];
 	}
 

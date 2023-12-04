@@ -12,7 +12,9 @@
 		"deleteTimesheetSuccess": "Timesheet deleted.",
 		"deleteTimesheetErrorModal": {
 			"confirmText": "OK"
-		}
+		},
+		"supervisorComment": "Supervisor: ",
+		"clientComment": "Client: "
 	},
 	"onboardingResourceEditTimesheet": {
 		"modal": {

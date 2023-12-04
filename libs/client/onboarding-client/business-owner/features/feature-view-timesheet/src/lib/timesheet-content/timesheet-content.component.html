@@ -12,12 +12,12 @@
 				<tempus-ghost-button
 					(click)="openEditTimesheet()"
 					cssClass="yellow"
-					label="{{ viewTimesheetPrefx + 'buttons.editViewButton.title' | translate }}"
+					label="Edit timesheet"
 					icon="edit"
 				></tempus-ghost-button>
 				<tempus-ghost-button
 					(click)="deleteTimesheet()"
-					label="{{ viewTimesheetPrefx + 'buttons.deleteViewButton.title' | translate }}"
+					label="Delete timesheet"
 					cssClass="red"
 					icon="delete"
 				></tempus-ghost-button>
@@ -31,7 +31,8 @@
 			id="button-container2"
 			*ngIf="
 				isValidRole(roles, [roleType.BUSINESS_OWNER]) ||
-				(isValidRole(roles, [roleType.SUPERVISOR]) && isRevision)
+				(isValidRole(roles, [roleType.SUPERVISOR]) && isRevision) ||
+				(isValidRole(roles, [roleType.CLIENT]) && isRevision)
 			"
 		>
 			<div class="submitAndCancel">

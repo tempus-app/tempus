@@ -46,7 +46,13 @@
 		</div>
 		<div *ngIf="status === TimesheetRevisionType.REJECTED" id="rejection-dialog">
 			<h3 class="mat-h3">{{ timesheetPrefix + 'rejectedDialogHeading' | translate }}</h3>
-			<p class="mat-body-1" *ngIf="timesheet.supervisorComment !== ''">{{ timesheet.supervisorComment }}</p>
+			<p class="mat-body-1" *ngIf="timesheet.supervisorComment !== ''">
+				{{ timesheetPrefix + 'supervisorComment' | translate }}{{ timesheet.supervisorComment }}
+			</p>
+			<p class="mat-body-1" *ngIf="timesheet.clientRepresentativeComment !== ''">
+				{{ timesheetPrefix + 'clientComment' | translate }}
+				{{ timesheet.clientRepresentativeComment }}
+			</p>
 		</div>
 		<tempus-resource-display-timesheet
 			[timesheet]="timesheet"
