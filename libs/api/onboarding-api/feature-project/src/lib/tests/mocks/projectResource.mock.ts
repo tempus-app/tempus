@@ -9,6 +9,8 @@ export const projectResourceEntityMock: ProjectResourceEntity = {
 	title: 'UX Developer',
 	resource: resourceEntityMock,
 	project: projectEntityMock,
+	costRate: 30,
+	billRate: 50
 };
 
 export const projectResourceEntityTwoMock: ProjectResourceEntity = {
@@ -18,4 +20,6 @@ export const projectResourceEntityTwoMock: ProjectResourceEntity = {
 	title: 'UX Developer',
 	resource: resourceTwoEntityMock,
 	project: projectEntityMock,
+	costRate: 30,
+	billRate: 50
 };
