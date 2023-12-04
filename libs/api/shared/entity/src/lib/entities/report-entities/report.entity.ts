@@ -10,6 +10,7 @@ export class ReportEntity implements Report {
 		clientName?: string,
 		projectName?: string,
 		userName?: string,
+		startDate?: Date,
 		month?: number,
 		year?: number,
 		hoursWorked?: number,
@@ -22,6 +23,7 @@ export class ReportEntity implements Report {
 		this.clientName = clientName;
 		this.projectName = projectName;
 		this.userName = userName;
+		this.startDate = startDate;
 		this.month = month;
 		this.year = year;
 		this.hoursWorked = hoursWorked;
@@ -43,6 +45,9 @@ export class ReportEntity implements Report {
 
 	@Column({ nullable: true })
 	userName?: string;
+
+	@Column({ nullable: true })
+	startDate?: Date;
 
 	@Column({ nullable: true })
 	month?: number;
@@ -72,6 +77,7 @@ export class ReportEntity implements Report {
 			dto.clientName,
 			dto.projectName,
 			dto.userName,
+			dto.startDate,
 			dto.month,
 			dto.year,
 			dto.hoursWorked,

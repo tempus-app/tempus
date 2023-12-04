@@ -14,6 +14,9 @@ export class CreateReportDto implements ICreateReportDto {
 	userName?: string;
 
 	@ApiProperty()
+	startDate?: Date;
+
+	@ApiProperty()
 	month?: number;
 
 	@ApiProperty()
@@ -38,6 +41,7 @@ export class CreateReportDto implements ICreateReportDto {
 		clientName?: string,
 		projectName?: string,
 		userName?: string,
+		startDate?: Date,
 		month?: number,
 		year?: number,
 		hoursWorked?: number,
@@ -49,6 +53,7 @@ export class CreateReportDto implements ICreateReportDto {
 		this.clientName = clientName;
 		this.projectName = projectName;
 		this.userName = userName;
+		this.startDate = startDate;
 		this.month = month;
 		this.year = year;
 		this.hoursWorked = hoursWorked;

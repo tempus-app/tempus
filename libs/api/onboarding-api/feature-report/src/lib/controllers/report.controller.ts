@@ -4,7 +4,7 @@
 import { Controller, Get, HttpStatus, Param, Query, Res, UseGuards } from "@nestjs/common";
 import { ApiQuery, ApiTags } from "@nestjs/swagger";
 import { JwtAuthGuard, Roles, RolesGuard } from '@tempus/api/shared/feature-auth';
-import { RoleType } from "@tempus/shared-domain";
+import { RoleType, Timesheet, Report } from "@tempus/shared-domain";
 import { Response } from 'express';
 import { ReportService } from "../services";
 
@@ -14,6 +14,19 @@ export class ReportController {
 	constructor(
         private reportService: ReportService,
     ) {}
+
+    @Get('/:userId')
+    async getReport(
+      @Param('userId') userId: number,
+      @Query('clientId') clientId: number,
+      @Query('projectId') projectId?: number,
+      @Query('resourceId') resourceId?: number,
+      @Query('month') month?: number,
+			@Query('year') year?: number,
+    ): Promise<Report[]> {
+      const rows = await this.reportService.getReport(userId, clientId, projectId, resourceId, month, year)
+      return rows;
+    }
 
     @UseGuards(JwtAuthGuard, RolesGuard)
     @Roles(RoleType.CLIENT)

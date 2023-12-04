@@ -2,6 +2,7 @@ export interface ICreateReportDto {
 	clientName?: string;
 	projectName?: string;
 	userName?: string;
+	startDate?: Date;
 	month?: number;
 	year?: number;
 	hoursWorked?: number;

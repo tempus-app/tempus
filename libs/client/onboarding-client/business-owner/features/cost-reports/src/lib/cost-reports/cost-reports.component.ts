@@ -7,11 +7,12 @@ import {
 	OnboardingClientResourceService,
 	OnboardingClientProjectService,
 	selectLoggedInRoles,
+	OnboardingClientTimesheetsService,
 } from '@tempus/client/onboarding-client/shared/data-access';
 import { Store } from '@ngrx/store';
 import { HttpClient } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
-import { Client, Project, Resource, RoleType } from '@tempus/shared-domain';
+import { Client, IReportFiltersDto, Project, Resource, RoleType } from '@tempus/shared-domain';
 
 export interface CostReport {
 	clientName: string;
@@ -42,6 +43,7 @@ export class CostReportsComponent implements OnInit {
 		private store: Store<OnboardingClientState>,
 		private resourceService: OnboardingClientResourceService,
 		private projectService: OnboardingClientProjectService,
+		private timesheetService: OnboardingClientTimesheetsService,
 		private http: HttpClient,
 		private fb: FormBuilder,
 	) {}
@@ -124,6 +126,8 @@ export class CostReportsComponent implements OnInit {
 				this.populateResources(this.userId);
 			}
 		});
+
+		console.log("CLient id: "+this.reportForm.get('client')?.value);
 	}
 
 	updateProjects = () => {
@@ -161,8 +165,20 @@ export class CostReportsComponent implements OnInit {
 
 	// eslint-disable-next-line class-methods-use-this
 	loadReports(): void {
-		// eslint-disable-next-line no-console
-		console.log('hi');
+
+		const reportFilters: IReportFiltersDto = {
+			clientId: this.reportForm.get('client')?.value,
+			projectId: this.reportForm.get('project')?.value,
+			resourceId: this.reportForm.get('resource')?.value,
+			month: this.reportForm.get('month')?.value,
+			year: this.reportForm.get('year')?.value,
+		};
+
+		this.timesheetService.getReport(this.userId, reportFilters).subscribe(report => {
+			if(report){
+
+			}
+		});
 	}
 
 	populateClients(userId: number) {
@@ -208,6 +224,7 @@ export class CostReportsComponent implements OnInit {
 					this.projectService.getClientByRepresentative(info.email).subscribe(client => {
 						// We find the client from client rep email
 						this.clientOptions = [{ val: client.clientName, id: client.id }];
+						this.reportForm.get('client')?.setValue(client.id);
 					});
 				}
 			});
@@ -225,6 +242,12 @@ export class CostReportsComponent implements OnInit {
 					this.clientOptions.push({ val: ' ', id: 0 });
 				}
 			});
+		}
+		if(role != RoleType.CLIENT){
+			const defaultOption = this.clientOptions.find((option) => option.id === 0);
+			if (defaultOption) {
+				this.reportForm.get('client')?.setValue(defaultOption.id);
+			}
 		}
 	}
 
@@ -302,6 +325,10 @@ export class CostReportsComponent implements OnInit {
 				}
 			});
 		}
+		const defaultOption = this.projectOptions.find((option) => option.id === 0);
+		if (defaultOption) {
+			this.reportForm.get('project')?.setValue(defaultOption.id);
+		}
 	}
 
 	populateResources(userId: number) {
@@ -337,6 +364,7 @@ export class CostReportsComponent implements OnInit {
 							id: resource.id,
 						},
 					];
+					this.reportForm.get('resource')?.setValue(resource.id);
 				}
 			});
 		}
@@ -363,6 +391,12 @@ export class CostReportsComponent implements OnInit {
 					this.resourceOptions.push({ val: ' ', id: 0 });
 				}
 			});
+		}
+		if(role != RoleType.ASSIGNED_RESOURCE && role != RoleType.AVAILABLE_RESOURCE){
+			const defaultOption = this.resourceOptions.find((option) => option.id === 0);
+			if (defaultOption) {
+				this.reportForm.get('resource')?.setValue(defaultOption.id);
+			}
 		}
 	}
 

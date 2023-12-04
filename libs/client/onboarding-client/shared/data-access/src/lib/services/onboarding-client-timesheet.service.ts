@@ -1,10 +1,11 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams, HttpResponse } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
 import { APP_CONFIG } from '@tempus/app-config';
 import {
 	AppConfig,
 	IApproveTimesheetDto,
 	ICreateTimesheetDto,
+	IReportFiltersDto,
 	IUpdateTimesheetDto,
 	RevisionType,
 	Timesheet,
@@ -72,4 +73,18 @@ export class OnboardingClientTimesheetsService {
 			{},
 		);
 	}
+
+	public getReport(
+		userId: number,
+		reportFilters: IReportFiltersDto,
+	  ): Observable<Timesheet[]> {
+
+		let url =  `${this.appConfig.apiUrl}/onboarding/report/${userId}?clientId=${reportFilters.clientId}&projectId=${reportFilters.projectId}&resourceId=${reportFilters.resourceId}&month=${reportFilters.month}&year=${reportFilters.year}`;
+		
+			console.log(url);
+
+		return this.http
+		  .get<Timesheet[]>(url)
+		  .pipe(catchError(handleError));
+	  }
 }
