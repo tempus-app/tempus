@@ -225,7 +225,7 @@ export class TimesheetService {
 		});
 
 		// Throw a forbidden exception if the timesheet already exists with the same date range and project
-		if (!existingTimesheet) {
+		if (existingTimesheet) {
 			throw new ForbiddenException('There already exists a timesheet in that date range');
 		}
 
