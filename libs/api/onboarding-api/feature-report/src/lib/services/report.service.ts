@@ -1,3 +1,5 @@
+/* eslint-disable prefer-const */
+/* eslint-disable prefer-destructuring */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable class-methods-use-this */
 /* eslint-disable prettier/prettier */
@@ -39,7 +41,7 @@ export class ReportService {
             case 'BUSINESS_OWNER':
                 return ['reportId', 'clientName', 'projectName', 'userName', 'month', 'hoursWorked', 'costRate', 'totalCost', 'billingRate', 'totalBilling'];
             case 'ASSIGNED_RESOURCE':
-                return ['reportId', 'clientName', 'projectName', 'userName', 'month', 'costRate', 'totalCost', 'hoursWorked'];
+                return ['reportId', 'clientName', 'projectName', 'userName', 'month', 'hoursWorked'];
             default:
                 return []; // Empty array for an available resource
         }
@@ -182,8 +184,6 @@ export class ReportService {
                     project: timesheet.project
                 },
             });
-            reportEntity.costRate = projRes?.costRate || 0;
-            reportEntity.totalCost = reportEntity.costRate * reportEntity.hoursWorked;
             return reportEntity;
         });
 
