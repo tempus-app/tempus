@@ -10,7 +10,7 @@ import {
 	SimpleChange,
 	SimpleChanges,
 } from '@angular/core';
-import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators, ValidationErrors, ValidatorFn} from '@angular/forms';
 import {
 	DateRange,
 	MatDateRangePicker,
@@ -294,13 +294,13 @@ export class TimesheetComponent implements OnInit {
 		endDate: ['', Validators.required],
 		project: ['', Validators.required],
 		comments: [''],
-		sunday: ['', Validators.required],
-		monday: ['', Validators.required],
-		tuesday: ['', Validators.required],
-		wednesday: ['', Validators.required],
-		thursday: ['', Validators.required],
-		friday: ['', Validators.required],
-		saturday: ['', Validators.required],
+		sunday: [''],
+		monday: [''],
+		tuesday: [''],
+		wednesday: [''],
+		thursday: [''],
+		friday: [''],
+		saturday: [''],
 	});
 
 	myInfoForm = this.fb.group({
@@ -310,13 +310,13 @@ export class TimesheetComponent implements OnInit {
 				endDate: ['', Validators.required],
 				project: ['', Validators.required],
 				comments: [''],
-				sunday: ['', Validators.required],
-				monday: ['', Validators.required],
-				tuesday: ['', Validators.required],
-				wednesday: ['', Validators.required],
-				thursday: ['', Validators.required],
-				friday: ['', Validators.required],
-				saturday: ['', Validators.required],
+				sunday: [''],
+				monday: [''],
+				tuesday: [''],
+				wednesday: [''],
+				thursday: [''],
+				friday: [''],
+				saturday: [''],
 				total: ['']
 			}),
 		]),
@@ -467,13 +467,13 @@ export class TimesheetComponent implements OnInit {
 			endDate: [this.thru, Validators.required],
 			project: ['', Validators.required],
 			comments: [''],
-			sunday: ['', Validators.required],
-			monday: ['', Validators.required],
-			tuesday: ['', Validators.required],
-			wednesday: ['', Validators.required],
-			thursday: ['', Validators.required],
-			friday: ['', Validators.required],
-			saturday: ['', Validators.required],
+			sunday: [''],
+			monday: [''],
+			tuesday: [''],
+			wednesday: [''],
+			thursday: [''],
+			friday: [''],
+			saturday: [''],
 			total: ['']
 		});
 

@@ -143,13 +143,13 @@ export class EditViewTimesheetComponent implements OnDestroy {
 				clientRepresentativeComment: '',
 				audited: false,
 				billed: false,
-				mondayHours: (timesheetsArray?.at(i) as FormGroup).get('monday')?.value,
-				tuesdayHours: (timesheetsArray?.at(i) as FormGroup).get('tuesday')?.value,
-				wednesdayHours: (timesheetsArray?.at(i) as FormGroup).get('wednesday')?.value,
-				thursdayHours: (timesheetsArray?.at(i) as FormGroup).get('thursday')?.value,
-				fridayHours: (timesheetsArray?.at(i) as FormGroup).get('friday')?.value,
-				saturdayHours: (timesheetsArray?.at(i) as FormGroup).get('saturday')?.value,
-				sundayHours: (timesheetsArray?.at(i) as FormGroup).get('sunday')?.value,
+				mondayHours: (timesheetsArray?.at(i) as FormGroup).get('monday')?.value || '0',
+				tuesdayHours: (timesheetsArray?.at(i) as FormGroup).get('tuesday')?.value || '0',
+				wednesdayHours: (timesheetsArray?.at(i) as FormGroup).get('wednesday')?.value || '0',
+				thursdayHours: (timesheetsArray?.at(i) as FormGroup).get('thursday')?.value || '0',
+				fridayHours: (timesheetsArray?.at(i) as FormGroup).get('friday')?.value || '0',
+				saturdayHours: (timesheetsArray?.at(i) as FormGroup).get('saturday')?.value || '0',
+				sundayHours: (timesheetsArray?.at(i) as FormGroup).get('sunday')?.value || '0',
 			};
 			timesheetsDto.push(timesheet);
 		}
