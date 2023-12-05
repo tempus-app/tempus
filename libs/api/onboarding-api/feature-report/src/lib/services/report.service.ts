@@ -1,3 +1,5 @@
+/* eslint-disable prefer-const */
+/* eslint-disable prefer-destructuring */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable class-methods-use-this */
 /* eslint-disable prettier/prettier */
@@ -5,7 +7,7 @@ import { Injectable, NotFoundException, Res } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateReportDto } from '@tempus/api/shared/dto';
 import { ClientEntity, TimesheetEntity, ProjectEntity, ReportEntity, ResourceEntity, UserEntity, ProjectResourceEntity } from '@tempus/api/shared/entity';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { Report, RoleType, TimesheetRevisionType, User } from '@tempus/shared-domain';
 import { UserService } from '@tempus/onboarding-api/feature-account';
 import { createObjectCsvStringifier } from 'csv-writer';
@@ -39,7 +41,7 @@ export class ReportService {
             case 'BUSINESS_OWNER':
                 return ['reportId', 'clientName', 'projectName', 'userName', 'month', 'hoursWorked', 'costRate', 'totalCost', 'billingRate', 'totalBilling'];
             case 'ASSIGNED_RESOURCE':
-                return ['reportId', 'clientName', 'projectName', 'userName', 'month', 'costRate', 'totalCost', 'hoursWorked'];
+                return ['reportId', 'clientName', 'projectName', 'userName', 'month', 'hoursWorked'];
             default:
                 return []; // Empty array for an available resource
         }
@@ -90,7 +92,7 @@ export class ReportService {
         if (projectEnt) { whereClause.project = projectEnt; }
         if (resourceEnt) { whereClause.resource = resourceEnt; }
 
-        whereClause.status = TimesheetRevisionType.APPROVED;
+        whereClause.status = In([TimesheetRevisionType.APPROVED, TimesheetRevisionType.CLIENTREVIEW]);
         whereClause.supervisor = supervisor;
 
         const timesheets = await this.timesheetRepository.find({
@@ -144,7 +146,7 @@ export class ReportService {
         if (projectEnt) { whereClause.project = projectEnt; }
         if (resourceEnt) { whereClause.resource = resourceEnt; }
 
-        whereClause.status = TimesheetRevisionType.APPROVED;
+        whereClause.status = In([TimesheetRevisionType.APPROVED, TimesheetRevisionType.CLIENTREVIEW]);
 
         const timesheets = await this.timesheetRepository.find({
             where: whereClause,
@@ -182,8 +184,6 @@ export class ReportService {
                     project: timesheet.project
                 },
             });
-            reportEntity.costRate = projRes?.costRate || 0;
-            reportEntity.totalCost = reportEntity.costRate * reportEntity.hoursWorked;
             return reportEntity;
         });
 
@@ -197,7 +197,7 @@ export class ReportService {
         if (projectEnt) { whereClause.project = projectEnt; }
         if (resourceEnt) { whereClause.resource = resourceEnt; }
 
-        whereClause.status = TimesheetRevisionType.APPROVED;
+        whereClause.status = In([TimesheetRevisionType.APPROVED, TimesheetRevisionType.CLIENTREVIEW]);
 
         const timesheets = await this.timesheetRepository.find({
             where: whereClause,
@@ -250,7 +250,7 @@ export class ReportService {
         if (projectEnt) { whereClause.project = projectEnt; }
         if (resourceEnt) { whereClause.resource = resourceEnt; }
 
-        whereClause.status = TimesheetRevisionType.APPROVED;
+        whereClause.status = In([TimesheetRevisionType.APPROVED, TimesheetRevisionType.CLIENTREVIEW]);
 
         const timesheets = await this.timesheetRepository.find({
             where: whereClause,
