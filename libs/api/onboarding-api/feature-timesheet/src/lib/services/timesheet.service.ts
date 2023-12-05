@@ -1,7 +1,7 @@
 import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { TimesheetEntity, UserEntity } from '@tempus/api/shared/entity';
-import { In, Repository } from 'typeorm';
+import { In, OrderByCondition, Repository } from 'typeorm';
 import { RoleType, Timesheet, TimesheetRevisionType } from '@tempus/shared-domain';
 import { ApproveTimesheetDto, CreateTimesheetDto, UpdateTimesheetDto } from '@tempus/api/shared/dto';
 import { ResourceService, UserService } from '@tempus/onboarding-api/feature-account';
@@ -73,6 +73,16 @@ export class TimesheetService {
 		let timesheetsAndCount;
 		const userRole = (await this.userService.getUserbyId(supervisorId)).roles[0];
 
+		const statusSort = (a: TimesheetRevisionType, b: TimesheetRevisionType): number => {
+			if (a === TimesheetRevisionType.SUBMITTED  && b !== TimesheetRevisionType.SUBMITTED ) {
+			  return -1; 
+			} else if (a !== TimesheetRevisionType.SUBMITTED && b === TimesheetRevisionType.SUBMITTED ) {
+			  return 1;
+			} else {
+			  return 0
+			}
+		  };
+
 		if (userRole == RoleType.SUPERVISOR) {
 			timesheetsAndCount = await this.timesheetRepository.findAndCount({
 				where: { supervisor: { id: supervisorId } },
@@ -90,7 +100,7 @@ export class TimesheetService {
 			});
 		}
 
-		return { timesheets: timesheetsAndCount[0], totalTimesheets: timesheetsAndCount[1] };
+		return { timesheets: timesheetsAndCount[0].sort(statusSort), totalTimesheets: timesheetsAndCount[1] };
 	}
 
 	async getAllTimesheetsByClientId(clientId: number, page: number, pageSize: number) {
