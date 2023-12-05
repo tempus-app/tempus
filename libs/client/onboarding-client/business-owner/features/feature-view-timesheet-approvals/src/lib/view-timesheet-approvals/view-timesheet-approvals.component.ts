@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { TranslateService } from '@ngx-translate/core';
@@ -148,7 +149,7 @@ export class ViewTimesheetApprovalsComponent implements OnInit, OnDestroy {
 			}
 		});
 
-		
+
 		this.businessownerStore.dispatch(
 			getAllTimesheetsBySupervisorId({
 				supervisorId: this.userId,
@@ -156,7 +157,7 @@ export class ViewTimesheetApprovalsComponent implements OnInit, OnDestroy {
 				pageNum: this.pageNum,
 			}),
 		);
-		
+
 		this.businessownerStore
 			.select(selectSupervisorTimesheets)
 			.pipe(takeUntil(this.$destroyed))
