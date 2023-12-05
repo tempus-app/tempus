@@ -152,7 +152,6 @@ export class TimesheetContentComponent implements OnInit {
 	template!: TemplateRef<unknown>;
 
 	ngOnInit(): void {
-
 		this.sharedStore
 			.select(selectLoggedInUserId)
 			.pipe(take(1))
@@ -177,7 +176,6 @@ export class TimesheetContentComponent implements OnInit {
 				this.roles = data;
 			});
 
-		console.log(isValidRole(this.roles, [this.roleType.BUSINESS_OWNER]));
 		const timesheetId = parseInt(this.route.snapshot.paramMap.get('id') || '0', 10);
 
 		this.timesheetService.getTimesheetById(timesheetId).subscribe(timesheet => {
@@ -221,7 +219,10 @@ export class TimesheetContentComponent implements OnInit {
 		this.timesheet.saturdayHours = timesheet.saturdayHours;
 		this.timesheet.sundayHours = timesheet.sundayHours;
 
-		if (timesheet.status === TimesheetRevisionType.SUBMITTED || timesheet.status === TimesheetRevisionType.CLIENTREVIEW) {
+		if (
+			timesheet.status === TimesheetRevisionType.SUBMITTED ||
+			timesheet.status === TimesheetRevisionType.CLIENTREVIEW
+		) {
 			this.isRevision = true;
 		} else {
 			this.isRevision = false;
@@ -248,7 +249,6 @@ export class TimesheetContentComponent implements OnInit {
 			});
 
 		this.modalService.confirmEventSubject.subscribe(() => {
-			console.log(this.approveTimesheetForm.get('rejectionComments')?.value);
 			const approveTimesheetDto = {
 				approval: false,
 				comment: this.approveTimesheetForm.get('rejectionComments')?.value,
@@ -298,7 +298,6 @@ export class TimesheetContentComponent implements OnInit {
 				updateTimesheetStatusAsSupervisor({
 					timesheetId: parseInt(this.route.snapshot.paramMap.get('id') || '0', 10),
 					approveTimesheetDto,
-					
 				}),
 			);
 			this.modalService.confirmEventSubject.unsubscribe();

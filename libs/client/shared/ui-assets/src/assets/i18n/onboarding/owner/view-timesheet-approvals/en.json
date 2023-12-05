@@ -65,8 +65,8 @@
 			"errorMessage": "Please enter a comment."
 		},
 		"confirmationDialog": {
-			"title": "Revision Approved!",
-			"message": "You have approved the revision",
+			"title": "Timesheet Approved!",
+			"message": "You have approved the timesheet.",
 			"confirmText": "CLOSE"
 		}
 	}
