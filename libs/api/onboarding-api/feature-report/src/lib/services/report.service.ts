@@ -7,7 +7,7 @@ import { Injectable, NotFoundException, Res } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateReportDto } from '@tempus/api/shared/dto';
 import { ClientEntity, TimesheetEntity, ProjectEntity, ReportEntity, ResourceEntity, UserEntity, ProjectResourceEntity } from '@tempus/api/shared/entity';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { Report, RoleType, TimesheetRevisionType, User } from '@tempus/shared-domain';
 import { UserService } from '@tempus/onboarding-api/feature-account';
 import { createObjectCsvStringifier } from 'csv-writer';
@@ -92,7 +92,7 @@ export class ReportService {
         if (projectEnt) { whereClause.project = projectEnt; }
         if (resourceEnt) { whereClause.resource = resourceEnt; }
 
-        whereClause.status = TimesheetRevisionType.APPROVED;
+        whereClause.status = In([TimesheetRevisionType.APPROVED, TimesheetRevisionType.CLIENTREVIEW]);
         whereClause.supervisor = supervisor;
 
         const timesheets = await this.timesheetRepository.find({
@@ -146,7 +146,7 @@ export class ReportService {
         if (projectEnt) { whereClause.project = projectEnt; }
         if (resourceEnt) { whereClause.resource = resourceEnt; }
 
-        whereClause.status = TimesheetRevisionType.APPROVED;
+        whereClause.status = In([TimesheetRevisionType.APPROVED, TimesheetRevisionType.CLIENTREVIEW]);
 
         const timesheets = await this.timesheetRepository.find({
             where: whereClause,
@@ -197,7 +197,7 @@ export class ReportService {
         if (projectEnt) { whereClause.project = projectEnt; }
         if (resourceEnt) { whereClause.resource = resourceEnt; }
 
-        whereClause.status = TimesheetRevisionType.APPROVED;
+        whereClause.status = In([TimesheetRevisionType.APPROVED, TimesheetRevisionType.CLIENTREVIEW]);
 
         const timesheets = await this.timesheetRepository.find({
             where: whereClause,
@@ -250,7 +250,7 @@ export class ReportService {
         if (projectEnt) { whereClause.project = projectEnt; }
         if (resourceEnt) { whereClause.resource = resourceEnt; }
 
-        whereClause.status = TimesheetRevisionType.APPROVED;
+        whereClause.status = In([TimesheetRevisionType.APPROVED, TimesheetRevisionType.CLIENTREVIEW]);
 
         const timesheets = await this.timesheetRepository.find({
             where: whereClause,
