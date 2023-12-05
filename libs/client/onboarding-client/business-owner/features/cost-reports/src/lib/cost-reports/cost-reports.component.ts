@@ -120,8 +120,8 @@ export class CostReportsComponent implements OnInit {
 		resource: [''],
 		client: [''],
 		project: [''],
-		month: [''],
-		year: [''],
+		month: ['', Validators.required],
+		year: ['', Validators.required],
 	});
 
 	buttonDisabled = true;
