@@ -147,7 +147,6 @@ export class TimesheetComponent implements OnInit {
 		inputElement.value = numericValue.toString(); // Update the input value
 		const formGroup = (this.myInfoForm.get('timesheets') as FormArray).at(index) as FormGroup;
 		formGroup.get(controlName)?.setValue(numericValue)
-		console.log(formGroup.get(controlName))
 	}
 
 	// After a date range is selected this function is executed
@@ -346,37 +345,39 @@ export class TimesheetComponent implements OnInit {
 			this.multiTimesheets.emit(this.myInfoForm);
 		}
 
-		// Subscribe to value changes in the form group
-		this.myInfoForm.valueChanges.subscribe(() => {
-			this.calculateTotal();
-		  });
+		// // Subscribe to value changes in the timesheets array
+		// this.myInfoForm.valueChanges.subscribe(() => {
+		// 	this.calculateTotal();
+		// });
 	}
 
-	calculateTotal() {
-		// Access the timesheets array
-		const timesheetsArray = this.myInfoForm.get('timesheets') as FormArray;
+	// calculateTotal() {
+	// 	// Access the timesheets array
+	// 	const timesheetsArray = this.myInfoForm.get('timesheets') as FormArray;
 
-		// Calculate the total based on the values of individual day inputs
-		let totalValue = 0;
+	// 	// Calculate the total based on the values of individual day inputs
+	// 	let totalValue = 0;
+
+	// 	const timesheetCount = timesheetsArray.controls.length;
 	
-		// Loop through each form group in the timesheets array
-		timesheetsArray.controls.forEach((timesheetGroup: AbstractControl, index: number) => {
-			if (timesheetGroup instanceof FormGroup) {
-		  // Calculate the total based on the values of individual day inputs
-		  totalValue +=
-			+timesheetGroup.get('sunday')?.value +
-			+timesheetGroup.get('monday')?.value +
-			+timesheetGroup.get('tuesday')?.value +
-			+timesheetGroup.get('wednesday')?.value +
-			+timesheetGroup.get('thursday')?.value +
-			+timesheetGroup.get('friday')?.value +
-			+timesheetGroup.get('saturday')?.value;
-			}
-		});
-
-		// Update the value of the "total" form control
-		this.totalHoursForm.setValue(totalValue)
-	  }
+	// 	for (let i = 0; i < timesheetCount; i++) {
+	// 		const timesheetGroup = timesheetsArray.at(i);
+		  
+	// 		if (timesheetGroup instanceof FormGroup) {
+	// 		  // Calculate the total based on the values of individual day inputs
+	// 		  totalValue +=
+	// 			+timesheetGroup.get('sunday')?.value +
+	// 			+timesheetGroup.get('monday')?.value +
+	// 			+timesheetGroup.get('tuesday')?.value +
+	// 			+timesheetGroup.get('wednesday')?.value +
+	// 			+timesheetGroup.get('thursday')?.value +
+	// 			+timesheetGroup.get('friday')?.value +
+	// 			+timesheetGroup.get('saturday')?.value;
+	// 		}
+	// 	  }
+	// 	// Update the value of the "total" form control
+	// 	this.totalHoursForm.setValue(totalValue)
+	// }
 
 	// Load the store data
 	loadStoreData() {
