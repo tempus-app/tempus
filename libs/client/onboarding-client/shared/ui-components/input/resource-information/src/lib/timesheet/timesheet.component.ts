@@ -230,6 +230,11 @@ export class TimesheetComponent implements OnInit {
 
 	rowAmount = 1;
 
+	// Edit and submit timesheet prefix
+	editViewTimesheetPrefix = 'onboardingClient.editViewTimesheet.';
+
+	rowAmount = 1;
+
 	// ---------------------------------------------------------------------------
 
 	InputType = InputType;
@@ -261,6 +266,8 @@ export class TimesheetComponent implements OnInit {
 	@Input() projectName = '';
 
 	@Output() formGroup = new EventEmitter();
+
+	@Output() multiTimesheets = new EventEmitter();
 
 	@Output() multiTimesheets = new EventEmitter();
 

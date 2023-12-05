@@ -96,7 +96,7 @@ export class TimesheetService {
 	async getAllTimesheetsByClientId(clientId: number, page: number, pageSize: number) {
 		const clientUser = await this.userService.getUserbyId(clientId);
 		const clientRep = await this.clientRepService.getClientRepresentativeByEmail(clientUser.email);
-		const projects = await this.userService.getClientProjects(clientRep.client.id);
+		const projects = await this.projectService.getClientProjects(clientRep.client.id);
 		const projectIds = projects.map(project => project.id);
 
 		const timesheetsAndCount = await this.timesheetRepository.findAndCount({

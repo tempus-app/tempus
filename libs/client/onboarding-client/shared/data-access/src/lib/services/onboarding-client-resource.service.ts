@@ -107,6 +107,10 @@ export class OnboardingClientResourceService {
 		return this.http.get<Resource>(`${this.url}/user/${resourceId}`).pipe(catchError(handleError));
 	}
 
+	public getUserInformationById(userId: number): Observable<User> {
+		return this.http.get<User>(`${this.url}/user/info/${userId}`).pipe(catchError(handleError));
+	}
+
 	public getResourceOriginalResumeById(resourceId: number): Observable<Blob> {
 		return this.http
 			.get<Blob>(`${this.url}/user/${resourceId}/resume`, { responseType: 'blob' as 'json' })
@@ -187,11 +191,11 @@ export class OnboardingClientResourceService {
 	}
 
 	public getClientProjects(clientId: number): Observable<Project[]> {
-		return this.http.get<Project[]>(`${this.url}/user/clients/projects/${clientId}`).pipe(catchError(handleError));
+		return this.http.get<Project[]>(`${this.url}/user/client/projects/${clientId}`).pipe(catchError(handleError));
 	}
 
 	public getClientResources(clientId: number): Observable<Resource[]> {
-		return this.http.get<Resource[]>(`${this.url}/user/clients/resources/${clientId}`).pipe(catchError(handleError));
+		return this.http.get<Resource[]>(`${this.url}/user/client/resources/${clientId}`).pipe(catchError(handleError));
 	}
 
 	public getAllResources(): Observable<Resource[]> {

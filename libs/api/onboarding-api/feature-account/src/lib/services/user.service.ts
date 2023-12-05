@@ -5,7 +5,7 @@ import { ConfigService } from '@nestjs/config';
 import { Any, getManager, In, Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { hash, genSalt } from 'bcrypt';
-import { ClientEntity, ProjectResourceEntity, ResourceEntity, UserEntity } from '@tempus/api/shared/entity';
+import { ClientEntity, ClientRepresentativeEntity, ProjectResourceEntity, ResourceEntity, UserEntity } from '@tempus/api/shared/entity';
 import { CreateUserDto, JwtPayload, UpdateUserDto } from '@tempus/api/shared/dto';
 import { CommonService } from '@tempus/api/shared/feature-common';
 import { EmailService } from '@tempus/api/shared/feature-email';
@@ -23,6 +23,8 @@ export class UserService {
 		private projectResourceRepository: Repository<ProjectResourceEntity>,
 		@InjectRepository(ClientEntity)
 		private clientRepository: Repository<ClientEntity>,
+		@InjectRepository(ClientRepresentativeEntity)
+		private clientRepRepository: Repository<ClientRepresentativeEntity>,
 		private resourceService: ResourceService,
 		private configService: ConfigService,
 		private emailService: EmailService,
@@ -70,9 +72,15 @@ export class UserService {
 		return userEntity;
 	}
 
-	async getUserbyId(id: number): Promise<User> {
+	async getUserbyId(id: number): Promise<UserEntity> {
 		const userEntity = await this.userRepository.findOne(id);
 		if (!userEntity) throw new NotFoundException(`Could not find user with id ${id}`);
+		return userEntity;
+	}
+
+	async getResourcebyId(id: number): Promise<ResourceEntity> {
+		const userEntity = await this.resourceRepository.findOne(id);
+		if (!userEntity) throw new NotFoundException(`Could not find Resource with id ${id}`);
 		return userEntity;
 	}
 
@@ -111,7 +119,7 @@ export class UserService {
 
 		const projectResources = await this.projectResourceRepository.find({
 			where: { resource: In(resourceIds)},
-			relations: ['project', 'resource'],
+			relations: ['project', 'resource', 'project.client'],
 		});
 		if (projectResources.length === 0) {
 			throw new NotFoundException(
@@ -159,7 +167,11 @@ export class UserService {
 
 	async getClientProjects(clientId: number):Promise<Project[]> {
 		
-		const clientEntity = await this.clientRepository.findOne(clientId, {
+		const user = await this.getUserbyId(clientId);
+		
+		const clientRep = await this.clientRepRepository.findOne({email: user.email}, {relations: ['client']})
+
+		const clientEntity = await this.clientRepository.findOne(clientRep.client.id, {
 			relations: ['projects'],
 		});
 		if (!clientEntity) {
@@ -170,18 +182,18 @@ export class UserService {
 	}
 
 	async getClientResources(clientId: number):Promise<Resource[]> {
-		
+
 		const projects = await this.getClientProjects(clientId);
 
 		const projectIds = projects.map(project => project.id);
-
 
 		const projectResources = await this.projectResourceRepository.find({
 			where: { project: In(projectIds)},
 			relations: ['project', 'resource'],
 		});
 		const resources = Array.from(new Set(projectResources.map(projRes => projRes.resource)));
-		return resources;
+		const resourcesNoDuplicates = resources.filter((obj, index, self) => index === self.findIndex((el) => el['id'] === obj['id']));
+		return resourcesNoDuplicates;
 	}
 
 

@@ -1,26 +1,54 @@
 <div fxLayout="column" id="page-container">
 	<div>
-		<div id="title-container">
+		<div id="title-container" style="margin-bottom: 2%">
 			<h2 class="mat-h2 page-title">Reports</h2>
 		</div>
 	</div>
-	<div fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="start center">
-		<div fxLayout="column" *ngFor="let dropdown of dropdowns">
-			<label class="dropdown-label">{{ dropdown.label }}</label>
+  <div fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="start center">
+		<div fxLayout="column" style="margin-bottom: 1%">
+			<label class="dropdown-label">Client</label>
 			<tempus-dropdown
-				id="dropdown-{{ dropdown.name }}"
-				[label]="dropdown.label"
-				[options]="dropdownOptions[dropdown.name]"
-				(optionSelect)="onDropdownSelect($event, dropdown.name)"
-			>
-			</tempus-dropdown>
+				[label]="labels.client"
+				[optionsWithId]="clientOptions"
+				(optionSelect)="updateProjects()"
+				[control]="$any(reportForm).get('client')"
+			></tempus-dropdown>
+		</div>
+		<div fxLayout="column" style="margin-bottom: 1%">
+			<label class="dropdown-label">Project</label>
+			<tempus-dropdown
+				[label]="labels.project"
+				[optionsWithId]="projectOptions"
+				(optionSelect)="updateClients()"
+				[control]="$any(reportForm).get('project')"
+			></tempus-dropdown>
+		</div>
+		<div fxLayout="column" style="margin-bottom: 1%">
+			<label class="dropdown-label">Resource</label>
+			<tempus-dropdown
+				[label]="labels.resource"
+				[optionsWithId]="resourceOptions"
+				[control]="$any(reportForm).get('resource')"
+			></tempus-dropdown>
+		</div>
+		<div fxLayout="column" style="margin-bottom: 1%">
+			<label class="dropdown-label">Month</label>
+			<tempus-dropdown
+				[label]="labels.month"
+				[optionsWithId]="monthOptions"
+				(optionSelect)="enableButton()"
+				[control]="$any(reportForm).get('month')"
+			></tempus-dropdown>
+		</div>
+		<div fxLayout="column" style="margin-bottom: 1%">
+			<label class="dropdown-label">Year</label>
+			<tempus-dropdown
+				[label]="labels.year"
+				[optionsWithId]="yearOptions"
+				(optionSelect)="enableButton()"
+				[control]="$any(reportForm).get('year')"
+			></tempus-dropdown>
 		</div>
 	</div>
-	<tempus-button
-		class="generate-button"
-		mat-raised-button
-		(buttonClick)="generateDropdowns()"
-		[label]="'Generate Report'"
-		[color]="'primary'"
-	></tempus-button>
+	<tempus-button  class="generate-button" mat-raised-button (buttonClick)="loadReports()" [label]="'Generate Report'" [disabled]="buttonDisabled" [color]="'primary'"></tempus-button>
 </div>

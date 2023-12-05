@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { ApiProperty } from '@nestjs/swagger';
 import { ICreateReportDto } from '@tempus/shared-domain';
 
@@ -13,7 +14,13 @@ export class CreateReportDto implements ICreateReportDto {
 	userName?: string;
 
 	@ApiProperty()
-	month?: string;
+	startDate?: string;
+
+	@ApiProperty()
+	month?: number;
+
+	@ApiProperty()
+	year?: number;
 
 	@ApiProperty()
 	hoursWorked?: number;
@@ -25,30 +32,36 @@ export class CreateReportDto implements ICreateReportDto {
 	totalCost?: number;
 
 	@ApiProperty()
-	totalBilling?: number;
+	billingRate?: number;
 
 	@ApiProperty()
-	billingRate?: number;
+	totalBilling?: number;
+
 
 	constructor(
 		clientName?: string,
 		projectName?: string,
 		userName?: string,
-		month?: string,
+		startDate?: string,
+		month?: number,
+		year?: number,
 		hoursWorked?: number,
 		costRate?: number,
 		totalCost?: number,
-		totalBilling?: number,
 		billingRate?: number,
+		totalBilling?: number,
+
 	) {
 		this.clientName = clientName;
 		this.projectName = projectName;
 		this.userName = userName;
+		this.startDate = startDate;
 		this.month = month;
+		this.year = year;
 		this.hoursWorked = hoursWorked;
 		this.costRate = costRate;
 		this.totalCost = totalCost;
-		this.totalBilling = totalBilling;
 		this.billingRate = billingRate;
+		this.totalBilling = totalBilling;
 	}
 }

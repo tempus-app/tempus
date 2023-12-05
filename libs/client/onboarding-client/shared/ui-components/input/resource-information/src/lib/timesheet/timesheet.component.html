@@ -4,6 +4,7 @@
 		<mat-date-range-input [rangePicker]="picker">
 			<input
 				*ngIf="isLoadingStoreData; else startDateNew"
+				*ngIf="isLoadingStoreData; else startDateNew"
 				[disabled]="isLoadingStoreData"
 				[(ngModel)]="this.from"
 				[formControl]="$any(timesheetForm).get('startDate')"
@@ -20,7 +21,18 @@
 				/>
 			</ng-template>
 
+
+			<ng-template #startDateNew>
+				<input
+					[(ngModel)]="this.from"
+					[formControl]="$any(timesheets.controls[0]).get('startDate')"
+					matStartDate
+					placeholder="{{ commonPrefix + 'dates.startPlaceholder' | translate }}"
+				/>
+			</ng-template>
+
 			<input
+				*ngIf="isLoadingStoreData; else endDateNew"
 				*ngIf="isLoadingStoreData; else endDateNew"
 				[disabled]="isLoadingStoreData"
 				[(ngModel)]="this.thru"
@@ -28,6 +40,15 @@
 				matEndDate
 				placeholder="{{ commonPrefix + 'dates.endPlaceholder' | translate }}"
 			/>
+
+			<ng-template #endDateNew>
+				<input
+					[(ngModel)]="this.thru"
+					[formControl]="$any(timesheets.controls[0]).get('endDate')"
+					matEndDate
+					placeholder="{{ commonPrefix + 'dates.endPlaceholder' | translate }}"
+				/>
+			</ng-template>
 
 			<ng-template #endDateNew>
 				<input
@@ -49,16 +70,20 @@
 	<ng-container matColumnDef="position" class="column-position">
 		<th mat-header-cell *matHeaderCellDef>#</th>
 		<td mat-cell *matCellDef="let element; let index = index">{{ index + 1 }}</td>
+		<td mat-cell *matCellDef="let element; let index = index">{{ index + 1 }}</td>
 	</ng-container>
 
 	<!-- Project Column -->
 	<ng-container matColumnDef="project">
 		<th mat-header-cell *matHeaderCellDef>{{ timesheetPrefix + 'project' | translate }}</th>
 		<td mat-cell *matCellDef="let element; let index = index">
+		<td mat-cell *matCellDef="let element; let index = index">
 			<span class="projectContainer">
 				<br />
 
+
 				<tempus-dropdown
+					*ngIf="isLoadingStoreData; else projectNew"
 					*ngIf="isLoadingStoreData; else projectNew"
 					id="project-options"
 					[optionsWithId]="projectOptions"
@@ -77,11 +102,29 @@
 					></tempus-dropdown>
 				</ng-template>
 
+				<ng-template #projectNew>
+					<tempus-dropdown
+						id="project-options"
+						[optionsWithId]="projectOptions"
+						[control]="$any(timesheets.controls[index]).get('project')"
+						[showLabel]="true"
+						[label]="projectName"
+					></tempus-dropdown>
+				</ng-template>
+
 				<tempus-text-area
+					*ngIf="isLoadingStoreData; else commentsNew"
 					*ngIf="isLoadingStoreData; else commentsNew"
 					[control]="$any(timesheetForm).get('comments')"
 					placeholder="{{ timesheetPrefix + 'comments' | translate }}"
 				></tempus-text-area>
+
+				<ng-template #commentsNew>
+					<tempus-text-area
+						[control]="$any(timesheets.controls[index]).get('comments')"
+						placeholder="{{ timesheetPrefix + 'comments' | translate }}"
+					></tempus-text-area>
+				</ng-template>
 
 				<ng-template #commentsNew>
 					<tempus-text-area
@@ -100,12 +143,16 @@
 			<ng-template #column>{{ sundayDate | date: 'EEE, MMM d' }}</ng-template>
 		</th>
 		<td mat-cell *matCellDef="let element; let index = index">
+		<td mat-cell *matCellDef="let element; let index = index">
 			<span class="cellContainer">
 				<br />
 
+
 				{{ timesheetPrefix + 'hours' | translate }}
 
+
 				<tempus-text-input
+					*ngIf="isLoadingStoreData; else sundayNew"
 					*ngIf="isLoadingStoreData; else sundayNew"
 					ngDefaultControl
 					(input)="restrictInputToNumeric($event, 0, 24, 'sunday', index)"
@@ -130,10 +177,13 @@
 			<ng-template #column>{{ mondayDate | date: 'EEE, MMM d' }}</ng-template>
 		</th>
 		<td mat-cell *matCellDef="let element; let index = index">
+		<td mat-cell *matCellDef="let element; let index = index">
 			<span class="cellContainer">
 				<br />
 
+
 				{{ timesheetPrefix + 'hours' | translate }}
+
 
 				<tempus-text-input
 					*ngIf="isLoadingStoreData; else mondayNew"
@@ -160,9 +210,11 @@
 			<ng-template #column>{{ tuesdayDate | date: 'EEE, MMM d' }}</ng-template>
 		</th>
 		<td mat-cell *matCellDef="let element; let index = index">
+		<td mat-cell *matCellDef="let element; let index = index">
 			<span class="cellContainer">
 				<br />
 				{{ timesheetPrefix + 'hours' | translate }}
+
 
 				<tempus-text-input
 					*ngIf="isLoadingStoreData; else tuesdayNew"
@@ -188,10 +240,13 @@
 			<ng-template #column>{{ wednesdayDate | date: 'EEE, MMM d' }}</ng-template>
 		</th>
 		<td mat-cell *matCellDef="let element; let index = index">
+		<td mat-cell *matCellDef="let element; let index = index">
 			<span class="cellContainer">
 				<br />
 
+
 				{{ timesheetPrefix + 'hours' | translate }}
+
 
 				<tempus-text-input
 					*ngIf="isLoadingStoreData; else wednesdayNew"
@@ -217,9 +272,11 @@
 			<ng-template #column>{{ thursdayDate | date: 'EEE, MMM d' }}</ng-template>
 		</th>
 		<td mat-cell *matCellDef="let element; let index = index">
+		<td mat-cell *matCellDef="let element; let index = index">
 			<span class="cellContainer">
 				<br />
 				{{ timesheetPrefix + 'hours' | translate }}
+
 
 				<tempus-text-input
 					*ngIf="isLoadingStoreData; else thursdayNew"
@@ -246,9 +303,11 @@
 			<ng-template #column>{{ fridayDate | date: 'EEE, MMM d' }}</ng-template>
 		</th>
 		<td mat-cell *matCellDef="let element; let index = index">
+		<td mat-cell *matCellDef="let element; let index = index">
 			<span class="cellContainer">
 				<br />
 				{{ timesheetPrefix + 'hours' | translate }}
+
 
 				<tempus-text-input
 					*ngIf="isLoadingStoreData; else fridayNew"
@@ -275,9 +334,11 @@
 			<ng-template #column>{{ saturdayDate | date: 'EEE, MMM d' }}</ng-template>
 		</th>
 		<td mat-cell *matCellDef="let element; let index = index">
+		<td mat-cell *matCellDef="let element; let index = index">
 			<span class="cellContainer">
 				<br />
 				{{ timesheetPrefix + 'hours' | translate }}
+
 
 				<tempus-text-input
 					*ngIf="isLoadingStoreData; else saturdayNew"
@@ -302,11 +363,23 @@
 		<th mat-header-cell *matHeaderCellDef>{{ timesheetPrefix + 'total' | translate }}</th>
 		<td mat-cell *matCellDef="let element; let index = index">
 			<span class="totalContainer">
+		<td mat-cell *matCellDef="let element; let index = index">
+			<span class="totalContainer">
 				<tempus-text-input
 					class="table-input"
 					[control]="totalHoursForm"
 				>
 				</tempus-text-input>
+
+				<button
+					*ngIf="index > 0"
+					class="remove-button"
+					mat-mini-fab
+					(click)="removeTimesheetSection(index)"
+					color="primary"
+				>
+					<span class="material-icons">remove</span>
+				</button>
 
 				<button
 					*ngIf="index > 0"
