@@ -32,23 +32,29 @@
 			></tempus-dropdown>
 		</div>
 		<div fxLayout="column" style="margin-bottom: 1%">
-			<label class="dropdown-label">Month</label>
-			<tempus-dropdown
-				[label]="labels.month"
-				[optionsWithId]="monthOptions"
-				(optionSelect)="enableButton()"
-				[control]="$any(reportForm).get('month')"
-			></tempus-dropdown>
-		</div>
-		<div fxLayout="column" style="margin-bottom: 1%">
-			<label class="dropdown-label">Year</label>
-			<tempus-dropdown
-				[label]="labels.year"
-				[optionsWithId]="yearOptions"
-				(optionSelect)="enableButton()"
-				[control]="$any(reportForm).get('year')"
-			></tempus-dropdown>
-		</div>
+			<label class="dropdown-label">Start Date</label>
+			<mat-form-field appearance="outline">
+					<input matInput
+								 [matDatepicker]="startPicker"
+								 placeholder="Select Start Date"
+								 formControlName="startDate">
+					<mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
+					<mat-datepicker #startPicker></mat-datepicker>
+			</mat-form-field>
+	</div>
+
+<!-- End Date Picker -->
+<div fxLayout="column" style="margin-bottom: 1%">
+	<label class="dropdown-label">End Date</label>
+	<mat-form-field appearance="outline">
+			<input matInput
+						 [matDatepicker]="endPicker"
+						 placeholder="Select End Date"
+						 formControlName="endDate">
+			<mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
+			<mat-datepicker #endPicker></mat-datepicker>
+	</mat-form-field>
+</div>
 	</div>
 	<tempus-button  class="generate-button" mat-raised-button (buttonClick)="loadReports()" [label]="'Generate Report'" [disabled]="buttonDisabled" [color]="'primary'"></tempus-button>
 </div>

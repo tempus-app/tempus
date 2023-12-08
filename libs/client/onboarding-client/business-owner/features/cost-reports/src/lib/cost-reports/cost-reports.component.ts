@@ -17,9 +17,10 @@ import {
 } from '@tempus/client/onboarding-client/shared/data-access';
 import { Store } from '@ngrx/store';
 import { HttpClient } from '@angular/common/http';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { Client, IReportFiltersDto, Project, Report, Resource, RoleType } from '@tempus/shared-domain';
 import { CustomModalType, ModalService, ModalType } from '@tempus/client/shared/ui-components/modal';
+import { MatDatepicker } from '@angular/material/datepicker';
 
 export interface CostReport {
 	clientName: string;
@@ -46,6 +47,8 @@ export interface CostReportsTableData extends TableDataModel, CostReport {
 	styleUrls: ['./cost-reports.component.scss'],
 })
 export class CostReportsComponent implements OnInit {
+	reportForm: FormGroup;
+
 	constructor(
 		private store: Store<OnboardingClientState>,
 		private resourceService: OnboardingClientResourceService,
@@ -54,7 +57,19 @@ export class CostReportsComponent implements OnInit {
 		private http: HttpClient,
 		private fb: FormBuilder,
 		private modalService: ModalService,
-	) {}
+	) {
+		this.reportForm = this.fb.group({
+			// ... other form controls ...
+			resource: [''],
+			client: [''],
+			project: [''],
+			month: [''],
+			year: [''],
+			startDate: ['', Validators.required],
+			endDate: ['', Validators.required],
+			// ... other form controls ...
+		});
+	}
 
 	costReportsTableData: CostReportsTableData[] = [];
 
@@ -116,14 +131,6 @@ export class CostReportsComponent implements OnInit {
 		{ name: 'year', label: 'Year' },
 	];
 
-	reportForm = this.fb.group({
-		resource: [''],
-		client: [''],
-		project: [''],
-		month: [''],
-		year: [''],
-	});
-
 	buttonDisabled = true;
 
 	ngOnInit(): void {
@@ -162,7 +169,7 @@ export class CostReportsComponent implements OnInit {
 	};
 
 	updateClients = () => {
-		if(this.userRole != RoleType.CLIENT){
+		if (this.userRole != RoleType.CLIENT) {
 			const id = this.reportForm.get('project')?.value;
 			if (id === 0) {
 				this.populateClients(this.userId);
@@ -179,7 +186,6 @@ export class CostReportsComponent implements OnInit {
 
 	// eslint-disable-next-line class-methods-use-this
 	loadReports(): void {
-
 		const reportFilters: IReportFiltersDto = {
 			clientId: this.reportForm.get('client')?.value,
 			projectId: this.reportForm.get('project')?.value,
@@ -188,100 +194,132 @@ export class CostReportsComponent implements OnInit {
 			year: this.reportForm.get('year')?.value,
 		};
 
-		const resourceHeaders = ['Client Name', 'Project Name', 'Resource Name', 'Timesheet Week', 'Hours Total', 'Cost Rate', 'Total Cost'];
+		const resourceHeaders = [
+			'Client Name',
+			'Project Name',
+			'Resource Name',
+			'Timesheet Week',
+			'Hours Total',
+			'Cost Rate',
+			'Total Cost',
+		];
 
-		const ownerHeaders = ['Client Name', 'Project Name', 'Resource Name', 'Timesheet Week', 'Hours Total', 'Cost Rate', 'Total Cost', 'Bill Rate', 'Total Bill'];
+		const ownerHeaders = [
+			'Client Name',
+			'Project Name',
+			'Resource Name',
+			'Timesheet Week',
+			'Hours Total',
+			'Cost Rate',
+			'Total Cost',
+			'Bill Rate',
+			'Total Bill',
+		];
 
-		const clientHeaders = ['Client Name', 'Project Name', 'Resource Name', 'Timesheet Week', 'Hours Total', 'Bill Rate', 'Total Bill'];
+		const clientHeaders = [
+			'Client Name',
+			'Project Name',
+			'Resource Name',
+			'Timesheet Week',
+			'Hours Total',
+			'Bill Rate',
+			'Total Bill',
+		];
 
+		this.timesheetService.getReport(this.userId, reportFilters).subscribe(
+			reports => {
+				if (reports.length != 0) {
+					const csvData = this.convertArrayToCsv(reports);
+					const rows: string[] = csvData.split('\n');
 
-		this.timesheetService.getReport(this.userId, reportFilters).subscribe(reports => {
+					if (
+						this.userRole == RoleType.SUPERVISOR ||
+						this.userRole === RoleType.ASSIGNED_RESOURCE ||
+						this.userRole === RoleType.AVAILABLE_RESOURCE
+					) {
+						if (rows.length > 0) {
+							const header: string[] = rows[0].split(',');
 
-			if(reports.length != 0){
-				const csvData = this.convertArrayToCsv(reports);
-				const rows: string[] = csvData.split('\n');
+							for (let i = 0; i < Math.min(header.length, resourceHeaders.length); i++) {
+								header[i] = resourceHeaders[i];
+							}
+							const modifiedCsvData: string = [header.join(','), ...rows.slice(1)].join('\n');
+							const blob = new Blob([modifiedCsvData], { type: 'text/csv' });
+							const link = document.createElement('a');
 
-				if(this.userRole == RoleType.SUPERVISOR || this.userRole === RoleType.ASSIGNED_RESOURCE || this.userRole === RoleType.AVAILABLE_RESOURCE){
-					if (rows.length > 0) {
-						const header: string[] = rows[0].split(',');
+							link.href = window.URL.createObjectURL(blob);
+							link.download = 'Cost_Report.csv';
 
-						for (let i = 0; i < Math.min(header.length, resourceHeaders.length); i++) {
-							header[i] = resourceHeaders[i];
+							document.body.appendChild(link);
+							link.click();
+							document.body.removeChild(link);
+						} else {
+							this.openErrorModal(
+								'No data was found. Try changing the parameters or make sure approved timesheets exist for you',
+							);
 						}
-						const modifiedCsvData: string = [header.join(','), ...rows.slice(1)].join('\n');
-						const blob = new Blob([modifiedCsvData], { type: 'text/csv' });
-						const link = document.createElement('a');
+					} else if (this.userRole == RoleType.BUSINESS_OWNER) {
+						if (rows.length > 0) {
+							const header: string[] = rows[0].split(',');
 
-						link.href = window.URL.createObjectURL(blob);
-						link.download = 'Cost_Report.csv';
+							for (let i = 0; i < Math.min(header.length, ownerHeaders.length); i++) {
+								header[i] = ownerHeaders[i];
+							}
+							const modifiedCsvData: string = [header.join(','), ...rows.slice(1)].join('\n');
+							const blob = new Blob([modifiedCsvData], { type: 'text/csv' });
+							const link = document.createElement('a');
 
-						document.body.appendChild(link);
-						link.click();
-						document.body.removeChild(link);
-					}
-					else{
-						this.openErrorModal('No data was found. Try changing the parameters or make sure approved timesheets exist for you');
-					}
-				}
-				else if(this.userRole == RoleType.BUSINESS_OWNER){
-					if (rows.length > 0) {
-						const header: string[] = rows[0].split(',');
+							link.href = window.URL.createObjectURL(blob);
+							link.download = 'Bill_Cost_Report.csv';
 
-						for (let i = 0; i < Math.min(header.length, ownerHeaders.length); i++) {
-							header[i] = ownerHeaders[i];
+							document.body.appendChild(link);
+							link.click();
+							document.body.removeChild(link);
+						} else {
+							this.openErrorModal(
+								'No data was found. Try changing the parameters or make sure approved timesheets exist for you',
+							);
 						}
-						const modifiedCsvData: string = [header.join(','), ...rows.slice(1)].join('\n');
-						const blob = new Blob([modifiedCsvData], { type: 'text/csv' });
-						const link = document.createElement('a');
+					} else {
+						if (rows.length > 0) {
+							const header: string[] = rows[0].split(',');
 
-						link.href = window.URL.createObjectURL(blob);
-						link.download = 'Bill_Cost_Report.csv';
+							for (let i = 0; i < Math.min(header.length, clientHeaders.length); i++) {
+								header[i] = clientHeaders[i];
+							}
+							const modifiedCsvData: string = [header.join(','), ...rows.slice(1)].join('\n');
+							const blob = new Blob([modifiedCsvData], { type: 'text/csv' });
+							const link = document.createElement('a');
 
-						document.body.appendChild(link);
-						link.click();
-						document.body.removeChild(link);
-					}
-					else{
-						this.openErrorModal('No data was found. Try changing the parameters or make sure approved timesheets exist for you');
-					}
-				}
-				else{
-					if (rows.length > 0) {
-						const header: string[] = rows[0].split(',');
+							link.href = window.URL.createObjectURL(blob);
+							link.download = 'Bill_Report.csv';
 
-						for (let i = 0; i < Math.min(header.length, clientHeaders.length); i++) {
-							header[i] = clientHeaders[i];
+							document.body.appendChild(link);
+							link.click();
+							document.body.removeChild(link);
+						} else {
+							this.openErrorModal(
+								'No data was found. Try changing the parameters or make sure approved timesheets exist for you',
+							);
 						}
-						const modifiedCsvData: string = [header.join(','), ...rows.slice(1)].join('\n');
-						const blob = new Blob([modifiedCsvData], { type: 'text/csv' });
-						const link = document.createElement('a');
-
-						link.href = window.URL.createObjectURL(blob);
-						link.download = 'Bill_Report.csv';
-
-						document.body.appendChild(link);
-						link.click();
-						document.body.removeChild(link);
 					}
-					else{
-						this.openErrorModal('No data was found. Try changing the parameters or make sure approved timesheets exist for you');
-					}
+				} else {
+					this.openErrorModal(
+						'No data was found. Try changing the parameters or make sure approved timesheets exist for you',
+					);
 				}
-			}
-			else{
-				this.openErrorModal('No data was found. Try changing the parameters or make sure approved timesheets exist for you');
-			}
-		},
-		(error) => {
-			console.error(error);
-		});
+			},
+			error => {
+				console.error(error);
+			},
+		);
 	}
 
 	private convertArrayToCsv(reports: Report[]): string {
 		const header = Object.keys(reports[0]).join(',');
-		const rows = reports.map((report) => Object.values(report).join(','));
+		const rows = reports.map(report => Object.values(report).join(','));
 		return `${header}\n${rows.join('\n')}`;
-	  }
+	}
 
 	populateClients(userId: number) {
 		let role;
@@ -345,8 +383,8 @@ export class CostReportsComponent implements OnInit {
 				}
 			});
 		}
-		if(role != RoleType.CLIENT){
-			const defaultOption = this.clientOptions.find((option) => option.id === 0);
+		if (role != RoleType.CLIENT) {
+			const defaultOption = this.clientOptions.find(option => option.id === 0);
 			if (defaultOption) {
 				this.reportForm.get('client')?.setValue(defaultOption.id);
 			}
@@ -427,7 +465,7 @@ export class CostReportsComponent implements OnInit {
 				}
 			});
 		}
-		const defaultOption = this.projectOptions.find((option) => option.id === 0);
+		const defaultOption = this.projectOptions.find(option => option.id === 0);
 		if (defaultOption) {
 			this.reportForm.get('project')?.setValue(defaultOption.id);
 		}
@@ -494,8 +532,8 @@ export class CostReportsComponent implements OnInit {
 				}
 			});
 		}
-		if(role != RoleType.ASSIGNED_RESOURCE && role != RoleType.AVAILABLE_RESOURCE){
-			const defaultOption = this.resourceOptions.find((option) => option.id === 0);
+		if (role != RoleType.ASSIGNED_RESOURCE && role != RoleType.AVAILABLE_RESOURCE) {
+			const defaultOption = this.resourceOptions.find(option => option.id === 0);
 			if (defaultOption) {
 				this.reportForm.get('resource')?.setValue(defaultOption.id);
 			}
@@ -524,6 +562,4 @@ export class CostReportsComponent implements OnInit {
 			CustomModalType.INFO,
 		);
 	};
-
-
 }

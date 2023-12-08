@@ -19,27 +19,27 @@ export class ReportSeederService {
         private reportService: ReportService,
     ) {}
 
-    async seedReports(count: number): Promise<ReportEntity[]> {
-        this.logger.log(`Starting to seed reports with count: ${count}`);
-        const reports: ReportEntity[] = [];
+    // async seedReports(count: number): Promise<ReportEntity[]> {
+    //     this.logger.log(`Starting to seed reports with count: ${count}`);
+    //     const reports: ReportEntity[] = [];
 
-        for (let i = 0; i < count; i++) {
-            const createReportDto = this.generateRandomReportDto();
+    //     for (let i = 0; i < count; i++) {
+    //         const createReportDto = this.generateRandomReportDto();
 
-            try {
-                this.logger.log(`Creating report ${i + 1}/${count}`);
-                this.logger.log(`Calling createReport for report number ${i + 1}`);
-                const report = await this.reportService.createReport(createReportDto);
-                this.logger.log(`Created report: ${JSON.stringify(report)}`);
-                reports.push(report);
-            } catch (error) {
-                this.logger.error(`Error creating report ${i + 1}: ${error.message}`);
-            }
-        }
+    //         try {
+    //             this.logger.log(`Creating report ${i + 1}/${count}`);
+    //             this.logger.log(`Calling createReport for report number ${i + 1}`);
+    //             const report = await this.reportService.createReport(createReportDto);
+    //             this.logger.log(`Created report: ${JSON.stringify(report)}`);
+    //             reports.push(report);
+    //         } catch (error) {
+    //             this.logger.error(`Error creating report ${i + 1}: ${error.message}`);
+    //         }
+    //     }
 
-        this.logger.log(`Total reports created: ${reports.length}`);
-        return reports;
-    }
+    //     this.logger.log(`Total reports created: ${reports.length}`);
+    //     return reports;
+    // }
 
     async clear() {
         await this.reportRepository.query('DELETE from report_entity CASCADE');
