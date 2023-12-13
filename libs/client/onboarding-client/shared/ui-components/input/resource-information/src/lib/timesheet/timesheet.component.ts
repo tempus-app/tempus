@@ -10,7 +10,7 @@ import {
 	SimpleChange,
 	SimpleChanges,
 } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators, ValidationErrors, ValidatorFn} from '@angular/forms';
 import {
 	DateRange,
 	MatDateRangePicker,
@@ -102,9 +102,9 @@ export interface TableOfContents {
 	],
 })
 export class TimesheetComponent implements OnInit {
-	@Input() from!: Date;
+	@Input() from: Date | undefined;
 
-	@Input() thru!: Date;
+	@Input() thru: Date | undefined;
 
 	startDate2 = ''; // sunday
 
@@ -121,9 +121,18 @@ export class TimesheetComponent implements OnInit {
 	startDatePlusFive2 = ''; // friday
 
 	// Function to restrict input to numeric characters for a specific input field
-	restrictInputToNumeric(event: any, min: number, max: number) {
+	restrictInputToNumeric(event: any, min: number, max: number, controlName: string, index: number) {
 		const inputElement: HTMLInputElement = event.target;
 		let numericValue = +inputElement.value; // Convert the input value to a number
+
+		// Check if the input is empty
+		if (inputElement.value.trim() === '') {
+			inputElement.value = ''; // Set the input value to empty
+			const formGroup = (this.myInfoForm.get('timesheets') as FormArray).at(index) as FormGroup;
+			formGroup.get(controlName)?.setValue(null)
+			return;
+		}
+
 		if (isNaN(numericValue)) {
 			numericValue = 0; // Set to a default value if not a number
 		}
@@ -136,6 +145,8 @@ export class TimesheetComponent implements OnInit {
 		}
 
 		inputElement.value = numericValue.toString(); // Update the input value
+		const formGroup = (this.myInfoForm.get('timesheets') as FormArray).at(index) as FormGroup;
+		formGroup.get(controlName)?.setValue(numericValue)
 	}
 
 	// After a date range is selected this function is executed
@@ -143,11 +154,11 @@ export class TimesheetComponent implements OnInit {
 		// Dynamically display the dates in each of the timesheet table columns
 
 		// Sunday
-		const startDate: Date = new Date(this.from);
+		const startDate: Date = new Date(this.from ?? 0);
 		const startDate_string: string = startDate.toLocaleString();
 
 		// Saturday
-		const endDate: Date = new Date(this.thru);
+		const endDate: Date = new Date(this.thru ?? 0);
 		const endDate_string: string = endDate.toLocaleString();
 
 		// Monday
@@ -281,14 +292,14 @@ export class TimesheetComponent implements OnInit {
 		startDate: ['', Validators.required],
 		endDate: ['', Validators.required],
 		project: ['', Validators.required],
-		comments: ['', Validators.required],
-		sunday: ['', Validators.required],
-		monday: ['', Validators.required],
-		tuesday: ['', Validators.required],
-		wednesday: ['', Validators.required],
-		thursday: ['', Validators.required],
-		friday: ['', Validators.required],
-		saturday: ['', Validators.required],
+		comments: [''],
+		sunday: [''],
+		monday: [''],
+		tuesday: [''],
+		wednesday: [''],
+		thursday: [''],
+		friday: [''],
+		saturday: [''],
 	});
 
 	myInfoForm = this.fb.group({
@@ -297,14 +308,15 @@ export class TimesheetComponent implements OnInit {
 				startDate: ['', Validators.required],
 				endDate: ['', Validators.required],
 				project: ['', Validators.required],
-				comments: ['', Validators.required],
-				sunday: ['', Validators.required],
-				monday: ['', Validators.required],
-				tuesday: ['', Validators.required],
-				wednesday: ['', Validators.required],
-				thursday: ['', Validators.required],
-				friday: ['', Validators.required],
-				saturday: ['', Validators.required],
+				comments: [''],
+				sunday: [''],
+				monday: [''],
+				tuesday: [''],
+				wednesday: [''],
+				thursday: [''],
+				friday: [''],
+				saturday: [''],
+				total: ['']
 			}),
 		]),
 	});
@@ -332,7 +344,40 @@ export class TimesheetComponent implements OnInit {
 		} else {
 			this.multiTimesheets.emit(this.myInfoForm);
 		}
+
+		// // Subscribe to value changes in the timesheets array
+		// this.myInfoForm.valueChanges.subscribe(() => {
+		// 	this.calculateTotal();
+		// });
 	}
+
+	// calculateTotal() {
+	// 	// Access the timesheets array
+	// 	const timesheetsArray = this.myInfoForm.get('timesheets') as FormArray;
+
+	// 	// Calculate the total based on the values of individual day inputs
+	// 	let totalValue = 0;
+
+	// 	const timesheetCount = timesheetsArray.controls.length;
+	
+	// 	for (let i = 0; i < timesheetCount; i++) {
+	// 		const timesheetGroup = timesheetsArray.at(i);
+		  
+	// 		if (timesheetGroup instanceof FormGroup) {
+	// 		  // Calculate the total based on the values of individual day inputs
+	// 		  totalValue +=
+	// 			+timesheetGroup.get('sunday')?.value +
+	// 			+timesheetGroup.get('monday')?.value +
+	// 			+timesheetGroup.get('tuesday')?.value +
+	// 			+timesheetGroup.get('wednesday')?.value +
+	// 			+timesheetGroup.get('thursday')?.value +
+	// 			+timesheetGroup.get('friday')?.value +
+	// 			+timesheetGroup.get('saturday')?.value;
+	// 		}
+	// 	  }
+	// 	// Update the value of the "total" form control
+	// 	this.totalHoursForm.setValue(totalValue)
+	// }
 
 	// Load the store data
 	loadStoreData() {
@@ -422,14 +467,15 @@ export class TimesheetComponent implements OnInit {
 			startDate: [this.from, Validators.required],
 			endDate: [this.thru, Validators.required],
 			project: ['', Validators.required],
-			comments: ['', Validators.required],
-			sunday: ['', Validators.required],
-			monday: ['', Validators.required],
-			tuesday: ['', Validators.required],
-			wednesday: ['', Validators.required],
-			thursday: ['', Validators.required],
-			friday: ['', Validators.required],
-			saturday: ['', Validators.required],
+			comments: [''],
+			sunday: [''],
+			monday: [''],
+			tuesday: [''],
+			wednesday: [''],
+			thursday: [''],
+			friday: [''],
+			saturday: [''],
+			total: ['']
 		});
 
 		this.timesheets.push(timesheet);

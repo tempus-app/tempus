@@ -208,7 +208,10 @@ export class TimesheetService {
 		}
 	}
 
-	async approveOrRejectTimesheetClient(timesheetId: number, approveTimesheetDto: ApproveTimesheetDto): Promise<Timesheet> {
+	async approveOrRejectTimesheetClient(
+		timesheetId: number,
+		approveTimesheetDto: ApproveTimesheetDto,
+	): Promise<Timesheet> {
 		const { approval, comment } = approveTimesheetDto;
 		const timesheetEntity = await this.timesheetRepository.findOne(timesheetId);
 		if (!timesheetEntity) throw new NotFoundException(`Could not find timesheet with id ${timesheetId}`);
@@ -221,16 +224,14 @@ export class TimesheetService {
 			const toReturn = await this.timesheetRepository.save(timesheetEntity);
 			return toReturn;
 		}
-			else if (approval === false) {
+		if (approval === false) {
 			timesheetEntity.status = TimesheetRevisionType.REJECTED;
 			timesheetEntity.dateModified = new Date(Date.now());
 			timesheetEntity.clientRepresentativeComment = comment;
 			const toReturn = await this.timesheetRepository.save(timesheetEntity);
 			return toReturn;
 		}
-		return;
 	}
-
 
 	async createTimesheet(timesheet: CreateTimesheetDto): Promise<Timesheet> {
 		const timesheetEntity = TimesheetEntity.fromDto(timesheet);
