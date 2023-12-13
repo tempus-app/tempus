@@ -66,22 +66,32 @@ export class TimesheetService {
 			skip: Number(page) * Number(pageSize),
 		});
 
-		return { timesheets: timesheetsAndCount[0], totalTimesheets: timesheetsAndCount[1] };
+		const statusOrder = [
+			TimesheetRevisionType.REJECTED,
+			TimesheetRevisionType.SUBMITTED,
+			TimesheetRevisionType.CLIENTREVIEW,
+			TimesheetRevisionType.NEW,
+			TimesheetRevisionType.APPROVED,
+		];
+
+		const sortedTimesheets = timesheetsAndCount[0].sort((a, b) =>
+			statusOrder.indexOf(a.status) - statusOrder.indexOf(b.status)
+		);
+
+		return { timesheets: sortedTimesheets, totalTimesheets: timesheetsAndCount[1] };
 	}
 
 	async getAllTimesheetsBySupervisorId(supervisorId: number, page: number, pageSize: number) {
 		let timesheetsAndCount;
 		const userRole = (await this.userService.getUserbyId(supervisorId)).roles[0];
 
-		const statusSort = (a: TimesheetRevisionType, b: TimesheetRevisionType): number => {
-			if (a === TimesheetRevisionType.SUBMITTED  && b !== TimesheetRevisionType.SUBMITTED ) {
-			  return -1; 
-			} else if (a !== TimesheetRevisionType.SUBMITTED && b === TimesheetRevisionType.SUBMITTED ) {
-			  return 1;
-			} else {
-			  return 0
-			}
-		  };
+		const statusOrder = [
+			TimesheetRevisionType.SUBMITTED,
+			TimesheetRevisionType.CLIENTREVIEW,
+			TimesheetRevisionType.REJECTED,
+			TimesheetRevisionType.APPROVED,
+			TimesheetRevisionType.NEW,
+		];
 
 		if (userRole == RoleType.SUPERVISOR) {
 			timesheetsAndCount = await this.timesheetRepository.findAndCount({
@@ -100,7 +110,11 @@ export class TimesheetService {
 			});
 		}
 
-		return { timesheets: timesheetsAndCount[0].sort(statusSort), totalTimesheets: timesheetsAndCount[1] };
+		const sortedTimesheets = timesheetsAndCount[0].sort((a, b) =>
+			statusOrder.indexOf(a.status) - statusOrder.indexOf(b.status)
+		);
+
+		return { timesheets: sortedTimesheets, totalTimesheets: timesheetsAndCount[1] };
 	}
 
 	async getAllTimesheetsByClientId(clientId: number, page: number, pageSize: number) {
@@ -117,7 +131,7 @@ export class TimesheetService {
 		});
 
 		const filteredTimesheets = timesheetsAndCount[0].filter(
-			timesheet => timesheet.status === TimesheetRevisionType.CLIENTREVIEW,
+			timesheet => timesheet.status == TimesheetRevisionType.CLIENTREVIEW,
 		);
 
 		return { timesheets: filteredTimesheets, totalTimesheets: timesheetsAndCount[1] };
