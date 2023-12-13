@@ -21,10 +21,10 @@ export class ReportController {
       @Query('clientId') clientId: number,
       @Query('projectId') projectId?: number,
       @Query('resourceId') resourceId?: number,
-      @Query('month') month?: number,
-			@Query('year') year?: number,
+      @Query('startDate') startDate?: string,
+			@Query('endDate') endDate?: string,
     ): Promise<Report[]> {
-      const rows = await this.reportService.getReport(userId, clientId, projectId, resourceId, month, year)
+      const rows = await this.reportService.getReport(userId, clientId, projectId, resourceId, startDate, endDate)
       return rows;
     }
 }

@@ -95,7 +95,7 @@ export class OnboardingClientTimesheetsService {
 		reportFilters: IReportFiltersDto,
 	  ): Observable<Report[]> {
 
-		let url =  `${this.appConfig.apiUrl}/onboarding/report/${userId}?clientId=${reportFilters.clientId}&projectId=${reportFilters.projectId}&resourceId=${reportFilters.resourceId}&month=${reportFilters.month}&year=${reportFilters.year}`;
+		let url =  `${this.appConfig.apiUrl}/onboarding/report/${userId}?clientId=${reportFilters.clientId}&projectId=${reportFilters.projectId}&resourceId=${reportFilters.resourceId}&startDate=${reportFilters.startDate}&endDate=${reportFilters.endDate}`;
 		return this.http
 		  .get<Report[]>(url)
 		  .pipe(catchError(handleError));

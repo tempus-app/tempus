@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { MatTableModule } from '@angular/material/table';
 import { ClientSharedUiComponentsPresentationalModule } from '@tempus/client/shared/ui-components/presentational';
@@ -31,6 +31,7 @@ import { CostReportsComponent } from './cost-reports/cost-reports.component';
 			},
 		]),
 	],
+	providers: [DatePipe],
 	declarations: [CostReportsComponent],
 	exports: [CostReportsComponent],
 })

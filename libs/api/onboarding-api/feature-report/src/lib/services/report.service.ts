@@ -29,34 +29,7 @@ export class ReportService {
         private userService: UserService,
     ) { }
 
-    private filterColumnsForRole(userRole: string): string[] {
-        // Define the columns based on the user role
-        switch (userRole) {
-            case 'CLIENT':
-                return ['reportId', 'clientName', 'projectName', 'userName', 'month', 'hoursWorked'];
-            case 'SUPERVISOR':
-                return ['reportId', 'clientName', 'projectName', 'userName', 'month', 'costRate', 'totalCost', 'hoursWorked'];
-            case 'BUSINESS_OWNER':
-                return ['reportId', 'clientName', 'projectName', 'userName', 'month', 'hoursWorked', 'costRate', 'totalCost', 'billingRate', 'totalBilling'];
-            case 'ASSIGNED_RESOURCE':
-                return ['reportId', 'clientName', 'projectName', 'userName', 'month', 'costRate', 'totalCost', 'hoursWorked'];
-            default:
-                return []; // Empty array for an available resource
-        }
-    }
-
-    private applyColumnFilter(reportData: ReportEntity[], columns: string[]): ReportEntity[] {
-        // Create a new array of report entities with only the allowed columns
-        return reportData.map((report) => {
-            const filteredReport: ReportEntity = {} as ReportEntity;
-            columns.forEach((column) => {
-                filteredReport[column] = report[column];
-            });
-            return filteredReport;
-        });
-    }
-
-    async getReport(userId: number, clientId: number, projectId: number, resourceId: number, month: number, year: number): Promise<Report[]> {
+    async getReport(userId: number, clientId: number, projectId: number, resourceId: number, startDate: string, endDate: string): Promise<Report[]> {
 
         const user = await this.userService.getUserbyId(userId);
 
@@ -69,14 +42,14 @@ export class ReportService {
 
         switch (user.roles[0]) {
             case RoleType.BUSINESS_OWNER:
-                return this.getOwnerReport(client, project, resource, month, year);
+                return this.getOwnerReport(client, project, resource, startDate, endDate);
             case RoleType.SUPERVISOR:
-                return this.getSupervisorReport(user, client, project, resource, month, year);
+                return this.getSupervisorReport(user, client, project, resource, startDate, endDate);
             case RoleType.CLIENT:
-                return this.getClientReport(client, project, resource, month, year);
+                return this.getClientReport(client, project, resource, startDate, endDate);
             case RoleType.ASSIGNED_RESOURCE:
             case RoleType.AVAILABLE_RESOURCE:
-                return this.getResourceReport(resource, client, project, month, year);
+                return this.getResourceReport(resource, client, project, startDate, endDate);
             default:
                 throw new NotFoundException(`Could not find user role`);
         }
@@ -84,7 +57,7 @@ export class ReportService {
         return;
     }
 
-    async getSupervisorReport(supervisor: UserEntity, clientEnt: ClientEntity, projectEnt: ProjectEntity, resourceEnt: ResourceEntity, month: number, year: number): Promise<Report[]> {
+    async getSupervisorReport(supervisor: UserEntity, clientEnt: ClientEntity, projectEnt: ProjectEntity, resourceEnt: ResourceEntity, startDate: string, endDate: string): Promise<Report[]> {
 
         const whereClause: Record<string, any> = {};
         if (projectEnt) { whereClause.project = projectEnt; }
@@ -98,6 +71,76 @@ export class ReportService {
             relations: ['project', 'project.client', 'resource', 'supervisor']
         });
 
+        let timesheetsClient = timesheets;
+        if (clientEnt) {
+            timesheetsClient = await timesheets.filter(timesheet => {
+                return timesheet.project.client.id == clientEnt.id
+            });
+        }
+
+        let startDay = new Date(startDate);
+        let endDay = new Date(endDate);
+
+        startDay.setDate(startDay.getDate() + 1);
+        endDay.setDate(endDay.getDate() + 1);
+
+        //temp
+        let month = 12;
+        let year = 2023;
+
+        const timesheetsInMonthAndYear = await timesheetsClient.filter(timesheet => {
+            const weekStartDateMonth = timesheet.weekStartDate.getMonth() + 1;
+            const weekStartDateYear = timesheet.weekStartDate.getFullYear();
+            return weekStartDateMonth == month && weekStartDateYear == year;
+        });
+
+        //console.log(timesheetsInMonthAndYear.length);
+
+        let finalTimesheets = timesheetsInMonthAndYear;
+
+        //Could do approach where days out of date range, change hours to 0 here? not too sure need to experiment more
+
+        const reportEntitiesPromises: Promise<ReportEntity>[] = finalTimesheets.map(async (timesheet) => {
+            const reportEntity = new ReportEntity();
+
+            reportEntity.clientName = timesheet.project.client.clientName;
+            reportEntity.projectName = timesheet.project.name;
+            reportEntity.userName = `${timesheet.resource.firstName} ${timesheet.resource.lastName}`;
+            reportEntity.startDate = timesheet.weekStartDate.toDateString();
+            reportEntity.hoursWorked = this.totalHours(timesheet);
+
+            const projRes = await this.projectResourceRepository.findOne({
+                where: {
+                    resource: timesheet.resource,
+                    project: timesheet.project
+                },
+            });
+            reportEntity.costRate = projRes?.costRate || 0;
+            reportEntity.totalCost = reportEntity.costRate * reportEntity.hoursWorked;
+            return reportEntity;
+        });
+
+        const reportEntities: ReportEntity[] = await Promise.all(reportEntitiesPromises);
+        return this.sortReportElements(reportEntities);
+    }
+
+    async getResourceReport(resourceEnt: ResourceEntity, clientEnt: ClientEntity, projectEnt: ProjectEntity, startDate: string, endDate: string): Promise<Report[]> {
+
+        const whereClause: Record<string, any> = {};
+        if (projectEnt) { whereClause.project = projectEnt; }
+        if (resourceEnt) { whereClause.resource = resourceEnt; }
+
+        whereClause.status = TimesheetRevisionType.APPROVED;
+
+        const timesheets = await this.timesheetRepository.find({
+            where: whereClause,
+            relations: ['project', 'project.client', 'resource', 'supervisor']
+        });
+
+        //temp
+        let month = 12;
+        let year = 2023;
+
         const timesheetsInMonthAndYear = await timesheets.filter(timesheet => {
             const weekStartDateMonth = timesheet.weekStartDate.getMonth() + 1;
             const weekStartDateYear = timesheet.weekStartDate.getFullYear();
@@ -138,7 +181,7 @@ export class ReportService {
         return this.sortReportElements(reportEntities);
     }
 
-    async getResourceReport(resourceEnt: ResourceEntity, clientEnt: ClientEntity, projectEnt: ProjectEntity, month: number, year: number): Promise<Report[]> {
+    async getClientReport(clientEnt: ClientEntity, projectEnt: ProjectEntity, resourceEnt: ResourceEntity, startDate: string, endDate: string): Promise<Report[]> {
 
         const whereClause: Record<string, any> = {};
         if (projectEnt) { whereClause.project = projectEnt; }
@@ -151,58 +194,9 @@ export class ReportService {
             relations: ['project', 'project.client', 'resource', 'supervisor']
         });
 
-        const timesheetsInMonthAndYear = await timesheets.filter(timesheet => {
-            const weekStartDateMonth = timesheet.weekStartDate.getMonth() + 1;
-            const weekStartDateYear = timesheet.weekStartDate.getFullYear();
-            return weekStartDateMonth == month && weekStartDateYear == year;
-        });
-
-        console.log(timesheetsInMonthAndYear.length);
-
-        let finalTimesheets = timesheetsInMonthAndYear;
-
-        if (clientEnt) {
-            finalTimesheets = await timesheetsInMonthAndYear.filter(timesheet => {
-                return timesheet.project.client.id == clientEnt.id
-            });
-        }
-
-        const reportEntitiesPromises: Promise<ReportEntity>[] = finalTimesheets.map(async (timesheet) => {
-            const reportEntity = new ReportEntity();
-
-            reportEntity.clientName = timesheet.project.client.clientName;
-            reportEntity.projectName = timesheet.project.name;
-            reportEntity.userName = `${timesheet.resource.firstName} ${timesheet.resource.lastName}`;
-            reportEntity.startDate = timesheet.weekStartDate.toDateString();
-            reportEntity.hoursWorked = this.totalHours(timesheet);
-
-            const projRes = await this.projectResourceRepository.findOne({
-                where: {
-                    resource: timesheet.resource,
-                    project: timesheet.project
-                },
-            });
-            reportEntity.costRate = projRes?.costRate || 0;
-            reportEntity.totalCost = reportEntity.costRate * reportEntity.hoursWorked;
-            return reportEntity;
-        });
-
-        const reportEntities: ReportEntity[] = await Promise.all(reportEntitiesPromises);
-        return this.sortReportElements(reportEntities);
-    }
-
-    async getClientReport(clientEnt: ClientEntity, projectEnt: ProjectEntity, resourceEnt: ResourceEntity, month: number, year: number): Promise<Report[]> {
-
-        const whereClause: Record<string, any> = {};
-        if (projectEnt) { whereClause.project = projectEnt; }
-        if (resourceEnt) { whereClause.resource = resourceEnt; }
-
-        whereClause.status = TimesheetRevisionType.APPROVED;
-
-        const timesheets = await this.timesheetRepository.find({
-            where: whereClause,
-            relations: ['project', 'project.client', 'resource', 'supervisor']
-        });
+        //temp
+        let month = 12;
+        let year = 2023;
 
         const timesheetsInMonthAndYear = await timesheets.filter(timesheet => {
             const weekStartDateMonth = timesheet.weekStartDate.getMonth() + 1;
@@ -244,7 +238,7 @@ export class ReportService {
         return this.sortReportElements(reportEntities);
     }
 
-    async getOwnerReport(clientEnt: ClientEntity, projectEnt: ProjectEntity, resourceEnt: ResourceEntity, month: number, year: number): Promise<Report[]> {
+    async getOwnerReport(clientEnt: ClientEntity, projectEnt: ProjectEntity, resourceEnt: ResourceEntity, startDate: string, endDate: string): Promise<Report[]> {
 
         const whereClause: Record<string, any> = {};
         if (projectEnt) { whereClause.project = projectEnt; }
@@ -256,6 +250,10 @@ export class ReportService {
             where: whereClause,
             relations: ['project', 'project.client', 'resource', 'supervisor']
         });
+
+        //temp
+        let month = 12;
+        let year = 2023;
 
         const timesheetsInMonthAndYear = await timesheets.filter(timesheet => {
             const weekStartDateMonth = timesheet.weekStartDate.getMonth() + 1;

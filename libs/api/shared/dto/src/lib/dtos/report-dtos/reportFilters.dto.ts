@@ -14,16 +14,16 @@ export class ReportFiltersDto implements IReportFiltersDto {
 	resourceId: number;
 
     @ApiProperty()
-	month: number;
+	startDate: string;
 
     @ApiProperty()
-	year: number;
+	endDate: string;
 
-	constructor(clientId: number, projectId: number, resourceId: number, month: number, year: number,) {
+	constructor(clientId: number, projectId: number, resourceId: number, startDate: string, endDate: string,) {
 		this.clientId = clientId;
 		this.projectId = projectId;
-        this.resourceId = clientId;
-        this.month = month;
-        this.year = year;
+        this.resourceId = resourceId;
+        this.startDate = startDate;
+        this.endDate = endDate;
 	}
 }

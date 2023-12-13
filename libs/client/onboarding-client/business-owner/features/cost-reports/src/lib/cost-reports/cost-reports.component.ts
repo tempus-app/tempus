@@ -17,10 +17,13 @@ import {
 } from '@tempus/client/onboarding-client/shared/data-access';
 import { Store } from '@ngrx/store';
 import { HttpClient } from '@angular/common/http';
-import { FormBuilder, Validators, FormGroup } from '@angular/forms';
+import { FormBuilder, Validators, FormGroup, ValidatorFn, AbstractControl } from '@angular/forms';
 import { Client, IReportFiltersDto, Project, Report, Resource, RoleType } from '@tempus/shared-domain';
 import { CustomModalType, ModalService, ModalType } from '@tempus/client/shared/ui-components/modal';
 import { MatDatepicker } from '@angular/material/datepicker';
+import { Subject, takeUntil } from 'rxjs';
+import { InputType } from '@tempus/client/shared/ui-components/input';
+import { DatePipe } from '@angular/common';
 
 export interface CostReport {
 	clientName: string;
@@ -57,9 +60,22 @@ export class CostReportsComponent implements OnInit {
 		private http: HttpClient,
 		private fb: FormBuilder,
 		private modalService: ModalService,
+		private datePipe: DatePipe,
 	) {
+
+		const dateRangeValidator: ValidatorFn = (control: AbstractControl) => {
+			const startDate = control.get('startDate')?.value;
+			const endDate = control.get('endDate')?.value;
+			
+			if (startDate && endDate && new Date(startDate) > new Date(endDate)) {
+				console.log('wrong date');
+				return { dateRange: false };
+			}
+			
+			return null;
+			};
+
 		this.reportForm = this.fb.group({
-			// ... other form controls ...
 			resource: [''],
 			client: [''],
 			project: [''],
@@ -67,13 +83,16 @@ export class CostReportsComponent implements OnInit {
 			year: [''],
 			startDate: ['', Validators.required],
 			endDate: ['', Validators.required],
-			// ... other form controls ...
-		});
+		},
+		{ validator: dateRangeValidator });
 	}
+
 
 	costReportsTableData: CostReportsTableData[] = [];
 
 	pageNum = 1;
+
+	InputType = InputType;
 
 	labels = {
 		client: 'Client',
@@ -87,11 +106,15 @@ export class CostReportsComponent implements OnInit {
 
 	userId = 0;
 
+	private ngUnsubscribe: Subject<void> = new Subject<void>();
+
 	userRole = RoleType.USER;
 
 	dropdownOptions: { val: string; id: number }[] = [];
 
 	clients: Client[] = [];
+
+	buttonDisabled: boolean = false;
 
 	clientOptions: { val: string; id: number }[] = [{ val: 'No clients assigned', id: 0 }];
 
@@ -131,8 +154,6 @@ export class CostReportsComponent implements OnInit {
 		{ name: 'year', label: 'Year' },
 	];
 
-	buttonDisabled = true;
-
 	ngOnInit(): void {
 		this.store.select(selectLoggedInUserId).subscribe(id => {
 			if (id) {
@@ -147,6 +168,23 @@ export class CostReportsComponent implements OnInit {
 		this.store.select(selectLoggedInRoles).subscribe(roles => {
 			this.userRole = roles[0];
 		});
+
+		const currentDate = new Date();
+		this.reportForm.get('startDate')?.setValue(this.datePipe.transform(new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1), 'yyyy-MM-dd'));
+		this.reportForm.get('endDate')?.setValue(this.datePipe.transform(new Date(currentDate.getFullYear(), currentDate.getMonth(), 0), 'yyyy-MM-dd'));
+
+
+		this.reportForm.get('endDate')?.valueChanges.pipe(
+			takeUntil(this.ngUnsubscribe)
+		  ).subscribe(() => {
+			this.enableButton();
+		  });
+
+		  this.reportForm.get('startDate')?.valueChanges.pipe(
+			takeUntil(this.ngUnsubscribe)
+		  ).subscribe(() => {
+			this.enableButton();
+		  });
 	}
 
 	updateProjects = () => {
@@ -184,14 +222,14 @@ export class CostReportsComponent implements OnInit {
 		}
 	};
 
-	// eslint-disable-next-line class-methods-use-this
 	loadReports(): void {
+
 		const reportFilters: IReportFiltersDto = {
 			clientId: this.reportForm.get('client')?.value,
 			projectId: this.reportForm.get('project')?.value,
 			resourceId: this.reportForm.get('resource')?.value,
-			month: this.reportForm.get('month')?.value,
-			year: this.reportForm.get('year')?.value,
+			startDate: this.reportForm.get('startDate')?.value,
+			endDate: this.reportForm.get('endDate')?.value,
 		};
 
 		const resourceHeaders = [
@@ -453,7 +491,6 @@ export class CostReportsComponent implements OnInit {
 			this.projectService.getAllProjects(paginationData).subscribe(response => {
 				const projects = response.projectData;
 				// eslint-disable-next-line no-console
-				console.log(projects);
 				if (projects) {
 					this.projectOptions = projects.map(p => {
 						return {
@@ -540,14 +577,6 @@ export class CostReportsComponent implements OnInit {
 		}
 	}
 
-	enableButton() {
-		if (this.reportForm.valid) {
-			this.buttonDisabled = false;
-		} else {
-			this.buttonDisabled = true;
-		}
-	}
-
 	openErrorModal = (errorMessage: string) => {
 		this.modalService.open(
 			{
@@ -562,4 +591,17 @@ export class CostReportsComponent implements OnInit {
 			CustomModalType.INFO,
 		);
 	};
+
+	enableButton() {
+		if (this.reportForm.valid) {
+		  this.buttonDisabled = false;
+		} else {
+		  this.buttonDisabled = true;
+		}
+	  }
+
+	ngOnDestroy(): void {
+		this.ngUnsubscribe.next();
+		this.ngUnsubscribe.complete();
+	  }
 }
