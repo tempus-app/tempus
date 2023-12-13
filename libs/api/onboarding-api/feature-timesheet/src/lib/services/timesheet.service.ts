@@ -62,8 +62,6 @@ export class TimesheetService {
 		const timesheetsAndCount = await this.timesheetRepository.findAndCount({
 			where: { resource: { id: resourceId } },
 			relations: ['supervisor', 'project', 'resource'],
-			take: Number(pageSize),
-			skip: Number(page) * Number(pageSize),
 		});
 
 		const statusOrder = [
@@ -78,7 +76,11 @@ export class TimesheetService {
 			statusOrder.indexOf(a.status) - statusOrder.indexOf(b.status)
 		);
 
-		return { timesheets: sortedTimesheets, totalTimesheets: timesheetsAndCount[1] };
+		const startIndex = page * pageSize;
+		const endIndex = startIndex + pageSize;
+		const paginatedTimesheets = sortedTimesheets.slice(startIndex, endIndex);	  
+	  
+		return { timesheets: paginatedTimesheets, totalTimesheets: timesheetsAndCount[1] };
 	}
 
 	async getAllTimesheetsBySupervisorId(supervisorId: number, page: number, pageSize: number) {
@@ -97,16 +99,12 @@ export class TimesheetService {
 			timesheetsAndCount = await this.timesheetRepository.findAndCount({
 				where: { supervisor: { id: supervisorId } },
 				relations: ['supervisor', 'project', 'resource'],
-				take: Number(pageSize),
-				skip: Number(page) * Number(pageSize),
 			});
 		} else if (userRole == RoleType.CLIENT) {
 			return this.getAllTimesheetsByClientId(supervisorId, page, pageSize);
 		} else {
 			timesheetsAndCount = await this.timesheetRepository.findAndCount({
 				relations: ['supervisor', 'project', 'resource'],
-				take: Number(pageSize),
-				skip: Number(page) * Number(pageSize),
 			});
 		}
 
@@ -114,7 +112,12 @@ export class TimesheetService {
 			statusOrder.indexOf(a.status) - statusOrder.indexOf(b.status)
 		);
 
-		return { timesheets: sortedTimesheets, totalTimesheets: timesheetsAndCount[1] };
+		const startIndex = page * pageSize;
+		const endIndex = startIndex + pageSize;
+		const paginatedTimesheets = sortedTimesheets.slice(startIndex, endIndex);	  
+	  
+
+		return { timesheets: paginatedTimesheets, totalTimesheets: timesheetsAndCount[1] };
 	}
 
 	async getAllTimesheetsByClientId(clientId: number, page: number, pageSize: number) {
