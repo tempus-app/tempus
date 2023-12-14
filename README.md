@@ -140,7 +140,7 @@ Information about the tempus backend,its functionalities, architecutre, and how 
 
 ## 🖌️ Frontend
 
-Information about the tempus client,its functionalities, how to contribute, can be found [here](/docs/frontend/).
+Information about the tempus client,its fu nctionalities, how to contribute, can be found [here](/docs/frontend/).
 
 ## ✨ Misc
 
