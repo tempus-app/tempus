@@ -3,6 +3,7 @@ name: CD
 on:
   push:
     branches: [release]
+  workflow_dispatch:
 
 jobs:
   docker:
