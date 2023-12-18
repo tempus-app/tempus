@@ -20,5 +20,5 @@ export interface Resource extends User {
 	githubLink: string;
 	otherLink: string;
 	resume: Uint8Array;
-	supervisorId?: number; 
+	supervisorId?: number;
 }
