@@ -21,7 +21,8 @@
 			"timesheet": "Timesheets",
 			"timesheetApprovals": "Timesheet Approvals",
 			"costBillingReports": "Cost and Billing Reports",
-			"costReports": "Reports"
+			"costReports": "Reports",
+			"manageUsers": "Manage Users"
 		}
 	},
 	"button": {

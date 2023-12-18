@@ -114,6 +114,11 @@ export class SidebarComponent implements OnInit, OnDestroy {
 			route: '/owner/cost-reports',
 			base: true,
 		},
+		{
+			tab: SidebarTab.MANAGE_USERS,
+			route: '/owner/manage-users',
+			base: true,
+		},
 	];
 
 	ngOnInit(): void {
@@ -148,6 +153,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
 						SidebarTab.PROJECTS,
 						SidebarTab.TIMESHEET_APPROVALS,
 						SidebarTab.COST_REPORTS,
+						SidebarTab.MANAGE_USERS,
 						// SidebarTab.COST_BILLING_REPORTS,
 					];
 				} else if (roles.includes(RoleType.AVAILABLE_RESOURCE) || roles.includes(RoleType.ASSIGNED_RESOURCE)) {
@@ -159,12 +165,8 @@ export class SidebarComponent implements OnInit, OnDestroy {
 						SidebarTab.TIMESHEET,
 						SidebarTab.COST_REPORTS,
 					];
-					
 				} else if (roles.includes(RoleType.CLIENT)) {
-					this.tabs = [
-						SidebarTab.TIMESHEET_APPROVALS,
-						SidebarTab.COST_REPORTS,
-					];
+					this.tabs = [SidebarTab.TIMESHEET_APPROVALS, SidebarTab.COST_REPORTS];
 				} else {
 					this.tabs = [
 						SidebarTab.PRIMARY_VIEW,

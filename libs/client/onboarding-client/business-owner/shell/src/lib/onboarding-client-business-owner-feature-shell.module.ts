@@ -24,6 +24,15 @@ const routes: Routes = [
 			},
 			{ path: '', pathMatch: 'full', redirectTo: 'pending-approvals' },
 			{
+				path: 'manage-users',
+				canLoad: [AuthGuard],
+				canActivate: [AuthGuard],
+				loadChildren: () =>
+					import('@tempus/client/onboarding-client/business-owner/features/feature-manage-users').then(
+						m => m.ClientOnboardingClientBusinessOwnerFeaturesFeatureManageUsersModule,
+					),
+			},
+			{
 				path: 'pending-approvals',
 				canLoad: [AuthGuard],
 				canActivate: [AuthGuard],

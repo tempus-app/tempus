@@ -35,6 +35,9 @@
 			"@tempus/client/onboarding-client/business-owner/features/cost-reports": [
 				"libs/client/onboarding-client/business-owner/features/cost-reports/src/index.ts"
 			],
+			"@tempus/client/onboarding-client/business-owner/features/feature-manage-users": [
+				"libs/client/onboarding-client/business-owner/features/feature-manage-users/src/index.ts"
+			],
 			"@tempus/client/onboarding-client/business-owner/features/feature-view-pending-approvals": [
 				"libs/client/onboarding-client/business-owner/features/feature-view-pending-approvals/src/index.ts"
 			],
@@ -100,8 +103,8 @@
 			"@tempus/onboarding-api/feature-approval": ["libs/api/onboarding-api/feature-approval/src/index.ts"],
 			"@tempus/onboarding-api/feature-profile": ["libs/api/onboarding-api/feature-profile/src/index.ts"],
 			"@tempus/onboarding-api/feature-project": ["libs/api/onboarding-api/feature-project/src/index.ts"],
-			"@tempus/onboarding-api/feature-timesheet": ["libs/api/onboarding-api/feature-timesheet/src/index.ts"],
 			"@tempus/onboarding-api/feature-report": ["libs/api/onboarding-api/feature-report/src/index.ts"],
+			"@tempus/onboarding-api/feature-timesheet": ["libs/api/onboarding-api/feature-timesheet/src/index.ts"],
 			"@tempus/onboarding-client/business-owner/feature-manage-resources": [
 				"libs/client/onboarding-client/business-owner/features/feature-manage-resources/src/index.ts"
 			],

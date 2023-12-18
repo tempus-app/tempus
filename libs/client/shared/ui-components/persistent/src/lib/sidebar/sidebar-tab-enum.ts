@@ -12,4 +12,5 @@ export enum SidebarTab {
 	TIMESHEET_APPROVALS = 'timesheetApprovals',
 	COST_BILLING_REPORTS = 'costBillingReports',
 	COST_REPORTS = 'costReports',
+	MANAGE_USERS = 'manageUsers',
 }
