@@ -2,8 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { Resource } from '@tempus/shared-domain';
 import { OnboardingClientResourceService } from '@tempus/client/onboarding-client/shared/data-access';
 import { Column, ProjectManagmenetTableData } from '@tempus/client/shared/ui-components/presentational';
-import { MatCheckboxModule } from '@angular/material/checkbox'; // Import this if not already imported
-// ... other properties ...
 
 @Component({
 	selector: 'tempus-manage-users',
@@ -15,10 +13,7 @@ export class ManageUsersComponent implements OnInit {
 
 	tableData: ProjectManagmenetTableData[] = [];
 
-	displayedColumns: Column[] = [
-		{ columnDef: 'resource', header: 'User', cell: (element: any) => `${element.resource}` },
-		{ columnDef: 'active', header: 'Active', cell: (element: any) => 'Active' },
-	];
+	displayedColumns: string[] = ['resource', 'active']; // Use string array for column definitions
 
 	constructor(private resourceService: OnboardingClientResourceService) {}
 
