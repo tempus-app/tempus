@@ -17,4 +17,6 @@ export interface User {
 	roles: RoleType[];
 
 	supervisedTimesheets: Timesheet[];
+
+	active: boolean;
 }

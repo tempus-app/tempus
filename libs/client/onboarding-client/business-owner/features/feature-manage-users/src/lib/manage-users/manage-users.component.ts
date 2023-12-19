@@ -30,6 +30,7 @@ export class ManageUsersComponent implements OnInit {
 	}
 
 	private mapResourceToTableData(resource: Resource): ProjectManagmenetTableData {
+		console.log(resource);
 		return {
 			resourceId: resource.id,
 			resource: `${resource.firstName} ${resource.lastName}`,
@@ -45,6 +46,7 @@ export class ManageUsersComponent implements OnInit {
 			columnsWithUrl: [],
 			columnsWithChips: [],
 			columnsWithButtonIcon: [],
+			active: resource.active,
 		};
 	}
 }

@@ -72,6 +72,7 @@ export class CreateResourceDto extends CreateUserDto implements ICreateResourceD
 		email: string,
 		password: string,
 		roles: RoleType[],
+		active: boolean,
 		phoneNumber: string,
 		calEmail: string,
 		title: string,
@@ -91,7 +92,7 @@ export class CreateResourceDto extends CreateUserDto implements ICreateResourceD
 		linkId: number,
 		supervisorId: number,
 	) {
-		super(firstName, lastName, email, password, roles);
+		super(firstName, lastName, email, password, roles, active);
 		this.roles = roles;
 		this.phoneNumber = phoneNumber;
 		this.calEmail = calEmail;

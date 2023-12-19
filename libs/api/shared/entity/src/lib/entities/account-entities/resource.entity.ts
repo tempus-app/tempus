@@ -32,8 +32,9 @@ export class ResourceEntity extends UserEntity implements Resource {
 		roles?: RoleType[],
 		resume?: Uint8Array,
 		supervisorId?: number,
+		active?: boolean,
 	) {
-		super(id, firstName, lastName, email, password, roles);
+		super(id, firstName, lastName, email, password, roles, undefined, active);
 		this.calEmail = calEmail;
 		this.phoneNumber = phoneNumber;
 		this.title = title;
@@ -50,6 +51,7 @@ export class ResourceEntity extends UserEntity implements Resource {
 		this.otherLink = otherLink;
 		this.resume = resume;
 		this.supervisorId = supervisorId;
+		this.active = active;
 	}
 
 	@Column({ nullable: true })
@@ -73,7 +75,7 @@ export class ResourceEntity extends UserEntity implements Resource {
 	@Column({ nullable: true })
 	title: string;
 
-	@Column({nullable: true})
+	@Column({ nullable: true })
 	supervisorId?: number;
 
 	@OneToOne(() => LocationEntity, loc => loc.resource, { cascade: ['insert', 'update'], nullable: true })
@@ -100,6 +102,9 @@ export class ResourceEntity extends UserEntity implements Resource {
 	@OneToMany(() => TimesheetEntity, timesheet => timesheet.resource, { cascade: ['insert', 'update'] })
 	timesheets: TimesheetEntity[];
 
+	@Column({ nullable: true })
+	active: boolean;
+
 	public static override fromDto(dto: CreateResourceDto): ResourceEntity {
 		if (dto == null) return new ResourceEntity();
 		return new ResourceEntity(
@@ -123,6 +128,9 @@ export class ResourceEntity extends UserEntity implements Resource {
 			dto.email,
 			dto.password,
 			dto.roles,
+			undefined,
+			undefined,
+			dto.active,
 		);
 	}
 }

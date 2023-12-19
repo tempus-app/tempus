@@ -59,7 +59,7 @@ export class ResourceService {
 				educationsSummary: resource.educationsSummary,
 				educations: createdResource.educations,
 				certifications: createdResource.certifications,
-			//	timesheets: createdResource.timesheets,
+				//	timesheets: createdResource.timesheets,
 				experiencesSummary: resource.experiencesSummary,
 				experiences: createdResource.experiences,
 				skillsSummary: resource.skillsSummary,
@@ -295,50 +295,53 @@ export class ResourceService {
 		// sortBy?: string,
 
 		const resources = await this.resourceRepository.find({
-			relations: ['projectResources', 'experiences', 'educations', 'skills', 'certifications', 'timesheets', 'views', 'location'],
+			relations: [
+				'projectResources',
+				'experiences',
+				'educations',
+				'skills',
+				'certifications',
+				'timesheets',
+				'views',
+				'location',
+			],
 		});
 
 		return resources;
 	}
 
-	async getResourceProjects(resourceId: number):Promise<Project[]> {
-
+	async getResourceProjects(resourceId: number): Promise<Project[]> {
 		const resourceEntity = await this.getResourceInfo(resourceId);
 
 		const projectResources = await this.projectResourceRepository.find({
-			where: { resource: resourceEntity},
+			where: { resource: resourceEntity },
 			relations: ['project', 'resource'],
 		});
 		if (projectResources.length === 0) {
-			throw new NotFoundException(
-				`Could not find project for resource with id ${resourceId}`,
-			);
+			throw new NotFoundException(`Could not find project for resource with id ${resourceId}`);
 		}
 		const projects = Array.from(new Set(projectResources.map(projRes => projRes.project)));
 		return projects;
 	}
 
-
-	async getResourceClients(resourceId: number):Promise<ClientEntity[]> {
-
+	async getResourceClients(resourceId: number): Promise<ClientEntity[]> {
 		const resourceEntity = await this.getResourceInfo(resourceId);
 
 		const projectResources = await this.projectResourceRepository.find({
-			where: { resource: resourceEntity},
+			where: { resource: resourceEntity },
 			relations: ['project', 'project.client', 'resource'],
 		});
 		if (projectResources.length === 0) {
-			throw new NotFoundException(
-				`Could not find project for resource with id ${resourceId}`,
-			);
+			throw new NotFoundException(`Could not find project for resource with id ${resourceId}`);
 		}
 		const clients = Array.from(new Set(projectResources.map(projRes => projRes.project.client)));
 
-		const clientsNoDuplicates = clients.filter((obj, index, self) => index === self.findIndex((el) => el['id'] === obj['id']));
+		const clientsNoDuplicates = clients.filter(
+			(obj, index, self) => index === self.findIndex(el => el['id'] === obj['id']),
+		);
 
 		return clientsNoDuplicates;
 	}
-
 
 	// edit resource to be used specifically when updating local information
 	async editResource(updateResourceData: UpdateResourceDto): Promise<Resource> {
@@ -375,8 +378,6 @@ export class ResourceService {
 		resourceEntity.supervisorId = supervisorId;
 		return await this.resourceRepository.save(resourceEntity);
 	}
-
-	
 
 	public async isNowAvailable(resourceId: number) {
 		const existingResourceEntity = await this.resourceRepository.findOne(resourceId, {

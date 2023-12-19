@@ -40,8 +40,6 @@ export class UserSeederService {
 	}
 
 	async getClients(): Promise<UserEntity[]> {
-		
-
 		const users = await this.userService.getAllUsers();
 
 		// Not optimal lol but works
@@ -63,12 +61,14 @@ export class UserSeederService {
 			const firstName = faker.name.firstName();
 
 			const password = faker.internet.password();
+			const active = true;
 			const user: CreateUserDto = new CreateUserDto(
 				firstName,
 				lastName,
 				faker.internet.email(firstName, lastName),
 				password,
 				[RoleType.BUSINESS_OWNER],
+				active,
 			);
 			const createdUser = await this.userService.createUser(user);
 			createdUsers.push({ ...createdUser, password });
@@ -89,20 +89,21 @@ export class UserSeederService {
 			const firstName = faker.name.firstName();
 
 			const password = faker.internet.password();
+
+			const active = true;
 			const user: CreateUserDto = new CreateUserDto(
 				firstName,
 				lastName,
 				faker.internet.email(firstName, lastName),
 				password,
 				[RoleType.SUPERVISOR],
+				active,
 			);
 			const createdUser = await this.userService.createUser(user);
 			createdUsers.push({ ...createdUser, password });
 		}
 		return createdUsers;
 	}
-
-	
 
 	// user.seeder.service.ts// Add this method to seed clients
 	async seedClients(clientCount: number): Promise<UserEntity[]> {
@@ -112,10 +113,16 @@ export class UserSeederService {
 			const firstName = faker.name.firstName();
 			const plainPassword = faker.internet.password();
 			const email = faker.internet.email(firstName, lastName);
+			const active = true;
 
-			const userDto: CreateUserDto = new CreateUserDto(firstName, lastName, email, plainPassword, [
-				RoleType.CLIENT,
-			]);
+			const userDto: CreateUserDto = new CreateUserDto(
+				firstName,
+				lastName,
+				email,
+				plainPassword,
+				[RoleType.CLIENT],
+				active,
+			);
 
 			const createdUser = await this.userService.createUser(userDto);
 			// const hashedPassword = await bcrypt.hash(plainPassword, saltRounds);

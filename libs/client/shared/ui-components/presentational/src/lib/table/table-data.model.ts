@@ -26,6 +26,7 @@ export interface ProjectManagmenetTableData extends TableDataModel {
 	allClients: string[];
 	delete: string;
 	location: string;
+	active?: boolean;
 }
 
 export interface PendingApprovalsTableData extends TableDataModel {

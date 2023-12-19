@@ -5,7 +5,13 @@ import { ConfigService } from '@nestjs/config';
 import { Any, getManager, In, Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { hash, genSalt } from 'bcrypt';
-import { ClientEntity, ClientRepresentativeEntity, ProjectResourceEntity, ResourceEntity, UserEntity } from '@tempus/api/shared/entity';
+import {
+	ClientEntity,
+	ClientRepresentativeEntity,
+	ProjectResourceEntity,
+	ResourceEntity,
+	UserEntity,
+} from '@tempus/api/shared/entity';
 import { CreateUserDto, JwtPayload, UpdateUserDto } from '@tempus/api/shared/dto';
 import { CommonService } from '@tempus/api/shared/feature-common';
 import { EmailService } from '@tempus/api/shared/feature-email';
@@ -92,13 +98,12 @@ export class UserService {
 	}
 
 	async getAllSupervisors(): Promise<User[]> {
-
 		const users = await this.getAllUsers();
 
 		// Not optimal lol but works
-		const supervisors = users.filter(user =>
-       	 user.roles.includes(RoleType.SUPERVISOR) || user.roles.includes(RoleType.BUSINESS_OWNER)
-    	);
+		const supervisors = users.filter(
+			user => user.roles.includes(RoleType.SUPERVISOR) || user.roles.includes(RoleType.BUSINESS_OWNER),
+		);
 
 		// IDK WHY THIS ISNT WORKING
 		/*const supervisors = await this.userRepository.find({
@@ -107,69 +112,63 @@ export class UserService {
 			},
 		  });**/
 
-
 		return supervisors;
 	}
 
-	async getSupervisorProjects(supervisorId: number):Promise<Project[]> {
-
+	async getSupervisorProjects(supervisorId: number): Promise<Project[]> {
 		const resources = await this.getSupervisorResources(supervisorId);
 
 		const resourceIds = resources.map(resource => resource.id);
 
 		const projectResources = await this.projectResourceRepository.find({
-			where: { resource: In(resourceIds)},
+			where: { resource: In(resourceIds) },
 			relations: ['project', 'resource', 'project.client'],
 		});
 		if (projectResources.length === 0) {
-			throw new NotFoundException(
-				`Could not find projects for resource with id ${supervisorId}`,
-			);
+			throw new NotFoundException(`Could not find projects for resource with id ${supervisorId}`);
 		}
 		const projects = Array.from(new Set(projectResources.map(projRes => projRes.project)));
 
-		const projectsNoDuplicates = projects.filter((obj, index, self) => index === self.findIndex((el) => el['id'] === obj['id']));
+		const projectsNoDuplicates = projects.filter(
+			(obj, index, self) => index === self.findIndex(el => el['id'] === obj['id']),
+		);
 
 		return projectsNoDuplicates;
 	}
 
-	async getSupervisorResources(supervisorId: number):Promise<Resource[]> {
-		
+	async getSupervisorResources(supervisorId: number): Promise<Resource[]> {
 		const resources = await this.resourceRepository.find({
-			where: {supervisorId: supervisorId}
-		})
+			where: { supervisorId: supervisorId },
+		});
 
 		return resources;
 	}
 
-	async getSupervisorClients(supervisorId: number): Promise<Client[]>{
-
+	async getSupervisorClients(supervisorId: number): Promise<Client[]> {
 		const resources = await this.getSupervisorResources(supervisorId);
 
 		const resourceIds = resources.map(resource => resource.id);
 
 		const projectResources = await this.projectResourceRepository.find({
-			where: { resource: In(resourceIds)},
+			where: { resource: In(resourceIds) },
 			relations: ['project', 'project.client', 'resource'],
 		});
 		if (projectResources.length === 0) {
-			throw new NotFoundException(
-				`Could not find projects for resource with id ${supervisorId}`,
-			);
+			throw new NotFoundException(`Could not find projects for resource with id ${supervisorId}`);
 		}
 		const clients = Array.from(new Set(projectResources.map(projRes => projRes.project.client)));
 
-		const clientsNoDuplicates = clients.filter((obj, index, self) => index === self.findIndex((el) => el['id'] === obj['id']));
+		const clientsNoDuplicates = clients.filter(
+			(obj, index, self) => index === self.findIndex(el => el['id'] === obj['id']),
+		);
 
 		return clientsNoDuplicates;
-
 	}
 
-	async getClientProjects(clientId: number):Promise<Project[]> {
-		
+	async getClientProjects(clientId: number): Promise<Project[]> {
 		const user = await this.getUserbyId(clientId);
-		
-		const clientRep = await this.clientRepRepository.findOne({email: user.email}, {relations: ['client']})
+
+		const clientRep = await this.clientRepRepository.findOne({ email: user.email }, { relations: ['client'] });
 
 		const clientEntity = await this.clientRepository.findOne(clientRep.client.id, {
 			relations: ['projects'],
@@ -181,21 +180,21 @@ export class UserService {
 		return clientEntity.projects;
 	}
 
-	async getClientResources(clientId: number):Promise<Resource[]> {
-
+	async getClientResources(clientId: number): Promise<Resource[]> {
 		const projects = await this.getClientProjects(clientId);
 
 		const projectIds = projects.map(project => project.id);
 
 		const projectResources = await this.projectResourceRepository.find({
-			where: { project: In(projectIds)},
+			where: { project: In(projectIds) },
 			relations: ['project', 'resource'],
 		});
 		const resources = Array.from(new Set(projectResources.map(projRes => projRes.resource)));
-		const resourcesNoDuplicates = resources.filter((obj, index, self) => index === self.findIndex((el) => el['id'] === obj['id']));
+		const resourcesNoDuplicates = resources.filter(
+			(obj, index, self) => index === self.findIndex(el => el['id'] === obj['id']),
+		);
 		return resourcesNoDuplicates;
 	}
-
 
 	async deleteUser(token: JwtPayload, userId: number): Promise<void> {
 		if (token.roles.includes(RoleType.SUPERVISOR) && !token.roles.includes(RoleType.BUSINESS_OWNER)) {

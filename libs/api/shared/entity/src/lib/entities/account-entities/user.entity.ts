@@ -14,6 +14,7 @@ export class UserEntity implements User {
 		password?: string,
 		roles?: RoleType[],
 		supervisedTimesheets?: TimesheetEntity[],
+		active?: boolean,
 	) {
 		this.id = id;
 		this.firstName = firstName;
@@ -22,6 +23,7 @@ export class UserEntity implements User {
 		this.password = password;
 		this.roles = roles;
 		this.supervisedTimesheets = supervisedTimesheets;
+		this.active = active;
 	}
 
 	@PrimaryGeneratedColumn()
@@ -42,6 +44,9 @@ export class UserEntity implements User {
 	@Column({ nullable: true })
 	refreshToken: string;
 
+	@Column({ nullable: true })
+	active: boolean;
+
 	@Column({
 		type: 'enum',
 		enum: RoleType,
@@ -56,6 +61,15 @@ export class UserEntity implements User {
 	public static fromDto(dto: CreateUserDto | UpdateUserDto): UserEntity {
 		if (dto == null) return new UserEntity();
 		const id = dto instanceof CreateUserDto ? undefined : dto.id;
-		return new UserEntity(id, dto.firstName, dto.lastName, dto.email, dto.password, dto.roles);
+		return new UserEntity(
+			id,
+			dto.firstName,
+			dto.lastName,
+			dto.email,
+			dto.password,
+			dto.roles,
+			undefined,
+			dto.active,
+		);
 	}
 }

@@ -28,7 +28,7 @@ export class ClientRepresentativeService {
 
 	async getClientRepresentativeByEmail(emailRep: string): Promise<ClientRepresentativeEntity> {
 		const clientRepresentative = await this.clientRepresentativeRepository.findOne({
-			where: {email: emailRep},
+			where: { email: emailRep },
 			relations: ['client'],
 		});
 		if (!clientRepresentative) {
@@ -36,8 +36,8 @@ export class ClientRepresentativeService {
 		}
 		return clientRepresentative;
 	}
-	
-	async getClientByRepresentative(email: string): Promise<ClientEntity>{
+
+	async getClientByRepresentative(email: string): Promise<ClientEntity> {
 		const clientRepresentative = await this.getClientRepresentativeByEmail(email);
 
 		return clientRepresentative.client;
@@ -49,6 +49,7 @@ export class ClientRepresentativeService {
 		email: string,
 		clientId: number,
 	): Promise<ClientRepresentativeEntity> {
+		const active = true;
 		const clientEntity = await this.clientService.getClientInfo(clientId);
 
 		const existingRepresentative = await this.clientRepresentativeRepository.findOne({ where: { email } });
@@ -56,15 +57,22 @@ export class ClientRepresentativeService {
 			throw new BadRequestException(`Client Representative with email ${email} already exists`);
 		}
 
-		const clientRepresentative = await this.clientRepresentativeRepository.save({ firstName, lastName, email, client: clientEntity });
+		const clientRepresentative = await this.clientRepresentativeRepository.save({
+			firstName,
+			lastName,
+			email,
+			client: clientEntity,
+			active,
+		});
 
-		if(clientRepresentative){
+		if (clientRepresentative) {
 			this.userService.createUser({
 				firstName: clientRepresentative.firstName,
 				lastName: clientRepresentative.lastName,
 				email: clientRepresentative.email,
 				password: 'IamAClient',
 				roles: [RoleType.CLIENT],
+				active: true,
 			});
 		}
 

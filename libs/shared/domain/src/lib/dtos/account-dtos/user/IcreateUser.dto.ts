@@ -10,4 +10,6 @@ export interface ICreateUserDto {
 	password: string;
 
 	roles: RoleType[];
+
+	active: boolean;
 }

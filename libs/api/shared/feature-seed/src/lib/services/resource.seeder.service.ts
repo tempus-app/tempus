@@ -203,6 +203,7 @@ export class ResourceSeederService {
 		const firstName = faker.name.firstName();
 		const lastName = faker.name.lastName();
 		const password = faker.internet.password();
+		const active = true;
 
 		const resource: CreateResourceDto = new CreateResourceDto(
 			firstName,
@@ -210,6 +211,7 @@ export class ResourceSeederService {
 			faker.internet.email(firstName, lastName),
 			password,
 			[role],
+			active,
 			faker.phone.phoneNumber(),
 			undefined,
 			faker.name.jobTitle(),
