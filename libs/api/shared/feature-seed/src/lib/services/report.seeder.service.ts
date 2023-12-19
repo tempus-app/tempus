@@ -19,7 +19,7 @@ export class ReportSeederService {
         private reportService: ReportService,
     ) {}
 
-    async seedReports(count: number): Promise<ReportEntity[]> {
+    /*async seedReports(count: number): Promise<ReportEntity[]> {
         this.logger.log(`Starting to seed reports with count: ${count}`);
         const reports: ReportEntity[] = [];
 
@@ -39,13 +39,13 @@ export class ReportSeederService {
 
         this.logger.log(`Total reports created: ${reports.length}`);
         return reports;
-    }
+    }*/
 
     async clear() {
         await this.reportRepository.query('DELETE from report_entity CASCADE');
     }
 
-    private generateRandomReportDto(): CreateReportDto {
+ /*   private generateRandomReportDto(): CreateReportDto {
         return new CreateReportDto(
             faker.company.companyName(), // clientName
             faker.commerce.productName(), // projectName
@@ -58,5 +58,5 @@ export class ReportSeederService {
             faker.datatype.number({ min: 1, max: 8 }), // hoursWorked
             faker.datatype.number({ min: 100, max: 300 }), // billingRate
         );
-    }
+    }*/
 }

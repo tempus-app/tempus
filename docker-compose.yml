@@ -37,7 +37,7 @@ services:
       args:
         - NODE_ENV=development
     environment:
-      - DB_HOST=postgres
+      - DB_HOST=${DB_HOST}
       - DB_PORT=5432
       - DB_USERNAME=postgres
       - DB_PASSWORD=${DB_PASSWORD}

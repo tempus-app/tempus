@@ -4,6 +4,26 @@ RUN apk add --update python3 make g++ && rm -rf /var/cache/apk/*
 RUN apk add chromium
 ENV NODE_ENV=development
 ENV SKIP_BUILD=1
+ENV DB_HOST=cal-tempus.postgres.database.azure.com
+ENV DB_PORT=5432
+ENV PORT=80
+ENV DB_USERNAME=postgres
+ENV DB_PASSWORD=pTWZ9jW6w2pksQ
+ENV DB_NAME=postgres
+ENV CLIENT_ID=3688a458-dd63-430a-a0a4-43a346f393df
+ENV CLIENT_SECRET=eIn8Q~Y3oELWT~Lig733i5gcqzMj~XqAtBnn~a7A
+ENV TENANT_ID=77c0a1f2-c915-4b85-b2a0-daef2b3c535f
+ENV AZURE_DOMAIN=@tempusADoutlook.onmicrosoft.com
+ENV CHROMIUM_PATH=/usr/bin/chromium-browser
+ENV JWT_ACCESS_SECRET=test
+ENV JWT_REFRESH_SECRET=test2
+ENV SALT_SECRET=10
+ENV API_URL=https://cal-tempus.azurewebsites.net/
+ENV EMAIL_HOST=smtp.sendgrid.net
+ENV EMAIL_PORT=587
+ENV EMAIL_USERNAME=apikey
+ENV EMAIL_PASSWORD=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
+ENV EMAIL_ADDRESS=support@cal-assoc.com
 COPY package*.json ./
 RUN npm install --legacy-peer-deps
 COPY . .

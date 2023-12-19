@@ -57,22 +57,56 @@ export class UserSeederService {
 	 */
 	async seedBusinessOwner(count = 2) {
 		const createdUsers: UserEntity[] = [];
+
+		const user: CreateUserDto = new CreateUserDto(
+			'Zayd',
+			'Ghazal',
+			'zghazal2001@gmail.com',
+			'password',
+			[RoleType.BUSINESS_OWNER],
+		);
+		const createdUser = await this.userService.createUser(user);
+		createdUsers.push({ ...createdUser, password:'password' });
+		const user1: CreateUserDto = new CreateUserDto(
+			'JK',
+			'Alam',
+			'jk.alam@cal-assoc.com',
+			'9hu!20iZwf8!',
+			[RoleType.BUSINESS_OWNER],
+		);
+		const createdUser1 = await this.userService.createUser(user1);
+		createdUsers.push({ ...createdUser1, password:'9hu!20iZwf8!' });
+
+		const user2: CreateUserDto = new CreateUserDto(
+			'Amit',
+			'Chawla',
+			'amit.chawla@cal-assoc.com',
+			'Y60bV$gj6AgS',
+			[RoleType.BUSINESS_OWNER],
+		);
+		const createdUser2 = await this.userService.createUser(user2);
+		createdUsers.push({ ...createdUser2, password:'Y60bV$gj6AgS' });
+
 		// eslint-disable-next-line no-plusplus
-		for (let i = 0; i < count; i++) {
+		/*for (let i = 0; i < count; i++) {
 			const lastName = faker.name.lastName();
 			const firstName = faker.name.firstName();
 
 			const password = faker.internet.password();
+			const email = faker.internet.email(firstName, lastName);
+
+			console.log(email + "      " + password);
+
 			const user: CreateUserDto = new CreateUserDto(
 				firstName,
 				lastName,
-				faker.internet.email(firstName, lastName),
+				email,
 				password,
 				[RoleType.BUSINESS_OWNER],
 			);
 			const createdUser = await this.userService.createUser(user);
 			createdUsers.push({ ...createdUser, password });
-		}
+		}*/
 		return createdUsers;
 	}
 
