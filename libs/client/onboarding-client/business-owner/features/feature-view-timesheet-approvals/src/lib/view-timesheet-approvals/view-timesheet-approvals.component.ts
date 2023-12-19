@@ -53,6 +53,7 @@ export class ViewTimesheetApprovalsComponent implements OnInit, OnDestroy {
 	$approveTimesheetModalClosedEvent = new Subject<void>();
 
 	constructor(
+		private store: Store<OnboardingClientState>,
 		private businessownerStore: Store<BusinessOwnerState>,
 		private translateService: TranslateService,
 		private sharedStore: Store<OnboardingClientState>,
@@ -71,33 +72,33 @@ export class ViewTimesheetApprovalsComponent implements OnInit, OnDestroy {
 					{
 						columnDef: 'timesheetWeek',
 						header: data.timesheetWeek,
-						cell: (element: Record<string, unknown>) => `${element['timesheetWeek']}`,
+						cell: (element: Record<string, unknown>) => `${element.timesheetWeek}`,
 					},
 					{
 						columnDef: 'submittedBy',
 						header: data.submittedBy,
-						cell: (element: Record<string, unknown>) => `${element['submittedBy']}`,
+						cell: (element: Record<string, unknown>) => `${element.submittedBy}`,
 					},
 					{
 						columnDef: 'dateModified',
 						header: data.dateModified,
-						cell: (element: Record<string, unknown>) => `${element['dateModified']}`,
+						cell: (element: Record<string, unknown>) => `${element.dateModified}`,
 					},
 					{
 						columnDef: 'projectName',
 						header: data.projectName,
-						cell: (element: Record<string, unknown>) => `${element['projectName']}`,
+						cell: (element: Record<string, unknown>) => `${element.projectName}`,
 					},
 
 					{
 						columnDef: 'totalTime',
 						header: data.totalTime,
-						cell: (element: Record<string, unknown>) => `${element['totalTime']}`,
+						cell: (element: Record<string, unknown>) => `${element.totalTime}`,
 					},
 					{
 						columnDef: 'status',
 						header: data.status,
-						cell: (element: Record<string, unknown>) => `${element['status']}`,
+						cell: (element: Record<string, unknown>) => `${element.status}`,
 					},
 				];
 			});
@@ -132,15 +133,19 @@ export class ViewTimesheetApprovalsComponent implements OnInit, OnDestroy {
 					this.userId = data;
 				}
 			});
+			this.store.select(selectLoggedInRoles).subscribe(roles => {
+				// eslint-disable-next-line prefer-destructuring
+				this.userRole = roles[0];
+			});
 
-		/*this.sharedStore
+		/* this.sharedStore
 			.select(selectLoggedInRoles)
 			.pipe(take(1))
 			.subscribe(data => {
 				if (data) {
 					this.userRole = data[0];
 				}
-			});*/
+			}); */
 
 		this.modalService.confirmEventSubject.pipe(takeUntil(this.$destroyed)).subscribe(modalId => {
 			this.modalService.close();
@@ -177,7 +182,7 @@ export class ViewTimesheetApprovalsComponent implements OnInit, OnDestroy {
 						year: 'numeric',
 					});
 
-					const fullName = timesheet.resource.firstName + ' ' + timesheet.resource.lastName;
+					const fullName = `${timesheet.resource.firstName  } ${  timesheet.resource.lastName}`;
 					const timesheetWeek = `${startDate} - ${endDate}`;
 
 					let dateModified = '-';
@@ -215,6 +220,81 @@ export class ViewTimesheetApprovalsComponent implements OnInit, OnDestroy {
 					});
 				});
 			});
+	}
+
+	approveAllPendingTimesheets() {
+		if (!this.approveTimesheetForm || !this.userId) {
+			console.error('Error: Form or user information not available.');
+			return;
+		}
+
+		console.log('All Timesheets:', this.timesheetsTableData);
+
+		const pendingTimesheets = this.timesheetsTableData.filter(
+			(timesheet) => timesheet.status === 'SUBMITTED' || timesheet.status === 'CLIENT REVIEW'
+		);
+
+		console.log('Pending Timesheets:', pendingTimesheets);
+
+		if (pendingTimesheets.length > 0) {
+			const approveTimesheetDto = {
+				approval: true,
+				comment: this.approveTimesheetForm.get('comment')?.value,
+				approverId: this.userId,
+			};
+
+			// Approve each pending timesheet based on user role
+			console.log('Approving pending timesheets:', this.timesheetsTableData.map((timesheet) => timesheet.status));
+
+			pendingTimesheets.forEach((timesheet) => {
+				// Assuming you have a userRole property available indicating the user's role
+				switch (this.userRole) {
+					case RoleType.SUPERVISOR:
+						// Supervisor can approve to "Client Review" state
+						if (timesheet.status === 'SUBMITTED') {
+							this.businessownerStore.dispatch(
+								updateTimesheetStatusAsSupervisor({
+									timesheetId: timesheet.timesheetId,
+									approveTimesheetDto,
+								})
+							);
+							console.log('supervisor')
+						}
+						break;
+
+					case RoleType.CLIENT:
+						// Client can approve to "Submitted" state from "Client Review" state
+						if (timesheet.status === 'CLIENT REVIEW') {
+							this.businessownerStore.dispatch(
+								updateTimesheetStatusAsSupervisor({
+									timesheetId: timesheet.timesheetId,
+									approveTimesheetDto,
+								})
+							);
+							console.log('client')
+						}
+						break;
+
+					case RoleType.BUSINESS_OWNER:
+						// Business Owner can approve to both "Client Review" and "Submitted" states
+						this.businessownerStore.dispatch(
+							updateTimesheetStatusAsSupervisor({
+								timesheetId: timesheet.timesheetId,
+								approveTimesheetDto,
+							})
+						);
+						break;
+
+					default:
+						// Handle other roles or no role (if needed)
+						console.warn('Unhandled user role:', this.userRole);
+				}
+			});
+
+		} else {
+			// Show a message or handle the case where there are no pending timesheets
+			console.log('No pending timesheets to approve.');
+		}
 	}
 
 	ngOnDestroy(): void {

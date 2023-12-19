@@ -27,7 +27,6 @@ import { ProjectSeederService } from './services/project.seeder.service';
 import { ResourceSeederService } from './services/resource.seeder.service';
 import { UserSeederService } from './services/user.seeder.service';
 import { TimesheetSeederService } from './services/timsheet.seeder.service';
-import { ReportSeederService } from './services/report.seeder.service';
 /**
  * provider to seed database
  */
@@ -46,7 +45,6 @@ export class SeederService {
 		private resourceSeedService: ResourceSeederService,
 		private linkSeederService: LinkSeederService,
 		private timesheetSeederService: TimesheetSeederService,
-		private reportSeederService: ReportSeederService,
 	) {}
 
 	/**
