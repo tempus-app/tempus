@@ -1,46 +1,14 @@
 <div id="button-container">
 	<!-- Week picker -->
 	<mat-form-field appearance="outline">
-		<mat-date-range-input [rangePicker]="picker">
-			<input
-				*ngIf="isLoadingStoreData; else startDateNew"
-				[disabled]="isLoadingStoreData"
-				[(ngModel)]="this.from"
-				[formControl]="$any(timesheetForm).get('startDate')"
-				matStartDate
-				placeholder="{{ commonPrefix + 'dates.startPlaceholder' | translate }}"
-			/>
-
-			<ng-template #startDateNew>
-				<input
-					[(ngModel)]="this.from"
-					[formControl]="$any(timesheets.controls[0]).get('startDate')"
-					matStartDate
-					placeholder="{{ commonPrefix + 'dates.startPlaceholder' | translate }}"
-				/>
-			</ng-template>
-
-			<input
-				*ngIf="isLoadingStoreData; else endDateNew"
-				[disabled]="isLoadingStoreData"
-				[(ngModel)]="this.thru"
-				[formControl]="$any(timesheetForm).get('endDate')"
-				matEndDate
-				placeholder="{{ commonPrefix + 'dates.endPlaceholder' | translate }}"
-			/>
-
-			<ng-template #endDateNew>
-				<input
-					[(ngModel)]="this.thru"
-					[formControl]="$any(timesheets.controls[0]).get('endDate')"
-					matEndDate
-					placeholder="{{ commonPrefix + 'dates.endPlaceholder' | translate }}"
-				/>
-			</ng-template>
+		<mat-date-range-input [rangePicker]="picker" [min]="firstDayOfCurrentMonth" >
+			<input matStartDate placeholder="Start date">
+			<input matEndDate placeholder="End date">
 		</mat-date-range-input>
 		<mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-		<mat-date-range-picker #picker (closed)="changed(picker)"></mat-date-range-picker>
+		<mat-date-range-picker #picker></mat-date-range-picker>
 	</mat-form-field>
+
 </div>
 
 <!-- Timesheet table -->

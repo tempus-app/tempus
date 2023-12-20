@@ -102,6 +102,10 @@ export interface TableOfContents {
 	],
 })
 export class TimesheetComponent implements OnInit {
+
+	firstDayOfCurrentMonth: string | undefined;
+
+
 	@Input() from!: Date;
 
 	@Input() thru!: Date;
@@ -332,6 +336,13 @@ export class TimesheetComponent implements OnInit {
 		} else {
 			this.multiTimesheets.emit(this.myInfoForm);
 		}
+
+		const currentDate = new Date();
+        this.firstDayOfCurrentMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1)
+            .toISOString()
+			.split('T')[0]; // format as 'YYYY-MM-DD'
+
+		console.log(this.firstDayOfCurrentMonth);
 	}
 
 	// Load the store data
