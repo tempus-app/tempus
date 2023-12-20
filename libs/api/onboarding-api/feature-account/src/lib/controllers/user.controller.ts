@@ -177,6 +177,8 @@ export class UserController {
 	@UseGuards(JwtAuthGuard, PermissionGuard)
 	@Patch('resource')
 	async updateResource(@Body() updateResourceData: UpdateResourceDto): Promise<Resource> {
+		console.log("hello");
+		console.log(updateResourceData);
 		return await this.resourceService.editResource(updateResourceData);
 	}
 
@@ -190,7 +192,7 @@ export class UserController {
 	@Patch('assign/:supervisorId/:resourceId')
 	async assignSupervisorToResource(
 		@Param('resourceId') resourceId: number,
-		@Param('supervisorId') supervisorId: number,	
+		@Param('supervisorId') supervisorId: number,
 		): Promise<Resource> {
 		return this.resourceService.assignSupervisorToResource(
 			supervisorId,

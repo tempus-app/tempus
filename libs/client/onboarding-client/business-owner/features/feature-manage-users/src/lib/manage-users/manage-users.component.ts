@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Resource } from '@tempus/shared-domain';
+import { IUpdateResourceDto, Resource } from '@tempus/shared-domain';
 import { OnboardingClientResourceService } from '@tempus/client/onboarding-client/shared/data-access';
 import { Column, ProjectManagmenetTableData } from '@tempus/client/shared/ui-components/presentational';
 
@@ -48,5 +48,23 @@ export class ManageUsersComponent implements OnInit {
 			columnsWithButtonIcon: [],
 			active: resource.active,
 		};
+	}
+
+	onActiveChange(resource: ProjectManagmenetTableData): void {
+		const updatedResource: IUpdateResourceDto = {
+			id: resource.resourceId,
+			active: resource.active,
+		};
+
+		console.log('Updating resource:', updatedResource); // Add this line to log the object
+
+		this.resourceService.editResourcePersonalInformation(updatedResource).subscribe(
+			response => {
+				console.log('Resource active status updated successfully', response);
+			},
+			error => {
+				console.error('There was an error updating the resource active status', error);
+			},
+		);
 	}
 }

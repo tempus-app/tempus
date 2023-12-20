@@ -345,19 +345,40 @@ export class ResourceService {
 
 	// edit resource to be used specifically when updating local information
 	async editResource(updateResourceData: UpdateResourceDto): Promise<Resource> {
-		const resourceEntity = await this.getResource(updateResourceData.id);
+		const resourceEntity = await this.resourceRepository.findOne(updateResourceData.id, {
+			relations: ['location'], // Include 'projectResources' if you need to update them
+		});
 
-		const updatedLocationData = updateResourceData.location;
-		delete updateResourceData.location;
-
-		for (const [key, val] of Object.entries(updateResourceData)) if (!val) delete updateResourceData[key];
-		if (updatedLocationData) {
-			for (const [key, val] of Object.entries(updatedLocationData)) if (!val) delete updatedLocationData[key];
+		if (!resourceEntity) {
+			throw new NotFoundException(`Resource with ID ${updateResourceData.id} not found`);
 		}
-		Object.assign(resourceEntity.location, updatedLocationData);
-		Object.assign(resourceEntity, updateResourceData);
 
+		// Update location data
+		const updatedLocationData = updateResourceData.location;
+		if (updatedLocationData) {
+			for (const [key, val] of Object.entries(updatedLocationData)) {
+				if (val != null) {
+					// Only update if value is not null
+					resourceEntity.location[key] = val;
+				}
+			}
+		}
+
+		// Update resource data
+		for (const [key, val] of Object.entries(updateResourceData)) {
+			if (val != null && key !== 'id' && key !== 'location') {
+				// Skip 'id' and 'location' field
+				resourceEntity[key] = val;
+			}
+		}
+
+		// If you need to update projectResources as well, you'll have to handle it here
+		// Make sure to set the resourceId for each projectResource to avoid null values
+		// ...
+
+		// Save the updated resource
 		const updatedResource = await this.resourceRepository.save(resourceEntity);
+		// Clear sensitive data
 		updatedResource.password = null;
 		updatedResource.refreshToken = null;
 
