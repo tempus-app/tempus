@@ -138,15 +138,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
 				// eslint-disable-next-line prefer-destructuring
 				this.role = roles[0];
 
-				if (roles.includes(RoleType.SUPERVISOR)) {
-					this.tabs = [
-						SidebarTab.MANAGE_RESOURCES,
-						SidebarTab.PENDING_APPROVALS,
-						SidebarTab.PROJECTS,
-						SidebarTab.TIMESHEET_APPROVALS,
-						SidebarTab.COST_REPORTS,
-					];
-				} else if (roles.includes(RoleType.BUSINESS_OWNER) || roles.includes(RoleType.SUPERVISOR)) {
+				if (roles.includes(RoleType.BUSINESS_OWNER)) {
 					this.tabs = [
 						SidebarTab.MANAGE_RESOURCES,
 						SidebarTab.PENDING_APPROVALS,
@@ -155,6 +147,14 @@ export class SidebarComponent implements OnInit, OnDestroy {
 						SidebarTab.COST_REPORTS,
 						SidebarTab.MANAGE_USERS,
 						// SidebarTab.COST_BILLING_REPORTS,
+					];
+				} else if (roles.includes(RoleType.SUPERVISOR)) {
+					this.tabs = [
+						SidebarTab.MANAGE_RESOURCES,
+						SidebarTab.PENDING_APPROVALS,
+						SidebarTab.PROJECTS,
+						SidebarTab.TIMESHEET_APPROVALS,
+						SidebarTab.COST_REPORTS,
 					];
 				} else if (roles.includes(RoleType.AVAILABLE_RESOURCE) || roles.includes(RoleType.ASSIGNED_RESOURCE)) {
 					this.tabs = [

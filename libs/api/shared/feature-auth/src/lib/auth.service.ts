@@ -29,6 +29,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { EmailService } from '@tempus/api/shared/feature-email';
 import { UpdateUserDto } from '@tempus/api/shared/dto';
 import { UserService } from '@tempus/onboarding-api/feature-account';
+import { first } from 'rxjs';
 
 @Injectable()
 export class AuthService {
@@ -153,6 +154,7 @@ export class AuthService {
 
 	async validateUser(email: string, password: string): Promise<User> {
 		const user = await this.userService.findByEmail(email);
+		console.log(user);
 		if (!user) {
 			console.log(`User not found: ${email}`);
 			throw new UnauthorizedException('Incorrect credentials.');
@@ -161,6 +163,10 @@ export class AuthService {
 		if (!isMatch) {
 			console.log(`Password mismatch for user: ${email}`);
 			throw new UnauthorizedException('Incorrect credentials.');
+		}
+		if(!user.active) {
+			console.log(`User not active: ${user.firstName} ${user.lastName}`);
+			throw new UnauthorizedException('Not Activated.');
 		}
 		return user;
 	}
