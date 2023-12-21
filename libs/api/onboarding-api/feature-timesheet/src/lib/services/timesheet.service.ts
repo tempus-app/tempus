@@ -38,8 +38,8 @@ export class TimesheetService {
 	async getAllSubmittedTimesheetsforUser(resourceId: number): Promise<Timesheet[]> {
 		const timesheets = await this.timesheetRepository.find({
 			where: {
-				/* resource: { 
-					id: resourceId 
+				/* resource: {
+					id: resourceId
 				}, */
 				status: TimesheetRevisionType.SUBMITTED,
 			},
@@ -78,8 +78,8 @@ export class TimesheetService {
 
 		const startIndex = page * pageSize;
 		const endIndex = startIndex + pageSize;
-		const paginatedTimesheets = sortedTimesheets.slice(startIndex, endIndex);	  
-	  
+		const paginatedTimesheets = sortedTimesheets.slice(startIndex, endIndex);
+
 		return { timesheets: paginatedTimesheets, totalTimesheets: timesheetsAndCount[1] };
 	}
 
@@ -114,8 +114,8 @@ export class TimesheetService {
 
 		const startIndex = page * pageSize;
 		const endIndex = startIndex + pageSize;
-		const paginatedTimesheets = sortedTimesheets.slice(startIndex, endIndex);	  
-	  
+		const paginatedTimesheets = sortedTimesheets.slice(startIndex, endIndex);
+
 
 		return { timesheets: paginatedTimesheets, totalTimesheets: timesheetsAndCount[1] };
 	}

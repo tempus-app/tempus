@@ -223,79 +223,83 @@ export class ViewTimesheetApprovalsComponent implements OnInit, OnDestroy {
 	}
 
 	approveAllPendingTimesheets() {
-		if (!this.approveTimesheetForm || !this.userId) {
-			console.error('Error: Form or user information not available.');
-			return;
-		}
+    if (!this.approveTimesheetForm || !this.userId) {
+				this.openErrorModal('Error: Form or user information not available.');
+        return;
+    }
 
-		console.log('All Timesheets:', this.timesheetsTableData);
 
-		const pendingTimesheets = this.timesheetsTableData.filter(
-			(timesheet) => timesheet.status === 'SUBMITTED' || timesheet.status === 'CLIENT REVIEW'
-		);
+    const pendingTimesheets = this.timesheetsTableData.filter(
+        (timesheet) => timesheet.status === 'SUBMITTED' || timesheet.status === 'CLIENT REVIEW'
+    );
 
-		console.log('Pending Timesheets:', pendingTimesheets);
 
-		if (pendingTimesheets.length > 0) {
-			const approveTimesheetDto = {
-				approval: true,
-				comment: this.approveTimesheetForm.get('comment')?.value,
-				approverId: this.userId,
-			};
+    if (pendingTimesheets.length > 0) {
+        const approveTimesheetDto = {
+            approval: true,
+            comment: this.approveTimesheetForm.get('comment')?.value,
+            approverId: this.userId,
+        };
 
-			// Approve each pending timesheet based on user role
-			console.log('Approving pending timesheets:', this.timesheetsTableData.map((timesheet) => timesheet.status));
+        // Approve each pending timesheet based on user role
+        switch (this.userRole) {
+            case RoleType.SUPERVISOR:
+                if (pendingTimesheets.some((timesheet) => timesheet.status === 'SUBMITTED')) {
+                    pendingTimesheets.forEach((timesheet) => {
+                        this.businessownerStore.dispatch(
+                            updateTimesheetStatusAsSupervisor({
+                                timesheetId: timesheet.timesheetId,
+                                approveTimesheetDto,
+                            })
+                        );
+                    });
+                    window.location.reload();
+                } else {
+                    this.openErrorModal('No pending timesheets for you to approve.');
+                }
+                break;
 
-			pendingTimesheets.forEach((timesheet) => {
-				// Assuming you have a userRole property available indicating the user's role
-				switch (this.userRole) {
-					case RoleType.SUPERVISOR:
-						// Supervisor can approve to "Client Review" state
-						if (timesheet.status === 'SUBMITTED') {
-							this.businessownerStore.dispatch(
-								updateTimesheetStatusAsSupervisor({
-									timesheetId: timesheet.timesheetId,
-									approveTimesheetDto,
-								})
-							);
-							console.log('supervisor')
-						}
-						break;
+            case RoleType.CLIENT:
+                if (pendingTimesheets.some((timesheet) => timesheet.status === 'CLIENT REVIEW')) {
+                    pendingTimesheets.forEach((timesheet) => {
+                        this.businessownerStore.dispatch(
+                            updateTimesheetStatusAsSupervisor({
+                                timesheetId: timesheet.timesheetId,
+                                approveTimesheetDto,
+                            })
+                        );
+                    });
+                    window.location.reload();
+                } else {
+                    this.openErrorModal('No pending timesheets for you to approve.');
+                }
+                break;
 
-					case RoleType.CLIENT:
-						// Client can approve to "Submitted" state from "Client Review" state
-						if (timesheet.status === 'CLIENT REVIEW') {
-							this.businessownerStore.dispatch(
-								updateTimesheetStatusAsSupervisor({
-									timesheetId: timesheet.timesheetId,
-									approveTimesheetDto,
-								})
-							);
-							console.log('client')
-						}
-						break;
+								case RoleType.BUSINESS_OWNER:
+									const submittedTimesheets = pendingTimesheets.filter((timesheet) => timesheet.status === 'SUBMITTED');
+									if (submittedTimesheets.length > 0) {
+											submittedTimesheets.forEach((timesheet) => {
+													this.businessownerStore.dispatch(
+															updateTimesheetStatusAsSupervisor({
+																	timesheetId: timesheet.timesheetId,
+																	approveTimesheetDto,
+															})
+													);
+											});
+											window.location.reload();
+									} else {
+											this.openErrorModal('No timesheets for you to approve.');
+									}
+                break;
 
-					case RoleType.BUSINESS_OWNER:
-						// Business Owner can approve to both "Client Review" and "Submitted" states
-						this.businessownerStore.dispatch(
-							updateTimesheetStatusAsSupervisor({
-								timesheetId: timesheet.timesheetId,
-								approveTimesheetDto,
-							})
-						);
-						break;
+            default:
+							this.openErrorModal('Not the correct user role for this feature');
+        }
 
-					default:
-						// Handle other roles or no role (if needed)
-						console.warn('Unhandled user role:', this.userRole);
-				}
-			});
-
-		} else {
-			// Show a message or handle the case where there are no pending timesheets
-			console.log('No pending timesheets to approve.');
-		}
-	}
+    } else {
+        this.openErrorModal('No pending timesheets for you to approve.');
+    }
+}
 
 	ngOnDestroy(): void {
 		this.$destroyed.next();
@@ -383,6 +387,21 @@ export class ViewTimesheetApprovalsComponent implements OnInit, OnDestroy {
 			comment: [''],
 		});
 	}
+
+	openErrorModal = (errorMessage: string) => {
+		this.modalService.open(
+			{
+				title: 'Error',
+				confirmText: ' ',
+				closeText: 'Okay',
+				message: errorMessage,
+				modalType: ModalType.ERROR,
+				closable: true,
+				id: 'error',
+			},
+			CustomModalType.INFO,
+		);
+	};
 
 	rejectTimesheet() {}
 
